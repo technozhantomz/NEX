@@ -1,0 +1,1 @@
+export const getPassedTime = (start: Date) => new Date(new Date().valueOf() - start.valueOf()).getTime();

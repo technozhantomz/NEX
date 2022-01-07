@@ -1,0 +1,1 @@
+export const removeStorageItem = (item: string, storageType = 'localStorage') => window[storageType as keyof Window].removeItem(item);
