@@ -3,7 +3,7 @@ const commonEslintConfig = require('./eslint-common')
 
 module.exports = {
   ...commonEslintConfig,
-  ignorePatterns: [...commonEslintConfig.ignorePatterns, '**/*.graphql.d.ts'],
+  ignorePatterns: [...commonEslintConfig.ignorePatterns],
   plugins: [...commonEslintConfig.plugins, 'react', 'react-hooks'],
   extends: [...commonEslintConfig.extends, 'plugin:react/recommended'],
 
