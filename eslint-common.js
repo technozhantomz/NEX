@@ -10,6 +10,7 @@ module.exports = {
   },
   plugins: ['import', '@typescript-eslint', 'sort-exports'],
   extends: [
+    'plugin:@next/next/recommended',
     'eslint:recommended',
     'plugin:prettier/recommended',
     'plugin:import/errors',
