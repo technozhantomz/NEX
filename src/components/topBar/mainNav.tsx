@@ -1,6 +1,6 @@
-import Icon from "@ant-design/icons";
+// import Icon from "@ant-design/icons";
 
-import NavIcon from "../../../public/icons/nav.svg";
+// import NavIcon from "../../../public/icons/nav.svg";
 // import Image from "next/image";
 // import Link from "next/link";
 import Styles from "../../styles/mainMenu.module.scss";
