@@ -1,0 +1,15 @@
+.topbar{
+    display: flex;
+    justify-content: space-between;
+    .topbarLeft{
+        margin-left:10px;
+    }
+    .topbarCenter{
+
+    }
+    .topbarRight{
+        margin-right:10px;
+        display: flex;
+        flex-direction: row-reverse;
+    }
+}

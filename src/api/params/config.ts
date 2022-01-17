@@ -69,7 +69,7 @@ const Config = {
    * @type {string}
    * @memberof Config
    */
-  dexUrl: DEX_URL
+  dexUrl: DEX_URL,
 };
 
 export default Config;

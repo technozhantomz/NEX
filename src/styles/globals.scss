@@ -1,0 +1,36 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: white;
+  background: #03078c; /* ultimate fallback, always put this, just in case */
+  /* if you choose the IE filter linear gradient fallback */
+  filter: progid:DXImageTransform.Microsoft.gradient(
+              startColorstr=#352e24, endColorstr=#1a160d);
+
+  /* if you choose to use the image fallback */
+  // background: url(gradient.png);
+
+  /* Chrome, Safari */
+  background: -webkit-radial-gradient(circle, #123abd, #03078c);
+
+  /* Firefox 15 and older, Firefox for Android */
+  background: -moz-radial-gradient(circle, #123abd, #03078c);
+
+  /* Opera 11.6 (older only supported linear), Opera 12.0, Opera Mobile 12.0 */
+  background: -o-radial-gradient(circle, #123abd, #03078c);
+
+  /* standard syntax, IE10, Firefox 16+, Opera 12.1+ */
+  background: radial-gradient(circle, #123abd, #03078c);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}

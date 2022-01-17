@@ -1,3 +1,3 @@
-const commonEslintConfig = require('./eslint-common')
+const commonEslintConfig = require("./eslint-common");
 
-module.exports = commonEslintConfig
+module.exports = commonEslintConfig;
