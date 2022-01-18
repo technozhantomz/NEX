@@ -1,62 +1,51 @@
 import {
-  BellOutlined,
   DollarOutlined,
-  MoreOutlined,
   PoweroffOutlined,
   SettingOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Dropdown, Menu } from "antd";
+import { Menu, Switch } from "antd";
 import Link from "next/link";
 
-import Styles from "../../styles/mainMenu.module.scss";
+import { Dashboard, Market, Vote } from "../icons";
 
-const { SubMenu } = Menu;
+const MainNav = (): JSX.Element => {
+  const onChange = (checked: boolean): void => {
+    console.log(`switch to ${checked}`);
+  };
 
-const MainNavBar = (): JSX.Element => {
   return (
-    <div className={Styles.MainNavBar}>
-      <BellOutlined className={Styles.Bell} />
-      <Avatar icon={<UserOutlined />} />
-      <Dropdown
-        className={Styles.DropDownToggle}
-        overlay={MainNav}
-        trigger={["click"]}
-        placement="bottomRight"
-      >
-        <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-          <MoreOutlined />
-        </a>
-      </Dropdown>
-    </div>
-  );
-};
-
-const MainNav = (
-  <Menu mode="inline">
-    <Menu.Item key="dashboad">
-      <Link href="/dashboad">{/* Icon */} Dashboad</Link>
-    </Menu.Item>
-    <Menu.Item key="market">
-      <Link href="/market">
-        <a>{/* Icon */} Market</a>
-      </Link>
-    </Menu.Item>
-    <Menu.Item key="wallet">
-      <Link href="/wallet">
-        <a>
-          <DollarOutlined /> Wallet
-        </a>
-      </Link>
-    </Menu.Item>
-    <Menu.Item key="settings">
-      <Link href="/settings">
-        <a>
-          <SettingOutlined /> Settings
-        </a>
-      </Link>
-    </Menu.Item>
-    <SubMenu key="advancedSettings" title="Advanced Settings">
+    <Menu>
+      <Menu.Item key="dashboad">
+        <Link href="/dashboad">
+          <a>
+            <Dashboard /> Dashboad
+          </a>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key="market">
+        <Link href="/market">
+          <a>
+            <Market /> Market
+          </a>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key="wallet">
+        <Link href="/wallet">
+          <a>
+            <DollarOutlined /> Wallet
+          </a>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key="settings">
+        <Link href="/settings">
+          <a>
+            <SettingOutlined /> Settings
+          </a>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key="advancedSettings">
+        <Switch size="small" onChange={onChange} /> Advanced Settings
+      </Menu.Item>
       <Menu.Item key="blocks">
         <Link href="/blocks">
           {/* Icon */}
@@ -65,8 +54,9 @@ const MainNav = (
       </Menu.Item>
       <Menu.Item key="voting">
         <Link href="/voting">
-          {/* Icon */}
-          Voting
+          <a>
+            <Vote /> Voting
+          </a>
         </Link>
       </Menu.Item>
       <Menu.Item key="contacts">
@@ -78,18 +68,12 @@ const MainNav = (
       <Menu.Item key="logout">
         <Link href="/logout">
           <a>
-            <PoweroffOutlined />
-            Logout
+            <PoweroffOutlined /> Logout
           </a>
         </Link>
       </Menu.Item>
-    </SubMenu>
-    <Menu.Item key="logout">
-      <Link href="/logout">
-        <a>Logout</a>
-      </Link>
-    </Menu.Item>
-  </Menu>
-);
+    </Menu>
+  );
+};
 
-export default MainNavBar;
+export default MainNav;

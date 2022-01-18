@@ -1,4 +1,6 @@
 import Icon from "@ant-design/icons";
+import { IconComponentProps } from "@ant-design/icons/lib/components/Icon";
+import { RefAttributes } from "react";
 
 const LogoSVG = () => {
   return (
@@ -202,6 +204,12 @@ const LogoSVG = () => {
   );
 };
 
-const Logo = (props) => <Icon component={LogoSVG} {...props} />;
+const Logo = (
+  props: JSX.IntrinsicAttributes &
+    IconComponentProps &
+    RefAttributes<HTMLSpanElement>
+): JSX.Element => {
+  return <Icon component={LogoSVG} {...props} />;
+};
 
 export default Logo;

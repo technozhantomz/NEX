@@ -1,7 +1,7 @@
 import styles from "../../styles/topBar.module.scss";
-import Logo from "../icons/logo";
+import { Logo } from "../icons";
 
-import MainNavBar from "./mainNav";
+import MainNavBar from "./mainNavBar";
 
 const TopBar = (): JSX.Element => {
   return (
