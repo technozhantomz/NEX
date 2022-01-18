@@ -2,14 +2,16 @@
     display: flex;
     justify-content: space-between;
     .topbarLeft{
-        margin-left:10px;
-    }
-    .topbarCenter{
-
+        margin:20px 0 0 20px;
+        .Logo{
+            font-size: 10em;
+            display: flex;
+            color: var(---white);
+        }
     }
     .topbarRight{
-        margin-right:10px;
+        margin:20px 20px 0 0;
         display: flex;
-        flex-direction: row-reverse;
+        flex-direction: row;
     }
 }

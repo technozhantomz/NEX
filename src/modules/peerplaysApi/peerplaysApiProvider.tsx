@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { PeerplaysApi, PeerplaysApiProvider, Props } from "../../../index";
+import { PeerplaysApi, PeerplaysApiProvider, Props } from "../../../";
 import { defaultNodesList } from "../../api/params";
 import { initNode } from "../../api/services/initNode";
 import { initCache, initSettings } from "../../api/utils";

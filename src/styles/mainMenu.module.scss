@@ -1,0 +1,12 @@
+.MainNavBar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    color: var(---white);
+
+    .Bell, .DropDownToggle{
+        font-size: 2em;
+        font-weight: bold;
+    }
+}

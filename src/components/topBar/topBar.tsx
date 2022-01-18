@@ -1,14 +1,16 @@
 import styles from "../../styles/topBar.module.scss";
+import Logo from "../icons/logo";
 
-import MainNav from "./mainNav";
+import MainNavBar from "./mainNav";
 
 const TopBar = (): JSX.Element => {
   return (
     <nav className={styles.topbar}>
-      <div className={styles.topbarLeft}>LOGO HERE</div>
-      <div className={styles.topbarCenter}></div>
+      <div className={styles.topbarLeft}>
+        <Logo className={styles.Logo} />
+      </div>
       <div className={styles.topbarRight}>
-        <MainNav />
+        <MainNavBar />
       </div>
     </nav>
   );
