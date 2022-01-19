@@ -6,7 +6,7 @@ import {
 import { Menu, Switch } from "antd";
 import Link from "next/link";
 
-import { Dashboard, Market, Vote } from "../icons";
+import { Blockchain, Contacts, Dashboard, Market, Vote } from "../icons";
 
 const MainNav = (): JSX.Element => {
   const onChange = (checked: boolean): void => {
@@ -48,8 +48,9 @@ const MainNav = (): JSX.Element => {
       </Menu.Item>
       <Menu.Item key="blocks">
         <Link href="/blocks">
-          {/* Icon */}
-          Blocks
+          <a>
+            <Blockchain /> Blocks
+          </a>
         </Link>
       </Menu.Item>
       <Menu.Item key="voting">
@@ -61,8 +62,9 @@ const MainNav = (): JSX.Element => {
       </Menu.Item>
       <Menu.Item key="contacts">
         <Link href="/contacts">
-          {/* Icon */}
-          Contacts
+          <a>
+            <Contacts /> Contacts
+          </a>
         </Link>
       </Menu.Item>
       <Menu.Item key="logout">
