@@ -4,19 +4,27 @@ import { Avatar, Dropdown } from "antd";
 import Styles from "../../styles/mainMenu.module.scss";
 
 import MainNav from "./mainNav";
+import ProfileNav from "./profileNav";
 
 const MainNavBar = (): JSX.Element => {
   return (
     <div className={Styles.MainNavBar}>
       <BellOutlined className={Styles.Bell} />
-      <Avatar icon={<UserOutlined />} />
+      <Dropdown
+        className={Styles.DropDownToggle}
+        overlay={ProfileNav}
+        placement="bottomRight"
+      >
+        <a className="ant-dropdown-link">
+          <Avatar icon={<UserOutlined />} />
+        </a>
+      </Dropdown>
       <Dropdown
         className={Styles.DropDownToggle}
         overlay={MainNav}
-        trigger={["click"]}
         placement="bottomRight"
       >
-        <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+        <a className="ant-dropdown-link">
           <MoreOutlined />
         </a>
       </Dropdown>

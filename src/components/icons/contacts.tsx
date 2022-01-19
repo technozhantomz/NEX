@@ -11,7 +11,7 @@ const ContactsSVG = () => {
           id="contacts"
         />
       </defs>
-      <g transform="translate(-3 -1.5)" fill="none" fill-rule="evenodd">
+      <g transform="translate(-3 -1.5)" fill="none" fillRule="evenodd">
         <mask id="contactsMask" fill="#fff">
           <use xlinkHref="#contacts" />
         </mask>

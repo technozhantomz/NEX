@@ -13,16 +13,21 @@ import TopBar from "./topBar/topBar";
 type Props = {
   children: ReactNode;
   title?: string;
+  description?: string;
 };
 
-const Layout = ({ children, title = "Peerplays" }: Props): JSX.Element => {
+const Layout = ({
+  children,
+  title = "PeerPlays",
+  description = "",
+}: Props): JSX.Element => {
   return (
     <>
       <Head>
-        <title>{title}</title>
+        <title>{title} | PeerPlays</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta name="description" content="" />
+        <meta name="description" content={description} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <TopBar />

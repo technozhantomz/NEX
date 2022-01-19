@@ -15,10 +15,10 @@ const MainNav = (): JSX.Element => {
 
   return (
     <Menu>
-      <Menu.Item key="dashboad">
-        <Link href="/dashboad">
+      <Menu.Item key="dashboard">
+        <Link href="/dashboard">
           <a>
-            <Dashboard /> Dashboad
+            <Dashboard /> Dashboard
           </a>
         </Link>
       </Menu.Item>
@@ -46,8 +46,8 @@ const MainNav = (): JSX.Element => {
       <Menu.Item key="advancedSettings">
         <Switch size="small" onChange={onChange} /> Advanced Settings
       </Menu.Item>
-      <Menu.Item key="blocks">
-        <Link href="/blocks">
+      <Menu.Item key="blockchain">
+        <Link href="/blockchain">
           <a>
             <Blockchain /> Blocks
           </a>

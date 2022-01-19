@@ -11,7 +11,7 @@ const BlockchainSVG = () => {
           id="blockChain"
         />
       </defs>
-      <g transform="translate(-1 -3.5)" fill="none" fill-rule="evenodd">
+      <g transform="translate(-1 -3.5)" fill="none" fillRule="evenodd">
         <mask id="blockChainMask" fill="#fff">
           <use xlinkHref="#blockChain" />
         </mask>
