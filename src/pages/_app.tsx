@@ -1,4 +1,5 @@
-import "../styles/globals.css";
+import "antd/dist/antd.variable.min.css";
+import "../styles/globals.scss";
 
 import type { AppProps } from "next/app";
 

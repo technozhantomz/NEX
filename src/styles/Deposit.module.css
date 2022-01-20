@@ -9,3 +9,38 @@
     width: 50%;      
     margin-top: 20px;
 }
+
+
+.btn {
+    top: 335px;
+  left: 761px;
+  width: 399px;
+  height: 44px;
+  background: var(---primary-blue) 0% 0% no-repeat padding-box;
+  background: #0148BE 0% 0% no-repeat padding-box;
+  border-radius: 4px;
+  opacity: 1;
+  }
+  
+  .cont {
+      background: red;
+    top: 120px;
+  left: 660px;
+  width: 600px;
+  height: 45px;
+  background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border-radius: 4px;
+  opacity: 1;
+  }
+  
+  .cont2 {
+    top: 200px;
+  left: 660px;
+  width: 600px;
+  height: 268px;
+  background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border-radius: 4px;
+  opacity: 1;
+  }

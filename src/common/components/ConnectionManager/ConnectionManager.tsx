@@ -1,3 +1,4 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import React from "react";
 
 import { usePeerplaysApi } from "../../../modules/peerplaysApi";
@@ -7,12 +8,17 @@ type Props = {
 };
 
 export const ConnectionManager = ({ children }: Props): JSX.Element => {
-  const { isLoadingConnection, isConnectionError } = usePeerplaysApi();
+  const { isLoadingConnection, isConnectionError, dbApi } = usePeerplaysApi();
   if (isConnectionError) {
     return <div>disconnected please try again later</div>;
   }
   if (isLoadingConnection) {
-    return <div>loading</div>;
+    return (
+      <div>
+        <p>loading</p>
+        <LoadingOutlined />
+      </div>
+    );
   }
 
   return <>{children}</>;
