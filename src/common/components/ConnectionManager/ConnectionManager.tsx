@@ -1,19 +1,19 @@
-import { usePeerplaysApi } from '../../../modules/peerplaysApi';
+import React from "react";
 
+import { usePeerplaysApi } from "../../../modules/peerplaysApi";
 
 type Props = {
-    children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
-export const ConnectionManager = ({ children }: Props) => {
+export const ConnectionManager = ({ children }: Props): JSX.Element => {
+  const { isLoadingConnection, isConnectionError } = usePeerplaysApi();
+  if (isConnectionError) {
+    return <div>disconnected please try again later</div>;
+  }
+  if (isLoadingConnection) {
+    return <div>loading</div>;
+  }
 
-    const { isLoadingConnection, isConnectionError, dbApi } = usePeerplaysApi()
-    if (isConnectionError) {
-        return (<div>disconnected please try again later</div>)
-    }
-    if (isLoadingConnection) {
-        return (<div>loading</div>)
-    }
-
-    return <>{children}</>
-}
+  return <>{children}</>;
+};

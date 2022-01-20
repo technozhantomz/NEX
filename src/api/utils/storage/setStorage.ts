@@ -1,1 +1,6 @@
-export const setStorage = (item: string, params: any, storageType = 'localStorage') => window[storageType as keyof Window].setItem(item, JSON.stringify(params));
+export const setStorage = (
+  item: string,
+  params: object,
+  storageType = "localStorage"
+): void =>
+  window[storageType as keyof Window].setItem(item, JSON.stringify(params));

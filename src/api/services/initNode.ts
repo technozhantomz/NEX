@@ -1,28 +1,43 @@
-import { getPassedTime } from '../utils';
-import { Apis } from 'peerplaysjs-lib';
+import { Apis } from "peerplaysjs-lib";
 
-export const initNode = async (url: string, actualNode = false): Promise<any> => {
+import { getPassedTime } from "../utils";
 
-    const start = new Date();
+export type InstanceType = {
+  init_promise: Promise<unknown>;
+  url: string;
+  setRpcConnectionStatusCallback: (
+    callback: (status: string) => Promise<void>
+  ) => void;
+};
 
-    let instance: any = '';
+export type InitNodeOutput = {
+  instance: InstanceType;
+  connectTime: number;
+};
+export const initNode = async (
+  url: string,
+  actualNode = false
+): Promise<boolean | InitNodeOutput> => {
+  const start = new Date();
 
-    if (actualNode) {
-        if (Apis.instance().chain_id) {
-            await Apis.instance().close();
-        }
-        instance = Apis.instance(url, true);
-    } else {
-        instance = Apis.instance(url, true, 1000);
+  let instance: InstanceType;
+
+  if (actualNode) {
+    if (Apis.instance().chain_id) {
+      await Apis.instance().close();
     }
-    instance.url = url;
-    return instance.init_promise
-        .then(() => ({
-            instance,
-            connectTime: getPassedTime(start)
-        }))
-        .catch((e: any) => {
-            console.error('--error', e);
-            return false;
-        });
+    instance = Apis.instance(url, true);
+  } else {
+    instance = Apis.instance(url, true, 1000);
+  }
+  instance.url = url;
+  return instance.init_promise
+    .then(() => ({
+      instance,
+      connectTime: getPassedTime(start),
+    }))
+    .catch((e: unknown) => {
+      console.error("--error", e);
+      return false;
+    });
 };

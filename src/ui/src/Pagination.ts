@@ -1,5 +1,5 @@
-import { Pagination as AntdPagination } from 'antd'
-import styled from 'styled-components'
+import { Pagination as AntdPagination } from "antd";
+import styled from "styled-components";
 
 export const Pagination = styled(AntdPagination)`
   padding-top: 35px;
@@ -10,4 +10,4 @@ export const Pagination = styled(AntdPagination)`
     border: none;
     background: #ebf2ff;
   }
-`
+`;

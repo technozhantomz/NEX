@@ -1,1 +1,1 @@
-export * from './peerplaysApiProvider'
+export * from "./peerplaysApiProvider";

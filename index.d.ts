@@ -1,1 +1,1 @@
-declare module 'peerplaysjs-lib'
+declare module "peerplaysjs-lib";

@@ -1,15 +1,15 @@
-const isDev = process.env.NODE_ENV === 'development';
-const DEFAULT_TOKEN = process.env.NEXT_PUBLIC_DEFAULT_TOKEN
-const DEFAULT_QUOTE = process.env.NEXT_PUBLIC_DEFAULT_QUOTE
-const FAUCET_URL = process.env.NEXT_PUBLIC_FAUCET_URL
-const DEX_URL = process.env.NEXT_PUBLIC_DEX_URL
-const DEFAULT_CHAIN_ID = process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID
-const BLOCKCHAIN_ENDPOINTS = process.env.NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS
+const isDev = process.env.NODE_ENV === "development";
+const DEFAULT_TOKEN = process.env.NEXT_PUBLIC_DEFAULT_TOKEN;
+const DEFAULT_QUOTE = process.env.NEXT_PUBLIC_DEFAULT_QUOTE;
+const FAUCET_URL = process.env.NEXT_PUBLIC_FAUCET_URL;
+const DEX_URL = process.env.NEXT_PUBLIC_DEX_URL;
+const DEFAULT_CHAIN_ID = process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID;
+const BLOCKCHAIN_ENDPOINTS = process.env.NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS;
 
 /**
  * @namespace Config
  */
-const Config = {
+export const config = {
   /**
    * @type {boolean}
    * @memberof Config
@@ -53,7 +53,7 @@ const Config = {
    * @type {string[]}
    * @memberof Config
    */
-  blockchainEndpoints: BLOCKCHAIN_ENDPOINTS?.replace(' ', '').split(',') ?? [],
+  blockchainEndpoints: BLOCKCHAIN_ENDPOINTS?.replace(" ", "").split(",") ?? [],
 
   /**
    * Represents the faucet url.
@@ -69,7 +69,5 @@ const Config = {
    * @type {string}
    * @memberof Config
    */
-  dexUrl: DEX_URL
+  dexUrl: DEX_URL,
 };
-
-export default Config;
