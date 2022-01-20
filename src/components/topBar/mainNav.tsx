@@ -5,11 +5,15 @@ import {
 } from "@ant-design/icons";
 import { Menu, Switch } from "antd";
 import Link from "next/link";
+// import { useState } from "react";
 
 import { Blockchain, Contacts, Dashboard, Market, Vote } from "../icons";
 
 const MainNav = (): JSX.Element => {
+  // const [advancedSettings, setAdvancedSettings] = useState<boolean>(false);
+
   const onChange = (checked: boolean): void => {
+    // setAdvancedSettings(checked);
     console.log(`switch to ${checked}`);
   };
 
