@@ -7,11 +7,15 @@ import {
   useState,
 } from "react";
 
-import { PeerplaysApi, PeerplaysApiProvider, Props } from "../../../";
 import { defaultNodesList } from "../../api/params";
 import { initNode } from "../../api/services/initNode";
 import { initCache, initSettings } from "../../api/utils";
 import { initLocale } from "../../api/utils/locale";
+import {
+  PeerplaysApi,
+  PeerplaysApiProvider,
+  Props,
+} from "../../interfaces/index";
 
 const defaultPeerplaysApiContext: PeerplaysApi = {
   instance: {},

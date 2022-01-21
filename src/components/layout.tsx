@@ -1,14 +1,14 @@
-// import { ConfigProvider } from "antd";
+import { ConfigProvider } from "antd";
 import Head from "next/head";
-import React, { ReactNode } from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 
 import TopBar from "./topBar/topBar";
 
-// ConfigProvider.config({
-//   theme: {
-//     primaryColor: "#0148BE",
-//   },
-// });
+ConfigProvider.config({
+  theme: {
+    primaryColor: "#0148BE",
+  },
+});
 
 type Props = {
   children: ReactNode;
@@ -16,11 +16,11 @@ type Props = {
   description?: string;
 };
 
-const Layout = ({
+const Layout: FunctionComponent<Props> = ({
   children,
   title = "PeerPlays",
   description = "",
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <>
       <Head>
@@ -31,9 +31,9 @@ const Layout = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <TopBar />
-      {/* <ConfigProvider> */}
-      <main>{children}</main>
-      {/* </ConfigProvider> */}
+      <ConfigProvider>
+        <main>{children}</main>
+      </ConfigProvider>
     </>
   );
 };
