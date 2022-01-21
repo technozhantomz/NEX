@@ -4,11 +4,11 @@ import React, { FunctionComponent, ReactNode } from "react";
 
 import TopBar from "./topBar/topBar";
 
-ConfigProvider.config({
-  theme: {
-    primaryColor: "#0148BE",
-  },
-});
+// ConfigProvider.config({
+//   theme: {
+//     primaryColor: "#0148BE",
+//   },
+// });
 
 type Props = {
   children: ReactNode;
