@@ -8,7 +8,7 @@ import { Avatar, Dropdown } from "antd";
 import { useState } from "react";
 
 import { useViewport } from "../../context";
-import Styles from "../../styles/mainMenu.module.scss";
+import Styles from "../../styles/mainNav.module.scss";
 
 import MainNav from "./mainNav";
 import ProfileNav from "./profileNav";
@@ -18,6 +18,7 @@ const MainNavBar = (): JSX.Element => {
   const { width } = useViewport();
 
   const openMenu = () => {
+    console.log("openMenu Fire");
     menuOpen ? setMenuOpen(false) : setMenuOpen(true);
   };
 
@@ -50,7 +51,22 @@ const MainNavBar = (): JSX.Element => {
           </>
         )}
       </div>
-      <div className={Styles.MainMenu}>{menuOpen ? <MainNav /> : ""}</div>
+      <div
+        className={
+          menuOpen
+            ? Styles.MainMenuWrapper + " " + Styles.Open
+            : Styles.MainMenuWrapper
+        }
+      >
+        {width < 414 ? (
+          <a className={Styles.close} onClick={openMenu}>
+            X
+          </a>
+        ) : (
+          ""
+        )}
+        <MainNav />
+      </div>
     </>
   );
 };

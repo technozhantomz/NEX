@@ -1,14 +1,8 @@
 import { ConfigProvider } from "antd";
 import Head from "next/head";
-import React, { FunctionComponent, ReactNode } from "react";
+import React, { FunctionComponent, ReactNode, useEffect } from "react";
 
 import TopBar from "./topBar/topBar";
-
-// ConfigProvider.config({
-//   theme: {
-//     primaryColor: "#0148BE",
-//   },
-// });
 
 type Props = {
   children: ReactNode;
@@ -21,6 +15,18 @@ const Layout: FunctionComponent<Props> = ({
   title = "PeerPlays",
   description = "",
 }: Props) => {
+  useEffect(() => {
+    ConfigProvider.config({
+      theme: {
+        primaryColor: "#0148BE",
+        errorColor: "#ff4d4f",
+        warningColor: "#faad14",
+        successColor: "#52c41a",
+        infoColor: "#1890ff",
+      },
+    });
+  }, []);
+
   return (
     <>
       <Head>
