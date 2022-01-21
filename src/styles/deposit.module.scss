@@ -1,18 +1,6 @@
 
-.content_header {
-    margin: auto;
-    width: 50%;    
-}
-
-.content_body {
-    margin: auto;
-    width: 50%;      
-    margin-top: 20px;
-}
-
-
 .btn {
-    top: 335px;
+  top: 335px;
   left: 761px;
   width: 399px;
   height: 44px;
@@ -21,26 +9,41 @@
   border-radius: 4px;
   opacity: 1;
   }
+
+.header_container {
+  margin: auto;
+
+}
   
-  .cont {
-      background: red;
-    top: 120px;
-  left: 660px;
-  width: 600px;
-  height: 45px;
+.content_header {
+  top: 50px;
   background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
   background: #FFFFFF 0% 0% no-repeat padding-box;
   border-radius: 4px;
   opacity: 1;
-  }
-  
-  .cont2 {
-    top: 200px;
-  left: 660px;
-  width: 600px;
+  justify-content: space-around
+}
+
+.content_body {
+  top: 90px;
+  // left: 660px;
+  // width: 600px;
   height: 268px;
   background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
   background: #FFFFFF 0% 0% no-repeat padding-box;
   border-radius: 4px;
   opacity: 1;
-  }
+}
+
+.deposit_btn {
+  width: 140px; 
+  height: 32px;
+  background: #E3EBF8 0% 0% no-repeat padding-box;
+  border-radius: 4px;
+  opacity: 1;
+  border: none;
+}
+
+.btn_base {
+  background: red;
+}
