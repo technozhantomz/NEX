@@ -204,7 +204,7 @@ const LogoSVG = () => {
   );
 };
 
-const Logo = (
+const LogoIcon = (
   props: JSX.IntrinsicAttributes &
     IconComponentProps &
     RefAttributes<HTMLSpanElement>
@@ -212,4 +212,4 @@ const Logo = (
   return <Icon component={LogoSVG} {...props} />;
 };
 
-export default Logo;
+export default LogoIcon;

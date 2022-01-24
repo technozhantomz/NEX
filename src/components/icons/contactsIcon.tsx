@@ -23,7 +23,7 @@ const ContactsSVG = () => {
   );
 };
 
-const Contacts = (
+const ContactsIcon = (
   props: JSX.IntrinsicAttributes &
     IconComponentProps &
     RefAttributes<HTMLSpanElement>
@@ -31,4 +31,4 @@ const Contacts = (
   return <Icon component={ContactsSVG} {...props} />;
 };
 
-export default Contacts;
+export default ContactsIcon;

@@ -11,7 +11,7 @@ const DashboardSVG = () => {
   );
 };
 
-const Dashboard = (
+const DashboardIcon = (
   props: JSX.IntrinsicAttributes &
     IconComponentProps &
     RefAttributes<HTMLSpanElement>
@@ -19,4 +19,4 @@ const Dashboard = (
   return <Icon component={DashboardSVG} {...props} />;
 };
 
-export default Dashboard;
+export default DashboardIcon;

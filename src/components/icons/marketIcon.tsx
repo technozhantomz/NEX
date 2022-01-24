@@ -11,7 +11,7 @@ const MarketSVG = () => {
   );
 };
 
-const Market = (
+const MarketIcon = (
   props: JSX.IntrinsicAttributes &
     IconComponentProps &
     RefAttributes<HTMLSpanElement>
@@ -19,4 +19,4 @@ const Market = (
   return <Icon component={MarketSVG} {...props} />;
 };
 
-export default Market;
+export default MarketIcon;

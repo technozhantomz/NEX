@@ -11,7 +11,7 @@ const VoteSVG = () => {
   );
 };
 
-const Vote = (
+const VoteIcon = (
   props: JSX.IntrinsicAttributes &
     IconComponentProps &
     RefAttributes<HTMLSpanElement>
@@ -19,4 +19,4 @@ const Vote = (
   return <Icon component={VoteSVG} {...props} />;
 };
 
-export default Vote;
+export default VoteIcon;

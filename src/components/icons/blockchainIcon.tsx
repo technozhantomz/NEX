@@ -23,7 +23,7 @@ const BlockchainSVG = () => {
   );
 };
 
-const Blockchain = (
+const BlockchainIcon = (
   props: JSX.IntrinsicAttributes &
     IconComponentProps &
     RefAttributes<HTMLSpanElement>
@@ -31,4 +31,4 @@ const Blockchain = (
   return <Icon component={BlockchainSVG} {...props} />;
 };
 
-export default Blockchain;
+export default BlockchainIcon;

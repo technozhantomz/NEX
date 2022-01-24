@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const ConnectionManager = ({ children }: Props): JSX.Element => {
-  const { isLoadingConnection, isConnectionError, dbApi } = usePeerplaysApi();
+  const { isLoadingConnection, isConnectionError } = usePeerplaysApi();
   if (isConnectionError) {
     return <div>disconnected please try again later</div>;
   }
