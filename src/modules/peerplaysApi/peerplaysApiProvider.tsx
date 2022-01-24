@@ -1,5 +1,5 @@
 import { ChainStore } from "peerplaysjs-lib";
-import {
+import React, {
   createContext,
   useCallback,
   useContext,

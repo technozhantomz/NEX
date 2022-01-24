@@ -1,9 +1,13 @@
-import { defaultLocales } from '../../params';
 import counterpart from "counterpart";
-import { setLocale } from './setLocale';
-import { localeFromStorage } from './LocaleFromStorage';
 
-export const initLocale = () => {
-    defaultLocales.forEach(({ type, json }) => counterpart.registerTranslations(type, json));
-    setLocale(localeFromStorage());
+import { defaultLocales } from "../../params";
+
+import { localeFromStorage } from "./LocaleFromStorage";
+import { setLocale } from "./setLocale";
+
+export const initLocale = (): void => {
+  defaultLocales.forEach(({ type, json }) =>
+    counterpart.registerTranslations(type, json)
+  );
+  setLocale(localeFromStorage());
 };

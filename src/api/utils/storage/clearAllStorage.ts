@@ -1,4 +1,4 @@
-export const clearAllStorage = () => {
-    window.localStorage.clear();
-    window.sessionStorage.clear();
+export const clearAllStorage = (): void => {
+  window.localStorage.clear();
+  window.sessionStorage.clear();
 };

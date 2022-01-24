@@ -9,7 +9,7 @@ const BLOCKCHAIN_ENDPOINTS = process.env.NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS;
 /**
  * @namespace Config
  */
-const Config = {
+export const config = {
   /**
    * @type {boolean}
    * @memberof Config
@@ -71,5 +71,3 @@ const Config = {
    */
   dexUrl: DEX_URL,
 };
-
-export default Config;

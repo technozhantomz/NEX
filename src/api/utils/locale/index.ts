@@ -1,3 +1,3 @@
-export * from './initLocale'
-export * from './LocaleFromStorage'
-export * from './setLocale'
+export * from "./initLocale";
+export * from "./LocaleFromStorage";
+export * from "./setLocale";
