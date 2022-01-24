@@ -16,7 +16,6 @@ const MainNav = (): JSX.Element => {
 
   const onChange = (checked: boolean): void => {
     setAdvancedSettings(checked);
-    console.log(`switch to ${checked}`);
   };
 
   return (

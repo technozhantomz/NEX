@@ -23,7 +23,6 @@ export const ViewportProvider: FC = ({ children }) => {
   });
 
   const handleResize = (): void => {
-    // Set window width/height to state
     setWindowSize({
       width: window.innerWidth,
       height: window.innerHeight,
@@ -31,7 +30,6 @@ export const ViewportProvider: FC = ({ children }) => {
   };
 
   useEffect(() => {
-    // only execute all the code below in client side
     if (typeof window !== "undefined") {
       window.addEventListener("resize", handleResize);
       handleResize();

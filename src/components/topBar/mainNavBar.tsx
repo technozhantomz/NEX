@@ -18,7 +18,6 @@ const MainNavBar = (): JSX.Element => {
   const { width } = useViewport();
 
   const openMenu = () => {
-    console.log("openMenu Fire");
     menuOpen ? setMenuOpen(false) : setMenuOpen(true);
   };
 
