@@ -1,11 +1,11 @@
+import { Button } from "antd";
 import type { NextPage } from "next";
-import { Button, Card, Col, Row } from "antd";
+
+import Deposit from "../../components/deposit";
 import Layout from "../../components/layout";
-import Deposit from "../../components/deposit"
-import Styles from '../../styles/depositPage.module.scss';
+import Styles from "../../styles/depositPage.module.scss";
 
 const DepositPage: NextPage = () => {
-
   return (
     <Layout title="Deposit">
       <div className={Styles.headerContainer}>
