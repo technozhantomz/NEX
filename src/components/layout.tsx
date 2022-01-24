@@ -2,18 +2,24 @@ import { ConfigProvider } from "antd";
 import Head from "next/head";
 import React, { FunctionComponent, ReactNode, useEffect } from "react";
 
+import Styles from "../styles/layouts.module.scss";
+
 import TopBar from "./topBar/topBar";
 
 type Props = {
   children: ReactNode;
   title?: string;
   description?: string;
+  type?: string | undefined;
+  heading?: string | undefined;
 };
 
 const Layout: FunctionComponent<Props> = ({
   children,
   title = "PeerPlays",
-  description = "",
+  description,
+  type,
+  heading,
 }: Props) => {
   useEffect(() => {
     ConfigProvider.config({
@@ -27,6 +33,15 @@ const Layout: FunctionComponent<Props> = ({
     });
   }, []);
 
+  const getStyles = () => {
+    switch (true) {
+      case type == "card":
+        return Styles.CardLayout;
+      default:
+        return Styles.Default;
+    }
+  };
+
   return (
     <>
       <Head>
@@ -38,7 +53,14 @@ const Layout: FunctionComponent<Props> = ({
       </Head>
       <TopBar />
       <ConfigProvider>
-        <main>{children}</main>
+        <main className={getStyles()}>
+          {heading != undefined ? (
+            <h1 className={Styles.PageHeading}>{heading}</h1>
+          ) : (
+            ""
+          )}
+          {children}
+        </main>
       </ConfigProvider>
     </>
   );

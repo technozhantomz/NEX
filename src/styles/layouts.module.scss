@@ -1,0 +1,12 @@
+@import './vars.scss';
+
+.Default{
+    margin: 0;
+}
+
+.CardLayout{
+    margin: 10%;
+    .PageHeading{
+        color: var(---white);
+    }
+}
