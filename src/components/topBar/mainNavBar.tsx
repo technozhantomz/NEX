@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useViewport } from "../../context";
 import Styles from "../../styles/mainNav.module.scss";
 
-import MainNav from "./mainNav";
+import MainNav from "./mainMenu";
 import ProfileNav from "./profileNav";
 
 const MainNavBar = (): JSX.Element => {

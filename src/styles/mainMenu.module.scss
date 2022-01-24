@@ -12,11 +12,6 @@
             margin: 10px 0 0 0;
         }
     }
-    .MenuItem{
-        display: flex;
-        justify-content: space-between;
-        color: var(---text);
-    }
     .MenuIcon{
         color: var(---gray);
     }
@@ -40,9 +35,6 @@
             li{
                 border-bottom: none;
             }
-        }
-        .MenuItemArrow{
-         display: none;   
         }
         .Advanced{
             border: none;
