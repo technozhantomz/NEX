@@ -1,0 +1,27 @@
+.depositContainer {
+    background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 4px;
+    opacity: 1;
+    color: white;
+    font-size: 25px;
+    text-align: center;
+    width: 600px;
+    height: 268px;
+    margin: 10px;
+}
+
+.logInBtn {
+    margin-top: 150px;
+    height: 44px;
+    background: var(---primary-blue) 0% 0% no-repeat padding-box;
+    background: #0148BE 0% 0% no-repeat padding-box;
+    border-radius: 4px;
+    opacity: 1;
+    color: var(---text-icons-ffffff);
+    text-align: center;
+    font: normal normal normal 16px/20px Inter;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    opacity: 1;
+}
