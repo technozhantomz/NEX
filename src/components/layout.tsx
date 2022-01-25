@@ -27,7 +27,7 @@ const Layout: FunctionComponent<Props> = ({
         primaryColor: "#0148BE",
         errorColor: "#ff4d4f",
         warningColor: "#faad14",
-        successColor: "#52c41a",
+        successColor: "#2ADF5D",
         infoColor: "#1890ff",
       },
     });

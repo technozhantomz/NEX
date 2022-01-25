@@ -1,4 +1,4 @@
-@import './vars.scss';
+@import '../vars.scss';
 
 .MainNavBar{
     display: flex;
@@ -33,16 +33,18 @@
     height: 100%;
     background: var(---white);
     color: var(---text-icons);
+    z-index: 2;
     &.Open{
         display: block;
     }
     .close{
+        color: var(---text-icons);
         position: relative;
         text-align: left;
         display: flex;
         flex-direction: row;
-        align-items: end;
-        justify-content: end;
+        align-items: flex-end;
+        justify-content: flex-end;
         margin: 30px 20px 0 0;
     }
 }

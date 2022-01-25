@@ -8,7 +8,7 @@ import { Avatar, Dropdown } from "antd";
 import { useState } from "react";
 
 import { useViewport } from "../../context";
-import Styles from "../../styles/mainNav.module.scss";
+import Styles from "../../styles/topbar/mainNav.module.scss";
 
 import MainNav from "./mainMenu";
 import ProfileNav from "./profileNav";

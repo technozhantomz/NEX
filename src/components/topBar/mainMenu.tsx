@@ -6,7 +6,7 @@ import {
 import { Card, Switch } from "antd";
 import { useState } from "react";
 
-import Styles from "../../styles/mainMenu.module.scss";
+import Styles from "../../styles/topbar/mainMenu.module.scss";
 import { Blockchain, Contacts, Dashboard, Market, Vote } from "../icons";
 
 import MenuItem from "./MenuItem";

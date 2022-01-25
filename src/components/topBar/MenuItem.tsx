@@ -2,7 +2,7 @@ import { RightOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import React from "react";
 
-import Styles from "../../styles/menuItem.module.scss";
+import Styles from "../../styles/topbar/menuItem.module.scss";
 
 interface MenuItemProps {
   Href: string;

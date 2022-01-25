@@ -14,20 +14,25 @@ const Login: NextPage = () => {
     console.log(formData);
   };
 
+  const formValdation = {
+    username: [{ required: true, message: "Username is required" }],
+    password: [
+      { required: true, message: "Password is required" },
+      {
+        min: 12,
+        message: "Password should be at least 12 characters long",
+      },
+    ],
+  };
+
   return (
     <Layout title="Login" type="card" heading="Log into your account">
       <Card>
         <Form name="loginForm" onFinish={onLogin}>
-          <Form.Item
-            name="username"
-            rules={[{ required: true, message: "Please input your Username!" }]}
-          >
+          <Form.Item name="username" rules={formValdation.username}>
             <Input placeholder="Enter username" />
           </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
-          >
+          <Form.Item name="password" rules={formValdation.password}>
             <Input.Password placeholder="Enter password" />
           </Form.Item>
           <Form.Item>
@@ -36,8 +41,8 @@ const Login: NextPage = () => {
             </Button>
           </Form.Item>
         </Form>
-        <p>
-          Don't have a Peerplays account?
+        <p className="disclamer">
+          <span>Don't have a Peerplays account? </span>
           <Link href="/signup">
             <a>Create account</a>
           </Link>

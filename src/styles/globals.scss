@@ -33,7 +33,7 @@ body {
 }
 
 a {
-  color: inherit;
+  color: var(---additional-blue);
   text-decoration: none;
 }
 
@@ -44,4 +44,30 @@ a {
 .Row{
   display: flex;
   flex-direction: row;
+}
+
+.ant-card {
+  .ant-form {
+    .ant-btn{
+      display: block;
+      width: 85%;
+      margin: 0 auto;
+    }
+  }  
+}
+
+.disclamer{
+  font-size: 0.9em;
+  font-weight: 300;
+  text-align: center;
+}
+
+@media only screen and (min-width: $screen-sm-min) {
+  .ant-card {
+    .ant-form {
+      .ant-btn{
+        width: 70%;
+      }
+    }  
+  }
 }
