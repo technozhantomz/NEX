@@ -7,6 +7,7 @@ import {
 import { Button, Card, Checkbox, Form, Input } from "antd";
 import type { NextPage } from "next";
 import Link from "next/link";
+import { useEffect } from "react";
 
 import { CopyIcon } from "../../components/icons";
 import Layout from "../../components/layout";
@@ -17,8 +18,22 @@ interface SignupFormData {
 }
 
 const SignUp: NextPage = () => {
+  const [signUpForm] = Form.useForm();
+
   const onLogin = (formData: SignupFormData) => {
     console.log(formData);
+  };
+
+  const createPassword = () => {
+    let password = "";
+    const characterList =
+      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    const characterListLength = characterList.length;
+    for (let i = 0; i < 52; i++) {
+      const characterIndex = Math.round(Math.random() * characterListLength);
+      password += characterList.charAt(characterIndex);
+    }
+    return password;
   };
 
   const formValdation = {
@@ -31,10 +46,17 @@ const SignUp: NextPage = () => {
       },
     ],
   };
+
+  useEffect(() => {
+    signUpForm.setFieldsValue({
+      password: createPassword(),
+    });
+  }, []);
+
   return (
     <Layout title="SignUp" type="card" heading="Create your account">
       <Card>
-        <Form name="signUpForm" onFinish={onLogin}>
+        <Form form={signUpForm} name="signUpForm" onFinish={onLogin}>
           <Form.Item name="username" rules={formValdation.username}>
             <Input placeholder="Enter username" suffix={<CheckOutlined />} />
           </Form.Item>
