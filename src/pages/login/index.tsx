@@ -1,3 +1,4 @@
+import { CheckOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input } from "antd";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -30,7 +31,7 @@ const Login: NextPage = () => {
       <Card>
         <Form name="loginForm" onFinish={onLogin}>
           <Form.Item name="username" rules={formValdation.username}>
-            <Input placeholder="Enter username" />
+            <Input placeholder="Enter username" suffix={<CheckOutlined />} />
           </Form.Item>
           <Form.Item name="password" rules={formValdation.password}>
             <Input.Password placeholder="Enter password" />
