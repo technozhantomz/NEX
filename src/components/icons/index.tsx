@@ -1,6 +1,6 @@
-export { default as BlockchainIcon } from "./blockchainIcon";
-export { default as ContactsIcon } from "./contactsIcon";
-export { default as DashboardIcon } from "./dashboardIcon";
-export { default as LogoIcon } from "./logoIcon";
-export { default as MarketIcon } from "./marketIcon";
-export { default as VoteIcon } from "./voteIcon";
+export { default as Blockchain } from "./blockchainIcon";
+export { default as Contacts } from "./contactsIcon";
+export { default as Dashboard } from "./dashboardIcon";
+export { default as Logo } from "./logoIcon";
+export { default as Market } from "./marketIcon";
+export { default as Vote } from "./voteIcon";

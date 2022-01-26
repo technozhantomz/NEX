@@ -71,5 +71,3 @@ export const config = {
    */
   dexUrl: DEX_URL,
 };
-
-export default config;

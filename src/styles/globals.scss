@@ -1,13 +1,25 @@
+@import './vars.scss';
+
 :root {
   /* Colors: */
   ---black: #000000;
   ---white: #ffffff;
-  ---text-icons: #212121;
+  ---gray: #C1C2C4;
+  ---text: #212121;
+  ---text-icons: var(---text);
   ---text-icons-white: var(---white);
   ---additional-blue: #1084FF;
   ---secondary-green: #2ADF5D;
   ---secondary-orange: #FB7A14;
   ---primary-blue: #0148BE;
+}
+
+html,
+body,
+body > div:first-child,
+div#__next,
+div#__next > div {
+  height: 100%;
 }
 
 html,

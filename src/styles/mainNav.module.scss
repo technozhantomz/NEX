@@ -1,0 +1,58 @@
+@import './vars.scss';
+
+.MainNavBar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    color: var(---white);
+
+    .DropDownToggle{
+        font-size: 2em;
+        font-weight: bold;
+        margin-left: 10px;
+        &a:hover{
+            color: var(---white);
+        }
+    }
+    
+    .Hambuger{
+        font-size: 2em;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+}
+
+
+.MainMenuWrapper{
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: var(---white);
+    color: var(---text-icons);
+    &.Open{
+        display: block;
+    }
+    .close{
+        position: relative;
+        text-align: left;
+        display: flex;
+        flex-direction: row;
+        align-items: end;
+        justify-content: end;
+        margin: 30px 20px 0 0;
+    }
+}
+
+@media only screen and (min-width: $screen-sm-min) {
+    .MainMenuWrapper{
+        position: absolute;
+        top:110px;
+        right:50px;
+        height: inherit;
+        width: 210px;
+    }
+}
