@@ -1,7 +1,7 @@
 import {
   CheckOutlined,
   EyeInvisibleOutlined,
-  EyeTwoTone,
+  EyeOutlined,
   InfoCircleOutlined,
 } from "@ant-design/icons";
 import { Button, Card, Checkbox, Form, Input } from "antd";
@@ -11,6 +11,7 @@ import { useEffect } from "react";
 
 import { CopyIcon } from "../../components/icons";
 import Layout from "../../components/layout";
+import Styles from "../../styles/signup.module.scss";
 
 interface SignupFormData {
   username: string;
@@ -20,7 +21,7 @@ interface SignupFormData {
 const SignUp: NextPage = () => {
   const [signUpForm] = Form.useForm();
 
-  const onLogin = (formData: SignupFormData) => {
+  const onSignup = (formData: SignupFormData) => {
     console.log(formData);
   };
 
@@ -36,6 +37,16 @@ const SignUp: NextPage = () => {
     return password;
   };
 
+  const checkMatch = (_: unknown, value: { passwordCheck: string }) => {
+    if (value === signUpForm.getFieldValue("password"))
+      return Promise.resolve();
+    return Promise.reject(new Error("Password do not match"));
+  };
+
+  const copyPassword = () => {
+    navigator.clipboard.writeText(signUpForm.getFieldValue("password"));
+  };
+
   const formValdation = {
     username: [{ required: true, message: "Username is required" }],
     password: [
@@ -44,6 +55,10 @@ const SignUp: NextPage = () => {
         min: 12,
         message: "Password should be at least 12 characters long",
       },
+    ],
+    passwordCheck: [
+      { required: true, message: "This feild is required" },
+      { validator: checkMatch },
     ],
   };
 
@@ -56,33 +71,43 @@ const SignUp: NextPage = () => {
   return (
     <Layout title="SignUp" type="card" heading="Create your account">
       <Card>
-        <Form form={signUpForm} name="signUpForm" onFinish={onLogin}>
+        <Form form={signUpForm} name="signUpForm" onFinish={onSignup}>
           <Form.Item name="username" rules={formValdation.username}>
             <Input placeholder="Enter username" suffix={<CheckOutlined />} />
           </Form.Item>
           <p>Your auto-generated password</p>
           <Form.Item name="password" rules={formValdation.password}>
             <Input.Password
-              placeholder="Enter password"
               iconRender={(visible) =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                visible ? (
+                  <div>
+                    <CopyIcon onClick={copyPassword} />
+                    <EyeOutlined />
+                  </div>
+                ) : (
+                  <div>
+                    <CopyIcon onClick={copyPassword} />
+                    <EyeInvisibleOutlined />
+                  </div>
+                )
               }
-              suffix={<CopyIcon />}
             />
           </Form.Item>
-          <Form.Item
-            name="password-confermation"
-            rules={formValdation.password}
-          >
-            <Input.Password placeholder="Enter password" />
+          <Form.Item name="passwordCheck" rules={formValdation.passwordCheck}>
+            <Input.Password
+              placeholder="Re-enter your auto-generated password"
+              visibilityToggle={false}
+            />
           </Form.Item>
-          <div>
-            <InfoCircleOutlined />
-            <p>
-              <span>Keep your password safe to avoid losing any funds.</span>
-              <Link href={"/"}>Download Recovery password file here</Link>
-            </p>
-          </div>
+          <Form.Item>
+            <div className={Styles.InfoBar}>
+              <InfoCircleOutlined className={Styles.InfoBarIcon} />
+              <p className={Styles.InfoBarText}>
+                <span>Keep your password safe to avoid losing any funds.</span>
+                <Link href={"/"}>Download Recovery password file here</Link>
+              </p>
+            </div>
+          </Form.Item>
           <Form.Item name="confirm" valuePropName="checked">
             <Checkbox>
               I understand Peerplays cannot recover my lost password
@@ -99,7 +124,7 @@ const SignUp: NextPage = () => {
         </Form>
         <p className="disclamer">
           <span>Already have a Peerplays account? </span>
-          <Link href="/signup">
+          <Link href="/login">
             <a>Log in</a>
           </Link>
         </p>

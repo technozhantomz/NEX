@@ -1,0 +1,14 @@
+.InfoBar{
+    display: flex;
+    text-align: left;
+    font-size: 0.9em;
+    align-items: center;
+    .InfoBarIcon{
+        margin-right: 10px;
+        color: var(--ant-warning-color);
+    }
+    .InfoBarText{
+        margin: 0;
+        max-width: 388px;
+    }
+}

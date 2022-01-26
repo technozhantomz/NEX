@@ -28,6 +28,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-weight: 300;
   color: var(---white);
   background: transparent radial-gradient(closest-side at 50% 50%, var(---primary-blue) 0%, #01245F 100%) 0% 0% no-repeat padding-box;
 }
@@ -53,6 +54,27 @@ a {
       width: 85%;
       margin: 0 auto;
     }
+    .ant-form-item-has-success{
+      .ant-input-suffix{
+        color: var(--ant-success-color);
+      }
+    }
+    .ant-input-password-icon{
+      color: #B9B9B9;
+      display: flex;
+      justify-content: space-between;
+      width: 38px;
+    }
+    .ant-checkbox-wrapper{
+      align-items: flex-start;
+      .ant-checkbox-inner{
+        width: 30px;
+        height: 30px;
+        &::after{
+          left: 35%;
+        }
+      }
+    }
   }  
 }
 
@@ -68,6 +90,16 @@ a {
       .ant-btn{
         width: 70%;
       }
-    }  
+      .ant-checkbox-wrapper{
+        align-items: flex-start;
+        .ant-checkbox-inner{
+          width: 20px;
+          height: 20px;
+          &::after{
+            left: 25%;
+          }
+        }
+      }  
+    }
   }
 }
