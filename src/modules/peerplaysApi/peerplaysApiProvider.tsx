@@ -15,17 +15,7 @@ import {
 } from "../../api/services/initNode";
 import { initCache, initSettings } from "../../api/utils";
 import { initLocale } from "../../api/utils/locale";
-
-export type PeerplaysApi = {
-  instance: InstanceType;
-  isLoadingConnection: boolean;
-  isConnectionError: boolean;
-  dbApi: unknown;
-};
-
-export type Props = {
-  children: React.ReactNode;
-};
+import { PeerplaysApi, Props } from "../../interfaces/index";
 
 const defaultPeerplaysApiContext: PeerplaysApi = {
   instance: {} as InstanceType,
