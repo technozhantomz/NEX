@@ -6,7 +6,7 @@ import { Login, PrivateKey } from "peerplaysjs-lib";
 
 import { defaultToken } from "../../api/params/networkparams";
 import Layout from "../../components/layout";
-import { getFullAccount } from "../../context/user/helper";
+import { usePeerplaysApi } from "../../modules/peerplaysApi";
 
 interface LoginFormData {
   username: string;
@@ -14,9 +14,14 @@ interface LoginFormData {
 }
 
 const LoginPage: NextPage = () => {
+  const { dbApi } = usePeerplaysApi();
   const onLogin = async (formData: LoginFormData) => {
     //console.log(formData);
-    const fullAcc = getFullAccount(formData.username, false)
+    //TODO: move to doseUserExist
+    const fullAcc = await dbApi("get_full_accounts", [
+      [formData.username],
+      false,
+    ])
       .then((arr: any[][]) => arr[0][1])
       .catch(() => false);
 
