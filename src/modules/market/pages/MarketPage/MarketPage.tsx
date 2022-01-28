@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Col, Row } from "../../../../ui/src";
+import { Col, Flex, Row } from "../../../../ui/src";
+import { OrderTabs } from "../../components/OrderTabs";
 import { PairSelect } from "../../components/PairSelect";
 
 import * as Styled from "./MarketPage.styled";
@@ -11,9 +12,12 @@ const MarketPage: React.FC = () => {
       <Styled.Container>
         <Row>
           <Col span={6}>
-            <PairSelect />
+            <Flex flexDirection="column">
+              <PairSelect />
+              <OrderTabs />
+            </Flex>
           </Col>
-          <Col span={18}>salam</Col>
+          <Col span={18}></Col>
         </Row>
       </Styled.Container>
     </>
