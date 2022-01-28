@@ -22,7 +22,7 @@ const LoginPage: NextPage = () => {
       [formData.username],
       false,
     ])
-      .then((arr: any[][]) => arr[0][1])
+      .then((arr: any[][]): any => arr[0][1])
       .catch(() => false);
 
     if (!fullAcc) {
