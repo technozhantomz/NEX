@@ -6,7 +6,7 @@ export interface PeerplaysApi {
   instance: InstanceType;
   isLoadingConnection: boolean;
   isConnectionError: boolean;
-  dbApi: unknown;
+  dbApi: any;
 }
 export interface Props {
   children: React.ReactNode;
@@ -14,4 +14,12 @@ export interface Props {
 
 export interface PeerplaysApiProvider {
   PeerplaysApi: PeerplaysApi;
+}
+
+export interface Asset {
+  precision: any;
+  id: string;
+  symbol: string;
+  percent: number;
+  amount: number;
 }

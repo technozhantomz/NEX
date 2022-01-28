@@ -2,17 +2,69 @@ import { CheckOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input } from "antd";
 import type { NextPage } from "next";
 import Link from "next/link";
+import { Login, PrivateKey } from "peerplaysjs-lib";
 
+import { defaultToken } from "../../api/params/networkparams";
 import Layout from "../../components/layout";
+import { getFullAccount } from "../../context/user/helper";
 
 interface LoginFormData {
   username: string;
   password: string;
 }
 
-const Login: NextPage = () => {
-  const onLogin = (formData: LoginFormData) => {
-    console.log(formData);
+const LoginPage: NextPage = () => {
+  const onLogin = async (formData: LoginFormData) => {
+    //console.log(formData);
+    const fullAcc = getFullAccount(formData.username, false)
+      .then((arr: any[][]) => arr[0][1])
+      .catch(() => false);
+
+    if (!fullAcc) {
+      //TODO: add error handling
+      console.log("no account");
+    }
+    console.log(fullAcc);
+    const accData = fullAcc.account;
+    const roles = ["active", "owner", "memo"];
+    let checkPassword = false;
+    let fromWif = "";
+
+    try {
+      fromWif = PrivateKey.fromWif(formData.password);
+    } catch (e) {
+      console.error(e);
+    }
+
+    const keys = Login.generateKeys(
+      formData.username,
+      formData.password,
+      roles
+    );
+
+    for (const role of roles) {
+      const privKey = fromWif ? fromWif : keys.privKeys[role];
+      const pubKey = privKey.toPublicKey().toString(defaultToken);
+      const key =
+        role !== "memo"
+          ? accData[role].key_auths[0][0]
+          : accData.options.memo_key;
+
+      if (key === pubKey) {
+        checkPassword = true;
+        break;
+      }
+    }
+    if (!checkPassword) {
+      console.log("wrong password");
+    }
+
+    // const userData = await formAccount(
+    //   accData.id,
+    //   formData.username,
+    //   fullAcc.balances
+    // );
+    // console.log(userData);
   };
 
   const formValdation = {
@@ -53,4 +105,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

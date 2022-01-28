@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 
 import { ConnectionManager } from "../common/components/ConnectionManager";
 import { ViewportProvider } from "../context/index";
+import { UserProvider } from "../context/user/user";
 import { PeerplaysApiProvider } from "../modules/peerplaysApi";
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
@@ -12,7 +13,9 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
     <ViewportProvider>
       <PeerplaysApiProvider>
         <ConnectionManager>
-          <Component {...pageProps} />
+          <UserProvider>
+            <Component {...pageProps} />
+          </UserProvider>
         </ConnectionManager>
       </PeerplaysApiProvider>
     </ViewportProvider>
