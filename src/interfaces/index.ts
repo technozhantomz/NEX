@@ -6,7 +6,8 @@ export interface PeerplaysApi {
   instance: InstanceType;
   isLoadingConnection: boolean;
   isConnectionError: boolean;
-  dbApi: any;
+  dbApi?: any;
+  historyApi?: any;
 }
 export interface Props {
   children: React.ReactNode;

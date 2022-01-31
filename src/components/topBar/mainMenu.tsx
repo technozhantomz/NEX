@@ -4,18 +4,18 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { Card, Switch } from "antd";
-import { useState } from "react";
 
+import { useUser } from "../../context";
 import Styles from "../../styles/topbar/mainMenu.module.scss";
 import { Blockchain, Contacts, Dashboard, Market, Vote } from "../icons";
 
 import MenuItem from "./MenuItem";
 
 const MainNav = (): JSX.Element => {
-  const [advancedSettings, setAdvancedSettings] = useState<boolean>();
+  const { userSettings, updateUserSettings } = useUser();
 
   const onChange = (checked: boolean): void => {
-    setAdvancedSettings(checked);
+    updateUserSettings(checked);
   };
 
   return (
@@ -53,7 +53,7 @@ const MainNav = (): JSX.Element => {
           <Switch size="small" onChange={onChange} /> Advanced Settings
         </li>
 
-        {advancedSettings ? (
+        {userSettings ? (
           <>
             <li>
               <MenuItem

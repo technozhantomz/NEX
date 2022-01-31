@@ -25,7 +25,6 @@ const defaultPeerplaysApiContext: PeerplaysApi = {
   instance: {} as InstanceType,
   isLoadingConnection: false,
   isConnectionError: false,
-  dbApi: null,
 };
 
 const peerplaysApiContext = createContext<PeerplaysApi>(
@@ -99,6 +98,25 @@ export function PeerplaysApiProvider({ children }: Props): JSX.Element {
     [instance]
   );
 
+  const historyApi = useCallback(
+    (request, data = []) =>
+      instance["_hist"].exec(request, data).catch(async (err: Error) => {
+        const error = "Error: websocket state error:3";
+        const url = instance.url;
+        if (error === err.message) {
+          setIsLoadingConnection(true);
+          const initedNode = await initNode(url, true);
+          if (!initedNode) {
+            setIsConnectionError(true);
+          } else {
+            setInstance((initedNode as InitNodeOutput).instance);
+            setIsLoadingConnection(false);
+          }
+        }
+      }),
+    [instance]
+  );
+
   useEffect(() => {
     initCache();
     initSettings();
@@ -107,7 +125,13 @@ export function PeerplaysApiProvider({ children }: Props): JSX.Element {
   }, []);
   return (
     <peerplaysApiContext.Provider
-      value={{ instance, isLoadingConnection, isConnectionError, dbApi }}
+      value={{
+        instance,
+        isLoadingConnection,
+        isConnectionError,
+        dbApi,
+        historyApi,
+      }}
     >
       {children}
     </peerplaysApiContext.Provider>

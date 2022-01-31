@@ -7,7 +7,7 @@ import {
 import { Avatar, Dropdown } from "antd";
 import { useState } from "react";
 
-import { useViewport } from "../../context";
+import { useUser, useViewport } from "../../context";
 import Styles from "../../styles/topbar/mainNav.module.scss";
 
 import MainNav from "./mainMenu";
@@ -16,6 +16,7 @@ import ProfileNav from "./profileNav";
 const MainNavBar = (): JSX.Element => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const { width } = useViewport();
+  const { accountData } = useUser();
 
   const openMenu = () => {
     menuOpen ? setMenuOpen(false) : setMenuOpen(true);
@@ -39,7 +40,9 @@ const MainNavBar = (): JSX.Element => {
               placement="bottomRight"
             >
               <a className="ant-dropdown-link">
-                <Avatar icon={<UserOutlined />} />
+                <Avatar icon={accountData?.name ? " " : <UserOutlined />}>
+                  {accountData?.name ? accountData.name.charAt(0) : ""}
+                </Avatar>
               </a>
             </Dropdown>
             <MoreOutlined

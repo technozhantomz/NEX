@@ -7,17 +7,17 @@ const { dbApi } = usePeerplaysApi();
 
 export const getFullAccount = (
   name: string,
-  subscription = false
+  subscription: boolean
 ): Promise<IFullAccount | undefined> =>
   dbApi("get_full_accounts", [[name], subscription])
-    .then((e: string | any[]) => (e.length ? e[0][1] : false))
+    .then((e: IFullAccount) => (e ? e : undefined))
     .catch(() => false);
 
 export const getSidechainAccounts = (
   accountId: string
-): Promise<any[] | undefined> =>
+): Promise<unknown[] | undefined> =>
   dbApi("get_sidechain_addresses_by_account", [accountId])
-    .then((e: string | any[]) => (e.length ? e : false))
+    .then((e: string | unknown[]) => (e.length ? e : undefined))
     .catch(() => false);
 
 export const getAccount = async (
