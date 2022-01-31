@@ -1,8 +1,9 @@
 import { Button } from "antd";
+import React from "react";
 
-import Styles from "../../styles/depositComponent.module.scss";
+import Styles from "../../../../styles/depositComponent.module.scss";
 
-const Deposit = (): JSX.Element => {
+export const DepositTab = (): JSX.Element => {
   return (
     <div className={Styles.depositContainer}>
       <Button className={Styles.logInBtn}>
@@ -11,5 +12,3 @@ const Deposit = (): JSX.Element => {
     </div>
   );
 };
-
-export default Deposit;
