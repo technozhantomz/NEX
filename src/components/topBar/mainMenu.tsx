@@ -4,6 +4,7 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { Card, Switch } from "antd";
+import { useEffect, useState } from "react";
 
 import { useUser } from "../../context";
 import Styles from "../../styles/topbar/mainMenu.module.scss";
@@ -12,11 +13,17 @@ import { Blockchain, Contacts, Dashboard, Market, Vote } from "../icons";
 import MenuItem from "./MenuItem";
 
 const MainNav = (): JSX.Element => {
+  const [showAdvanced, setAdvanced] = useState<boolean>(false);
   const { userSettings, updateUserSettings } = useUser();
 
   const onChange = (checked: boolean): void => {
-    updateUserSettings({ advancedSettings: checked });
+    setAdvanced(checked);
+    updateUserSettings("advancedSettings", checked);
   };
+
+  useEffect(() => {
+    setAdvanced(userSettings.advancedSettings);
+  }, [userSettings.advancedSettings, showAdvanced]);
 
   return (
     <Card className={Styles.MainMenu} bordered={false}>
@@ -50,10 +57,14 @@ const MainNav = (): JSX.Element => {
           />
         </li>
         <li className={Styles.Advanced}>
-          <Switch size="small" onChange={onChange} /> Advanced Settings
+          <Switch
+            size="small"
+            onChange={onChange}
+            defaultChecked={userSettings.advancedSettings}
+          />
+          <span> Advanced Settings</span>
         </li>
-
-        {userSettings.advancedSettings ? (
+        {showAdvanced ? (
           <>
             <li>
               <MenuItem

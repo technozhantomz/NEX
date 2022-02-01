@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
+import { editStorage, getStorage } from "../../api/utils/storage";
 import { useLocalStorage } from "../../common/hooks";
 import { Cache, IAccountData } from "../../common/types";
 import { Props } from "../../modules/peerplaysApi/peerplaysApiProvider.types";
@@ -9,6 +10,7 @@ import { IUser, IUserSettings } from "./userTypes";
 const defaultUserState = {
   userSettings: {
     advancedSettings: false,
+    notificationSettings: true,
   },
 };
 
@@ -17,31 +19,40 @@ const UserContext = createContext<IUser>(defaultUserState);
 export const UserProvider = ({ children }: Props): JSX.Element => {
   const [accountData, setAccountData] = useState<IAccountData>();
   const [userSettings, setUserSettings] = useState<IUserSettings>({
-    advancedSettings: false,
+    advancedSettings: getStorage("settings").advancedMode,
+    notificationSettings: getStorage("settings").notifications,
   });
   const [jsonCache, setJsonCache] = useLocalStorage("cache");
 
-  const updateUserSettings = (userSettings: IUserSettings) => {
+  const updateUserSettings = (key: string, value: boolean) => {
+    const settings = getStorage("settings");
+    if (key === "advancedSettings") {
+      settings.advancedMode = value;
+      userSettings.advancedSettings = value;
+    }
+    if (key === "notificationSettings") {
+      settings.notifications = value;
+      userSettings.notificationSettings = value;
+    }
     setUserSettings(userSettings);
+    editStorage("settings", settings);
   };
 
   const updateAccountData = (accountData: IAccountData) => {
     const cache = jsonCache as Cache;
     setAccountData(accountData);
-    setJsonCache(
-      JSON.stringify({
-        created: cache.created,
-        accounts: cache.accounts,
-        assets: cache.assets,
-        userSettings: accountData,
-      })
-    );
+    setJsonCache({
+      created: cache.created,
+      accounts: cache.accounts,
+      assets: cache.assets,
+      userAccount: accountData,
+    });
   };
 
   useEffect(() => {
     const cache = jsonCache as Cache;
     if (cache.userAccount != undefined) setAccountData(cache.userAccount);
-  }, []);
+  }, [accountData]);
 
   return (
     <UserContext.Provider

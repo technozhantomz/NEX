@@ -1,7 +1,11 @@
 type GetStorageOutput = {
-  created: Date;
   language: string;
-  active: boolean;
+  darkTheme: boolean;
+  advancedMode: boolean;
+  notifications: boolean;
+  walletLock: number;
+  nodeAutoselect: boolean;
+  defaultAsset: string;
 };
 export const getStorage = (
   item: string,
