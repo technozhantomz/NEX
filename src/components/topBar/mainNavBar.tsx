@@ -40,8 +40,10 @@ const MainNavBar = (): JSX.Element => {
               placement="bottomRight"
             >
               <a className="ant-dropdown-link">
-                <Avatar icon={accountData?.name ? " " : <UserOutlined />}>
-                  {accountData?.name ? accountData.name.charAt(0) : ""}
+                <Avatar
+                  icon={accountData !== undefined ? "" : <UserOutlined />}
+                >
+                  {accountData !== undefined ? accountData.name.charAt(0) : ""}
                 </Avatar>
               </a>
             </Dropdown>

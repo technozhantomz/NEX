@@ -15,7 +15,7 @@ const MainNav = (): JSX.Element => {
   const { userSettings, updateUserSettings } = useUser();
 
   const onChange = (checked: boolean): void => {
-    updateUserSettings(checked);
+    updateUserSettings({ advancedSettings: checked });
   };
 
   return (
@@ -53,7 +53,7 @@ const MainNav = (): JSX.Element => {
           <Switch size="small" onChange={onChange} /> Advanced Settings
         </li>
 
-        {userSettings ? (
+        {userSettings.advancedSettings ? (
           <>
             <li>
               <MenuItem

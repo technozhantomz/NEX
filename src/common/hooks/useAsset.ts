@@ -16,7 +16,7 @@ export function useAsset(): UseAssetResult {
       const cache = jsonCache as Cache;
       if (
         Object.keys(cache).length > 0 &&
-        cache.assets.length > 0 &&
+        cache.assets != undefined &&
         cache.assets.find((asset) => asset.id === id) !== undefined
       ) {
         return cache.assets.find((asset) => asset.id === id);
@@ -26,18 +26,56 @@ export function useAsset(): UseAssetResult {
         (e: Asset[]) => e[0]
       );
       const assets =
-        cache.assets.length > 0 ? [...cache.assets, asset] : [asset];
+        cache.assets != undefined ? [...cache.assets, asset] : [asset];
       setJsonCache(
         JSON.stringify({
           created: cache.created,
           accounts: cache.accounts,
           assets: assets,
+          userAccount: cache.userAccount,
         })
       );
 
       return asset;
     },
     [dbApi, jsonCache, setJsonCache]
+  );
+
+  const getAssetBySymbol = useCallback(
+    async (symbol: string) => {
+      const cache = jsonCache as Cache;
+      if (
+        Object.keys(cache).length > 0 &&
+        cache.assets != undefined &&
+        cache.assets.find((asset) => asset.symbol === symbol) !== undefined
+      ) {
+        return cache.assets.find((asset) => asset.symbol === symbol);
+      }
+
+      const asset: Asset = await dbApi("lookup_asset_symbols", [[symbol]]).then(
+        (e: Asset[]) => e[0]
+      );
+      const assets =
+        cache.assets != undefined ? [...cache.assets, asset] : [asset];
+      setJsonCache(
+        JSON.stringify({
+          created: cache.created,
+          accounts: cache.accounts,
+          assets: assets,
+          userAccount: cache.userAccount,
+        })
+      );
+
+      return asset;
+    },
+    [dbApi, jsonCache, setJsonCache]
+  );
+
+  const toString = useCallback(
+    (amount: number, symbol: string, precision: number) => {
+      return `${setPrecision(true, amount, precision)} ${symbol}`;
+    },
+    []
   );
 
   const setPrecision = useCallback(
@@ -49,6 +87,8 @@ export function useAsset(): UseAssetResult {
   );
   return {
     getAssetById,
+    getAssetBySymbol,
     setPrecision,
+    toString,
   };
 }

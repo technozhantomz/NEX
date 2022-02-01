@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { Props } from "../../interfaces";
+import { useLocalStorage } from "../../common/hooks";
+import { Cache, IAccountData } from "../../common/types";
+import { Props } from "../../modules/peerplaysApi/peerplaysApiProvider.types";
 
-// import { getFullAccount } from "./helper";
-import { IAccountData, IUser, IUserSettings } from "./userTypes";
+import { IUser, IUserSettings } from "./userTypes";
 
 const defaultUserState = {
   userSettings: {
@@ -18,21 +19,29 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const [userSettings, setUserSettings] = useState<IUserSettings>({
     advancedSettings: false,
   });
+  const [jsonCache, setJsonCache] = useLocalStorage("cache");
 
   const updateUserSettings = (userSettings: IUserSettings) => {
     setUserSettings(userSettings);
   };
 
   const updateAccountData = (accountData: IAccountData) => {
+    const cache = jsonCache as Cache;
     setAccountData(accountData);
+    setJsonCache(
+      JSON.stringify({
+        created: cache.created,
+        accounts: cache.accounts,
+        assets: cache.assets,
+        userSettings: accountData,
+      })
+    );
   };
 
-  // const loginUser = (loginFormData: ILoginFormData) => {
-  //   // const fullAcc = getFullAccount(loginFormData.username, false);
-  //   // console.log(fullAcc);
-  // };
-  // const logoutUser = () => {};
-  // const signupUser = () => {};
+  useEffect(() => {
+    const cache = jsonCache as Cache;
+    if (cache.userAccount != undefined) setAccountData(cache.userAccount);
+  }, []);
 
   return (
     <UserContext.Provider
@@ -41,7 +50,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         userSettings,
         updateUserSettings,
         updateAccountData,
-        // loginUser,
       }}
     >
       {children}
