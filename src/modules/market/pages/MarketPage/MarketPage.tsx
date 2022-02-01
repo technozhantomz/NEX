@@ -17,7 +17,12 @@ const MarketPage: React.FC = () => {
               <OrderTabs />
             </Flex>
           </Col>
-          <Col span={18}></Col>
+          <Col span={18}>
+            <Row>
+              <Col span={12}></Col>
+              <Col span={12}></Col>
+            </Row>
+          </Col>
         </Row>
       </Styled.Container>
     </>

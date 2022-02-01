@@ -15,13 +15,15 @@ import {
 } from "../../api/services/initNode";
 import { initCache, initSettings } from "../../api/utils";
 import { initLocale } from "../../api/utils/locale";
-import { PeerplaysApi, Props } from "../../interfaces/index";
+
+import { PeerplaysApi, Props } from "./peerplaysApiProvider.types";
 
 const defaultPeerplaysApiContext: PeerplaysApi = {
   instance: {} as InstanceType,
-  isLoadingConnection: false,
+  isLoadingConnection: true,
   isConnectionError: false,
   dbApi: null,
+  historyApi: null,
 };
 
 const peerplaysApiContext = createContext<PeerplaysApi>(
@@ -34,9 +36,30 @@ export function usePeerplaysApi(): PeerplaysApi {
 
 export function PeerplaysApiProvider({ children }: Props): JSX.Element {
   const [instance, setInstance] = useState<InstanceType>({} as InstanceType);
-  const [isLoadingConnection, setIsLoadingConnection] =
-    useState<boolean>(false);
+  const [isLoadingConnection, setIsLoadingConnection] = useState<boolean>(true);
   const [isConnectionError, setIsConnectionError] = useState<boolean>(false);
+
+  const getApi =
+    (type: "_db" | "_hist") =>
+    (request: string, data = []) => {
+      if (Object.keys(instance).length > 0) {
+        return instance[type].exec(request, data).catch(async (err: Error) => {
+          const error = "Error: websocket state error:3";
+          const url = instance.url;
+          if (error === err.message) {
+            setIsLoadingConnection(true);
+            const initedNode = await initNode(url, true);
+            if (!initedNode) {
+              setIsConnectionError(true);
+              setIsLoadingConnection(false);
+            } else {
+              setInstance((initedNode as InitNodeOutput).instance);
+              setIsLoadingConnection(false);
+            }
+          }
+        });
+      }
+    };
 
   const setSocketCallBack = (instance: InstanceType): void => {
     instance.setRpcConnectionStatusCallback(async (status: string) => {
@@ -46,8 +69,9 @@ export function PeerplaysApiProvider({ children }: Props): JSX.Element {
       const newInstance = await initNode(activeUrl, true);
       if (!newInstance) {
         setIsConnectionError(true);
+        setIsLoadingConnection(false);
       } else {
-        setInstance(newInstance);
+        setInstance((newInstance as InitNodeOutput).instance);
         setIsLoadingConnection(false);
       }
     });
@@ -67,6 +91,7 @@ export function PeerplaysApiProvider({ children }: Props): JSX.Element {
 
     if (!initedNode) {
       setIsConnectionError(true);
+      setIsLoadingConnection(false);
     } else {
       ChainStore.setDispatchFrequency(0);
       ChainStore.init();
@@ -76,24 +101,9 @@ export function PeerplaysApiProvider({ children }: Props): JSX.Element {
     }
   }, []);
 
-  const dbApi = useCallback(
-    (request, data = []) =>
-      instance["_db"].exec(request, data).catch(async (err: Error) => {
-        const error = "Error: websocket state error:3";
-        const url = instance.url;
-        if (error === err.message) {
-          setIsLoadingConnection(true);
-          const initedNode = await initNode(url, true);
-          if (!initedNode) {
-            setIsConnectionError(true);
-          } else {
-            setInstance((initedNode as InitNodeOutput).instance);
-            setIsLoadingConnection(false);
-          }
-        }
-      }),
-    [instance]
-  );
+  const dbApi = useCallback(getApi("_db"), [instance]);
+
+  const historyApi = useCallback(getApi("_hist"), [instance]);
 
   useEffect(() => {
     initCache();
@@ -103,7 +113,13 @@ export function PeerplaysApiProvider({ children }: Props): JSX.Element {
   }, []);
   return (
     <peerplaysApiContext.Provider
-      value={{ instance, isLoadingConnection, isConnectionError, dbApi }}
+      value={{
+        instance,
+        isLoadingConnection,
+        isConnectionError,
+        dbApi,
+        historyApi,
+      }}
     >
       {children}
     </peerplaysApiContext.Provider>

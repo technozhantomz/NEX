@@ -1,7 +1,6 @@
 import { Tabs } from "../../../../ui/src";
+import { HistoryBook } from "../HistoryBook";
 import { OrderBook } from "../OrderBook";
-
-import * as Styled from "./OrderTabs.styles";
 
 const { TabPane } = Tabs;
 
@@ -12,7 +11,7 @@ export const OrderTabs = (): JSX.Element => {
         <OrderBook />
       </TabPane>
       <TabPane tab="History" key="2">
-        Content of Tab Pane 2
+        <HistoryBook />
       </TabPane>
     </Tabs>
   );

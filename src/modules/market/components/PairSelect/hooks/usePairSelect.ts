@@ -1,42 +1,61 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useLocalStorage } from "../../../../../common/hooks/useLocalStorage";
+import { Asset } from "../../../../../common/types/Asset";
 import { Exchanges } from "../../../../../common/types/Exchanges";
+import { usePeerplaysApi } from "../../../../peerplaysApi";
 
 import { UsePairSelectResult } from "./usePariSelect.types";
 
 export function usePairSelect(): UsePairSelectResult {
   const [jsonExchanges, setJsonExchanges] = useLocalStorage("exchanges");
+  // Active pair example: BTC_TEST
   const [activePair, setActivePair] = useState<string>("");
+  // Recent pairs example: ["BTC / TEST"]
   const [recentPairs, setRecentPairs] = useState<string[]>([]);
+  const { dbApi } = usePeerplaysApi();
+  const [currentBase, setCurrentBase] = useState<Asset>();
+  const [currentQuote, setCurrentQuote] = useState<Asset>();
+
+  const getPairData = useCallback(
+    async (assets: string[]) => {
+      const [quote, base] = await dbApi("lookup_asset_symbols", [assets]);
+      setCurrentBase(base as Asset);
+      setCurrentQuote(quote as Asset);
+    },
+    [dbApi, setCurrentBase, setCurrentQuote]
+  );
 
   const handleSelectPair = useCallback(
     (selectedPair: string) => {
-      setActivePair(selectedPair);
       let list: string[] = [];
-      recentPairs.includes(selectedPair)
-        ? (list = [...recentPairs])
-        : [...recentPairs, selectedPair];
+      if (selectedPair !== activePair) {
+        recentPairs.includes(selectedPair.split("_").join(" / "))
+          ? (list = [...recentPairs])
+          : [...recentPairs, selectedPair];
 
-      setRecentPairs([...list]);
-      setJsonExchanges(
-        JSON.stringify({
-          active: selectedPair,
-          list: [...list],
-        })
-      );
+        setJsonExchanges(
+          JSON.stringify({
+            active: selectedPair,
+            list: [...list],
+          })
+        );
+      }
     },
-    [recentPairs, setRecentPairs, setActivePair, setJsonExchanges]
+    [recentPairs, setJsonExchanges]
   );
 
   useEffect(() => {
-    const exchanges: Exchanges = JSON.parse(jsonExchanges as string);
+    const exchanges = jsonExchanges as Exchanges;
     setActivePair(exchanges.active);
     setRecentPairs(exchanges.list);
-  }, [jsonExchanges, setActivePair, setRecentPairs]);
+    getPairData(exchanges.active.split("_"));
+  }, [jsonExchanges, setActivePair, setRecentPairs, getPairData]);
   return {
     activePair,
     recentPairs,
+    currentBase,
+    currentQuote,
     handleSelectPair,
   };
 }

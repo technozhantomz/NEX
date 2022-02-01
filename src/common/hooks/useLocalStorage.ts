@@ -1,12 +1,23 @@
 import { isNil } from "lodash";
 import { useEffect, useState } from "react";
 
-type Value = string | number | boolean | JSON | undefined | null;
+import { Cache, Exchanges } from "../types";
+
+type Value =
+  | string
+  | number
+  | boolean
+  | JSON
+  | Exchanges
+  | Cache
+  | undefined
+  | null;
 
 type Result = [Value, (value?: Value) => void];
 
 export const useLocalStorage = (key: string): Result => {
-  const localStorageItem = localStorage.getItem(key);
+  const localStorageItem =
+    typeof window !== "undefined" ? localStorage.getItem(key) : "";
   const [value, setValue] = useState<Value>(
     localStorageItem && JSON.parse(localStorageItem)
   );
