@@ -7,6 +7,8 @@ import { ConnectionManager } from "../common/components/ConnectionManager";
 import { UserProvider, ViewportProvider } from "../context/index";
 import { PeerplaysApiProvider } from "../modules/peerplaysApi";
 
+import "../ui/src/ui.less";
+
 function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ViewportProvider>
