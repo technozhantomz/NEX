@@ -110,11 +110,6 @@ export type IStatistics = {
   last_vote_time?: string;
 };
 
-export type ILoginFormData = {
-  username: string;
-  password: string;
-};
-
 export type IFormAssetData = {
   asset_type: string;
   asset_id: string;
