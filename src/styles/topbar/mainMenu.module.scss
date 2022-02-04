@@ -1,6 +1,6 @@
 @import '../vars.scss';
 
-.MainMenu{
+.MainMenu, .ProfileMenu, .NotificationMenuWrapper{
      height: 93%;
     ul{
         list-style: none;
@@ -26,10 +26,14 @@
         bottom: 40px;
         border: none;
     }
+    .Link{
+        margin-top: 25px;
+        border: none;
+    }
 }
 
 @media only screen and (min-width: $screen-sm-min) {
-    .MainMenu{
+    .MainMenu, .ProfileMenu, .NotificationMenuWrapper{
         height: inherit;
         ul{
             li{
@@ -45,6 +49,9 @@
         .Logout{
             position: relative; 
             bottom: 0;
+        }
+        .Link{
+            margin-top: 0;
         }
     }
 }

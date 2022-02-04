@@ -21,10 +21,15 @@
         font-weight: bold;
         margin-left: 10px;
     }
+    .Bell{
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-right: 20px;
+    }
 }
 
 
-.MainMenuWrapper{
+.MainMenuWrapper, .ProfileWrapper, .NotificationMenuWrapper{
     display: none;
     position: absolute;
     top: 0;
@@ -54,6 +59,20 @@
         position: absolute;
         top:75px;
         right:32px;
+        height: inherit;
+        width: 210px;
+    }
+    .ProfileWrapper{
+        position: absolute;
+        top:75px;
+        right:60px;
+        height: inherit;
+        width: 210px;
+    }
+    .NotificationMenuWrapper{
+        position: absolute;
+        top:75px;
+        right:60px;
         height: inherit;
         width: 210px;
     }
