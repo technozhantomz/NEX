@@ -15,9 +15,9 @@ export type IUserHistory = {
 };
 
 export type IUserKeys = {
-  active: IUserKey;
-  memo: IUserKey;
-  owner: IUserKey;
+  active: IUserKey | string;
+  memo: IUserKey | string;
+  owner: IUserKey | string;
 };
 
 export type IUserKey = {
@@ -118,4 +118,13 @@ export type IFormAssetData = {
   balance: number;
   amount: number;
   precision: number;
+};
+
+export type ISignupFormData = {
+  username: string;
+  password: string;
+  passwordCheck: string;
+  confirm: boolean;
+  saved: boolean;
+  referrer?: string;
 };

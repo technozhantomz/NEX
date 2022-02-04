@@ -24,7 +24,6 @@ const LoginPage: NextPage = () => {
     loginForm.validateFields().then(async () => {
       const userData = await formAccount(fullAcc);
       updateAccountData(userData);
-      console.log(userData);
       router.push("/dashboard");
     });
   };

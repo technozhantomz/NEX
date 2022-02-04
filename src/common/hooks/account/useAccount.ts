@@ -1,16 +1,22 @@
+import { Login } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
+import { defaultToken, faucetUrl } from "../../../api/params/networkparams";
 import { usePeerplaysApi } from "../../../modules/peerplaysApi";
-import { Asset, Cache, IAccountData, IFormAssetData, IFullAccount } from "../../types";
+import {
+  IAccountData,
+  IFormAssetData,
+  IFullAccount,
+  ISignupFormData,
+  IUserKeys,
+} from "../../types";
 import { useAsset } from "../useAsset";
-import { useLocalStorage } from "../useLocalStorage";
 
 import { UseAccountResult } from "./useAccount.type";
 
 export function useAccount(): UseAccountResult {
   const { dbApi, historyApi } = usePeerplaysApi();
   const { setPrecision, getAssetById, getAssetBySymbol } = useAsset();
-  const [jsonCache, setJsonCache] = useLocalStorage("cache");
 
   const getFullAccount = useCallback(
     async (name: string, subscription: boolean) => {
@@ -44,6 +50,35 @@ export function useAccount(): UseAccountResult {
     );
 
     return userName;
+  }, []);
+
+  const createAccount = useCallback(async (data: ISignupFormData) => {
+    let user = undefined;
+    const keys: IUserKeys = formKeys(data.username, data.password);
+    const account = {
+      name: data.username,
+      active_key: keys?.active,
+      memo_key: keys.memo,
+      owner_key: keys.owner,
+      refcode: null,
+      referrer: data.referrer || null,
+    };
+
+    const newUserData = await fetch(faucetUrl, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ account }),
+    }).then((e) => e.json());
+
+    if (newUserData.account) {
+      const acc = await getFullAccount(newUserData.account.name, false);
+      user = await formAccount(acc);
+      return user;
+    }
+    return newUserData.error;
   }, []);
 
   const formAccount = useCallback(async (data: IFullAccount) => {
@@ -98,7 +133,7 @@ export function useAccount(): UseAccountResult {
                 canBeIssued = false;
                 assetType = await dbApi("get_objects", [
                   [el.bitasset_data_id],
-                ]).then((e) =>
+                ]).then((e: { is_prediction_market: any }[]) =>
                   e[0].is_prediction_market ? "prediction" : "smart"
                 );
               }
@@ -218,10 +253,33 @@ export function useAccount(): UseAccountResult {
     return { isLifetimeMember, allocation };
   };
 
+  const formKeys = (name: string, password: string): IUserKeys => {
+    const keys: IUserKeys = {
+      active: "",
+      memo: "",
+      owner: "",
+    };
+    const roles = ["active", "owner", "memo"];
+
+    const generatedKeys = Login.generateKeys(
+      name,
+      password,
+      roles,
+      defaultToken
+    );
+
+    for (const role of roles) {
+      keys[role as keyof IUserKeys] = generatedKeys.pubKeys[role].toString();
+    }
+
+    return keys;
+  };
+
   return {
     getFullAccount,
     getSidechainAccounts,
     formAccount,
     getUserName,
+    createAccount,
   };
 }

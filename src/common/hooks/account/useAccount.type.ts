@@ -1,4 +1,4 @@
-import { IAccountData, IFullAccount } from "../../types";
+import { IAccountData, IFullAccount, ISignupFormData } from "../../types";
 
 export type UseAccountResult = {
   getFullAccount: (
@@ -10,4 +10,5 @@ export type UseAccountResult = {
     data: IFullAccount
   ) => Promise<Partial<IAccountData> | undefined>;
   getUserName: (id: string) => Promise<string> | undefined;
+  createAccount: (data: ISignupFormData) => Promise<IAccountData> | undefined;
 };

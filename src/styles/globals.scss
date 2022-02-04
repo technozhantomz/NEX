@@ -65,6 +65,11 @@ a {
       justify-content: space-between;
       //width: 38px;
     }
+    .CopyPasswordInput{
+      .ant-input-password-icon{
+          width: 38px;
+      }
+    }
     .ant-checkbox-wrapper{
       align-items: flex-start;
       .ant-checkbox-inner{

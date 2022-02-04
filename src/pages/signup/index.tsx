@@ -7,22 +7,26 @@ import {
 import { Button, Card, Checkbox, Form, Input } from "antd";
 import type { NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+import { useAccount } from "../../common/hooks";
+import { ISignupFormData } from "../../common/types";
 import { CopyIcon } from "../../components/icons";
 import Layout from "../../components/layout";
+import { useUser } from "../../context";
 import Styles from "../../styles/signup.module.scss";
 
-interface SignupFormData {
-  username: string;
-  password: string;
-}
-
 const SignUp: NextPage = () => {
+  const { createAccount } = useAccount();
+  const { updateAccountData } = useUser();
   const [signUpForm] = Form.useForm();
+  const router = useRouter();
 
-  const onSignup = (formData: SignupFormData) => {
-    console.log(formData);
+  const onSignup = async (formData: ISignupFormData) => {
+    const account = await createAccount(formData);
+    updateAccountData(account);
+    router.push("/dashboard");
   };
 
   const createPassword = () => {
@@ -78,6 +82,7 @@ const SignUp: NextPage = () => {
           <p>Your auto-generated password</p>
           <Form.Item name="password" rules={formValdation.password}>
             <Input.Password
+              className="CopyPasswordInput"
               iconRender={(visible) =>
                 visible ? (
                   <div>
