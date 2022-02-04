@@ -1,18 +1,19 @@
-import { Tabs } from "../../../../ui/src";
 import { HistoryBook } from "../HistoryBook";
 import { OrderBook } from "../OrderBook";
 
-const { TabPane } = Tabs;
+import * as Styled from "./OrderTabs.styled";
+
+const { TabPane } = Styled.Tabs;
 
 export const OrderTabs = (): JSX.Element => {
   return (
-    <Tabs defaultActiveKey="1" centered={true}>
+    <Styled.Tabs defaultActiveKey="1" centered={true}>
       <TabPane tab="Order Book" key="1">
         <OrderBook />
       </TabPane>
       <TabPane tab="History" key="2">
         <HistoryBook />
       </TabPane>
-    </Tabs>
+    </Styled.Tabs>
   );
 };

@@ -9,11 +9,11 @@ export const PairSelect = (): JSX.Element => {
   const { latest, change, volume } = usePairStats();
   return (
     <Styled.PairSelectContainer>
-      <Row>
+      <Styled.PairButtonRow>
         <Styled.PairButton>
           {activePair} <Styled.PairButtonDownOutlined />
         </Styled.PairButton>
-      </Row>
+      </Styled.PairButtonRow>
       <Row>
         <Col span={10}>
           <Flex flexDirection="column">

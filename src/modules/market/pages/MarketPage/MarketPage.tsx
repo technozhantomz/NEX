@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Col, Flex, Row } from "../../../../ui/src";
+import { LimitOrderForm } from "../../components/LimitOrderForm";
 import { OrderTabs } from "../../components/OrderTabs";
 import { PairSelect } from "../../components/PairSelect";
 
@@ -19,8 +20,12 @@ const MarketPage: React.FC = () => {
           </Col>
           <Col span={18}>
             <Row>
-              <Col span={12}></Col>
-              <Col span={12}></Col>
+              <Col span={12}>
+                <LimitOrderForm isBuyOrder={true} />
+              </Col>
+              <Col span={12}>
+                <LimitOrderForm isBuyOrder={false} />
+              </Col>
             </Row>
           </Col>
         </Row>

@@ -1,7 +1,9 @@
 export type UseOrderBookResult = {
   asks: Order[];
   bids: Order[];
+  orderType: OrderType;
   handleThresholdChange: (value: string) => void;
+  handleFilterChange: (type: OrderType) => void;
 };
 
 export type Order = {
@@ -9,3 +11,5 @@ export type Order = {
   price: string;
   quote: string;
 };
+
+export type OrderType = "total" | "buy" | "sell";

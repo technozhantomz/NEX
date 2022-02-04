@@ -1,7 +1,12 @@
-import { Button, DownOutlined, styled } from "../../../../ui/src";
+import { Button, DownOutlined, Row, styled } from "../../../../ui/src";
 
 export const PairSelectContainer = styled.div`
   padding: 30px 30px 0 30px;
+  margin-bottom: 26px;
+`;
+
+export const PairButtonRow = styled(Row)`
+  margin-bottom: 20px;
 `;
 
 export const PairButton = styled(Button)`
