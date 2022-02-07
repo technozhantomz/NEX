@@ -2,8 +2,8 @@ import { BellOutlined, MoreOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar } from "antd";
 import { useState } from "react";
 
-import { useUser } from "../../context";
-import Styles from "../../styles/topbar/mainNav.module.scss";
+import { useUser } from "../../../../context";
+import Styles from "../../../../styles/topbar/mainNav.module.scss";
 
 import MainNav from "./mainMenu";
 import MenuWrapper from "./menuWrapper";

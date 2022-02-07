@@ -6,9 +6,15 @@ import {
 import { Card, Switch } from "antd";
 import { useEffect, useState } from "react";
 
-import { useUser } from "../../context";
-import Styles from "../../styles/topbar/mainMenu.module.scss";
-import { Blockchain, Contacts, Dashboard, Market, Vote } from "../icons";
+import { useUser } from "../../../../context";
+import Styles from "../../../../styles/topbar/mainMenu.module.scss";
+import {
+  Blockchain,
+  Contacts,
+  Dashboard,
+  Market,
+  Vote,
+} from "../../../../ui/src/icons";
 
 import MenuItem from "./MenuItem";
 

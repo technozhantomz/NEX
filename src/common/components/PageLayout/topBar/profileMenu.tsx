@@ -1,9 +1,9 @@
 import { PoweroffOutlined, SettingOutlined } from "@ant-design/icons";
 import { Avatar, Card } from "antd";
 
-import { useUser, useViewport } from "../../context";
-import Styles from "../../styles/topbar/mainMenu.module.scss";
-import { Contacts, Vote } from "../icons";
+import { useUser, useViewport } from "../../../../context";
+import Styles from "../../../../styles/topbar/mainMenu.module.scss";
+import { Contacts, Vote } from "../../../../ui/src/icons";
 
 import MenuItem from "./MenuItem";
 

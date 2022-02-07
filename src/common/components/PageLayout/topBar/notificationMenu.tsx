@@ -1,7 +1,7 @@
 import { Card } from "antd";
 
 // import { useUser } from "../../context";
-import Styles from "../../styles/topbar/mainMenu.module.scss";
+import Styles from "../../../../styles/topbar/mainMenu.module.scss";
 
 const NotificationMenu = (): JSX.Element => {
   //const { accountData } = useUser();

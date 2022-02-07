@@ -1,5 +1,5 @@
-import styles from "../../styles/topbar/topBar.module.scss";
-import { Logo } from "../icons";
+import styles from "../../../../styles/topbar/topBar.module.scss";
+import { Logo } from "../../../../ui/src/icons";
 
 import MainNavBar from "./mainNavBar";
 

@@ -2,7 +2,7 @@ import { ConfigProvider } from "antd";
 import Head from "next/head";
 import React, { FunctionComponent, ReactNode, useEffect } from "react";
 
-import Styles from "../styles/layouts.module.scss";
+import Styles from "../../../styles/layouts.module.scss";
 
 import TopBar from "./topBar/topBar";
 

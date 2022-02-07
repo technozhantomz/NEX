@@ -1,7 +1,7 @@
 import { MouseEventHandler, ReactElement } from "react";
 
-import { useViewport } from "../../context";
-import Styles from "../../styles/topbar/mainNav.module.scss";
+import { useViewport } from "../../../../context";
+import Styles from "../../../../styles/topbar/mainNav.module.scss";
 
 interface IMenuWrapper {
   children: ReactElement;
