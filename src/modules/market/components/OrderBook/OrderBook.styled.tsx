@@ -1,7 +1,43 @@
-import { Flex, Menu, styled } from "../../../../ui/src";
+import {
+  Dropdown,
+  Flex,
+  Menu,
+  styled,
+  Table as UiTable,
+} from "../../../../ui/src";
+
+export const Table = styled(UiTable)`
+  .ant-table-tbody > tr > td {
+    border-bottom: none;
+  }
+  .ant-table-thead > tr > th {
+    background: #fff;
+    border-bottom: none;
+    padding: 13px;
+    text-align: center;
+  }
+  .ant-table-thead
+    > tr
+    > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+    display: none;
+  }
+  .ant-table-tbody > tr.ant-table-row:hover > td,
+  .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+    background: none;
+  }
+  .ant-table-tbody > tr.ant-table-row.sell {
+    background: #fff4f4;
+  }
+  .ant-table-tbody > tr.ant-table-row.buy {
+    background: #e5fff6;
+  }
+`;
+
+export const TableContainer = styled.div``;
 
 export const FilterContainer = styled(Flex)`
   padding-left: 30px;
+  padding-right: 30px;
   margin-bottom: 25px;
   justify-content: space-between;
 `;
@@ -13,7 +49,6 @@ export const OrdersFilter = styled.button`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transition: 0.3s;
   border-radius: 50%;
   border: none;
   background: none;
@@ -39,3 +74,16 @@ export const OrdersFilter = styled.button`
 `;
 
 export const ThresholdMenu = styled(Menu)``;
+
+export const ThresholdDropdown = styled(Dropdown)``;
+
+export const ThresholdLabel = styled.span`
+  color: #6c6c6c;
+  font-size: 12px;
+  margin-right: 10px;
+`;
+
+export const ThresholdValue = styled.span`
+  font-size: 14px;
+  color: #212121;
+`;
