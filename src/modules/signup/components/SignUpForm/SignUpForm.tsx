@@ -1,16 +1,26 @@
-// import { CheckOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form } from "antd";
-import React from "react";
+import { CheckOutlined } from "@ant-design/icons";
+import { Button, Form, Input } from "antd";
+import React, { useEffect } from "react";
 
+import CheckboxInput from "../CheckboxInput";
+import GeneratedPassordInput from "../GeneratedPassordInput";
+import { useGeneratePassword } from "../GeneratedPassordInput/hooks";
 import InfoBar from "../InfoBar";
+
+import { useSignUpForm } from "./hooks";
 
 // import * as Styled from "./SignUpForm.styled";
 
 const SignUpForm: React.FC = () => {
+  const { validUser, onSignUp, formValdation, signUpForm } = useSignUpForm();
+  useEffect(() => {
+    signUpForm.setFieldsValue({
+      password: useGeneratePassword(),
+    });
+  }, []);
   return (
-    // <Form form={signUpForm} name="signUpForm" onFinish={onSignup}>
-    <Form name="signUpForm">
-      {/* <Form.Item
+    <Form form={signUpForm} name="signUpForm" onFinish={onSignUp}>
+      <Form.Item
         name="username"
         rules={formValdation.username}
         validateFirst={true}
@@ -20,52 +30,30 @@ const SignUpForm: React.FC = () => {
           placeholder="Enter username"
           suffix={validUser ? <CheckOutlined /> : ""}
         />
-      </Form.Item> */}
-      <p>Your auto-generated password</p>
-      {/* <Form.Item
-            name="password"
-            rules={formValdation.password}
-            validateFirst={true}
-            validateTrigger="onBlur"
-          >
-            <Input.Password
-              className="CopyPasswordInput"
-              iconRender={(visible) =>
-                visible ? (
-                  <div>
-                    <CopyIcon onClick={copyPassword} />
-                    <EyeOutlined />
-                  </div>
-                ) : (
-                  <div>
-                    <CopyIcon onClick={copyPassword} />
-                    <EyeInvisibleOutlined />
-                  </div>
-                )
-              }
-            />
-          </Form.Item>
-          <Form.Item
-            name="passwordCheck"
-            rules={formValdation.passwordCheck}
-            validateFirst={true}
-            validateTrigger="onBlur"
-          >
-            <Input.Password
-              placeholder="Re-enter your auto-generated password"
-              visibilityToggle={false}
-            />
-          </Form.Item> */}
-      <Form.Item>
-        <InfoBar />
       </Form.Item>
+      <p>Your auto-generated password</p>
+      <Form.Item name="password" validateFirst={true} validateTrigger="onBlur">
+        <GeneratedPassordInput />
+      </Form.Item>
+      <Form.Item
+        name="passwordCheck"
+        rules={formValdation.passwordCheck}
+        validateFirst={true}
+        validateTrigger="onBlur"
+      >
+        <Input.Password
+          placeholder="Re-enter your auto-generated password"
+          visibilityToggle={false}
+        />
+      </Form.Item>
+      <InfoBar />
       <Form.Item name="confirm" valuePropName="confirm">
-        <Checkbox>
+        <CheckboxInput>
           I understand Peerplays cannot recover my lost password
-        </Checkbox>
+        </CheckboxInput>
       </Form.Item>
       <Form.Item name="saved" valuePropName="saved">
-        <Checkbox>I have securely saved my password</Checkbox>
+        <CheckboxInput>I have securely saved my password</CheckboxInput>
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">

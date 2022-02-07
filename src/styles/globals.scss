@@ -59,52 +59,26 @@ a {
         color: var(--ant-success-color);
       }
     }
-    .ant-input-password-icon{
-      color: #B9B9B9;
-      display: flex;
-      justify-content: space-between;
-      //width: 38px;
-    }
-    .CopyPasswordInput{
-      .ant-input-password-icon{
-          width: 38px;
-      }
-    }
-    .ant-checkbox-wrapper{
-      align-items: flex-start;
-      .ant-checkbox-inner{
-        width: 30px;
-        height: 30px;
-        &::after{
-          left: 35%;
-        }
-      }
-    }
+    // .ant-input-password-icon{
+    //   color: #B9B9B9;
+    //   display: flex;
+    //   justify-content: space-between;
+    // }
+    // .CopyPasswordInput{
+    //   .ant-input-password-icon{
+    //       width: 38px;
+    //   }
+    // }
   }  
 }
 
-.disclamer{
-  font-size: 0.9em;
-  font-weight: 300;
-  text-align: center;
-}
 
 @media only screen and (min-width: $screen-sm-min) {
   .ant-card {
     .ant-form {
       .ant-btn{
         width: 70%;
-      }
-      .ant-checkbox-wrapper{
-        align-items: flex-start;
-        .ant-checkbox-inner{
-          width: 20px;
-          height: 20px;
-          &::after{
-            left: 25%;
-          }
-        }
-      }  
+      } 
     }
   }
 }
