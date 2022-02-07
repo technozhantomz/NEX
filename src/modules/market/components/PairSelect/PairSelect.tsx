@@ -1,4 +1,4 @@
-import { Col, Flex, Row } from "../../../../ui/src";
+import { Col, DownOutlined, Flex, Row } from "../../../../ui/src";
 
 import * as Styled from "./PairSelect.styled";
 import { usePairSelect } from "./hooks/usePairSelect";
@@ -9,11 +9,11 @@ export const PairSelect = (): JSX.Element => {
   const { latest, change, volume } = usePairStats();
   return (
     <Styled.PairSelectContainer>
-      <Row>
+      <Styled.PairButtonRow>
         <Styled.PairButton>
-          {activePair} <Styled.PairButtonDownOutlined />
+          {activePair} <DownOutlined />
         </Styled.PairButton>
-      </Row>
+      </Styled.PairButtonRow>
       <Row>
         <Col span={10}>
           <Flex flexDirection="column">

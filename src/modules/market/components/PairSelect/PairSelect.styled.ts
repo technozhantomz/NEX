@@ -1,7 +1,12 @@
-import { Button, DownOutlined, styled } from "../../../../ui/src";
+import { Button, Row, styled } from "../../../../ui/src";
 
 export const PairSelectContainer = styled.div`
   padding: 30px 30px 0 30px;
+  margin-bottom: 26px;
+`;
+
+export const PairButtonRow = styled(Row)`
+  margin-bottom: 20px;
 `;
 
 export const PairButton = styled(Button)`
@@ -9,15 +14,6 @@ export const PairButton = styled(Button)`
   font-weight: 700;
   border: none;
   padding: 4px 0;
-`;
-
-export const PairButtonDownOutlined = styled(DownOutlined)`
-  vertical-align: baseline;
-  margin-left: 16px !important;
-  &.anticon.anticon-down svg {
-    width: 14px;
-    height: 10px;
-  }
 `;
 
 export const PairInfoLabel = styled.span`

@@ -10,7 +10,9 @@ import { UsePairSelectResult } from "./usePariSelect.types";
 export function usePairSelect(): UsePairSelectResult {
   const [jsonExchanges, setJsonExchanges] = useLocalStorage("exchanges");
   // Active pair example: BTC_TEST
-  const [activePair, setActivePair] = useState<string>("");
+  const [activePair, setActivePair] = useState<string>(
+    (jsonExchanges as Exchanges).active
+  );
   // Recent pairs example: ["BTC / TEST"]
   const [recentPairs, setRecentPairs] = useState<string[]>([]);
   const { dbApi } = usePeerplaysApi();
