@@ -10,12 +10,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import Layout from "../../common/components/PageLayout/layout";
 import { useAccount } from "../../common/hooks";
 import { ISignupFormData } from "../../common/types";
-import { CopyIcon } from "../../ui/src/icons";
-import Layout from "../../common/components/PageLayout/layout";
 import { useUser } from "../../context";
 import Styles from "../../styles/signup.module.scss";
+import { CopyIcon } from "../../ui/src/icons";
 
 const SignUp: NextPage = () => {
   const [validUser, setValidUser] = useState(false);
