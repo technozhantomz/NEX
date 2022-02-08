@@ -1,3 +1,4 @@
+import { CheckboxChangeEvent } from "antd/lib/checkbox";
 import { FormInstance, Rule } from "antd/lib/form";
 
 import { ISignupFormData } from "../../../../../common/types";
@@ -5,6 +6,7 @@ import { ISignupFormData } from "../../../../../common/types";
 export type IUserSignUpForm = {
   validUser: boolean;
   onSignUp: (formData: ISignupFormData) => void;
+  setCheckboxVlaue: (e: CheckboxChangeEvent) => void;
   checkPasswordMatch: (
     _: unknown,
     value: { passwordCheck: string }
@@ -14,7 +16,14 @@ export type IUserSignUpForm = {
   signUpForm: FormInstance;
 };
 
-type IFormValidation = {
+export type IFormField = {
+  field: string;
+  fullField: string;
+  type: string;
+  validator: unknown;
+};
+
+export type IFormValidation = {
   username: Rule[];
   password: Rule[];
   passwordCheck: Rule[];
