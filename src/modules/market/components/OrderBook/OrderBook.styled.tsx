@@ -9,6 +9,7 @@ import {
 export const Table = styled(UiTable)`
   .ant-table-tbody > tr > td {
     border-bottom: none;
+    font-size: 12px;
   }
   .ant-table-thead > tr > th {
     background: #fff;

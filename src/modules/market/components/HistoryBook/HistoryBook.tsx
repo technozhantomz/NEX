@@ -1,11 +1,24 @@
+import * as Styled from "./HistoryBook.styled";
 import { useHistory } from "./hooks/useHistory";
+import { OrderHistoryRow } from "./hooks/useHistory.types";
 
 export const HistoryBook = (): JSX.Element => {
-  const { orderHistoryRow } = useHistory();
+  const { columns, orderHistoryRow } = useHistory();
   console.log("this is history", orderHistoryRow);
   return (
     <>
-      <div></div>
+      <Styled.TableContainer>
+        <Styled.Table
+          scroll={{ scrollToFirstRowOnChange: false, y: 600 }}
+          pagination={false}
+          columns={columns}
+          dataSource={orderHistoryRow}
+          rowClassName={(record) => {
+            const rec = record as OrderHistoryRow;
+            return rec.isBuyOrder ? "buy" : "sell";
+          }}
+        ></Styled.Table>
+      </Styled.TableContainer>
     </>
   );
 };

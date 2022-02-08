@@ -1,7 +1,7 @@
-import { DownOutlined, Flex } from "../../../../ui/src";
+import { DownOutlined, Flex, Tooltip } from "../../../../ui/src";
 
 import * as Styled from "./OrderBook.styled";
-import { OrderType } from "./hooks/uesOrderBook.types";
+import { OrderRow, OrderType } from "./hooks/uesOrderBook.types";
 import { useOrderBook } from "./hooks/useOrderBook";
 
 export const OrderBook = (): JSX.Element => {
@@ -16,11 +16,6 @@ export const OrderBook = (): JSX.Element => {
     columns,
   } = useOrderBook();
   const types: OrderType[] = ["total", "sell", "buy"];
-
-  console.log("this is bids", bids);
-  console.log("this is asks", asks);
-  console.log("this is selected", ordersRows);
-
   const thresholdMenu = (
     <Styled.ThresholdMenu onClick={handleThresholdChange}>
       <Styled.ThresholdMenu.Item key="0.001">0.001</Styled.ThresholdMenu.Item>
@@ -34,18 +29,24 @@ export const OrderBook = (): JSX.Element => {
       <Styled.FilterContainer>
         <Flex>
           {types.map((type) => (
-            <Styled.OrdersFilter
+            <Tooltip
+              placement="top"
+              title={type.toUpperCase() + " ORDERS"}
               key={type}
-              onClick={() => handleFilterChange(type)}
-              className={`order-filters__type--${type}${
-                type === orderType ? " active" : ""
-              }`}
             >
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </Styled.OrdersFilter>
+              <Styled.OrdersFilter
+                key={type}
+                onClick={() => handleFilterChange(type)}
+                className={`order-filters__type--${type}${
+                  type === orderType ? " active" : ""
+                }`}
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </Styled.OrdersFilter>
+            </Tooltip>
           ))}
         </Flex>
         <Flex>
@@ -68,7 +69,8 @@ export const OrderBook = (): JSX.Element => {
           columns={columns}
           dataSource={ordersRows}
           rowClassName={(record) => {
-            return record.isBuyOrder ? "buy" : "sell";
+            const rec = record as OrderRow;
+            return rec.isBuyOrder ? "buy" : "sell";
           }}
         ></Styled.Table>
       </Styled.TableContainer>

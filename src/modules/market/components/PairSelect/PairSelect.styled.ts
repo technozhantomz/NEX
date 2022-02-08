@@ -1,4 +1,5 @@
 import { Button, Row, styled } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 
 export const PairSelectContainer = styled.div`
   padding: 30px 30px 0 30px;
@@ -18,5 +19,5 @@ export const PairButton = styled(Button)`
 
 export const PairInfoLabel = styled.span`
   font-size: 12px;
-  color: #6c6c6c;
+  color: ${colors.textColorSecondary};
 `;

@@ -13,15 +13,49 @@ import {
   UseOrderBookResult,
 } from "./uesOrderBook.types";
 
+const reduceAndSortOrdersWithSamePrice = (
+  orders: Order[],
+  isBuyOrder: boolean
+): Order[] => {
+  return orders
+    .reduce((acc, element) => {
+      const index = acc.findIndex(
+        (order) =>
+          roundNum(Number(order.price)) === roundNum(Number(element.price))
+      );
+      if (index === -1) {
+        acc.push(element);
+      } else {
+        const { quote, base, price } = acc[index];
+        acc[index] = {
+          quote: String(Number(quote) + Number(element.quote)),
+          base: String(Number(base) + Number(element.base)),
+          price,
+          isBuyOrder: isBuyOrder,
+        };
+      }
+
+      return acc;
+    }, [] as Order[])
+    .sort((prev, next) =>
+      isBuyOrder
+        ? Number(next.price) - Number(prev.price)
+        : Number(prev.price) - Number(next.price)
+    )
+    .map((order) => {
+      return { ...order, isBuyOrder: isBuyOrder };
+    });
+};
+
 export function useOrderBook(): UseOrderBookResult {
-  // asks are buy orders
+  // asks are sell orders
   const [asks, setAsks] = useState<Order[]>([]);
-  // bids are sell orders
+  // bids are buy orders
   const [bids, setBids] = useState<Order[]>([]);
   const [ordersRows, setOrdersRows] = useState<OrderRow[]>([]);
+  const [columns, setColumns] = useState<OrderColumn[]>([]);
   const [orderType, setOrderType] = useState<OrderType>("total");
   const [threshold, setThreshold] = useState<number>(0.001);
-  const [columns, setColumns] = useState<OrderColumn[]>([]);
   //const [tableScroll, setTableScroll] = useState<TableScroll>();
   const { currentBase, currentQuote } = usePairSelect();
   const { dbApi } = usePeerplaysApi();
@@ -42,37 +76,14 @@ export function useOrderBook(): UseOrderBookResult {
 
   const getOrderBook = useCallback(
     async (base: Asset, quote: Asset) => {
-      console.log("this is base", base);
-      console.log("this is quote", quote);
-      const { asks, bids } = await dbApi("get_order_book", [
-        base.symbol,
-        quote.symbol,
-        50,
-      ]);
-      setAsks(
-        asks.map((ask: Order) => {
-          return { ...ask, isBuyOrder: false };
-        }) as Order[]
-      );
-      setBids(
-        bids.map((bid: Order) => {
-          return { ...bid, isBuyOrder: true };
-        }) as Order[]
-      );
-    },
-    [dbApi, setAsks, setBids]
-  );
-
-  useEffect(() => {
-    if (currentBase !== undefined && currentQuote !== undefined) {
       setColumns([
         {
-          title: currentQuote.symbol,
+          title: quote.symbol,
           dataIndex: "quote",
           key: "quote",
         },
         {
-          title: currentBase.symbol,
+          title: base.symbol,
           dataIndex: "base",
           key: "base",
         },
@@ -82,28 +93,44 @@ export function useOrderBook(): UseOrderBookResult {
           key: "price",
         },
       ]);
+      const { asks, bids } = await dbApi("get_order_book", [
+        base.symbol,
+        quote.symbol,
+        50,
+      ]);
+      setAsks(asks as Order[]);
+      setBids(bids as Order[]);
+    },
+    [dbApi, setAsks, setBids, setColumns]
+  );
+
+  useEffect(() => {
+    if (currentBase !== undefined && currentQuote !== undefined) {
       getOrderBook(currentBase, currentQuote);
     }
-  }, [currentBase, currentQuote, getOrderBook]);
+  }, [currentBase, currentQuote, getOrderBook, setColumns]);
 
   useEffect(() => {
     let selectedOrders: Order[] = [];
+    const selectedAsks = [
+      ...reduceAndSortOrdersWithSamePrice(asks, false).filter(
+        (ask) => Number(ask.price) >= threshold
+      ),
+    ];
+    const selectedBids = [
+      ...reduceAndSortOrdersWithSamePrice(bids, true).filter(
+        (bid) => Number(bid.price) >= threshold
+      ),
+    ];
     switch (orderType) {
       case "total":
-        selectedOrders = [
-          ...asks.filter((ask) => Number(ask.price) >= threshold).reverse(),
-          ...bids.filter((bid) => Number(bid.price) >= threshold),
-        ];
+        selectedOrders = [...selectedBids, ...selectedAsks];
         break;
       case "sell":
-        selectedOrders = [
-          ...asks.filter((ask) => Number(ask.price) >= threshold).reverse(),
-        ];
+        selectedOrders = [...selectedAsks];
         break;
       case "buy":
-        selectedOrders = [
-          ...bids.filter((bid) => Number(bid.price) >= threshold),
-        ];
+        selectedOrders = [...selectedBids];
         break;
       default:
         break;

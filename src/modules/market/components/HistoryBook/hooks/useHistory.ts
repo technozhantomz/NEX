@@ -9,6 +9,7 @@ import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
 
 import {
   OrderHistory,
+  OrderHistoryColumn,
   OrderHistoryRow,
   UseHistoryResult,
 } from "./useHistory.types";
@@ -17,6 +18,7 @@ export function useHistory(): UseHistoryResult {
   const { historyApi } = usePeerplaysApi();
   const { currentBase, currentQuote } = usePairSelect();
   const [orderHistoryRow, setOrderHistoryRow] = useState<OrderHistoryRow[]>([]);
+  const [columns, setColumns] = useState<OrderHistoryColumn[]>([]);
   const { setPrecision } = useAsset();
 
   const getHistory = useCallback(
@@ -26,7 +28,7 @@ export function useHistory(): UseHistoryResult {
         [base.id, quote.id, 100]
       );
       setOrderHistoryRow(
-        history.map((h) => {
+        history.map((h, index) => {
           const time = useFormDate(h.time, ["date", "month", "year", "time"]);
           const { pays, receives } = h.op;
           let baseAmount = 0,
@@ -45,9 +47,10 @@ export function useHistory(): UseHistoryResult {
           }
 
           return {
+            key: String(index),
             baseAmount,
             quoteAmount,
-            price: roundNum(baseAmount / quoteAmount),
+            price: roundNum(baseAmount / quoteAmount, base.precision),
             isBuyOrder,
             time,
           };
@@ -59,11 +62,34 @@ export function useHistory(): UseHistoryResult {
 
   useEffect(() => {
     if (currentBase !== undefined && currentQuote !== undefined) {
+      setColumns([
+        {
+          title: "Price",
+          dataIndex: "price",
+          key: "price",
+        },
+        {
+          title: currentQuote.symbol,
+          dataIndex: "baseAmount",
+          key: "baseAmount",
+        },
+        {
+          title: currentBase.symbol,
+          dataIndex: "quoteAmount",
+          key: "quoteAmount",
+        },
+        {
+          title: "Date",
+          dataIndex: "time",
+          key: "time",
+        },
+      ]);
       getHistory(currentBase, currentQuote);
     }
-  }, [currentBase, currentQuote, getHistory]);
+  }, [currentBase, currentQuote, getHistory, setColumns]);
 
   return {
     orderHistoryRow,
+    columns,
   };
 }

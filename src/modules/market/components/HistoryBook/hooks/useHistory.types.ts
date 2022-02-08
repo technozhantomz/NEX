@@ -2,14 +2,21 @@ import { Fee } from "../../../../../common/types";
 
 export type UseHistoryResult = {
   orderHistoryRow: OrderHistoryRow[];
+  columns: OrderHistoryColumn[];
 };
 
 export type OrderHistoryRow = {
+  key: string;
   baseAmount: number;
   quoteAmount: number;
   price: number;
   isBuyOrder: boolean;
   time: string;
+};
+export type OrderHistoryColumn = {
+  title: string;
+  dataIndex: string;
+  key: string;
 };
 export type OrderHistory = {
   id: string;
