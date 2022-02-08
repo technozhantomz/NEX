@@ -1,4 +1,4 @@
-import { styled } from "../../../../ui/src";
+import { styled } from "../../../ui/src";
 
 export const Disclamer = styled.p`
    {

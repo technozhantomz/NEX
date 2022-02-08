@@ -8,9 +8,9 @@ import { ISignupFormData } from "../../../../../common/types";
 import { useUser } from "../../../../../context";
 
 import { useGeneratePassword } from "./useGeneratePassword";
-import { IFormField, IUserSignUpForm } from "./useSignUpForm.type";
+import { IFormField, ISignUpForm } from "./useSignUpForm.type";
 
-export function useSignUpForm(): IUserSignUpForm {
+export function useSignUpForm(): ISignUpForm {
   const { createAccount, getFullAccount } = useAccount();
   const { accountData, updateAccountData } = useUser();
   const [validUser, setValidUser] = useState(false);

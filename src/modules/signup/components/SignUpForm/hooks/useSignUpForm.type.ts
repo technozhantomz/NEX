@@ -3,7 +3,7 @@ import { FormInstance, Rule } from "antd/lib/form";
 
 import { ISignupFormData } from "../../../../../common/types";
 
-export type IUserSignUpForm = {
+export type ISignUpForm = {
   validUser: boolean;
   onSignUp: (formData: ISignupFormData) => void;
   setCheckboxVlaue: (e: CheckboxChangeEvent) => void;

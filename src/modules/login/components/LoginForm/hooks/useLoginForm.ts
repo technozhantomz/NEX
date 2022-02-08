@@ -1,24 +1,24 @@
-import { CheckOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input } from "antd";
-import type { NextPage } from "next";
-import Link from "next/link";
+import { Form } from "antd";
 import { useRouter } from "next/router";
 import { Login, PrivateKey } from "peerplaysjs-lib";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { defaultToken } from "../../api/params/networkparams";
-import Layout from "../../common/components/PageLayout/layout";
-import { useAccount } from "../../common/hooks";
-import { IAccountData, IFullAccount } from "../../common/types";
-import { useUser } from "../../context/index";
+import { defaultToken } from "../../../../../api/params/networkparams";
+import { useAccount } from "../../../../../common/hooks";
+import { IFullAccount } from "../../../../../common/types";
+import { useUser } from "../../../../../context";
 
-const LoginPage: NextPage = () => {
+export function useLoginForm(): ILoginForm {
   const [validUser, setValidUser] = useState(false);
   const [fullAcc, setFullAcc] = useState<IFullAccount | undefined>(undefined);
   const { getFullAccount, formAccount } = useAccount();
-  const { updateAccountData } = useUser();
+  const { accountData, updateAccountData } = useUser();
   const [loginForm] = Form.useForm();
   const router = useRouter();
+
+  useEffect(() => {
+    if (accountData) router.push("/dashboard");
+  }, []);
 
   const onLogin = async () => {
     loginForm.validateFields().then(async () => {
@@ -82,44 +82,10 @@ const LoginPage: NextPage = () => {
     ],
   };
 
-  return (
-    <Layout title="Login" type="card" heading="Log into your account">
-      <Card>
-        <Form form={loginForm} name="loginForm" onFinish={onLogin}>
-          <Form.Item
-            name="username"
-            rules={formValdation.username}
-            validateFirst={true}
-            validateTrigger="onBlur"
-          >
-            <Input
-              placeholder="Enter username"
-              suffix={validUser ? <CheckOutlined /> : ""}
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={formValdation.password}
-            validateFirst={true}
-            validateTrigger="onSubmit"
-          >
-            <Input.Password placeholder="Enter password" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Log in
-            </Button>
-          </Form.Item>
-        </Form>
-        <p className="disclamer">
-          <span>Don't have a Peerplays account? </span>
-          <Link href="/signup">
-            <a>Create account</a>
-          </Link>
-        </p>
-      </Card>
-    </Layout>
-  );
-};
-
-export default LoginPage;
+  return {
+    validUser,
+    loginForm,
+    onLogin,
+    formValdation,
+  };
+}
