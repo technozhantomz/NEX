@@ -1,15 +1,13 @@
-import { Card } from "antd";
-
 // import { useUser } from "../../context";
-import Styles from "../../../../styles/topbar/mainMenu.module.scss";
+import * as Styled from "../../../../ui/src";
 
 const NotificationMenu = (): JSX.Element => {
   //const { accountData } = useUser();
 
   return (
-    <Card className={Styles.NotifiMenu} bordered={false}>
+    <Styled.MenuCard bordered={false}>
       <div>FPO</div>
-    </Card>
+    </Styled.MenuCard>
   );
 };
 

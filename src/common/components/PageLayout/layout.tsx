@@ -2,8 +2,7 @@ import { ConfigProvider } from "antd";
 import Head from "next/head";
 import React, { FunctionComponent, ReactNode, useEffect } from "react";
 
-import Styles from "../../../styles/layouts.module.scss";
-
+import * as Styled from "./layout.styled";
 import TopBar from "./topBar/topBar";
 
 type Props = {
@@ -36,9 +35,9 @@ const Layout: FunctionComponent<Props> = ({
   const getStyles = () => {
     switch (true) {
       case type == "card":
-        return Styles.CardLayout;
+        return "card-layout";
       default:
-        return Styles.Default;
+        return "default";
     }
   };
 
@@ -53,14 +52,16 @@ const Layout: FunctionComponent<Props> = ({
       </Head>
       <TopBar />
       <ConfigProvider>
-        <main className={getStyles()}>
+        <Styled.Layout className={getStyles()}>
           {heading != undefined ? (
-            <h1 className={Styles.PageHeading}>{heading}</h1>
+            <Styled.PageHeading className={"page-heading"}>
+              {heading}
+            </Styled.PageHeading>
           ) : (
             ""
           )}
           {children}
-        </main>
+        </Styled.Layout>
       </ConfigProvider>
     </>
   );

@@ -1,40 +1,25 @@
-import { MouseEventHandler, ReactElement } from "react";
+import { ReactElement } from "react";
 
-import { useViewport } from "../../../../context";
-import Styles from "../../../../styles/topbar/mainNav.module.scss";
+import { useNavBar } from "./hooks";
+import { IMenus } from "./hooks/useNaveBar.type";
+import * as Styled from "./menuWrapper.styled";
 
 interface IMenuWrapper {
   children: ReactElement;
-  open: boolean;
-  menuClass: string;
-  closeMethod: MouseEventHandler;
+  menuName: string;
 }
 
-const MenuWrapper = ({
-  children,
-  open,
-  menuClass,
-  closeMethod,
-}: IMenuWrapper): JSX.Element => {
-  const { width } = useViewport();
+const MenuWrapper = ({ children, menuName }: IMenuWrapper): JSX.Element => {
+  const { menus, closeMenu } = useNavBar();
+  const menu = menus[menuName as keyof IMenus];
 
   return (
-    <>
-      <div
-        className={
-          open ? Styles[menuClass] + " " + Styles.Open : Styles[menuClass]
-        }
-      >
-        {width < 414 ? (
-          <a className={Styles.close} onClick={closeMethod}>
-            X
-          </a>
-        ) : (
-          ""
-        )}
-        {children}
-      </div>
-    </>
+    <Styled.MenuWrapper className={menu.className + (menu.open ? " open" : "")}>
+      <a className="close" onClick={closeMenu}>
+        X
+      </a>
+      {children}
+    </Styled.MenuWrapper>
   );
 };
 

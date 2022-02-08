@@ -2,13 +2,14 @@ import { CheckOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import React from "react";
 
+import * as Styled from "./LoginForm.styled";
 import { useLoginForm } from "./hooks";
 
 const LoginForm: React.FC = () => {
   const { validUser, loginForm, onLogin, formValdation } = useLoginForm();
 
   return (
-    <Form form={loginForm} name="loginForm" onFinish={onLogin}>
+    <Styled.LoginForm form={loginForm} name="loginForm" onFinish={onLogin}>
       <Form.Item
         name="username"
         rules={formValdation.username}
@@ -29,11 +30,11 @@ const LoginForm: React.FC = () => {
         <Input.Password placeholder="Enter password" />
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Styled.LoginFormButton type="primary" htmlType="submit">
           Log in
-        </Button>
+        </Styled.LoginFormButton>
       </Form.Item>
-    </Form>
+    </Styled.LoginForm>
   );
 };
 

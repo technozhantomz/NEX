@@ -19,7 +19,7 @@ const SignUpPage: React.FC = () => {
       <Card>
         <SignUpForm />
         <FormDisclamer>
-          <span>Already have a Peerplays account?</span>
+          <span>Already have a Peerplays account? </span>
           <Link href="/login">
             <a>Log in</a>
           </Link>

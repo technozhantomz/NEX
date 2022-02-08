@@ -1,46 +1,26 @@
 import { BellOutlined, MoreOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar } from "antd";
-import { useState } from "react";
 
 import { useUser } from "../../../../context";
-import Styles from "../../../../styles/topbar/mainNav.module.scss";
 
+import { useNavBar } from "./hooks";
 import MainNav from "./mainMenu";
+import * as Styled from "./mainNavBar.styled";
 import MenuWrapper from "./menuWrapper";
 import NotificationMenu from "./notificationMenu";
 import ProfileNav from "./profileMenu";
 
 const MainNavBar = (): JSX.Element => {
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const [profileOpen, setProfileOpen] = useState<boolean>(false);
-  const [notificationsOpen, setNotifiOpen] = useState<boolean>(false);
+  const { toggleMenu } = useNavBar();
   const { accountData } = useUser();
-
-  const toggleMenu = (menu: string): void => {
-    if (menu === "main") {
-      setProfileOpen(false);
-      setNotifiOpen(false);
-      menuOpen ? setMenuOpen(false) : setMenuOpen(true);
-    }
-    if (menu === "profile") {
-      setMenuOpen(false);
-      setNotifiOpen(false);
-      menuOpen ? setProfileOpen(false) : setProfileOpen(true);
-    }
-    if (menu === "notifi") {
-      setMenuOpen(false);
-      setProfileOpen(false);
-      menuOpen ? setNotifiOpen(false) : setNotifiOpen(true);
-    }
-  };
 
   return (
     <>
-      <div className={Styles.MainNavBar}>
+      <Styled.MainNavBar>
         <BellOutlined
-          className={Styles.Bell}
-          onMouseOver={() => toggleMenu("notifi")}
-          onClick={() => toggleMenu("notifi")}
+          className={"bell"}
+          onMouseOver={() => toggleMenu("notify")}
+          onClick={() => toggleMenu("notify")}
         />
         {accountData !== undefined ? (
           <div
@@ -55,30 +35,18 @@ const MainNavBar = (): JSX.Element => {
           ""
         )}
         <MoreOutlined
-          className={Styles.Hambuger}
+          className={"hambuger"}
           onMouseOver={() => toggleMenu("main")}
           onClick={() => toggleMenu("main")}
         />
-      </div>
-      <MenuWrapper
-        open={notificationsOpen}
-        menuClass="NotificationMenuWrapper"
-        closeMethod={() => setNotifiOpen(false)}
-      >
+      </Styled.MainNavBar>
+      <MenuWrapper menuName={"notify"}>
         <NotificationMenu />
       </MenuWrapper>
-      <MenuWrapper
-        open={profileOpen}
-        menuClass="ProfileWrapper"
-        closeMethod={() => setProfileOpen(false)}
-      >
+      <MenuWrapper menuName={"profile"}>
         <ProfileNav />
       </MenuWrapper>
-      <MenuWrapper
-        open={menuOpen}
-        menuClass="MainMenuWrapper"
-        closeMethod={() => setMenuOpen(false)}
-      >
+      <MenuWrapper menuName={"main"}>
         <MainNav />
       </MenuWrapper>
     </>

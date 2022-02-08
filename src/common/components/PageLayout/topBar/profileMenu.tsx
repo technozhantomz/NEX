@@ -2,7 +2,7 @@ import { PoweroffOutlined, SettingOutlined } from "@ant-design/icons";
 import { Avatar, Card } from "antd";
 
 import { useUser, useViewport } from "../../../../context";
-import Styles from "../../../../styles/topbar/mainMenu.module.scss";
+import * as Styled from "../../../../ui/src";
 import { Contacts, Vote } from "../../../../ui/src/icons";
 
 import MenuItem from "./MenuItem";
@@ -14,7 +14,7 @@ const ProfileNav = (): JSX.Element => {
   const { width } = useViewport();
 
   return (
-    <Card className={Styles.ProfileMenu} bordered={false}>
+    <Styled.MenuCard bordered={false}>
       <Meta
         avatar={<Avatar>{accountData?.name.charAt(0)}</Avatar>}
         title={<p>Hello {accountData?.name}!</p>}
@@ -26,20 +26,20 @@ const ProfileNav = (): JSX.Element => {
             <li>
               <MenuItem
                 Href="/voting"
-                Icon={<Vote className={Styles.MenuIcon} />}
+                Icon={<Vote className={"menu-icon"} />}
                 Label="Voting"
               />
             </li>
             <li>
               <MenuItem
                 Href="/contacts"
-                Icon={<Contacts className={Styles.MenuIcon} />}
+                Icon={<Contacts className={"menu-icon"} />}
                 Label="Contacts"
               />
             </li>
           </>
         ) : (
-          <li className={Styles.Link}>
+          <li className={"link"}>
             <a>See all account activity</a>
           </li>
         )}
@@ -47,26 +47,26 @@ const ProfileNav = (): JSX.Element => {
         <li>
           <MenuItem
             Href="/settings"
-            Icon={<SettingOutlined className={Styles.MenuIcon} />}
+            Icon={<SettingOutlined className={"menu-icon"} />}
             Label="Settings"
           />
         </li>
         {width < 414 ? (
-          <li className={Styles.Link}>
+          <li className={"link"}>
             <a>See all account activity</a>
           </li>
         ) : (
           " "
         )}
-        <li className={Styles.Logout}>
+        <li className={"logout"}>
           <MenuItem
             Href="/logout"
-            Icon={<PoweroffOutlined className={Styles.MenuIcon} />}
+            Icon={<PoweroffOutlined className={"menu-icon"} />}
             Label="Logout"
           />
         </li>
       </ul>
-    </Card>
+    </Styled.MenuCard>
   );
 };
 

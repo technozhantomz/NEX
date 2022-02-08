@@ -3,11 +3,11 @@ import {
   PoweroffOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Card, Switch } from "antd";
+import { Switch } from "antd";
 import { useEffect, useState } from "react";
 
 import { useUser } from "../../../../context";
-import Styles from "../../../../styles/topbar/mainMenu.module.scss";
+import * as Styled from "../../../../ui/src";
 import {
   Blockchain,
   Contacts,
@@ -32,37 +32,37 @@ const MainNav = (): JSX.Element => {
   }, [userSettings.advancedSettings, showAdvanced]);
 
   return (
-    <Card className={Styles.MainMenu} bordered={false}>
+    <Styled.MenuCard bordered={false}>
       <ul>
         <li>
           <MenuItem
             Href="/dashboard"
-            Icon={<Dashboard className={Styles.MenuIcon} />}
+            Icon={<Dashboard className={"menu-icon"} />}
             Label="Dashboard"
           />
         </li>
         <li>
           <MenuItem
             Href="/market"
-            Icon={<Market className={Styles.MenuIcon} />}
+            Icon={<Market className={"menu-icon"} />}
             Label="Market"
           />
         </li>
         <li>
           <MenuItem
             Href="/wallet"
-            Icon={<DollarOutlined className={Styles.MenuIcon} />}
+            Icon={<DollarOutlined className={"menu-icon"} />}
             Label="Wallet"
           />
         </li>
         <li>
           <MenuItem
             Href="/settings"
-            Icon={<SettingOutlined className={Styles.MenuIcon} />}
+            Icon={<SettingOutlined className={"menu-icon"} />}
             Label="Settings"
           />
         </li>
-        <li className={Styles.Advanced}>
+        <li className={"advanced"}>
           <Switch
             size="small"
             onChange={onChange}
@@ -75,21 +75,21 @@ const MainNav = (): JSX.Element => {
             <li>
               <MenuItem
                 Href="/blockchain"
-                Icon={<Blockchain className={Styles.MenuIcon} />}
+                Icon={<Blockchain className={"menu-icon"} />}
                 Label="Blocks"
               />
             </li>
             <li>
               <MenuItem
                 Href="/voting"
-                Icon={<Vote className={Styles.MenuIcon} />}
+                Icon={<Vote className={"menu-icon"} />}
                 Label="Voting"
               />
             </li>
             <li>
               <MenuItem
                 Href="/contacts"
-                Icon={<Contacts className={Styles.MenuIcon} />}
+                Icon={<Contacts className={"menu-icon"} />}
                 Label="Contacts"
               />
             </li>
@@ -97,15 +97,15 @@ const MainNav = (): JSX.Element => {
         ) : (
           ""
         )}
-        <li className={Styles.Logout}>
+        <li className={"logout"}>
           <MenuItem
             Href="/logout"
-            Icon={<PoweroffOutlined className={Styles.MenuIcon} />}
+            Icon={<PoweroffOutlined className={"menu-icon"} />}
             Label="Logout"
           />
         </li>
       </ul>
-    </Card>
+    </Styled.MenuCard>
   );
 };
 

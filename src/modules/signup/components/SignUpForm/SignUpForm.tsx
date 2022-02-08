@@ -17,7 +17,7 @@ const SignUpForm: React.FC = () => {
     useSignUpForm();
 
   return (
-    <Form form={signUpForm} name="signUpForm" onFinish={onSignUp}>
+    <Styled.SignupForm form={signUpForm} name="signUpForm" onFinish={onSignUp}>
       <Form.Item
         name="username"
         rules={formValdation.username}
@@ -77,11 +77,11 @@ const SignUpForm: React.FC = () => {
         </Styled.Checkbox>
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Styled.SignupFormButton type="primary" htmlType="submit">
           Create account
-        </Button>
+        </Styled.SignupFormButton>
       </Form.Item>
-    </Form>
+    </Styled.SignupForm>
   );
 };
 
