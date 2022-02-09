@@ -3,7 +3,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { editStorage, getStorage } from "../../api/utils/storage";
 import { useLocalStorage } from "../../common/hooks";
 import { Cache, IAccountData } from "../../common/types";
-import { Props } from "../../modules/peerplaysApi/peerplaysApiProvider.types";
 
 import { IUser, IUserSettings } from "./userTypes";
 
@@ -13,6 +12,10 @@ const defaultUserState = {
     notificationSettings: true,
   },
 };
+
+interface Props {
+  children: React.ReactNode;
+}
 
 const UserContext = createContext<IUser>(defaultUserState);
 

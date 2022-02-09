@@ -1,18 +1,45 @@
 import { BellOutlined, MoreOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar } from "antd";
+import { useState } from "react";
 
 import { useUser } from "../../../../context";
 
-import { useNavBar } from "./hooks";
 import MainNav from "./mainMenu";
 import * as Styled from "./mainNavBar.styled";
-import MenuWrapper from "./menuWrapper";
 import NotificationMenu from "./notificationMenu";
 import ProfileNav from "./profileMenu";
 
 const MainNavBar = (): JSX.Element => {
-  const { toggleMenu } = useNavBar();
+  const [nofiyMenuOpen, setNofiyMenuOpen] = useState<boolean>(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
+  const [mainMenuOpen, setMainMenuOpen] = useState<boolean>(false);
   const { accountData } = useUser();
+
+  const toggleMenu = (menuName: string): void => {
+    switch (true) {
+      case menuName === "notify":
+        setNofiyMenuOpen(nofiyMenuOpen ? false : true);
+        setProfileMenuOpen(false);
+        setMainMenuOpen(false);
+        break;
+      case menuName === "profile":
+        setProfileMenuOpen(profileMenuOpen ? false : true);
+        setNofiyMenuOpen(false);
+        setMainMenuOpen(false);
+        break;
+      case menuName === "main":
+        setMainMenuOpen(mainMenuOpen ? false : true);
+        setNofiyMenuOpen(false);
+        setProfileMenuOpen(false);
+        break;
+    }
+  };
+
+  const closeMenu = () => {
+    setNofiyMenuOpen(false);
+    setProfileMenuOpen(false);
+    setMainMenuOpen(false);
+  };
 
   return (
     <>
@@ -40,15 +67,30 @@ const MainNavBar = (): JSX.Element => {
           onClick={() => toggleMenu("main")}
         />
       </Styled.MainNavBar>
-      <MenuWrapper menuName={"notify"}>
+      <Styled.MenuWrapper
+        className={`notification-menu-wrapper${nofiyMenuOpen ? " open" : ""}`}
+      >
+        <a className="close" onClick={closeMenu}>
+          X
+        </a>
         <NotificationMenu />
-      </MenuWrapper>
-      <MenuWrapper menuName={"profile"}>
+      </Styled.MenuWrapper>
+      <Styled.MenuWrapper
+        className={`profile-wrapper${profileMenuOpen ? " open" : ""}`}
+      >
+        <a className="close" onClick={closeMenu}>
+          X
+        </a>
         <ProfileNav />
-      </MenuWrapper>
-      <MenuWrapper menuName={"main"}>
+      </Styled.MenuWrapper>
+      <Styled.MenuWrapper
+        className={`main-menu-wrapper${mainMenuOpen ? " open" : ""}`}
+      >
+        <a className="close" onClick={closeMenu}>
+          X
+        </a>
         <MainNav />
-      </MenuWrapper>
+      </Styled.MenuWrapper>
     </>
   );
 };
