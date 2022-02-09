@@ -1,11 +1,11 @@
 import { PoweroffOutlined, SettingOutlined } from "@ant-design/icons";
-import { Avatar, Card } from "antd";
+import { Card } from "antd";
 
 import { useUser, useViewport } from "../../../../context";
-import * as Styled from "../../../../ui/src";
 import { Contacts, Vote } from "../../../../ui/src/icons";
 
 import MenuItem from "./MenuItem";
+import * as Styled from "./profileMenu.styled";
 
 const { Meta } = Card;
 
@@ -14,11 +14,15 @@ const ProfileNav = (): JSX.Element => {
   const { width } = useViewport();
 
   return (
-    <Styled.MenuCard bordered={false}>
+    <Styled.ProfileMenu bordered={false}>
       <Meta
-        avatar={<Avatar>{accountData?.name.charAt(0)}</Avatar>}
-        title={<p>Hello {accountData?.name}!</p>}
-        description={<p>@{accountData?.name}</p>}
+        avatar={
+          <Styled.ProfileAvitar>
+            {accountData?.name.charAt(0)}
+          </Styled.ProfileAvitar>
+        }
+        title={`Hello ${accountData?.name}!`}
+        description={`@${accountData?.name}`}
       />
       <ul>
         {width < 414 ? (
@@ -66,7 +70,7 @@ const ProfileNav = (): JSX.Element => {
           />
         </li>
       </ul>
-    </Styled.MenuCard>
+    </Styled.ProfileMenu>
   );
 };
 

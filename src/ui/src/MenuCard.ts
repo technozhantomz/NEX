@@ -2,6 +2,7 @@ import { Card as AntdCard } from "antd";
 import styled from "styled-components";
 
 import { breakpoint } from "./breakpoints";
+import { colors } from "./colors";
 
 export const MenuCard = styled(AntdCard)`
    {
@@ -11,7 +12,7 @@ export const MenuCard = styled(AntdCard)`
       margin: 0;
       padding: 0;
       li {
-        border-bottom: 1px solid var(--border-color-base);
+        border-bottom: 1px solid ${colors.borderColorBase};
         padding: 0 0 10px 0;
         margin: 10px 0 0 0;
       }
@@ -19,10 +20,10 @@ export const MenuCard = styled(AntdCard)`
     .menu-item {
       display: flex;
       justify-content: space-between;
-      color: var(---text-color);
+      color: ${colors.textColor};
     }
     .menu-icon {
-      color: var(--border-color-base);
+      color: ${colors.borderColorBase};
     }
     .advanced {
       border: none;

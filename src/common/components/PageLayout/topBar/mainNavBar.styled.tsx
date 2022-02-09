@@ -1,5 +1,6 @@
-import { styled } from "../../../../ui/src";
+import { styled, Avatar as UiAvatar } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
 
 export const MainNavBar = styled.div`
    {
@@ -7,7 +8,7 @@ export const MainNavBar = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
-    color: var(---white);
+    color: ${colors.white};
     .hambuger {
       font-size: 2em;
       font-weight: bold;
@@ -28,14 +29,14 @@ export const MenuWrapper = styled.div`{
   right: 0;
   width: 100%;
   height: 100%;
-  background: var(---white);
-  color: var(---text-color);
+  background: ${colors.white};
+  color: ${colors.textColor};
   z-index: 2;
   &.open{
       display: block;
   }
   .close{
-      color: var(---text-color);
+      color: ${colors.textColor};
       position: relative;
       text-align: left;
       display: flex;
@@ -71,3 +72,5 @@ export const MenuWrapper = styled.div`{
       }
   }
 `;
+
+export const MainNavBarAvitar = styled(UiAvatar)``;

@@ -5,6 +5,7 @@ export { Button } from "./Button";
 export { DownOutlined } from "./DownOutlined";
 export { CardFrom, CardFormButton } from "./CardFrom";
 export { MenuCard } from "./MenuCard";
+export { Avatar } from "./Avatar";
 
 export {
   Row,

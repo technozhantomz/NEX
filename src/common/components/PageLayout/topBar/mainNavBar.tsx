@@ -1,5 +1,4 @@
 import { BellOutlined, MoreOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar } from "antd";
 import { useState } from "react";
 
 import { useUser } from "../../../../context";
@@ -54,9 +53,11 @@ const MainNavBar = (): JSX.Element => {
             onMouseOver={() => toggleMenu("profile")}
             onClick={() => toggleMenu("profile")}
           >
-            <Avatar icon={accountData !== undefined ? "" : <UserOutlined />}>
+            <Styled.MainNavBarAvitar
+              icon={accountData !== undefined ? "" : <UserOutlined />}
+            >
               {accountData !== undefined ? accountData.name.charAt(0) : ""}
-            </Avatar>
+            </Styled.MainNavBarAvitar>
           </div>
         ) : (
           ""

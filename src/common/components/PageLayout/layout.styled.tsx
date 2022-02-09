@@ -1,5 +1,6 @@
 import { styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
+import { colors } from "../../../ui/src/colors";
 
 export const Layout = styled.main`
   &.default {
@@ -18,7 +19,7 @@ export const Layout = styled.main`
 
 export const PageHeading = styled.h1`
    {
-    color: var(---white);
+    color: ${colors.white};
     font-size: 1.5em;
     font-weight: 300;
     margin: 7% 0 5%;
