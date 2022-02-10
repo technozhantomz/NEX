@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { usePeerplaysApi } from "../../modules/peerplaysApi";
+import { usePeerplaysApi } from "../components/peerplaysApi";
 import { Asset, Cache } from "../types";
 
 import { UseAssetResult } from "./useAsset.types";

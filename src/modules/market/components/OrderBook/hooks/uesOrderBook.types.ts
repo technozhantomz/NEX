@@ -1,4 +1,5 @@
 export type UseOrderBookResult = {
+  tableLoading: boolean;
   asks: Order[];
   bids: Order[];
   ordersRows: OrderRow[];

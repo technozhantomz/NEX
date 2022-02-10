@@ -18,3 +18,5 @@ export {
 export { Col } from "./Col";
 
 export type { FormInstance } from "antd";
+
+export * from "./colors";

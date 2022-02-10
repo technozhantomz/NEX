@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { usePeerplaysApi } from "../../../../../common/components/peerplaysApi";
 import { useAsset } from "../../../../../common/hooks/useAsset";
 import { useFormDate } from "../../../../../common/hooks/useFormDate";
 import { roundNum } from "../../../../../common/hooks/useRoundNum";
 import { Asset } from "../../../../../common/types/Asset";
-import { usePeerplaysApi } from "../../../../peerplaysApi";
 import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
 
 import {
@@ -18,6 +18,7 @@ export function useHistory(): UseHistoryResult {
   const { historyApi } = usePeerplaysApi();
   const { currentBase, currentQuote } = usePairSelect();
   const [orderHistoryRow, setOrderHistoryRow] = useState<OrderHistoryRow[]>([]);
+  const [tableLoading, setTableLoading] = useState<boolean>(true);
   const [columns, setColumns] = useState<OrderHistoryColumn[]>([]);
   const { setPrecision } = useAsset();
 
@@ -27,6 +28,28 @@ export function useHistory(): UseHistoryResult {
         "get_fill_order_history",
         [base.id, quote.id, 100]
       );
+      setColumns([
+        {
+          title: "Price",
+          dataIndex: "price",
+          key: "price",
+        },
+        {
+          title: quote.symbol,
+          dataIndex: "baseAmount",
+          key: "baseAmount",
+        },
+        {
+          title: base.symbol,
+          dataIndex: "quoteAmount",
+          key: "quoteAmount",
+        },
+        {
+          title: "Date",
+          dataIndex: "time",
+          key: "time",
+        },
+      ]);
       setOrderHistoryRow(
         history.map((h, index) => {
           const time = useFormDate(h.time, ["date", "month", "year", "time"]);
@@ -56,39 +79,19 @@ export function useHistory(): UseHistoryResult {
           };
         })
       );
+      setTableLoading(false);
     },
-    [historyApi]
+    [historyApi, setColumns, setOrderHistoryRow, setTableLoading]
   );
 
   useEffect(() => {
     if (currentBase !== undefined && currentQuote !== undefined) {
-      setColumns([
-        {
-          title: "Price",
-          dataIndex: "price",
-          key: "price",
-        },
-        {
-          title: currentQuote.symbol,
-          dataIndex: "baseAmount",
-          key: "baseAmount",
-        },
-        {
-          title: currentBase.symbol,
-          dataIndex: "quoteAmount",
-          key: "quoteAmount",
-        },
-        {
-          title: "Date",
-          dataIndex: "time",
-          key: "time",
-        },
-      ]);
       getHistory(currentBase, currentQuote);
     }
-  }, [currentBase, currentQuote, getHistory, setColumns]);
+  }, [currentBase, currentQuote, getHistory]);
 
   return {
+    tableLoading,
     orderHistoryRow,
     columns,
   };

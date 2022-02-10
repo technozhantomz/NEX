@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { usePeerplaysApi } from "../../../../../common/components/peerplaysApi";
 import { useLocalStorage } from "../../../../../common/hooks/useLocalStorage";
 import { Asset } from "../../../../../common/types/Asset";
 import { Exchanges } from "../../../../../common/types/Exchanges";
-import { usePeerplaysApi } from "../../../../peerplaysApi";
 
 import { UsePairSelectResult } from "./usePariSelect.types";
 

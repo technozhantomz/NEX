@@ -7,14 +7,14 @@ import React, {
   useState,
 } from "react";
 
-import { defaultNodesList } from "../../api/params";
+import { defaultNodesList } from "../../../api/params";
 import {
   initNode,
   InitNodeOutput,
   InstanceType,
-} from "../../api/services/initNode";
-import { initCache, initSettings } from "../../api/utils";
-import { initLocale } from "../../api/utils/locale";
+} from "../../../api/services/initNode";
+import { initCache, initSettings } from "../../../api/utils";
+import { initLocale } from "../../../api/utils/locale";
 
 import { PeerplaysApi, Props } from "./peerplaysApiProvider.types";
 

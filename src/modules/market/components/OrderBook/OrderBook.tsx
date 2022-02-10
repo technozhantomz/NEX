@@ -6,8 +6,7 @@ import { useOrderBook } from "./hooks/useOrderBook";
 
 export const OrderBook = (): JSX.Element => {
   const {
-    bids,
-    asks,
+    tableLoading,
     orderType,
     threshold,
     ordersRows,
@@ -64,7 +63,9 @@ export const OrderBook = (): JSX.Element => {
       </Styled.FilterContainer>
       <Styled.TableContainer>
         <Styled.Table
-          scroll={{ scrollToFirstRowOnChange: false, y: 600 }}
+          //style={{"overflow: auto"}}
+          loading={tableLoading}
+          scroll={{ scrollToFirstRowOnChange: false }}
           pagination={false}
           columns={columns}
           dataSource={ordersRows}

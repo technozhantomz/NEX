@@ -3,6 +3,7 @@ import { Fee } from "../../../../../common/types";
 export type UseHistoryResult = {
   orderHistoryRow: OrderHistoryRow[];
   columns: OrderHistoryColumn[];
+  tableLoading: boolean;
 };
 
 export type OrderHistoryRow = {

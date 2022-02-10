@@ -1,6 +1,6 @@
 import React from "react";
 
-import { InstanceType } from "../../api/services/initNode";
+import { InstanceType } from "../../../api/services/initNode";
 
 export interface PeerplaysApi {
   instance: InstanceType;

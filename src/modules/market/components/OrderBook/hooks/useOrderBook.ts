@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { usePeerplaysApi } from "../../../../../common/components/peerplaysApi";
 import { roundNum } from "../../../../../common/hooks/useRoundNum";
 import { Asset } from "../../../../../common/types/Asset";
-import { usePeerplaysApi } from "../../../../peerplaysApi";
 import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
 
 import {
@@ -56,6 +56,7 @@ export function useOrderBook(): UseOrderBookResult {
   const [columns, setColumns] = useState<OrderColumn[]>([]);
   const [orderType, setOrderType] = useState<OrderType>("total");
   const [threshold, setThreshold] = useState<number>(0.001);
+  const [tableLoading, setTableLoading] = useState<boolean>(true);
   //const [tableScroll, setTableScroll] = useState<TableScroll>();
   const { currentBase, currentQuote } = usePairSelect();
   const { dbApi } = usePeerplaysApi();
@@ -76,6 +77,11 @@ export function useOrderBook(): UseOrderBookResult {
 
   const getOrderBook = useCallback(
     async (base: Asset, quote: Asset) => {
+      const { asks, bids } = await dbApi("get_order_book", [
+        base.symbol,
+        quote.symbol,
+        50,
+      ]);
       setColumns([
         {
           title: quote.symbol,
@@ -93,19 +99,17 @@ export function useOrderBook(): UseOrderBookResult {
           key: "price",
         },
       ]);
-      const { asks, bids } = await dbApi("get_order_book", [
-        base.symbol,
-        quote.symbol,
-        50,
-      ]);
       setAsks(asks as Order[]);
       setBids(bids as Order[]);
+      setTableLoading(false);
     },
     [dbApi, setAsks, setBids, setColumns]
   );
 
   useEffect(() => {
     if (currentBase !== undefined && currentQuote !== undefined) {
+      console.log("this is current quote", currentQuote);
+      console.log("this is current Base", currentBase);
       getOrderBook(currentBase, currentQuote);
     }
   }, [currentBase, currentQuote, getOrderBook, setColumns]);
@@ -158,6 +162,7 @@ export function useOrderBook(): UseOrderBookResult {
   ]);
 
   return {
+    tableLoading,
     asks,
     bids,
     orderType,

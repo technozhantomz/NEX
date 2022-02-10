@@ -1,6 +1,9 @@
 import { styled, Table as UiTable } from "../../../../ui/src";
 
-export const TableContainer = styled.div``;
+export const TableContainer = styled.div`
+  height: 600px;
+  overflow-y: auto;
+`;
 
 export const Table = styled(UiTable)`
   .ant-table-tbody > tr > td {

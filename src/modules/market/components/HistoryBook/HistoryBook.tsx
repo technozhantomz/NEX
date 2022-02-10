@@ -3,13 +3,14 @@ import { useHistory } from "./hooks/useHistory";
 import { OrderHistoryRow } from "./hooks/useHistory.types";
 
 export const HistoryBook = (): JSX.Element => {
-  const { columns, orderHistoryRow } = useHistory();
+  const { columns, orderHistoryRow, tableLoading } = useHistory();
   console.log("this is history", orderHistoryRow);
   return (
     <>
       <Styled.TableContainer>
         <Styled.Table
-          scroll={{ scrollToFirstRowOnChange: false, y: 600 }}
+          loading={tableLoading}
+          scroll={{ scrollToFirstRowOnChange: false }}
           pagination={false}
           columns={columns}
           dataSource={orderHistoryRow}

@@ -1,10 +1,11 @@
 import * as Styled from "./InputPrefix.styled";
 import BitcoinIcon from "./icons/BitcoinIcon.svg";
+import HiveIcon from "./icons/HiveIcon.svg";
 import PPYIcon from "./icons/PPYIcon.svg";
 
 type Props = {
   inputSymbol: string;
-  quoteSymbol: string;
+  quoteSymbol?: string;
   baseSymbol?: string;
   constLabel: string;
 };
@@ -21,6 +22,7 @@ export function InputPrefix({
     BTC: <BitcoinIcon height="30" width="30" />,
     TEST: <PPYIcon height="30" width="30" />,
     PPY: <PPYIcon height="30" width="30" />,
+    HIVE: <HiveIcon height="30" width="30" />,
   };
   return (
     <>
@@ -32,7 +34,9 @@ export function InputPrefix({
           {constLabel}
         </Styled.InputPrefixConstLabel>
         <Styled.InputPrefixAssetLabel>
-          {baseSymbol ? `${baseSymbol} / ${quoteSymbol}` : `${quoteSymbol}`}
+          {baseSymbol && quoteSymbol
+            ? `${baseSymbol} / ${quoteSymbol}`
+            : `${inputSymbol}`}
         </Styled.InputPrefixAssetLabel>
       </Styled.InputPrefixContainer>
     </>

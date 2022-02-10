@@ -34,7 +34,10 @@ export const Table = styled(UiTable)`
   }
 `;
 
-export const TableContainer = styled.div``;
+export const TableContainer = styled.div`
+  height: 600px;
+  overflow-y: auto;
+`;
 
 export const FilterContainer = styled(Flex)`
   padding-left: 30px;

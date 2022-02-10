@@ -1,9 +1,9 @@
-import { Flex, styled } from "../../../../ui/src";
+import { colors, Flex, styled } from "../../../../../../ui/src";
 
 export const InputPrefixConstLabel = styled.span`
-  color: #6c6c6c;
+  color: ${colors.textColorSecondary};
   font-size: 16px;
-  margin-right: 3px;
+  margin-right: 5px;
 `;
 
 export const InputPrefixAssetLabel = styled.span`
