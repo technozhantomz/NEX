@@ -5,6 +5,7 @@ import { defaultToken, faucetUrl } from "../../../api/params/networkparams";
 import { usePeerplaysApi } from "../../../modules/peerplaysApi";
 import {
   IAccountData,
+  IBalance,
   IFormAssetData,
   IFullAccount,
   ISignupFormData,
@@ -108,10 +109,10 @@ export function useAccount(): UseAccountResult {
       memo: { memo_key: options.memo_key },
     };
 
-    let createdAssets: never[] = [];
+    let createdAssets: unknown[] = [];
     if (data.assets) {
       createdAssets = await dbApi("get_assets", [data.assets]).then(
-        (assetsList: any[]) => {
+        (assetsList: unknown[]) => {
           return Promise.all(
             assetsList.map(async (el) => {
               const dynamicData = await dbApi("get_objects", [
@@ -133,17 +134,16 @@ export function useAccount(): UseAccountResult {
                 canBeIssued = false;
                 assetType = await dbApi("get_objects", [
                   [el.bitasset_data_id],
-                ]).then((e: { is_prediction_market: any }[]) =>
+                ]).then((e: { is_prediction_market: unknown }[]) =>
                   e[0].is_prediction_market ? "prediction" : "smart"
                 );
               }
 
               return {
-                symbol: el.symbol,
-                supply: setPrecision(true, el.amount, el.precision),
+                symbol: asset?.symbol,
+                supply: setPrecision(true, asset?.amount, asset?.precision),
                 assetType: assetType,
                 maxSupply,
-                actions,
               };
             })
           );
@@ -169,15 +169,25 @@ export function useAccount(): UseAccountResult {
     };
   }, []);
 
-  const formAssetData = async (data: IFormAssetData) => {
-    const id = data.asset_type || data.asset_id || data.id;
-    const symbol = data.symbol;
+  const formAssetData = async (data: IFormAssetData | IBalance) => {
+    let id = data.asset_type || data.asset_id || data.id;
+    let symbol = data.symbol;
     const amount = data.balance || data.amount || 0;
-    const precision = data.precision;
+    let precision = data.precision;
 
     if (id && symbol && precision) return { id, amount, precision, symbol };
-    if (id) return await getAssetById(id);
-    if (symbol) return getAssetBySymbol(symbol);
+    if (id)
+      await getAssetById(id).then((asset) => {
+        symbol = asset?.symbol;
+        precision = asset?.precision;
+        return { id, amount, precision, symbol };
+      });
+    if (symbol)
+      getAssetBySymbol(symbol).then((asset) => {
+        id = asset?.id;
+        precision = asset?.precision;
+        return { id, amount, precision, symbol };
+      });
 
     return { id, amount, precision, symbol };
   };

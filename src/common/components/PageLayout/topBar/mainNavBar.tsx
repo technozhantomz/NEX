@@ -44,21 +44,23 @@ const MainNavBar = (): JSX.Element => {
     <>
       <Styled.MainNavBar>
         {accountData !== undefined ? (
-          <div
-            onMouseOver={() => toggleMenu("profile")}
-            onClick={() => toggleMenu("profile")}
-          >
+          <>
             <BellOutlined
               className={"bell"}
               onMouseOver={() => toggleMenu("notify")}
               onClick={() => toggleMenu("notify")}
             />
-            <Styled.MainNavBarAvitar
-              icon={accountData !== undefined ? "" : <UserOutlined />}
+            <div
+              onMouseOver={() => toggleMenu("profile")}
+              onClick={() => toggleMenu("profile")}
             >
-              {accountData !== undefined ? accountData.name.charAt(0) : ""}
-            </Styled.MainNavBarAvitar>
-          </div>
+              <Styled.MainNavBarAvitar
+                icon={accountData !== undefined ? "" : <UserOutlined />}
+              >
+                {accountData !== undefined ? accountData.name.charAt(0) : ""}
+              </Styled.MainNavBarAvitar>
+            </div>
+          </>
         ) : (
           ""
         )}
