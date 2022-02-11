@@ -4,7 +4,7 @@ export type Cache = {
   created: number;
   accounts: CacheAccount[];
   assets: Asset[];
-  userAccount: IAccountData;
+  userAccount: IAccountData | undefined;
 };
 
 export type CacheAccount = {

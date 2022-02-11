@@ -16,6 +16,7 @@ export {
   Menu,
   Table,
   Checkbox,
+  Card,
 } from "antd";
 
 export { Col } from "./Col";

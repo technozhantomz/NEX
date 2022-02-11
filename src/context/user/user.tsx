@@ -52,6 +52,24 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     });
   };
 
+  const logoutUser = () => {
+    const cache = jsonCache as Cache;
+    const settings = getStorage("settings");
+    settings.advancedMode = false;
+    settings.notifications = true;
+    userSettings.advancedSettings = false;
+    userSettings.notificationSettings = true;
+    setUserSettings(userSettings);
+    editStorage("settings", settings);
+    setAccountData(undefined);
+    setJsonCache({
+      created: cache.created,
+      accounts: cache.accounts,
+      assets: cache.assets,
+      userAccount: undefined,
+    });
+  };
+
   useEffect(() => {
     const cache = jsonCache as Cache;
     if (cache.userAccount != undefined) setAccountData(cache.userAccount);
@@ -64,6 +82,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         userSettings,
         updateUserSettings,
         updateAccountData,
+        logoutUser,
       }}
     >
       {children}

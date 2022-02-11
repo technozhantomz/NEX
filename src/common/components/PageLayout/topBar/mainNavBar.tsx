@@ -43,16 +43,16 @@ const MainNavBar = (): JSX.Element => {
   return (
     <>
       <Styled.MainNavBar>
-        <BellOutlined
-          className={"bell"}
-          onMouseOver={() => toggleMenu("notify")}
-          onClick={() => toggleMenu("notify")}
-        />
         {accountData !== undefined ? (
           <div
             onMouseOver={() => toggleMenu("profile")}
             onClick={() => toggleMenu("profile")}
           >
+            <BellOutlined
+              className={"bell"}
+              onMouseOver={() => toggleMenu("notify")}
+              onClick={() => toggleMenu("notify")}
+            />
             <Styled.MainNavBarAvitar
               icon={accountData !== undefined ? "" : <UserOutlined />}
             >

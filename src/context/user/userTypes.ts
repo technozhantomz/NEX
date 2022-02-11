@@ -5,6 +5,7 @@ export interface IUser {
   userSettings: IUserSettings;
   updateUserSettings?: (key: string, value: boolean) => void;
   updateAccountData?: (accountData: IAccountData) => void;
+  logoutUser?: () => void;
 }
 
 export interface IUserSettings {
