@@ -3,9 +3,9 @@ import React from "react";
 import Layout from "../../../../components/layout";
 import { DepositTab } from "../../components/DepositTab";
 
-import * as Styled from "./DepositPage.styled";
+import * as Styled from "./Dashboard.styled";
 
-const DepositPage: React.FC = () => {
+const Dashboard: React.FC = () => {
   return (
     <Layout title="Deposit">
       <Styled.HeaderContainer>
@@ -23,4 +23,4 @@ const DepositPage: React.FC = () => {
   );
 };
 
-export default DepositPage;
+export default Dashboard;
