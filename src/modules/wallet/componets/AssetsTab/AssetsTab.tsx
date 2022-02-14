@@ -1,20 +1,100 @@
-import { Button, List } from "antd";
+import { List } from "antd";
+import { ColumnsType } from "antd/es/table";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-import { useViewport } from "../../../../context";
+import { useAsset } from "../../../../common/hooks";
+import { useUser, useViewport } from "../../../../context";
 import { breakpoints } from "../../../../ui/src/breakpoints";
+import AssetActionButton from "../AssetActionButton";
 import AssetTitle from "../AssetTitle";
 
 import * as Styled from "./AssetsTab.styled";
-import { useAssets } from "./hooks";
+
+interface IAssetData {
+  key: string;
+  asset: string;
+  available: number;
+  price: number;
+  change: number;
+  value: string;
+}
+
+const columns: ColumnsType<IAssetData> = [
+  {
+    title: "Asset",
+    dataIndex: "asset",
+    key: "asset",
+  },
+  {
+    title: "Available",
+    dataIndex: "available",
+    key: "available",
+  },
+  {
+    title: "Price (BTC)",
+    dataIndex: "price",
+    key: "price",
+  },
+  {
+    title: "Change (24 hrs)",
+    dataIndex: "change",
+    key: "change",
+  },
+  {
+    title: "Value (BTC)",
+    dataIndex: "value",
+    key: "value",
+  },
+  {
+    title: "",
+    dataIndex: "transfer",
+    key: "transfer",
+    render: record => <AssetActionButton txt="Transfer" href="/" />,
+  },
+  {
+    title: "",
+    dataIndex: "withdraw",
+    key: "withdraw",
+    render: record => <AssetActionButton txt="Withdraw" href="/" />,
+  },
+  {
+    title: "",
+    dataIndex: "deposit",
+    key: "deposit",
+    render: record => <AssetActionButton txt="Deposit" href="/" />,
+  },
+];
 
 const AssetsTab = (): JSX.Element => {
-  const { columns, assetData } = useAssets();
+  const { setPrecision } = useAsset();
+  const { accountData } = useUser();
   const { width } = useViewport();
+  const router = useRouter();
+
+  const assetData = accountData?.assets.map((asset) => {
+    return {
+      key: asset.id,
+      asset: asset.symbol,
+      available: setPrecision(true, asset.amount, asset.precision),
+      price: 0,
+      change: 0,
+      value: "Infinity",
+    };
+  });
+
+  useEffect(() => {
+    if (accountData === undefined) router.push("/login");
+  }, []);
 
   return (
     <>
       {width > breakpoints.xs ? (
-        <Styled.AssetsTable columns={columns} dataSource={assetData} />
+        <Styled.AssetsTable
+          columns={columns}
+          dataSource={assetData}
+          pagination={false}
+        />
       ) : (
         <List
           itemLayout="vertical"
@@ -23,15 +103,9 @@ const AssetsTab = (): JSX.Element => {
             <Styled.AssetListItem
               key={item.key}
               actions={[
-                <Styled.AssetActionButton type="text">
-                  Transfer
-                </Styled.AssetActionButton>,
-                <Styled.AssetActionButton type="text">
-                  Withdraw
-                </Styled.AssetActionButton>,
-                <Styled.AssetActionButton type="text">
-                  Deposit
-                </Styled.AssetActionButton>,
+                <AssetActionButton txt="Transfer" href="/" />,
+                <AssetActionButton txt="Withdraw" href="/" />,
+                <AssetActionButton txt="Deposit" href="/" />,
               ]}
             >
               <AssetTitle symbol={item.asset} />

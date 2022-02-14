@@ -36,6 +36,8 @@ const Layout: FunctionComponent<Props> = ({
     switch (true) {
       case type == "card":
         return "card-layout";
+      case type == "card-lrg":
+        return "card-layout__lrg";
       default:
         return "default";
     }

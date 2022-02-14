@@ -4,13 +4,15 @@ import type { NextPage } from "next";
 import Layout from "../../../../common/components/PageLayout/layout";
 import AssetsTab from "../../componets/AssetsTab";
 
+//import * as Styled from "./WalletPage.styled"
+
 const { TabPane } = Tabs;
 
 const WalletPage: NextPage = () => {
   return (
     <Layout
       title="Wallet"
-      type="card"
+      type="card-lrg"
       heading="Wallet"
       description="Wallet Page"
     >

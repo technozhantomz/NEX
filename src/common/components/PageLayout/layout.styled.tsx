@@ -14,6 +14,10 @@ export const Layout = styled.main`
       margin: 0 auto;
       max-width: 600px;
     }
+    &.card-layout__lrg {
+      margin: 0 auto;
+      max-width: 1070px;
+    }
   }
 `;
 
