@@ -1,9 +1,5 @@
 import { Asset } from "./index";
 
-export type IUserAsset = {
-  asset: Asset;
-};
-
 export type IUserHistory = {
   blockNum: number;
   id: string;
@@ -57,7 +53,7 @@ export type IAccountData = {
   active_special_authority: unknown[];
   blacklisted_accounts: unknown[];
   blacklisting_accounts: unknown[];
-  assets: IUserAsset[];
+  assets: Asset[];
   history: IUserHistory[];
   keys: IUserKeys;
   limit_orders: unknown[];

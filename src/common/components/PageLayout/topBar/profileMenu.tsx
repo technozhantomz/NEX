@@ -2,6 +2,7 @@ import { PoweroffOutlined, SettingOutlined } from "@ant-design/icons";
 import { Card } from "antd";
 
 import { useUser, useViewport } from "../../../../context";
+import { breakpoints } from "../../../../ui/src/breakpoints";
 import { Contacts, Vote } from "../../../../ui/src/icons";
 
 import MenuItem from "./MenuItem";
@@ -25,7 +26,7 @@ const ProfileNav = (): JSX.Element => {
         description={`@${accountData?.name}`}
       />
       <ul>
-        {width < 414 ? (
+        {width < breakpoints.xs ? (
           <>
             <li>
               <MenuItem
@@ -55,7 +56,7 @@ const ProfileNav = (): JSX.Element => {
             Label="Settings"
           />
         </li>
-        {width < 414 ? (
+        {width < breakpoints.xs ? (
           <li className={"link"}>
             <a>See all account activity</a>
           </li>
