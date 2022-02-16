@@ -63,7 +63,12 @@ const AssetsTab = (): JSX.Element => {
   return (
     <>
       {width > breakpoints.xs ? (
-        <Styled.AssetsTable columns={columns} {...assets} pagination={false} />
+        <Styled.AssetsTable
+          columns={columns}
+          {...assets}
+          pagination={false}
+          size="small"
+        />
       ) : (
         <List
           itemLayout="vertical"

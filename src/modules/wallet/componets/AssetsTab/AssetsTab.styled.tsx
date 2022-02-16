@@ -20,6 +20,7 @@ export const AssetsTable = styled(UiTable)`
 
 export const AssetListItem = styled(UiList.Item)`
    {
+    padding: 15px 20px;
   }
   .ant-list-item-action {
     display: flex;
@@ -35,7 +36,7 @@ export const AssetListItem = styled(UiList.Item)`
 
 export const AssetsItemContent = styled.div`
    {
-    margin: 18px 0 25px 0;
+    margin: 18px 0 25px;
   }
   .asset-info {
     margin: 5px 0;

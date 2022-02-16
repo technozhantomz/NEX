@@ -24,15 +24,6 @@ export function useAssetsTab(): IAssetsTab {
     getAssetsData();
   }, []);
 
-  const getAssetValue = (amount: number, price: number): number => {
-    return roundNum(amount, price);
-  };
-
-  const getAssetChange = (symbol: string, percent_change: number) => {
-    if (symbol === defaultQuote) return "0%";
-    return !percent_change || percent_change == 0 ? `0%` : `${percent_change}%`;
-  };
-
   const getAssetsData = async () => {
     const assetsData = await Promise.all(
       accountData?.assets.map(formAssetData)
@@ -41,13 +32,21 @@ export function useAssetsTab(): IAssetsTab {
   };
 
   const formAssetData = async (asset: Asset) => {
-    const tickerData = await dbApi("get_ticker", [asset.symbol, defaultQuote]);
     const available = setPrecision(true, asset.amount, asset.precision);
-    const price = tickerData ? tickerData.latest : 0;
-    const change = tickerData
-      ? getAssetChange(asset.symbol, tickerData.percent_change)
-      : "0%";
-    const value = price ? getAssetValue(available, price) : 0;
+    let price = 0;
+    let change = "0%";
+    let value = available;
+    if (asset.symbol !== defaultQuote) {
+      const tickerData = await dbApi("get_ticker", [
+        asset.symbol,
+        defaultQuote,
+      ]);
+      price = tickerData ? Number(parseFloat(tickerData.latest).toFixed(8)) : 0;
+      change = tickerData
+        ? `${parseFloat(tickerData.percent_change).toFixed(2)}%`
+        : change;
+      value = roundNum(available, price);
+    }
     return {
       key: asset.id,
       asset: asset.symbol,

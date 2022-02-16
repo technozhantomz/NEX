@@ -4,7 +4,7 @@ import type { NextPage } from "next";
 import Layout from "../../../../common/components/PageLayout/layout";
 import AssetsTab from "../../componets/AssetsTab";
 
-//import * as Styled from "./WalletPage.styled"
+import * as Styled from "./WalletPage.styled"
 
 const { TabPane } = Tabs;
 
@@ -16,7 +16,7 @@ const WalletPage: NextPage = () => {
       heading="Wallet"
       description="Wallet Page"
     >
-      <Card>
+      <Styled.WalletCard>
         <Tabs defaultActiveKey="1">
           <TabPane tab="Asset" key="asset">
             <AssetsTab />
@@ -25,7 +25,7 @@ const WalletPage: NextPage = () => {
             contacts
           </TabPane>
         </Tabs>
-      </Card>
+      </Styled.WalletCard>
     </Layout>
   );
 };
