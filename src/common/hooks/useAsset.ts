@@ -85,6 +85,7 @@ export function useAsset(): UseAssetResult {
     },
     []
   );
+
   return {
     getAssetById,
     getAssetBySymbol,

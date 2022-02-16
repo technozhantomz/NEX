@@ -1,24 +1,14 @@
 import { List } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
-import { useAsset } from "../../../../common/hooks";
-import { useUser, useViewport } from "../../../../context";
+import { useViewport } from "../../../../context";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import AssetActionButton from "../AssetActionButton";
 import AssetTitle from "../AssetTitle";
 
 import * as Styled from "./AssetsTab.styled";
-
-interface IAssetData {
-  key: string;
-  asset: string;
-  available: number;
-  price: number;
-  change: number;
-  value: string;
-}
+import { useAssetsTab } from "./hooks";
+import { IAssetData } from "./hooks/useAssetsTab.type";
 
 const columns: ColumnsType<IAssetData> = [
   {
@@ -50,55 +40,34 @@ const columns: ColumnsType<IAssetData> = [
     title: "",
     dataIndex: "transfer",
     key: "transfer",
-    render: record => <AssetActionButton txt="Transfer" href="/" />,
+    render: (record) => <AssetActionButton txt="Transfer" href="/" />,
   },
   {
     title: "",
     dataIndex: "withdraw",
     key: "withdraw",
-    render: record => <AssetActionButton txt="Withdraw" href="/" />,
+    render: (record) => <AssetActionButton txt="Withdraw" href="/" />,
   },
   {
     title: "",
     dataIndex: "deposit",
     key: "deposit",
-    render: record => <AssetActionButton txt="Deposit" href="/" />,
+    render: (record) => <AssetActionButton txt="Deposit" href="/" />,
   },
 ];
 
 const AssetsTab = (): JSX.Element => {
-  const { setPrecision } = useAsset();
-  const { accountData } = useUser();
+  const { assets } = useAssetsTab();
   const { width } = useViewport();
-  const router = useRouter();
-
-  const assetData = accountData?.assets.map((asset) => {
-    return {
-      key: asset.id,
-      asset: asset.symbol,
-      available: setPrecision(true, asset.amount, asset.precision),
-      price: 0,
-      change: 0,
-      value: "Infinity",
-    };
-  });
-
-  useEffect(() => {
-    if (accountData === undefined) router.push("/login");
-  }, []);
 
   return (
     <>
       {width > breakpoints.xs ? (
-        <Styled.AssetsTable
-          columns={columns}
-          dataSource={assetData}
-          pagination={false}
-        />
+        <Styled.AssetsTable columns={columns} {...assets} pagination={false} />
       ) : (
         <List
           itemLayout="vertical"
-          dataSource={assetData}
+          {...assets}
           renderItem={(item) => (
             <Styled.AssetListItem
               key={item.key}
