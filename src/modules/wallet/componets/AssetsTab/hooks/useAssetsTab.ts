@@ -43,9 +43,11 @@ export function useAssetsTab(): IAssetsTab {
   const formAssetData = async (asset: Asset) => {
     const tickerData = await dbApi("get_ticker", [asset.symbol, defaultQuote]);
     const available = setPrecision(true, asset.amount, asset.precision);
-    const price = tickerData.latest;
-    const change = getAssetChange(asset.symbol, tickerData.percent_change);
-    const value = getAssetValue(available, price);
+    const price = tickerData ? tickerData.latest : 0;
+    const change = tickerData
+      ? getAssetChange(asset.symbol, tickerData.percent_change)
+      : "0%";
+    const value = price ? getAssetValue(available, price) : 0;
     return {
       key: asset.id,
       asset: asset.symbol,
