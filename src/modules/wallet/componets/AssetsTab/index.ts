@@ -1,1 +1,1 @@
-export { default } from "./AssetsTab";
+export { default, columns } from "./AssetsTab";

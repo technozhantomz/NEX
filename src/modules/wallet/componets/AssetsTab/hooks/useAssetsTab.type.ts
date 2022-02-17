@@ -1,3 +1,5 @@
+import { ColumnsType } from "antd/lib/table";
+
 export interface IAssetData {
   key: string;
   asset: string;
@@ -9,6 +11,7 @@ export interface IAssetData {
 
 export type IAssetsTab = {
   assets: IAssetsDataState;
+  columns: ColumnsType<IAssetData>[];
 };
 
 export type IAssetsDataState = {

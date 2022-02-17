@@ -6,7 +6,7 @@ export const Layout = styled.main`
   &.default {
     margin: 0;
   }
-  &.card-layout {
+  &.card-layout, &.card-layout__lrg { {
     margin: 0 5%;
   }
   ${breakpoint.sm} {

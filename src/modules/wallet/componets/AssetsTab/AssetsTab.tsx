@@ -10,7 +10,7 @@ import * as Styled from "./AssetsTab.styled";
 import { useAssetsTab } from "./hooks";
 import { IAssetData } from "./hooks/useAssetsTab.type";
 
-const columns: ColumnsType<IAssetData> = [
+export const columns: ColumnsType<IAssetData> = [
   {
     title: "Asset",
     dataIndex: "asset",
@@ -40,19 +40,34 @@ const columns: ColumnsType<IAssetData> = [
     title: "",
     dataIndex: "transfer",
     key: "transfer",
-    render: (record) => <AssetActionButton txt="Transfer" href="/" />,
+    render: (value, record) => (
+      <AssetActionButton
+        txt="Transfer"
+        href={`/wallet/${record.asset}?tab=transfer`}
+      />
+    ),
   },
   {
     title: "",
     dataIndex: "withdraw",
     key: "withdraw",
-    render: (record) => <AssetActionButton txt="Withdraw" href="/" />,
+    render: (value, record) => (
+      <AssetActionButton
+        txt="Withdraw"
+        href={`/wallet/${record.asset}?tab=withdraw`}
+      />
+    ),
   },
   {
     title: "",
     dataIndex: "deposit",
     key: "deposit",
-    render: (record) => <AssetActionButton txt="Deposit" href="/" />,
+    render: (value, record) => (
+      <AssetActionButton
+        txt="Deposit"
+        href={`/wallet/${record.asset}?tab=deposit`}
+      />
+    ),
   },
 ];
 
@@ -77,9 +92,18 @@ const AssetsTab = (): JSX.Element => {
             <Styled.AssetListItem
               key={item.key}
               actions={[
-                <AssetActionButton txt="Transfer" href="/" />,
-                <AssetActionButton txt="Withdraw" href="/" />,
-                <AssetActionButton txt="Deposit" href="/" />,
+                <AssetActionButton
+                  txt="Transfer"
+                  href={`/wallet/${item.asset}?tab=transfer`}
+                />,
+                <AssetActionButton
+                  txt="Withdraw"
+                  href={`/wallet/${item.asset}?tab=withdraw`}
+                />,
+                <AssetActionButton
+                  txt="Deposit"
+                  href={`/wallet/${item.asset}?tab=deposit`}
+                />,
               ]}
             >
               <AssetTitle symbol={item.asset} />
