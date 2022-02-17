@@ -86,13 +86,6 @@ const MainNav = (): JSX.Element => {
                 Label="Voting"
               />
             </li>
-            <li>
-              <MenuItem
-                Href="/contacts"
-                Icon={<Contacts className={"menu-icon"} />}
-                Label="Contacts"
-              />
-            </li>
           </>
         ) : (
           ""

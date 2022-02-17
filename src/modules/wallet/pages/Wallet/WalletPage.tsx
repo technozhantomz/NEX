@@ -1,4 +1,4 @@
-import { Card, Tabs } from "antd";
+import { Tabs } from "antd";
 import type { NextPage } from "next";
 
 import Layout from "../../../../common/components/PageLayout/layout";
@@ -20,9 +20,6 @@ const WalletPage: NextPage = () => {
         <Tabs defaultActiveKey="1">
           <TabPane tab="Asset" key="asset">
             <AssetsTab />
-          </TabPane>
-          <TabPane tab="Contacts" key="contacts">
-            contacts
           </TabPane>
         </Tabs>
       </Styled.WalletCard>
