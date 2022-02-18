@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { usePeerplaysApi } from "../components/peerplaysApi";
+import { usePeerplaysApi } from "../components/PeerplaysApi";
 import { Asset, Cache } from "../types";
 
 import { UseAssetResult } from "./useAsset.types";
@@ -19,23 +19,60 @@ export function useAsset(): UseAssetResult {
         cache.assets.length > 0 &&
         cache.assets.find((asset) => asset.id === id) !== undefined
       ) {
-        return cache.assets.find((asset) => asset.id === id);
+        return cache.assets.find((asset) => asset.id === id) as Asset;
       }
+      try {
+        const asset: Asset = await dbApi("get_assets", [[id]]).then(
+          (e: Asset[]) => e[0]
+        );
+        const assets =
+          cache.assets.length > 0 ? [...cache.assets, asset] : [asset];
+        setJsonCache(
+          JSON.stringify({
+            created: cache.created,
+            accounts: cache.accounts,
+            assets: assets,
+          })
+        );
 
-      const asset: Asset = await dbApi("get_assets", [[id]]).then(
-        (e: Asset[]) => e[0]
-      );
-      const assets =
-        cache.assets.length > 0 ? [...cache.assets, asset] : [asset];
-      setJsonCache(
-        JSON.stringify({
-          created: cache.created,
-          accounts: cache.accounts,
-          assets: assets,
-        })
-      );
+        return asset;
+      } catch (e) {
+        console.log(e);
+        return {} as Asset;
+      }
+    },
+    [dbApi, jsonCache, setJsonCache]
+  );
 
-      return asset;
+  const getAssetBySymbol = useCallback(
+    async (symbol: string) => {
+      const cache = jsonCache as Cache;
+      if (
+        Object.keys(cache).length > 0 &&
+        cache.assets.length > 0 &&
+        cache.assets.find((asset) => asset.symbol === symbol) !== undefined
+      ) {
+        return cache.assets.find((asset) => asset.symbol === symbol) as Asset;
+      }
+      try {
+        const asset: Asset = await dbApi("lookup_asset_symbols", [
+          [symbol],
+        ]).then((e: Asset[]) => e[0]);
+        const assets =
+          cache.assets.length > 0 ? [...cache.assets, asset] : [asset];
+        setJsonCache(
+          JSON.stringify({
+            created: cache.created,
+            accounts: cache.accounts,
+            assets: assets,
+          })
+        );
+
+        return asset;
+      } catch (e) {
+        console.log(e);
+        return {} as Asset;
+      }
     },
     [dbApi, jsonCache, setJsonCache]
   );
@@ -47,8 +84,20 @@ export function useAsset(): UseAssetResult {
     },
     []
   );
+
+  const formAssetBalanceById = useCallback(
+    async (id: string, amount: number) => {
+      const asset = await getAssetById(id);
+      asset.amount = setPrecision(false, amount, asset.precision);
+      return asset;
+    },
+    [getAssetById, setPrecision]
+  );
+
   return {
+    formAssetBalanceById,
     getAssetById,
     setPrecision,
+    getAssetBySymbol,
   };
 }

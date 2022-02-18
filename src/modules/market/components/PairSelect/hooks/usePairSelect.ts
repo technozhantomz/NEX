@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApi } from "../../../../../common/components/peerplaysApi";
+import { usePeerplaysApi } from "../../../../../common/components/PeerplaysApi";
 import { useLocalStorage } from "../../../../../common/hooks/useLocalStorage";
 import { Asset } from "../../../../../common/types/Asset";
 import { Exchanges } from "../../../../../common/types/Exchanges";
@@ -22,6 +22,7 @@ export function usePairSelect(): UsePairSelectResult {
   const getPairData = useCallback(
     async (assets: string[]) => {
       const [quote, base] = await dbApi("lookup_asset_symbols", [assets]);
+      console.log(await dbApi("get_account_balances", ["ali6", []]));
       setCurrentBase(base as Asset);
       setCurrentQuote(quote as Asset);
     },

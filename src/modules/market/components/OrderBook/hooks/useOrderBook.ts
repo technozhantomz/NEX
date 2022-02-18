@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApi } from "../../../../../common/components/peerplaysApi";
+import { usePeerplaysApi } from "../../../../../common/components/PeerplaysApi";
 import { roundNum } from "../../../../../common/hooks/useRoundNum";
 import { Asset } from "../../../../../common/types/Asset";
 import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";

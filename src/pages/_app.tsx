@@ -3,7 +3,7 @@
 import type { AppProps } from "next/app";
 
 import { ConnectionManager } from "../common/components/ConnectionManager";
-import { PeerplaysApiProvider } from "../common/components/peerplaysApi";
+import { PeerplaysApiProvider } from "../common/components/PeerplaysApi";
 
 import "../ui/src/ui.less";
 

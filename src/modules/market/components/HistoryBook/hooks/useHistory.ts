@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApi } from "../../../../../common/components/peerplaysApi";
+import { usePeerplaysApi } from "../../../../../common/components/PeerplaysApi";
 import { useAsset } from "../../../../../common/hooks/useAsset";
 import { useFormDate } from "../../../../../common/hooks/useFormDate";
 import { roundNum } from "../../../../../common/hooks/useRoundNum";

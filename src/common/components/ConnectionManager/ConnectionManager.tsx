@@ -1,6 +1,6 @@
 import React from "react";
 
-import { usePeerplaysApi } from "../peerplaysApi";
+import { usePeerplaysApi } from "../PeerplaysApi";
 
 type Props = {
   children: React.ReactNode;

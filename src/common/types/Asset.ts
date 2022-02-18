@@ -3,4 +3,5 @@ export type Asset = {
   id: string;
   precision: number;
   symbol: string;
+  amount?: number;
 };

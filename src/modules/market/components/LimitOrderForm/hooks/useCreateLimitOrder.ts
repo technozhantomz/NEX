@@ -25,15 +25,27 @@ export function useCreateLimitOrder({
         quoteRoundTo = currentQuote.precision;
       }
       if (changedValues.price || changedValues.quantity) {
-        if (allValues.price && allValues.quantity) {
+        if (
+          allValues.price &&
+          allValues.price > 0 &&
+          allValues.quantity &&
+          allValues.quantity > 0
+        ) {
           form.setFieldsValue({
             total: roundNum(allValues.price * allValues.quantity, baseRoundTo),
           });
         }
       } else if (changedValues.total) {
-        form.setFieldsValue({
-          quantity: roundNum(allValues.total / allValues.price, quoteRoundTo),
-        });
+        if (
+          allValues.price &&
+          allValues.price > 0 &&
+          allValues.total &&
+          allValues.total > 0
+        ) {
+          form.setFieldsValue({
+            quantity: roundNum(allValues.total / allValues.price, quoteRoundTo),
+          });
+        }
       }
     },
     [form, currentBase, currentQuote]
