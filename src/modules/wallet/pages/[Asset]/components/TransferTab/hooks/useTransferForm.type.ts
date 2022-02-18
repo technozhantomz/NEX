@@ -4,7 +4,7 @@ import { IFee } from "../../../../../../../common/hooks/fees/useFees.type";
 
 export type ITransferForm = {
   validFrom: boolean;
-  feeData: IFee;
+  feeData: IFee | undefined;
   onSend: (values: ITransferFormData) => void;
   formValdation: IFormValidation;
   transferForm: FormInstance;

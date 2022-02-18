@@ -15,10 +15,10 @@ import { ITransferForm, ITransferFormData } from "./useTransferForm.type";
 export function useTransferForm(): ITransferForm {
   const [validFrom, setValidForm] = useState<boolean>(false);
   const [feeData, setFeeData] = useState<IFee>();
-  const [toFullAcc, setToFullAcc] = useState<IFullAccount | undefined>(
+  const [toAccount, setToAccount] = useState<IFullAccount | undefined>(
     undefined
   );
-  const { getFullAccount, formAccount } = useAccount();
+  const { getFullAccount } = useAccount();
   const { accountData } = useUser();
   const { getFees } = useFees();
   const [transferForm] = Form.useForm();
@@ -29,9 +29,9 @@ export function useTransferForm(): ITransferForm {
   }, []);
 
   const getFeeData = async () => {
-    const feeData = (await getFees()).filter(
-      (item) => item.name === "TRANSFER"
-    )[0];
+    const feeData = await (
+      await getFees()
+    ).filter((item) => item.name === "TRANSFER")[0];
     setFeeData(feeData);
   };
 
@@ -52,6 +52,7 @@ export function useTransferForm(): ITransferForm {
     if (value === accountData?.name)
       return Promise.reject(new Error("Can not send to yourself"));
     if (acc === undefined) return Promise.reject(new Error("User not found"));
+    setToAccount(acc);
     return Promise.resolve();
   };
 

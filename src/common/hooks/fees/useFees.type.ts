@@ -1,5 +1,6 @@
 export type IUseFees = {
   getFees: () => Promise<IFee[]>;
+  //fees: IFee[] | undefined;
 };
 
 export type IFee = {

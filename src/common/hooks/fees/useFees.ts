@@ -1,5 +1,5 @@
 import { ChainTypes } from "peerplaysjs-lib";
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // import { useUser } from "../../../context";
 import { usePeerplaysApi } from "../../../modules/peerplaysApi";
@@ -9,10 +9,14 @@ import { IFee, IUseFees } from "./useFees.type";
 
 export function useFees(): IUseFees {
   //   const { accountData } = useUser();
-
+  const [fees, setFees] = useState<IFee[]>();
   const { getAssetById, setAssets } = useAsset();
   const { dbApi } = usePeerplaysApi();
   const operationsNames = Object.keys(ChainTypes.operations);
+
+  useEffect(() => {
+    getFees();
+  }, []);
 
   const getFees = async () => {
     let operations: IFee[];
@@ -58,6 +62,7 @@ export function useFees(): IUseFees {
 
     operations = await Promise.all(operations);
 
+    setFees(operations);
     return operations;
   };
 
