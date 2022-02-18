@@ -11,7 +11,8 @@ type Props = {
 
 const TransferTab = ({ asset }: Props): JSX.Element => {
   const { accountData } = useUser();
-  const { validFrom, transferForm, onSend, formValdation } = useTransferForm();
+  const { validFrom, feeData, transferForm, onSend, formValdation } =
+    useTransferForm();
 
   return (
     <Styled.TransferForm form={transferForm} name="loginForm" onFinish={onSend}>
@@ -20,8 +21,9 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
         rules={formValdation.from}
         validateFirst={true}
         validateTrigger="onBlur"
+        initialValue={`${accountData?.name}`}
       >
-        <Input placeholder="From" defaultValue={`${accountData?.name}`} />
+        <Input placeholder="From" />
       </Form.Item>
       <Form.Item
         name="to"
@@ -37,15 +39,16 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
         rules={formValdation.quantity}
         validateTrigger="onBlur"
       >
-        <Input placeholder="Quantity" />
+        <Input placeholder="Quantity" type="number" />
       </Form.Item>
       <Form.Item
         name="coin"
         validateFirst={true}
         rules={formValdation.coin}
         validateTrigger="onBlur"
+        initialValue={`${asset}`}
       >
-        <Input placeholder="Coin (Default)" defaultValue={`${asset}`} />
+        <Input placeholder="Coin (Default)" />
       </Form.Item>
       <p>Only members with memo key can read your memos</p>
       <Form.Item
@@ -56,9 +59,15 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
       >
         <Input placeholder="Memo" />
       </Form.Item>
-      <p>Fees: 0 {asset}</p>
+      <p>
+        Fees: {feeData ? feeData.fee : 0} {asset}
+      </p>
       <Form.Item>
-        <Styled.TransferFormButton type="primary" htmlType="submit">
+        <Styled.TransferFormButton
+          type="primary"
+          htmlType="submit"
+          disabled={validFrom}
+        >
           Send
         </Styled.TransferFormButton>
       </Form.Item>

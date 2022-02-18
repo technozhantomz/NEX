@@ -1,7 +1,10 @@
 import { FormInstance, Rule } from "antd/lib/form";
 
+import { IFee } from "../../../../../../../common/hooks/fees/useFees.type";
+
 export type ITransferForm = {
   validFrom: boolean;
+  feeData: IFee;
   onSend: (values: ITransferFormData) => void;
   formValdation: IFormValidation;
   transferForm: FormInstance;

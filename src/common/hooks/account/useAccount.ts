@@ -5,8 +5,6 @@ import { defaultToken, faucetUrl } from "../../../api/params/networkparams";
 import { usePeerplaysApi } from "../../../modules/peerplaysApi";
 import {
   IAccountData,
-  IBalance,
-  IFormAssetData,
   IFullAccount,
   ISignupFormData,
   IUserKeys,
@@ -17,12 +15,14 @@ import { UseAccountResult } from "./useAccount.type";
 
 export function useAccount(): UseAccountResult {
   const { dbApi, historyApi } = usePeerplaysApi();
-  const { setPrecision, getAssetById, getAssetBySymbol } = useAsset();
+  const { setPrecision, formAssetData } = useAsset();
 
   const getFullAccount = useCallback(
     async (name: string, subscription: boolean) => {
       const fullAcc = await dbApi("get_full_accounts", [[name], subscription])
-        .then((e: unknown[][]) => (e ? e[0][1] : undefined))
+        .then((e: unknown[][]) => {
+          return e ? e[0][1] : undefined;
+        })
         .catch(() => false);
       return fullAcc;
     },
@@ -168,29 +168,6 @@ export function useAccount(): UseAccountResult {
       sidechainAccounts,
     };
   }, []);
-
-  const formAssetData = async (data: IFormAssetData | IBalance) => {
-    let id = data.asset_type || data.asset_id || data.id;
-    let symbol = data.symbol;
-    const amount = data.balance || data.amount || 0;
-    let precision = data.precision;
-
-    if (id && symbol && precision) return { id, amount, precision, symbol };
-    if (id)
-      await getAssetById(id).then((asset) => {
-        symbol = asset?.symbol;
-        precision = asset?.precision;
-        return { id, amount, precision, symbol };
-      });
-    if (symbol)
-      getAssetBySymbol(symbol).then((asset) => {
-        id = asset?.id;
-        precision = asset?.precision;
-        return { id, amount, precision, symbol };
-      });
-
-    return { id, amount, precision, symbol };
-  };
 
   const contactsInfo = async (
     account: IAccountData,

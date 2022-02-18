@@ -22,11 +22,11 @@ export function useAssetsTab(): IAssetsTab {
   useEffect(() => {
     if (accountData === undefined) router.push("/login");
     getAssetsData();
-  }, []);
+  }, [accountData]);
 
   const getAssetsData = async () => {
     const assetsData = await Promise.all(
-      accountData?.assets.map(formAssetData)
+      accountData !== undefined ? accountData?.assets.map(formAssetData) : []
     );
     setAssets({ dataSource: assetsData, loading: false });
   };

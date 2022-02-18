@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import { usePeerplaysApi } from "../../modules/peerplaysApi";
-import { Asset, Cache } from "../types";
+import { Asset, Cache, IBalance, IFormAssetData } from "../types";
 
 import { UseAssetResult } from "./useAsset.types";
 import { useLocalStorage } from "./useLocalStorage";
@@ -27,14 +27,12 @@ export function useAsset(): UseAssetResult {
       );
       const assets =
         cache.assets != undefined ? [...cache.assets, asset] : [asset];
-      setJsonCache(
-        JSON.stringify({
-          created: cache.created,
-          accounts: cache.accounts,
-          assets: assets,
-          userAccount: cache.userAccount,
-        })
-      );
+      setJsonCache({
+        created: cache.created,
+        accounts: cache.accounts,
+        assets: assets,
+        userAccount: cache.userAccount,
+      });
 
       return asset;
     },
@@ -57,26 +55,47 @@ export function useAsset(): UseAssetResult {
       );
       const assets =
         cache.assets != undefined ? [...cache.assets, asset] : [asset];
-      setJsonCache(
-        JSON.stringify({
-          created: cache.created,
-          accounts: cache.accounts,
-          assets: assets,
-          userAccount: cache.userAccount,
-        })
-      );
+      setJsonCache({
+        created: cache.created,
+        accounts: cache.accounts,
+        assets: assets,
+        userAccount: cache.userAccount,
+      });
 
       return asset;
     },
     [dbApi, jsonCache, setJsonCache]
   );
 
-  const toString = useCallback(
-    (amount: number, symbol: string, precision: number) => {
-      return `${setPrecision(true, amount, precision)} ${symbol}`;
-    },
-    []
-  );
+  const formAssetData = useCallback(async (data: IFormAssetData | IBalance) => {
+    let id = data.asset_type || data.asset_id || data.id;
+    let symbol = data.symbol;
+    const amount = data.balance || data.amount || 0;
+    let precision = data.precision;
+
+    if (id && symbol && precision) return { id, amount, precision, symbol };
+    if (id)
+      await getAssetById(id).then((asset) => {
+        symbol = asset?.symbol;
+        precision = asset?.precision;
+        return { id, amount, precision, symbol };
+      });
+    if (symbol)
+      getAssetBySymbol(symbol).then((asset) => {
+        id = asset?.id;
+        precision = asset?.precision;
+        return { id, amount, precision, symbol };
+      });
+
+    return { id, amount, precision, symbol };
+  }, []);
+
+  const setAssets = useCallback(async (assetId: string, quantity: number) => {
+    const precision = await dbApi("get_assets", [[assetId]]).then(
+      (asset) => asset[0].precision
+    );
+    return quantity / 10 ** precision;
+  }, []);
 
   const setPrecision = useCallback(
     (roundTo: boolean, amount: number, precision: number) => {
@@ -86,9 +105,18 @@ export function useAsset(): UseAssetResult {
     []
   );
 
+  const toString = useCallback(
+    (amount: number, symbol: string, precision: number) => {
+      return `${setPrecision(true, amount, precision)} ${symbol}`;
+    },
+    []
+  );
+
   return {
     getAssetById,
     getAssetBySymbol,
+    formAssetData,
+    setAssets,
     setPrecision,
     toString,
   };

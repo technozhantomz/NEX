@@ -11,7 +11,6 @@ export interface IAssetData {
 
 export type IAssetsTab = {
   assets: IAssetsDataState;
-  columns: ColumnsType<IAssetData>[];
 };
 
 export type IAssetsDataState = {
