@@ -4,6 +4,7 @@ import { breakpoint } from "../../../../ui/src/breakpoints";
 export const AssetCard = styled(UiCard)`
   .ant-card-body {
     padding: 0;
+    max-width: 710px;
     .ant-tabs-nav-list {
       justify-content: space-between;
       width: 100%;
