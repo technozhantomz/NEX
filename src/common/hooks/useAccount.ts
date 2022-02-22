@@ -62,13 +62,13 @@ export function useAccount(): {
   }, []);
 
   return {
+    loading,
     id,
     name,
     assets,
-    formAccountByName,
     localStorageAccount,
     setLocalStorageAccount,
-    loading,
+    formAccountByName,
     formAccountBalancesByName,
   };
 }
