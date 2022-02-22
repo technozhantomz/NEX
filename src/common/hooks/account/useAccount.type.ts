@@ -5,6 +5,7 @@ export type UseAccountResult = {
     name: string,
     subscription: boolean
   ) => Promise<IFullAccount | undefined>;
+  getAccountByName: () => Promise<unknown> | undefined;
   getSidechainAccounts: (accountId: string) => Promise<unknown[] | undefined>;
   formAccount: (
     data: IFullAccount

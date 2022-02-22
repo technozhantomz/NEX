@@ -29,6 +29,13 @@ export function useAccount(): UseAccountResult {
     []
   );
 
+  const getAccountByName = useCallback(async (name: string) => {
+    const account = await dbApi("get_account_by_name", name)
+      .then((e: unknown) => e)
+      .catch(() => false);
+    return account;
+  }, []);
+
   const getSidechainAccounts = useCallback(async (accountId: string) => {
     const sidechainAccts = dbApi("get_sidechain_addresses_by_account", [
       accountId,
@@ -264,6 +271,7 @@ export function useAccount(): UseAccountResult {
 
   return {
     getFullAccount,
+    getAccountByName,
     getSidechainAccounts,
     formAccount,
     getUserName,

@@ -60,7 +60,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
         <Input placeholder="Memo" />
       </Form.Item>
       <p>
-        Fees: {feeData ? feeData.fee : 0} {asset}
+        Fees: {feeData ? feeData.amount : 0} {asset}
       </p>
       <Form.Item>
         <Styled.TransferFormButton
