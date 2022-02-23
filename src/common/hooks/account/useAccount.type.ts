@@ -4,12 +4,11 @@ export type UseAccountResult = {
   getFullAccount: (
     name: string,
     subscription: boolean
-  ) => Promise<IFullAccount | undefined>;
-  getAccountByName: () => Promise<unknown> | undefined;
-  getSidechainAccounts: (accountId: string) => Promise<unknown[] | undefined>;
-  formAccount: (
-    data: IFullAccount
-  ) => Promise<Partial<IAccountData> | undefined>;
-  getUserName: (id: string) => Promise<string> | undefined;
-  createAccount: (data: ISignupFormData) => Promise<IAccountData> | undefined;
+  ) => Promise<IFullAccount>;
+  getAccountByName: (name: string) => Promise<IAccountData>;
+  getSidechainAccounts: (accountId: string) => Promise<unknown[]>;
+  formAccount: (data: IFullAccount) => Promise<Partial<IAccountData>>;
+  formPrivateKey: (password: string, role: string) => Promise<string>;
+  getUserName: (id: string) => Promise<string>;
+  createAccount: (data: ISignupFormData) => Promise<IAccountData>;
 };

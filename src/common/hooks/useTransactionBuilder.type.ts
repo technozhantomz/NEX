@@ -1,3 +1,3 @@
 export type ITransactionBuilder = {
-  trxBuilder: () => Promise<unknown>;
+  trxBuilder: (trx: any, keys: any) => Promise<unknown>;
 };

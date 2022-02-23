@@ -69,7 +69,6 @@ export function useFees(): IUseFees {
   };
 
   const calculateFees = (type: string, memo: string) => {
-    //const feeAsset = accountData?.assets.find((asset) => asset.id === "1.3.0");
     const feeData = jsonFees?.find((fee) => fee.name.toLowerCase() === type);
     let feeAmount = feeData.fee;
 

@@ -11,8 +11,7 @@ type Props = {
 
 const TransferTab = ({ asset }: Props): JSX.Element => {
   const { accountData } = useUser();
-  const { validFrom, feeData, transferForm, onSend, formValdation } =
-    useTransferForm();
+  const { feeData, transferForm, onSend, formValdation } = useTransferForm();
 
   return (
     <Styled.TransferForm form={transferForm} name="loginForm" onFinish={onSend}>
@@ -63,11 +62,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
         Fees: {feeData ? feeData.amount : 0} {asset}
       </p>
       <Form.Item>
-        <Styled.TransferFormButton
-          type="primary"
-          htmlType="submit"
-          disabled={validFrom}
-        >
+        <Styled.TransferFormButton type="primary" htmlType="submit">
           Send
         </Styled.TransferFormButton>
       </Form.Item>

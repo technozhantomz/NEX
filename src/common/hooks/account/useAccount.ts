@@ -1,7 +1,8 @@
-import { Login } from "peerplaysjs-lib";
+import { Login, PrivateKey } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
 import { defaultToken, faucetUrl } from "../../../api/params/networkparams";
+import { useUser } from "../../../context";
 import { usePeerplaysApi } from "../../../modules/peerplaysApi";
 import {
   IAccountData,
@@ -14,6 +15,7 @@ import { useAsset } from "../useAsset";
 import { UseAccountResult } from "./useAccount.type";
 
 export function useAccount(): UseAccountResult {
+  const { accountData } = useUser();
   const { dbApi, historyApi } = usePeerplaysApi();
   const { setPrecision, formAssetData } = useAsset();
 
@@ -30,8 +32,8 @@ export function useAccount(): UseAccountResult {
   );
 
   const getAccountByName = useCallback(async (name: string) => {
-    const account = await dbApi("get_account_by_name", name)
-      .then((e: unknown) => e)
+    const account = await dbApi("get_account_by_name", [name])
+      .then((e: IAccountData) => e)
       .catch(() => false);
     return account;
   }, []);
@@ -176,6 +178,20 @@ export function useAccount(): UseAccountResult {
     };
   }, []);
 
+  const formPrivateKey = useCallback(async (password: string, role: string) => {
+    let fromWif = "";
+
+    try {
+      fromWif = PrivateKey.fromWif(password);
+    } catch (e) {
+      return new Error(e.message);
+    }
+
+    return fromWif
+      ? fromWif
+      : Login.generateKeys(accountData?.name, password, [role]).privKeys[role];
+  }, []);
+
   const contactsInfo = async (
     account: IAccountData,
     listed: string,
@@ -274,6 +290,7 @@ export function useAccount(): UseAccountResult {
     getAccountByName,
     getSidechainAccounts,
     formAccount,
+    formPrivateKey,
     getUserName,
     createAccount,
   };

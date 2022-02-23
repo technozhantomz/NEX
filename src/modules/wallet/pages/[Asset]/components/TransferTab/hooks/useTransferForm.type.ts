@@ -4,8 +4,8 @@ import { ITransactionFee } from "../../../../../../../common/hooks/fees/useFees.
 
 export type ITransferForm = {
   validFrom: boolean;
-  feeData: ITransactionFee;
-  onSend: (values: ITransferFormData) => void;
+  feeData: ITransactionFee | undefined;
+  onSend: (password: string) => void;
   formValdation: IFormValidation;
   transferForm: FormInstance;
 };

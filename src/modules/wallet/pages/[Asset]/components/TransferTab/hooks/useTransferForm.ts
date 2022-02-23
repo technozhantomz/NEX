@@ -2,6 +2,7 @@ import { Form } from "antd";
 import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
+import { passwordModal } from "../../../../../../../common/components/PasswordModal/passwordModal";
 import {
   useAccount,
   useAsset,
@@ -9,17 +10,18 @@ import {
   useTransactionBuilder,
 } from "../../../../../../../common/hooks";
 import { ITransactionFee } from "../../../../../../../common/hooks/fees/useFees.type";
-import { IFullAccount } from "../../../../../../../common/types";
+import { IAccountData } from "../../../../../../../common/types";
 import { useUser } from "../../../../../../../context";
 
-import { ITransferForm, ITransferFormData } from "./useTransferForm.type";
+import { ITransferForm } from "./useTransferForm.type";
 
 export function useTransferForm(): ITransferForm {
   const [validFrom, setValidForm] = useState<boolean>(false);
   const [feeData, setFeeData] = useState<ITransactionFee>();
-  const [toAccount, setToAccount] = useState<IFullAccount>();
-  const { getAccountByName } = useAccount();
-  const {trxBuilder } = useTransactionBuilder();
+  const [toAccount, setToAccount] = useState<IAccountData>();
+  const [fromAccount, setFromAccount] = useState<IAccountData>();
+  const { getAccountByName, formPrivateKey } = useAccount();
+  const { trxBuilder } = useTransactionBuilder();
   const { accountData } = useUser();
   const { getFees, feeCalculator } = useFees();
   const [transferForm] = Form.useForm();
@@ -39,83 +41,88 @@ export function useTransferForm(): ITransferForm {
     });
   };
 
-  const onSend = async (values: ITransferFormData) => {
-    transferForm.validateFields().then(async () => {
-      console.log(values);
-      const fromAccount = getAccountByName(values.form);
-      toAccount = toAccount ? toAccount : getAccountByName(values.to);
-      let memoFromPublic, memoToPublic;
-      if (values.memo) {
-        memoFromPublic = fromAccount.options.memo_key;
-        memoToPublic = toAccount.options.memo_key;
+  const send = async (password: string) => {
+    const values = transferForm.getFieldsValue();
+    let memoFromPublic, memoToPublic;
+    if (values.memo) {
+      memoFromPublic = fromAccount?.options.memo_key;
+      memoToPublic = toAccount?.options.memo_key;
+    }
+    let memoFromPrivkey;
+    const activeKey = formPrivateKey(password, "active");
+    if (values.memo) {
+      if (
+        fromAccount?.options.memo_key === fromAccount?.active.key_auths[0][0]
+      ) {
+        memoFromPrivkey = formPrivateKey(password, "active");
+      } else {
+        memoFromPrivkey = formPrivateKey(password, "memo");
       }
-      let memoFromPrivkey;
-      //TODO need to get private keey and password Prompt would need to fire here
-      // const activeKey =
-      // if (values.memo) {
-      //   if (
-      //     fromAccount.options.memo_key === fromAccount.active.key_auths[0][0]
-      //   ) {
-      //     memoFromPrivkey = loginData.formPrivateKey(password, "active");
-      //   } else {
-      //     memoFromPrivkey = loginData.formPrivateKey(password, "memo");
-      //   }
-      //   if (!memoFromPrivkey) {
-      //     throw new Error(
-      //       "Missing private memo key for sender: " + fromAccount
-      //     );
-      //   }
-      // }
-      //let memoObject;
+      if (!memoFromPrivkey) {
+        throw new Error("Missing private memo key for sender: " + fromAccount);
+      }
+    }
+    let memoObject;
 
-      // if (values.memo && memoFromPublic && memoToPublic) {
-      //   if (
-      //     !/111111111111111111111/.test(memoFromPublic) &&
-      //     !/111111111111111111111/.test(memoToPublic)
-      //   ) {
-      //     const nonce = TransactionHelper.unique_nonce_uint64();
-      //     memoObject = {
-      //       from: memoFromPublic,
-      //       to: memoToPublic,
-      //       nonce,
-      //       message: Aes.encrypt_with_checksum(
-      //         memoFromPrivkey,
-      //         memoToPublic,
-      //         nonce,
-      //         values.memo
-      //       ),
-      //     };
-      //   } else {
-      //     memoObject = {
-      //       from: memoFromPublic,
-      //       to: memoToPublic,
-      //       nonce: 0,
-      //       message: Buffer.isBuffer(values.memo)
-      //         ? values.memo
-      //         : Buffer.concat([
-      //             Buffer.alloc(4),
-      //             Buffer.from(values.memo.toString("utf-8"), "utf-8"),
-      //           ]),
-      //     };
-      //   }
-      // }
-      const trx = {
-        type: "transfer",
-        params: {
-          fee: feeData,
-          from: fromAccount?.id,
-          to: toAccount?.id,
-          amount: values.quantity,
-          memo: null,
-        },
-      };
-      const trxResult = await trxBuilder([trx], [activeKey]);
+    if (values.memo && memoFromPublic && memoToPublic) {
+      if (
+        !/111111111111111111111/.test(memoFromPublic) &&
+        !/111111111111111111111/.test(memoToPublic)
+      ) {
+        const nonce = TransactionHelper.unique_nonce_uint64();
+        memoObject = {
+          from: memoFromPublic,
+          to: memoToPublic,
+          nonce,
+          message: Aes.encrypt_with_checksum(
+            memoFromPrivkey,
+            memoToPublic,
+            nonce,
+            values.memo
+          ),
+        };
+      } else {
+        memoObject = {
+          from: memoFromPublic,
+          to: memoToPublic,
+          nonce: 0,
+          message: Buffer.isBuffer(values.memo)
+            ? values.memo
+            : Buffer.concat([
+                Buffer.alloc(4),
+                Buffer.from(values.memo.toString("utf-8"), "utf-8"),
+              ]),
+        };
+      }
+    }
+
+    const trx = {
+      type: "transfer",
+      params: {
+        fee: feeData,
+        from: fromAccount?.id,
+        to: toAccount?.id,
+        amount: values.quantity,
+        memo: memoObject,
+      },
+    };
+    const trxResult = await trxBuilder([trx], [activeKey]);
+    if (trxResult) console.log(trxResult);
+  };
+
+  const onSend = () => {
+    transferForm.validateFields().then(async () => {
+      passwordModal(send);
     });
   };
 
-  const validateFrom = (_: unknown, value: string) => {
+  const validateFrom = async (_: unknown, value: string) => {
     if (value !== accountData?.name)
       return Promise.reject(new Error("Not your Account"));
+    setFromAccount(await getAccountByName(value));
+    // transferForm.validateFields().then(() => {
+    //   setValidForm(true);
+    // });
     return Promise.resolve();
   };
 
@@ -125,6 +132,9 @@ export function useTransferForm(): ITransferForm {
       return Promise.reject(new Error("Can not send to yourself"));
     if (acc === undefined) return Promise.reject(new Error("User not found"));
     setToAccount(acc);
+    // transferForm.validateFields().then(() => {
+    //   setValidForm(true);
+    // });
     return Promise.resolve();
   };
 
@@ -136,8 +146,16 @@ export function useTransferForm(): ITransferForm {
     const accountBalance = accountAsset
       ? setPrecision(true, accountAsset[0].amount, accountAsset[0].precision)
       : undefined;
-    if (accountBalance !== undefined && accountBalance > value + feeData.amount)
+    if (
+      accountBalance !== undefined &&
+      accountBalance > value + feeData.amount
+    ) {
+      // transferForm.validateFields().then(() => {
+      //   setValidForm(true);
+      // });
       return Promise.resolve();
+    }
+
     return Promise.reject(
       new Error(
         `Must be less then ${accountAsset ? accountAsset[0].amount : ""}`
@@ -160,6 +178,9 @@ export function useTransferForm(): ITransferForm {
       accountBalance !== undefined &&
       accountBalance > updatedFee + sendAmount
     ) {
+      // transferForm.validateFields().then(() => {
+      //   setValidForm(true);
+      // });
       return Promise.resolve();
     }
     return Promise.reject(new Error(`Insufficient Funds`));
