@@ -1,7 +1,8 @@
 import React from "react";
 
 import Layout from "../../../../components/layout";
-import { DepositTab } from "../../components/DepositTab";
+// import { DepositTab } from "../../components/DepositTab";
+import { WithdrawTab } from "../../components/WithdrawTab";
 
 import * as Styled from "./Dashboard.styled";
 
@@ -17,7 +18,8 @@ const Dashboard: React.FC = () => {
         </Styled.HeaderContainerItem>
       </Styled.HeaderContainer>
       <Styled.BodyContainer>
-        <DepositTab />
+        {/* <DepositTab /> */}
+        <WithdrawTab />
       </Styled.BodyContainer>
     </Layout>
   );

@@ -11,4 +11,5 @@ export {
   Menu,
   Table,
   Tooltip,
+  Col,
 } from "antd";
