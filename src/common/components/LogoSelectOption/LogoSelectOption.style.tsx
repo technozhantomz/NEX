@@ -29,7 +29,7 @@ export const Row = styled(row)`
 `;
 
 export const SelectOptionCol = styled(col)`
-  margin-top: auto;
+  margin-top: 15px;
   margin-bottom: auto;
 `;
 
@@ -58,6 +58,21 @@ export const IconDiv = styled.div`
 
 export const NamePara = styled.p``;
 
-export const BalancePara = styled.p`
-  margin: 20px;
+export const BalancePara = styled.div`
+  margin-top: 10px;
+  margin-right: 10px;
+  color: var(---text-icons);
+  text-align: right;
+  font: normal normal medium 20px/24px Inter;
+  letter-spacing: 0px;
+  color: #212121;
+  opacity: 1;
+`;
+
+export const BalanceFooterPara = styled.p`
+  text-align: right;
+  font: normal normal normal 14px/17px Inter;
+  letter-spacing: 0px;
+  color: #6c6c6c;
+  opacity: 1;
 `;

@@ -1,8 +1,9 @@
 import React from "react";
 
 import Layout from "../../../../components/layout";
+import { SwapTab } from "../../components/SwapTab";
 // import { DepositTab } from "../../components/DepositTab";
-import { WithdrawTab } from "../../components/WithdrawTab";
+// import { WithdrawTab } from "../../components/WithdrawTab";
 
 import * as Styled from "./Dashboard.styled";
 
@@ -19,7 +20,8 @@ const Dashboard: React.FC = () => {
       </Styled.HeaderContainer>
       <Styled.BodyContainer>
         {/* <DepositTab /> */}
-        <WithdrawTab />
+        {/* <WithdrawTab /> */}
+        <SwapTab />
       </Styled.BodyContainer>
     </Layout>
   );

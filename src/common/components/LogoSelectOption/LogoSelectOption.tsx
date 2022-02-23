@@ -1,27 +1,33 @@
 import React from "react";
-
-import BitcoinIcon from "../../../modules/dashboard/components/DepositTab/icons/BitcoinIcon.svg";
-
 import * as Styled from "./LogoSelectOption.style";
 
-export const LogoSelectOption = (): JSX.Element => {
+type LogoSelectionProps = {
+  balance: string;
+  token: React.ReactNode;
+};
+
+export const LogoSelectOption = ({
+  balance,
+  token,
+}: LogoSelectionProps): JSX.Element => {
   return (
     <Styled.FormContainer>
       <Styled.Row>
-        <Styled.SelectOptionCol span={12}>
+        <Styled.SelectOptionCol span={11}>
           <Styled.SelectContainer defaultValue="1">
             <Styled.SelectOptionContainer value="1">
               <Styled.OptionsDiv>
-                <Styled.IconDiv>
-                  <BitcoinIcon width="30px" height="30px" />
-                </Styled.IconDiv>
+                <Styled.IconDiv>{token}</Styled.IconDiv>
                 <Styled.NamePara>BTC</Styled.NamePara>
               </Styled.OptionsDiv>
             </Styled.SelectOptionContainer>
           </Styled.SelectContainer>
         </Styled.SelectOptionCol>
         <Styled.AmountCol span={12}>
-          <Styled.BalancePara>3.0917</Styled.BalancePara>
+          <Styled.BalancePara>
+            {balance} <br />{" "}
+            <Styled.BalanceFooterPara>~$ 2,239.57</Styled.BalanceFooterPara>
+          </Styled.BalancePara>
         </Styled.AmountCol>
       </Styled.Row>
     </Styled.FormContainer>
