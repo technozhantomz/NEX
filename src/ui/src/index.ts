@@ -12,4 +12,5 @@ export {
   Table,
   Tooltip,
   Col,
+  Card,
 } from "antd";

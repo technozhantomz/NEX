@@ -1,7 +1,8 @@
 import React from "react";
 
 import Layout from "../../../../components/layout";
-import { SwapTab } from "../../components/SwapTab";
+import { MarketTab } from "../../components/MarketTab";
+// import { SwapTab } from "../../components/SwapTab";
 // import { DepositTab } from "../../components/DepositTab";
 // import { WithdrawTab } from "../../components/WithdrawTab";
 
@@ -21,7 +22,8 @@ const Dashboard: React.FC = () => {
       <Styled.BodyContainer>
         {/* <DepositTab /> */}
         {/* <WithdrawTab /> */}
-        <SwapTab />
+        {/* <SwapTab /> */}
+        <MarketTab />
       </Styled.BodyContainer>
     </Layout>
   );
