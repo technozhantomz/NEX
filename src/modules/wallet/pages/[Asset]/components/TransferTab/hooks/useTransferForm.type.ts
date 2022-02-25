@@ -1,12 +1,16 @@
 import { FormInstance, Rule } from "antd/lib/form";
+import { FormFinishInfo } from "rc-field-form";
 
 import { ITransactionFee } from "../../../../../../../common/hooks/fees/useFees.type";
 
 export type ITransferForm = {
+  visible: boolean;
   feeData: ITransactionFee | undefined;
-  sendTransfer: (password: string) => void;
   formValdation: IFormValidation;
   transferForm: FormInstance<ITransferFormData>;
+  onFormFinish: (name: string, info: FormFinishInfo) => void;
+  onCancel: () => void;
+  confirm: () => void;
 };
 
 export type IFormField = {

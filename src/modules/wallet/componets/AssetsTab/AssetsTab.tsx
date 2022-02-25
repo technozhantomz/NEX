@@ -77,7 +77,7 @@ const AssetsTab = (): JSX.Element => {
 
   return (
     <>
-      {width > breakpoints.xs ? (
+      {width > breakpoints.sm ? (
         <Styled.AssetsTable
           columns={columns}
           {...assets}

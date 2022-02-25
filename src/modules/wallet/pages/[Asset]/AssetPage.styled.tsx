@@ -11,7 +11,6 @@ export const AssetCard = styled(UiCard)`
     }
     .ant-tabs-tab-active {
       justify-content: center;
-      width: 100%;
     }
     .ant-tabs-top > .ant-tabs-nav::before {
       border-bottom: 2pt solid #f0f0f0;
@@ -20,14 +19,11 @@ export const AssetCard = styled(UiCard)`
       height: 2pt;
     }
   }
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     .ant-card-body {
-      .ant-tabs-nav {
-        width: 30%;
-      }
       .ant-tabs-nav-list {
         justify-content: space-between;
-        width: 100%;
+        width: 75%;
       }
       .ant-tabs-nav-operations {
         display: flex;

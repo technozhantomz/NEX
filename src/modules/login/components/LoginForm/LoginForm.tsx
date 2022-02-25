@@ -17,6 +17,7 @@ const LoginForm: React.FC = () => {
         validateTrigger="onBlur"
       >
         <Input
+          size="large"
           placeholder="Enter username"
           suffix={validUser ? <CheckOutlined /> : ""}
         />
@@ -27,7 +28,7 @@ const LoginForm: React.FC = () => {
         validateFirst={true}
         validateTrigger="onSubmit"
       >
-        <Input.Password placeholder="Enter password" />
+        <Input.Password size="large" placeholder="Enter password" />
       </Form.Item>
       <Form.Item>
         <Styled.LoginFormButton type="primary" htmlType="submit">

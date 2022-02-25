@@ -18,7 +18,7 @@ const AssetRow = ({ asset }: Props): JSX.Element => {
 
   return (
     <>
-      {width > breakpoints.xs ? (
+      {width > breakpoints.sm ? (
         <Styled.AssetTable
           columns={columns.filter((item) => item.title !== "")}
           dataSource={assets.dataSource?.filter((item) => item.asset === asset)}

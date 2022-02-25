@@ -25,6 +25,7 @@ const SignUpForm: React.FC = () => {
         validateTrigger="onBlur"
       >
         <Input
+          size="large"
           placeholder="Enter username"
           suffix={validUser ? <CheckOutlined /> : ""}
         />
@@ -38,6 +39,7 @@ const SignUpForm: React.FC = () => {
       >
         {/* <GeneratedPassordInput /> */}
         <Styled.GeneratedPassordInput
+          size="large"
           iconRender={(visible) => (
             <div>
               <CopyIcon
@@ -57,6 +59,7 @@ const SignUpForm: React.FC = () => {
         validateTrigger="onBlur"
       >
         <Input.Password
+          size="large"
           placeholder="Re-enter your auto-generated password"
           visibilityToggle={false}
         />

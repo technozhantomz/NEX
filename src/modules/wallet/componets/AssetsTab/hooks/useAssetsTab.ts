@@ -20,8 +20,8 @@ export function useAssetsTab(): IAssetsTab {
   const router = useRouter();
 
   useEffect(() => {
-    if (accountData === undefined) router.push("/login");
-    getAssetsData();
+    // if (accountData === undefined) router.push("/login");
+    if (accountData !== undefined) getAssetsData();
   }, [accountData]);
 
   const getAssetsData = async () => {

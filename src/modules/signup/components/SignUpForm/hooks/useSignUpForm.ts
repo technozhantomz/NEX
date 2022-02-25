@@ -49,7 +49,7 @@ export function useSignUpForm(): ISignUpForm {
 
   const validateUsername = async (_: unknown, value: string) => {
     const acc = await getFullAccount(value, false);
-    if (acc) return Promise.reject(new Error("Username Already taken"));
+    if (acc) return Promise.reject(new Error("Username taken"));
     setValidUser(true);
     return Promise.resolve();
   };

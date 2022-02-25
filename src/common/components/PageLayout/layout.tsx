@@ -11,6 +11,7 @@ type Props = {
   description?: string;
   type?: string | undefined;
   heading?: string | undefined;
+  dexLayout?: boolean;
 };
 
 const Layout: FunctionComponent<Props> = ({
@@ -19,6 +20,7 @@ const Layout: FunctionComponent<Props> = ({
   description,
   type,
   heading,
+  dexLayout = false,
 }: Props) => {
   useEffect(() => {
     ConfigProvider.config({
@@ -52,19 +54,21 @@ const Layout: FunctionComponent<Props> = ({
         <meta name="description" content={description} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <TopBar />
-      <ConfigProvider>
-        <Styled.Layout className={getStyles()}>
-          {heading != undefined ? (
-            <Styled.PageHeading className={"page-heading"}>
-              {heading}
-            </Styled.PageHeading>
-          ) : (
-            ""
-          )}
-          {children}
-        </Styled.Layout>
-      </ConfigProvider>
+      <Styled.Page className={dexLayout ? "dex-layout" : ""}>
+        <TopBar />
+        <ConfigProvider>
+          <Styled.Layout className={getStyles()}>
+            {heading != undefined ? (
+              <Styled.PageHeading className={"page-heading"}>
+                {heading}
+              </Styled.PageHeading>
+            ) : (
+              ""
+            )}
+            {children}
+          </Styled.Layout>
+        </ConfigProvider>
+      </Styled.Page>
     </>
   );
 };

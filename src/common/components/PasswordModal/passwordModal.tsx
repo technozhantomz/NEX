@@ -19,6 +19,8 @@ const passwordModal = ({ visible, onCancel }: Props): JSX.Element => {
     <Styled.PasswordModal
       title="Password"
       visible={visible}
+      centered={true}
+      closable={false}
       onOk={onOk}
       onCancel={onCancel}
     >
@@ -29,7 +31,7 @@ const passwordModal = ({ visible, onCancel }: Props): JSX.Element => {
           validateFirst={true}
           validateTrigger="onBlur"
         >
-          <Input.Password placeholder="Password" />
+          <Input.Password size="large" placeholder="Password" />
         </Form.Item>
       </Styled.PasswordModalForm>
     </Styled.PasswordModal>

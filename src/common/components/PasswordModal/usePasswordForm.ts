@@ -7,11 +7,7 @@ import { useAccount } from "../../hooks";
 import { IAccountData } from "../../types";
 
 export type IUsePasswordForm = {
-  validatePassword: (
-    _: unknown,
-    value: string,
-    username: string
-  ) => Promise<void>;
+  validatePassword: (_: unknown, value: string) => Promise<void>;
   passwordModalForm: FormInstance<IPasswordForm>;
 };
 

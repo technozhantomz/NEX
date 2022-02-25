@@ -20,6 +20,7 @@ const AssetPage: NextPage = () => {
       type="card-lrg"
       heading="Wallet"
       description={`Wallet Page | ${asset} ${tab}`}
+      dexLayout={true}
     >
       <Styled.AssetCard>
         <Tabs

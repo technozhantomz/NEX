@@ -1,5 +1,6 @@
 import { Form } from "antd";
 import { Aes, TransactionHelper } from "peerplaysjs-lib";
+import { FormFinishInfo } from "rc-field-form";
 import { useEffect, useState } from "react";
 
 import {
@@ -15,6 +16,7 @@ import { useUser } from "../../../../../../../context";
 import { ITransferForm } from "./useTransferForm.type";
 
 export function useTransferForm(): ITransferForm {
+  const [visible, setVisible] = useState<boolean>(false);
   const [feeData, setFeeData] = useState<ITransactionFee>();
   const [toAccount, setToAccount] = useState<IAccountData>();
   const [fromAccount, setFromAccount] = useState<IAccountData>();
@@ -26,8 +28,31 @@ export function useTransferForm(): ITransferForm {
   const { setPrecision } = useAsset();
 
   useEffect(() => {
-    getFeeData();
-  }, []);
+    if (accountData !== undefined) {
+      getFeeData();
+      transferForm.setFieldsValue({ from: accountData?.name });
+    }
+  }, [accountData]);
+
+  const onCancel = () => {
+    setVisible(false);
+  };
+
+  const confirm = () => {
+    transferForm.validateFields().then(() => {
+      setVisible(true);
+    });
+  };
+
+  const onFormFinish = (name: string, info: FormFinishInfo) => {
+    const { values, forms } = info;
+    const { passwordModal } = forms;
+    if (name === "passwordModal") {
+      passwordModal.validateFields().then(() => {
+        sendTransfer(values.password);
+      });
+    }
+  };
 
   const getFeeData = async () => {
     const rawFeeData = (await getFees()).filter(
@@ -99,7 +124,7 @@ export function useTransferForm(): ITransferForm {
     }
 
     const amount = {
-      amount: values.quantity,
+      amount: values.quantity * 10 ** asset?.precision,
       asset_id: asset?.id,
     };
 
@@ -119,7 +144,7 @@ export function useTransferForm(): ITransferForm {
     } catch (e) {
       console.log(e);
     }
-    if (trxResult) console.log(trxResult);
+    if (trxResult) setVisible(false);
   };
 
   const validateFrom = async (_: unknown, value: string) => {
@@ -210,9 +235,12 @@ export function useTransferForm(): ITransferForm {
   };
 
   return {
+    visible,
     feeData,
     transferForm,
-    sendTransfer,
     formValdation,
+    onCancel,
+    confirm,
+    onFormFinish,
   };
 }

@@ -32,7 +32,7 @@ export function useLoginForm(): ILoginForm {
 
   const validateUsername = async (_: unknown, value: string) => {
     const acc = await getFullAccount(value, false);
-    if (acc === undefined) return Promise.reject(new Error("User not found"));
+    if (!acc) return Promise.reject(new Error("User not found"));
     setFullAcc(acc);
     setValidUser(true);
     return Promise.resolve();

@@ -18,6 +18,6 @@ export const LogoutCard = styled(AntdCard)`
 `;
 export const LogoutButton = styled(CardFormButton)`
    {
-    margin: 10% auto;
+    margin: 5% auto;
   }
 `;
