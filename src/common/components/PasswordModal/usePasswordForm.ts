@@ -1,31 +1,32 @@
-import { Form } from "antd";
+import { Form, FormInstance } from "antd";
 import { Login, PrivateKey } from "peerplaysjs-lib";
 
-import { defaultToken } from "../../../../api/params/networkparams";
-import { useUser } from "../../../../context";
-import { useAccount } from "../../../hooks";
+import { defaultToken } from "../../../api/params/networkparams";
+import { useUser } from "../../../context";
+import { useAccount } from "../../hooks";
+import { IAccountData } from "../../types";
 
-import { IPasswordModal } from "./usePasswordModal.type";
+export type IUsePasswordForm = {
+  validatePassword: (
+    _: unknown,
+    value: string,
+    username: string
+  ) => Promise<void>;
+  passwordModalForm: FormInstance<IPasswordForm>;
+};
 
-export function usePasswordModal(): IPasswordModal {
+export type IPasswordForm = {
+  password: string;
+};
+
+export function usePasswordForm(): IUsePasswordForm {
   const { accountData } = useUser();
+  const [passwordModalForm] = Form.useForm();
   const { getAccountByName } = useAccount();
-  const [passwordModal] = Form.useForm();
-
-  const handleOk = () => {
-    passwordModal
-      .validateFields()
-      .then(() => {
-        return Promise.resolve(passwordModal.getFieldValue("password"));
-      })
-      .catch((error) => {
-        return Promise.reject(new Error(error.message));
-      });
-  };
 
   const validatePassword = async (_: unknown, value: string) => {
-    const accData = await getAccountByName(accountData?.name);
     const roles = ["active", "owner", "memo"];
+    const accData = await getAccountByName(accountData?.name);
     let checkPassword = false;
     let fromWif = "";
 
@@ -55,8 +56,7 @@ export function usePasswordModal(): IPasswordModal {
   };
 
   return {
-    passwordModal,
     validatePassword,
-    handleOk,
+    passwordModalForm,
   };
 }

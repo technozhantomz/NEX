@@ -8,10 +8,12 @@ import { useAccount } from "../../../../../common/hooks";
 import { IFullAccount } from "../../../../../common/types";
 import { useUser } from "../../../../../context";
 
+import { ILoginForm } from "./useLoginForm.type";
+
 export function useLoginForm(): ILoginForm {
   const [validUser, setValidUser] = useState(false);
   const [fullAcc, setFullAcc] = useState<IFullAccount | undefined>(undefined);
-  const { getFullAccount, formAccount } = useAccount();
+  const { getFullAccount, formAccount, getAccountByName } = useAccount();
   const { accountData, updateAccountData } = useUser();
   const [loginForm] = Form.useForm();
   const router = useRouter();
@@ -36,9 +38,10 @@ export function useLoginForm(): ILoginForm {
     return Promise.resolve();
   };
 
-  const validatePassword = (_: unknown, value: string) => {
-    const accData = fullAcc?.account;
+  const validatePassword = async (_: unknown, value: string) => {
+    const username = loginForm.getFieldValue("username");
     const roles = ["active", "owner", "memo"];
+    const accData = await getAccountByName(username);
     let checkPassword = false;
     let fromWif = "";
 
@@ -48,7 +51,7 @@ export function useLoginForm(): ILoginForm {
       console.error(e);
     }
 
-    const keys = Login.generateKeys(fullAcc?.account.name, value, roles);
+    const keys = Login.generateKeys(username, value, roles);
 
     for (const role of roles) {
       const privKey = fromWif ? fromWif : keys.privKeys[role];

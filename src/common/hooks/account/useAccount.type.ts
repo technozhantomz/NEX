@@ -9,6 +9,5 @@ export type UseAccountResult = {
   getSidechainAccounts: (accountId: string) => Promise<unknown[]>;
   formAccount: (data: IFullAccount) => Promise<Partial<IAccountData>>;
   formPrivateKey: (password: string, role: string) => Promise<string>;
-  getUserName: (id: string) => Promise<string>;
   createAccount: (data: ISignupFormData) => Promise<IAccountData>;
 };

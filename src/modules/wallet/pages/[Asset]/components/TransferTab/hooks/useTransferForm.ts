@@ -2,7 +2,6 @@ import { Form } from "antd";
 import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
-import { passwordModal } from "../../../../../../../common/components/PasswordModal/passwordModal";
 import {
   useAccount,
   useAsset,
@@ -16,7 +15,6 @@ import { useUser } from "../../../../../../../context";
 import { ITransferForm } from "./useTransferForm.type";
 
 export function useTransferForm(): ITransferForm {
-  const [validFrom, setValidForm] = useState<boolean>(false);
   const [feeData, setFeeData] = useState<ITransactionFee>();
   const [toAccount, setToAccount] = useState<IAccountData>();
   const [fromAccount, setFromAccount] = useState<IAccountData>();
@@ -32,24 +30,27 @@ export function useTransferForm(): ITransferForm {
   }, []);
 
   const getFeeData = async () => {
-    const rawFeeData = await (
-      await getFees()
-    ).filter((item) => item.name === "TRANSFER")[0];
+    const rawFeeData = (await getFees()).filter(
+      (item) => item.name === "TRANSFER"
+    )[0];
     setFeeData({
       amount: rawFeeData.fee,
       asset_id: "1.3.0",
     });
   };
 
-  const send = async (password: string) => {
+  const sendTransfer = async (password: string) => {
     const values = transferForm.getFieldsValue();
+    const asset = accountData?.assets.filter(
+      (asset) => asset.symbol === values.coin
+    )[0];
     let memoFromPublic, memoToPublic;
     if (values.memo) {
       memoFromPublic = fromAccount?.options.memo_key;
       memoToPublic = toAccount?.options.memo_key;
     }
     let memoFromPrivkey;
-    const activeKey = formPrivateKey(password, "active");
+    const activeKey = await formPrivateKey(password, "active");
     if (values.memo) {
       if (
         fromAccount?.options.memo_key === fromAccount?.active.key_auths[0][0]
@@ -70,16 +71,17 @@ export function useTransferForm(): ITransferForm {
         !/111111111111111111111/.test(memoToPublic)
       ) {
         const nonce = TransactionHelper.unique_nonce_uint64();
+        const message = Aes.encrypt_with_checksum(
+          memoFromPrivkey,
+          memoToPublic,
+          nonce,
+          values.memo
+        );
         memoObject = {
           from: memoFromPublic,
           to: memoToPublic,
           nonce,
-          message: Aes.encrypt_with_checksum(
-            memoFromPrivkey,
-            memoToPublic,
-            nonce,
-            values.memo
-          ),
+          message,
         };
       } else {
         memoObject = {
@@ -96,24 +98,28 @@ export function useTransferForm(): ITransferForm {
       }
     }
 
+    const amount = {
+      amount: values.quantity,
+      asset_id: asset?.id,
+    };
+
     const trx = {
       type: "transfer",
       params: {
         fee: feeData,
         from: fromAccount?.id,
         to: toAccount?.id,
-        amount: values.quantity,
+        amount,
         memo: memoObject,
       },
     };
-    const trxResult = await trxBuilder([trx], [activeKey]);
+    let trxResult;
+    try {
+      trxResult = await trxBuilder([trx], [activeKey]);
+    } catch (e) {
+      console.log(e);
+    }
     if (trxResult) console.log(trxResult);
-  };
-
-  const onSend = () => {
-    transferForm.validateFields().then(async () => {
-      passwordModal(send);
-    });
   };
 
   const validateFrom = async (_: unknown, value: string) => {
@@ -204,10 +210,9 @@ export function useTransferForm(): ITransferForm {
   };
 
   return {
-    validFrom,
     feeData,
     transferForm,
-    onSend,
+    sendTransfer,
     formValdation,
   };
 }

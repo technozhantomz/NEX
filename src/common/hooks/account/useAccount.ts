@@ -18,12 +18,13 @@ export function useAccount(): UseAccountResult {
   const { accountData } = useUser();
   const { dbApi, historyApi } = usePeerplaysApi();
   const { setPrecision, formAssetData } = useAsset();
+  const roles = ["active", "owner", "memo"];
 
   const getFullAccount = useCallback(
     async (name: string, subscription: boolean) => {
       const fullAcc = await dbApi("get_full_accounts", [[name], subscription])
         .then((e: unknown[][]) => {
-          return e ? e[0][1] : undefined;
+          return e[0][1] as IFullAccount;
         })
         .catch(() => false);
       return fullAcc;
@@ -182,15 +183,49 @@ export function useAccount(): UseAccountResult {
     let fromWif = "";
 
     try {
-      fromWif = PrivateKey.fromWif(password);
+      fromWif = PrivateKey.PrivateKey.fromWif(password);
     } catch (e) {
-      return new Error(e.message);
+      console.error(e);
     }
 
     return fromWif
       ? fromWif
       : Login.generateKeys(accountData?.name, password, [role]).privKeys[role];
   }, []);
+
+  // const validatePassword = async (
+  //   _: unknown,
+  //   password: string,
+  //   username: string
+  // ) => {
+  //   const accData = await getAccountByName(username);
+  //   let checkPassword = false;
+  //   let fromWif = "";
+
+  //   try {
+  //     fromWif = PrivateKey.fromWif(password);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+
+  //   const keys = Login.generateKeys(username, password, roles);
+
+  //   for (const role of roles) {
+  //     const privKey = fromWif ? fromWif : keys.privKeys[role];
+  //     const pubKey = privKey.toPublicKey().toString(defaultToken);
+  //     const key =
+  //       role !== "memo"
+  //         ? accData[role as keyof IAccountData].key_auths[0][0]
+  //         : accData.options.memo_key;
+
+  //     if (key === pubKey) {
+  //       checkPassword = true;
+  //       break;
+  //     }
+  //   }
+  //   if (!checkPassword) return Promise.reject(new Error("Password incorrect"));
+  //   return Promise.resolve();
+  // };
 
   const contactsInfo = async (
     account: IAccountData,
@@ -264,13 +299,7 @@ export function useAccount(): UseAccountResult {
   };
 
   const formKeys = (name: string, password: string): IUserKeys => {
-    const keys: IUserKeys = {
-      active: "",
-      memo: "",
-      owner: "",
-    };
-    const roles = ["active", "owner", "memo"];
-
+    const keys: IUserKeys = { active: "", memo: "", owner: "" };
     const generatedKeys = Login.generateKeys(
       name,
       password,
@@ -281,7 +310,6 @@ export function useAccount(): UseAccountResult {
     for (const role of roles) {
       keys[role as keyof IUserKeys] = generatedKeys.pubKeys[role].toString();
     }
-
     return keys;
   };
 

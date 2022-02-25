@@ -1,14 +1,28 @@
 import { Form, Input } from "antd";
 
-import { usePasswordModal } from "./hooks/usePasswordModal";
 import * as Styled from "./passwordModal.styled";
+import { usePasswordForm } from "./usePasswordForm";
 
-export function passwordModal(callback: (password: string) => void): void {
-  const { passwordModal, validatePassword } = usePasswordModal();
-  Styled.PasswordModal.confirm({
-    title: "Password",
-    content: (
-      <Styled.PasswordModalForm form={passwordModal} name="passwordModal">
+type Props = {
+  visible: boolean;
+  onCancel: () => void;
+};
+
+const passwordModal = ({ visible, onCancel }: Props): JSX.Element => {
+  const { validatePassword, passwordModalForm } = usePasswordForm();
+
+  const onOk = () => {
+    passwordModalForm.submit();
+  };
+
+  return (
+    <Styled.PasswordModal
+      title="Password"
+      visible={visible}
+      onOk={onOk}
+      onCancel={onCancel}
+    >
+      <Styled.PasswordModalForm form={passwordModalForm} name="passwordModal">
         <Form.Item
           name="password"
           rules={[{ validator: validatePassword }]}
@@ -18,14 +32,8 @@ export function passwordModal(callback: (password: string) => void): void {
           <Input.Password placeholder="Password" />
         </Form.Item>
       </Styled.PasswordModalForm>
-    ),
-    onOk() {
-      passwordModal.validateFields().then(() => {
-        callback(passwordModal.getFieldValue("password"));
-      });
-    },
-    onCancel() {
-      return Promise.reject(new Error("Password Required!"));
-    },
-  });
-}
+    </Styled.PasswordModal>
+  );
+};
+
+export default passwordModal;

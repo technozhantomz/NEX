@@ -3,11 +3,10 @@ import { FormInstance, Rule } from "antd/lib/form";
 import { ITransactionFee } from "../../../../../../../common/hooks/fees/useFees.type";
 
 export type ITransferForm = {
-  validFrom: boolean;
   feeData: ITransactionFee | undefined;
-  onSend: (password: string) => void;
+  sendTransfer: (password: string) => void;
   formValdation: IFormValidation;
-  transferForm: FormInstance;
+  transferForm: FormInstance<ITransferFormData>;
 };
 
 export type IFormField = {
@@ -31,4 +30,5 @@ export type ITransferFormData = {
   quantity: number;
   coin: string;
   memo: string;
+  password: string;
 };
