@@ -9,20 +9,21 @@ type Props = {
 };
 
 const passwordModal = ({ visible, onCancel }: Props): JSX.Element => {
-  const { validatePassword, passwordModalForm } = usePasswordForm();
+  const { validatePassword, useResetFormOnCloseModal, passwordModalForm } =
+    usePasswordForm();
 
-  const onOk = () => {
-    passwordModalForm.submit();
-  };
+  useResetFormOnCloseModal(passwordModalForm, visible);
 
   return (
     <Styled.PasswordModal
       title="Password"
       visible={visible}
       centered={true}
-      closable={false}
-      onOk={onOk}
+      onOk={() => {
+        passwordModalForm.submit();
+      }}
       onCancel={onCancel}
+      footer={null}
     >
       <Styled.PasswordModalForm form={passwordModalForm} name="passwordModal">
         <Form.Item
@@ -32,6 +33,11 @@ const passwordModal = ({ visible, onCancel }: Props): JSX.Element => {
           validateTrigger="onBlur"
         >
           <Input.Password size="large" placeholder="Password" />
+        </Form.Item>
+        <Form.Item>
+          <Styled.PasswordModalFormButton type="primary" htmlType="submit">
+            Send
+          </Styled.PasswordModalFormButton>
         </Form.Item>
       </Styled.PasswordModalForm>
     </Styled.PasswordModal>

@@ -1,5 +1,6 @@
 import { Form, FormInstance } from "antd";
 import { Login, PrivateKey } from "peerplaysjs-lib";
+import { useEffect, useRef } from "react";
 
 import { defaultToken } from "../../../api/params/networkparams";
 import { useUser } from "../../../context";
@@ -8,6 +9,10 @@ import { IAccountData } from "../../types";
 
 export type IUsePasswordForm = {
   validatePassword: (_: unknown, value: string) => Promise<void>;
+  useResetFormOnCloseModal: (
+    form: FormInstance<IPasswordForm>,
+    visible: boolean
+  ) => void;
   passwordModalForm: FormInstance<IPasswordForm>;
 };
 
@@ -19,6 +24,23 @@ export function usePasswordForm(): IUsePasswordForm {
   const { accountData } = useUser();
   const [passwordModalForm] = Form.useForm();
   const { getAccountByName } = useAccount();
+
+  const useResetFormOnCloseModal = (
+    form: FormInstance<IPasswordForm>,
+    visible: boolean
+  ) => {
+    const prevVisibleRef = useRef<boolean>();
+    useEffect(() => {
+      prevVisibleRef.current = visible;
+    }, [visible]);
+    const prevVisible = prevVisibleRef.current;
+
+    useEffect(() => {
+      if (!visible && prevVisible) {
+        form.resetFields();
+      }
+    }, [visible]);
+  };
 
   const validatePassword = async (_: unknown, value: string) => {
     const roles = ["active", "owner", "memo"];
@@ -53,6 +75,7 @@ export function usePasswordForm(): IUsePasswordForm {
 
   return {
     validatePassword,
+    useResetFormOnCloseModal,
     passwordModalForm,
   };
 }

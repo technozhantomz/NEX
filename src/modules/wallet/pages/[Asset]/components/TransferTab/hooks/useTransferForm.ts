@@ -124,14 +124,17 @@ export function useTransferForm(): ITransferForm {
     }
 
     const amount = {
-      amount: values.quantity * 10 ** asset?.precision,
+      amount: values.quantity * 10 ** Number(asset?.precision),
       asset_id: asset?.id,
     };
 
     const trx = {
       type: "transfer",
       params: {
-        fee: feeData,
+        fee: {
+          amount: 0,
+          asset_id: asset?.id,
+        },
         from: fromAccount?.id,
         to: toAccount?.id,
         amount,
@@ -151,9 +154,6 @@ export function useTransferForm(): ITransferForm {
     if (value !== accountData?.name)
       return Promise.reject(new Error("Not your Account"));
     setFromAccount(await getAccountByName(value));
-    // transferForm.validateFields().then(() => {
-    //   setValidForm(true);
-    // });
     return Promise.resolve();
   };
 
@@ -177,16 +177,9 @@ export function useTransferForm(): ITransferForm {
     const accountBalance = accountAsset
       ? setPrecision(true, accountAsset[0].amount, accountAsset[0].precision)
       : undefined;
-    if (
-      accountBalance !== undefined &&
-      accountBalance > value + feeData.amount
-    ) {
-      // transferForm.validateFields().then(() => {
-      //   setValidForm(true);
-      // });
+    const total = Number(value) + Number(feeData?.amount);
+    if (accountBalance !== undefined && accountBalance > total)
       return Promise.resolve();
-    }
-
     return Promise.reject(
       new Error(
         `Must be less then ${accountAsset ? accountAsset[0].amount : ""}`
@@ -205,15 +198,9 @@ export function useTransferForm(): ITransferForm {
       ? setPrecision(true, accountAsset[0].amount, accountAsset[0].precision)
       : undefined;
     setFeeData({ amount: updatedFee, asset_id: "1.3.0" });
-    if (
-      accountBalance !== undefined &&
-      accountBalance > updatedFee + sendAmount
-    ) {
-      // transferForm.validateFields().then(() => {
-      //   setValidForm(true);
-      // });
+    const total = Number(updatedFee) + Number(sendAmount);
+    if (accountBalance !== undefined && accountBalance > total)
       return Promise.resolve();
-    }
     return Promise.reject(new Error(`Insufficient Funds`));
   };
 
@@ -239,8 +226,8 @@ export function useTransferForm(): ITransferForm {
     feeData,
     transferForm,
     formValdation,
-    onCancel,
     confirm,
+    onCancel,
     onFormFinish,
   };
 }
