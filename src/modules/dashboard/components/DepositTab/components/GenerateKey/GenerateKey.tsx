@@ -2,21 +2,20 @@ import Link from "next/link";
 import React from "react";
 
 import { DashboardButton } from "../../../../../../common/components/DashboardButton/DashboardButton";
+import { LogoSelectOption } from "../../../../../../common/components/LogoSelectOption/LogoSelectOption";
+import BitcoinIcon from "../../icons/BitcoinIcon.svg";
 
 import * as Styled from "./GenerateKey.styled";
-// import BitcoinIcon from "./icons/BitcoinIcon.svg";
 
 export const GenerateKey = (): JSX.Element => {
   return (
     <>
       <Styled.DepositForm>
-        <Styled.DepositFormItemSelect>
-          <Styled.DepositFormSelect>
-            <Styled.DepositFormOption value="BTC">
-              Bitcoin BTC
-            </Styled.DepositFormOption>
-          </Styled.DepositFormSelect>
-        </Styled.DepositFormItemSelect>
+        <LogoSelectOption
+          balance="1.0000"
+          token={<BitcoinIcon width="30px" height="30px" />}
+          amountCol={false}
+        />
         <Styled.DepositForm.Item>
           <DashboardButton label="Log in & Generate Bitcoin Address" />
           <Styled.DepositFormFooter>

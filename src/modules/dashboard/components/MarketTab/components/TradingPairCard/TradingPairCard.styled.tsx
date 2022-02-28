@@ -61,6 +61,9 @@ export const TradingPairAmt = styled.p`
   opacity: 1;
   font-size: 14px;
   margin: 10px;
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
 `;
 export const Amount = styled.p`
   color: var(---text-icons);
@@ -83,4 +86,7 @@ export const HoverAmount = styled.p`
   opacity: 1;
   font-size: 28px;
   margin-left: 10px;
+  @media (max-width: 500px) {
+    font-size: 26px;
+  }
 `;

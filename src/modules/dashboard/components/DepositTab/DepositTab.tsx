@@ -5,7 +5,7 @@ import { GenerateKey } from "./components/GenerateKey/GenerateKey";
 import { KeyIsGenerated } from "./components/KeyIsGenerated/KeyIsGenerated";
 
 export const DepositTab = (): JSX.Element => {
-  const isKeyGenerated = true;
+  const isKeyGenerated = false;
 
   return (
     <Styled.DepositFormContainer>

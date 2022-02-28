@@ -13,6 +13,7 @@ export const WithdrawTab = (): JSX.Element => {
         <LogoSelectOption
           balance="3.0917"
           token={<BitcoinIcon width="30px" height="30px" />}
+          amountCol={true}
         />
         <Styled.WithdrawLabel>Withdrawal Address</Styled.WithdrawLabel>
         <Styled.WithdrawFormItem name="withdrawalAddress" hasFeedback>

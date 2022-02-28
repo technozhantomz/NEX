@@ -25,6 +25,10 @@ export const InfoDiv = styled.div`
   // display:flex;
 `;
 export const InfoPara = styled.p`
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
+  font-size: 16px;
   .anticon {
     color: var(--ant-warning-color);
     margin-left: 20px;

@@ -14,10 +14,12 @@ export const SwapTab = (): JSX.Element => {
         <LogoSelectOption
           balance="1.0000"
           token={<BitcoinIcon width="30px" height="30px" />}
+          amountCol={true}
         />
         <LogoSelectOption
           balance="2240.02"
           token={<BitcoinIcon width="30px" height="30px" />}
+          amountCol={true}
         />
         <Styled.InfoDiv>
           <Styled.InfoPara>

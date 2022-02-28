@@ -14,12 +14,15 @@ export const MarketContainer = styled.div`
 `;
 
 export const Row = styled(row)`
-  margin-left: 10px;
-  margin-right: auto;
   margin-bottom: 20px;
+  @media (min-width: 500px) {
+    margin-left: 25px;
+    margin-top: 25px;
+    margin-right: auto;
+  }
 `;
 export const Col = styled(col)`
-  margin: 10px;
+  margin: 5px;
 `;
 export const HeadingPara = styled.p`
   text-align: left;
@@ -27,6 +30,10 @@ export const HeadingPara = styled.p`
   letter-spacing: 0px;
   color: #6c6c6c;
   opacity: 1;
-  margin-left: 20px;
+  margin-left: 30px;
   margin-top: 30px;
+  @media (max-width: 500px) {
+    font-size: 12px;
+    margin-left: 7px;
+  }
 `;

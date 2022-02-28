@@ -5,11 +5,11 @@ export const DepositFormContainer = styled.div`
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 4px;
   opacity: 1;
-  color: white;
+  // color: white;
   font-size: 25px;
   text-align: center;
   width: 600px;
-  height: 268px;
+  // height: 268px;
   margin: 10px;
   padding: 10px;
 `;

@@ -43,6 +43,9 @@ export const WithdrawFormInput = styled(KeyInput)`
   letter-spacing: 0px;
   color: #212121;
   opacity: 1;
-  font-size: 20px;
+  font-size: 16px;
+  @media (max-width: 500px) {
+    font-size: 11px;
+  }
 `;
 export const WithdrawFooter = styled.p``;

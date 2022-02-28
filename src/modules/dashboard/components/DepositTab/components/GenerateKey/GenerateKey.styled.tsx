@@ -42,7 +42,7 @@ export const DepositFormBotton = styled(Button)`
 
 export const DepositFormFooter = styled.p`
   margin-top: 40px;
-  font-size: 0.9em;
+  font-size: 12px;
   font-weight: 300;
   text-align: center;
   font: normal normal normal 14px/17px Inter;
@@ -50,6 +50,19 @@ export const DepositFormFooter = styled.p`
   opacity: 1;
 `;
 
-export const DepositFormFooterSpan = styled.span``;
+export const DepositFormFooterSpan = styled.span`
+  font-size: 14px;
 
-export const DepositFormFooterA = styled.a``;
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
+`;
+
+export const DepositFormFooterA = styled.a`
+  color: var(---primary-blue);
+  font-size: 14px;
+
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
+`;
