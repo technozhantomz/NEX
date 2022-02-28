@@ -28,6 +28,9 @@ export const AssetCard = styled(UiCard)`
       .ant-tabs-nav-operations {
         display: flex;
       }
+      .ant-table-wrapper {
+        margin: 0 20px;
+      }
     }
   }
 `;

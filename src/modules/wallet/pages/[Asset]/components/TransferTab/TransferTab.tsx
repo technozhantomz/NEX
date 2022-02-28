@@ -31,40 +31,44 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
         onFinish={confirm}
         size="large"
       >
-        <Form.Item
-          name="from"
-          rules={formValdation.from}
-          validateFirst={true}
-          validateTrigger="onBlur"
-          initialValue={`${accountData?.name}`}
-        >
-          <Input placeholder="From" />
-        </Form.Item>
-        <Form.Item
-          name="to"
-          validateFirst={true}
-          rules={formValdation.to}
-          validateTrigger="onBlur"
-        >
-          <Input placeholder="To" />
-        </Form.Item>
-        <Form.Item
-          name="quantity"
-          validateFirst={true}
-          rules={formValdation.quantity}
-          validateTrigger="onBlur"
-        >
-          <Input placeholder="Quantity" type="number" />
-        </Form.Item>
-        <Form.Item
-          name="coin"
-          validateFirst={true}
-          rules={formValdation.coin}
-          validateTrigger="onBlur"
-          initialValue={`${asset}`}
-        >
-          <Input placeholder="Coin (Default)" />
-        </Form.Item>
+        <div className="two-input-row">
+          <Form.Item
+            name="from"
+            rules={formValdation.from}
+            validateFirst={true}
+            validateTrigger="onBlur"
+            initialValue={`${accountData?.name}`}
+          >
+            <Input placeholder="From" />
+          </Form.Item>
+          <Form.Item
+            name="to"
+            validateFirst={true}
+            rules={formValdation.to}
+            validateTrigger="onBlur"
+          >
+            <Input placeholder="To" />
+          </Form.Item>
+        </div>
+        <div className="two-input-row">
+          <Form.Item
+            name="quantity"
+            validateFirst={true}
+            rules={formValdation.quantity}
+            validateTrigger="onBlur"
+          >
+            <Input placeholder="Quantity" type="number" />
+          </Form.Item>
+          <Form.Item
+            name="coin"
+            validateFirst={true}
+            rules={formValdation.coin}
+            validateTrigger="onBlur"
+            initialValue={`${asset}`}
+          >
+            <Input placeholder="Coin (Default)" />
+          </Form.Item>
+        </div>
         <p>Only members with memo key can read your memos</p>
         <Form.Item
           name="memo"
