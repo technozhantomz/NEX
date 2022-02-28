@@ -17,7 +17,12 @@ const SignUpForm: React.FC = () => {
     useSignUpForm();
 
   return (
-    <Styled.SignupForm form={signUpForm} name="signUpForm" onFinish={onSignUp}>
+    <Styled.SignupForm
+      form={signUpForm}
+      name="signUpForm"
+      onFinish={onSignUp}
+      size="large"
+    >
       <Form.Item
         name="username"
         rules={formValdation.username}
@@ -25,7 +30,6 @@ const SignUpForm: React.FC = () => {
         validateTrigger="onBlur"
       >
         <Input
-          size="large"
           placeholder="Enter username"
           suffix={validUser ? <CheckOutlined /> : ""}
         />
@@ -39,7 +43,6 @@ const SignUpForm: React.FC = () => {
       >
         {/* <GeneratedPassordInput /> */}
         <Styled.GeneratedPassordInput
-          size="large"
           iconRender={(visible) => (
             <div>
               <CopyIcon
@@ -59,7 +62,6 @@ const SignUpForm: React.FC = () => {
         validateTrigger="onBlur"
       >
         <Input.Password
-          size="large"
           placeholder="Re-enter your auto-generated password"
           visibilityToggle={false}
         />

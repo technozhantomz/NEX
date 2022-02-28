@@ -9,7 +9,12 @@ const LoginForm: React.FC = () => {
   const { validUser, loginForm, onLogin, formValdation } = useLoginForm();
 
   return (
-    <Styled.LoginForm form={loginForm} name="loginForm" onFinish={onLogin}>
+    <Styled.LoginForm
+      form={loginForm}
+      name="loginForm"
+      onFinish={onLogin}
+      size="large"
+    >
       <Form.Item
         name="username"
         rules={formValdation.username}
@@ -17,7 +22,6 @@ const LoginForm: React.FC = () => {
         validateTrigger="onBlur"
       >
         <Input
-          size="large"
           placeholder="Enter username"
           suffix={validUser ? <CheckOutlined /> : ""}
         />
@@ -28,7 +32,7 @@ const LoginForm: React.FC = () => {
         validateFirst={true}
         validateTrigger="onSubmit"
       >
-        <Input.Password size="large" placeholder="Enter password" />
+        <Input.Password placeholder="Enter password" />
       </Form.Item>
       <Form.Item>
         <Styled.LoginFormButton type="primary" htmlType="submit">

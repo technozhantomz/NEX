@@ -25,14 +25,18 @@ const passwordModal = ({ visible, onCancel }: Props): JSX.Element => {
       onCancel={onCancel}
       footer={null}
     >
-      <Styled.PasswordModalForm form={passwordModalForm} name="passwordModal">
+      <Styled.PasswordModalForm
+        form={passwordModalForm}
+        name="passwordModal"
+        size="large"
+      >
         <Form.Item
           name="password"
           rules={[{ validator: validatePassword }]}
           validateFirst={true}
           validateTrigger="onBlur"
         >
-          <Input.Password size="large" placeholder="Password" />
+          <Input.Password placeholder="Password" />
         </Form.Item>
         <Form.Item>
           <Styled.PasswordModalFormButton type="primary" htmlType="submit">

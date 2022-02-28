@@ -29,6 +29,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
         form={transferForm}
         name="transferForm"
         onFinish={confirm}
+        size="large"
       >
         <Form.Item
           name="from"
@@ -37,7 +38,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
           validateTrigger="onBlur"
           initialValue={`${accountData?.name}`}
         >
-          <Input size="large" placeholder="From" />
+          <Input placeholder="From" />
         </Form.Item>
         <Form.Item
           name="to"
@@ -45,7 +46,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
           rules={formValdation.to}
           validateTrigger="onBlur"
         >
-          <Input size="large" placeholder="To" />
+          <Input placeholder="To" />
         </Form.Item>
         <Form.Item
           name="quantity"
@@ -53,7 +54,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
           rules={formValdation.quantity}
           validateTrigger="onBlur"
         >
-          <Input size="large" placeholder="Quantity" type="number" />
+          <Input placeholder="Quantity" type="number" />
         </Form.Item>
         <Form.Item
           name="coin"
@@ -62,7 +63,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
           validateTrigger="onBlur"
           initialValue={`${asset}`}
         >
-          <Input size="large" placeholder="Coin (Default)" />
+          <Input placeholder="Coin (Default)" />
         </Form.Item>
         <p>Only members with memo key can read your memos</p>
         <Form.Item
@@ -71,7 +72,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
           rules={formValdation.memo}
           validateTrigger="onBlur"
         >
-          <Input size="large" placeholder="Memo" />
+          <Input placeholder="Memo" />
         </Form.Item>
         <p>
           Fees: {feeData ? feeData.amount : 0} {asset}

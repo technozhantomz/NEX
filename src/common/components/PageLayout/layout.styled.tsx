@@ -4,7 +4,7 @@ import { colors } from "../../../ui/src/colors";
 
 export const Page = styled.section`
    {
-    height: 100vh;
+    min-height: 100vh;
     padding: 0;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
