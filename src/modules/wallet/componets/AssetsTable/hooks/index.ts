@@ -1,0 +1,1 @@
+export { useAssetsTab } from "./useAssetsTable";

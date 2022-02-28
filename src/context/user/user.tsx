@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { editStorage, getStorage } from "../../api/utils/storage";
-import { useLocalStorage } from "../../common/hooks";
+import { useAccount, useLocalStorage } from "../../common/hooks";
 import { Cache, IAccountData } from "../../common/types";
 
 import { IUser, IUserSettings } from "./userTypes";
@@ -26,6 +26,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     notificationSettings: getStorage("settings").notifications,
   });
   const [jsonCache, setJsonCache] = useLocalStorage("cache");
+  const { formAccount, getFullAccount } = useAccount();
 
   const updateUserSettings = (key: string, value: boolean) => {
     const settings = getStorage("settings");
@@ -70,9 +71,22 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     });
   };
 
+  const refreshUser = async (username: string) => {
+    const fullAcc = await getFullAccount(username, false);
+    const userData = await formAccount(fullAcc);
+    if (JSON.stringify(userData) !== JSON.stringify(accountData)) {
+      updateAccountData(userData);
+    }
+  };
+
   useEffect(() => {
     const cache = jsonCache as Cache;
-    if (cache.userAccount != undefined) setAccountData(cache.userAccount);
+    if (cache.userAccount != undefined) {
+      setAccountData(cache.userAccount);
+      setTimeout(() => {
+        refreshUser(cache.userAccount.name);
+      }, 20.0 * 1000);
+    }
   }, [accountData]);
 
   return (
@@ -83,6 +97,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         updateUserSettings,
         updateAccountData,
         logoutUser,
+        refreshUser,
       }}
     >
       {children}

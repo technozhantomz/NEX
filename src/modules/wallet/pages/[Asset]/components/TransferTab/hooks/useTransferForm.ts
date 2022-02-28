@@ -16,13 +16,14 @@ import { useUser } from "../../../../../../../context";
 import { ITransferForm } from "./useTransferForm.type";
 
 export function useTransferForm(): ITransferForm {
+  const [status, upStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [feeData, setFeeData] = useState<ITransactionFee>();
   const [toAccount, setToAccount] = useState<IAccountData>();
   const [fromAccount, setFromAccount] = useState<IAccountData>();
   const { getAccountByName, formPrivateKey } = useAccount();
   const { trxBuilder } = useTransactionBuilder();
-  const { accountData } = useUser();
+  const { accountData, refreshUser } = useUser();
   const { getFees, feeCalculator } = useFees();
   const [transferForm] = Form.useForm();
   const { setPrecision } = useAsset();
@@ -147,7 +148,13 @@ export function useTransferForm(): ITransferForm {
     } catch (e) {
       console.log(e);
     }
-    if (trxResult) setVisible(false);
+    if (trxResult) {
+      refreshUser(values.from);
+      setVisible(false);
+      upStatus(
+        `Successfully Transfered ${values.quantity} ${values.coin} to ${values.to}`
+      );
+    }
   };
 
   const validateFrom = async (_: unknown, value: string) => {
@@ -222,6 +229,7 @@ export function useTransferForm(): ITransferForm {
   };
 
   return {
+    status,
     visible,
     feeData,
     transferForm,

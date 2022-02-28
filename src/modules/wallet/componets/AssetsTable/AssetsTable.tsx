@@ -6,9 +6,14 @@ import { breakpoints } from "../../../../ui/src/breakpoints";
 import AssetActionButton from "../AssetActionButton";
 import AssetTitle from "../AssetTitle";
 
-import * as Styled from "./AssetsTab.styled";
+import * as Styled from "./AssetsTable.styled";
 import { useAssetsTab } from "./hooks";
-import { IAssetData } from "./hooks/useAssetsTab.type";
+import { IAssetData } from "./hooks/useAssetsTable.type";
+
+type Props = {
+  showActions?: boolean;
+  fillterAsset?: string;
+};
 
 export const columns: ColumnsType<IAssetData> = [
   {
@@ -71,7 +76,10 @@ export const columns: ColumnsType<IAssetData> = [
   },
 ];
 
-const AssetsTab = (): JSX.Element => {
+const AssetsTable = ({
+  showActions = true,
+  fillterAsset = "",
+}: Props): JSX.Element => {
   const { assets } = useAssetsTab();
   const { width } = useViewport();
 
@@ -79,32 +87,48 @@ const AssetsTab = (): JSX.Element => {
     <>
       {width > breakpoints.sm ? (
         <Styled.AssetsTable
-          columns={columns}
-          {...assets}
+          columns={
+            showActions ? columns : columns.filter((item) => item.title !== "")
+          }
+          dataSource={
+            fillterAsset === ""
+              ? assets.dataSource
+              : assets.dataSource?.filter((item) => item.asset === fillterAsset)
+          }
+          loading={assets.loading}
           pagination={false}
           size="small"
         />
       ) : (
         <List
           itemLayout="vertical"
-          {...assets}
+          dataSource={
+            fillterAsset === ""
+              ? assets.dataSource
+              : assets.dataSource?.filter((item) => item.asset === fillterAsset)
+          }
+          loading={assets.loading}
           renderItem={(item) => (
             <Styled.AssetListItem
               key={item.key}
-              actions={[
-                <AssetActionButton
-                  txt="Transfer"
-                  href={`/wallet/${item.asset}?tab=transfer`}
-                />,
-                <AssetActionButton
-                  txt="Withdraw"
-                  href={`/wallet/${item.asset}?tab=withdraw`}
-                />,
-                <AssetActionButton
-                  txt="Deposit"
-                  href={`/wallet/${item.asset}?tab=deposit`}
-                />,
-              ]}
+              actions={
+                showActions
+                  ? [
+                      <AssetActionButton
+                        txt="Transfer"
+                        href={`/wallet/${item.asset}?tab=transfer`}
+                      />,
+                      <AssetActionButton
+                        txt="Withdraw"
+                        href={`/wallet/${item.asset}?tab=withdraw`}
+                      />,
+                      <AssetActionButton
+                        txt="Deposit"
+                        href={`/wallet/${item.asset}?tab=deposit`}
+                      />,
+                    ]
+                  : []
+              }
             >
               <AssetTitle symbol={item.asset} />
               <Styled.AssetsItemContent>
@@ -133,4 +157,4 @@ const AssetsTab = (): JSX.Element => {
   );
 };
 
-export default AssetsTab;
+export default AssetsTable;

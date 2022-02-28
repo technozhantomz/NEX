@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 
 import Layout from "../../../../common/components/PageLayout/layout";
-import AssetsTab from "../../componets/AssetsTab";
+import AssetsTable from "../../componets/AssetsTable";
 
 import * as Styled from "./WalletPage.styled";
 
@@ -15,7 +15,7 @@ const WalletPage: NextPage = () => {
       dexLayout={true}
     >
       <Styled.WalletCard>
-        <AssetsTab />
+        <AssetsTable  />
       </Styled.WalletCard>
     </Layout>
   );

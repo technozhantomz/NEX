@@ -4,6 +4,7 @@ import { FormFinishInfo } from "rc-field-form";
 import { ITransactionFee } from "../../../../../../../common/hooks/fees/useFees.type";
 
 export type ITransferForm = {
+  status: string;
   visible: boolean;
   feeData: ITransactionFee | undefined;
   formValdation: IFormValidation;

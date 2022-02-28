@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+//import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { defaultQuote } from "../../../../../api/params/networkparams";
@@ -7,7 +7,7 @@ import { Asset } from "../../../../../common/types";
 import { useUser } from "../../../../../context";
 import { usePeerplaysApi } from "../../../../peerplaysApi";
 
-import { IAssetsDataState, IAssetsTab } from "./useAssetsTab.type";
+import { IAssetsDataState, IAssetsTab } from "./useAssetsTable.type";
 
 export function useAssetsTab(): IAssetsTab {
   const [assets, setAssets] = useState<IAssetsDataState>({
@@ -17,7 +17,7 @@ export function useAssetsTab(): IAssetsTab {
   const { dbApi } = usePeerplaysApi();
   const { accountData } = useUser();
   const { setPrecision } = useAsset();
-  const router = useRouter();
+  //const router = useRouter();
 
   useEffect(() => {
     // if (accountData === undefined) router.push("/login");

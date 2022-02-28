@@ -13,6 +13,7 @@ type Props = {
 const TransferTab = ({ asset }: Props): JSX.Element => {
   const { accountData } = useUser();
   const {
+    status,
     visible,
     feeData,
     transferForm,
@@ -75,6 +76,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
         <p>
           Fees: {feeData ? feeData.amount : 0} {asset}
         </p>
+        {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
           <Styled.TransferFormButton type="primary" htmlType="submit">
             Send

@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import Layout from "../../../../common/components/PageLayout/layout";
+import AssetsTable from "../../componets/AssetsTable";
 
 import * as Styled from "./AssetPage.styled";
-import AssetRow from "./components/AssetRow";
 import TransferTab from "./components/TransferTab";
 
 const { TabPane } = Tabs;
@@ -28,15 +28,15 @@ const AssetPage: NextPage = () => {
           tabBarExtraContent={<Link href="/wallet">Back to Assets</Link>}
         >
           <TabPane tab="Transfer" key="transfer">
-            <AssetRow asset={`${asset}`} />
+            <AssetsTable showActions={false} fillterAsset={`${asset}`} />
             <TransferTab asset={`${asset}`} />
           </TabPane>
           <TabPane tab="Withdraw" key="withdraw">
-            <AssetRow asset={`${asset}`} />
+            <AssetsTable showActions={false} fillterAsset={`${asset}`} />
             {/* <TransferTab asset={asset} /> */}
           </TabPane>
           <TabPane tab="Deposit" key="deposit">
-            <AssetRow asset={`${asset}`} />
+            <AssetsTable showActions={false} fillterAsset={`${asset}`} />
             {/* <TransferTab asset={asset} /> */}
           </TabPane>
           <TabPane tab="All Activity" key="activity">

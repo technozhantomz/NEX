@@ -12,7 +12,7 @@ export type IUserHistory = {
 
 export type IUserKeys = {
   active: IUserKey | string;
-  memo: IUserKey | string;
+  memo: { memo_key: string } | string;
   owner: IUserKey | string;
 };
 
@@ -34,25 +34,25 @@ export type IOptions = {
 
 export type IAccountData = {
   id: string;
-  membership_expiration_date: string;
-  registrar: string;
-  referrer: string;
-  lifetime_referrer: string;
-  network_fee_percentage: number;
-  lifetime_referrer_fee_percentage: number;
-  referrer_rewards_percentage: number;
+  // membership_expiration_date?: string;
+  // registrar?: string;
+  // referrer?: string;
+  // lifetime_referrer?: string;
+  // network_fee_percentage?: number;
+  // lifetime_referrer_fee_percentage?: number;
+  // referrer_rewards_percentage?: number;
   name: string;
-  owner: IUserKey;
-  options: IOptions;
-  statistics: IStatistics;
-  whitelisting_accounts: unknown[];
-  whitelisted_accounts: unknown[];
-  owner_special_authority: unknown[];
-  top_n_control_flags: number;
-  active: IUserKey;
-  active_special_authority: unknown[];
-  blacklisted_accounts: unknown[];
-  blacklisting_accounts: unknown[];
+  // owner?: IUserKey;
+  // options?: IOptions;
+  // statistics?: IStatistics;
+  // whitelisting_accounts?: unknown[];
+  // whitelisted_accounts?: unknown[];
+  // owner_special_authority?: unknown[];
+  // top_n_control_flags?: number;
+  // active?: IUserKey;
+  // active_special_authority?: unknown[];
+  // blacklisted_accounts?: unknown[];
+  // blacklisting_accounts?: unknown[];
   assets: Asset[];
   history: IUserHistory[];
   keys: IUserKeys;
@@ -61,6 +61,7 @@ export type IAccountData = {
   votes: unknown[];
   membership: unknown;
   sidechainAccounts: unknown[];
+  contacts: unknown[];
 };
 
 export type IFullAccount = {
