@@ -1,6 +1,8 @@
 import Link from "next/link";
 import React from "react";
 
+import { DashboardButton } from "../../../../../../common/components/DashboardButton/DashboardButton";
+
 import * as Styled from "./GenerateKey.styled";
 // import BitcoinIcon from "./icons/BitcoinIcon.svg";
 
@@ -16,9 +18,7 @@ export const GenerateKey = (): JSX.Element => {
           </Styled.DepositFormSelect>
         </Styled.DepositFormItemSelect>
         <Styled.DepositForm.Item>
-          <Styled.DepositFormBotton htmlType="submit">
-            Log in & Generate Bitcoin Address
-          </Styled.DepositFormBotton>
+          <DashboardButton label="Log in & Generate Bitcoin Address" />
           <Styled.DepositFormFooter>
             <Styled.DepositFormFooterSpan>
               Don't have a Peerplays account?{" "}

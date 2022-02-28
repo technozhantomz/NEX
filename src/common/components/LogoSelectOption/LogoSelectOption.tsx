@@ -1,4 +1,5 @@
 import React from "react";
+
 import * as Styled from "./LogoSelectOption.style";
 
 type LogoSelectionProps = {
