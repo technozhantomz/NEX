@@ -179,11 +179,11 @@ export function useAccount(): UseAccountResult {
     };
   }, []);
 
-  const formPrivateKey = useCallback(async (password: string, role: string) => {
+  const formPrivateKey = (password: string, role: string) => {
     let fromWif = "";
 
     try {
-      fromWif = PrivateKey.PrivateKey.fromWif(password);
+      fromWif = PrivateKey.fromWif(password);
     } catch (e) {
       console.error(e);
     }
@@ -191,7 +191,7 @@ export function useAccount(): UseAccountResult {
     return fromWif
       ? fromWif
       : Login.generateKeys(accountData?.name, password, [role]).privKeys[role];
-  }, []);
+  };
 
   // const validatePassword = async (
   //   _: unknown,

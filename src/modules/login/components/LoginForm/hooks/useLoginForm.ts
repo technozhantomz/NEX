@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params/networkparams";
 import { useAccount } from "../../../../../common/hooks";
-import { IFullAccount } from "../../../../../common/types";
+import { IAccountData, IFullAccount } from "../../../../../common/types";
 import { useUser } from "../../../../../context";
 
 import { ILoginForm } from "./useLoginForm.type";

@@ -76,7 +76,7 @@ export function useTransferForm(): ITransferForm {
       memoToPublic = toAccount?.options?.memo_key;
     }
     let memoFromPrivkey;
-    const activeKey = await formPrivateKey(password, "active");
+    const activeKey = formPrivateKey(password, "active");
     if (values.memo) {
       if (
         fromAccount?.options?.memo_key === fromAccount?.active?.key_auths[0][0]
