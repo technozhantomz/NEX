@@ -62,6 +62,6 @@ export const PageHeading = styled.h1`
     color: ${colors.white};
     font-size: 1.5em;
     font-weight: 300;
-    margin: 7% 0 5%;
+    margin: 40px 0 20px;
   }
 `;

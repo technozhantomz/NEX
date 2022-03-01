@@ -72,14 +72,14 @@ export function useTransferForm(): ITransferForm {
     )[0];
     let memoFromPublic, memoToPublic;
     if (values.memo) {
-      memoFromPublic = fromAccount?.options.memo_key;
-      memoToPublic = toAccount?.options.memo_key;
+      memoFromPublic = fromAccount?.options?.memo_key;
+      memoToPublic = toAccount?.options?.memo_key;
     }
     let memoFromPrivkey;
     const activeKey = await formPrivateKey(password, "active");
     if (values.memo) {
       if (
-        fromAccount?.options.memo_key === fromAccount?.active.key_auths[0][0]
+        fromAccount?.options?.memo_key === fromAccount?.active?.key_auths[0][0]
       ) {
         memoFromPrivkey = formPrivateKey(password, "active");
       } else {
