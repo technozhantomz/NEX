@@ -3,8 +3,8 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import Layout from "../../../../common/components/PageLayout/layout";
-import AssetsTable from "../../componets/AssetsTable";
+import { Layout } from "../../../../common/components/PageLayout";
+import { AssetsTable } from "../../componets/AssetsTable";
 
 import * as Styled from "./AssetPage.styled";
 import TransferTab from "./components/TransferTab";

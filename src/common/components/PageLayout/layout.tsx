@@ -2,8 +2,8 @@ import { ConfigProvider } from "antd";
 import Head from "next/head";
 import React, { FunctionComponent, ReactNode, useEffect } from "react";
 
-import * as Styled from "./layout.styled";
-import TopBar from "./topBar/topBar";
+import * as Styled from "./Layout.styled";
+import { TopBar } from "./topBar";
 
 type Props = {
   children: ReactNode;
@@ -14,7 +14,7 @@ type Props = {
   dexLayout?: boolean;
 };
 
-const Layout: FunctionComponent<Props> = ({
+export const Layout: FunctionComponent<Props> = ({
   children,
   title = "PeerPlays",
   description,
@@ -72,5 +72,3 @@ const Layout: FunctionComponent<Props> = ({
     </>
   );
 };
-
-export default Layout;

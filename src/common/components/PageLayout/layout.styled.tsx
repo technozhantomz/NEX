@@ -38,7 +38,7 @@ export const Page = styled.section`
   }
 `;
 
-export const Layout = styled.main`
+export const Layout = styled.main`{
   &.default {
     margin: 0;
   }
@@ -55,6 +55,7 @@ export const Layout = styled.main`
       max-width: 1070px;
     }
   }
+}
 `;
 
 export const PageHeading = styled.h1`

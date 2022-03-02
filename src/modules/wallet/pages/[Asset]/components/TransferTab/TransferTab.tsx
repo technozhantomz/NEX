@@ -1,7 +1,7 @@
 import { Form, Input } from "antd";
 
 import PasswordModal from "../../../../../../common/components/PasswordModal/passwordModal";
-import { useUser } from "../../../../../../context";
+import { useUserContext } from "../../../../../../common/components/UserProvider";
 
 import * as Styled from "./TransferTab.styled";
 import { useTransferForm } from "./hooks";
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const TransferTab = ({ asset }: Props): JSX.Element => {
-  const { accountData } = useUser();
+  const { localStorageAccount } = useUserContext();
   const {
     status,
     visible,
@@ -37,7 +37,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
             rules={formValdation.from}
             validateFirst={true}
             validateTrigger="onBlur"
-            initialValue={`${accountData?.name}`}
+            initialValue={localStorageAccount}
           >
             <Input placeholder="From" />
           </Form.Item>

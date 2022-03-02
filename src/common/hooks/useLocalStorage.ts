@@ -1,7 +1,7 @@
 import { isNil } from "lodash";
 import { useEffect, useState } from "react";
 
-import { Cache, Exchanges } from "../types";
+import { Cache, Exchanges, Settings } from "../types";
 
 type Value =
   | string
@@ -9,6 +9,7 @@ type Value =
   | boolean
   | JSON
   | Exchanges
+  | Settings
   | Cache
   | undefined
   | null;

@@ -1,3 +1,2 @@
-export { useSignUpForm } from "./useSignUpForm";
-export { useCopyPassword } from "./useGeneratePassword";
-export { useGeneratePassword } from "./useGeneratePassword";
+export * from "./useSignUpForm";
+export * from "./useGeneratePassword";

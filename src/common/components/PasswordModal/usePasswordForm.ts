@@ -3,9 +3,9 @@ import { Login, PrivateKey } from "peerplaysjs-lib";
 import { useEffect, useRef } from "react";
 
 import { defaultToken } from "../../../api/params/networkparams";
-import { useUser } from "../../../context";
 import { useAccount } from "../../hooks";
-import { IAccountData } from "../../types";
+import { Account } from "../../types";
+import { useUserContext } from "../UserProvider";
 
 export type IUsePasswordForm = {
   validatePassword: (_: unknown, value: string) => Promise<void>;
@@ -21,7 +21,7 @@ export type IPasswordForm = {
 };
 
 export function usePasswordForm(): IUsePasswordForm {
-  const { accountData } = useUser();
+  const { localStorageAccount } = useUserContext();
   const [passwordModalForm] = Form.useForm();
   const { getAccountByName } = useAccount();
 
@@ -44,7 +44,7 @@ export function usePasswordForm(): IUsePasswordForm {
 
   const validatePassword = async (_: unknown, value: string) => {
     const roles = ["active", "owner", "memo"];
-    const accData = await getAccountByName(accountData?.name);
+    const accData = await getAccountByName(localStorageAccount);
     let checkPassword = false;
     let fromWif = "";
 
@@ -54,14 +54,14 @@ export function usePasswordForm(): IUsePasswordForm {
       console.error(e);
     }
 
-    const keys = Login.generateKeys(accountData?.name, value, roles);
+    const keys = Login.generateKeys(localStorageAccount, value, roles);
 
     for (const role of roles) {
       const privKey = fromWif ? fromWif : keys.privKeys[role];
       const pubKey = privKey.toPublicKey().toString(defaultToken);
       const key =
         role !== "memo"
-          ? accData[role as keyof IAccountData].key_auths[0][0]
+          ? accData[role as keyof Account].key_auths[0][0]
           : accData.options.memo_key;
 
       if (key === pubKey) {

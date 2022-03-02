@@ -5,14 +5,13 @@ import React from "react";
 import * as Styled from "./LoginForm.styled";
 import { useLoginForm } from "./hooks";
 
-const LoginForm: React.FC = () => {
-  const { validUser, loginForm, onLogin, formValdation } = useLoginForm();
-
+export const LoginForm: React.FC = () => {
+  const { validUser, loginForm, handleLogin, formValdation } = useLoginForm();
   return (
     <Styled.LoginForm
       form={loginForm}
       name="loginForm"
-      onFinish={onLogin}
+      onFinish={handleLogin}
       size="large"
     >
       <Form.Item
@@ -42,5 +41,3 @@ const LoginForm: React.FC = () => {
     </Styled.LoginForm>
   );
 };
-
-export default LoginForm;

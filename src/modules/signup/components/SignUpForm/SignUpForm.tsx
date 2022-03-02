@@ -1,26 +1,32 @@
+import React from "react";
+
 import {
   CheckOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
-} from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
-import React from "react";
-
+  Form,
+  Input,
+} from "../../../../ui/src";
 import { CopyIcon } from "../../../../ui/src/icons";
-import InfoBar from "../InfoBar";
+import { InfoBar } from "../InfoBar";
 
 import * as Styled from "./SignUpForm.styled";
 import { useCopyPassword, useSignUpForm } from "./hooks";
 
-const SignUpForm: React.FC = () => {
-  const { validUser, onSignUp, setCheckboxVlaue, formValdation, signUpForm } =
-    useSignUpForm();
+export const SignUpForm: React.FC = () => {
+  const {
+    validUser,
+    handleSignUp,
+    setCheckboxVlaue,
+    formValdation,
+    signUpForm,
+  } = useSignUpForm();
 
   return (
     <Styled.SignupForm
       form={signUpForm}
       name="signUpForm"
-      onFinish={onSignUp}
+      onFinish={handleSignUp}
       size="large"
     >
       <Form.Item
@@ -89,5 +95,3 @@ const SignUpForm: React.FC = () => {
     </Styled.SignupForm>
   );
 };
-
-export default SignUpForm;

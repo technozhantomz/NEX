@@ -1,9 +1,9 @@
 import { Logo } from "../../../../ui/src/icons";
 
-import MainNavBar from "./mainNavBar";
-import * as Styled from "./topBar.styled";
+import * as Styled from "./TopBar.styled";
+import { MainNavBar } from "./components/MainNavBar";
 
-const TopBar = (): JSX.Element => {
+export const TopBar = (): JSX.Element => {
   return (
     <Styled.TopBar className="top-bar">
       <div className={"topbar-left"}>
@@ -16,5 +16,3 @@ const TopBar = (): JSX.Element => {
     </Styled.TopBar>
   );
 };
-
-export default TopBar;

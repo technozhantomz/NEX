@@ -1,7 +1,7 @@
 import { FormInstance, Rule } from "antd/lib/form";
 import { FormFinishInfo } from "rc-field-form";
 
-import { ITransactionFee } from "../../../../../../../common/hooks/fees/useFees.type";
+import { ITransactionFee } from "../../../../../../../common/hooks/fees/useFees.types";
 
 export type ITransferForm = {
   status: string;

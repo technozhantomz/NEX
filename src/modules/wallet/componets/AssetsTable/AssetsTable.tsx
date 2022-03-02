@@ -1,7 +1,7 @@
 import { List } from "antd";
 import { ColumnsType } from "antd/es/table";
 
-import { useViewport } from "../../../../context";
+import { useViewportContext } from "../../../../common/components/ViewportProvider";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import AssetActionButton from "../AssetActionButton";
 import AssetTitle from "../AssetTitle";
@@ -15,7 +15,7 @@ type Props = {
   fillterAsset?: string;
 };
 
-export const columns: ColumnsType<IAssetData> = [
+const columns: ColumnsType<IAssetData> = [
   {
     title: "Asset",
     dataIndex: "asset",
@@ -76,12 +76,12 @@ export const columns: ColumnsType<IAssetData> = [
   },
 ];
 
-const AssetsTable = ({
+export const AssetsTable = ({
   showActions = true,
   fillterAsset = "",
 }: Props): JSX.Element => {
-  const { assets } = useAssetsTab();
-  const { width } = useViewport();
+  const { tableAssets } = useAssetsTab();
+  const { width } = useViewportContext();
 
   return (
     <>
@@ -92,10 +92,12 @@ const AssetsTable = ({
           }
           dataSource={
             fillterAsset === ""
-              ? assets.dataSource
-              : assets.dataSource?.filter((item) => item.asset === fillterAsset)
+              ? tableAssets.dataSource
+              : tableAssets.dataSource?.filter(
+                  (item) => item.asset === fillterAsset
+                )
           }
-          loading={assets.loading}
+          loading={tableAssets.loading}
           pagination={false}
           size="small"
         />
@@ -104,10 +106,12 @@ const AssetsTable = ({
           itemLayout="vertical"
           dataSource={
             fillterAsset === ""
-              ? assets.dataSource
-              : assets.dataSource?.filter((item) => item.asset === fillterAsset)
+              ? tableAssets.dataSource
+              : tableAssets.dataSource?.filter(
+                  (item) => item.asset === fillterAsset
+                )
           }
-          loading={assets.loading}
+          loading={tableAssets.loading}
           renderItem={(item) => (
             <Styled.AssetListItem
               key={item.key}
@@ -156,5 +160,3 @@ const AssetsTable = ({
     </>
   );
 };
-
-export default AssetsTable;

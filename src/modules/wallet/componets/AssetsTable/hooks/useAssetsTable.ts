@@ -1,38 +1,35 @@
-//import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { defaultQuote } from "../../../../../api/params/networkparams";
-import { roundNum, useAsset } from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
+import { useUserContext } from "../../../../../common/components/UserProvider";
+import { roundNum } from "../../../../../common/hooks";
 import { Asset } from "../../../../../common/types";
-import { useUser } from "../../../../../context";
-import { usePeerplaysApi } from "../../../../peerplaysApi";
 
 import { IAssetsDataState, IAssetsTab } from "./useAssetsTable.type";
 
 export function useAssetsTab(): IAssetsTab {
-  const [assets, setAssets] = useState<IAssetsDataState>({
+  const [tableAssets, setTableAssets] = useState<IAssetsDataState>({
     dataSource: [],
     loading: true,
   });
-  const { dbApi } = usePeerplaysApi();
-  const { accountData } = useUser();
-  const { setPrecision } = useAsset();
-  //const router = useRouter();
+  const { dbApi } = usePeerplaysApiContext();
+  const { assets, localStorageAccount } = useUserContext();
+  const router = useRouter();
 
   useEffect(() => {
-    // if (accountData === undefined) router.push("/login");
-    if (accountData !== undefined) getAssetsData();
-  }, [accountData]);
+    if (localStorageAccount === null) router.push("/login");
+    getAssetsData();
+  }, [assets]);
 
   const getAssetsData = async () => {
-    const assetsData = await Promise.all(
-      accountData !== undefined ? accountData?.assets.map(formAssetData) : []
-    );
-    setAssets({ dataSource: assetsData, loading: false });
+    const assetsData = await Promise.all(assets.map(formAssetData));
+    setTableAssets({ dataSource: assetsData, loading: false });
   };
 
   const formAssetData = async (asset: Asset) => {
-    const available = setPrecision(true, asset.amount, asset.precision);
+    const available = asset.amount;
     let price = 0;
     let change = "0%";
     let value = available;
@@ -57,5 +54,5 @@ export function useAssetsTab(): IAssetsTab {
     };
   };
 
-  return { assets };
+  return { tableAssets };
 }

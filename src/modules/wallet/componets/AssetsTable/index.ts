@@ -1,1 +1,1 @@
-export { default, columns } from "./AssetsTable";
+export { AssetsTable } from "./AssetsTable";

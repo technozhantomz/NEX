@@ -1,3 +1,4 @@
+import type { NextPage } from "next";
 import React from "react";
 
 import { Col, Flex, Row } from "../../../../ui/src";
@@ -7,7 +8,7 @@ import { PairSelect } from "../../components/PairSelect";
 
 import * as Styled from "./MarketPage.styled";
 
-const MarketPage: React.FC = () => {
+const MarketPage: NextPage = () => {
   return (
     <>
       <Styled.Container>

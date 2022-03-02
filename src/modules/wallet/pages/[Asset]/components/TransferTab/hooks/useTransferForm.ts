@@ -3,37 +3,36 @@ import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { FormFinishInfo } from "rc-field-form";
 import { useEffect, useState } from "react";
 
+import { useUserContext } from "../../../../../../../common/components/UserProvider";
 import {
   useAccount,
-  useAsset,
   useFees,
   useTransactionBuilder,
 } from "../../../../../../../common/hooks";
-import { ITransactionFee } from "../../../../../../../common/hooks/fees/useFees.type";
-import { IAccountData } from "../../../../../../../common/types";
-import { useUser } from "../../../../../../../context";
+import { TransactionFee } from "../../../../../../../common/hooks/fees/useFees.types";
+import { Account } from "../../../../../../../common/types";
 
 import { ITransferForm } from "./useTransferForm.type";
 
 export function useTransferForm(): ITransferForm {
   const [status, upStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
-  const [feeData, setFeeData] = useState<ITransactionFee>();
-  const [toAccount, setToAccount] = useState<IAccountData>();
-  const [fromAccount, setFromAccount] = useState<IAccountData>();
-  const { getAccountByName, formPrivateKey } = useAccount();
+  const [feeData, setFeeData] = useState<TransactionFee>();
+  const [toAccount, setToAccount] = useState<Account>();
+  const [fromAccount, setFromAccount] = useState<Account>();
+  const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
+    useAccount();
   const { trxBuilder } = useTransactionBuilder();
-  const { accountData, refreshUser } = useUser();
+  const { localStorageAccount, assets } = useUserContext();
   const { getFees, feeCalculator } = useFees();
   const [transferForm] = Form.useForm();
-  const { setPrecision } = useAsset();
 
   useEffect(() => {
-    if (accountData !== undefined) {
+    if (localStorageAccount !== null) {
       getFeeData();
-      transferForm.setFieldsValue({ from: accountData?.name });
+      transferForm.setFieldsValue({ from: localStorageAccount });
     }
-  }, [accountData]);
+  }, [localStorageAccount, assets]);
 
   const onCancel = () => {
     setVisible(false);
@@ -67,26 +66,26 @@ export function useTransferForm(): ITransferForm {
 
   const sendTransfer = async (password: string) => {
     const values = transferForm.getFieldsValue();
-    const asset = accountData?.assets.filter(
-      (asset) => asset.symbol === values.coin
-    )[0];
+    const from = fromAccount
+      ? fromAccount
+      : await getAccountByName(values.from);
+    const to = toAccount ? toAccount : await getAccountByName(values.to);
+    const asset = assets.filter((asset) => asset.symbol === values.coin)[0];
     let memoFromPublic, memoToPublic;
     if (values.memo) {
-      memoFromPublic = fromAccount?.options?.memo_key;
-      memoToPublic = toAccount?.options?.memo_key;
+      memoFromPublic = from.options.memo_key;
+      memoToPublic = to.options.memo_key;
     }
     let memoFromPrivkey;
-    const activeKey = formPrivateKey(password, "active");
+    const activeKey = getPrivateKey(password, "active");
     if (values.memo) {
-      if (
-        fromAccount?.options?.memo_key === fromAccount?.active?.key_auths[0][0]
-      ) {
-        memoFromPrivkey = formPrivateKey(password, "active");
+      if (from.options.memo_key === from.active.key_auths[0][0]) {
+        memoFromPrivkey = getPrivateKey(password, "active");
       } else {
-        memoFromPrivkey = formPrivateKey(password, "memo");
+        memoFromPrivkey = getPrivateKey(password, "memo");
       }
       if (!memoFromPrivkey) {
-        throw new Error("Missing private memo key for sender: " + fromAccount);
+        throw new Error("Missing private memo key for sender: " + from.name);
       }
     }
     let memoObject;
@@ -136,8 +135,8 @@ export function useTransferForm(): ITransferForm {
           amount: 0,
           asset_id: asset?.id,
         },
-        from: fromAccount?.id,
-        to: toAccount?.id,
+        from: from.id,
+        to: to.id,
         amount,
         memo: memoObject,
       },
@@ -149,7 +148,7 @@ export function useTransferForm(): ITransferForm {
       console.log(e);
     }
     if (trxResult) {
-      refreshUser(values.from);
+      formAccountBalancesByName(localStorageAccount);
       setVisible(false);
       upStatus(
         `Successfully Transfered ${values.quantity} ${values.coin} to ${values.to}`
@@ -158,7 +157,7 @@ export function useTransferForm(): ITransferForm {
   };
 
   const validateFrom = async (_: unknown, value: string) => {
-    if (value !== accountData?.name)
+    if (value !== localStorageAccount)
       return Promise.reject(new Error("Not your Account"));
     setFromAccount(await getAccountByName(value));
     return Promise.resolve();
@@ -166,47 +165,32 @@ export function useTransferForm(): ITransferForm {
 
   const validateTo = async (_: unknown, value: string) => {
     const acc = await getAccountByName(value);
-    if (value === accountData?.name)
+    if (value === localStorageAccount)
       return Promise.reject(new Error("Can not send to yourself"));
     if (acc === undefined) return Promise.reject(new Error("User not found"));
     setToAccount(acc);
-    // transferForm.validateFields().then(() => {
-    //   setValidForm(true);
-    // });
     return Promise.resolve();
   };
 
   const validateQuantity = async (_: unknown, value: number) => {
     const coin = transferForm.getFieldValue("coin");
-    const accountAsset = accountData?.assets.filter(
-      (asset) => asset.symbol === coin
-    );
-    const accountBalance = accountAsset
-      ? setPrecision(true, accountAsset[0].amount, accountAsset[0].precision)
-      : undefined;
+    const accountAsset = assets.find((asset) => asset.symbol === coin);
     const total = Number(value) + Number(feeData?.amount);
-    if (accountBalance !== undefined && accountBalance > total)
+    if (accountAsset !== undefined && accountAsset.amount > total)
       return Promise.resolve();
     return Promise.reject(
-      new Error(
-        `Must be less then ${accountAsset ? accountAsset[0].amount : ""}`
-      )
+      new Error(`Must be less then ${accountAsset ? accountAsset.amount : ""}`)
     );
   };
 
-  const validateMemo = (_: unknown, value: string) => {
+  const validateMemo = async (_: unknown, value: string) => {
     const coin = transferForm.getFieldValue("coin");
-    const updatedFee = feeCalculator.transfer(value);
+    const updatedFee = await feeCalculator.transfer(value);
     const sendAmount = transferForm.getFieldValue("quantity");
-    const accountAsset = accountData?.assets.filter(
-      (asset) => asset.symbol === coin
-    );
-    const accountBalance = accountAsset
-      ? setPrecision(true, accountAsset[0].amount, accountAsset[0].precision)
-      : undefined;
+    const accountAsset = assets.find((asset) => asset.symbol === coin);
     setFeeData({ amount: updatedFee, asset_id: "1.3.0" });
     const total = Number(updatedFee) + Number(sendAmount);
-    if (accountBalance !== undefined && accountBalance > total)
+    if (accountAsset !== undefined && accountAsset.amount > total)
       return Promise.resolve();
     return Promise.reject(new Error(`Insufficient Funds`));
   };
