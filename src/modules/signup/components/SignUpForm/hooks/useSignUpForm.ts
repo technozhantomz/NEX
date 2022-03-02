@@ -1,33 +1,38 @@
-import { CheckboxChangeEvent } from "antd/lib/checkbox";
-import { useForm } from "antd/lib/form/Form";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { useAccount } from "../../../../../common/hooks";
+import { useUserContext } from "../../../../../common/components/UserProvider/UserProvider";
+import { useAccount, useCreateAccount } from "../../../../../common/hooks";
 import { ISignupFormData } from "../../../../../common/types";
-import { useUser } from "../../../../../context";
+import { CheckboxChangeEvent, Form } from "../../../../../ui/src";
 
 import { useGeneratePassword } from "./useGeneratePassword";
-import { IFormField, ISignUpForm } from "./useSignUpForm.type";
+import { IFormValidation, ISignUpForm } from "./useSignUpForm.types";
 
 export function useSignUpForm(): ISignUpForm {
-  const { createAccount, getFullAccount } = useAccount();
-  const { accountData, updateAccountData } = useUser();
+  const { formAccountAfterConfirmation, getFullAccount } = useAccount();
+  const { createAccount } = useCreateAccount();
+  const { localStorageAccount, setLocalStorageAccount } = useUserContext();
   const [validUser, setValidUser] = useState(false);
-  const [signUpForm] = useForm();
+  const [signUpForm] = Form.useForm();
   const router = useRouter();
 
   useEffect(() => {
-    if (accountData) router.push("/dashboard");
-    signUpForm.setFieldsValue({
-      password: useGeneratePassword(),
-    });
-  }, []);
+    if (localStorageAccount) {
+      router.push("/dashboard");
+    } else {
+      signUpForm.setFieldsValue({
+        password: useGeneratePassword(),
+      });
+    }
+  }, [localStorageAccount]);
 
-  const onSignUp = async (formData: ISignupFormData) => {
-    const account = await createAccount(formData);
-    updateAccountData(account);
-    router.push("/dashboard");
+  const handleSignUp = async (formData: unknown) => {
+    const fullAccount = await createAccount(formData as ISignupFormData);
+    if (fullAccount) {
+      await formAccountAfterConfirmation(fullAccount);
+      setLocalStorageAccount(fullAccount.account.name);
+    }
   };
 
   const setCheckboxVlaue = (e: CheckboxChangeEvent) => {
@@ -48,19 +53,26 @@ export function useSignUpForm(): ISignUpForm {
   };
 
   const validateUsername = async (_: unknown, value: string) => {
-    const acc = await getFullAccount(value, false);
-    if (acc) return Promise.reject(new Error("Username Already taken"));
+    const fullAccount = await getFullAccount(value, false);
+    if (fullAccount) {
+      return Promise.reject(new Error("Username Already taken"));
+    }
     setValidUser(true);
     return Promise.resolve();
   };
 
-  const validateCheckbox = (_: IFormField) => {
-    return signUpForm.getFieldValue(_.field)
+  const validateConfirmation = (_: unknown, value: boolean) => {
+    return value
       ? Promise.resolve()
       : Promise.reject(new Error("Confimation Required"));
   };
 
-  const formValdation = {
+  const validateSaved = (_: unknown, value: boolean) => {
+    return value
+      ? Promise.resolve()
+      : Promise.reject(new Error("Please save your password"));
+  };
+  const formValdation: IFormValidation = {
     username: [
       { required: true, message: "Username is required" },
       { validator: validateUsername },
@@ -76,13 +88,13 @@ export function useSignUpForm(): ISignUpForm {
       { required: true, message: "This feild is required" },
       { validator: checkPasswordMatch },
     ],
-    confirm: [{ validator: validateCheckbox }],
-    saved: [{ validator: validateCheckbox }],
+    confirm: [{ validator: validateConfirmation }],
+    saved: [{ validator: validateSaved }],
   };
 
   return {
     validUser,
-    onSignUp,
+    handleSignUp,
     setCheckboxVlaue,
     checkPasswordMatch,
     validateUsername,

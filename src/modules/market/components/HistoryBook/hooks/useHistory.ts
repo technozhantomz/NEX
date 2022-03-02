@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
 import { useAsset } from "../../../../../common/hooks/useAsset";
 import { useFormDate } from "../../../../../common/hooks/useFormDate";
 import { roundNum } from "../../../../../common/hooks/useRoundNum";
 import { Asset } from "../../../../../common/types/Asset";
-import { usePeerplaysApi } from "../../../../peerplaysApi";
 import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
 
 import {
@@ -14,7 +14,7 @@ import {
 } from "./useHistory.types";
 
 export function useHistory(): UseHistoryResult {
-  const { historyApi } = usePeerplaysApi();
+  const { historyApi } = usePeerplaysApiContext();
   const { currentBase, currentQuote } = usePairSelect();
   const [orderHistoryRow, setOrderHistoryRow] = useState<OrderHistoryRow[]>([]);
   const { setPrecision } = useAsset();

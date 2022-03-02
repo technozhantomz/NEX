@@ -1,10 +1,11 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import React from "react";
 
+import { InfoCircleOutlined } from "../../../../ui/src";
+
 import * as Styled from "./InfoBar.styled";
 
-const InfoBar: React.FC = () => {
+export const InfoBar: React.FC = () => {
   return (
     <Styled.InfoBar>
       <InfoCircleOutlined />
@@ -17,5 +18,3 @@ const InfoBar: React.FC = () => {
     </Styled.InfoBar>
   );
 };
-
-export default InfoBar;

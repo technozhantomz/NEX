@@ -1,21 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useLocalStorage } from "../../../../../common/hooks/useLocalStorage";
+import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
+import { useSettingsContext } from "../../../../../common/components/SettingsProvider";
 import { Asset } from "../../../../../common/types/Asset";
 import { Exchanges } from "../../../../../common/types/Exchanges";
-import { usePeerplaysApi } from "../../../../peerplaysApi";
 
 import { UsePairSelectResult } from "./usePariSelect.types";
 
 export function usePairSelect(): UsePairSelectResult {
-  const [jsonExchanges, setJsonExchanges] = useLocalStorage("exchanges");
+  const { exchanges, setExchanges } = useSettingsContext();
   // Active pair example: BTC_TEST
-  const [activePair, setActivePair] = useState<string>(
-    (jsonExchanges as Exchanges).active
-  );
+  const [activePair, setActivePair] = useState<string>(exchanges.active);
   // Recent pairs example: ["BTC / TEST"]
   const [recentPairs, setRecentPairs] = useState<string[]>([]);
-  const { dbApi } = usePeerplaysApi();
+  const { dbApi } = usePeerplaysApiContext();
   const [currentBase, setCurrentBase] = useState<Asset>();
   const [currentQuote, setCurrentQuote] = useState<Asset>();
 
@@ -36,23 +34,20 @@ export function usePairSelect(): UsePairSelectResult {
           ? (list = [...recentPairs])
           : [...recentPairs, selectedPair];
 
-        setJsonExchanges(
-          JSON.stringify({
-            active: selectedPair,
-            list: [...list],
-          })
-        );
+        setExchanges({
+          active: selectedPair,
+          list: [...list],
+        } as Exchanges);
       }
     },
-    [recentPairs, setJsonExchanges]
+    [recentPairs, setExchanges]
   );
 
   useEffect(() => {
-    const exchanges = jsonExchanges as Exchanges;
     setActivePair(exchanges.active);
     setRecentPairs(exchanges.list);
     getPairData(exchanges.active.split("_"));
-  }, [jsonExchanges, setActivePair, setRecentPairs, getPairData]);
+  }, [exchanges, setActivePair, setRecentPairs, getPairData]);
   return {
     activePair,
     recentPairs,

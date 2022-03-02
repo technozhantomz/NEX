@@ -6,8 +6,6 @@ type Props = {
   children: React.ReactNode[];
 };
 
-const FormDisclamer = ({ children }: Props): JSX.Element => {
+export const FormDisclamer = ({ children }: Props): JSX.Element => {
   return <Styled.Disclamer>{children}</Styled.Disclamer>;
 };
-
-export default FormDisclamer;
