@@ -1,7 +1,7 @@
 import { List } from "antd";
 import { ColumnsType } from "antd/es/table";
 
-import { useViewport } from "../../../../context";
+import { useViewportContext } from "../../../../common/components/ViewportProvider";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import AssetActionButton from "../AssetActionButton";
 import AssetTitle from "../AssetTitle";
@@ -57,22 +57,22 @@ const columns: ColumnsType<IAssetData> = [
 ];
 
 const AssetsTab = (): JSX.Element => {
-  const { assets } = useAssetsTab();
-  const { width } = useViewport();
+  const { tableAssets } = useAssetsTab();
+  const { width } = useViewportContext();
 
   return (
     <>
       {width > breakpoints.xs ? (
         <Styled.AssetsTable
           columns={columns}
-          {...assets}
+          {...tableAssets}
           pagination={false}
           size="small"
         />
       ) : (
         <List
           itemLayout="vertical"
-          {...assets}
+          {...tableAssets}
           renderItem={(item) => (
             <Styled.AssetListItem
               key={item.key}

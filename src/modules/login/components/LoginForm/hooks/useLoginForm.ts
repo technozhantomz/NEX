@@ -1,69 +1,84 @@
-import { Form } from "antd";
 import { useRouter } from "next/router";
 import { Login, PrivateKey } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
-import { defaultToken } from "../../../../../api/params/networkparams";
+import { defaultToken } from "../../../../../api/params";
+import { useUserContext } from "../../../../../common/components/UserProvider/UserProvider";
 import { useAccount } from "../../../../../common/hooks";
-import { IFullAccount } from "../../../../../common/types";
-import { useUser } from "../../../../../context";
+import { Account, FullAccount, UserKey } from "../../../../../common/types";
+import { Form } from "../../../../../ui/src";
+
+import { ILoginForm } from "./useLoginForm.types";
 
 export function useLoginForm(): ILoginForm {
   const [validUser, setValidUser] = useState(false);
-  const [fullAcc, setFullAcc] = useState<IFullAccount | undefined>(undefined);
-  const { getFullAccount, formAccount } = useAccount();
-  const { accountData, updateAccountData } = useUser();
+  const [temporaryFullAccount, setTemporaryFullAccount] = useState<
+    FullAccount | undefined
+  >(undefined);
+  const { getFullAccount, formAccountAfterConfirmation } = useAccount();
+  const { localStorageAccount, setLocalStorageAccount } = useUserContext();
   const [loginForm] = Form.useForm();
   const router = useRouter();
 
   useEffect(() => {
-    if (accountData) router.push("/dashboard");
-  }, []);
-
-  const onLogin = async () => {
-    loginForm.validateFields().then(async () => {
-      const userData = await formAccount(fullAcc);
-      updateAccountData(userData);
+    if (localStorageAccount) {
       router.push("/dashboard");
+    }
+  }, [localStorageAccount]);
+
+  const handleLogin = async () => {
+    loginForm.validateFields().then(async () => {
+      if (temporaryFullAccount) {
+        await formAccountAfterConfirmation(temporaryFullAccount);
+        setLocalStorageAccount(temporaryFullAccount.account.name);
+      }
     });
   };
 
   const validateUsername = async (_: unknown, value: string) => {
-    const acc = await getFullAccount(value, false);
-    if (acc === undefined) return Promise.reject(new Error("User not found"));
-    setFullAcc(acc);
+    const fullAccount = await getFullAccount(value, false);
+    if (!fullAccount) {
+      return Promise.reject(new Error("User not found"));
+    }
+    setTemporaryFullAccount(fullAccount);
     setValidUser(true);
     return Promise.resolve();
   };
 
   const validatePassword = (_: unknown, value: string) => {
-    const accData = fullAcc?.account;
-    const roles = ["active", "owner", "memo"];
-    let checkPassword = false;
-    let fromWif = "";
+    if (temporaryFullAccount) {
+      const account = temporaryFullAccount?.account;
+      const roles = ["active", "owner", "memo"];
+      let checkPassword = false;
+      let fromWif = "";
 
-    try {
-      fromWif = PrivateKey.fromWif(value);
-    } catch (e) {
-      console.error(e);
-    }
+      try {
+        fromWif = PrivateKey.fromWif(value);
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
 
-    const keys = Login.generateKeys(fullAcc?.account.name, value, roles);
+      const keys = Login.generateKeys(account?.name, value, roles);
 
-    for (const role of roles) {
-      const privKey = fromWif ? fromWif : keys.privKeys[role];
-      const pubKey = privKey.toPublicKey().toString(defaultToken);
-      const key =
-        role !== "memo"
-          ? accData[role as keyof IAccountData].key_auths[0][0]
-          : accData.options.memo_key;
+      for (const role of roles) {
+        const privKey = fromWif ? fromWif : keys.privKeys[role];
+        const pubKey = privKey.toPublicKey().toString(defaultToken);
+        let key = "";
 
-      if (key === pubKey) {
-        checkPassword = true;
-        break;
+        if (role !== "memo") {
+          const permission = account[role as keyof Account] as UserKey;
+          key = permission.key_auths[0][0];
+        } else {
+          key = account.options.memo_key;
+        }
+        if (key === pubKey) {
+          checkPassword = true;
+          break;
+        }
       }
+      if (!checkPassword)
+        return Promise.reject(new Error("Password incorrect"));
     }
-    if (!checkPassword) return Promise.reject(new Error("Password incorrect"));
+
     return Promise.resolve();
   };
 
@@ -85,7 +100,7 @@ export function useLoginForm(): ILoginForm {
   return {
     validUser,
     loginForm,
-    onLogin,
+    handleLogin,
     formValdation,
   };
 }

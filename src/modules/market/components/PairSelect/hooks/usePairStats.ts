@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
 import { roundNum } from "../../../../../common/hooks/useRoundNum";
 import { Asset } from "../../../../../common/types";
-import { usePeerplaysApi } from "../../../../peerplaysApi";
 
 import { usePairSelect } from "./usePairSelect";
 import { Ticker, UsePairStatsResult } from "./usePairStats.types";
@@ -15,7 +15,7 @@ export function usePairStats(): UsePairStatsResult {
   // trade volume of quote asset in 24hr
   const [volume, setVolume] = useState<number>(0);
   const { currentBase, currentQuote } = usePairSelect();
-  const { dbApi } = usePeerplaysApi();
+  const { dbApi } = usePeerplaysApiContext();
 
   const getPairStats = useCallback(
     async (base: Asset, quote: Asset) => {

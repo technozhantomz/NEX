@@ -1,10 +1,10 @@
 import { Tabs } from "antd";
 import type { NextPage } from "next";
 
-import Layout from "../../../../common/components/PageLayout/layout";
+import { Layout } from "../../../../common/components/PageLayout";
 import AssetsTab from "../../componets/AssetsTab";
 
-import * as Styled from "./WalletPage.styled"
+import * as Styled from "./WalletPage.styled";
 
 const { TabPane } = Tabs;
 

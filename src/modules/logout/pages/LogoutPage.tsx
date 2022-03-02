@@ -1,19 +1,18 @@
-import { Card } from "antd";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useEffect } from "react";
 
-import FormDisclamer from "../../../common/components/FormDisclamer";
-import Layout from "../../../common/components/PageLayout/layout";
-import { useUser } from "../../../context";
+import { FormDisclamer } from "../../../common/components/FormDisclamer";
+import { Layout } from "../../../common/components/PageLayout";
+import { useAccount } from "../../../common/hooks";
 
 import * as Styled from "./LogoutPage.styled";
 
-const Logout: NextPage = () => {
-  const { logoutUser } = useUser();
+const LogoutPage: NextPage = () => {
+  const { removeAccount } = useAccount();
 
   useEffect(() => {
-    if (logoutUser) logoutUser();
+    removeAccount();
   }, []);
 
   return (
@@ -34,4 +33,4 @@ const Logout: NextPage = () => {
   );
 };
 
-export default Logout;
+export default LogoutPage;

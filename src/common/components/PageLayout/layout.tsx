@@ -2,8 +2,8 @@ import { ConfigProvider } from "antd";
 import Head from "next/head";
 import React, { FunctionComponent, ReactNode, useEffect } from "react";
 
-import * as Styled from "./layout.styled";
-import TopBar from "./topBar/topBar";
+import * as Styled from "./Layout.styled";
+import { TopBar } from "./topBar/TopBar";
 
 type Props = {
   children: ReactNode;
@@ -13,7 +13,7 @@ type Props = {
   heading?: string | undefined;
 };
 
-const Layout: FunctionComponent<Props> = ({
+export const Layout: FunctionComponent<Props> = ({
   children,
   title = "PeerPlays",
   description,
@@ -36,8 +36,6 @@ const Layout: FunctionComponent<Props> = ({
     switch (true) {
       case type == "card":
         return "card-layout";
-      case type == "card-lrg":
-        return "card-layout__lrg";
       default:
         return "default";
     }
@@ -68,5 +66,3 @@ const Layout: FunctionComponent<Props> = ({
     </>
   );
 };
-
-export default Layout;

@@ -1,19 +1,15 @@
-import {
-  EyeInvisibleOutlined,
-  EyeOutlined,
-  InfoCircleOutlined,
-} from "@ant-design/icons";
-import { Button, Card, Checkbox, Form, Input } from "antd";
+import type { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 
-import FormDisclamer from "../../../../common/components/FormDisclamer";
-import Layout from "../../../../common/components/PageLayout/layout";
-import SignUpForm from "../../components/SignUpForm";
+import { FormDisclamer } from "../../../../common/components/FormDisclamer";
+import { Layout } from "../../../../common/components/PageLayout";
+import { Card } from "../../../../ui/src";
+import { SignUpForm } from "../../components/SignUpForm";
 
 // import * as Styled from "./SignUpPage.styled";
 
-const SignUpPage: React.FC = () => {
+const SignUpPage: NextPage = () => {
   return (
     <Layout title="SignUp" type="card" heading="Create your account">
       <Card>

@@ -1,1 +1,1 @@
-export { default } from "./FormDisclamer";
+export * from "./FormDisclamer";

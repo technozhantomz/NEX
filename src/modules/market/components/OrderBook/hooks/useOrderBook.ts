@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
 import { roundNum } from "../../../../../common/hooks/useRoundNum";
 import { Asset } from "../../../../../common/types/Asset";
-import { usePeerplaysApi } from "../../../../peerplaysApi";
 import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
 
 import {
@@ -24,7 +24,7 @@ export function useOrderBook(): UseOrderBookResult {
   const [columns, setColumns] = useState<OrderColumn[]>([]);
   //const [tableScroll, setTableScroll] = useState<TableScroll>();
   const { currentBase, currentQuote } = usePairSelect();
-  const { dbApi } = usePeerplaysApi();
+  const { dbApi } = usePeerplaysApiContext();
 
   const handleFilterChange = useCallback(
     (type: OrderType) => {

@@ -8,7 +8,7 @@ export interface IAssetData {
 }
 
 export type IAssetsTab = {
-  assets: IAssetsDataState;
+  tableAssets: IAssetsDataState;
 };
 
 export type IAssetsDataState = {

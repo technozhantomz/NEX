@@ -17,9 +17,28 @@ export {
   Table,
   Checkbox,
   Card,
+  Switch,
   List,
 } from "antd";
+
+export {
+  DollarOutlined,
+  PoweroffOutlined,
+  SettingOutlined,
+  BellOutlined,
+  MoreOutlined,
+  UserOutlined,
+  RightOutlined,
+  InfoCircleOutlined,
+  CheckOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+} from "@ant-design/icons";
 
 export { Col } from "./Col";
 
 export type { FormInstance } from "antd";
+
+export type { Rule } from "antd/lib/form";
+
+export type { CheckboxChangeEvent } from "antd/lib/checkbox";
