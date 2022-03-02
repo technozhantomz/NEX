@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { defaultQuote } from "../../../../../api/params/networkparams";
 import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
 import { useUserContext } from "../../../../../common/components/UserProvider";
-import { roundNum, useAsset } from "../../../../../common/hooks";
+import { roundNum } from "../../../../../common/hooks";
 import { Asset } from "../../../../../common/types";
 
 import { IAssetsDataState, IAssetsTab } from "./useAssetsTab.type";
@@ -16,7 +16,6 @@ export function useAssetsTab(): IAssetsTab {
   });
   const { dbApi } = usePeerplaysApiContext();
   const { assets, localStorageAccount } = useUserContext();
-  const { setPrecision } = useAsset();
   const router = useRouter();
 
   useEffect(() => {
