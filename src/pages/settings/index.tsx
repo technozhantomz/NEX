@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 
-import { Layout } from "../../common/components/PageLayout/Layout";
+import { Layout } from "../../common/components/PageLayout";
 
 const Settings: NextPage = () => {
   return (
