@@ -57,10 +57,16 @@ const columns: ColumnsType<IAssetData> = [
     dataIndex: "withdraw",
     key: "withdraw",
     render: (value, record) => (
-      <AssetActionButton
-        txt="Withdraw"
-        href={`/wallet/${record.asset}?tab=withdraw`}
-      />
+      <>
+        {record.asset === "TEST" || record.asset === "PPY" ? (
+          ""
+        ) : (
+          <AssetActionButton
+            txt="Withdraw"
+            href={`/wallet/${record.asset}?tab=withdraw`}
+          />
+        )}
+      </>
     ),
   },
   {
@@ -68,10 +74,16 @@ const columns: ColumnsType<IAssetData> = [
     dataIndex: "deposit",
     key: "deposit",
     render: (value, record) => (
-      <AssetActionButton
-        txt="Deposit"
-        href={`/wallet/${record.asset}?tab=deposit`}
-      />
+      <>
+        {record.asset === "TEST" || record.asset === "PPY" ? (
+          ""
+        ) : (
+          <AssetActionButton
+            txt="Deposit"
+            href={`/wallet/${record.asset}?tab=deposit`}
+          />
+        )}
+      </>
     ),
   },
 ];
@@ -122,14 +134,26 @@ export const AssetsTable = ({
                         txt="Transfer"
                         href={`/wallet/${item.asset}?tab=transfer`}
                       />,
-                      <AssetActionButton
-                        txt="Withdraw"
-                        href={`/wallet/${item.asset}?tab=withdraw`}
-                      />,
-                      <AssetActionButton
-                        txt="Deposit"
-                        href={`/wallet/${item.asset}?tab=deposit`}
-                      />,
+                      <>
+                        {item.asset === "TEST" || item.asset === "PPY" ? (
+                          ""
+                        ) : (
+                          <AssetActionButton
+                            txt="Withdraw"
+                            href={`/wallet/${item.asset}?tab=withdraw`}
+                          />
+                        )}
+                      </>,
+                      <>
+                        {item.asset === "TEST" || item.asset === "PPY" ? (
+                          ""
+                        ) : (
+                          <AssetActionButton
+                            txt="Deposit"
+                            href={`/wallet/${item.asset}?tab=deposit`}
+                          />
+                        )}
+                      </>,
                     ]
                   : []
               }
