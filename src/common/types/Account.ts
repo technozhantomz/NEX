@@ -81,7 +81,7 @@ export type ISignupFormData = {
   referrer?: string;
 };
 
-export type BitcoinSideChainAccount = {
+export type SidechainAcccount = {
   deposit_address: string;
   deposit_address_data: string;
   deposit_public_key: string;

@@ -1,7 +1,7 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 
-import { useSidechainAccounts } from "../../../../../../common/hooks";
+import { useUserContext } from "../../../../../../common/components/UserProvider";
 import { CopyIcon } from "../../../../../../ui/src/icons";
 import BitcoinIcon from "../../icons/BitcoinIcon.svg";
 
@@ -10,7 +10,7 @@ import { useCopyKey } from "./hooks";
 
 export const KeyIsGenerated = (): JSX.Element => {
   const [depositAddress, setDepositAddress] = useState<string>();
-  const { sidechainAcccounts } = useSidechainAccounts();
+  const { sidechainAcccounts } = useUserContext();
 
   useEffect(() => {
     if (sidechainAcccounts && sidechainAcccounts.length > 0) {

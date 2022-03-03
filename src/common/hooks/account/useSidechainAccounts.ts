@@ -2,18 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 
 import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
 import { useUserContext } from "../../components/UserProvider";
-import { BitcoinSideChainAccount } from "../../types";
 
 import { UseSidechainAccounts } from "./useSidechainAccounts.types";
 
 export function useSidechainAccounts(): UseSidechainAccounts {
   const [hasBTCDepositAddress, setHasBTCDepositAddress] =
     useState<boolean>(false);
-  const [sidechainAcccounts, setSidechainAcccounts] = useState<
-    BitcoinSideChainAccount[]
-  >([]);
   const { dbApi } = usePeerplaysApiContext();
-  const { id } = useUserContext();
+  const { id, sidechainAcccounts, setSidechainAcccounts } = useUserContext();
 
   useEffect(() => {
     if (sidechainAcccounts && sidechainAcccounts.length > 0) {
@@ -37,7 +33,6 @@ export function useSidechainAccounts(): UseSidechainAccounts {
   }, []);
 
   return {
-    sidechainAcccounts,
     hasBTCDepositAddress,
     getSidechainAccounts,
   };
