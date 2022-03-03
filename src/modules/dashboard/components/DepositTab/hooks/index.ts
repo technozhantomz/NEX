@@ -1,0 +1,1 @@
+export { useSidechainAccounts } from "./useSidechainAccounts";

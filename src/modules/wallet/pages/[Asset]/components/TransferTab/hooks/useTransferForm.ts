@@ -12,9 +12,9 @@ import {
 import { TransactionFee } from "../../../../../../../common/hooks/fees/useFees.types";
 import { Account } from "../../../../../../../common/types";
 
-import { ITransferForm } from "./useTransferForm.type";
+import { TransferForm } from "./useTransferForm.type";
 
-export function useTransferForm(): ITransferForm {
+export function useTransferForm(): TransferForm {
   const [status, upStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [feeData, setFeeData] = useState<TransactionFee>();

@@ -1,3 +1,7 @@
+import { BitcoinSideChainAccount } from "../../../../../common/types";
+
 export type UseSidechainAccounts = {
-  getSidechainAccounts: (accountId: string) => Promise<unknown[] | undefined>;
+  sidechainAcccounts: BitcoinSideChainAccount[];
+  hasBTCDepositAddress: boolean;
+  getSidechainAccounts: (accountId: string) => Promise<unknown[]>;
 };

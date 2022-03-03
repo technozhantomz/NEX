@@ -1,14 +1,25 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { CopyIcon } from "../../../../../../ui/src/icons";
+import { useSidechainAccounts } from "../../hooks";
 import BitcoinIcon from "../../icons/BitcoinIcon.svg";
 
 import * as Styled from "./KeyIsGenerated.styled";
 import { useCopyKey } from "./hooks";
 
 export const KeyIsGenerated = (): JSX.Element => {
-  const Gkey = "bcrt1qzyng3fqdrns4d53h8exm2jqw0frc6fw4swnyqf";
+  const [depositAddress, setDepositAddress] = useState<string>();
+  const { sidechainAcccounts } = useSidechainAccounts();
+
+  useEffect(() => {
+    if (sidechainAcccounts && sidechainAcccounts.length > 0) {
+      const bitcoinAccount = sidechainAcccounts.find(
+        (act) => act.sidechain === "bitcoin"
+      );
+      setDepositAddress(bitcoinAccount?.deposit_address);
+    }
+  }, [sidechainAcccounts]);
 
   return (
     <>
@@ -18,8 +29,8 @@ export const KeyIsGenerated = (): JSX.Element => {
       </Styled.KeyContainer>
       <Styled.GeneratedBitcoinKey
         size="small"
-        suffix={<CopyIcon onClick={() => useCopyKey(Gkey)} />}
-        value={Gkey}
+        suffix={<CopyIcon onClick={() => useCopyKey(depositAddress)} />}
+        value={depositAddress}
         disabled
       />
       <Styled.KeyLinkContainer>

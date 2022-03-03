@@ -3,13 +3,14 @@ import React from "react";
 import * as Styled from "./DepositTab.styled";
 import { GenerateKey } from "./components/GenerateKey/GenerateKey";
 import { KeyIsGenerated } from "./components/KeyIsGenerated/KeyIsGenerated";
+import { useSidechainAccounts } from "./hooks";
 
 export const DepositTab = (): JSX.Element => {
-  const isKeyGenerated = false;
+  const { hasBTCDepositAddress } = useSidechainAccounts();
 
   return (
     <Styled.DepositFormContainer>
-      {isKeyGenerated ? <KeyIsGenerated /> : <GenerateKey />}
+      {hasBTCDepositAddress ? <KeyIsGenerated /> : <GenerateKey />}
     </Styled.DepositFormContainer>
   );
 };
