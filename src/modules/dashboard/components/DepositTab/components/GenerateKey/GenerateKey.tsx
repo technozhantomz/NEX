@@ -6,8 +6,11 @@ import { LogoSelectOption } from "../../../../../../common/components/LogoSelect
 import BitcoinIcon from "../../icons/BitcoinIcon.svg";
 
 import * as Styled from "./GenerateKey.styled";
+import { useGenerateAddress } from "./hooks/useGenerateAddress";
 
 export const GenerateKey = (): JSX.Element => {
+  const { generateAddress, key } = useGenerateAddress();
+
   return (
     <>
       <Styled.DepositForm>
@@ -17,7 +20,10 @@ export const GenerateKey = (): JSX.Element => {
           amountCol={false}
         />
         <Styled.DepositForm.Item>
-          <DashboardButton label="Log in & Generate Bitcoin Address" />
+          <DashboardButton
+            label="Log in & Generate Bitcoin Address"
+            onClick={generateAddress}
+          />
           <Styled.DepositFormFooter>
             <Styled.DepositFormFooterSpan>
               Don't have a Peerplays account?{" "}

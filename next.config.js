@@ -41,6 +41,8 @@ const nextConfig = {
       use: '@svgr/webpack',
     });
 
+    config.experiments = { asyncWebAssembly: true };
+
     return config;
   },
 };
