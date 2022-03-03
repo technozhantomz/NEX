@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
-import { useUserContext } from "../../../../../common/components/UserProvider";
-import { BitcoinSideChainAccount } from "../../../../../common/types";
+import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
+import { useUserContext } from "../../components/UserProvider";
+import { BitcoinSideChainAccount } from "../../types";
 
 import { UseSidechainAccounts } from "./useSidechainAccounts.types";
 

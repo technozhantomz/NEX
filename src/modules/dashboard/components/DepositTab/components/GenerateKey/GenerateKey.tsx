@@ -11,7 +11,8 @@ import * as Styled from "./GenerateKey.styled";
 import { useGenerateAddress } from "./hooks/useGenerateAddress";
 
 export const GenerateKey = (): JSX.Element => {
-  const { visible, onCancel, onFormFinish, confirm, handleAssetChange } = useGenerateAddress();
+  const { visible, onCancel, onFormFinish, confirm, handleAssetChange } =
+    useGenerateAddress();
 
   return (
     <>

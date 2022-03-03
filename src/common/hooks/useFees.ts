@@ -1,13 +1,13 @@
 import { ChainTypes, TransactionHelper } from "peerplaysjs-lib";
 import { useEffect } from "react";
 
-import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
-import { useUserContext } from "../../components/UserProvider";
-import { useAccount } from "../account/useAccount";
-import { useAsset } from "../useAsset";
-import { useLocalStorage } from "../useLocalStorage";
+import { usePeerplaysApiContext } from "../components/PeerplaysApiProvider";
+import { useUserContext } from "../components/UserProvider";
 
+import { useAccount } from "./account/useAccount";
+import { useAsset } from "./useAsset";
 import { Fee, UseFees } from "./useFees.types";
+import { useLocalStorage } from "./useLocalStorage";
 
 export function useFees(): UseFees {
   const defaultNonce = TransactionHelper.unique_nonce_uint64();

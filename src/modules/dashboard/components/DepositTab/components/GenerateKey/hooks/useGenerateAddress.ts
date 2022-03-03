@@ -8,9 +8,11 @@ import { useCallback, useState } from "react";
 import * as ecc from "tiny-secp256k1";
 
 import { useUserContext } from "../../../../../../../common/components/UserProvider";
-import { useAccount } from "../../../../../../../common/hooks";
+import {
+  useAccount,
+  useSidechainAccounts,
+} from "../../../../../../../common/hooks";
 import { useTransactionBuilder } from "../../../../../../../common/hooks/useTransactionBuilder";
-import { useSidechainAccounts } from "../../../hooks";
 
 import { GenerateAddress } from "./useAddress.types";
 

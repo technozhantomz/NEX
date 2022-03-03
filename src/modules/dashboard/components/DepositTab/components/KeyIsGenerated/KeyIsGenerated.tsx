@@ -1,8 +1,8 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 
+import { useSidechainAccounts } from "../../../../../../common/hooks";
 import { CopyIcon } from "../../../../../../ui/src/icons";
-import { useSidechainAccounts } from "../../hooks";
 import BitcoinIcon from "../../icons/BitcoinIcon.svg";
 
 import * as Styled from "./KeyIsGenerated.styled";
