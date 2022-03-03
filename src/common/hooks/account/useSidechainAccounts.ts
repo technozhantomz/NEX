@@ -9,7 +9,7 @@ export function useSidechainAccounts(): UseSidechainAccounts {
   const [hasBTCDepositAddress, setHasBTCDepositAddress] =
     useState<boolean>(false);
   const { dbApi } = usePeerplaysApiContext();
-  const { id, sidechainAcccounts, setSidechainAcccounts } = useUserContext();
+  const { id, sidechainAcccounts } = useUserContext();
 
   useEffect(() => {
     if (sidechainAcccounts && sidechainAcccounts.length > 0) {
@@ -26,7 +26,6 @@ export function useSidechainAccounts(): UseSidechainAccounts {
       .then((e: string | unknown[]) => (e.length ? e : undefined))
       .catch(() => false);
     if (acccounts) {
-      setSidechainAcccounts(acccounts);
       setHasBTCDepositAddress(true);
     }
     return acccounts;

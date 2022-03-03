@@ -21,7 +21,7 @@ export function useGenerateAddress(): GenerateAddress {
   const [visible, setVisible] = useState<boolean>(false);
   const { trxBuilder } = useTransactionBuilder();
   const { getPrivateKey } = useAccount();
-  const { id } = useUserContext();
+  const { id, setSidechainAcccounts } = useUserContext();
 
   const toHex = (buffer: any) => {
     return Array.from(buffer)
@@ -96,7 +96,8 @@ export function useGenerateAddress(): GenerateAddress {
     }
 
     if (trxResult) {
-      getSidechainAccounts(id);
+      const sidechainAcccounts = await getSidechainAccounts(id);
+      setSidechainAcccounts(sidechainAcccounts);
       setVisible(false);
     }
   }, []);
