@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Layout from "../../../../components/layout";
+import { Layout } from "../../../../common/components/PageLayout";
 import { DepositTab } from "../../components/DepositTab";
 import { MarketTab } from "../../components/MarketTab";
 import { SwapTab } from "../../components/SwapTab";

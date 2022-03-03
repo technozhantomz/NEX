@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 
-import { usePeerplaysApi } from "../../../../peerplaysApi";
+import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
 
 import { UseSidechainAccounts } from "./useSidechainAccounts.types";
 
 export function useSidechainAccounts(): UseSidechainAccounts {
-  const { dbApi } = usePeerplaysApi();
+  const { dbApi } = usePeerplaysApiContext();
 
   // Fetching sidechain accounts by user's account id:
 

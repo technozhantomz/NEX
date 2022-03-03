@@ -1,25 +1,27 @@
 /** @format */
 
-import * as bitcoin from 'bitcoinjs-lib';
-import ECPairFactory from 'ecpair';
-import { useCallback, useState } from 'react';
-import { RegtestUtils } from 'regtest-client';
-import * as ecc from 'tiny-secp256k1';
+import * as bitcoin from "bitcoinjs-lib";
+import ECPairFactory from "ecpair";
+import { useCallback, useState } from "react";
+import { RegtestUtils } from "regtest-client";
+import * as ecc from "tiny-secp256k1";
 
-import { useTransactionBuilder } from '../../../../../../../common/hooks/useTransactionBuilder';
+import { useUserContext } from "../../../../../../../common/components/UserProvider";
+import { useTransactionBuilder } from "../../../../../../../common/hooks/useTransactionBuilder";
 
-import { AddressDetails } from './useAddress.types';
+import { AddressDetails } from "./useAddress.types";
 
-export function useGenerateAddress() {
+export function useGenerateAddress(): GenerateAddress {
   const [key, setKey] = useState(0);
   const [addresses, setAddresses] = useState<AddressDetails[]>([]);
+  const [depositPublicKey, setDepositPublicKey] = useState("");
   const { trxBuilder } = useTransactionBuilder();
-  const [depositPublicKey, setDepositPublicKey] = useState('');
+  const { id } = useUserContext();
 
   const toHex = (buffer: any) => {
     return Array.from(buffer)
-      .map((byte) => byte.toString(16).padStart(2, '0'))
-      .join('');
+      .map((byte) => byte.toString(16).padStart(2, "0"))
+      .join("");
   };
 
   const generateAddress = useCallback(async () => {
@@ -33,18 +35,18 @@ export function useGenerateAddress() {
       generatedAddress.push(address);
     }
 
-    const fees = { amount: 0, asset_id: '1.3.0' };
+    const fees = { amount: 0, asset_id: "1.3.0" };
 
     const trx = {
-      type: 'sidechain_address_add',
+      type: "sidechain_address_add",
       params: {
         fee: fees,
-        payer: '1.2.73',
-        sidechain_address_account: '1.2.73',
-        sidechain: 'bitcoin',
+        payer: id,
+        sidechain_address_account: id,
+        sidechain: "bitcoin",
         deposit_public_key: toHex(generatedAddress[0].pubkey),
-        deposit_address: '',
-        deposit_address_data: '',
+        deposit_address: "",
+        deposit_address_data: "",
         withdraw_public_key: toHex(generatedAddress[1].pubkey),
         withdraw_address: generatedAddress[1].address,
       },
@@ -52,7 +54,7 @@ export function useGenerateAddress() {
 
     try {
       console.log(trx);
-      const activeKey = ['vijaythopate'];
+      const activeKey = ["vijaythopate"];
       const trxResult = await trxBuilder([trx], [activeKey]);
       console.log(trxResult);
     } catch (error) {
