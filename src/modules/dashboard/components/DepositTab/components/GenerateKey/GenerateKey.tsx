@@ -9,7 +9,10 @@ import * as Styled from "./GenerateKey.styled";
 import { useGenerateAddress } from "./hooks/useGenerateAddress";
 
 export const GenerateKey = (): JSX.Element => {
-  const { generateAddress, key } = useGenerateAddress();
+  const { generateAddress } = useGenerateAddress();
+
+  const handleChange = (event: any) => {
+  }
 
   return (
     <>
@@ -18,6 +21,7 @@ export const GenerateKey = (): JSX.Element => {
           balance="1.0000"
           token={<BitcoinIcon width="30px" height="30px" />}
           amountCol={false}
+          onChange={handleChange}
         />
         <Styled.DepositForm.Item>
           <DashboardButton

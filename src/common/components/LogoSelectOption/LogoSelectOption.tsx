@@ -6,19 +6,26 @@ type LogoSelectionProps = {
   balance: string;
   token: React.ReactNode;
   amountCol: boolean;
+  onChange: (event: any) => void;
 };
 
 export const LogoSelectOption = ({
   balance,
   token,
   amountCol,
+  onChange
 }: LogoSelectionProps): JSX.Element => {
   return (
     <Styled.FormContainer>
       <Styled.Row>
         <Styled.SelectOptionCol span={amountCol ? 11 : 23}>
-          <Styled.SelectContainer defaultValue="1" bordered={false}>
-            <Styled.SelectOptionContainer value="1">
+          <Styled.SelectContainer defaultValue='0' bordered={false} onChange={onChange}>
+            <Styled.SelectOptionContainer value='0'>
+              <Styled.OptionsDiv>
+                <Styled.IconDiv>Select Token</Styled.IconDiv>
+              </Styled.OptionsDiv>
+            </Styled.SelectOptionContainer>
+            <Styled.SelectOptionContainer value='bitcoin'>
               <Styled.OptionsDiv>
                 <Styled.IconDiv>{token}</Styled.IconDiv>
                 <Styled.NamePara>BTC</Styled.NamePara>

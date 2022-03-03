@@ -1,23 +1,30 @@
-import * as bitcoin from "bitcoinjs-lib";
-import ECPairFactory from "ecpair";
-import { useState } from "react";
-import { RegtestUtils } from "regtest-client";
-import * as ecc from "tiny-secp256k1";
+/** @format */
 
-import { useTransactionBuilder } from "../../../../../../../common/hooks/useTransactionBuilder";
+import * as bitcoin from 'bitcoinjs-lib';
+import ECPairFactory from 'ecpair';
+import { useCallback, useState } from 'react';
+import { RegtestUtils } from 'regtest-client';
+import * as ecc from 'tiny-secp256k1';
 
-import { AddressDetails } from "./useAddress.types";
+import { useTransactionBuilder } from '../../../../../../../common/hooks/useTransactionBuilder';
+
+import { AddressDetails } from './useAddress.types';
 
 export function useGenerateAddress() {
   const [key, setKey] = useState(0);
   const [addresses, setAddresses] = useState<AddressDetails[]>([]);
   const { trxBuilder } = useTransactionBuilder();
-  // const [depositAddress, setDepositAddress] = useState([]);
+  const [depositPublicKey, setDepositPublicKey] = useState('');
 
-  const generateAddress = async () => {
+  const toHex = (buffer: any) => {
+    return Array.from(buffer)
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
+  };
+
+  const generateAddress = useCallback(async () => {
     const ECPair = ECPairFactory(ecc);
     const generatedAddress = [];
-    let depositAddress = [];
 
     for (let i = 0; i <= 1; i++) {
       const keyPair = ECPair.makeRandom();
@@ -25,10 +32,33 @@ export function useGenerateAddress() {
       const address = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey });
       generatedAddress.push(address);
     }
-    console.log(generatedAddress);
-    depositAddress = generatedAddress[0];
-    console.log(depositAddress);
-  };
 
-  return { generateAddress, key };
+    const fees = { amount: 0, asset_id: '1.3.0' };
+
+    const trx = {
+      type: 'sidechain_address_add',
+      params: {
+        fee: fees,
+        payer: '1.2.73',
+        sidechain_address_account: '1.2.73',
+        sidechain: 'bitcoin',
+        deposit_public_key: toHex(generatedAddress[0].pubkey),
+        deposit_address: '',
+        deposit_address_data: '',
+        withdraw_public_key: toHex(generatedAddress[1].pubkey),
+        withdraw_address: generatedAddress[1].address,
+      },
+    };
+
+    try {
+      console.log(trx);
+      const activeKey = ['vijaythopate'];
+      const trxResult = await trxBuilder([trx], [activeKey]);
+      console.log(trxResult);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  return { generateAddress };
 }
