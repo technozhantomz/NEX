@@ -1,7 +1,7 @@
 import { Logo } from "../../../../ui/src/icons";
 
-import * as Styled from "./TopBar.styled";
 import { MainNavBar } from "./components/MainNavBar";
+import * as Styled from "./topBar.styled";
 
 export const TopBar = (): JSX.Element => {
   return (

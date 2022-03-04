@@ -1,20 +1,18 @@
-/** @format */
+import { BaseOptionType, DefaultOptionType } from 'antd/lib/select';
+import * as bitcoin from 'bitcoinjs-lib';
+import ECPairFactory from 'ecpair';
+import { FormFinishInfo } from 'rc-field-form';
+import { useCallback, useState } from 'react';
+import * as ecc from 'tiny-secp256k1';
 
-import { BaseOptionType, DefaultOptionType } from "antd/lib/select";
-import * as bitcoin from "bitcoinjs-lib";
-import ECPairFactory from "ecpair";
-import { FormFinishInfo } from "rc-field-form";
-import { useCallback, useState } from "react";
-import * as ecc from "tiny-secp256k1";
-
-import { useUserContext } from "../../../../../../../common/components/UserProvider";
+import { useUserContext } from '../../../../../../../common/components/UserProvider';
 import {
   useAccount,
   useSidechainAccounts,
-} from "../../../../../../../common/hooks";
-import { useTransactionBuilder } from "../../../../../../../common/hooks/useTransactionBuilder";
+} from '../../../../../../../common/hooks';
+import { useTransactionBuilder } from '../../../../../../../common/hooks/useTransactionBuilder';
 
-import { GenerateAddress } from "./useAddress.types";
+import { GenerateAddress } from './useAddress.types';
 
 export function useGenerateAddress(): GenerateAddress {
   const { getSidechainAccounts } = useSidechainAccounts();
@@ -25,8 +23,8 @@ export function useGenerateAddress(): GenerateAddress {
 
   const toHex = (buffer: any) => {
     return Array.from(buffer)
-      .map((byte) => byte.toString(16).padStart(2, "0"))
-      .join("");
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
   };
 
   const handleAssetChange = (
@@ -51,7 +49,7 @@ export function useGenerateAddress(): GenerateAddress {
   const onFormFinish = (name: string, info: FormFinishInfo) => {
     const { values, forms } = info;
     const { passwordModal } = forms;
-    if (name === "passwordModal") {
+    if (name === 'passwordModal') {
       passwordModal.validateFields().then(() => {
         generateAddress(values.password);
       });
@@ -69,18 +67,18 @@ export function useGenerateAddress(): GenerateAddress {
       generatedAddress.push(address);
     }
 
-    const fees = { amount: 0, asset_id: "1.3.0" };
-    const activeKey = getPrivateKey(password, "active");
+    const fees = { amount: 0, asset_id: '1.3.0' };
+    const activeKey = getPrivateKey(password, 'active');
     const trx = {
-      type: "sidechain_address_add",
+      type: 'sidechain_address_add',
       params: {
         fee: fees,
         payer: id,
         sidechain_address_account: id,
-        sidechain: "bitcoin",
+        sidechain: 'bitcoin',
         deposit_public_key: toHex(generatedAddress[0].pubkey),
-        deposit_address: "",
-        deposit_address_data: "",
+        deposit_address: '',
+        deposit_address_data: '',
         withdraw_public_key: toHex(generatedAddress[1].pubkey),
         withdraw_address: generatedAddress[1].address,
       },
@@ -89,6 +87,7 @@ export function useGenerateAddress(): GenerateAddress {
     let trxResult;
 
     try {
+      console.log(trx);
       trxResult = await trxBuilder([trx], [activeKey]);
     } catch (error) {
       console.log(error);
