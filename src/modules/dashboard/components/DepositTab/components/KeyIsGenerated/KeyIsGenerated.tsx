@@ -1,5 +1,5 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-
+import { saveAs } from 'file-saver';
 import { CopyIcon } from "../../../../../../ui/src/icons";
 import BitcoinIcon from "../../icons/BitcoinIcon.svg";
 
@@ -10,6 +10,7 @@ import { useKeyIsGenerated } from "./hooks/useKeyIsGenerated";
 export const KeyIsGenerated = (): JSX.Element => {
   const { depositAddress } = useKeyIsGenerated();
 
+  let blob = new Blob([depositAddress], { type: 'text/plain:charset=utf-8' });
   return (
     <>
       <Styled.KeyContainer>
@@ -23,7 +24,7 @@ export const KeyIsGenerated = (): JSX.Element => {
         disabled
       />
       <Styled.KeyLinkContainer>
-        <Styled.KeyDownloadLink>Download Private Key</Styled.KeyDownloadLink>
+        <Styled.KeyDownloadLink onClick={() => saveAs(blob, 'private_key.txt')}>Download Private Key</Styled.KeyDownloadLink>
       </Styled.KeyLinkContainer>
       <Styled.InfoBox>
         <InfoCircleOutlined />
