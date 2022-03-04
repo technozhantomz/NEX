@@ -1,9 +1,9 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { Form, Input } from "antd";
 import React from "react";
 
 import { DashboardButton } from "../../../../common/components/DashboardButton/DashboardButton";
 import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
-import BitcoinIcon from "../DepositTab/icons/BitcoinIcon.svg";
 
 import * as Styled from "./SwapTab.styled";
 
@@ -11,16 +11,31 @@ export const SwapTab = (): JSX.Element => {
   return (
     <Styled.SwapContainer>
       <Styled.SwapForm>
-        <LogoSelectOption
-          balance="1.0000"
-          token={<BitcoinIcon width="30px" height="30px" />}
-          amountCol={true}
-        />
-        <LogoSelectOption
-          balance="2240.02"
-          token={<BitcoinIcon width="30px" height="30px" />}
-          amountCol={true}
-        />
+        <Form.Item
+        // name="from"
+        // validateFirst={true}
+        // rules={formValdation.amount}
+        // validateTrigger="onBlur"
+        >
+          <Input
+            placeholder="0.00000"
+            type="number"
+            prefix={<LogoSelectOption />}
+          />
+        </Form.Item>
+        <Form.Item
+        // name="amount"
+        // validateFirst={true}
+        // rules={formValdation.amount}
+        // validateTrigger="onBlur"
+        >
+          <Input
+            placeholder="0.00000"
+            type="number"
+            prefix={<LogoSelectOption/>}
+          />
+        </Form.Item>
+
         <Styled.InfoDiv>
           <Styled.InfoPara>
             1 USDT= 0.0004475 ETH

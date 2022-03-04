@@ -3,14 +3,10 @@ import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { FormFinishInfo } from "rc-field-form";
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../../../../../../../common/components/UserProvider";
-import {
-  useAccount,
-  useFees,
-  useTransactionBuilder,
-} from "../../../../../../../common/hooks";
-import { TransactionFee } from "../../../../../../../common/hooks/useFees.types";
-import { Account } from "../../../../../../../common/types";
+import { useAccount, useFees, useTransactionBuilder } from "../../../hooks";
+import { TransactionFee } from "../../../hooks/useFees.types";
+import { Account } from "../../../types";
+import { useUserContext } from "../../UserProvider";
 
 import { TransferForm } from "./useTransferForm.types";
 

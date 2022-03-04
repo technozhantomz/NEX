@@ -3,20 +3,17 @@ import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { FormFinishInfo } from "rc-field-form";
 import { useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../../../common/components/PeerplaysApiProvider";
-import { useUserContext } from "../../../../../../../common/components/UserProvider";
-import {
-  useAccount,
-  useFees,
-  useTransactionBuilder,
-} from "../../../../../../../common/hooks";
-import { TransactionFee } from "../../../../../../../common/hooks/useFees.types";
-import { SidechainAcccount } from "../../../../../../../common/types";
+import { useAccount, useFees, useTransactionBuilder } from "../../../hooks";
+import { TransactionFee } from "../../../hooks/useFees.types";
+import { SidechainAcccount } from "../../../types";
+import { usePeerplaysApiContext } from "../../PeerplaysApiProvider";
+import { useUserContext } from "../../UserProvider";
 
 import { WithdrawForm } from "./useWithdrawForm.types";
 
 export function useWithdrawForm(): WithdrawForm {
   const [status, upStatus] = useState<string>("");
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [bitcoinAccount, setBitcoinsAccount] = useState<SidechainAcccount>();
   const [visible, setVisible] = useState<boolean>(false);
   const [feeData, setFeeData] = useState<TransactionFee>();
@@ -31,7 +28,8 @@ export function useWithdrawForm(): WithdrawForm {
   useEffect(() => {
     if (localStorageAccount !== null) {
       getFeeData();
-      withdrawForm.setFieldsValue({ from: localStorageAccount });
+      setLoggedIn(true);
+      //withdrawForm.setFieldsValue({ from: localStorageAccount });
       if (sidechainAcccounts && sidechainAcccounts.length > 0) {
         const bitcoinAccount = sidechainAcccounts.find(
           (act) => act.sidechain === "bitcoin"
@@ -52,6 +50,11 @@ export function useWithdrawForm(): WithdrawForm {
     withdrawForm.validateFields().then(() => {
       setVisible(true);
     });
+  };
+
+  const handleAssetChange = (value: string) => {
+    withdrawForm.setFieldsValue({ asset: value });
+    console.log(withdrawForm.getFieldsValue());
   };
 
   const onFormFinish = (name: string, info: FormFinishInfo) => {
@@ -170,7 +173,10 @@ export function useWithdrawForm(): WithdrawForm {
   };
 
   const validateAmount = async (_: unknown, value: number) => {
-    const accountAsset = assets.find((asset) => asset.symbol === "BTC");
+    const formAsset = withdrawForm.getFieldValue("asset")
+      ? withdrawForm.getFieldValue("asset")
+      : "BTC";
+    const accountAsset = assets.find((asset) => asset.symbol === formAsset);
     if (accountAsset !== undefined && accountAsset.amount > Number(value))
       return Promise.resolve();
     return Promise.reject(
@@ -187,8 +193,9 @@ export function useWithdrawForm(): WithdrawForm {
   };
 
   const formValdation = {
+    asset: [],
     amount: [
-      { required: true, message: "Quantity is required" },
+      { required: true, message: "Amount is required" },
       { validator: validateAmount },
     ],
     withdrawAddress: [
@@ -268,6 +275,7 @@ export function useWithdrawForm(): WithdrawForm {
 
   return {
     status,
+    loggedIn,
     visible,
     feeData,
     withdrawForm,
@@ -275,5 +283,6 @@ export function useWithdrawForm(): WithdrawForm {
     confirm,
     onCancel,
     onFormFinish,
+    handleAssetChange,
   };
 }
