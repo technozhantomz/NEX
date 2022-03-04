@@ -10,7 +10,7 @@ type Props = {
   asset: string;
 };
 
-const TransferTab = ({ asset }: Props): JSX.Element => {
+const WithdrawForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
@@ -31,23 +31,6 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
         onFinish={confirm}
         size="large"
       >
-        {/* <Form.Item
-          name="from"
-          rules={formValdation.from}
-          validateFirst={true}
-          validateTrigger="onBlur"
-          initialValue={localStorageAccount}
-        >
-          <Input placeholder="From" />
-        </Form.Item> */}
-        {/* <Form.Item
-          name="to"
-          validateFirst={true}
-          rules={formValdation.to}
-          validateTrigger="onBlur"
-        >
-          <Input placeholder="To" />
-        </Form.Item> */}
         <Form.Item
           name="withdrawAddress"
           validateFirst={true}
@@ -65,9 +48,7 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
         >
           <Input placeholder="amount" type="number" />
         </Form.Item>
-        {/* <p>
-          Fees: {feeData ? feeData.amount : 0} {feeData.}
-        </p> */}
+        <p>Fees: {feeData ? feeData.amount : 0}</p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
           <Styled.WithdrawFormButton type="primary" htmlType="submit">
@@ -80,4 +61,4 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
   );
 };
 
-export default TransferTab;
+export default WithdrawForm;

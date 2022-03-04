@@ -11,7 +11,7 @@ import {
   useTransactionBuilder,
 } from "../../../../../../../common/hooks";
 import { TransactionFee } from "../../../../../../../common/hooks/useFees.types";
-import { Account, SidechainAcccount } from "../../../../../../../common/types";
+import { SidechainAcccount } from "../../../../../../../common/types";
 
 import { WithdrawForm } from "./useWithdrawForm.types";
 
@@ -20,8 +20,6 @@ export function useWithdrawForm(): WithdrawForm {
   const [bitcoinAccount, setBitcoinsAccount] = useState<SidechainAcccount>();
   const [visible, setVisible] = useState<boolean>(false);
   const [feeData, setFeeData] = useState<TransactionFee>();
-  const [toAccount, setToAccount] = useState<Account>();
-  const [fromAccount, setFromAccount] = useState<Account>();
   const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
     useAccount();
   const { trxBuilder } = useTransactionBuilder();
@@ -78,10 +76,6 @@ export function useWithdrawForm(): WithdrawForm {
 
   const handleWithdraw = async (password: string) => {
     const values = withdrawForm.getFieldsValue();
-    // const from = fromAccount
-    //   ? fromAccount
-    //   : await getAccountByName(values.from);
-    // const to = toAccount ? toAccount : await getAccountByName(values.to);
     const from = await getAccountByName(localStorageAccount);
     const to = await getAccountByName("son-account");
     const gpo = await dbApi("get_global_properties");
@@ -92,7 +86,6 @@ export function useWithdrawForm(): WithdrawForm {
         throw new Error("son network not available");
       }
     }
-    // const asset = assets.filter((asset) => asset.symbol === values.coin)[0];
     const asset = assets.filter((asset) => asset.symbol === "BTC")[0];
     const activeKey = getPrivateKey(password, "active");
     let memoFromPublic, memoToPublic;
@@ -176,24 +169,7 @@ export function useWithdrawForm(): WithdrawForm {
     }
   };
 
-  const validateFrom = async (_: unknown, value: string) => {
-    if (value !== localStorageAccount)
-      return Promise.reject(new Error("Not your Account"));
-    setFromAccount(await getAccountByName(value));
-    return Promise.resolve();
-  };
-
-  const validateTo = async (_: unknown, value: string) => {
-    const acc = await getAccountByName(value);
-    if (value === localStorageAccount)
-      return Promise.reject(new Error("Can not send to yourself"));
-    if (acc === undefined) return Promise.reject(new Error("User not found"));
-    setToAccount(acc);
-    return Promise.resolve();
-  };
-
   const validateAmount = async (_: unknown, value: number) => {
-    // const coin = withdrawForm.getFieldValue("coin");
     const accountAsset = assets.find((asset) => asset.symbol === "BTC");
     if (accountAsset !== undefined && accountAsset.amount > Number(value))
       return Promise.resolve();
@@ -211,14 +187,6 @@ export function useWithdrawForm(): WithdrawForm {
   };
 
   const formValdation = {
-    from: [
-      { required: true, message: "From is required" },
-      { validator: validateFrom },
-    ],
-    to: [
-      { required: true, message: "To is required" },
-      { validator: validateTo },
-    ],
     amount: [
       { required: true, message: "Quantity is required" },
       { validator: validateAmount },

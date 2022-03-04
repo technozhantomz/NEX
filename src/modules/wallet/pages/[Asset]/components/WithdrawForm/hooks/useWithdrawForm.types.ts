@@ -22,15 +22,11 @@ export type FormField = {
 };
 
 export type FormValidation = {
-  from: Rule[];
-  to: Rule[];
   amount: Rule[];
   withdrawAddress: Rule[];
 };
 
 export type TransferFormData = {
-  form: string;
-  to: string;
   amount: number;
   withdrawAddress: string;
 };
