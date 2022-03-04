@@ -37,7 +37,7 @@ export function useAccount(): UseAccountResult {
   );
 
   const removeAccount = useCallback(() => {
-    updateAccount("", "", []);
+    updateAccount("", "", [], []);
     setIsAccountLocked(true);
     setLocalStorageAccount("");
   }, [updateAccount, setIsAccountLocked, setLocalStorageAccount]);
