@@ -7,7 +7,8 @@ import { Layout } from "../../../../common/components/PageLayout";
 import { AssetsTable } from "../../componets/AssetsTable";
 
 import * as Styled from "./AssetPage.styled";
-import TransferTab from "./components/TransferTab";
+import TransferForm from "./components/TransferForm";
+import WithdrawForm from "./components/WithdrawForm";
 
 const { TabPane } = Tabs;
 
@@ -29,16 +30,22 @@ const AssetPage: NextPage = () => {
         >
           <TabPane tab="Transfer" key="transfer">
             <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-            <TransferTab asset={`${asset}`} />
+            <TransferForm asset={`${asset}`} />
           </TabPane>
-          <TabPane tab="Withdraw" key="withdraw">
-            <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-            {/* <TransferTab asset={asset} /> */}
-          </TabPane>
-          <TabPane tab="Deposit" key="deposit">
-            <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-            {/* <TransferTab asset={asset} /> */}
-          </TabPane>
+          {asset === "TEST" || asset === "PPT" ? (
+            ""
+          ) : (
+            <>
+              <TabPane tab="Withdraw" key="withdraw">
+                <AssetsTable showActions={false} fillterAsset={`${asset}`} />
+                <WithdrawForm asset={`${asset}`} />
+              </TabPane>
+              <TabPane tab="Deposit" key="deposit">
+                <AssetsTable showActions={false} fillterAsset={`${asset}`} />
+                {/* <TransferTab asset={asset} /> */}
+              </TabPane>
+            </>
+          )}
           <TabPane tab="All Activity" key="activity">
             {/* <TransferTab asset={asset} /> */}
           </TabPane>

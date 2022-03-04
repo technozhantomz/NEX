@@ -3,14 +3,14 @@ import { Form, Input } from "antd";
 import PasswordModal from "../../../../../../common/components/PasswordModal/passwordModal";
 import { useUserContext } from "../../../../../../common/components/UserProvider";
 
-import * as Styled from "./TransferTab.styled";
+import * as Styled from "./TransferForm.styled";
 import { useTransferForm } from "./hooks";
 
 type Props = {
   asset: string;
 };
 
-const TransferTab = ({ asset }: Props): JSX.Element => {
+const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
@@ -93,4 +93,4 @@ const TransferTab = ({ asset }: Props): JSX.Element => {
   );
 };
 
-export default TransferTab;
+export default TransferForm;
