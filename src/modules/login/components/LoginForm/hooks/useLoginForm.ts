@@ -55,7 +55,9 @@ export function useLoginForm(): ILoginForm {
       try {
         fromWif = PrivateKey.fromWif(value);
         // eslint-disable-next-line no-empty
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
 
       const keys = Login.generateKeys(account?.name, value, roles);
 

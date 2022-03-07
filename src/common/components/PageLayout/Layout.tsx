@@ -3,7 +3,7 @@ import Head from "next/head";
 import React, { FunctionComponent, ReactNode, useEffect } from "react";
 
 import * as Styled from "./Layout.styled";
-import { TopBar } from "./TopBar";
+import { TopBar } from "./TopBar/TopBar";
 
 type Props = {
   children: ReactNode;

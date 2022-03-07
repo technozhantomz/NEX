@@ -24,5 +24,4 @@ const SignUpPage: NextPage = () => {
     </Layout>
   );
 };
-
 export default SignUpPage;
