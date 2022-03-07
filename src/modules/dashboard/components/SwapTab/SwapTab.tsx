@@ -14,7 +14,7 @@ export const SwapTab = (): JSX.Element => {
   return (
     <Styled.SwapContainer>
       <Styled.SwapForm>
-        <Form.Item
+        <Styled.SwapItem
         // name="from"
         // validateFirst={true}
         // rules={formValdation.amount}
@@ -23,11 +23,16 @@ export const SwapTab = (): JSX.Element => {
           <Input
             placeholder="0.00000"
             type="number"
-            prefix={<LogoSelectOption />}
+            prefix={
+              <Styled.SwapFormItem>
+                <LogoSelectOption
+                  defaultValue="BTC"
+                  onChange={handleAssetChange} />
+              </Styled.SwapFormItem>}
           />
-        </Form.Item>
-        <Form.Item
-        // name="amount"
+        </Styled.SwapItem>
+        <Styled.SwapItem
+        // name="from"
         // validateFirst={true}
         // rules={formValdation.amount}
         // validateTrigger="onBlur"
@@ -35,9 +40,14 @@ export const SwapTab = (): JSX.Element => {
           <Input
             placeholder="0.00000"
             type="number"
-            prefix={<LogoSelectOption/>}
+            prefix={
+              <Styled.SwapFormItem>
+                <LogoSelectOption
+                  defaultValue="BTC"
+                  onChange={handleAssetChange} />
+              </Styled.SwapFormItem>}
           />
-        </Form.Item>
+        </Styled.SwapItem>
 
         <Styled.InfoDiv>
           <Styled.InfoPara>
