@@ -10,7 +10,7 @@ export const SwapContainer = styled.div`
   width: 600px;
   // height: 354px;
   margin: 10px;
-  padding: 10px;
+  padding: 30px 10px 10px;
   text-align: center;
 `;
 

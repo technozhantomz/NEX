@@ -5,7 +5,6 @@ import React from "react";
 import { DashboardButton } from "../../../../../../common/components/DashboardButton/DashboardButton";
 import { LogoSelectOption } from "../../../../../../common/components/LogoSelectOption/LogoSelectOption";
 import PasswordModal from "../../../../../../common/components/PasswordModal/passwordModal";
-import BitcoinIcon from "../../icons/BitcoinIcon.svg";
 
 import * as Styled from "./GenerateKey.styled";
 import { useGenerateAddress } from "./hooks/useGenerateAddress";
@@ -18,12 +17,16 @@ export const GenerateKey = (): JSX.Element => {
     <>
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.DepositForm>
-          <LogoSelectOption
-            balance="1.0000"
-            token={<BitcoinIcon width="30px" height="30px" />}
-            amountCol={false}
-            onChange={handleAssetChange}
-          />
+          <Form.Item>
+            <Styled.Row>
+              <Styled.SelectOptionCol span={23}>
+                <LogoSelectOption
+                  defaultValue="BTC"
+                  onChange={handleAssetChange}
+                />
+              </Styled.SelectOptionCol>
+            </Styled.Row>
+          </Form.Item>
           <Styled.DepositForm.Item>
             <DashboardButton
               label="Log in & Generate Bitcoin Address"

@@ -1,7 +1,7 @@
 import { Form, Input } from "antd";
 
-import PasswordModal from "../../../../../../common/components/PasswordModal/passwordModal";
-import { useUserContext } from "../../../../../../common/components/UserProvider";
+import PasswordModal from "../PasswordModal/passwordModal";
+import { useUserContext } from "../UserProvider";
 
 import * as Styled from "./TransferForm.styled";
 import { useTransferForm } from "./hooks";
