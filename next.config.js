@@ -1,21 +1,18 @@
-/**
- * @format
- * @type {import('next').NextConfig}
- */
-
-const nextBundleAnalyzer = require('@next/bundle-analyzer');
-const withPlugins = require('next-compose-plugins');
-const withLess = require('next-with-less');
+// @ts-check
+/** @type {import('next').NextConfig} */
+const nextBundleAnalyzer = require("@next/bundle-analyzer");
+const withPlugins = require("next-compose-plugins");
+const withLess = require("next-with-less");
 
 const withBundleAnalyzer = nextBundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
+  enabled: process.env.ANALYZE === "true",
 });
 
 const plugins = [
   [
     withBundleAnalyzer,
     {
-      enabled: process.env.ANALYZE === 'true',
+      enabled: process.env.ANALYZE === "true",
     },
   ],
   [
@@ -32,13 +29,13 @@ const nextConfig = {
   webpack(config) {
     config.module.rules.push({
       test: /\.ya?ml$/,
-      type: 'json',
-      use: 'yaml-loader',
+      type: "json",
+      use: "yaml-loader",
     });
 
     config.module.rules.push({
       test: /\.svg$/,
-      use: '@svgr/webpack',
+      use: "@svgr/webpack",
     });
 
     return config;

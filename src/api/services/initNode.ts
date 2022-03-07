@@ -5,6 +5,8 @@ import { getPassedTime } from "../utils";
 export type InstanceType = {
   init_promise: Promise<unknown>;
   url: string;
+  _db: unknown;
+  _hist: unknown;
   setRpcConnectionStatusCallback: (
     callback: (status: string) => Promise<void>
   ) => void;
@@ -31,13 +33,15 @@ export const initNode = async (
     instance = Apis.instance(url, true, 1000);
   }
   instance.url = url;
-  return instance.init_promise
-    .then(() => ({
+
+  try {
+    await instance.init_promise;
+    return {
       instance,
       connectTime: getPassedTime(start),
-    }))
-    .catch((e: unknown) => {
-      console.error("--error", e);
-      return false;
-    });
+    };
+  } catch (e: unknown) {
+    console.error("--error", e);
+    return false;
+  }
 };
