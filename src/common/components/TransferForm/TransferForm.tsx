@@ -52,9 +52,9 @@ const TransferForm = ({ asset }: Props): JSX.Element => {
         </div>
         <div className="two-input-row">
           <Form.Item
-            name="quantity"
+            name="amount"
             validateFirst={true}
-            rules={formValdation.quantity}
+            rules={formValdation.amount}
             validateTrigger="onBlur"
           >
             <Input placeholder="Quantity" type="number" />

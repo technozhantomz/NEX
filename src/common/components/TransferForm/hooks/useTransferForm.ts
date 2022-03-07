@@ -1,11 +1,9 @@
 import { Form } from "antd";
-import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { FormFinishInfo } from "rc-field-form";
 import { useEffect, useState } from "react";
 
-import { useAccount, useFees, useTransactionBuilder } from "../../../hooks";
+import { useAccount, useFees, useTransfer } from "../../../hooks";
 import { TransactionFee } from "../../../hooks/useFees.types";
-import { Account } from "../../../types";
 import { useUserContext } from "../../UserProvider";
 
 import { TransferForm } from "./useTransferForm.types";
@@ -14,11 +12,8 @@ export function useTransferForm(): TransferForm {
   const [status, upStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [feeData, setFeeData] = useState<TransactionFee>();
-  const [toAccount, setToAccount] = useState<Account>();
-  const [fromAccount, setFromAccount] = useState<Account>();
-  const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
-    useAccount();
-  const { trxBuilder } = useTransactionBuilder();
+  const { getAccountByName, formAccountBalancesByName } = useAccount();
+  const { handleTransfer } = useTransfer();
   const { localStorageAccount, assets } = useUserContext();
   const { getFees, feeCalculator } = useFees();
   const [transferForm] = Form.useForm();
@@ -62,92 +57,12 @@ export function useTransferForm(): TransferForm {
 
   const sendTransfer = async (password: string) => {
     const values = transferForm.getFieldsValue();
-    const from = fromAccount
-      ? fromAccount
-      : await getAccountByName(values.from);
-    const to = toAccount ? toAccount : await getAccountByName(values.to);
-    const asset = assets.filter((asset) => asset.symbol === values.coin)[0];
-    let memoFromPublic, memoToPublic;
-    if (values.memo) {
-      memoFromPublic = from.options.memo_key;
-      memoToPublic = to.options.memo_key;
-    }
-    let memoFromPrivkey;
-    const activeKey = getPrivateKey(password, "active");
-    if (values.memo) {
-      if (from.options.memo_key === from.active.key_auths[0][0]) {
-        memoFromPrivkey = getPrivateKey(password, "active");
-      } else {
-        memoFromPrivkey = getPrivateKey(password, "memo");
-      }
-      if (!memoFromPrivkey) {
-        throw new Error("Missing private memo key for sender: " + from.name);
-      }
-    }
-    let memoObject;
-
-    if (values.memo && memoFromPublic && memoToPublic) {
-      if (
-        !/111111111111111111111/.test(memoFromPublic) &&
-        !/111111111111111111111/.test(memoToPublic)
-      ) {
-        const nonce = TransactionHelper.unique_nonce_uint64();
-        const message = Aes.encrypt_with_checksum(
-          memoFromPrivkey,
-          memoToPublic,
-          nonce,
-          values.memo
-        );
-        memoObject = {
-          from: memoFromPublic,
-          to: memoToPublic,
-          nonce,
-          message,
-        };
-      } else {
-        memoObject = {
-          from: memoFromPublic,
-          to: memoToPublic,
-          nonce: 0,
-          message: Buffer.isBuffer(values.memo)
-            ? values.memo
-            : Buffer.concat([
-                Buffer.alloc(4),
-                Buffer.from(values.memo.toString("utf-8"), "utf-8"),
-              ]),
-        };
-      }
-    }
-
-    const amount = {
-      amount: values.quantity * 10 ** Number(asset?.precision),
-      asset_id: asset?.id,
-    };
-
-    const trx = {
-      type: "transfer",
-      params: {
-        fee: {
-          amount: 0,
-          asset_id: asset?.id,
-        },
-        from: from.id,
-        to: to.id,
-        amount,
-        memo: memoObject,
-      },
-    };
-    let trxResult;
-    try {
-      trxResult = await trxBuilder([trx], [activeKey]);
-    } catch (e) {
-      console.log(e);
-    }
+    const trxResult = await handleTransfer(transferForm, password);
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
       setVisible(false);
       upStatus(
-        `Successfully Transfered ${values.quantity} ${values.coin} to ${values.to}`
+        `Successfully Transfered ${values.amount} ${values.coin} to ${values.to}`
       );
     }
   };
@@ -155,7 +70,6 @@ export function useTransferForm(): TransferForm {
   const validateFrom = async (_: unknown, value: string) => {
     if (value !== localStorageAccount)
       return Promise.reject(new Error("Not your Account"));
-    setFromAccount(await getAccountByName(value));
     return Promise.resolve();
   };
 
@@ -164,7 +78,6 @@ export function useTransferForm(): TransferForm {
     if (value === localStorageAccount)
       return Promise.reject(new Error("Can not send to yourself"));
     if (acc === undefined) return Promise.reject(new Error("User not found"));
-    setToAccount(acc);
     return Promise.resolve();
   };
 
@@ -182,7 +95,7 @@ export function useTransferForm(): TransferForm {
   const validateMemo = async (_: unknown, value: string) => {
     const coin = transferForm.getFieldValue("coin");
     const updatedFee = await feeCalculator.transfer(value);
-    const sendAmount = transferForm.getFieldValue("quantity");
+    const sendAmount = transferForm.getFieldValue("amount");
     const accountAsset = assets.find((asset) => asset.symbol === coin);
     setFeeData({ amount: updatedFee, asset_id: "1.3.0" });
     const total = Number(updatedFee) + Number(sendAmount);
@@ -200,7 +113,7 @@ export function useTransferForm(): TransferForm {
       { required: true, message: "To is required" },
       { validator: validateTo },
     ],
-    quantity: [
+    amount: [
       { required: true, message: "Quantity is required" },
       { validator: validateQuantity },
     ],
