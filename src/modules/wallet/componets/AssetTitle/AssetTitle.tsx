@@ -6,7 +6,7 @@ type Props = {
   symbol: string;
 };
 
-const AssetTitle = ({ symbol }: Props): JSX.Element => {
+export const AssetTitle = ({ symbol }: Props): JSX.Element => {
   const icons: {
     [symbol: string]: JSX.Element;
   } = {
@@ -35,5 +35,3 @@ const AssetTitle = ({ symbol }: Props): JSX.Element => {
     />
   );
 };
-
-export default AssetTitle;

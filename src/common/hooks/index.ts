@@ -7,3 +7,4 @@ export * from "./useRoundNum";
 export * from "./fees/useFees";
 export * from "./useTransactionBuilder";
 export * from "./useFormKeys";
+export * from "./useMarketPairStats";

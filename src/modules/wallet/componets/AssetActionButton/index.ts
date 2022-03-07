@@ -1,1 +1,1 @@
-export { default } from "./AssetActionButton";
+export * from "./AssetActionButton";

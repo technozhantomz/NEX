@@ -7,12 +7,10 @@ type Props = {
   href: string;
 };
 
-const AssetActionButton = ({ txt, href }: Props): JSX.Element => {
+export const AssetActionButton = ({ txt, href }: Props): JSX.Element => {
   return (
     <Styled.AssetActionButton type="text">
       <Link href={href}>{txt}</Link>
     </Styled.AssetActionButton>
   );
 };
-
-export default AssetActionButton;
