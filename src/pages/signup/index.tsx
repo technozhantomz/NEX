@@ -1,1 +1,1 @@
-export { default } from "../../modules/signup";
+export { default } from "../../modules/Signup";
