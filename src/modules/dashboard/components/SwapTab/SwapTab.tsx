@@ -6,8 +6,11 @@ import { DashboardButton } from "../../../../common/components/DashboardButton/D
 import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
 
 import * as Styled from "./SwapTab.styled";
+import { useSwap } from "./hooks/useSwapTab";
 
 export const SwapTab = (): JSX.Element => {
+  const { visible, onCancel, onFormFinish, confirm, handleAssetChange } =
+    useSwap();
   return (
     <Styled.SwapContainer>
       <Styled.SwapForm>
