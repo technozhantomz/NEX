@@ -2,6 +2,7 @@ import { Form } from "antd";
 import { FormFinishInfo } from "rc-field-form";
 import { useEffect, useState } from "react";
 
+import { defaultToken } from "../../../../api/params/networkparams";
 import { useAccount, useFees, useTransfer } from "../../../hooks";
 import { TransactionFee } from "../../../hooks/useFees.types";
 import { useUserContext } from "../../UserProvider";
@@ -11,7 +12,10 @@ import { TransferForm } from "./useTransferForm.types";
 export function useTransferForm(): TransferForm {
   const [status, upStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
-  const [feeData, setFeeData] = useState<TransactionFee>();
+  const [feeData, setFeeData] = useState<TransactionFee>({
+    amount: 0,
+    asset_id: "1.3.0",
+  });
   const { getAccountByName, formAccountBalancesByName } = useAccount();
   const { handleTransfer } = useTransfer();
   const { localStorageAccount, assets } = useUserContext();
@@ -84,24 +88,33 @@ export function useTransferForm(): TransferForm {
   const validateQuantity = async (_: unknown, value: number) => {
     const coin = transferForm.getFieldValue("coin");
     const accountAsset = assets.find((asset) => asset.symbol === coin);
-    const total = Number(value) + Number(feeData?.amount);
-    if (accountAsset !== undefined && accountAsset.amount > total)
-      return Promise.resolve();
+    if (canPayFee(value, feeData?.amount)) return Promise.resolve();
     return Promise.reject(
       new Error(`Must be less then ${accountAsset ? accountAsset.amount : ""}`)
     );
   };
 
   const validateMemo = async (_: unknown, value: string) => {
-    const coin = transferForm.getFieldValue("coin");
     const updatedFee = await feeCalculator.transfer(value);
     const sendAmount = transferForm.getFieldValue("amount");
-    const accountAsset = assets.find((asset) => asset.symbol === coin);
     setFeeData({ amount: updatedFee, asset_id: "1.3.0" });
-    const total = Number(updatedFee) + Number(sendAmount);
-    if (accountAsset !== undefined && accountAsset.amount > total)
-      return Promise.resolve();
+    if (canPayFee(sendAmount, updatedFee)) return Promise.resolve();
     return Promise.reject(new Error(`Insufficient Funds`));
+  };
+
+  const canPayFee = (
+    amount: number,
+    feeAmount: number
+  ): boolean | undefined => {
+    const coin = transferForm.getFieldValue("coin");
+    const sendAsset = assets.find((asset) => asset.symbol === coin);
+    const feeAsset = assets.find((asset) => asset.symbol === defaultToken);
+    if (feeAsset?.amount !== undefined && sendAsset?.amount !== undefined) {
+      if (coin === defaultToken) {
+        return amount + feeAmount > sendAsset?.amount;
+      }
+      return feeAsset.amount > feeAmount;
+    }
   };
 
   const formValdation = {

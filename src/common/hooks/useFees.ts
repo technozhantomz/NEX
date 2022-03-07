@@ -1,6 +1,7 @@
 import { ChainTypes, TransactionHelper } from "peerplaysjs-lib";
 import { useEffect } from "react";
 
+import { defaultToken } from "../../api/params/networkparams";
 import { usePeerplaysApiContext } from "../components/PeerplaysApiProvider";
 import { useUserContext } from "../components/UserProvider";
 
@@ -14,7 +15,7 @@ export function useFees(): UseFees {
   const [jsonFees, setJsonFees] = useLocalStorage("fees");
   const { localStorageAccount } = useUserContext();
   const { getAccountByName } = useAccount();
-  const { getAssetById, setAssets } = useAsset();
+  const { getAssetBySymbol, setAssets } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
   const operationsNames = Object.keys(ChainTypes.operations);
 
@@ -25,7 +26,7 @@ export function useFees(): UseFees {
   const getFees = async () => {
     if (jsonFees) return jsonFees;
     let operations: Fee[];
-    const feeAsset = await getAssetById("1.3.0");
+    const feeAsset = await getAssetBySymbol(defaultToken);
     const globalProps = await dbApi("get_global_properties").then(
       (e: { [x: string]: { [x: string]: { [x: string]: unknown } } }) =>
         e["parameters"]["current_fees"]["parameters"]

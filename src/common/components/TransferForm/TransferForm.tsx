@@ -1,5 +1,6 @@
 import { Form, Input } from "antd";
 
+import { defaultToken } from "../../../api/params/networkparams";
 import PasswordModal from "../PasswordModal/passwordModal";
 import { useUserContext } from "../UserProvider";
 
@@ -79,7 +80,7 @@ const TransferForm = ({ asset }: Props): JSX.Element => {
           <Input placeholder="Memo" />
         </Form.Item>
         <p>
-          Fees: {feeData ? feeData.amount : 0} {asset}
+          Fees: {feeData ? feeData.amount : 0} {defaultToken}
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>

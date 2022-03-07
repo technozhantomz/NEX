@@ -28,7 +28,6 @@ export function useSidechainAccounts(): UseSidechainAccounts {
     if (acccounts) {
       setHasBTCDepositAddress(true);
     }
-    setSidechainAcccounts(acccounts);
     return acccounts;
   }, []);
 
