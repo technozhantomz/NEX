@@ -49,6 +49,7 @@ const WithdrawForm = (props: Props): JSX.Element => {
                     <LogoSelectOption
                       defaultValue="BTC"
                       onChange={handleAssetChange}
+                      forWithraw={true}
                     />
                   </Styled.WithdrawFormAsset>
                 }

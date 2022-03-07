@@ -13,7 +13,7 @@ export type WithdrawForm = {
   onFormFinish: (name: string, info: FormFinishInfo) => void;
   onCancel: () => void;
   confirm: () => void;
-  handleAssetChange: (value: string) => void;
+  handleAssetChange: (value: unknown) => void;
 };
 
 export type FormField = {

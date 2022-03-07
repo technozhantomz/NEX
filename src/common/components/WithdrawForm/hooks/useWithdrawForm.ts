@@ -48,7 +48,7 @@ export function useWithdrawForm(): WithdrawForm {
     });
   };
 
-  const handleAssetChange = (value: string) => {
+  const handleAssetChange = (value: unknown) => {
     withdrawForm.setFieldsValue({ asset: value });
     console.log(withdrawForm.getFieldsValue());
   };
