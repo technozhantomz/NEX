@@ -1,10 +1,10 @@
 import React from "react";
 
+import { GenerateKey } from "../../../../common/components/GenerateKey";
+import { KeyIsGenerated } from "../../../../common/components/KeyIsGenerated";
 import { useSidechainAccounts } from "../../../../common/hooks";
 
 import * as Styled from "./DepositTab.styled";
-import { GenerateKey } from "./components/GenerateKey/GenerateKey";
-import { KeyIsGenerated } from "./components/KeyIsGenerated/KeyIsGenerated";
 
 export const DepositTab = (): JSX.Element => {
   const { hasBTCDepositAddress } = useSidechainAccounts();

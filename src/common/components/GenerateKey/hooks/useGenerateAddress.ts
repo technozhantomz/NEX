@@ -5,12 +5,12 @@ import { FormFinishInfo } from "rc-field-form";
 import { useCallback, useState } from "react";
 import * as ecc from "tiny-secp256k1";
 
-import { useUserContext } from "../../../../../../../common/components/UserProvider";
+import { useUserContext } from "../../UserProvider";
 import {
   useAccount,
   useSidechainAccounts,
-} from "../../../../../../../common/hooks";
-import { useTransactionBuilder } from "../../../../../../../common/hooks/useTransactionBuilder";
+} from "../../../hooks";
+import { useTransactionBuilder } from "../../../hooks/useTransactionBuilder";
 
 import { GenerateAddress } from "./useAddress.types";
 

@@ -1,4 +1,4 @@
-import { Input as KeyInput, styled } from "../../../../../../ui/src";
+import { Input as KeyInput, styled } from "../../../ui/src";
 
 export const DepositHeader = styled.p`
   margin-left: 10px;

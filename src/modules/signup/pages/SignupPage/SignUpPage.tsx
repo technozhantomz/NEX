@@ -2,8 +2,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 
-import { FormDisclamer } from "../../../../common/components/FormDisclamer";
-import { Layout } from "../../../../common/components/PageLayout";
+import { FormDisclamer, Layout } from "../../../../common/components";
 import { Card } from "../../../../ui/src";
 import { SignUpForm } from "../../components/SignUpForm";
 

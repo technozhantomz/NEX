@@ -1,7 +1,7 @@
 import { Form, Input } from "antd";
 
 import { defaultToken } from "../../../api/params/networkparams";
-import PasswordModal from "../PasswordModal/passwordModal";
+import { PasswordModal } from "../PasswordModal";
 import { useUserContext } from "../UserProvider";
 
 import * as Styled from "./TransferForm.styled";
@@ -11,7 +11,7 @@ type Props = {
   asset: string;
 };
 
-const TransferForm = ({ asset }: Props): JSX.Element => {
+export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
@@ -93,5 +93,3 @@ const TransferForm = ({ asset }: Props): JSX.Element => {
     </Form.Provider>
   );
 };
-
-export default TransferForm;

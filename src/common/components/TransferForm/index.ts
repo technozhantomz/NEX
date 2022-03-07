@@ -1,1 +1,1 @@
-export { default } from "./TransferForm";
+export * from "./TransferForm";

@@ -2,9 +2,10 @@ import { Form } from "antd";
 import Link from "next/link";
 import React from "react";
 
-import { DashboardButton } from "../../../../../../common/components/DashboardButton/DashboardButton";
-import { LogoSelectOption } from "../../../../../../common/components/LogoSelectOption/LogoSelectOption";
-import PasswordModal from "../../../../../../common/components/PasswordModal/passwordModal";
+import { DashboardButton } from "../DashboardButton/DashboardButton";
+import { FormDisclamer } from "../FormDisclamer";
+import { LogoSelectOption } from "../LogoSelectOption/LogoSelectOption";
+import { PasswordModal } from "../PasswordModal";
 
 import * as Styled from "./GenerateKey.styled";
 import { useGenerateAddress } from "./hooks/useGenerateAddress";
@@ -32,18 +33,14 @@ export const GenerateKey = (): JSX.Element => {
               label="Log in & Generate Bitcoin Address"
               onClick={confirm}
             />
-            <Styled.DepositFormFooter>
-              <Styled.DepositFormFooterSpan>
-                Don't have a Peerplays account?{" "}
-              </Styled.DepositFormFooterSpan>
-              <Link href="/signup" passHref={true}>
-                <Styled.DepositFormFooterA>
-                  Create account
-                </Styled.DepositFormFooterA>
-              </Link>
-            </Styled.DepositFormFooter>
           </Styled.DepositForm.Item>
         </Styled.DepositForm>
+        <FormDisclamer>
+          <span>Don't have a Peerplays account? </span>
+          <Link href="/signup">
+            <a>Create account</a>
+          </Link>
+        </FormDisclamer>
         <PasswordModal visible={visible} onCancel={onCancel} />
       </Form.Provider>
     </>
