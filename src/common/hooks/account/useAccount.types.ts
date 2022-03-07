@@ -1,4 +1,4 @@
-import { FullAccount } from "../../types/Account";
+import { FullAccount } from "../../types";
 
 export type UseAccountResult = {
   formAccountByName: (name: string, subscription: boolean) => Promise<void>;

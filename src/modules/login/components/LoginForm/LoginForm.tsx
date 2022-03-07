@@ -1,6 +1,7 @@
-import { CheckOutlined } from "@ant-design/icons";
 import { Form, Input } from "antd";
 import React from "react";
+
+import { CheckOutlined } from "../../../../ui/src";
 
 import * as Styled from "./LoginForm.styled";
 import { useLoginForm } from "./hooks";
