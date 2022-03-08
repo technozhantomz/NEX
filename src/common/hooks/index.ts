@@ -6,3 +6,4 @@ export * from "./useRoundNum";
 export * from "./useFees";
 export * from "./useTransactionBuilder";
 export * from "./useFormKeys";
+export * from "./useTransfer";

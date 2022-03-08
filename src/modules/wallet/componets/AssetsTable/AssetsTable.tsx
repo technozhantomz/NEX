@@ -1,6 +1,7 @@
 import { List } from "antd";
 import { ColumnsType } from "antd/es/table";
 
+import { defaultToken } from "../../../../api/params/networkparams";
 import { useViewportContext } from "../../../../common/components/ViewportProvider";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import AssetActionButton from "../AssetActionButton";
@@ -58,7 +59,7 @@ const columns: ColumnsType<IAssetData> = [
     key: "withdraw",
     render: (value, record) => (
       <>
-        {record.asset === "TEST" || record.asset === "PPY" ? (
+        {record.asset === defaultToken ? (
           ""
         ) : (
           <AssetActionButton
@@ -75,7 +76,7 @@ const columns: ColumnsType<IAssetData> = [
     key: "deposit",
     render: (value, record) => (
       <>
-        {record.asset === "TEST" || record.asset === "PPY" ? (
+        {record.asset === defaultToken ? (
           ""
         ) : (
           <AssetActionButton
@@ -135,7 +136,7 @@ export const AssetsTable = ({
                         href={`/wallet/${item.asset}?tab=transfer`}
                       />,
                       <>
-                        {item.asset === "TEST" || item.asset === "PPY" ? (
+                        {item.asset === defaultToken ? (
                           ""
                         ) : (
                           <AssetActionButton
@@ -145,7 +146,7 @@ export const AssetsTable = ({
                         )}
                       </>,
                       <>
-                        {item.asset === "TEST" || item.asset === "PPY" ? (
+                        {item.asset === defaultToken ? (
                           ""
                         ) : (
                           <AssetActionButton

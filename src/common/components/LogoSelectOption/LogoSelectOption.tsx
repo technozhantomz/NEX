@@ -18,16 +18,12 @@ type LogoSelectionProps = {
     | undefined;
   labelInValue?: boolean;
   defaultValue?: string;
+  forWithraw?: boolean;
 };
 
 export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
   return (
     <Styled.SelectContainer {...props} bordered={false}>
-      <Styled.SelectOptionContainer value="0">
-        <Styled.OptionsDiv>
-          <Styled.IconDiv>Select Token</Styled.IconDiv>
-        </Styled.OptionsDiv>
-      </Styled.SelectOptionContainer>
       <Styled.SelectOptionContainer value="BTC">
         <Styled.OptionsDiv>
           <Styled.IconDiv>
@@ -36,14 +32,18 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
           <Styled.NamePara>BTC</Styled.NamePara>
         </Styled.OptionsDiv>
       </Styled.SelectOptionContainer>
-      <Styled.SelectOptionContainer value="PPY">
-        <Styled.OptionsDiv>
-          <Styled.IconDiv>
-            <PPYIcon width="30px" height="30px" />
-          </Styled.IconDiv>
-          <Styled.NamePara>PPY</Styled.NamePara>
-        </Styled.OptionsDiv>
-      </Styled.SelectOptionContainer>
+      {!props.forWithraw ? (
+        <Styled.SelectOptionContainer value="PPY">
+          <Styled.OptionsDiv>
+            <Styled.IconDiv>
+              <PPYIcon width="30px" height="30px" />
+            </Styled.IconDiv>
+            <Styled.NamePara>PPY</Styled.NamePara>
+          </Styled.OptionsDiv>
+        </Styled.SelectOptionContainer>
+      ) : (
+        ""
+      )}
     </Styled.SelectContainer>
   );
 };

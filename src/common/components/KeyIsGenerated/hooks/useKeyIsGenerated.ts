@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../../../../../../../common/components/UserProvider";
+import { useUserContext } from "../../UserProvider";
 
 import { KeyIsGenerated } from "./useKeyIsGenerated.types";
 

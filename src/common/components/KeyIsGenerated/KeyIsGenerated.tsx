@@ -1,11 +1,10 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 
-import { CopyIcon } from "../../../../../../ui/src/icons";
-import BitcoinIcon from "../../../../../../ui/src/icons/BitcoinIcon.svg";
+import { CopyIcon } from "../../../ui/src/icons";
+import BitcoinIcon from "../../../ui/src/icons/BitcoinIcon.svg";
 
 import * as Styled from "./KeyIsGenerated.styled";
-import { useCopyKey } from "./hooks";
-import { useKeyIsGenerated } from "./hooks/useKeyIsGenerated";
+import { useCopyKey, useKeyIsGenerated } from "./hooks";
 
 export const KeyIsGenerated = (): JSX.Element => {
   const { depositAddress } = useKeyIsGenerated();

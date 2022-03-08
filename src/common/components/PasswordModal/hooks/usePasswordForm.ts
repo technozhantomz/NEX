@@ -2,23 +2,12 @@ import { Form, FormInstance } from "antd";
 import { Login, PrivateKey } from "peerplaysjs-lib";
 import { useEffect, useRef } from "react";
 
-import { defaultToken } from "../../../api/params/networkparams";
-import { useAccount } from "../../hooks";
-import { Account } from "../../types";
-import { useUserContext } from "../UserProvider";
+import { defaultToken } from "../../../../api/params/networkparams";
+import { useAccount } from "../../../hooks";
+import { Account } from "../../../types";
+import { useUserContext } from "../../UserProvider";
 
-export type IUsePasswordForm = {
-  validatePassword: (_: unknown, value: string) => Promise<void>;
-  useResetFormOnCloseModal: (
-    form: FormInstance<IPasswordForm>,
-    visible: boolean
-  ) => void;
-  passwordModalForm: FormInstance<IPasswordForm>;
-};
-
-export type IPasswordForm = {
-  password: string;
-};
+import { IPasswordForm, IUsePasswordForm } from "./usePasswordForm.types";
 
 export function usePasswordForm(): IUsePasswordForm {
   const { localStorageAccount } = useUserContext();

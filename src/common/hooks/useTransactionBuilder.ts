@@ -1,7 +1,7 @@
 import { TransactionBuilder } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
-import { ITransactionBuilder } from "./useTransactionBuilder.type";
+import { ITransactionBuilder } from "./useTransactionBuilder.types";
 
 export function useTransactionBuilder(): ITransactionBuilder {
   const trxBuilder = useCallback(async (trx, keys) => {

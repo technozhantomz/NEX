@@ -12,6 +12,7 @@ export const WithdrawFormAssetAmount = styled(CardFrom.Item)`
     }
     .ant-input {
       text-align: right;
+      padding-right: 30px;
     }
   }
 `;
@@ -19,7 +20,7 @@ export const WithdrawFormAsset = styled(CardFrom.Item)`
    {
     width: 100%;
     margin-bottom: 0;
-    .ant-form-item-has-error
+    &.ant-form-item-has-error
       .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
       .ant-select-selector {
       border-color: none !important;

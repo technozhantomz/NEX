@@ -24,7 +24,7 @@ export type FormField = {
 export type FormValidation = {
   from: Rule[];
   to: Rule[];
-  quantity: Rule[];
+  amount: Rule[];
   coin: Rule[];
   memo: Rule[];
 };
@@ -32,7 +32,7 @@ export type FormValidation = {
 export type TransferFormData = {
   form: string;
   to: string;
-  quantity: number;
+  amount: number;
   coin: string;
   memo: string;
 };

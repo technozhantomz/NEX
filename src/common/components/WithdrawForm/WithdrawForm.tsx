@@ -1,7 +1,7 @@
 import { Form, Input } from "antd";
 
 import { LogoSelectOption } from "../LogoSelectOption/LogoSelectOption";
-import PasswordModal from "../PasswordModal/passwordModal";
+import { PasswordModal } from "../PasswordModal";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -11,7 +11,7 @@ type Props = {
   withAssetSelector: boolean;
 };
 
-const WithdrawForm = (props: Props): JSX.Element => {
+export const WithdrawForm = (props: Props): JSX.Element => {
   const {
     status,
     loggedIn,
@@ -49,6 +49,7 @@ const WithdrawForm = (props: Props): JSX.Element => {
                     <LogoSelectOption
                       defaultValue="BTC"
                       onChange={handleAssetChange}
+                      forWithraw={true}
                     />
                   </Styled.WithdrawFormAsset>
                 }
@@ -87,5 +88,3 @@ const WithdrawForm = (props: Props): JSX.Element => {
     </Form.Provider>
   );
 };
-
-export default WithdrawForm;

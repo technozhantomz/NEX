@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 
-import { Layout } from "../../../../common/components/PageLayout";
+import { Layout } from "../../../../common/components";
 import { AssetsTable } from "../../componets/AssetsTable";
 
 import * as Styled from "./WalletPage.styled";

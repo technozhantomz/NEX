@@ -1,6 +1,7 @@
 import { Form, Input } from "antd";
 
-import PasswordModal from "../PasswordModal/passwordModal";
+import { defaultToken } from "../../../api/params/networkparams";
+import { PasswordModal } from "../PasswordModal";
 import { useUserContext } from "../UserProvider";
 
 import * as Styled from "./TransferForm.styled";
@@ -10,7 +11,7 @@ type Props = {
   asset: string;
 };
 
-const TransferForm = ({ asset }: Props): JSX.Element => {
+export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
@@ -52,9 +53,9 @@ const TransferForm = ({ asset }: Props): JSX.Element => {
         </div>
         <div className="two-input-row">
           <Form.Item
-            name="quantity"
+            name="amount"
             validateFirst={true}
-            rules={formValdation.quantity}
+            rules={formValdation.amount}
             validateTrigger="onBlur"
           >
             <Input placeholder="Quantity" type="number" />
@@ -79,7 +80,7 @@ const TransferForm = ({ asset }: Props): JSX.Element => {
           <Input placeholder="Memo" />
         </Form.Item>
         <p>
-          Fees: {feeData ? feeData.amount : 0} {asset}
+          Fees: {feeData ? feeData.amount : 0} {defaultToken}
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
@@ -92,5 +93,3 @@ const TransferForm = ({ asset }: Props): JSX.Element => {
     </Form.Provider>
   );
 };
-
-export default TransferForm;
