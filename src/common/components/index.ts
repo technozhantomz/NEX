@@ -1,4 +1,3 @@
-export * from "./DashboardButton";
 export * from "./FormDisclamer";
 export * from "./GenerateAddress";
 export * from "./AddressGenerated";
