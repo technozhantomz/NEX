@@ -7,6 +7,7 @@ import {
 } from "./useCreateLimitOrder.types";
 
 export function useCreateLimitOrder({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isBuyOrder,
 }: UseCreateLimitOrderArgs): UseCreateLimitOrderResult {
   const [form] = Form.useForm();
