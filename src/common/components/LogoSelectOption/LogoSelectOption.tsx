@@ -17,6 +17,7 @@ type LogoSelectionProps = {
           | (DefaultOptionType | BaseOptionType)[]
       ) => void)
     | undefined;
+  labelInValue?: boolean;
   defaultValue?: string;
   hideDefultToken?: boolean;
 };

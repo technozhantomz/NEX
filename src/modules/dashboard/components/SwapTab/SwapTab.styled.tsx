@@ -57,3 +57,28 @@ export const HistoryLink = styled.a`
   color: #0a48be;
   opacity: 1;
 `;
+
+export const SwapFormItem = styled(swapForm.Item)`
+   {
+    width: 100%;
+    margin-bottom: 0;
+    .ant-form-item-has-error
+      .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
+      .ant-select-selector {
+      border-color: none !important;
+    }
+  }
+`;
+
+export const SwapItem = styled(swapForm.Item)`
+  .ant-input-affix-wrapper {
+    padding: 0;
+    .ant-input-prefix {
+      min-width: 135px;
+      width: 33%;
+    }
+    .ant-input {
+      text-align: right;
+    }
+  }
+`;
