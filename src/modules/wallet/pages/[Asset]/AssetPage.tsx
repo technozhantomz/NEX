@@ -48,7 +48,11 @@ const AssetPage: NextPage = () => {
               </TabPane>
               <TabPane tab="Deposit" key="deposit">
                 <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-                {hasBTCDepositAddress ? <KeyIsGenerated /> : <GenerateKey />}
+                {hasBTCDepositAddress ? (
+                  <KeyIsGenerated />
+                ) : (
+                  <GenerateKey hideDisclamer={true} />
+                )}
               </TabPane>
             </>
           )}

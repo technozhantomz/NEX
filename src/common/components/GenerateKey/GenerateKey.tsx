@@ -10,7 +10,11 @@ import { PasswordModal } from "../PasswordModal";
 import * as Styled from "./GenerateKey.styled";
 import { useGenerateAddress } from "./hooks/useGenerateAddress";
 
-export const GenerateKey = (): JSX.Element => {
+type Props = {
+  hideDisclamer?: boolean;
+};
+
+export const GenerateKey = ({ hideDisclamer = false }: Props): JSX.Element => {
   const { visible, onCancel, onFormFinish, confirm, handleAssetChange } =
     useGenerateAddress();
 
@@ -35,12 +39,16 @@ export const GenerateKey = (): JSX.Element => {
             />
           </Styled.DepositForm.Item>
         </Styled.DepositForm>
-        <FormDisclamer>
-          <span>Don't have a Peerplays account? </span>
-          <Link href="/signup">
-            <a>Create account</a>
-          </Link>
-        </FormDisclamer>
+        {hideDisclamer ? (
+          ""
+        ) : (
+          <FormDisclamer>
+            <span>Don't have a Peerplays account? </span>
+            <Link href="/signup">
+              <a>Create account</a>
+            </Link>
+          </FormDisclamer>
+        )}
         <PasswordModal visible={visible} onCancel={onCancel} />
       </Form.Provider>
     </>
