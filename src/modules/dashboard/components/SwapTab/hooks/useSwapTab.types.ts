@@ -8,12 +8,20 @@ export type Swap = {
   onCancel: () => void;
   confirm: () => void;
   swapForm: FormInstance<SwapFormData>;
-  handleAssetChange: (value: string) => void;
+  handleAssetChange:
+    | ((
+        value: unknown,
+        option:
+          | DefaultOptionType
+          | BaseOptionType
+          | (DefaultOptionType | BaseOptionType)[]
+      ) => void)
+    | undefined;
 };
 
 export type SwapFormData = {
-  amount_to_sell: number;
-  amount_to_receive: number;
-  asset_to_sell: string;
+  sellAmount: number;
+  buyAmount: number;
+  sellAsset: string;
   buyAsset: string;
 };
