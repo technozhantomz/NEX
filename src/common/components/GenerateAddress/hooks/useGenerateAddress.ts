@@ -5,12 +5,9 @@ import { FormFinishInfo } from "rc-field-form";
 import { useCallback, useState } from "react";
 import * as ecc from "tiny-secp256k1";
 
-import { useUserContext } from "../../UserProvider";
-import {
-  useAccount,
-  useSidechainAccounts,
-} from "../../../hooks";
+import { useAccount, useSidechainAccounts } from "../../../hooks";
 import { useTransactionBuilder } from "../../../hooks/useTransactionBuilder";
+import { useUserContext } from "../../UserProvider";
 
 import { GenerateAddress } from "./useAddress.types";
 
@@ -27,7 +24,7 @@ export function useGenerateAddress(): GenerateAddress {
       .join("");
   };
 
-  const handleAssetChange = (
+  const defaultHandleAssetChange = (
     value: unknown,
     option:
       | DefaultOptionType
@@ -101,5 +98,5 @@ export function useGenerateAddress(): GenerateAddress {
     }
   }, []);
 
-  return { visible, onCancel, onFormFinish, confirm, handleAssetChange };
+  return { visible, onCancel, onFormFinish, confirm, defaultHandleAssetChange };
 }

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 import { useUserContext } from "../../UserProvider";
 
-import { KeyIsGenerated } from "./useKeyIsGenerated.types";
+import { AddressGenerated } from "./useAddressGenerated.types";
 
-export function useKeyIsGenerated(): KeyIsGenerated {
+export function useAddressGenerated(): AddressGenerated {
   const [depositAddress, setDepositAddress] = useState<string>("");
   const { sidechainAcccounts } = useUserContext();
 
@@ -16,5 +16,10 @@ export function useKeyIsGenerated(): KeyIsGenerated {
       setDepositAddress(bitcoinAccount ? bitcoinAccount.deposit_address : "");
     }
   }, [sidechainAcccounts]);
-  return { depositAddress };
+
+  const useCopyAddress = (value: string): void => {
+    navigator.clipboard.writeText(value);
+  };
+
+  return { depositAddress, useCopyAddress };
 }

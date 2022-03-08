@@ -1,0 +1,1 @@
+export { useAddressGenerated } from "./useAddressGenerated";

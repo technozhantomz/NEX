@@ -1,7 +1,9 @@
 import React from "react";
 
-import { GenerateKey } from "../../../../common/components/GenerateKey";
-import { KeyIsGenerated } from "../../../../common/components/KeyIsGenerated";
+import {
+  AddressGenerated,
+  GenerateAddress,
+} from "../../../../common/components";
 import { useSidechainAccounts } from "../../../../common/hooks";
 
 import * as Styled from "./DepositTab.styled";
@@ -11,7 +13,7 @@ export const DepositTab = (): JSX.Element => {
 
   return (
     <Styled.DepositFormContainer>
-      {hasBTCDepositAddress ? <KeyIsGenerated /> : <GenerateKey />}
+      {hasBTCDepositAddress ? <AddressGenerated /> : <GenerateAddress />}
     </Styled.DepositFormContainer>
   );
 };

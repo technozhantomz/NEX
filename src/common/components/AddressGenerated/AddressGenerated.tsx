@@ -3,11 +3,12 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { CopyIcon } from "../../../ui/src/icons";
 import BitcoinIcon from "../../../ui/src/icons/BitcoinIcon.svg";
 
-import * as Styled from "./KeyIsGenerated.styled";
-import { useCopyKey, useKeyIsGenerated } from "./hooks";
+import * as Styled from "./AddressGenerated.styled";
+import { useAddressGenerated } from "./hooks";
 
-export const KeyIsGenerated = (): JSX.Element => {
-  const { depositAddress } = useKeyIsGenerated();
+
+export const AddressGenerated = (): JSX.Element => {
+  const { depositAddress, useCopyAddress } = useAddressGenerated();
 
   return (
     <>
@@ -17,7 +18,7 @@ export const KeyIsGenerated = (): JSX.Element => {
       </Styled.KeyContainer>
       <Styled.GeneratedBitcoinKey
         size="small"
-        suffix={<CopyIcon onClick={() => useCopyKey(depositAddress)} />}
+        suffix={<CopyIcon onClick={() => useCopyAddress(depositAddress)} />}
         value={depositAddress}
         disabled
       />

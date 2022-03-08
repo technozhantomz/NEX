@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import {
-  GenerateKey,
-  KeyIsGenerated,
+  AddressGenerated,
+  GenerateAddress,
   Layout,
   TransferForm,
   WithdrawForm,
@@ -14,10 +14,12 @@ import { useSidechainAccounts } from "../../../../common/hooks";
 import { AssetsTable } from "../../componets/AssetsTable";
 
 import * as Styled from "./AssetPage.styled";
+import { useAssetPage } from "./hooks";
 
 const { TabPane } = Tabs;
 
 const AssetPage: NextPage = () => {
+  const { handleAssetChange } = useAssetPage();
   const { hasBTCDepositAddress } = useSidechainAccounts();
   const router = useRouter();
   const { asset, tab } = router.query;
@@ -49,9 +51,13 @@ const AssetPage: NextPage = () => {
               <TabPane tab="Deposit" key="deposit">
                 <AssetsTable showActions={false} fillterAsset={`${asset}`} />
                 {hasBTCDepositAddress ? (
-                  <KeyIsGenerated />
+                  <AddressGenerated />
                 ) : (
-                  <GenerateKey hideDisclamer={true} />
+                  <GenerateAddress
+                    hideDisclamer={true}
+                    onAssetChange={handleAssetChange}
+                    hideDefultToken={true}
+                  />
                 )}
               </TabPane>
             </>
