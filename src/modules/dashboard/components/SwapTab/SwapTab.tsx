@@ -18,8 +18,8 @@ export const SwapTab = (): JSX.Element => {
     swapForm,
   } = useSwap();
   return (
-    <Styled.SwapForm.Provider onFormFinish={onFormFinish}>
-      <Styled.SwapContainer>
+    <Styled.SwapContainer>
+      <Styled.SwapForm.Provider onFormFinish={onFormFinish}>
         <Styled.SwapForm form={swapForm} name="swapForm" onFinish={confirm}>
           <Styled.SwapItem>
             <Input
@@ -70,7 +70,7 @@ export const SwapTab = (): JSX.Element => {
             Fees : 0.01121 PPY
           </Styled.FooterPara>
         </Styled.SwapForm>
-      </Styled.SwapContainer>
-    </Styled.SwapForm.Provider>
+      </Styled.SwapForm.Provider>
+    </Styled.SwapContainer>
   );
 };
