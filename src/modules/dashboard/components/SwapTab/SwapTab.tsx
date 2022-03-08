@@ -2,8 +2,10 @@
 import { Form, Input } from "antd";
 
 // import { DashboardButton } from "../../../../common/components/DashboardButton/DashboardButton";
+
+import { defaultToken } from "../../../../api/params/networkparams";
+import { PasswordModal } from "../../../../common/components";
 import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
-import PasswordModal from "../../../../common/components/PasswordModal/passwordModal";
 import { CardFormButton } from "../../../../ui/src";
 
 import * as Styled from "./SwapTab.styled";
@@ -17,17 +19,29 @@ export const SwapTab = (): JSX.Element => {
     confirm,
     handleAssetChange,
     swapForm,
+    formValdation,
+    feeData,
   } = useSwap();
   return (
     <Styled.SwapContainer>
       <Styled.SwapForm.Provider onFormFinish={onFormFinish}>
         <Styled.SwapForm form={swapForm} name="swapForm" onFinish={confirm}>
-          <Styled.SwapItem name="sellAmount">
+          <Styled.SwapItem
+            name="sellAmount"
+            rules={formValdation.sellAmount}
+            validateFirst={true}
+            validateTrigger="onBlur"
+          >
             <Input
               placeholder="0.00000"
               type="number"
               prefix={
-                <Styled.SwapFormItem name="sellAsset">
+                <Styled.SwapFormItem
+                  name="sellAsset"
+                  rules={formValdation.sellAsset}
+                  validateFirst={true}
+                  validateTrigger="onBlur"
+                >
                   <LogoSelectOption
                     labelInValue
                     defaultValue="BTC"
@@ -37,12 +51,22 @@ export const SwapTab = (): JSX.Element => {
               }
             />
           </Styled.SwapItem>
-          <Styled.SwapItem name="buyAmount">
+          <Styled.SwapItem
+            name="buyAmount"
+            rules={formValdation.buyAmount}
+            validateFirst={true}
+            validateTrigger="onBlur"
+          >
             <Input
               placeholder="0.00000"
               type="number"
               prefix={
-                <Styled.SwapFormItem name="buyAsset">
+                <Styled.SwapFormItem
+                  name="buyAsset"
+                  rules={formValdation.buyAsset}
+                  validateFirst={true}
+                  validateTrigger="onBlur"
+                >
                   <LogoSelectOption
                     labelInValue
                     defaultValue="BTC"
@@ -69,14 +93,14 @@ export const SwapTab = (): JSX.Element => {
       <DashboardButton label="Swap Coins" />
       <Styled.HistoryLinkDiv>
         <Styled.HistoryLink>See My Swap History</Styled.HistoryLink>
-      </Styled.HistoryLinkDiv>
+      </Styled.HistoryLinkDiv> */}
       <Styled.FooterPara>
-        Your swap was completed and you received 1.001 ETH for 2240.02 USDT{" "}
+        {/* Your swap was completed and you received 1.001 ETH for 2240.02 USDT{" "}
         <br />
         <br />
-        Transaction Type : Trade <br />
-        Fees : 0.01121 PPY
-      </Styled.FooterPara> */}
+        Transaction Type : Trade <br /> */}
+        Fees : {feeData ? feeData.amount : 0} {defaultToken}
+      </Styled.FooterPara>
     </Styled.SwapContainer>
   );
 };

@@ -1,6 +1,7 @@
 import { BaseOptionType, DefaultOptionType } from "antd/lib/select";
 import React from "react";
 
+import { defaultToken } from "../../../api/params/networkparams";
 import BitcoinIcon from "../../../ui/src/icons/BitcoinIcon.svg";
 import PPYIcon from "../../../ui/src/icons/PPYIcon.svg";
 
@@ -33,12 +34,12 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
         </Styled.OptionsDiv>
       </Styled.SelectOptionContainer>
       {!props.forWithraw ? (
-        <Styled.SelectOptionContainer value="PPY">
+        <Styled.SelectOptionContainer value={defaultToken}>
           <Styled.OptionsDiv>
             <Styled.IconDiv>
               <PPYIcon width="30px" height="30px" />
             </Styled.IconDiv>
-            <Styled.NamePara>PPY</Styled.NamePara>
+            <Styled.NamePara>{defaultToken}</Styled.NamePara>
           </Styled.OptionsDiv>
         </Styled.SelectOptionContainer>
       ) : (
