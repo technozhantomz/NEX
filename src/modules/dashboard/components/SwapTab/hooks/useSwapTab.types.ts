@@ -23,6 +23,7 @@ export type Swap = {
     | undefined;
   swapAsset: () => void;
   status: string;
+  assetValueInfo: string;
 };
 
 export type FormValidation = {

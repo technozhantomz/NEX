@@ -69,7 +69,8 @@ export const WithdrawForm = (props: Props): JSX.Element => {
         )}
 
         <Form.Item
-          name="withdrawAddress"onClick={confirm}
+          name="withdrawAddress"
+          onClick={confirm}
           validateFirst={true}
           rules={formValdation.withdrawAddress}
           validateTrigger="onBlur"

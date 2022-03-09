@@ -3,15 +3,19 @@ import { Form, Input } from "antd";
 
 // import { DashboardButton } from "../../../../common/components/DashboardButton/DashboardButton";
 
+import { Button } from "antd";
+
 import { defaultToken } from "../../../../api/params/networkparams";
 import { PasswordModal } from "../../../../common/components";
 import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
-import { CardFormButton } from "../../../../ui/src";
+import {
+  CardFormButton,
+  InfoCircleOutlined,
+  SwapOutlined,
+} from "../../../../ui/src";
 
 import * as Styled from "./SwapTab.styled";
 import { useSwap } from "./hooks/useSwapTab";
-import { Button } from "antd";
-import { SwapOutlined } from "../../../../ui/src";
 
 export const SwapTab = (): JSX.Element => {
   const {
@@ -24,7 +28,8 @@ export const SwapTab = (): JSX.Element => {
     formValdation,
     feeData,
     swapAsset,
-    status
+    status,
+    assetValueInfo,
   } = useSwap();
   return (
     <Styled.SwapContainer>
@@ -46,10 +51,7 @@ export const SwapTab = (): JSX.Element => {
                   validateFirst={true}
                   validateTrigger="onBlur"
                 >
-                  <LogoSelectOption
-                    labelInValue
-                    onChange={handleAssetChange}
-                  />
+                  <LogoSelectOption labelInValue onChange={handleAssetChange} />
                 </Styled.SwapFormItem>
               }
             />
@@ -71,10 +73,7 @@ export const SwapTab = (): JSX.Element => {
                   validateFirst={true}
                   validateTrigger="onBlur"
                 >
-                  <LogoSelectOption
-                    labelInValue
-                    onChange={handleAssetChange}
-                  />
+                  <LogoSelectOption labelInValue onChange={handleAssetChange} />
                 </Styled.SwapFormItem>
               }
             />
@@ -87,13 +86,13 @@ export const SwapTab = (): JSX.Element => {
         </Styled.SwapForm>
         <PasswordModal visible={visible} onCancel={onCancel} />
       </Styled.SwapForm.Provider>
-      {/* <Styled.InfoDiv>
+      <Styled.InfoDiv>
         <Styled.InfoPara>
-          1 USDT= 0.0004475 ETH
+          {assetValueInfo}
           <InfoCircleOutlined />
         </Styled.InfoPara>
       </Styled.InfoDiv>
-      <DashboardButton label="Swap Coins" />
+      {/*<DashboardButton label="Swap Coins" />
       <Styled.HistoryLinkDiv>
         <Styled.HistoryLink>See My Swap History</Styled.HistoryLink>
       </Styled.HistoryLinkDiv> */}

@@ -1,7 +1,7 @@
 import { Form, Input } from "antd";
 
-import * as Styled from "./passwordModal.styled";
 import { usePasswordForm } from "./hooks";
+import * as Styled from "./passwordModal.styled";
 
 type Props = {
   visible: boolean;
