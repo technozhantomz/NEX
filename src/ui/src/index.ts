@@ -14,6 +14,7 @@ export {
   Input,
   InputNumber,
   Menu,
+  Modal,
   Table,
   Checkbox,
   Card,

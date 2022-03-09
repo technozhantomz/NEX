@@ -3,7 +3,7 @@ import Head from "next/head";
 import React, { FunctionComponent, ReactNode, useEffect } from "react";
 
 import * as Styled from "./Layout.styled";
-import { TopBar } from "./TopBar/TopBar";
+import { TopBar } from "./TopBar";
 
 type Props = {
   children: ReactNode;
@@ -11,6 +11,7 @@ type Props = {
   description?: string;
   type?: string | undefined;
   heading?: string | undefined;
+  dexLayout?: boolean;
 };
 
 export const Layout: FunctionComponent<Props> = ({
@@ -19,6 +20,7 @@ export const Layout: FunctionComponent<Props> = ({
   description,
   type,
   heading,
+  dexLayout = false,
 }: Props) => {
   useEffect(() => {
     ConfigProvider.config({
@@ -36,6 +38,8 @@ export const Layout: FunctionComponent<Props> = ({
     switch (true) {
       case type == "card":
         return "card-layout";
+      case type == "card-lrg":
+        return "card-layout__lrg";
       default:
         return "default";
     }
@@ -50,19 +54,21 @@ export const Layout: FunctionComponent<Props> = ({
         <meta name="description" content={description} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <TopBar />
-      <ConfigProvider>
-        <Styled.Layout className={getStyles()}>
-          {heading != undefined ? (
-            <Styled.PageHeading className={"page-heading"}>
-              {heading}
-            </Styled.PageHeading>
-          ) : (
-            ""
-          )}
-          {children}
-        </Styled.Layout>
-      </ConfigProvider>
+      <Styled.Page className={dexLayout ? "dex-layout" : ""}>
+        <TopBar />
+        <ConfigProvider>
+          <Styled.Layout className={getStyles()}>
+            {heading != undefined ? (
+              <Styled.PageHeading className={"page-heading"}>
+                {heading}
+              </Styled.PageHeading>
+            ) : (
+              ""
+            )}
+            {children}
+          </Styled.Layout>
+        </ConfigProvider>
+      </Styled.Page>
     </>
   );
 };

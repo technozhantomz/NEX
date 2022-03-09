@@ -1,15 +1,17 @@
+import { Login, PrivateKey } from "peerplaysjs-lib";
 import { useCallback, useState } from "react";
 
 import { useAsset } from "..";
+import { defaultToken } from "../../../api/params";
 import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
 import { useUserContext } from "../../components/UserProvider";
-import { Asset } from "../../types";
-import { FullAccount } from "../../types/Account";
+import { Account, Asset, FullAccount, UserKey } from "../../types";
 
 import { UseAccountResult } from "./useAccount.types";
 
 export function useAccount(): UseAccountResult {
   const {
+    localStorageAccount,
     updateAccount,
     setAssets,
     setIsAccountLocked,
@@ -28,6 +30,18 @@ export function useAccount(): UseAccountResult {
           subscription,
         ]).then((e: any) => (e.length ? e[0][1] : undefined));
         return fullAccount;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
+  );
+
+  const getAccountByName = useCallback(
+    async (name: string) => {
+      try {
+        const account: Account = await dbApi("get_account_by_name", [name]);
+        return account;
       } catch (e) {
         console.log(e);
       }
@@ -100,12 +114,69 @@ export function useAccount(): UseAccountResult {
     [dbApi, setAssets, formAssetBalanceById]
   );
 
+  const getPrivateKey = useCallback(
+    (password: string, role: string): string => {
+      let fromWif = "";
+
+      try {
+        fromWif = PrivateKey.fromWif(password);
+      } catch (e) {
+        console.error(e);
+      }
+
+      return fromWif
+        ? fromWif
+        : Login.generateKeys(localStorageAccount, password, [role]).privKeys[
+            role
+          ];
+    },
+    []
+  );
+
+  const validateAccountPassword = useCallback(
+    (password: string, account: Account) => {
+      const roles = ["active", "owner", "memo"];
+      let checkPassword = false;
+      let fromWif = "";
+
+      try {
+        fromWif = PrivateKey.fromWif(password);
+      } catch (e) {
+        console.log(e);
+      }
+
+      const keys = Login.generateKeys(account.name, password, roles);
+
+      for (const role of roles) {
+        const privKey = fromWif ? fromWif : keys.privKeys[role];
+        const pubKey = privKey.toPublicKey().toString(defaultToken);
+        let key = "";
+
+        if (role !== "memo") {
+          const permission = account[role as keyof Account] as UserKey;
+          key = permission.key_auths[0][0];
+        } else {
+          key = account.options.memo_key;
+        }
+        if (key === pubKey) {
+          checkPassword = true;
+          break;
+        }
+      }
+      return checkPassword;
+    },
+    []
+  );
+
   return {
     formAccountByName,
     loading,
     formAccountBalancesByName,
     getFullAccount,
+    getAccountByName,
+    getPrivateKey,
     formAccountAfterConfirmation,
     removeAccount,
+    validateAccountPassword,
   };
 }

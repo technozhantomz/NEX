@@ -1,6 +1,8 @@
 import { LoadingOutlined } from "@ant-design/icons";
+import { ChainConfig } from "peerplaysjs-lib";
 import React from "react";
 
+import { defaultToken } from "../../../api/params";
 import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
 type Props = {
@@ -9,6 +11,8 @@ type Props = {
 
 export const ConnectionManager = ({ children }: Props): JSX.Element => {
   const { isLoadingConnection, isConnectionError } = usePeerplaysApiContext();
+  ChainConfig.setPrefix(defaultToken);
+
   if (isLoadingConnection) {
     return (
       <div>
