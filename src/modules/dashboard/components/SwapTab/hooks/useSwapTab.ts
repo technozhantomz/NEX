@@ -1,23 +1,24 @@
-/** @format */
 
-import { Form } from "antd";
-import { BaseOptionType, DefaultOptionType } from "antd/lib/select";
-import { FormFinishInfo } from "rc-field-form";
-import { useCallback, useEffect, useState } from "react";
 
-import { defaultToken } from "../../../../../api/params/networkparams";
-import { useUserContext } from "../../../../../common/components/UserProvider";
+import { Form } from 'antd';
+import { BaseOptionType, DefaultOptionType } from 'antd/lib/select';
+import { FormFinishInfo } from 'rc-field-form';
+import { useCallback, useEffect, useState } from 'react';
+
+import { defaultToken } from '../../../../../api/params/networkparams';
+import { useUserContext } from '../../../../../common/components/UserProvider';
 import {
   useAccount,
   useAsset,
   useFees,
   useTransactionBuilder,
-} from "../../../../../common/hooks/";
-import { TransactionFee } from "../../../../../common/hooks/useFees.types";
+} from '../../../../../common/hooks/';
+import { TransactionFee } from '../../../../../common/hooks/useFees.types';
 
-import { Swap } from "./useSwapTab.types";
+import { Swap } from './useSwapTab.types';
 
 export function useSwap(): Swap {
+  const [status, upStatus] = useState<string>('');
   const [visible, setVisible] = useState<boolean>(false);
   const { trxBuilder } = useTransactionBuilder();
   const { getPrivateKey } = useAccount();
@@ -28,7 +29,7 @@ export function useSwap(): Swap {
   const { getFees } = useFees();
 
   const handleAssetChange = (value: unknown) => {
-    if (value.label._owner.pendingProps.id === "swapForm_sellAsset") {
+    if (value.label._owner.pendingProps.id === 'swapForm_sellAsset') {
       swapForm.setFieldsValue({ sellAsset: value.value });
     } else {
       swapForm.setFieldsValue({ buyAsset: value.value });
@@ -45,15 +46,15 @@ export function useSwap(): Swap {
   };
 
   useEffect(() => {
-    swapForm.setFieldsValue({ sellAsset: "BTC" });
-    swapForm.setFieldsValue({ buyAsset: "BTC" });
+    swapForm.setFieldsValue({ sellAsset: defaultToken });
+    swapForm.setFieldsValue({ buyAsset: 'BTC' });
     getFeeData();
   }, []);
 
   const onFormFinish = (name: string, info: FormFinishInfo) => {
     const { values, forms } = info;
     const { passwordModal } = forms;
-    if (name === "passwordModal") {
+    if (name === 'passwordModal') {
       passwordModal.validateFields().then(() => {
         handleSwap(values.password);
       });
@@ -62,11 +63,11 @@ export function useSwap(): Swap {
 
   const getFeeData = async () => {
     const rawFeeData = (await getFees()).filter(
-      (item) => item.name === "LIMIT ORDER CREATE"
+      (item) => item.name === 'LIMIT ORDER CREATE'
     )[0];
     setFeeData({
       amount: rawFeeData.fee,
-      asset_id: "1.3.0",
+      asset_id: '1.3.0',
     });
   };
 
@@ -76,7 +77,7 @@ export function useSwap(): Swap {
     const buyAsset = await getAssetBySymbol(values.buyAsset);
 
     console.log(values);
-    const activeKey = getPrivateKey(password, "active");
+    const activeKey = getPrivateKey(password, 'active');
 
     const amount_to_sell = {
       amount: values.sellAmount,
@@ -93,11 +94,11 @@ export function useSwap(): Swap {
     ).toISOString();
 
     const trx = {
-      type: "limit_order_create",
+      type: 'limit_order_create',
       params: {
         fee: {
           amount: 0,
-          asset_id: "1.3.0",
+          asset_id: '1.3.0',
         },
         seller: id,
         amount_to_sell,
@@ -120,11 +121,12 @@ export function useSwap(): Swap {
 
     if (trxResult) {
       setVisible(false);
+      upStatus(`Your swap was completed and you received ${values.buyAmount} ${values.buyAsset} for ${values.sellAmount} ${values.sellAsset}`);
     }
   }, []);
 
   const validateSellAmount = (_: unknown, value: number) => {
-    const sellAsset = swapForm.getFieldValue("sellAsset");
+    const sellAsset = swapForm.getFieldValue('sellAsset');
     const accountAsset = assets.find((asset) => asset.symbol === sellAsset);
     if (canPayFee(value, sellAsset))
       return Promise.reject(
@@ -149,27 +151,42 @@ export function useSwap(): Swap {
 
   const validateSellAsset = (_: unknown, value: string) => {
     const accountAsset = assets.find((asset) => asset.symbol === value);
+    if (value === swapForm.getFieldValue("buyAsset")) 
+      return Promise.reject(new Error(`Cannot swap same tokens`));
     if (accountAsset === undefined)
       return Promise.reject(new Error(`${value} not available`));
     return Promise.resolve();
   };
 
-  // const validateBuyAsset = (_: unknown, value: number) => {};
+  const validateBuyAsset = (_: unknown, value: number) => {
+    if (value === swapForm.getFieldValue('sellAsset'))
+      return Promise.reject(new Error(`Cannot swap same tokens`));
+    return Promise.resolve();
+  };
 
   const formValdation = {
     sellAmount: [
-      { required: true, message: "Sell amount required" },
+      { required: true, message: 'Sell amount required' },
       { validator: validateSellAmount },
     ],
-    buyAmount: [{ required: true, message: "Buy amount required" }],
+    buyAmount: [{ required: true, message: 'Buy amount required' }],
     sellAsset: [
-      { required: true, message: "Sell Asset required" },
+      { required: true, message: 'Sell Asset required' },
       { validator: validateSellAsset },
     ],
     buyAsset: [
-      { required: true, message: "Sell amount required" },
-      // { validator: validateBuyAsset },
+      { required: true, message: 'Sell amount required' },
+      { validator: validateBuyAsset },
     ],
+  };
+
+  const swapAsset = () => {
+    const values = swapForm.getFieldsValue();
+    swapForm.setFieldsValue({ sellAsset: values.buyAsset });
+    swapForm.setFieldsValue({ buyAsset: values.sellAsset });
+    swapForm.setFieldsValue({ sellAmount: values.buyAmount });
+    swapForm.setFieldsValue({ buyAmount: values.sellAmount });
+    
   };
 
   return {
@@ -181,5 +198,7 @@ export function useSwap(): Swap {
     swapForm,
     formValdation,
     feeData,
+    swapAsset,
+    status
   };
 }

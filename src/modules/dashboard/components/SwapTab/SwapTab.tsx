@@ -10,6 +10,8 @@ import { CardFormButton } from "../../../../ui/src";
 
 import * as Styled from "./SwapTab.styled";
 import { useSwap } from "./hooks/useSwapTab";
+import { Button } from "antd";
+import { SwapOutlined } from "../../../../ui/src";
 
 export const SwapTab = (): JSX.Element => {
   const {
@@ -21,6 +23,8 @@ export const SwapTab = (): JSX.Element => {
     swapForm,
     formValdation,
     feeData,
+    swapAsset,
+    status
   } = useSwap();
   return (
     <Styled.SwapContainer>
@@ -44,13 +48,13 @@ export const SwapTab = (): JSX.Element => {
                 >
                   <LogoSelectOption
                     labelInValue
-                    defaultValue="BTC"
                     onChange={handleAssetChange}
                   />
                 </Styled.SwapFormItem>
               }
             />
           </Styled.SwapItem>
+          <Button icon={<SwapOutlined />} shape="circle" onClick={swapAsset} />
           <Styled.SwapItem
             name="buyAmount"
             rules={formValdation.buyAmount}
@@ -69,7 +73,6 @@ export const SwapTab = (): JSX.Element => {
                 >
                   <LogoSelectOption
                     labelInValue
-                    defaultValue="BTC"
                     onChange={handleAssetChange}
                   />
                 </Styled.SwapFormItem>
@@ -95,10 +98,8 @@ export const SwapTab = (): JSX.Element => {
         <Styled.HistoryLink>See My Swap History</Styled.HistoryLink>
       </Styled.HistoryLinkDiv> */}
       <Styled.FooterPara>
-        {/* Your swap was completed and you received 1.001 ETH for 2240.02 USDT{" "}
-        <br />
-        <br />
-        Transaction Type : Trade <br /> */}
+        {status === "" ? "" : status}
+        {status === "" ? "" : "Transaction Type : Trade"}
         Fees : {feeData ? feeData.amount : 0} {defaultToken}
       </Styled.FooterPara>
     </Styled.SwapContainer>

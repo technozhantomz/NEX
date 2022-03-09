@@ -21,6 +21,8 @@ export type Swap = {
           | (DefaultOptionType | BaseOptionType)[]
       ) => void)
     | undefined;
+  swapAsset: () => void;
+  status: string;
 };
 
 export type FormValidation = {

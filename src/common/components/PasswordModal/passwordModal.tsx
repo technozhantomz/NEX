@@ -1,6 +1,6 @@
 import { Form, Input } from "antd";
 
-import * as Styled from "./PasswordModal.styled";
+import * as Styled from "./passwordModal.styled";
 import { usePasswordForm } from "./hooks";
 
 type Props = {
