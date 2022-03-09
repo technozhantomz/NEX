@@ -1,11 +1,11 @@
 import { Login, PrivateKey } from "peerplaysjs-lib";
 import { useCallback, useState } from "react";
 
-import { useAsset } from "..";
+import { useAsset, useSidechainAccounts } from "..";
+import { defaultToken } from "../../../api/params";
 import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
 import { useUserContext } from "../../components/UserProvider";
-import { Asset } from "../../types";
-import { Account, FullAccount } from "../../types/Account";
+import { Account, Asset, FullAccount, UserKey } from "../../types";
 
 import { UseAccountResult } from "./useAccount.types";
 
@@ -20,6 +20,7 @@ export function useAccount(): UseAccountResult {
   const [loading, setLoading] = useState<boolean>(false);
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
+  const { getSidechainAccounts } = useSidechainAccounts();
 
   const getFullAccount = useCallback(
     async (name: string, subscription: boolean) => {
@@ -36,37 +37,23 @@ export function useAccount(): UseAccountResult {
     [dbApi]
   );
 
+  const getAccountByName = useCallback(
+    async (name: string) => {
+      try {
+        const account: Account = await dbApi("get_account_by_name", [name]);
+        return account;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
+  );
+
   const removeAccount = useCallback(() => {
     updateAccount("", "", [], []);
     setIsAccountLocked(true);
     setLocalStorageAccount("");
   }, [updateAccount, setIsAccountLocked, setLocalStorageAccount]);
-
-  const getAccountByName = useCallback(async (name: string) => {
-    const account = await dbApi("get_account_by_name", [name])
-      .then((e: Account) => e)
-      .catch(() => false);
-    return account;
-  }, []);
-
-  const getPrivateKey = useCallback(
-    (password: string, role: string): string => {
-      let fromWif = "";
-
-      try {
-        fromWif = PrivateKey.fromWif(password);
-      } catch (e) {
-        console.error(e);
-      }
-
-      return fromWif
-        ? fromWif
-        : Login.generateKeys(localStorageAccount, password, [role]).privKeys[
-            role
-          ];
-    },
-    []
-  );
 
   const formAccountAfterConfirmation = useCallback(
     async (fullAccount: FullAccount) => {
@@ -77,7 +64,15 @@ export function useAccount(): UseAccountResult {
             return formAssetBalanceById(balance.asset_type, balance.balance);
           })
         );
-        updateAccount(fullAccount.account.id, fullAccount.account.name, assets);
+        const sidechainAcccounts = await getSidechainAccounts(
+          fullAccount.account.id
+        );
+        updateAccount(
+          fullAccount.account.id,
+          fullAccount.account.name,
+          assets,
+          sidechainAcccounts
+        );
         setIsAccountLocked(false);
         setLoading(false);
       } catch (e) {
@@ -99,10 +94,14 @@ export function useAccount(): UseAccountResult {
               return formAssetBalanceById(balance.asset_type, balance.balance);
             })
           );
+          const sidechainAcccounts = await getSidechainAccounts(
+            fullAccount.account.id
+          );
           updateAccount(
             fullAccount.account.id,
             fullAccount.account.name,
-            assets
+            assets,
+            sidechainAcccounts
           );
         }
         setLoading(false);
@@ -127,6 +126,60 @@ export function useAccount(): UseAccountResult {
     [dbApi, setAssets, formAssetBalanceById]
   );
 
+  const getPrivateKey = useCallback(
+    (password: string, role: string): string => {
+      let fromWif = "";
+
+      try {
+        fromWif = PrivateKey.fromWif(password);
+      } catch (e) {
+        console.error(e);
+      }
+
+      return fromWif
+        ? fromWif
+        : Login.generateKeys(localStorageAccount, password, [role]).privKeys[
+            role
+          ];
+    },
+    []
+  );
+
+  const validateAccountPassword = useCallback(
+    (password: string, account: Account) => {
+      const roles = ["active", "owner", "memo"];
+      let checkPassword = false;
+      let fromWif = "";
+
+      try {
+        fromWif = PrivateKey.fromWif(password);
+      } catch (e) {
+        console.log(e);
+      }
+
+      const keys = Login.generateKeys(account.name, password, roles);
+
+      for (const role of roles) {
+        const privKey = fromWif ? fromWif : keys.privKeys[role];
+        const pubKey = privKey.toPublicKey().toString(defaultToken);
+        let key = "";
+
+        if (role !== "memo") {
+          const permission = account[role as keyof Account] as UserKey;
+          key = permission.key_auths[0][0];
+        } else {
+          key = account.options.memo_key;
+        }
+        if (key === pubKey) {
+          checkPassword = true;
+          break;
+        }
+      }
+      return checkPassword;
+    },
+    []
+  );
+
   return {
     formAccountByName,
     loading,
@@ -136,5 +189,6 @@ export function useAccount(): UseAccountResult {
     getPrivateKey,
     formAccountAfterConfirmation,
     removeAccount,
+    validateAccountPassword,
   };
 }

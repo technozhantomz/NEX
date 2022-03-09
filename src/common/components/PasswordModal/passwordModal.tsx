@@ -40,7 +40,7 @@ export const PasswordModal = ({ visible, onCancel }: Props): JSX.Element => {
         </Form.Item>
         <Form.Item>
           <Styled.PasswordModalFormButton type="primary" htmlType="submit">
-            Confirm
+            Send
           </Styled.PasswordModalFormButton>
         </Form.Item>
       </Styled.PasswordModalForm>

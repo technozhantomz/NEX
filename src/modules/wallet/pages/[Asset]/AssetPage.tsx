@@ -10,8 +10,8 @@ import {
   TransferForm,
   WithdrawForm,
 } from "../../../../common/components";
-import { useSidechainAccounts } from "../../../../common/hooks";
-import { AssetsTable } from "../../componets/AssetsTable";
+import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
+import { AssetsTable } from "../../components/AssetsTable";
 
 import * as Styled from "./AssetPage.styled";
 import { useAssetPage } from "./hooks";
@@ -22,6 +22,7 @@ const AssetPage: NextPage = () => {
   const { handleAssetChange } = useAssetPage();
   const { hasBTCDepositAddress } = useSidechainAccounts();
   const router = useRouter();
+  const { defaultAsset } = useAsset();
   const { asset, tab } = router.query;
   return (
     <Layout
@@ -40,7 +41,7 @@ const AssetPage: NextPage = () => {
             <AssetsTable showActions={false} fillterAsset={`${asset}`} />
             <TransferForm asset={`${asset}`} />
           </TabPane>
-          {asset === "TEST" || asset === "PPT" ? (
+          {asset === defaultAsset?.symbol ? (
             ""
           ) : (
             <>

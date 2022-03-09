@@ -1,5 +1,6 @@
 import { Form, Input } from "antd";
 
+import { useAsset } from "../../hooks";
 import { LogoSelectOption } from "../LogoSelectOption/LogoSelectOption";
 import { PasswordModal } from "../PasswordModal";
 
@@ -7,16 +8,17 @@ import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
 
 type Props = {
-  asset?: string;
+  asset: string;
   withAssetSelector: boolean;
 };
 
 export const WithdrawForm = (props: Props): JSX.Element => {
+  const { defaultAsset } = useAsset();
   const {
     status,
     loggedIn,
     visible,
-    feeData,
+    feeAmount,
     withdrawForm,
     formValdation,
     onCancel,
@@ -42,7 +44,7 @@ export const WithdrawForm = (props: Props): JSX.Element => {
               validateTrigger="onBlur"
             >
               <Input
-                placeholder="amount"
+                placeholder="0.00000"
                 type="number"
                 prefix={
                   <Styled.WithdrawFormAsset name="asset">
@@ -74,9 +76,11 @@ export const WithdrawForm = (props: Props): JSX.Element => {
           rules={formValdation.withdrawAddress}
           validateTrigger="onBlur"
         >
-          <Input placeholder="withdrawAddress" />
+          <Input disabled={true} placeholder="withdrawAddress" />
         </Form.Item>
-        {/* <p>Fees: {feeData ? feeData.amount : 0}</p> */}
+        <p>
+          Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
+        </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
           <Styled.WithdrawFormButton type="primary" htmlType="submit">

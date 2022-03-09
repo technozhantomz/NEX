@@ -1,5 +1,6 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { defaultToken } from "../../api/params";
 import { usePeerplaysApiContext } from "../components/PeerplaysApiProvider";
 import { useSettingsContext } from "../components/SettingsProvider";
 import { Asset, Cache } from "../types";
@@ -10,6 +11,7 @@ import { roundNum } from "./useRoundNum";
 export function useAsset(): UseAssetResult {
   const { dbApi } = usePeerplaysApiContext();
   const { cache, setCache } = useSettingsContext();
+  const [defaultAsset, setDefaultAsset] = useState<Asset>();
 
   const getAssetById = useCallback(
     async (id: string) => {
@@ -73,7 +75,7 @@ export function useAsset(): UseAssetResult {
 
   const setAssets = useCallback(async (assetId: string, quantity: number) => {
     const precision = await dbApi("get_assets", [[assetId]]).then(
-      (asset) => asset[0].precision
+      (asset: { precision: any }[]) => asset[0].precision
     );
     return quantity / 10 ** precision;
   }, []);
@@ -87,11 +89,22 @@ export function useAsset(): UseAssetResult {
     [getAssetById, setPrecision]
   );
 
+  const getDefaultAsset = useCallback(async () => {
+    const defaultAsset = await getAssetBySymbol(defaultToken as string);
+    setDefaultAsset(defaultAsset);
+  }, [getAssetBySymbol, setDefaultAsset]);
+
+  useEffect(() => {
+    getDefaultAsset();
+  }, []);
+
   return {
     formAssetBalanceById,
     getAssetById,
     setPrecision,
     setAssets,
+    getDefaultAsset,
     getAssetBySymbol,
+    defaultAsset,
   };
 }
