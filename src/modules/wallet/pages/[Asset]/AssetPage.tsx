@@ -6,7 +6,8 @@ import { useRouter } from "next/router";
 import { Layout } from "../../../../common/components/PageLayout";
 import TransferForm from "../../../../common/components/TransferForm";
 import WithdrawForm from "../../../../common/components/WithdrawForm";
-import { AssetsTable } from "../../componets/AssetsTable";
+import { useAsset } from "../../../../common/hooks";
+import { AssetsTable } from "../../components/AssetsTable";
 
 import * as Styled from "./AssetPage.styled";
 
@@ -14,6 +15,7 @@ const { TabPane } = Tabs;
 
 const AssetPage: NextPage = () => {
   const router = useRouter();
+  const { defaultAsset } = useAsset();
   const { asset, tab } = router.query;
   return (
     <Layout
@@ -32,7 +34,7 @@ const AssetPage: NextPage = () => {
             <AssetsTable showActions={false} fillterAsset={`${asset}`} />
             <TransferForm asset={`${asset}`} />
           </TabPane>
-          {asset === "TEST" || asset === "PPT" ? (
+          {asset === defaultAsset?.symbol ? (
             ""
           ) : (
             <>

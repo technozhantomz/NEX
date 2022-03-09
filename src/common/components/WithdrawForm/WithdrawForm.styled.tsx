@@ -3,6 +3,7 @@ import { CardFormButton, CardFrom, styled } from "../../../ui/src";
 export const WithdrawForm = styled(CardFrom)`
   margin: 0 20px;
 `;
+
 export const WithdrawFormAssetAmount = styled(CardFrom.Item)`
   .ant-input-affix-wrapper {
     padding: 0;
@@ -27,4 +28,5 @@ export const WithdrawFormAsset = styled(CardFrom.Item)`
     }
   }
 `;
+
 export const WithdrawFormButton = styled(CardFormButton)``;

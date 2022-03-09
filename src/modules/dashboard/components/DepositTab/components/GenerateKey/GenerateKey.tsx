@@ -4,7 +4,7 @@ import React from "react";
 
 import { DashboardButton } from "../../../../../../common/components/DashboardButton/DashboardButton";
 import { LogoSelectOption } from "../../../../../../common/components/LogoSelectOption/LogoSelectOption";
-import PasswordModal from "../../../../../../common/components/PasswordModal/passwordModal";
+import { PasswordModal } from "../../../../../../common/components/PasswordModal";
 
 import * as Styled from "./GenerateKey.styled";
 import { useGenerateAddress } from "./hooks/useGenerateAddress";
