@@ -3,6 +3,7 @@ export * from "./useAsset";
 export * from "./useFormDate";
 export * from "./useLocalStorage";
 export * from "./useRoundNum";
-export * from "./useFees";
+export * from "./fees/useFees";
 export * from "./useTransactionBuilder";
 export * from "./useFormKeys";
+export * from "./useMarketPairStats";
