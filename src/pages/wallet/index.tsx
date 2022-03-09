@@ -1,1 +1,1 @@
-export { default } from "../../modules/wallet";
+export { default } from "../../modules/Wallet";

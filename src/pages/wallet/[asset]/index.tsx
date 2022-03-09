@@ -1,1 +1,1 @@
-export { default } from "../../../modules/wallet/pages/[asset]";
+export { default } from "../../../modules/Wallet/pages/[Asset]";
