@@ -1,1 +1,1 @@
-export { default } from "../../modules/Market";
+export { default } from "../../modules/market";
