@@ -1,14 +1,14 @@
 import { Form, Input } from "antd";
 
-import * as Styled from "./passwordModal.styled";
-import { usePasswordForm } from "./usePasswordForm";
+import * as Styled from "./PasswordModal.styled";
+import { usePasswordForm } from "./hooks/usePasswordForm";
 
 type Props = {
   visible: boolean;
   onCancel: () => void;
 };
 
-const passwordModal = ({ visible, onCancel }: Props): JSX.Element => {
+export const PasswordModal = ({ visible, onCancel }: Props): JSX.Element => {
   const { validatePassword, useResetFormOnCloseModal, passwordModalForm } =
     usePasswordForm();
 
@@ -47,5 +47,3 @@ const passwordModal = ({ visible, onCancel }: Props): JSX.Element => {
     </Styled.PasswordModal>
   );
 };
-
-export default passwordModal;

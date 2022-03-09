@@ -1,100 +1,86 @@
 import { ChainTypes, TransactionHelper } from "peerplaysjs-lib";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { useAccount, useAsset } from "..";
 import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
 import { useUserContext } from "../../components/UserProvider";
-import { useAccount } from "../account/useAccount";
-import { useAsset } from "../useAsset";
-import { useLocalStorage } from "../useLocalStorage";
+import { Account } from "../../types";
 
-import { Fee, UseFees } from "./useFees.types";
+import { ChainOperations, FeeParameter, UseFeesResult } from "./useFees.types";
 
-export function useFees(): UseFees {
-  const defaultNonce = TransactionHelper.unique_nonce_uint64();
-  const [jsonFees, setJsonFees] = useLocalStorage("fees");
-  const { localStorageAccount } = useUserContext();
-  const { getAccountByName } = useAccount();
-  const { getAssetById, setAssets } = useAsset();
+export function useFees(): UseFeesResult {
+  const [feeParameters, setFeeParameters] = useState<FeeParameter[]>([]);
+  const [account, _setAccount] = useState<Account>();
   const { dbApi } = usePeerplaysApiContext();
-  const operationsNames = Object.keys(ChainTypes.operations);
+  const { getAccountByName } = useAccount();
+  const { localStorageAccount } = useUserContext();
+  const defaultNonce = TransactionHelper.unique_nonce_uint64();
+  const { defaultAsset, setPrecision } = useAsset();
 
-  useEffect(() => {
-    getFees();
-  }, [jsonFees]);
-
-  const getFees = async () => {
-    if (jsonFees) return jsonFees;
-    let operations: Fee[];
-    const feeAsset = await getAssetById("1.3.0");
-    const globalProps = await dbApi("get_global_properties").then(
-      (e: { [x: string]: { [x: string]: { [x: string]: unknown } } }) =>
-        e["parameters"]["current_fees"]["parameters"]
-    );
-    operations = operationsNames.map((item, index) => ({
-      name: item.split("_").join(" ").toUpperCase(),
-      ...globalProps[index],
-    }));
-
-    operations = await Promise.all(
-      operations.map(async (item) => {
-        if ("1" in item) {
-          const assetId = feeAsset.id;
-          return {
-            fee:
-              "fee" in item[1]
-                ? await setAssets(assetId, Number(item[1]["fee"]))
-                : 0,
-            membership_lifetime_fee:
-              "membership_lifetime_fee" in item[1]
-                ? await setAssets(
-                    assetId,
-                    Number(item[1]["membership_lifetime_fee"])
-                  )
-                : 0,
-            price_per_kbyte:
-              "price_per_kbyte" in item[1]
-                ? await setAssets(assetId, Number(item[1]["price_per_kbyte"]))
-                : 0,
-            name: item["name"],
-          };
-        } else {
-          return {
-            fee: "",
-            membership_lifetime_fee: "",
-            price_per_kbyte: "",
-            name: item["name"],
-          };
-        }
-      })
-    );
-    setJsonFees(operations);
-    return operations;
-  };
-
-  const calculateFees = async (type: string, memo: string) => {
-    const account = await getAccountByName(localStorageAccount);
-    const feeData = jsonFees?.find((fee) => fee.name.toLowerCase() === type);
-    let feeAmount = feeData.fee;
-
-    if (memo && memo.length > 0) {
-      const rawAdditional = feeData.price_per_kbyte;
-      const memoLength = JSON.stringify(account.options.memo_key).length;
-      const helperLength = JSON.stringify(defaultNonce).length;
-      const result =
-        ((memoLength + helperLength + memo.length) / 1024) * rawAdditional;
-
-      feeAmount = feeAmount + result;
+  const setAccount = useCallback(async () => {
+    const acc = await getAccountByName(localStorageAccount);
+    if (acc) {
+      _setAccount(acc);
     }
+  }, [getAccountByName, localStorageAccount, _setAccount]);
 
-    return feeAmount;
-  };
+  const getFeesFromGlobal = useCallback(async () => {
+    try {
+      const globalProperties = await dbApi("get_global_properties");
+      const feeParameters = globalProperties.parameters.current_fees
+        .parameters as FeeParameter[];
+      setFeeParameters(feeParameters);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi, setFeeParameters]);
 
-  const feeCalculator = {
-    transfer: async (memo: string) => await calculateFees("transfer", memo),
-  };
+  const findOperationFee = useCallback(
+    (operationType: string): FeeParameter | undefined => {
+      const allOperationsTypes = Object.keys(ChainTypes.operations);
+      if (!allOperationsTypes.find((type) => type === operationType)) {
+        return undefined;
+      }
+      const operations = ChainTypes.operations as ChainOperations;
+      const operationNumber = operations[operationType];
+      const selectedFeeParameter = feeParameters.find(
+        (feeParameter) => feeParameter[0] === operationNumber
+      );
+      return selectedFeeParameter;
+    },
+    [feeParameters]
+  );
+
+  const calculteTransferFee = useCallback(
+    (memo: string) => {
+      if (account && feeParameters.length && defaultAsset) {
+        const transferFeeParameter = findOperationFee(
+          "transfer"
+        ) as FeeParameter;
+        const transferFee = transferFeeParameter[1];
+        let feeAmount = transferFee.fee as number;
+
+        if (memo && memo.length > 0) {
+          const rawAdditional = transferFee.price_per_kbyte as number;
+          const memoLength = JSON.stringify(account.options.memo_key).length;
+          const helperLength = JSON.stringify(defaultNonce).length;
+          const result =
+            ((memoLength + helperLength + memo.length) / 1024) * rawAdditional;
+
+          feeAmount = feeAmount + result;
+        }
+
+        return setPrecision(true, feeAmount, defaultAsset.precision);
+      }
+    },
+    [feeParameters, findOperationFee, account]
+  );
+  useEffect(() => {
+    getFeesFromGlobal();
+    setAccount();
+  }, [localStorageAccount, dbApi]);
 
   return {
-    getFees,
-    feeCalculator,
+    calculteTransferFee,
   };
 }

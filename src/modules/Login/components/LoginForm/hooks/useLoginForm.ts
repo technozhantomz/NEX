@@ -1,11 +1,9 @@
 import { useRouter } from "next/router";
-import { Login, PrivateKey } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
-import { defaultToken } from "../../../../../api/params";
 import { useUserContext } from "../../../../../common/components/UserProvider/UserProvider";
 import { useAccount } from "../../../../../common/hooks";
-import { Account, FullAccount, UserKey } from "../../../../../common/types";
+import { FullAccount } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 
 import { ILoginForm } from "./useLoginForm.types";
@@ -15,7 +13,11 @@ export function useLoginForm(): ILoginForm {
   const [temporaryFullAccount, setTemporaryFullAccount] = useState<
     FullAccount | undefined
   >(undefined);
-  const { getFullAccount, formAccountAfterConfirmation } = useAccount();
+  const {
+    getFullAccount,
+    formAccountAfterConfirmation,
+    validateAccountPassword,
+  } = useAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
   const [loginForm] = Form.useForm();
   const router = useRouter();
@@ -47,36 +49,8 @@ export function useLoginForm(): ILoginForm {
 
   const validatePassword = (_: unknown, value: string) => {
     if (temporaryFullAccount) {
-      const account = temporaryFullAccount?.account;
-      const roles = ["active", "owner", "memo"];
-      let checkPassword = false;
-      let fromWif = "";
-
-      try {
-        fromWif = PrivateKey.fromWif(value);
-        // eslint-disable-next-line no-empty
-      } catch (e) {
-        console.log(e);
-      }
-
-      const keys = Login.generateKeys(account?.name, value, roles);
-
-      for (const role of roles) {
-        const privKey = fromWif ? fromWif : keys.privKeys[role];
-        const pubKey = privKey.toPublicKey().toString(defaultToken);
-        let key = "";
-
-        if (role !== "memo") {
-          const permission = account[role as keyof Account] as UserKey;
-          key = permission.key_auths[0][0];
-        } else {
-          key = account.options.memo_key;
-        }
-        if (key === pubKey) {
-          checkPassword = true;
-          break;
-        }
-      }
+      const account = temporaryFullAccount.account;
+      const checkPassword = validateAccountPassword(value, account);
       if (!checkPassword)
         return Promise.reject(new Error("Password incorrect"));
     }

@@ -1,7 +1,7 @@
-import { Form, Input } from "antd";
-
-import PasswordModal from "../../../../common/components/PasswordModal/passwordModal";
+import { PasswordModal } from "../../../../common/components/PasswordModal";
 import { useUserContext } from "../../../../common/components/UserProvider";
+import { useAsset } from "../../../../common/hooks";
+import { Form, Input } from "../../../../ui/src";
 
 import * as Styled from "./TransferTab.styled";
 import { useTransferForm } from "./hooks";
@@ -15,13 +15,15 @@ export const TransferTab = ({ asset }: Props): JSX.Element => {
   const {
     status,
     visible,
-    feeData,
+    feeAmount,
     transferForm,
     formValdation,
     onCancel,
     confirm,
     onFormFinish,
+    handleValuesChange,
   } = useTransferForm();
+  const { defaultAsset } = useAsset();
 
   return (
     <Form.Provider onFormFinish={onFormFinish}>
@@ -30,6 +32,7 @@ export const TransferTab = ({ asset }: Props): JSX.Element => {
         name="transferForm"
         onFinish={confirm}
         size="large"
+        onValuesChange={handleValuesChange}
       >
         <div className="two-input-row">
           <Form.Item
@@ -39,8 +42,19 @@ export const TransferTab = ({ asset }: Props): JSX.Element => {
             validateTrigger="onBlur"
             initialValue={localStorageAccount}
           >
-            <Input placeholder="From" />
+            <Input disabled={true} placeholder="From" />
           </Form.Item>
+
+          <Form.Item
+            name="quantity"
+            validateFirst={true}
+            rules={formValdation.quantity}
+            validateTrigger="onBlur"
+          >
+            <Input min={0} placeholder="Quantity" type="number" />
+          </Form.Item>
+        </div>
+        <div className="two-input-row">
           <Form.Item
             name="to"
             validateFirst={true}
@@ -49,37 +63,23 @@ export const TransferTab = ({ asset }: Props): JSX.Element => {
           >
             <Input placeholder="To" />
           </Form.Item>
-        </div>
-        <div className="two-input-row">
+
           <Form.Item
-            name="quantity"
+            name="asset"
             validateFirst={true}
-            rules={formValdation.quantity}
-            validateTrigger="onBlur"
-          >
-            <Input placeholder="Quantity" type="number" />
-          </Form.Item>
-          <Form.Item
-            name="coin"
-            validateFirst={true}
-            rules={formValdation.coin}
+            rules={formValdation.asset}
             validateTrigger="onBlur"
             initialValue={`${asset}`}
           >
-            <Input placeholder="Coin (Default)" />
+            <Input disabled={true} />
           </Form.Item>
         </div>
         <p>Only members with memo key can read your memos</p>
-        <Form.Item
-          name="memo"
-          validateFirst={true}
-          rules={formValdation.memo}
-          validateTrigger="onBlur"
-        >
+        <Form.Item name="memo" validateFirst={true} rules={formValdation.memo}>
           <Input placeholder="Memo" />
         </Form.Item>
         <p>
-          Fees: {feeData ? feeData.amount : 0} {asset}
+          Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
