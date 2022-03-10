@@ -143,6 +143,7 @@ export function useSwap(): Swap {
     const values = swapForm.getFieldsValue();
     const accountAsset = assets.find((asset) => asset.symbol === value);
     if (value === swapForm.getFieldValue('buyAsset'))
+      // swapForm.setFields([sellAmount : {errors:`Cannot swap same tokens`,value:values.sellAmount}])
       return Promise.reject(new Error(`Cannot swap same tokens`));
     if (accountAsset === undefined)
       return Promise.reject(new Error(`${value} not available`));

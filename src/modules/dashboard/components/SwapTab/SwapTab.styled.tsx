@@ -72,7 +72,7 @@ export const SwapFormItem = styled(swapForm.Item)`
 
 export const SwapItem = styled(swapForm.Item)`
   .ant-input-affix-wrapper {
-    padding: 0;
+    height: 65px;
     .ant-input-prefix {
       min-width: 135px;
       width: 33%;
@@ -81,4 +81,8 @@ export const SwapItem = styled(swapForm.Item)`
       text-align: right;
     }
   }
+`;
+
+export const SwapSellItem = styled(SwapItem)`
+  margin: 0;
 `;

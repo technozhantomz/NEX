@@ -35,7 +35,7 @@ export const SwapTab = (): JSX.Element => {
     <Styled.SwapContainer>
       <Styled.SwapForm.Provider onFormFinish={onFormFinish}>
         <Styled.SwapForm form={swapForm} name="swapForm" onFinish={confirm}>
-          <Styled.SwapItem
+          <Styled.SwapSellItem
             name="sellAmount"
             rules={formValdation.sellAmount}
             validateFirst={true}
@@ -55,8 +55,10 @@ export const SwapTab = (): JSX.Element => {
                 </Styled.SwapFormItem>
               }
             />
-          </Styled.SwapItem>
-          <Button icon={<SwapOutlined />} shape="circle" onClick={swapAsset} />
+          </Styled.SwapSellItem>
+          {/* <Form.Item> */}
+            <Button icon={<SwapOutlined />} shape="circle" onClick={swapAsset} />
+          {/* </Form.Item> */}
           <Styled.SwapItem
             name="buyAmount"
             rules={formValdation.buyAmount}
