@@ -7,7 +7,7 @@ export interface IAssetRow {
   volume: number;
 }
 
-export type UseAssetsTabResult = {
+export type UseAssetsTable = {
   tableAssets: IAssetRow[];
   loading: boolean;
 };

@@ -8,3 +8,4 @@ export * from "./useTransactionBuilder";
 export * from "./useFormKeys";
 export * from "./useTransfer";
 export * from "./useMarketPairStats";
+export * from "./useHistory";

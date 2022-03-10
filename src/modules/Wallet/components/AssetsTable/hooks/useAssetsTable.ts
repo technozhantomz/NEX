@@ -7,9 +7,9 @@ import { useUserContext } from "../../../../../common/components/UserProvider";
 import { useAsset, useMarketPairStats } from "../../../../../common/hooks";
 import { Asset } from "../../../../../common/types";
 
-import { IAssetRow, UseAssetsTabResult } from "./useAssetsTable.types";
+import { IAssetRow, UseAssetsTable } from "./useAssetsTable.types";
 
-export function useAssetsTab(): UseAssetsTabResult {
+export function useAssetsTable(): UseAssetsTable {
   const [tableAssets, _setTableAssets] = useState<IAssetRow[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { dbApi } = usePeerplaysApiContext();

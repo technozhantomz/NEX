@@ -1,1 +1,1 @@
-export { useAssetsTab } from "./useAssetsTable";
+export { useAssetsTable } from "./useAssetsTable";

@@ -1,7 +1,7 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 
 import { CopyIcon } from "../../../ui/src/icons";
-import BitcoinIcon from "../../../ui/src/icons/BitcoinIcon.svg";
+import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 
 import * as Styled from "./AddressGenerated.styled";
 import { useAddressGenerated } from "./hooks";

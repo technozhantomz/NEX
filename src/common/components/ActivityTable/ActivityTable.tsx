@@ -1,0 +1,27 @@
+import { breakpoints } from "../../../ui/src/breakpoints";
+import { useViewportContext } from "../ViewportProvider";
+
+import * as Styled from "./ActivityTable.styled";
+import { ActivityList } from "./components/ActivityList";
+import { useActivityTable } from "./hooks";
+
+export const ActivityTable = (): JSX.Element => {
+  const { tableActivity, loading, columns } = useActivityTable();
+  const { width } = useViewportContext();
+
+  return (
+    <>
+      {width > breakpoints.sm ? (
+        <Styled.ActivityTable
+          columns={columns}
+          dataSource={tableActivity}
+          loading={loading}
+          pagination={false}
+          size="small"
+        />
+      ) : (
+        <ActivityList />
+      )}
+    </>
+  );
+};

@@ -10,6 +10,7 @@ import {
   TransferForm,
   WithdrawForm,
 } from "../../../../common/components";
+import { ActivityTable } from "../../../../common/components/ActivityTable/ActivityTable";
 import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
 import { AssetsTable } from "../../components/AssetsTable";
 
@@ -66,7 +67,7 @@ const AssetPage: NextPage = () => {
             </>
           )}
           <TabPane tab="All Activity" key="activity">
-            {/* <TransferTab asset={asset} /> */}
+            <ActivityTable />
           </TabPane>
         </Tabs>
       </Styled.AssetCard>

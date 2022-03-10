@@ -1,7 +1,7 @@
-import { styled, Table as UiTable } from "../../../../ui/src";
-import { colors } from "../../../../ui/src/colors";
+import { styled, Table as UiTable } from "../../../ui/src";
+import { colors } from "../../../ui/src/colors";
 
-export const AssetsTable = styled(UiTable)`
+export const ActivityTable = styled(UiTable)`
 .ant-table-thead > tr > th {
         background: transparent;
         color: ${colors.textColorSecondary};
