@@ -1,38 +1,51 @@
-import { Input as KeyInput, styled } from "../../../ui/src";
+import { Input, styled } from "../../../ui/src";
+import { breakpoints } from "../../../ui/src/breakpoints";
+import { colors } from "../../../ui/src/colors";
 
 export const DepositHeader = styled.p`
   margin-left: 10px;
   margin-top: 3px;
-  color: var(---text-icons);
+  color: ${colors.textColor};
   text-align: center;
   font: normal normal medium 16px/20px Inter;
   letter-spacing: 0px;
-  color: #212121;
   opacity: 1;
   font-size: 16px;
 `;
 
-export const KeyDownloadLink = styled.a`
-  color: var(---primary-blue);
+export const AddressDownloadLink = styled.a`
+  color: ${colors.primaryColor};
   text-align: center;
   font: normal normal normal 16px/40px Inter;
   letter-spacing: 0px;
-  color: #0148be;
   opacity: 1;
 `;
 
 export const DisclaimerFooter = styled.p`
-  color: var(---text-icons);
+  color: ${colors.textColor};
   text-align: left;
   font: normal normal normal 14px/20px Inter;
   letter-spacing: 0px;
-  color: #212121;
   opacity: 1;
-  font-size: 0.5em;
-  width: 85%;
+
+  ${breakpoints.sm} {
+    font-size: 0.4em;
+  }
+`;
+
+export const GeneratedBitcoinAddress = styled(Input)`
+  height: 50px;
+  width: 95%;
+  background: ${colors.textColor} 0% 0% no-repeat padding-box;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid ${colors.borderColorBase};
+  border-radius: 4px;
+  opacity: 1;
+  text-align: left;
+  padding: 10px;
 
   @media (max-width: 500px) {
-    font-size: 0.4em;
+    width: 100%;
   }
 `;
 
@@ -46,34 +59,19 @@ export const InfoBox = styled.div`
     margin-right: 20px;
     margin-left: 20px;
 
-    @media (max-width: 500px) {
+    ${breakpoints.sm} {
       margin-right: 5px;
       margin-left: 5px;
     }
   }
 `;
 
-export const GeneratedBitcoinKey = styled(KeyInput)`
-  height: 50px;
-  width: 95%;
-  background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border: 1px solid #c1c2c4;
-  border-radius: 4px;
-  opacity: 1;
-  text-align: left;
-  padding: 10px;
-
-  @media (max-width: 500px) {
-    width: 100%;
-  }
-`;
-
-export const KeyLinkContainer = styled.div`
+export const AddressLinkContainer = styled.div`
   margin-top: 15px;
+  text-align: center;
 `;
 
-export const KeyContainer = styled.div`
+export const AddressContainer = styled.div`
    {
     display: flex;
     justify-content: center;

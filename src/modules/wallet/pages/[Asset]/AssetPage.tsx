@@ -51,15 +51,17 @@ const AssetPage: NextPage = () => {
               </TabPane>
               <TabPane tab="Deposit" key="deposit">
                 <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-                {hasBTCDepositAddress ? (
-                  <AddressGenerated />
-                ) : (
-                  <GenerateAddress
-                    hideDisclamer={true}
-                    onAssetChange={handleAssetChange}
-                    hideDefultToken={true}
-                  />
-                )}
+                <Styled.AssetFormWapper>
+                  {hasBTCDepositAddress ? (
+                    <AddressGenerated />
+                  ) : (
+                    <GenerateAddress
+                      hideDisclamer={true}
+                      onAssetChange={handleAssetChange}
+                      hideDefultToken={true}
+                    />
+                  )}
+                </Styled.AssetFormWapper>
               </TabPane>
             </>
           )}
