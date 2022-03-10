@@ -16,6 +16,13 @@ export const TopBar = styled.nav`
       display: flex;
       color: ${colors.white};
     }
+    .dex-logo {
+      margin: 0 0 0 5px;
+      font-size: 28px;
+      font-weight: 200;
+      color: #ff903e;
+      letter-spacing: 1px;
+    }
   }
   .topbar-right {
     margin: 23px 20px 0 0;
@@ -25,7 +32,6 @@ export const TopBar = styled.nav`
   ${breakpoint.xs} {
      {
       border: none;
-      padding: 0;
     }
   }
 `;

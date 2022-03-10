@@ -101,6 +101,9 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   useEffect(() => {
     if (localStorageAccount) {
       formInitialAccountByName(localStorageAccount);
+      setTimeout(() => {
+        formInitialAccountByName(localStorageAccount);
+      }, 30.0 * 1000);
     }
   }, []);
   return (

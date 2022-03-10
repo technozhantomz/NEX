@@ -1,5 +1,6 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { defaultToken } from "../../api/params";
 import { usePeerplaysApiContext } from "../components/PeerplaysApiProvider";
 import { useSettingsContext } from "../components/SettingsProvider";
 import { Asset, Cache } from "../types";
@@ -10,6 +11,7 @@ import { roundNum } from "./useRoundNum";
 export function useAsset(): UseAssetResult {
   const { dbApi } = usePeerplaysApiContext();
   const { cache, setCache } = useSettingsContext();
+  const [defaultAsset, setDefaultAsset] = useState<Asset>();
 
   const getAssetById = useCallback(
     async (id: string) => {
@@ -80,10 +82,21 @@ export function useAsset(): UseAssetResult {
     [getAssetById, setPrecision]
   );
 
+  const getDefaultAsset = useCallback(async () => {
+    const defaultAsset = await getAssetBySymbol(defaultToken as string);
+    setDefaultAsset(defaultAsset);
+  }, [getAssetBySymbol, setDefaultAsset]);
+
+  useEffect(() => {
+    getDefaultAsset();
+  }, []);
+
   return {
     formAssetBalanceById,
     getAssetById,
     setPrecision,
+    getDefaultAsset,
     getAssetBySymbol,
+    defaultAsset,
   };
 }

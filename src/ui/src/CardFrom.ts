@@ -22,4 +22,7 @@ export const CardFrom = styled(AntdForm)`
       color: var(--ant-success-color);
     }
   }
+  .ant-form-item-has-error {
+    margin-bottom: 10px;
+  }
 `;

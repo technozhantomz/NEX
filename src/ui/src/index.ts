@@ -15,6 +15,7 @@ export {
   Input,
   InputNumber,
   Menu,
+  Modal,
   Table,
   Tooltip,
   Card,
