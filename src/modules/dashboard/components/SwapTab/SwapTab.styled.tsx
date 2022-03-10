@@ -1,5 +1,5 @@
-import { styled, Form as swapForm } from "../../../../ui/src";
-
+import { styled, Form as swapForm, } from "../../../../ui/src";
+import { Button } from "antd";
 export const SwapContainer = styled.div`
   background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -73,6 +73,11 @@ export const SwapFormItem = styled(swapForm.Item)`
 export const SwapItem = styled(swapForm.Item)`
   .ant-input-affix-wrapper {
     height: 65px;
+    background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #C1C2C4;
+    border-radius: 4px;
+    opacity: 1;
     .ant-input-prefix {
       min-width: 135px;
       width: 33%;
@@ -81,8 +86,19 @@ export const SwapItem = styled(swapForm.Item)`
       text-align: right;
     }
   }
+  z-index:1;
+  
 `;
 
 export const SwapSellItem = styled(SwapItem)`
   margin: 0;
+  margin-bottom:20px;
+`;
+
+export const button = styled(Button)`
+  transform: rotate(90deg);
+  position: absolute;
+  z-index:2;
+  margin-top: 60px;
+
 `;
