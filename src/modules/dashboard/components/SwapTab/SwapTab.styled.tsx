@@ -1,5 +1,11 @@
-import { styled, Form as swapForm, Tooltip as tooltip } from "../../../../ui/src";
 import { Button } from "antd";
+
+import {
+  styled,
+  Form as swapForm,
+  Tooltip as tooltip,
+} from "../../../../ui/src";
+
 export const SwapContainer = styled.div`
   background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -74,8 +80,8 @@ export const SwapItem = styled(swapForm.Item)`
   .ant-input-affix-wrapper {
     height: 65px;
     background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-    border: 1px solid #C1C2C4;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    border: 1px solid #c1c2c4;
     border-radius: 4px;
     opacity: 1;
     .ant-input-prefix {
@@ -86,34 +92,31 @@ export const SwapItem = styled(swapForm.Item)`
       text-align: right;
     }
   }
-  z-index:1;
-  
+  z-index: 1;
 `;
 
 export const SwapSellItem = styled(SwapItem)`
   margin: 0;
-  margin-bottom:20px;
+  margin-bottom: 20px;
 `;
 
 export const button = styled(Button)`
   transform: rotate(90deg);
   position: absolute;
-  z-index:2;
+  z-index: 2;
   margin-top: 60px;
-
 `;
 
 export const Tooltip = styled(tooltip)`
   margin-left: 30px;
-
-`
+`;
 export const TooltipPara = styled.p`
   color: var(---text-icons);
   font: normal normal normal 14px/20px Inter;
   letter-spacing: 0px;
   color: #212121;
   opacity: 1;
-   @media (max-width: 500px) {
-      font-size: 11px;
-   }
-`
+  @media (max-width: 500px) {
+    font-size: 11px;
+  }
+`;

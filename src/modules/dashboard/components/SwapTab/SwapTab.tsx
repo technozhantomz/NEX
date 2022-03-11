@@ -1,4 +1,5 @@
 import { Form, Input } from "antd";
+
 import { defaultToken } from "../../../../api/params/networkparams";
 import { PasswordModal } from "../../../../common/components";
 import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
@@ -26,8 +27,7 @@ export const SwapTab = (): JSX.Element => {
     assetValueInfo,
   } = useSwap();
 
-
-  const abc = (
+  const InfoToolTip = (
     <Styled.TooltipPara>
       {status === "" ? "" : status}
       {status === "" ? "" : <p>Transaction Type : Trade</p>}
@@ -39,7 +39,11 @@ export const SwapTab = (): JSX.Element => {
     <Styled.SwapContainer>
       <Styled.SwapForm.Provider onFormFinish={onFormFinish}>
         <Styled.SwapForm form={swapForm} name="swapForm" onFinish={confirm}>
-            <Styled.button icon={<SwapOutlined />} shape="circle" onClick={swapAsset} />
+          <Styled.button
+            icon={<SwapOutlined />}
+            shape="circle"
+            onClick={swapAsset}
+          />
           <Styled.SwapSellItem
             name="sellAmount"
             rules={formValdation.sellAmount}
@@ -93,11 +97,10 @@ export const SwapTab = (): JSX.Element => {
       <Styled.InfoDiv>
         <Styled.InfoPara>
           {assetValueInfo}
-          <Styled.Tooltip placement='left' title={abc} color='#E3EBF8'>
+          <Styled.Tooltip placement="left" title={InfoToolTip} color="#E3EBF8">
             <InfoCircleOutlined />
           </Styled.Tooltip>
         </Styled.InfoPara>
-
       </Styled.InfoDiv>
       {/*<DashboardButton label="Swap Coins" />
       <Styled.HistoryLinkDiv>
