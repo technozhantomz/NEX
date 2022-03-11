@@ -1,4 +1,4 @@
-import { styled, Form as swapForm, } from "../../../../ui/src";
+import { styled, Form as swapForm, Tooltip as tooltip } from "../../../../ui/src";
 import { Button } from "antd";
 export const SwapContainer = styled.div`
   background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
@@ -102,3 +102,18 @@ export const button = styled(Button)`
   margin-top: 60px;
 
 `;
+
+export const Tooltip = styled(tooltip)`
+  margin-left: 30px;
+
+`
+export const TooltipPara = styled.p`
+  color: var(---text-icons);
+  font: normal normal normal 14px/20px Inter;
+  letter-spacing: 0px;
+  color: #212121;
+  opacity: 1;
+   @media (max-width: 500px) {
+      font-size: 11px;
+   }
+`
