@@ -17,7 +17,7 @@ Node v16+ is required and it can be installed using nvm following these [install
 
 Clone this repo:
 ```
-https://gitlab.com/PBSA/NEX.git -b dev
+https://gitlab.com/PBSA/NEX.git -b <branch name>
 ```
 
 Now make sure you are in the application's root directory. Install app dependecies:
