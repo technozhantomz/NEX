@@ -5,6 +5,8 @@ import { AssetsTable } from "../../components/AssetsTable";
 
 import * as Styled from "./WalletPage.styled";
 
+const { TabPane } = Styled.Tabs;
+
 const WalletPage: NextPage = () => {
   return (
     <Layout
@@ -15,7 +17,12 @@ const WalletPage: NextPage = () => {
       dexLayout={true}
     >
       <Styled.WalletCard>
-        <AssetsTable />
+        <Styled.Tabs defaultActiveKey="1" centered={true}>
+          <TabPane tab="Assets" key="1">
+            <AssetsTable />
+          </TabPane>
+          <TabPane tab="Contacts" key="2"></TabPane>
+        </Styled.Tabs>
       </Styled.WalletCard>
     </Layout>
   );

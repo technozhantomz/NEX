@@ -1,1 +1,1 @@
-export { default } from "./WithdrawForm";
+export * from "./WithdrawForm";

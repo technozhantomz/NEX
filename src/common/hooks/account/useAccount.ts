@@ -1,7 +1,7 @@
 import { Login, PrivateKey } from "peerplaysjs-lib";
 import { useCallback, useState } from "react";
 
-import { useAsset, useSidechainAccounts } from "..";
+import { useAsset } from "..";
 import { defaultToken } from "../../../api/params";
 import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
 import { useUserContext } from "../../components/UserProvider";
@@ -20,7 +20,6 @@ export function useAccount(): UseAccountResult {
   const [loading, setLoading] = useState<boolean>(false);
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
-  const { getSidechainAccounts } = useSidechainAccounts();
 
   const getFullAccount = useCallback(
     async (name: string, subscription: boolean) => {
@@ -50,7 +49,7 @@ export function useAccount(): UseAccountResult {
   );
 
   const removeAccount = useCallback(() => {
-    updateAccount("", "", [], []);
+    updateAccount("", "", []);
     setIsAccountLocked(true);
     setLocalStorageAccount("");
   }, [updateAccount, setIsAccountLocked, setLocalStorageAccount]);
@@ -64,15 +63,7 @@ export function useAccount(): UseAccountResult {
             return formAssetBalanceById(balance.asset_type, balance.balance);
           })
         );
-        const sidechainAcccounts = await getSidechainAccounts(
-          fullAccount.account.id
-        );
-        updateAccount(
-          fullAccount.account.id,
-          fullAccount.account.name,
-          assets,
-          sidechainAcccounts
-        );
+        updateAccount(fullAccount.account.id, fullAccount.account.name, assets);
         setIsAccountLocked(false);
         setLoading(false);
       } catch (e) {
@@ -94,14 +85,10 @@ export function useAccount(): UseAccountResult {
               return formAssetBalanceById(balance.asset_type, balance.balance);
             })
           );
-          const sidechainAcccounts = await getSidechainAccounts(
-            fullAccount.account.id
-          );
           updateAccount(
             fullAccount.account.id,
             fullAccount.account.name,
-            assets,
-            sidechainAcccounts
+            assets
           );
         }
         setLoading(false);

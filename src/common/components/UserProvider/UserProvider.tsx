@@ -6,8 +6,8 @@ import React, {
   useState,
 } from "react";
 
-import { useAsset, useLocalStorage, useSidechainAccounts } from "../../hooks";
-import { Asset, FullAccount, SidechainAcccount } from "../../types";
+import { useAsset, useLocalStorage } from "../../hooks";
+import { Asset, FullAccount } from "../../types";
 import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
 import { UserContextType } from "./UserProvider.types";
@@ -21,25 +21,12 @@ const defaultUserState: UserContextType = {
   id: "",
   name: "",
   assets: [],
-  sidechainAcccounts: [],
   isAccountLocked: true,
-  updateAccount: function (
-    id: string,
-    name: string,
-    assets: Asset[],
-    sidechainAcccounts: SidechainAcccount[]
-  ): void {
-    throw new Error(
-      `Function not implemented. ${id},${name}, ${assets}, ${sidechainAcccounts}`
-    );
+  updateAccount: function (id: string, name: string, assets: Asset[]): void {
+    throw new Error(`Function not implemented. ${id},${name}, ${assets}`);
   },
   setAssets: function (assets: Asset[]): void {
     throw new Error(`Function not implemented. ${assets}`);
-  },
-  setSidechainAcccounts: function (
-    sidechainAcccounts: SidechainAcccount[]
-  ): void {
-    throw new Error(`Function not implemented. ${sidechainAcccounts}`);
   },
   setIsAccountLocked: function (isAccountLocked: boolean) {
     throw new Error(`Function not implemented. ${isAccountLocked}`);
@@ -56,27 +43,17 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     "currentAccount"
   ) as [string, (value: string) => void];
   const { formAssetBalanceById } = useAsset();
-  const { getSidechainAccounts } = useSidechainAccounts();
   const { dbApi } = usePeerplaysApiContext();
   const [id, setId] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [assets, _setAssets] = useState<Asset[]>([]);
-  const [sidechainAcccounts, _setSidechainAcccounts] = useState<
-    SidechainAcccount[]
-  >([]);
   const [isAccountLocked, _setIsAccountLocked] = useState<boolean>(true);
 
   const updateAccount = useCallback(
-    (
-      id: string,
-      name: string,
-      assets: Asset[],
-      sidechainAcccounts: SidechainAcccount[]
-    ) => {
+    (id: string, name: string, assets: Asset[]) => {
       setId(id);
       setName(name);
       _setAssets(assets);
-      _setSidechainAcccounts(sidechainAcccounts);
     },
     [setId, setName, _setAssets]
   );
@@ -86,13 +63,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
       _setAssets(assets);
     },
     [_setAssets]
-  );
-
-  const setSidechainAcccounts = useCallback(
-    (sidechainAcccounts: SidechainAcccount[]) => {
-      _setSidechainAcccounts(sidechainAcccounts);
-    },
-    [_setSidechainAcccounts]
   );
 
   const setIsAccountLocked = useCallback(
@@ -115,13 +85,11 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
               return formAssetBalanceById(balance.asset_type, balance.balance);
             })
           );
-          const sidechainAcccounts: SidechainAcccount[] =
-            await getSidechainAccounts(fullAccount.account.id);
+
           updateAccount(
             fullAccount.account.id,
             fullAccount.account.name,
-            assets,
-            sidechainAcccounts
+            assets
           );
         }
       } catch (e) {
@@ -134,9 +102,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   useEffect(() => {
     if (localStorageAccount) {
       formInitialAccountByName(localStorageAccount);
-      setTimeout(() => {
-        formInitialAccountByName(localStorageAccount);
-      }, 30.0 * 1000);
     }
   }, []);
   return (
@@ -145,13 +110,11 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         id,
         name,
         assets,
-        sidechainAcccounts,
         localStorageAccount,
         setLocalStorageAccount,
         isAccountLocked,
         updateAccount,
         setAssets,
-        setSidechainAcccounts,
         setIsAccountLocked,
       }}
     >

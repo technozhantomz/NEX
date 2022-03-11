@@ -12,7 +12,9 @@ export function useAsset(): UseAssetResult {
   const { dbApi } = usePeerplaysApiContext();
   const { cache, setCache } = useSettingsContext();
   const [defaultAsset, setDefaultAsset] = useState<Asset>();
-
+  const [sidechainAssets, setSidechainAssets] = useState<Asset[]>([]);
+  const [loadingSidechainAssets, setLoadingSidechainAssets] =
+    useState<boolean>(true);
   const getAssetById = useCallback(
     async (id: string) => {
       if (
@@ -73,13 +75,6 @@ export function useAsset(): UseAssetResult {
     []
   );
 
-  const setAssets = useCallback(async (assetId: string, quantity: number) => {
-    const precision = await dbApi("get_assets", [[assetId]]).then(
-      (asset: { precision: any }[]) => asset[0].precision
-    );
-    return quantity / 10 ** precision;
-  }, []);
-
   const formAssetBalanceById = useCallback(
     async (id: string, amount: number) => {
       const asset = await getAssetById(id);
@@ -94,17 +89,43 @@ export function useAsset(): UseAssetResult {
     setDefaultAsset(defaultAsset);
   }, [getAssetBySymbol, setDefaultAsset]);
 
+  const getSidechainAssets = useCallback(async () => {
+    try {
+      const globalProperties = await dbApi("get_global_properties");
+
+      const btcAssetId = globalProperties.parameters.extensions
+        .btc_asset as string;
+      const hbdAssetId = globalProperties.parameters.extensions
+        .hbd_asset as string;
+      const hiveAssetId = globalProperties.parameters.extensions
+        .hive_asset as string;
+
+      const sidechainAssetsIds = [btcAssetId, hbdAssetId, hiveAssetId];
+
+      const sidechainAssets = await Promise.all(
+        sidechainAssetsIds.map(getAssetById)
+      );
+      setSidechainAssets(sidechainAssets);
+      setLoadingSidechainAssets(false);
+    } catch (e) {
+      console.log(e);
+      setLoadingSidechainAssets(false);
+    }
+  }, [dbApi, getAssetById, setSidechainAssets, setLoadingSidechainAssets]);
+
   useEffect(() => {
     getDefaultAsset();
+    getSidechainAssets();
   }, []);
 
   return {
     formAssetBalanceById,
     getAssetById,
     setPrecision,
-    setAssets,
     getDefaultAsset,
     getAssetBySymbol,
     defaultAsset,
+    sidechainAssets,
+    loadingSidechainAssets,
   };
 }

@@ -9,9 +9,10 @@ import { Asset } from "../../../../../common/types";
 
 import { IAssetRow, UseAssetsTabResult } from "./useAssetsTable.types";
 
-export function useAssetsTab(): UseAssetsTabResult {
+export function useAssetsTable(): UseAssetsTabResult {
   const [tableAssets, _setTableAssets] = useState<IAssetRow[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState<boolean>(true);
   const { dbApi } = usePeerplaysApiContext();
   const { assets, localStorageAccount } = useUserContext();
   const router = useRouter();
@@ -56,9 +57,9 @@ export function useAssetsTab(): UseAssetsTabResult {
   const setTableAssets = useCallback(async () => {
     if (assets && assets.length) {
       try {
-        setLoading(true);
         const assetsRows = await Promise.all(assets.map(formAssetRow));
         _setTableAssets(assetsRows);
+
         setLoading(false);
       } catch (e) {
         setLoading(false);

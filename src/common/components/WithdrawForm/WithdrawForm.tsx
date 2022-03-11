@@ -10,7 +10,7 @@ type Props = {
   asset: string;
 };
 
-const WithdrawForm = ({ asset }: Props): JSX.Element => {
+export const WithdrawForm = ({ asset }: Props): JSX.Element => {
   const { defaultAsset } = useAsset();
   const {
     status,
@@ -62,5 +62,3 @@ const WithdrawForm = ({ asset }: Props): JSX.Element => {
     </Form.Provider>
   );
 };
-
-export default WithdrawForm;

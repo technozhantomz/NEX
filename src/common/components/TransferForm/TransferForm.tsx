@@ -11,7 +11,7 @@ type Props = {
   asset: string;
 };
 
-const TransferForm = ({ asset }: Props): JSX.Element => {
+export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
@@ -96,5 +96,3 @@ const TransferForm = ({ asset }: Props): JSX.Element => {
     </Form.Provider>
   );
 };
-
-export default TransferForm;
