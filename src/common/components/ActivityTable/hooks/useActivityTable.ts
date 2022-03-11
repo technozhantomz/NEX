@@ -12,34 +12,7 @@ export function useActivityTable(): UseActivityTable {
   const { dbApi } = usePeerplaysApiContext();
   const { id } = useUserContext();
   const { getAssetById, setPrecision } = useAsset();
-  const { getHistoryById, getOperationType } = useHistory();
-  const columns = [
-    {
-      title: "Time",
-      dataIndex: "time",
-      key: "time",
-    },
-    {
-      title: "Price (kbyte)",
-      dataIndex: "price",
-      key: "price",
-    },
-    {
-      title: "Info",
-      dataIndex: "info",
-      key: "info",
-    },
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Fee",
-      dataIndex: "fee",
-      key: "fee",
-    },
-  ];
+  const { getHistoryById, getOperationInfo } = useHistory();
 
   useEffect(() => {
     setTableActivity();
@@ -47,7 +20,7 @@ export function useActivityTable(): UseActivityTable {
 
   const formDate = (
     date: string | number | Date,
-    pattern = ["date", "month", "year"]
+    pattern = ["year", "month", "date", "time"]
   ): string => {
     const newDate = String(new Date(date)).split(" ");
     const dateObj = {
@@ -61,21 +34,19 @@ export function useActivityTable(): UseActivityTable {
 
   const formActivityRow = useCallback(
     async (activity): Promise<ActivityRow> => {
-      console.log(activity);
       const fee = activity.op[1].fee;
       const time = await dbApi("get_block_header", [activity.block_num]).then(
         (block: { timestamp: any }) => formDate(block.timestamp)
       );
-      //const { type, info } = await formInfoColumn(id, el);
-      const type = getOperationType(id, activity);
+      const info = await getOperationInfo(id, activity);
       const feeAsset = await getAssetById(fee.asset_id);
       return {
         key: activity.id,
         time,
-        price: type,
-        info: "",
+        price: info.type,
+        info: info.infoString,
         id: activity.id,
-        fee: `${await setPrecision(false, fee.amount, feeAsset.precision)} ${
+        fee: `${setPrecision(false, fee.amount, feeAsset.precision)} ${
           feeAsset.symbol
         }`,
       };
@@ -98,17 +69,13 @@ export function useActivityTable(): UseActivityTable {
     try {
       setLoading(true);
       const activityRows = await Promise.all(history.map(formActivityRow));
-      console.log(activityRows);
       _setTableActivity(activityRows);
       setLoading(false);
     } catch (e) {
       setLoading(false);
       console.log(e);
     }
-
-    console.log(history);
-    return [];
   }, [tableActivity, formActivityRow, _setTableActivity, setLoading, id]);
 
-  return { tableActivity, loading, columns };
+  return { tableActivity, loading };
 }

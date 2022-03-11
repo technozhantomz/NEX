@@ -1,4 +1,5 @@
 import { ConfigProvider } from "antd";
+import en_US from "antd/lib/date-picker/locale/en_US";
 import Head from "next/head";
 import React, { FunctionComponent, ReactNode, useEffect } from "react";
 
@@ -56,7 +57,7 @@ export const Layout: FunctionComponent<Props> = ({
       </Head>
       <Styled.Page className={dexLayout ? "dex-layout" : ""}>
         <TopBar />
-        <ConfigProvider>
+        <ConfigProvider locale={en_US}>
           <Styled.Layout className={getStyles()}>
             {heading != undefined ? (
               <Styled.PageHeading className={"page-heading"}>

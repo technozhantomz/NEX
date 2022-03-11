@@ -2,11 +2,12 @@ import { breakpoints } from "../../../ui/src/breakpoints";
 import { useViewportContext } from "../ViewportProvider";
 
 import * as Styled from "./ActivityTable.styled";
+import { ActivityColumns as columns } from "./components/ActicityColumns/ActivityColumns";
 import { ActivityList } from "./components/ActivityList";
 import { useActivityTable } from "./hooks";
 
 export const ActivityTable = (): JSX.Element => {
-  const { tableActivity, loading, columns } = useActivityTable();
+  const { tableActivity, loading } = useActivityTable();
   const { width } = useViewportContext();
 
   return (
