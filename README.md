@@ -29,7 +29,7 @@ npm install
 Create a `.env.local` file in the root of the repository:
 
 ```
-cp env.example .env.local
+cp .env.example .env.local
 ```
 
 .env.local
