@@ -1,7 +1,6 @@
 export { default as styled, css } from "styled-components";
 export { Button } from "./Button";
 export { Select, Option } from "./Select";
-export { Box, Flex } from "reflexbox/styled-components";
 export { Dropdown } from "./Dropdown";
 export { DownOutlined } from "./DownOutlined";
 export { CardFrom, CardFormButton } from "./CardFrom";
