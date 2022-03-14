@@ -20,7 +20,8 @@ export const ActivityColumns = [
     dataIndex: "info",
     key: "info",
     render: (_value: unknown, record: ActivityRow): JSX.Element => (
-      <Link href={"/"}>{_value}</Link>
+      // <Link href={"/"}>{_value}</Link>
+      <span>{_value}</span>
     ),
   },
   {
