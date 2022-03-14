@@ -7,6 +7,7 @@ export { DownOutlined } from "./DownOutlined";
 export { CardFrom, CardFormButton } from "./CardFrom";
 export { MenuCard } from "./MenuCard";
 export { Avatar } from "./Avatar";
+export { Typography, Text } from './Typography';
 
 export {
   Row,
@@ -22,7 +23,8 @@ export {
   Switch,
   List,
   Tooltip,
-} from "antd";
+  Space
+} from 'antd';
 
 export {
   DollarOutlined,

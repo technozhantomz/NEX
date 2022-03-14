@@ -1,10 +1,10 @@
-import { styled, Card as UiCard } from "../../../../ui/src";
-import { breakpoint } from "../../../../ui/src/breakpoints";
+import { styled, Card as UiCard } from '../../../../ui/src';
+import { breakpoint } from '../../../../ui/src/breakpoints';
 
 export const SettingsCard = styled(UiCard)`
   .ant-card-body {
     padding: 0;
-    max-width: 800px;
+    width: 100%;
     .ant-tabs-tab,
     .ant-tabs-extra-content {
       justify-content: center;
