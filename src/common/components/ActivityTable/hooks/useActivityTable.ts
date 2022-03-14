@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { breakpoints } from "../../../../ui/src/breakpoints";
 import { useAsset, useHistory } from "../../../hooks";
 import { usePeerplaysApiContext } from "../../PeerplaysApiProvider";
 import { useUserContext } from "../../UserProvider";
+import { useViewportContext } from "../../ViewportProvider";
 
 import { ActivityRow, UseActivityTable } from "./useActivityTable.types";
 
@@ -11,6 +13,7 @@ export function useActivityTable(): UseActivityTable {
   const [loading, setLoading] = useState<boolean>(false);
   const { dbApi } = usePeerplaysApiContext();
   const { id } = useUserContext();
+  const { width } = useViewportContext();
   const { getAssetById, setPrecision } = useAsset();
   const { getHistoryById, getOperationInfo } = useHistory();
 
@@ -20,16 +23,18 @@ export function useActivityTable(): UseActivityTable {
 
   const formDate = (
     date: string | number | Date,
-    pattern = ["year", "month", "date", "time"]
+    pattern = ["day", "month", "date", "year"]
   ): string => {
     const newDate = String(new Date(date)).split(" ");
     const dateObj = {
+      day: newDate[0] + ",",
       date: newDate[2],
       month: newDate[1],
       year: newDate[3],
       time: newDate[4],
     };
-    return pattern.map((el) => dateObj[el]).join(" ");
+    if (width > breakpoints.sm) return String(date).replace("T", " ");
+    return pattern.map((el) => dateObj[el]).join(" ") + " | "  + dateObj.time;
   };
 
   const formActivityRow = useCallback(

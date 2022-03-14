@@ -34,6 +34,7 @@ export const AssetsTable = ({
           loading={loading}
           pagination={false}
           size="small"
+          className="asset-table"
         />
       ) : (
         <AssetList {...assetListProps} />

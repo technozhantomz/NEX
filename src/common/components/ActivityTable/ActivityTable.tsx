@@ -19,6 +19,7 @@ export const ActivityTable = (): JSX.Element => {
           loading={loading}
           pagination={false}
           size="small"
+          className="activity-table"
         />
       ) : (
         <ActivityList />
