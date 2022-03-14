@@ -1,10 +1,11 @@
-import { Tabs } from "antd";
+import { Button, Checkbox, Form, Input, Tabs } from "antd";
 import type { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 
 import { FormDisclamer, Layout } from "../../../../common/components";
 import { Card } from "../../../../ui/src";
+import { GeneralTab } from "../../components/GeneralTab";
 
 import * as Styled from "./SettingPage.styled";
 
@@ -22,7 +23,7 @@ const SettingPage: NextPage = () => {
       <Styled.SettingsCard>
         <Tabs defaultActiveKey="1">
           <TabPane tab="General" key="1">
-            Content of Tab Pane 1
+            <GeneralTab />
           </TabPane>
           <TabPane tab="Account" key="2">
             Content of Tab Pane 2
