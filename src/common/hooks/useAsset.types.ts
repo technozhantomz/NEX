@@ -7,4 +7,6 @@ export type UseAssetResult = {
   setPrecision: (roundTo: boolean, amount: number, precision: number) => number;
   getDefaultAsset: () => Promise<void>;
   defaultAsset: Asset | undefined;
+  sidechainAssets: Asset[];
+  loadingSidechainAssets: boolean;
 };

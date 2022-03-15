@@ -1,32 +1,33 @@
-import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
-import { defaultToken } from "../../../../../api/params";
-import { useUserContext } from "../../../../../common/components/UserProvider";
+import { defaultToken } from "../../../../api/params/networkparams";
+import { Form } from "../../../../ui/src";
 import {
   roundNum,
   useAccount,
-  useAsset,
   useFees,
+  useSonNetwork,
   useTransactionBuilder,
-} from "../../../../../common/hooks";
-import { Account } from "../../../../../common/types";
-import { Form } from "../../../../../ui/src";
+  useTransferTransactionBuilder,
+} from "../../../hooks";
+import { Account } from "../../../types";
+import { useUserContext } from "../../UserProvider";
 
 import { ITransferForm } from "./useTransferForm.types";
 
 export function useTransferForm(): ITransferForm {
-  const [status, upStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [toAccount, setToAccount] = useState<Account>();
   const [fromAccount, setFromAccount] = useState<Account>();
   const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
     useAccount();
-  const { defaultAsset } = useAsset();
   const { localStorageAccount, assets } = useUserContext();
   const { trxBuilder } = useTransactionBuilder();
   const { calculteTransferFee } = useFees();
+  const { buildTransferTransaction } = useTransferTransactionBuilder();
+  const { sonAccount, getSonNetworkStatus } = useSonNetwork();
   const [transferForm] = Form.useForm();
 
   useEffect(() => {
@@ -58,7 +59,7 @@ export function useTransferForm(): ITransferForm {
   };
 
   const handleValuesChange = (changedValues: any) => {
-    upStatus("");
+    setStatus("");
     if (changedValues.quantity) {
       if (changedValues.quantity < 0) {
         transferForm.setFieldsValue({ quantity: 0 });
@@ -68,7 +69,7 @@ export function useTransferForm(): ITransferForm {
           (asset) => asset.symbol === selectedAsset
         );
 
-        if (selectedAccountAsset) {
+        if (selectedAccountAsset && changedValues.quantity > 0) {
           transferForm.setFieldsValue({
             quantity: roundNum(
               changedValues.quantity,
@@ -88,76 +89,16 @@ export function useTransferForm(): ITransferForm {
     const to = (
       toAccount ? toAccount : await getAccountByName(values.to)
     ) as Account;
-    const asset = assets.filter((asset) => asset.symbol === values.asset)[0];
-    let memoFromPublic, memoToPublic;
-    if (values.memo) {
-      memoFromPublic = from.options.memo_key;
-      memoToPublic = to.options.memo_key;
-    }
-    let memoFromPrivkey;
     const activeKey = getPrivateKey(password, "active");
-    if (values.memo) {
-      if (from.options.memo_key === from.active.key_auths[0][0]) {
-        memoFromPrivkey = getPrivateKey(password, "active");
-      } else {
-        memoFromPrivkey = getPrivateKey(password, "memo");
-      }
-      if (!memoFromPrivkey) {
-        throw new Error("Missing private memo key for sender: " + from.name);
-      }
-    }
-    let memoObject;
-    if (values.memo && memoFromPublic && memoToPublic) {
-      if (
-        !/111111111111111111111/.test(memoFromPublic) &&
-        !/111111111111111111111/.test(memoToPublic)
-      ) {
-        const nonce = TransactionHelper.unique_nonce_uint64();
-        const message = Aes.encrypt_with_checksum(
-          memoFromPrivkey,
-          memoToPublic,
-          nonce,
-          values.memo
-        );
-        memoObject = {
-          from: memoFromPublic,
-          to: memoToPublic,
-          nonce,
-          message,
-        };
-      } else {
-        memoObject = {
-          from: memoFromPublic,
-          to: memoToPublic,
-          nonce: 0,
-          message: Buffer.isBuffer(values.memo)
-            ? values.memo
-            : Buffer.concat([
-                Buffer.alloc(4),
-                Buffer.from(values.memo.toString("utf-8"), "utf-8"),
-              ]),
-        };
-      }
-    }
-
-    const amount = {
-      amount: values.quantity * 10 ** Number(asset?.precision),
-      asset_id: asset?.id,
-    };
-
-    const trx = {
-      type: "transfer",
-      params: {
-        fee: {
-          amount: 0,
-          asset_id: defaultAsset?.id,
-        },
-        from: from.id,
-        to: to.id,
-        amount,
-        memo: memoObject,
-      },
-    };
+    const asset = assets.filter((asset) => asset.symbol === values.asset)[0];
+    const trx = buildTransferTransaction(
+      from,
+      to,
+      values.memo,
+      asset,
+      password,
+      values.quantity
+    );
     let trxResult;
     try {
       trxResult = await trxBuilder([trx], [activeKey]);
@@ -167,13 +108,13 @@ export function useTransferForm(): ITransferForm {
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
       setVisible(false);
-      upStatus(
+      setStatus(
         `Successfully Transfered ${values.quantity} ${values.asset} to ${values.to}`
       );
       transferForm.resetFields();
     } else {
       setVisible(false);
-      upStatus("Server error, please try again later.");
+      setStatus("Server error, please try again later.");
     }
   };
 
@@ -191,6 +132,15 @@ export function useTransferForm(): ITransferForm {
     }
     if (!acc) {
       return Promise.reject(new Error("User not found"));
+    }
+    if (
+      sonAccount &&
+      (acc.id === sonAccount.id || acc.name === sonAccount.name)
+    ) {
+      const sonNetworkStatus = await getSonNetworkStatus();
+      if (!sonNetworkStatus.isSonNetworkOk) {
+        return Promise.reject(new Error("SONs network is not available now"));
+      }
     }
     setToAccount(acc);
     return Promise.resolve();

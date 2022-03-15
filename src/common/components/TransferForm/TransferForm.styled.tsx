@@ -1,5 +1,5 @@
-import { CardFormButton, CardFrom, styled } from "../../../../ui/src";
-import { breakpoint } from "../../../../ui/src/breakpoints";
+import { CardFormButton, CardFrom, styled } from "../../../ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const TransferForm = styled(CardFrom)`
    {

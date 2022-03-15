@@ -1,16 +1,17 @@
-import { PasswordModal } from "../../../../common/components/PasswordModal";
-import { useUserContext } from "../../../../common/components/UserProvider";
-import { useAsset } from "../../../../common/hooks";
-import { Form, Input } from "../../../../ui/src";
+import { Form, Input } from "antd";
 
-import * as Styled from "./TransferTab.styled";
+import { useAsset } from "../../hooks";
+import { PasswordModal } from "../PasswordModal";
+import { useUserContext } from "../UserProvider";
+
+import * as Styled from "./TransferForm.styled";
 import { useTransferForm } from "./hooks";
 
 type Props = {
   asset: string;
 };
 
-export const TransferTab = ({ asset }: Props): JSX.Element => {
+export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
@@ -44,17 +45,6 @@ export const TransferTab = ({ asset }: Props): JSX.Element => {
           >
             <Input disabled={true} placeholder="From" />
           </Form.Item>
-
-          <Form.Item
-            name="quantity"
-            validateFirst={true}
-            rules={formValdation.quantity}
-            validateTrigger="onBlur"
-          >
-            <Input min={0} placeholder="Quantity" type="number" />
-          </Form.Item>
-        </div>
-        <div className="two-input-row">
           <Form.Item
             name="to"
             validateFirst={true}
@@ -63,7 +53,16 @@ export const TransferTab = ({ asset }: Props): JSX.Element => {
           >
             <Input placeholder="To" />
           </Form.Item>
-
+        </div>
+        <div className="two-input-row">
+          <Form.Item
+            name="quantity"
+            validateFirst={true}
+            rules={formValdation.quantity}
+            validateTrigger="onBlur"
+          >
+            <Input placeholder="Quantity" type="number" />
+          </Form.Item>
           <Form.Item
             name="asset"
             validateFirst={true}

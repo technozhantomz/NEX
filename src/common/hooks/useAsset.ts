@@ -12,7 +12,9 @@ export function useAsset(): UseAssetResult {
   const { dbApi } = usePeerplaysApiContext();
   const { cache, setCache } = useSettingsContext();
   const [defaultAsset, setDefaultAsset] = useState<Asset>();
-
+  const [sidechainAssets, setSidechainAssets] = useState<Asset[]>([]);
+  const [loadingSidechainAssets, setLoadingSidechainAssets] =
+    useState<boolean>(true);
   const getAssetById = useCallback(
     async (id: string) => {
       if (
@@ -87,9 +89,35 @@ export function useAsset(): UseAssetResult {
     setDefaultAsset(defaultAsset);
   }, [getAssetBySymbol, setDefaultAsset]);
 
+  const getSidechainAssets = useCallback(async () => {
+    try {
+      setLoadingSidechainAssets(true);
+      const globalProperties = await dbApi("get_global_properties");
+
+      const btcAssetId = globalProperties.parameters.extensions
+        .btc_asset as string;
+      const hbdAssetId = globalProperties.parameters.extensions
+        .hbd_asset as string;
+      const hiveAssetId = globalProperties.parameters.extensions
+        .hive_asset as string;
+
+      const sidechainAssetsIds = [btcAssetId, hbdAssetId, hiveAssetId];
+
+      const sidechainAssets = await Promise.all(
+        sidechainAssetsIds.map(getAssetById)
+      );
+      setSidechainAssets(sidechainAssets);
+      setLoadingSidechainAssets(false);
+    } catch (e) {
+      console.log(e);
+      setLoadingSidechainAssets(false);
+    }
+  }, [dbApi, getAssetById, setSidechainAssets, setLoadingSidechainAssets]);
+
   useEffect(() => {
     getDefaultAsset();
-  }, []);
+    getSidechainAssets();
+  }, [getDefaultAsset, getSidechainAssets]);
 
   return {
     formAssetBalanceById,
@@ -98,5 +126,7 @@ export function useAsset(): UseAssetResult {
     getDefaultAsset,
     getAssetBySymbol,
     defaultAsset,
+    sidechainAssets,
+    loadingSidechainAssets,
   };
 }

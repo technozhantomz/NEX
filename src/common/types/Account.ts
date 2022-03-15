@@ -80,3 +80,16 @@ export type ISignupFormData = {
   saved: boolean;
   referrer?: string;
 };
+
+export type SidechainAcccount = {
+  deposit_address: string;
+  deposit_address_data: string;
+  deposit_public_key: string;
+  expires: string;
+  id: string;
+  sidechain: string;
+  sidechain_address_account: string;
+  valid_from: string;
+  withdraw_address: string;
+  withdraw_public_key: string;
+};

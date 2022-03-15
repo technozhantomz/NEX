@@ -17,9 +17,8 @@ export function useAccount(): UseAccountResult {
     setIsAccountLocked,
     setLocalStorageAccount,
   } = useUserContext();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const { formAssetBalanceById } = useAsset();
-
   const { dbApi } = usePeerplaysApiContext();
 
   const getFullAccount = useCallback(

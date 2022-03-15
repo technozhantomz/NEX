@@ -1,5 +1,18 @@
-import { styled, Card as UiCard } from "../../../../ui/src";
+import { styled, Card as UiCard, Tabs as UiTabs } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+
+export const Tabs = styled(UiTabs)`
+  ${breakpoint.xs} {
+    &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
+    &.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
+      width: 100%;
+    }
+    .ant-tabs-tab {
+      flex: 1 1 50%;
+      justify-content: center;
+    }
+  }
+`;
 
 export const WalletCard = styled(UiCard)`
   .ant-card-body {

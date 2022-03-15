@@ -85,6 +85,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
               return formAssetBalanceById(balance.asset_type, balance.balance);
             })
           );
+
           updateAccount(
             fullAccount.account.id,
             fullAccount.account.name,
@@ -101,9 +102,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   useEffect(() => {
     if (localStorageAccount) {
       formInitialAccountByName(localStorageAccount);
-      setTimeout(() => {
-        formInitialAccountByName(localStorageAccount);
-      }, 30.0 * 1000);
     }
   }, []);
   return (

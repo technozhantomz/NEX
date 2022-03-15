@@ -6,3 +6,4 @@ export * from "./Cache";
 export * from "./Settings";
 export * from "./Ticker";
 export * from "./MarketPairStats";
+export * from "./Transaction";
