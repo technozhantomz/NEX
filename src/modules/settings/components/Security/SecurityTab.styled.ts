@@ -1,12 +1,12 @@
 import {
   Form as form,
+  Option as option,
   Select as select,
-  Space as space,
   styled,
   Text as text,
 } from "../../../../ui/src";
 
-export const GeneralSettingsCard = styled.div`
+export const SecuritySettingsCard = styled.div`
   .ant-form-horizontal {
     color: var(---text-icons);
     text-align: left;
@@ -19,18 +19,14 @@ export const GeneralSettingsCard = styled.div`
   }
 `;
 
-export const LanguageLabel = styled(text)`
+export const LockWalletLabel = styled(text)`
   margin-top: 20px;
   margin-bottom: 50px;
 `;
 
-export const LanguageDiv = styled.div`
-  margin-top: 20px;
-`;
+export const SecurityTabForm = styled(form)``;
 
-export const GeneralTabForm = styled(form)``;
-
-export const LanguageFormItem = styled(form.Item)`
+export const LockWalletFormItem = styled(form.Item)`
   width: 40%;
   margin-top: 20px;
   background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
@@ -43,21 +39,20 @@ export const LanguageFormItem = styled(form.Item)`
     height: 50px;
     padding: 0 11px;
     align-items: center;
+    color: var(---text-icons);
+    text-align: left;
+    font: normal normal normal 16px/20px Inter;
+    letter-spacing: 0px;
+    color: #212121;
+    opacity: 1;
+  }
+  @media (max-width: 500px) {
+    width: 80%;
   }
 `;
 
 export const Select = styled(select)``;
 
-export const SecondItem = styled(form.Item)``;
-export const FaucetURL = styled(text)`
-  color: var(---text-icons);
-  text-align: left;
-  font: normal normal normal 14px/17px Inter;
-  letter-spacing: 0px;
-  color: #212121;
-  opacity: 1;
-`;
+export const BtnFormItem = styled(form.Item)``;
 
-export const FaucetText = styled(space)`
-  margin-top: 30px;
-`;
+export const Option = styled(option)``;

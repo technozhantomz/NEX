@@ -6,6 +6,7 @@ import React from "react";
 import { FormDisclamer, Layout } from "../../../../common/components";
 import { Card } from "../../../../ui/src";
 import { GeneralTab } from "../../components/GeneralTab";
+import { SecurityTab } from "../../components/Security";
 
 import * as Styled from "./SettingPage.styled";
 
@@ -29,7 +30,7 @@ const SettingPage: NextPage = () => {
             Content of Tab Pane 2
           </TabPane>
           <TabPane tab="Security" key="3">
-            Content of Tab Pane 3
+            <SecurityTab />
           </TabPane>
           <TabPane tab="Key management" key="4">
             Content of Tab Pane 1
