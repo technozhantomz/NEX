@@ -1,11 +1,10 @@
-import { Button, Checkbox, Form, Input, Tabs } from "antd";
+import { Tabs } from "antd";
 import type { NextPage } from "next";
-import Link from "next/link";
 import React from "react";
 
-import { FormDisclamer, Layout } from "../../../../common/components";
-import { Card } from "../../../../ui/src";
+import { Layout } from "../../../../common/components";
 import { GeneralTab } from "../../components/GeneralTab";
+import { KeyManagementTab } from "../../components/KeyManagementTab";
 import { SecurityTab } from "../../components/Security";
 
 import * as Styled from "./SettingPage.styled";
@@ -33,7 +32,7 @@ const SettingPage: NextPage = () => {
             <SecurityTab />
           </TabPane>
           <TabPane tab="Key management" key="4">
-            Content of Tab Pane 1
+            <KeyManagementTab />
           </TabPane>
           <TabPane tab="Membership" key="5">
             Content of Tab Pane 2
