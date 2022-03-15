@@ -74,12 +74,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           </Form.Item>
         </div>
         <p>Only members with memo key can read your memos</p>
-        <Form.Item
-          name="memo"
-          validateFirst={true}
-          rules={formValdation.memo}
-          validateTrigger="onBlur"
-        >
+        <Form.Item name="memo" validateFirst={true} rules={formValdation.memo}>
           <Input placeholder="Memo" />
         </Form.Item>
         <p>

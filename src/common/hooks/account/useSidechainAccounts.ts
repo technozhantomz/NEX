@@ -2,37 +2,77 @@ import { useCallback, useEffect, useState } from "react";
 
 import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
 import { useUserContext } from "../../components/UserProvider";
+import { SidechainAcccount } from "../../types";
 
-import { UseSidechainAccounts } from "./useSidechainAccounts.types";
+import { UseSidechainAccountsResult } from "./useSidechainAccounts.types";
 
-export function useSidechainAccounts(): UseSidechainAccounts {
+export function useSidechainAccounts(): UseSidechainAccountsResult {
+  const [sidechainAccounts, setSidechainAccounts] = useState<
+    SidechainAcccount[]
+  >([]);
+  const [bitcoinSidechainAccount, setBitcoinSidechainAccount] =
+    useState<SidechainAcccount>();
+  const [loadingSidechainAccounts, setLoadingSidechainAccounts] =
+    useState<boolean>(true);
   const [hasBTCDepositAddress, setHasBTCDepositAddress] =
     useState<boolean>(false);
+  const [hasBTCWithdrawPublicKey, setHasBTCWithdrawPublicKey] =
+    useState<boolean>(false);
   const { dbApi } = usePeerplaysApiContext();
-  const { id, sidechainAcccounts } = useUserContext();
+  const { id } = useUserContext();
+
+  const getSidechainAccounts = useCallback(
+    async (accountId: string) => {
+      try {
+        setLoadingSidechainAccounts(true);
+        const accounts = (await dbApi("get_sidechain_addresses_by_account", [
+          accountId,
+        ])) as SidechainAcccount[];
+        setSidechainAccounts(accounts);
+        if (accounts && accounts.length) {
+          const bitcoinSidechain = accounts.find(
+            (account) => account.sidechain === "bitcoin"
+          );
+          if (
+            bitcoinSidechain &&
+            bitcoinSidechain.deposit_address &&
+            bitcoinSidechain.deposit_address !== ""
+          ) {
+            setBitcoinSidechainAccount(bitcoinSidechain);
+            setHasBTCDepositAddress(true);
+          }
+          if (bitcoinSidechain && bitcoinSidechain.withdraw_public_key !== "") {
+            setHasBTCWithdrawPublicKey(true);
+          }
+        }
+        setLoadingSidechainAccounts(false);
+      } catch (e) {
+        console.log(e);
+        setLoadingSidechainAccounts(false);
+      }
+    },
+    [
+      dbApi,
+      setSidechainAccounts,
+      setHasBTCDepositAddress,
+      setLoadingSidechainAccounts,
+      setHasBTCWithdrawPublicKey,
+      setBitcoinSidechainAccount,
+    ]
+  );
 
   useEffect(() => {
-    if (sidechainAcccounts && sidechainAcccounts.length > 0) {
-      setHasBTCDepositAddress(true);
-    } else if (id !== null && id !== "") {
+    if (id !== null && id !== "") {
       getSidechainAccounts(id);
     }
-  }, [sidechainAcccounts, id]);
-
-  const getSidechainAccounts = useCallback(async (accountId: string) => {
-    const acccounts = await dbApi("get_sidechain_addresses_by_account", [
-      accountId,
-    ])
-      .then((e: string | unknown[]) => (e.length ? e : undefined))
-      .catch(() => false);
-    if (acccounts) {
-      setHasBTCDepositAddress(true);
-    }
-    return acccounts;
-  }, []);
+  }, [id, getSidechainAccounts]);
 
   return {
     hasBTCDepositAddress,
+    hasBTCWithdrawPublicKey,
     getSidechainAccounts,
+    loadingSidechainAccounts,
+    sidechainAccounts,
+    bitcoinSidechainAccount,
   };
 }

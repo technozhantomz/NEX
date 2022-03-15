@@ -91,6 +91,7 @@ export function useAsset(): UseAssetResult {
 
   const getSidechainAssets = useCallback(async () => {
     try {
+      setLoadingSidechainAssets(true);
       const globalProperties = await dbApi("get_global_properties");
 
       const btcAssetId = globalProperties.parameters.extensions
@@ -116,7 +117,7 @@ export function useAsset(): UseAssetResult {
   useEffect(() => {
     getDefaultAsset();
     getSidechainAssets();
-  }, []);
+  }, [getDefaultAsset, getSidechainAssets]);
 
   return {
     formAssetBalanceById,

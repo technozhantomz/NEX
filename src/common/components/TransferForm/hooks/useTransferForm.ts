@@ -1,4 +1,3 @@
-import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../api/params/networkparams";
@@ -6,9 +5,10 @@ import { Form } from "../../../../ui/src";
 import {
   roundNum,
   useAccount,
-  useAsset,
   useFees,
+  useSonNetwork,
   useTransactionBuilder,
+  useTransferTransactionBuilder,
 } from "../../../hooks";
 import { Account } from "../../../types";
 import { useUserContext } from "../../UserProvider";
@@ -23,10 +23,11 @@ export function useTransferForm(): ITransferForm {
   const [fromAccount, setFromAccount] = useState<Account>();
   const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
     useAccount();
-  const { defaultAsset } = useAsset();
   const { localStorageAccount, assets } = useUserContext();
   const { trxBuilder } = useTransactionBuilder();
   const { calculteTransferFee } = useFees();
+  const { buildTransferTransaction } = useTransferTransactionBuilder();
+  const { sonAccount, getSonNetworkStatus } = useSonNetwork();
   const [transferForm] = Form.useForm();
 
   useEffect(() => {
@@ -68,7 +69,7 @@ export function useTransferForm(): ITransferForm {
           (asset) => asset.symbol === selectedAsset
         );
 
-        if (selectedAccountAsset) {
+        if (selectedAccountAsset && changedValues.quantity > 0) {
           transferForm.setFieldsValue({
             quantity: roundNum(
               changedValues.quantity,
@@ -88,76 +89,16 @@ export function useTransferForm(): ITransferForm {
     const to = (
       toAccount ? toAccount : await getAccountByName(values.to)
     ) as Account;
-    const asset = assets.filter((asset) => asset.symbol === values.asset)[0];
-    let memoFromPublic, memoToPublic;
-    if (values.memo) {
-      memoFromPublic = from.options.memo_key;
-      memoToPublic = to.options.memo_key;
-    }
-    let memoFromPrivkey;
     const activeKey = getPrivateKey(password, "active");
-    if (values.memo) {
-      if (from.options.memo_key === from.active.key_auths[0][0]) {
-        memoFromPrivkey = getPrivateKey(password, "active");
-      } else {
-        memoFromPrivkey = getPrivateKey(password, "memo");
-      }
-      if (!memoFromPrivkey) {
-        throw new Error("Missing private memo key for sender: " + from.name);
-      }
-    }
-    let memoObject;
-    if (values.memo && memoFromPublic && memoToPublic) {
-      if (
-        !/111111111111111111111/.test(memoFromPublic) &&
-        !/111111111111111111111/.test(memoToPublic)
-      ) {
-        const nonce = TransactionHelper.unique_nonce_uint64();
-        const message = Aes.encrypt_with_checksum(
-          memoFromPrivkey,
-          memoToPublic,
-          nonce,
-          values.memo
-        );
-        memoObject = {
-          from: memoFromPublic,
-          to: memoToPublic,
-          nonce,
-          message,
-        };
-      } else {
-        memoObject = {
-          from: memoFromPublic,
-          to: memoToPublic,
-          nonce: 0,
-          message: Buffer.isBuffer(values.memo)
-            ? values.memo
-            : Buffer.concat([
-                Buffer.alloc(4),
-                Buffer.from(values.memo.toString("utf-8"), "utf-8"),
-              ]),
-        };
-      }
-    }
-
-    const amount = {
-      amount: values.quantity * 10 ** Number(asset?.precision),
-      asset_id: asset?.id,
-    };
-
-    const trx = {
-      type: "transfer",
-      params: {
-        fee: {
-          amount: 0,
-          asset_id: defaultAsset?.id,
-        },
-        from: from.id,
-        to: to.id,
-        amount,
-        memo: memoObject,
-      },
-    };
+    const asset = assets.filter((asset) => asset.symbol === values.asset)[0];
+    const trx = buildTransferTransaction(
+      from,
+      to,
+      values.memo,
+      asset,
+      password,
+      values.quantity
+    );
     let trxResult;
     try {
       trxResult = await trxBuilder([trx], [activeKey]);
@@ -191,6 +132,15 @@ export function useTransferForm(): ITransferForm {
     }
     if (!acc) {
       return Promise.reject(new Error("User not found"));
+    }
+    if (
+      sonAccount &&
+      (acc.id === sonAccount.id || acc.name === sonAccount.name)
+    ) {
+      const sonNetworkStatus = await getSonNetworkStatus();
+      if (!sonNetworkStatus.isSonNetworkOk) {
+        return Promise.reject(new Error("SONs network is not available now"));
+      }
     }
     setToAccount(acc);
     return Promise.resolve();

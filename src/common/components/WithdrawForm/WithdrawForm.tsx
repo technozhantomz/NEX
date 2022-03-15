@@ -2,6 +2,7 @@ import { Form, Input } from "antd";
 
 import { useAsset } from "../../hooks";
 import { PasswordModal } from "../PasswordModal";
+import { useUserContext } from "../UserProvider";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export const WithdrawForm = ({ asset }: Props): JSX.Element => {
+  const { localStorageAccount } = useUserContext();
   const { defaultAsset } = useAsset();
   const {
     status,
@@ -21,7 +23,8 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     onCancel,
     confirm,
     onFormFinish,
-  } = useWithdrawForm();
+    handleValuesChange,
+  } = useWithdrawForm(asset);
 
   return (
     <Form.Provider onFormFinish={onFormFinish}>
@@ -29,15 +32,35 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
         form={withdrawForm}
         name="transferForm"
         onFinish={confirm}
+        onValuesChange={handleValuesChange}
         size="large"
       >
+        <Form.Item
+          name="from"
+          rules={formValdation.from}
+          validateFirst={true}
+          validateTrigger="onBlur"
+          initialValue={localStorageAccount}
+        >
+          <Input disabled={true} placeholder="From" />
+        </Form.Item>
+        {asset === "BTC" ? (
+          <Form.Item
+            name="withdrawPublicKey"
+            validateFirst={true}
+            rules={formValdation.withdrawPublicKey}
+          >
+            <Input placeholder="Withdraw public key" />
+          </Form.Item>
+        ) : (
+          ""
+        )}
         <Form.Item
           name="withdrawAddress"
           validateFirst={true}
           rules={formValdation.withdrawAddress}
-          validateTrigger="onBlur"
         >
-          <Input placeholder="withdrawAddress" />
+          <Input placeholder="Withdraw address" />
         </Form.Item>
 
         <Form.Item
@@ -46,7 +69,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
           rules={formValdation.amount}
           validateTrigger="onBlur"
         >
-          <Input placeholder="amount" type="number" />
+          <Input placeholder="Amount" type="number" />
         </Form.Item>
         <p>
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
@@ -54,7 +77,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
           <Styled.WithdrawFormButton type="primary" htmlType="submit">
-            Send
+            Withdraw
           </Styled.WithdrawFormButton>
         </Form.Item>
       </Styled.WithdrawForm>

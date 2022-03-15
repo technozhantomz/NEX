@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultQuote } from "../../../../../api/params/networkparams";
@@ -15,12 +14,10 @@ export function useAssetsTable(): UseAssetsTabResult {
   const [loading, setLoading] = useState<boolean>(true);
   const { dbApi } = usePeerplaysApiContext();
   const { assets, localStorageAccount } = useUserContext();
-  const router = useRouter();
   const { getAssetBySymbol } = useAsset();
   const { getMarketPairStats } = useMarketPairStats();
 
   useEffect(() => {
-    if (!localStorageAccount) router.push("/login");
     setTableAssets();
   }, [assets, localStorageAccount]);
 
@@ -57,6 +54,7 @@ export function useAssetsTable(): UseAssetsTabResult {
   const setTableAssets = useCallback(async () => {
     if (assets && assets.length) {
       try {
+        setLoading(true);
         const assetsRows = await Promise.all(assets.map(formAssetRow));
         _setTableAssets(assetsRows);
 
@@ -65,6 +63,8 @@ export function useAssetsTable(): UseAssetsTabResult {
         setLoading(false);
         console.log(e);
       }
+    } else {
+      setLoading(false);
     }
   }, [formAssetRow, _setTableAssets, setLoading, assets]);
 

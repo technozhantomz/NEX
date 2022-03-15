@@ -21,7 +21,7 @@ const WalletPage: NextPage = () => {
           <TabPane tab="Assets" key="1">
             <AssetsTable />
           </TabPane>
-          <TabPane tab="Contacts" key="2"></TabPane>
+          {/* <TabPane tab="Contacts" key="2"></TabPane> */}
         </Styled.Tabs>
       </Styled.WalletCard>
     </Layout>
