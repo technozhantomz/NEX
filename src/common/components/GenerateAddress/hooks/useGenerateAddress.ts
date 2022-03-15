@@ -9,7 +9,7 @@ import { useAccount, useSidechainAccounts } from "../../../hooks";
 import { useTransactionBuilder } from "../../../hooks/useTransactionBuilder";
 import { useUserContext } from "../../UserProvider";
 
-import { GenerateAddress } from "./useAddress.types";
+import { GenerateAddress } from "./useGenerateAddress.types";
 
 export function useGenerateAddress(): GenerateAddress {
   const { getSidechainAccounts } = useSidechainAccounts();
