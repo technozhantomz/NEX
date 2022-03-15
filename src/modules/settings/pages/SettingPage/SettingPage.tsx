@@ -5,6 +5,7 @@ import React from "react";
 import { Layout } from "../../../../common/components";
 import { GeneralTab } from "../../components/GeneralTab";
 import { KeyManagementTab } from "../../components/KeyManagementTab";
+import { MembershipTab } from "../../components/MembershipTab";
 import { SecurityTab } from "../../components/Security";
 
 import * as Styled from "./SettingPage.styled";
@@ -35,7 +36,7 @@ const SettingPage: NextPage = () => {
             <KeyManagementTab />
           </TabPane>
           <TabPane tab="Membership" key="5">
-            Content of Tab Pane 2
+            <MembershipTab />
           </TabPane>
         </Tabs>
       </Styled.SettingsCard>
