@@ -14,7 +14,9 @@ export const MembershipTab = (): JSX.Element => {
           and qualify to earn referral income from users they register with or
           refer to the network. A Lifetime Membership is just 5 PPY.
         </Styled.Paragraph>
-        <DashboardButton label="Buy lifetime subscription" />
+        <Styled.BtnDiv>
+          <DashboardButton label="Buy lifetime subscription" />
+        </Styled.BtnDiv>
         <Styled.TextHeader strong>Fee Allocation</Styled.TextHeader>
         <Styled.Paragraph>
           Every time pays a transaction fee, that fee is divided among several
@@ -33,58 +35,72 @@ export const MembershipTab = (): JSX.Element => {
 
         <Styled.ListDiv>
           <Styled.HeaderDiv>
-            <Styled.TextHeader>Network reviewer</Styled.TextHeader> <br />
-            <Styled.TextHeader>Lifetime reviewer</Styled.TextHeader>
+            <Styled.TextHeader>Lifetime reviewer</Styled.TextHeader> <br />
+            <a>pbsa-official</a>
           </Styled.HeaderDiv>
 
           <Styled.PercentageDiv>
-            <Styled.PercentageText>100%</Styled.PercentageText>
+            <Styled.PercentageText>0%</Styled.PercentageText>
           </Styled.PercentageDiv>
         </Styled.ListDiv>
 
         <Styled.ListDiv>
           <Styled.HeaderDiv>
-            <Styled.TextHeader>Network reviewer</Styled.TextHeader> <br />
-            <Styled.TextHeader>Lifetime reviewer</Styled.TextHeader>
+            <Styled.TextHeader>Registrar</Styled.TextHeader> <br />
+            <a>pbsa-official</a>
           </Styled.HeaderDiv>
 
           <Styled.PercentageDiv>
-            <Styled.PercentageText>100%</Styled.PercentageText>
+            <Styled.PercentageText>0%</Styled.PercentageText>
           </Styled.PercentageDiv>
         </Styled.ListDiv>
 
         <Styled.ListDiv>
           <Styled.HeaderDiv>
-            <Styled.TextHeader>Network reviewer</Styled.TextHeader> <br />
-            <Styled.TextHeader>Lifetime reviewer</Styled.TextHeader>
+            <Styled.TextHeader>Affiliate referrer</Styled.TextHeader> <br />
+            <a>pbsa-official</a>
           </Styled.HeaderDiv>
 
           <Styled.PercentageDiv>
-            <Styled.PercentageText>100%</Styled.PercentageText>
+            <Styled.PercentageText>0%</Styled.PercentageText>
           </Styled.PercentageDiv>
         </Styled.ListDiv>
 
         <Styled.ListDiv>
           <Styled.HeaderDiv>
-            <Styled.TextHeader>Network reviewer</Styled.TextHeader> <br />
-            <Styled.TextHeader>Lifetime reviewer</Styled.TextHeader>
+            <Styled.TextHeader>Membership expiration</Styled.TextHeader> <br />
+            <a>pbsa-official</a>
           </Styled.HeaderDiv>
 
           <Styled.PercentageDiv>
-            <Styled.PercentageText>100%</Styled.PercentageText>
+            <Styled.PercentageText>NA</Styled.PercentageText>
           </Styled.PercentageDiv>
         </Styled.ListDiv>
 
+        <Styled.TextHeader strong>Fee statistics</Styled.TextHeader>
         <Styled.ListDiv>
           <Styled.HeaderDiv>
-            <Styled.TextHeader>Network reviewer</Styled.TextHeader> <br />
-            <Styled.TextHeader>Lifetime reviewer</Styled.TextHeader>
+            <Styled.TextHeader>Total fees paid</Styled.TextHeader> <br />
           </Styled.HeaderDiv>
 
           <Styled.PercentageDiv>
-            <Styled.PercentageText>100%</Styled.PercentageText>
+            <Styled.PercentageText>10 PPY</Styled.PercentageText>
           </Styled.PercentageDiv>
         </Styled.ListDiv>
+
+        <Styled.TextHeader strong>Pending fees</Styled.TextHeader>
+        <Styled.Paragraph>
+          Fees paid by are divided among the network, referrers, and registrars
+          once every maintenance interval (3600 seconds). The next maintenance
+          time is 24 Feb 2022 16:00:00.
+        </Styled.Paragraph>
+
+        <Styled.TextHeader strong>Vesting fees</Styled.TextHeader>
+        <Styled.Paragraph>
+          Most fees are made available immediately, but fees over 100 TEST (such
+          as those paid to upgrade your membership or register a premium account
+          name) must vest for a total of 90 days.
+        </Styled.Paragraph>
       </Styled.Space>
     </Styled.MembershipCard>
   );

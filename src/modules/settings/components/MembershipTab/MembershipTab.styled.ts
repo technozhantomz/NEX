@@ -1,10 +1,5 @@
-/** @format */
-
 import {
-  Form as form,
-  Option as option,
   Paragraph as Para,
-  Select as select,
   Space as space,
   styled,
   Text as text,
@@ -21,16 +16,26 @@ export const MembershipCard = styled.div`
   height: 856px;
 `;
 
-export const TextHeader = styled(text)``;
+export const TextHeader = styled(text)`
+  color: var(---text-icons);
+  text-align: left;
+  font: normal normal medium 14px/17px Inter;
+  letter-spacing: 0px;
+  color: #212121;
+  opacity: 1;
+`;
 
-export const Paragraph = styled(Para)``;
+export const Paragraph = styled(Para)`
+  color: var(---text-icons);
+  text-align: left;
+  font: normal normal normal 14px/17px Inter;
+  letter-spacing: 0px;
+  color: #212121;
+  opacity: 1;
+  width: 75%;
+`;
 
 export const Space = styled(space)``;
-
-export const PercentageSpace = styled(space)`
-  background-color: red;
-  text-align: right;
-`;
 
 export const PercentageText = styled(text)`
   margin-left: 50px;
@@ -38,8 +43,25 @@ export const PercentageText = styled(text)`
 
 export const ListDiv = styled.div`
   display: flex;
+  margin-bottom: 10px;
+  color: var(---text-icons);
+  text-align: left;
+  font: normal normal normal 14px/20px Inter;
+  letter-spacing: 0px;
+  color: #212121;
 `;
 
-export const HeaderDiv = styled.div``;
+export const HeaderDiv = styled.div`
+  width: 15%;
+`;
 
-export const PercentageDiv = styled.div``;
+export const PercentageDiv = styled.div`
+  width: 10%;
+  text-align: right;
+`;
+
+export const BtnDiv = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+`;
