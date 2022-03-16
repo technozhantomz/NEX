@@ -1,10 +1,12 @@
 export type UseBlockchainTab = {
   loading: boolean;
   blockchainData: BlockChainData;
+  searchValue: string;
+  onSearch: (value: string) => void;
 };
 
 export type BlockTableRow = {
-  blockID: number;
+  blockID: string;
   time: string;
   witness: string;
   transaction: number;

@@ -12,11 +12,12 @@ const defaultData = {
     symbol: "",
   },
   activeWitnesses: [],
-  avgTime: 3000,
+  avgTime: 0,
   recentBlocks: [],
 };
 
 export function useBlockchainTab(): UseBlockchainTab {
+  const [searchValue, setSearchValue] = useState<string>("");
   const [blockchainData, setBlockchainData] =
     useState<BlockChainData>(defaultData);
   const [loading, setLoading] = useState<boolean>(false);
@@ -24,11 +25,13 @@ export function useBlockchainTab(): UseBlockchainTab {
   const { getChainData, getBlockData, getDynamic } = useBlockchain();
 
   useEffect(() => {
-    setInterval(() => getBlockchainData(), blockchainData.avgTime);
+    const intervalTime =
+      blockchainData.avgTime > 0 ? blockchainData.avgTime : 3000;
+    setInterval(() => getBlockchainData(), intervalTime);
   }, [blockchainData, defaultAsset]);
 
   const getBlockchainData = async () => {
-    setLoading(true);
+    //setLoading(true);
     let recentBlocks = ChainStore.getRecentBlocks();
     const chainData = await getChainData();
     const blockData = await getBlockData();
@@ -56,7 +59,8 @@ export function useBlockchainTab(): UseBlockchainTab {
 
       const blockRows = recentBlocks.map((block) => {
         return {
-          blockID: block.id,
+          key: block.id.toString(),
+          blockID: block.id.toString(),
           time: block.timestamp.toLocaleTimeString(),
           witness: block.witness_account_name,
           transaction: block.transactions.length,
@@ -72,15 +76,24 @@ export function useBlockchainTab(): UseBlockchainTab {
         avgTime: Number(chainAvgTime.toFixed(0)),
         recentBlocks: blockRows,
       });
-      setLoading(false);
+      //setLoading(false);
     } catch (e) {
       console.log(e);
-      setLoading(false);
+      //setLoading(false);
     }
+  };
+
+  const onSearch = (value: string) => {
+    setLoading(true);
+    //console.log(ChainStore.getObject(Number(value)));
+    setSearchValue(value);
+    setLoading(false);
   };
 
   return {
     loading,
     blockchainData,
+    searchValue,
+    onSearch,
   };
 }
