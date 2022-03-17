@@ -1,18 +1,19 @@
 import { Checkbox, Form, Select, Space, Typography } from "antd";
 import React from "react";
 
+import { defaultLocales } from "../../../../api/params/defaultLocales";
 import { faucetUrl } from "../../../../api/params/networkparams";
 import { CardFormButton } from "../../../../ui/src";
+import { useGeneralTab } from "../hooks/useGeneralTab";
 
 import * as Styled from "./GeneralTab.styled";
-import { useGeneralTab } from "./hooks/useGeneralTab";
 
 const { Option } = Select;
 const { Text } = Typography;
 
 export const GeneralTab = (): JSX.Element => {
   const {
-    onFormFinish,
+    updateSetting,
     handleLanguageChange,
     language,
     generalSettingForm,
@@ -22,7 +23,7 @@ export const GeneralTab = (): JSX.Element => {
 
   return (
     <Styled.GeneralSettingsCard>
-      <Styled.GeneralTabForm.Provider onFormFinish={onFormFinish}>
+      <Styled.GeneralTabForm.Provider onFormFinish={updateSetting}>
         <Styled.GeneralTabForm
           form={generalSettingForm}
           name="generalSettingForm"
@@ -33,8 +34,11 @@ export const GeneralTab = (): JSX.Element => {
               defaultValue={language}
               onChange={handleLanguageChange}
             >
-              <Option value="EN">English </Option>
-              <Option value="RU">Russian</Option>
+              {defaultLocales.map((e, id) => (
+                <Option key={id} value={e.type}>
+                  {e.title}
+                </Option>
+              ))}
             </Styled.Select>
           </Styled.LanguageFormItem>
 
