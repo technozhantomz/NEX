@@ -1,8 +1,7 @@
-import { FormInstance, Rule } from "antd/lib/form";
+import { FormInstance, Rule } from "../../../../ui/src";
 
 export type WithdrawForm = {
   status: string;
-  loggedIn: boolean;
   visible: boolean;
   feeAmount: number;
   formValdation: FormValidation;
@@ -10,7 +9,7 @@ export type WithdrawForm = {
   onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   onCancel: () => void;
   confirm: () => void;
-  handleAssetChange: (value: unknown) => void;
+  handleValuesChange: (changedValues: any) => void;
 };
 
 export type FormField = {
@@ -21,18 +20,15 @@ export type FormField = {
 };
 
 export type FormValidation = {
-  asset: Rule[];
+  from: Rule[];
   amount: Rule[];
   withdrawAddress: Rule[];
+  withdrawPublicKey: Rule[];
 };
 
 export type TransferFormData = {
-  asset: string;
+  from: string;
   amount: number;
   withdrawAddress: string;
-};
-
-export type SonNetworkStatus = {
-  status: any[];
-  isSonNetworkOk: boolean;
+  withdrawPublicKey: string;
 };

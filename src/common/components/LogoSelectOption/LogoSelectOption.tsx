@@ -1,11 +1,11 @@
-import { BaseOptionType, DefaultOptionType } from "antd/lib/select";
 import React from "react";
 
 import { defaultToken } from "../../../api/params/networkparams";
+import { BaseOptionType, DefaultOptionType } from "../../../ui/src";
 import BitcoinIcon from "../../../ui/src/icons/BitcoinIcon.svg";
 import PPYIcon from "../../../ui/src/icons/PPYIcon.svg";
 
-import * as Styled from "./LogoSelectOption.style";
+import * as Styled from "./LogoSelectOption.styled";
 
 type LogoSelectionProps = {
   onChange?:

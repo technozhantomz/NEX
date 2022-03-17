@@ -20,3 +20,8 @@ export const PairInfoLabel = styled.span`
   font-size: 12px;
   color: #6c6c6c;
 `;
+
+export const ColumnFlex = styled.div`
+  display: flex;
+  flex-direction: column;
+`;

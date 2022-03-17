@@ -1,5 +1,4 @@
-import { Form, Input } from "antd";
-
+import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
 import { PasswordModal } from "../PasswordModal";
 import { useUserContext } from "../UserProvider";
@@ -58,10 +57,10 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           <Form.Item
             name="amount"
             validateFirst={true}
-            rules={formValdation.quantity}
+            rules={formValdation.amount}
             validateTrigger="onBlur"
           >
-            <Input placeholder="Quantity" type="number" />
+            <Input placeholder="Amount" type="number" />
           </Form.Item>
           <Form.Item
             name="asset"
@@ -74,12 +73,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           </Form.Item>
         </div>
         <p>Only members with memo key can read your memos</p>
-        <Form.Item
-          name="memo"
-          validateFirst={true}
-          rules={formValdation.memo}
-          validateTrigger="onBlur"
-        >
+        <Form.Item name="memo" validateFirst={true} rules={formValdation.memo}>
           <Input placeholder="Memo" />
         </Form.Item>
         <p>

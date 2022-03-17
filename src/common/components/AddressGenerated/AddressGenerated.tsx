@@ -1,14 +1,12 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
-
+import { InfoCircleOutlined } from "../../../ui/src";
 import { CopyIcon } from "../../../ui/src/icons";
 import BitcoinIcon from "../../../ui/src/icons/BitcoinIcon.svg";
+import { useCopyText, useSidechainAccounts } from "../../hooks";
 
 import * as Styled from "./AddressGenerated.styled";
-import { useAddressGenerated } from "./hooks";
 
 export const AddressGenerated = (): JSX.Element => {
-  const { depositAddress, useCopyAddress } = useAddressGenerated();
-
+  const { bitcoinSidechainAccount } = useSidechainAccounts();
   return (
     <>
       <Styled.AddressContainer>
@@ -17,18 +15,32 @@ export const AddressGenerated = (): JSX.Element => {
       </Styled.AddressContainer>
       <Styled.GeneratedBitcoinAddress
         size="small"
-        suffix={<CopyIcon onClick={() => useCopyAddress(depositAddress)} />}
-        value={depositAddress}
+        suffix={
+          <CopyIcon
+            onClick={() =>
+              useCopyText(
+                bitcoinSidechainAccount
+                  ? bitcoinSidechainAccount.deposit_address
+                  : ""
+              )
+            }
+          />
+        }
+        value={
+          bitcoinSidechainAccount ? bitcoinSidechainAccount.deposit_address : ""
+        }
         disabled
       />
       <Styled.AddressLinkContainer>
-        <Styled.AddressDownloadLink>Download Private Address</Styled.AddressDownloadLink>
+        <Styled.AddressDownloadLink>
+          Download Private Address
+        </Styled.AddressDownloadLink>
       </Styled.AddressLinkContainer>
       <Styled.InfoBox>
         <InfoCircleOutlined />
         <Styled.DisclaimerFooter>
-          The private Address must be saved securely as it will be shown just once
-          during the deposit address creation.
+          The private Address must be saved securely as it will be shown just
+          once during the deposit address creation.
         </Styled.DisclaimerFooter>
       </Styled.InfoBox>
     </>

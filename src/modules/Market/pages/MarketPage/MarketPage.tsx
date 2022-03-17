@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import React from "react";
 
 import { Layout } from "../../../../common/components/PageLayout";
-import { Col, Flex, Row } from "../../../../ui/src";
+import { Col, Row } from "../../../../ui/src";
 import { LimitOrderForm } from "../../components/LimitOrderForm";
 import { OrderTabs } from "../../components/OrderTabs";
 import { PairSelect } from "../../components/PairSelect";
@@ -21,10 +21,10 @@ const MarketPage: NextPage = () => {
       <Styled.Container>
         <Row>
           <Col span={7}>
-            <Flex flexDirection="column">
+            <Styled.ColumnFlex>
               <PairSelect />
               <OrderTabs />
-            </Flex>
+            </Styled.ColumnFlex>
           </Col>
           <Col span={17}>
             <Row>

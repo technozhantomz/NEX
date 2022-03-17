@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Form, Input } from "../../../ui/src";
 
 import * as Styled from "./PasswordModal.styled";
 import { usePasswordForm } from "./hooks";

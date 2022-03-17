@@ -1,4 +1,4 @@
-import { DownOutlined, Flex } from "../../../../ui/src";
+import { DownOutlined } from "../../../../ui/src";
 
 import * as Styled from "./OrderBook.styled";
 import { OrderType } from "./hooks/uesOrderBook.types";
@@ -32,7 +32,7 @@ export const OrderBook = (): JSX.Element => {
   return (
     <>
       <Styled.FilterContainer>
-        <Flex>
+        <Styled.Flex>
           {types.map((type) => (
             <Styled.OrdersFilter
               key={type}
@@ -47,8 +47,8 @@ export const OrderBook = (): JSX.Element => {
               <span></span>
             </Styled.OrdersFilter>
           ))}
-        </Flex>
-        <Flex>
+        </Styled.Flex>
+        <Styled.Flex>
           <Styled.ThresholdDropdown overlay={thresholdMenu}>
             <a
               className="ant-dropdown-link"
@@ -59,7 +59,7 @@ export const OrderBook = (): JSX.Element => {
               <DownOutlined />
             </a>
           </Styled.ThresholdDropdown>
-        </Flex>
+        </Styled.Flex>
       </Styled.FilterContainer>
       <Styled.TableContainer>
         <Styled.Table
