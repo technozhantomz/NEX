@@ -1,7 +1,7 @@
-import { styled } from "../../../../../../ui/src";
-import { colors } from "../../../../../../ui/src/colors";
+import { styled } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 
-export const BlockCard = styled.div`
+export const StatsCard = styled.div`
   height: 120px;
   width: 220px;
   border: 1px solid ${colors.borderColorBase};
@@ -23,14 +23,15 @@ export const BlockCard = styled.div`
   }
 `;
 
-export const BlockCardHeading = styled.h3`
+export const StatsCardHeading = styled.h3`
   color: ${colors.textColor};
   font-size: 1em;
 `;
-export const BlockCardValue = styled.p`
+export const StatsCardValue = styled.p`
   color: ${colors.textColorSecondary};
   font-size: 1.4em;
   font-weight: 500;
+  margin-bottom: 8px;
   span {
     font-size: 0.8em;
     font-weight: 400;

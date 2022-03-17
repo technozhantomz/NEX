@@ -2,7 +2,11 @@ import { Input, styled } from "../../../../ui/src";
 
 const { Search } = Input;
 
-export const BlockCardsWrapper = styled.div`
+export const BlockTabWrapper = styled.div`
+  margin: 0 25px;
+`;
+
+export const StatsCardsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 25px 0 35px;

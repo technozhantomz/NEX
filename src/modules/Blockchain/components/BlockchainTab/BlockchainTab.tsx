@@ -1,16 +1,16 @@
-import Search from "antd/lib/input/Search";
+import { StatsCard } from "../StatsCard";
 
 import * as Styled from "./BlockchainTab.styled";
-import { BlockCard, BlockTable } from "./components";
+import { BlockTable } from "./components";
 import { useBlockchainTab } from "./hooks";
 
 export const BlockchainTab = (): JSX.Element => {
   const { loading, blockchainData, searchValue, onSearch } = useBlockchainTab();
 
   return (
-    <div>
-      <Styled.BlockCardsWrapper>
-        <BlockCard
+    <Styled.BlockTabWrapper>
+      <Styled.StatsCardsWrapper>
+        <StatsCard
           noData={blockchainData.currentBlock === 0}
           title="Current Block"
           data={`${
@@ -18,8 +18,9 @@ export const BlockchainTab = (): JSX.Element => {
               ? blockchainData.currentBlock
               : "no data"
           }`}
+          statsData={blockchainData.stats.blocks}
         />
-        <BlockCard
+        <StatsCard
           noData={blockchainData.supply.amount === 0}
           title={`Supply (${blockchainData.supply.symbol})`}
           data={`${
@@ -27,8 +28,9 @@ export const BlockchainTab = (): JSX.Element => {
               ? blockchainData.supply.amount
               : "no data"
           }`}
+          statsData={blockchainData.stats.supply}
         />
-        <BlockCard
+        <StatsCard
           noData={blockchainData.activeWitnesses.length === 0}
           title="Active Witness"
           data={`${
@@ -36,18 +38,18 @@ export const BlockchainTab = (): JSX.Element => {
               ? blockchainData.activeWitnesses.length
               : "no data"
           }`}
+          statsData={blockchainData.stats.witnesses}
         />
-        <BlockCard
+        <StatsCard
           isTimeCard={true}
           noData={blockchainData.avgTime === 0}
           title="Confimation Time"
           data={`${
-            blockchainData.avgTime > 0
-              ? blockchainData.avgTime / 1000 + ":00"
-              : "no data"
+            blockchainData.avgTime > 0 ? blockchainData.avgTime : "no data"
           }`}
+          statsData={blockchainData.stats.times}
         />
-      </Styled.BlockCardsWrapper>
+      </Styled.StatsCardsWrapper>
       <Styled.BlockSearch
         size="large"
         placeholder="Search Blocks"
@@ -62,6 +64,6 @@ export const BlockchainTab = (): JSX.Element => {
         blocks={blockchainData.recentBlocks}
         loading={loading}
       />
-    </div>
+    </Styled.BlockTabWrapper>
   );
 };

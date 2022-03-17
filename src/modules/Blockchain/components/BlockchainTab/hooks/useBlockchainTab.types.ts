@@ -6,6 +6,7 @@ export type UseBlockchainTab = {
 };
 
 export type BlockTableRow = {
+  key: string;
   blockID: string;
   time: string;
   witness: string;
@@ -21,4 +22,10 @@ export type BlockChainData = {
   activeWitnesses: string[];
   avgTime: number;
   recentBlocks: BlockTableRow[];
+  stats: {
+    blocks: number[];
+    supply: number[];
+    witnesses: number[];
+    times: number[];
+  };
 };

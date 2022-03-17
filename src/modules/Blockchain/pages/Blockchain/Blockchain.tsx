@@ -1,8 +1,8 @@
 import { Tabs } from "antd";
 import type { NextPage } from "next";
 
-import { Layout } from "../../../common/components/PageLayout";
-import { BlockchainTab } from "../components";
+import { Layout } from "../../../../common/components/PageLayout";
+import { BlockchainTab } from "../../components";
 
 import * as Styled from "./Blockchain.styled";
 

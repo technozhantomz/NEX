@@ -1,3 +1,5 @@
+import { useRouter } from "next/router";
+
 import { BlockTableRow } from "../../hooks/useBlockchainTab.types";
 
 import { BlockColumns } from "./BlockColumns";
@@ -14,6 +16,8 @@ export const BlockTable = ({
   blocks,
   loading,
 }: Props): JSX.Element => {
+  const router = useRouter();
+
   return (
     <Styled.BlockTable
       bordered={false}
@@ -26,6 +30,14 @@ export const BlockTable = ({
       rowKey={(record) => record.blockID}
       loading={loading}
       pagination={false}
+      onRow={(record, _rowIndex) => {
+        return {
+          onClick: (_event) => {
+            console.log(record);
+            router.push(`/blockchain/${record.blockID}`);
+          },
+        };
+      }}
     />
   );
 };

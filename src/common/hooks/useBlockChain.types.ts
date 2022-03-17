@@ -2,6 +2,22 @@ export type Blockchain = {
   getChainData: () => Promise<ChainData>;
   getBlockData: () => Promise<BlockData>;
   getDynamic: () => Promise<Dynamic>;
+  getBlock: (value: number) => Promise<Block>;
+  getBlocks: (first: number, last: number, limit: number) => Promise<Block[]>;
+};
+
+export type Block = {
+  id?: number;
+  extensions: any[];
+  next_secret_hash: string;
+  previous: string;
+  previous_secret: string;
+  timestamp: string;
+  transaction_merkle_root: string;
+  transactions: any[];
+  witness: string;
+  witness_account_name: string;
+  witness_signature: string;
 };
 
 export type ChainData = {
