@@ -2,9 +2,11 @@ import { FormInstance } from "antd/lib/form";
 
 export type GeneralTabTypes = {
   onFormFinish: () => void;
-  handleAssetChange: ((value: unknown) => void) | undefined;
+  handleLanguageChange: ((value: unknown) => void) | undefined;
   language: string;
   generalSettingForm: FormInstance<GeneralSettingFormData>;
+  handleNotificationCheckbox: (checked: boolean) => void;
+  notification: boolean;
 };
 
 export type GeneralSettingFormData = {

@@ -1,5 +1,5 @@
 import { Form } from "antd";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 import { useSettingsContext } from "../../../../../common/components/SettingsProvider";
 import { Settings } from "../../../../../common/types/Settings";
@@ -8,11 +8,16 @@ import { GeneralTabTypes } from "./useGeneralTab.types";
 
 export function useGeneralTab(): GeneralTabTypes {
   const { settings, setSettings } = useSettingsContext();
-  const [language, setLanguage] = useState<string>(settings?.language);
   const [generalSettingForm] = Form.useForm();
+  const notification = settings?.notifications;
+  const language = settings?.language;
 
-  const handleAssetChange = (value: unknown) => {
+  const handleLanguageChange = (value: unknown) => {
     generalSettingForm.setFieldsValue({ selectedLanguage: value });
+  };
+
+  const handleNotificationCheckbox = (checked: boolean) => {
+    generalSettingForm.setFieldsValue({ isEnableTransfer: checked });
   };
 
   const onFormFinish = () => {
@@ -25,14 +30,20 @@ export function useGeneralTab(): GeneralTabTypes {
     const newSettings: Settings = {
       ...settings,
       language: values.selectedLanguage ? values.selectedLanguage : language,
+      notifications:
+        values.isEnableTransfer === undefined
+          ? notification
+          : values.isEnableTransfer,
     };
     setSettings(newSettings);
   }, []);
 
   return {
     onFormFinish,
-    handleAssetChange,
+    handleLanguageChange,
     language,
     generalSettingForm,
+    handleNotificationCheckbox,
+    notification,
   };
 }

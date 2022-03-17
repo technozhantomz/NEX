@@ -1,6 +1,7 @@
 import { Checkbox, Form, Select, Space, Typography } from "antd";
 import React from "react";
 
+import { faucetUrl } from "../../../../api/params/networkparams";
 import { CardFormButton } from "../../../../ui/src";
 
 import * as Styled from "./GeneralTab.styled";
@@ -10,8 +11,14 @@ const { Option } = Select;
 const { Text } = Typography;
 
 export const GeneralTab = (): JSX.Element => {
-  const { onFormFinish, handleAssetChange, language, generalSettingForm } =
-    useGeneralTab();
+  const {
+    onFormFinish,
+    handleLanguageChange,
+    language,
+    generalSettingForm,
+    handleNotificationCheckbox,
+    notification,
+  } = useGeneralTab();
 
   return (
     <Styled.GeneralSettingsCard>
@@ -22,7 +29,10 @@ export const GeneralTab = (): JSX.Element => {
         >
           <Styled.LanguageLabel strong>Select language</Styled.LanguageLabel>
           <Styled.LanguageFormItem name="selectedLanguage">
-            <Styled.Select defaultValue={language} onChange={handleAssetChange}>
+            <Styled.Select
+              defaultValue={language}
+              onChange={handleLanguageChange}
+            >
               <Option value="EN">English </Option>
               <Option value="RU">Russian</Option>
             </Styled.Select>
@@ -30,17 +40,19 @@ export const GeneralTab = (): JSX.Element => {
 
           <Text strong>Enable transfers to my account</Text>
           <Styled.SecondItem name="isEnableTransfer">
-            <Checkbox.Group>
-              <Checkbox value="Yes">Yes</Checkbox>
-              <Checkbox value="No">No</Checkbox>
-            </Checkbox.Group>
+            <Checkbox
+              onChange={(e) => handleNotificationCheckbox(e.target.checked)}
+              defaultChecked={notification}
+            >
+              Yes
+            </Checkbox>
           </Styled.SecondItem>
           <Styled.FaucetText direction="vertical">
             <Text strong>Faucet</Text>
             <Space direction="horizontal">
               <Styled.FaucetURL>
                 Faucet URL:
-                https://faucet.peerplays.download/faucet/api/v1/accounts
+                {faucetUrl}
               </Styled.FaucetURL>
               <Typography.Link copyable>Copy URL</Typography.Link>
             </Space>
