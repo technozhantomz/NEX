@@ -1,10 +1,9 @@
 import { ChainStore } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
 import { useAsset, useBlockchain } from "../../../../../common/hooks";
 
-import { BlockChainData, UseBlockchainTab } from "./useBlockchainTab.types";
+import { BlockChainData, BlockTableRow, UseBlockchainTab } from "./useBlockchainTab.types";
 
 const defaultData = {
   currentBlock: 0,
@@ -27,11 +26,11 @@ export function useBlockchainTab(): UseBlockchainTab {
   const [searchValue, setSearchValue] = useState<string>("");
   const [blockchainData, setBlockchainData] =
     useState<BlockChainData>(defaultData);
+  const [searchResult, setSearchResult] = useState<BlockTableRow[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const { defaultAsset } = useAsset();
-  const { dbApi } = usePeerplaysApiContext();
   const { getChainData, getBlockData, getDynamic, getBlock } = useBlockchain();
-  let blockInterval: NodeJS.Timer;
+  let blockInterval: any;
 
   useEffect(() => {
     const intervalTime =
@@ -144,11 +143,11 @@ export function useBlockchainTab(): UseBlockchainTab {
       block.key.startsWith(value)
     );
     if (inRecents.length > 0) {
+      setSearchResult(undefined);
       setLoading(false);
     } else {
       const block = await getBlock(Number(value));
-
-      blockchainData.recentBlocks = [
+      setSearchResult([
         {
           key: value,
           blockID: value,
@@ -156,9 +155,7 @@ export function useBlockchainTab(): UseBlockchainTab {
           witness: block.witness_account_name,
           transaction: block.transactions.length,
         },
-      ];
-      setBlockchainData(blockchainData);
-      clearInterval(blockInterval);
+      ]);
       setLoading(false);
     }
   };
@@ -167,6 +164,7 @@ export function useBlockchainTab(): UseBlockchainTab {
     loading,
     blockchainData,
     searchValue,
+    searchResult,
     onSearch,
   };
 }

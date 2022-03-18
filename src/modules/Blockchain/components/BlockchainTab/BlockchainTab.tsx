@@ -5,7 +5,8 @@ import { BlockTable } from "./components";
 import { useBlockchainTab } from "./hooks";
 
 export const BlockchainTab = (): JSX.Element => {
-  const { loading, blockchainData, searchValue, onSearch } = useBlockchainTab();
+  const { loading, blockchainData, searchValue, searchResult, onSearch } =
+    useBlockchainTab();
 
   return (
     <Styled.BlockTabWrapper>
@@ -61,7 +62,7 @@ export const BlockchainTab = (): JSX.Element => {
       </div>
       <BlockTable
         searchValue={searchValue}
-        blocks={blockchainData.recentBlocks}
+        blocks={searchResult ? searchResult : blockchainData.recentBlocks}
         loading={loading}
       />
     </Styled.BlockTabWrapper>

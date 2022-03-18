@@ -2,6 +2,7 @@ export type UseBlockchainTab = {
   loading: boolean;
   blockchainData: BlockChainData;
   searchValue: string;
+  searchResult: BlockTableRow[] | undefined;
   onSearch: (value: string) => void;
 };
 
