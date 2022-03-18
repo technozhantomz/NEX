@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Layout } from "../../../../common/components/PageLayout";
-import { AssetsTab, BlockchainTab } from "../../components";
+import { AssetsTab, BlockchainTab, WitnessesTab } from "../../components";
 
 import * as Styled from "./Blockchain.styled";
 import { useBlockchainPage } from "./hooks";
@@ -33,7 +33,9 @@ const Blockchain: NextPage = () => {
           <TabPane tab="Assets" key="assets">
             <AssetsTab />
           </TabPane>
-          <TabPane tab="Witnesses" key="witnesses"></TabPane>
+          <TabPane tab="Witnesses" key="witnesses">
+            <WitnessesTab />
+          </TabPane>
           <TabPane tab="Committe" key="committe"></TabPane>
           <TabPane tab="Fees" key="fees"></TabPane>
         </Tabs>

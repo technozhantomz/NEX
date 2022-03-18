@@ -8,4 +8,6 @@ export const colors = {
   white: `#ffffff`,
   borderColorBase: `#C1C2C4`,
   assetTag: `#FDBA86`,
+  success: `#10AF77`,
+  error: `#D01721`,
 };
