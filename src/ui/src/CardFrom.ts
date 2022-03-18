@@ -17,6 +17,10 @@ export const CardFormButton = styled(Button)`
   }
 `;
 export const CardFrom = styled(AntdForm)`
+  .ant-input,
+  .ant-input-affix-wrapper {
+    border-radius: 4px;
+  }
   .ant-form-item-has-success {
     .ant-input-suffix {
       color: var(--ant-success-color);
