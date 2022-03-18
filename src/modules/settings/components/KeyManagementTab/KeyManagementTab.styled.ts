@@ -54,10 +54,24 @@ export const SecondItem = styled(form.Item)``;
 
 export const GeneratedKeyInput = styled(input.Password)`
   height: 50px;
-  .ant-input-password-icon {
+  width: 50%;
+  margin-top: 20px;
+  background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #c1c2c4;
+  border-radius: 4px;
+  opacity: 1 .ant-input-password-icon {
     color: #b9b9b9;
     display: flex;
     justify-content: space-between;
     width: 38px;
+  }
+  @media (max-width: 500px) {
+    width: 100%;
+  }
+  .ant-input {
+    @media (max-width: 500px) {
+      font-size: 10px;
+    }
   }
 `;
