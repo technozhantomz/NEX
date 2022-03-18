@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@babel/helper-validator-identifier": "^7.16.7",
     "@next/bundle-analyzer": "^12.1.0",
     "@svgr/webpack": "^6.2.1",
     "antd": "^4.19.2",

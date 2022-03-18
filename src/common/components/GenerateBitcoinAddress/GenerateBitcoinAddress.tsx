@@ -1,64 +1,45 @@
-import { Form } from "antd";
-import { BaseOptionType, DefaultOptionType } from "antd/lib/select";
 import Link from "next/link";
 import React from "react";
 
-import { CardFormButton } from "../../../ui/src";
+import { CardFormButton, Form } from "../../../ui/src";
 import { FormDisclamer } from "../FormDisclamer";
-import { LogoSelectOption } from "../LogoSelectOption/LogoSelectOption";
 import { PasswordModal } from "../PasswordModal";
 
 import * as Styled from "./GenerateBitcoinAddress.styled";
 import { useGenerateBitcoinAddress } from "./hooks";
 
 type Props = {
-  onAssetChange?:
-    | ((
-        value: unknown,
-        option:
-          | DefaultOptionType
-          | BaseOptionType
-          | (DefaultOptionType | BaseOptionType)[]
-      ) => void)
-    | undefined;
-  hideDisclamer?: boolean;
-  hideDefultToken?: boolean;
+  isLoggedIn?: boolean;
+  getSidechainAccounts: (accountId: string) => Promise<void>;
 };
 
 export const GenerateBitcoinAddress = ({
-  onAssetChange,
-  hideDisclamer = false,
-  hideDefultToken = false,
+  isLoggedIn = false,
+  getSidechainAccounts,
 }: Props): JSX.Element => {
-  const { visible, onCancel, onFormFinish, confirm, defaultHandleAssetChange } =
-    useGenerateBitcoinAddress();
+  const { visible, onCancel, onFormFinish, confirm, status } =
+    useGenerateBitcoinAddress(getSidechainAccounts);
 
   return (
     <>
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.DepositForm name="generateAddressForm" onFinish={confirm}>
           <Form.Item>
-            <Styled.Row>
-              <Styled.SelectOptionCol span={23}>
-                <LogoSelectOption
-                  defaultValue="BTC"
-                  onChange={
-                    onAssetChange ? onAssetChange : defaultHandleAssetChange
-                  }
-                  hideDefultToken={hideDefultToken}
-                />
-              </Styled.SelectOptionCol>
-            </Styled.Row>
-          </Form.Item>
-          <Form.Item>
             <CardFormButton type="primary" htmlType="submit">
-              {hideDisclamer
+              {isLoggedIn
                 ? "Generate Bitcoin Address"
                 : "Log in & Generate Bitcoin Address"}
             </CardFormButton>
           </Form.Item>
         </Styled.DepositForm>
-        {hideDisclamer ? (
+        {status === "" ? (
+          ""
+        ) : (
+          <FormDisclamer>
+            <Styled.SonError>{status}</Styled.SonError>
+          </FormDisclamer>
+        )}
+        {isLoggedIn ? (
           ""
         ) : (
           <FormDisclamer>

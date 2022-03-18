@@ -1,5 +1,5 @@
-import BitcoinIcon from "../../../../ui/src/icons/BitcoinIcon.svg";
-import PPYIcon from "../../../../ui/src/icons/PPYIcon.svg";
+import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
+import PPYIcon from "../../../../ui/src/icons/Cryptocurrencies/PPYIcon.svg";
 
 import * as Styled from "./InputPrefix.styled";
 

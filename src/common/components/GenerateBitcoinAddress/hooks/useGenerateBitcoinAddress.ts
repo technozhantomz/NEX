@@ -3,23 +3,25 @@ import ECPairFactory from "ecpair";
 import { useCallback, useState } from "react";
 import * as ecc from "tiny-secp256k1";
 
-import { BaseOptionType, DefaultOptionType } from "../../../../ui/src";
 import {
   useAccount,
-  useSidechainAccounts,
   useSidechainTransactionBuilder,
+  useSonNetwork,
   useTransactionBuilder,
 } from "../../../hooks";
 import { useUserContext } from "../../UserProvider";
 
 import { GenerateBitcoinAddressResult } from "./useGenerateBitcoinAddress.types";
 
-export function useGenerateBitcoinAddress(): GenerateBitcoinAddressResult {
-  const { getSidechainAccounts } = useSidechainAccounts();
+export function useGenerateBitcoinAddress(
+  getSidechainAccounts: (accountId: string) => Promise<void>
+): GenerateBitcoinAddressResult {
+  const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const { trxBuilder } = useTransactionBuilder();
   const { getPrivateKey } = useAccount();
   const { id } = useUserContext();
+  const { getSonNetworkStatus } = useSonNetwork();
   const { buildAddingBitcoinSidechainTransaction } =
     useSidechainTransactionBuilder();
 
@@ -29,22 +31,12 @@ export function useGenerateBitcoinAddress(): GenerateBitcoinAddressResult {
       .join("");
   }, []);
 
-  const defaultHandleAssetChange = (
-    value: unknown,
-    option:
-      | DefaultOptionType
-      | BaseOptionType
-      | (DefaultOptionType | BaseOptionType)[]
-  ) => {
-    console.log(value);
-    console.log(option);
-  };
-
   const onCancel = () => {
     setVisible(false);
   };
 
   const confirm = () => {
+    setStatus("");
     setVisible(true);
   };
 
@@ -60,6 +52,14 @@ export function useGenerateBitcoinAddress(): GenerateBitcoinAddressResult {
 
   const generateBitcoinAddresses = useCallback(
     async (password: string) => {
+      const sonNetworkStatus = await getSonNetworkStatus();
+      console.log(sonNetworkStatus);
+      if (!sonNetworkStatus.isSonNetworkOk) {
+        setVisible(false);
+        setStatus("SONs network is not available now. Please try again later!");
+        return;
+      }
+
       const ECPair = ECPairFactory(ecc);
       const generatedAddress = [];
 
@@ -88,7 +88,9 @@ export function useGenerateBitcoinAddress(): GenerateBitcoinAddressResult {
         setVisible(false);
       }
       if (trxResult) {
-        await getSidechainAccounts(id);
+        setTimeout(async () => {
+          await getSidechainAccounts(id);
+        }, 1000);
         setVisible(false);
       }
     },
@@ -101,5 +103,5 @@ export function useGenerateBitcoinAddress(): GenerateBitcoinAddressResult {
     ]
   );
 
-  return { visible, onCancel, onFormFinish, confirm, defaultHandleAssetChange };
+  return { visible, onCancel, onFormFinish, confirm, status };
 }

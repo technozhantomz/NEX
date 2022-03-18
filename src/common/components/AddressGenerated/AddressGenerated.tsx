@@ -1,12 +1,17 @@
 import { InfoCircleOutlined } from "../../../ui/src";
 import { CopyIcon } from "../../../ui/src/icons";
-import BitcoinIcon from "../../../ui/src/icons/BitcoinIcon.svg";
-import { useCopyText, useSidechainAccounts } from "../../hooks";
+import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
+import { useCopyText } from "../../hooks";
+import { SidechainAcccount } from "../../types";
 
 import * as Styled from "./AddressGenerated.styled";
 
-export const AddressGenerated = (): JSX.Element => {
-  const { bitcoinSidechainAccount } = useSidechainAccounts();
+type Props = {
+  bitcoinSidechainAccount?: SidechainAcccount;
+};
+export const AddressGenerated = ({
+  bitcoinSidechainAccount,
+}: Props): JSX.Element => {
   return (
     <>
       <Styled.AddressContainer>

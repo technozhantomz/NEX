@@ -1,9 +1,7 @@
 import React from "react";
 
-import { defaultToken } from "../../../api/params/networkparams";
 import { BaseOptionType, DefaultOptionType } from "../../../ui/src";
-import BitcoinIcon from "../../../ui/src/icons/BitcoinIcon.svg";
-import PPYIcon from "../../../ui/src/icons/PPYIcon.svg";
+import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 
 import * as Styled from "./LogoSelectOption.styled";
 
@@ -19,7 +17,6 @@ type LogoSelectionProps = {
     | undefined;
   labelInValue?: boolean;
   defaultValue?: string;
-  hideDefultToken?: boolean;
 };
 
 export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
@@ -37,18 +34,6 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
           <Styled.NamePara>BTC</Styled.NamePara>
         </Styled.OptionsDiv>
       </Styled.SelectOptionContainer>
-      {props.hideDefultToken ? (
-        ""
-      ) : (
-        <Styled.SelectOptionContainer value={defaultToken}>
-          <Styled.OptionsDiv>
-            <Styled.IconDiv>
-              <PPYIcon width="30px" height="30px" />
-            </Styled.IconDiv>
-            <Styled.NamePara>{defaultToken}</Styled.NamePara>
-          </Styled.OptionsDiv>
-        </Styled.SelectOptionContainer>
-      )}
     </Styled.SelectContainer>
   );
 };

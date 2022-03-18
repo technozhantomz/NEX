@@ -5,8 +5,10 @@ import { useRouter } from "next/router";
 import {
   AddressGenerated,
   GenerateBitcoinAddress,
+  HIVEAndHBDDeposit,
   Layout,
   TransferForm,
+  useUserContext,
   WithdrawForm,
 } from "../../../../common/components";
 import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
@@ -21,7 +23,13 @@ const AssetPage: NextPage = () => {
   const router = useRouter();
   const { asset, tab } = router.query;
   const { loadingSidechainAssets, sidechainAssets } = useAsset();
-  const { hasBTCDepositAddress } = useSidechainAccounts();
+  const {
+    bitcoinSidechainAccount,
+    hasBTCDepositAddress,
+    loadingSidechainAccounts,
+    getSidechainAccounts,
+  } = useSidechainAccounts();
+  const { localStorageAccount } = useUserContext();
 
   return (
     <Layout
@@ -31,8 +39,8 @@ const AssetPage: NextPage = () => {
       description={`Wallet Page | ${asset} ${tab}`}
       dexLayout={true}
     >
-      <Styled.AssetCard>
-        {!loadingSidechainAssets && (
+      {!loadingSidechainAssets && (
+        <Styled.AssetCard>
           <Tabs
             defaultActiveKey={`${tab}`}
             tabBarExtraContent={<Link href="/wallet">Back to Assets</Link>}
@@ -54,19 +62,26 @@ const AssetPage: NextPage = () => {
                 </TabPane>
                 <TabPane tab="Deposit" key="deposit">
                   <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-                  <Styled.AssetFormWapper>
-                    {hasBTCDepositAddress ? (
-                      <AddressGenerated />
-                    ) : (
-                      <GenerateBitcoinAddress
-                        hideDisclamer={true}
-                        onAssetChange={(value) => {
-                          router.push(`/wallet/${value}?tab=deposit`);
-                        }}
-                        hideDefultToken={true}
-                      />
-                    )}
-                  </Styled.AssetFormWapper>
+                  {!loadingSidechainAccounts ? (
+                    <Styled.AssetFormWapper>
+                      {asset === "BTC" ? (
+                        hasBTCDepositAddress ? (
+                          <AddressGenerated
+                            bitcoinSidechainAccount={bitcoinSidechainAccount}
+                          />
+                        ) : (
+                          <GenerateBitcoinAddress
+                            isLoggedIn={!!localStorageAccount}
+                            getSidechainAccounts={getSidechainAccounts}
+                          />
+                        )
+                      ) : (
+                        <HIVEAndHBDDeposit assetSymbol={asset as string} />
+                      )}
+                    </Styled.AssetFormWapper>
+                  ) : (
+                    ""
+                  )}
                 </TabPane>
               </>
             ) : (
@@ -77,8 +92,8 @@ const AssetPage: NextPage = () => {
               {/* <TransferTab asset={asset} /> */}
             </TabPane>
           </Tabs>
-        )}
-      </Styled.AssetCard>
+        </Styled.AssetCard>
+      )}
     </Layout>
   );
 };

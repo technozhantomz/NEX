@@ -7,4 +7,5 @@ export const colors = {
   textColorSecondary: `#6C6C6C`,
   white: `#ffffff`,
   borderColorBase: `#C1C2C4`,
+  errorColor: `#ff4d4f`,
 };
