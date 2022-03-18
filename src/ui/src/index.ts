@@ -16,6 +16,7 @@ export {
   Menu,
   Modal,
   Table,
+  Tag,
   Tooltip,
   Card,
   Checkbox,

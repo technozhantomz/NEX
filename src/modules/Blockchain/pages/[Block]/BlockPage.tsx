@@ -12,8 +12,8 @@ const { TabPane } = Tabs;
 
 const BlockPage: NextPage = () => {
   const router = useRouter();
-  const { block } = router.query;
-  const { blockData } = useBlockPage(block);
+  const { block, tab } = router.query;
+  const { blockData, onTabClick } = useBlockPage(block);
 
   return (
     <Layout
@@ -24,7 +24,10 @@ const BlockPage: NextPage = () => {
       dexLayout={true}
     >
       <Styled.BlockCard>
-        <Tabs>
+        <Tabs
+          defaultActiveKey={`${tab ? tab : "blockchain"}`}
+          onTabClick={onTabClick}
+        >
           <TabPane tab="Blockchain" key="blockchain">
             <Styled.BlockWrapper>
               <Styled.BlockNumber>

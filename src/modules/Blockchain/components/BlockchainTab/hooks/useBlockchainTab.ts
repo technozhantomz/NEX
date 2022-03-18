@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 
 import { useAsset, useBlockchain } from "../../../../../common/hooks";
 
-import { BlockChainData, BlockTableRow, UseBlockchainTab } from "./useBlockchainTab.types";
+import {
+  BlockChainData,
+  BlockTableRow,
+  UseBlockchainTab,
+} from "./useBlockchainTab.types";
 
 const defaultData = {
   currentBlock: 0,
@@ -30,12 +34,11 @@ export function useBlockchainTab(): UseBlockchainTab {
   const [loading, setLoading] = useState<boolean>(false);
   const { defaultAsset } = useAsset();
   const { getChainData, getBlockData, getDynamic, getBlock } = useBlockchain();
-  let blockInterval: any;
 
   useEffect(() => {
     const intervalTime =
       blockchainData.avgTime > 0 ? blockchainData.avgTime * 1000 : 3000;
-    blockInterval = setInterval(() => getBlockchainData(), intervalTime);
+    setInterval(() => getBlockchainData(), intervalTime);
   }, [defaultAsset]);
 
   const getBlockchainData = async () => {
@@ -97,8 +100,7 @@ export function useBlockchainTab(): UseBlockchainTab {
           },
           activeWitnesses: blockData.active_witnesses,
           avgTime: Number(chainAvgTime.toFixed(0)),
-          recentBlocks:
-            searchValue === "" ? blockRows : blockchainData.recentBlocks,
+          recentBlocks: blockRows,
           stats: {
             blocks: updateStatsArray(
               blockchainData.stats.blocks,

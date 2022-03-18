@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { useBlockchain } from "../../../../../common/hooks";
@@ -12,10 +13,15 @@ export function useBlockPage(block: string): BlockPage {
     witness: "",
   });
   const { getBlock } = useBlockchain();
+  const router = useRouter();
 
   useEffect(() => {
     getBlockData();
   }, [block]);
+
+  const onTabClick = (key: string) => {
+    router.push(`/blockchain?tab=${key}`);
+  };
 
   const getBlockData = async () => {
     const rawBlock = await getBlock(Number(block));
@@ -27,5 +33,5 @@ export function useBlockPage(block: string): BlockPage {
     });
   };
 
-  return { blockData };
+  return { blockData, onTabClick };
 }

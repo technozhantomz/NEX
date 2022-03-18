@@ -1,5 +1,6 @@
 export type BlockPage = {
   blockData: BlockData;
+  onTabClick: (key: string) => void;
 };
 
 export type BlockData = {
