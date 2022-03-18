@@ -1,8 +1,10 @@
 import { styled, Card as UiCard } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
 
 export const BlockCard = styled(UiCard)`
   .ant-card-body {
+    color: ${colors.textColor}
     padding: 0;
     .ant-tabs-tab {
       justify-content: center;
@@ -24,4 +26,29 @@ export const BlockCard = styled(UiCard)`
   }
   ${breakpoint.sm} {
   }
+`;
+
+export const BlockWrapper = styled.div`
+  margin: 35px;
+  max-width: 374px;
+`;
+export const BlockNumber = styled.h2`
+  display: flex;
+  justify-content: space-between;
+  font-size: 1em;
+  font-weight: 400;
+  margin: 0;
+`;
+export const BlockInfoTitle = styled.h3`
+  margin: 20px 0;
+  font-size: 1em;
+  font-weight: 200;
+`;
+export const BlockInfo = styled.p`
+  display: flex;
+  justify-content: space-between;
+  font-weight: normal;
+`;
+export const BlockTime = styled.p`
+  font-weight: 400;
 `;

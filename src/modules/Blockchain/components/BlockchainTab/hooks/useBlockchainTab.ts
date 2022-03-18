@@ -147,23 +147,18 @@ export function useBlockchainTab(): UseBlockchainTab {
       setLoading(false);
     } else {
       const block = await getBlock(Number(value));
-      if (block) {
-        const witness = await dbApi("get_objects", [[block.witness]]);
-        const witnessAccount = await dbApi("get_accounts", [
-          [witness[0].witness_account],
-        ]);
-        blockchainData.recentBlocks = [
-          {
-            key: value,
-            blockID: value,
-            time: new Date(block.timestamp).toLocaleTimeString(),
-            witness: witnessAccount[0].name,
-            transaction: block.transactions.length,
-          },
-        ];
-        setBlockchainData(blockchainData);
-        clearInterval(blockInterval);
-      }
+
+      blockchainData.recentBlocks = [
+        {
+          key: value,
+          blockID: value,
+          time: new Date(block.timestamp).toLocaleTimeString(),
+          witness: block.witness_account_name,
+          transaction: block.transactions.length,
+        },
+      ];
+      setBlockchainData(blockchainData);
+      clearInterval(blockInterval);
       setLoading(false);
     }
   };
