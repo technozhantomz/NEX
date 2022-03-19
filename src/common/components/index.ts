@@ -7,3 +7,4 @@ export * from "./PageLayout";
 export * from "./PasswordModal";
 export * from "./TransferForm";
 export * from "./WithdrawForm";
+export * from "./MembershipModal";

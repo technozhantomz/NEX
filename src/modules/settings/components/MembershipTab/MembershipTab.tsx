@@ -1,12 +1,32 @@
 import React from "react";
 
+import { MembershipModal } from "../../../../common/components";
 import { DashboardButton } from "../../../../common/components/DashboardButton";
 
 import * as Styled from "./MembershipTab.styled";
+import { useMembershipTab } from "./hooks/useMembershipTab";
 
 export const MembershipTab = (): JSX.Element => {
+  const {
+    updateSetting,
+    handleCancel,
+    handleOk,
+    confirmLoading,
+    modalText,
+    formValdation,
+    visible,
+  } = useMembershipTab();
+
   return (
     <Styled.MembershipCard>
+      <MembershipModal
+        visible={visible}
+        onCancel={handleCancel}
+        handleOk={handleOk}
+        modalText={modalText}
+        confirmLoading={confirmLoading}
+      />
+
       <Styled.Space direction="vertical">
         <Styled.TextHeader strong>Upgrade for 80% Cashback</Styled.TextHeader>
         <Styled.Paragraph>
@@ -15,7 +35,10 @@ export const MembershipTab = (): JSX.Element => {
           refer to the network. A Lifetime Membership is just 5 PPY.
         </Styled.Paragraph>
         <Styled.BtnDiv>
-          <DashboardButton label="Buy lifetime subscription" />
+          <DashboardButton
+            label="Buy lifetime subscription"
+            onClick={updateSetting}
+          />
         </Styled.BtnDiv>
         <Styled.TextHeader strong>Fee Allocation</Styled.TextHeader>
         <Styled.Paragraph>
