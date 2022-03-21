@@ -1,4 +1,3 @@
-import { ChainStore } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
 import { useAsset, useBlockchain } from "../../../../../common/hooks";
@@ -33,7 +32,14 @@ export function useBlockchainTab(): UseBlockchainTab {
   const [searchResult, setSearchResult] = useState<BlockTableRow[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const { defaultAsset } = useAsset();
-  const { getChainData, getBlockData, getDynamic, getBlock } = useBlockchain();
+  const {
+    getChainData,
+    getBlockData,
+    getDynamic,
+    getRecentBlocks,
+    getAvgBlockTime,
+    getBlock,
+  } = useBlockchain();
 
   useEffect(() => {
     const intervalTime =
@@ -43,53 +49,21 @@ export function useBlockchainTab(): UseBlockchainTab {
 
   const getBlockchainData = async () => {
     //setLoading(true);
-    let recentBlocks = ChainStore.getRecentBlocks();
+    const recentBlocks = getRecentBlocks();
     const chainData = await getChainData();
     const blockData = await getBlockData();
     const dynamic = await getDynamic();
+    const avgBlockTime = getAvgBlockTime();
     try {
-      recentBlocks = recentBlocks
-        .toJS()
-        .sort((a: { id: number }, b: { id: number }) => a.id > b.id);
-
-      const blockTimes: any[] = [];
-      let previousTime: number;
-
-      recentBlocks.forEach(
-        (block: { timestamp: number; id: any }, index: number) => {
-          if (index > 0) {
-            const delta = (previousTime - block.timestamp) / 1000;
-
-            blockTimes.push([block.id, delta]);
-          }
-
-          previousTime = block.timestamp;
-        }
-      );
-
-      const chainAvgTime = blockTimes.reduce(
-        (previous, current, _idx, array) => {
-          return previous + current[1] / array.length;
-        },
-        0
-      );
-
-      const blockRows = recentBlocks.map(
-        (block: {
-          id: { toString: () => any };
-          timestamp: { toLocaleTimeString: () => any };
-          witness_account_name: any;
-          transactions: string | any[];
-        }) => {
-          return {
-            key: block.id.toString(),
-            blockID: block.id.toString(),
-            time: block.timestamp.toLocaleTimeString(),
-            witness: block.witness_account_name,
-            transaction: block.transactions.length,
-          };
-        }
-      );
+      const blockRows = recentBlocks.map((block: any) => {
+        return {
+          key: block?.id.toString(),
+          blockID: block?.id.toString(),
+          time: block.timestamp.toLocaleTimeString(),
+          witness: block.witness_account_name,
+          transaction: block.transactions.length,
+        };
+      });
       if (defaultAsset) {
         setBlockchainData({
           currentBlock: blockData.head_block_number,
@@ -99,7 +73,7 @@ export function useBlockchainTab(): UseBlockchainTab {
             symbol: defaultAsset.symbol,
           },
           activeWitnesses: chainData.active_witnesses,
-          avgTime: Number(chainAvgTime.toFixed(0)),
+          avgTime: Number(avgBlockTime.toFixed(0)),
           recentBlocks: blockRows,
           stats: {
             blocks: updateStatsArray(
@@ -116,7 +90,7 @@ export function useBlockchainTab(): UseBlockchainTab {
             ),
             times: updateStatsArray(
               blockchainData.stats.times,
-              Number(chainAvgTime.toFixed(0))
+              Number(avgBlockTime.toFixed(0))
             ),
           },
         });

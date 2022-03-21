@@ -21,7 +21,7 @@ export function useWitnessesTab(): WitnessesTab {
   });
   const { dbApi } = usePeerplaysApiContext();
   const { defaultAsset, formAssetBalanceById, setPrecision } = useAsset();
-  const { getChainData } = useBlockchain();
+  const { getChainData, getAvgBlockTime } = useBlockchain();
 
   useEffect(() => {
     setInterval(() => getWitnessData(), 3000);
@@ -38,39 +38,68 @@ export function useWitnessesTab(): WitnessesTab {
       const witnessesID = await dbApi("lookup_witness_accounts", [
         "",
         100,
-      ]).then((e) => e);
+      ]).then((e: any) => e);
       const rawWitnesses = await dbApi("get_witnesses", [
-        witnessesID.map((item) => item[1]),
-      ]).then(async (e) => {
-        let allWitnesses = e.map(async (item, index) => {
-          const votesAsset = await formAssetBalanceById(
-            defaultAsset.id,
-            Number(item.total_votes)
-          );
-          return {
-            rank: index + 1,
-            name: witnessesID.filter((name) => name[1] === item.id)[0][0],
-            totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
-            lastBlock: item.last_confirmed_block_num,
-            missedBlocks: item.total_missed,
-            url: item.url,
-          };
-        });
+        witnessesID.map((item: any[]) => item[1]),
+      ]).then(async (e: any) => {
+        let allWitnesses = e.map(
+          async (
+            item: {
+              total_votes: any;
+              id: any;
+              last_confirmed_block_num: any;
+              total_missed: any;
+              url: any;
+            },
+            index: number
+          ) => {
+            const votesAsset = await formAssetBalanceById(
+              defaultAsset.id,
+              Number(item.total_votes)
+            );
+            return {
+              rank: index + 1,
+              name: witnessesID.filter(
+                (name: any[]) => name[1] === item.id
+              )[0][0],
+              totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+              lastBlock: item.last_confirmed_block_num,
+              missedBlocks: item.total_missed,
+              url: item.url,
+            };
+          }
+        );
         allWitnesses = await Promise.all(allWitnesses);
-        return allWitnesses.filter((item) => item.lastBlock !== 0);
+        return allWitnesses.filter(
+          (item: { lastBlock: number }) => item.lastBlock !== 0
+        );
       });
+      const blocksPerMonth =
+        (60 / getAvgBlockTime()) * 60 * 24 * getDaysInThisMonth();
+      const earnings = (
+        (blocksPerMonth / rawWitnesses.length) *
+        rewardAmount
+      ).toFixed(defaultAsset.precision);
       setWitnesses({
         activeWitnesses: rawWitnesses.length,
         reward: rewardAmount,
-        earnings: 0,
+        earnings: Number(earnings),
         data: rawWitnesses,
         stats: {
           active: updateStatsArray(witnesses.stats.active, rawWitnesses.length),
           reward: updateStatsArray(witnesses.stats.reward, rewardAmount),
-          earnings: [],
+          earnings: updateStatsArray(
+            witnesses.stats.earnings,
+            Number(earnings)
+          ),
         },
       });
     }
+  };
+
+  const getDaysInThisMonth = () => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   };
 
   const updateStatsArray = (arr: number[], value: number) => {

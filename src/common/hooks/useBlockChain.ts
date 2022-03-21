@@ -1,3 +1,4 @@
+import { ChainStore } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
 import { usePeerplaysApiContext } from "../components/PeerplaysApiProvider";
@@ -20,6 +21,38 @@ export function useBlockchain(): Blockchain {
   const getDynamic = useCallback(async () => {
     const dynamic = await dbApi("get_objects", [["2.3.0"]]);
     return dynamic[0];
+  }, []);
+
+  const getRecentBlocks = useCallback(() => {
+    const recentBlocks = ChainStore.getRecentBlocks();
+    return recentBlocks
+      .toJS()
+      .sort((a: { id: number }, b: { id: number }) => a.id > b.id);
+  }, []);
+
+  const getAvgBlockTime = useCallback(() => {
+    const recentBlocks = getRecentBlocks();
+
+    const blockTimes: any[] = [];
+    let previousTime: number;
+
+    recentBlocks.forEach(
+      (block: { timestamp: number; id: any }, index: number) => {
+        if (index > 0) {
+          const delta = (previousTime - block.timestamp) / 1000;
+
+          blockTimes.push([block.id, delta]);
+        }
+
+        previousTime = block.timestamp;
+      }
+    );
+
+    return Number(
+      blockTimes.reduce((previous, current, _idx, array) => {
+        return previous + current[1] / array.length;
+      }, 0)
+    );
   }, []);
 
   const getBlock = useCallback(async (value: number) => {
@@ -48,5 +81,13 @@ export function useBlockchain(): Blockchain {
     []
   );
 
-  return { getChainData, getBlockData, getDynamic, getBlock, getBlocks };
+  return {
+    getChainData,
+    getBlockData,
+    getDynamic,
+    getRecentBlocks,
+    getAvgBlockTime,
+    getBlock,
+    getBlocks,
+  };
 }

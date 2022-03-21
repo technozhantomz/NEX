@@ -24,9 +24,10 @@ export const WitnessesTab = (): JSX.Element => {
           statsData={witnesses.stats.reward}
         />
         <StatsCard
+          isRewardCard
           noData={witnesses.earnings === 0}
           title="Monthly Earnings"
-          data={`$${witnesses.earnings}`}
+          data={`${witnesses.earnings}`}
           statsData={witnesses.stats.earnings}
         />
       </Styled.StatsCardsWrapper>

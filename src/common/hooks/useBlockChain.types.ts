@@ -2,6 +2,8 @@ export type Blockchain = {
   getChainData: () => Promise<ChainData>;
   getBlockData: () => Promise<BlockData>;
   getDynamic: () => Promise<Dynamic>;
+  getRecentBlocks: () => Block[];
+  getAvgBlockTime: () => number;
   getBlock: (value: number) => Promise<Block>;
   getBlocks: (first: number, last: number, limit: number) => Promise<Block[]>;
 };
