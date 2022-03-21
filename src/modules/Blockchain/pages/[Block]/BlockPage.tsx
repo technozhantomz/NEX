@@ -57,7 +57,7 @@ const BlockPage: NextPage = () => {
           </TabPane>
           <TabPane tab="Assets" key="assets"></TabPane>
           <TabPane tab="Witnesses" key="witnesses"></TabPane>
-          <TabPane tab="Committe" key="committe"></TabPane>
+          <TabPane tab="Committee" key="committee"></TabPane>
           <TabPane tab="Fees" key="fees"></TabPane>
         </Tabs>
       </Styled.BlockCard>
