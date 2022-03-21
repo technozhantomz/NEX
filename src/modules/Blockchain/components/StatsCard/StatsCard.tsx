@@ -1,8 +1,11 @@
 import { TinyArea } from "@ant-design/plots";
 
+import { useAsset } from "../../../../common/hooks";
+
 import * as Styled from "./StatsCard.styled";
 
 type Props = {
+  isRewardCard?: boolean;
   isTimeCard?: boolean;
   statsData: number[];
   noData: boolean;
@@ -11,6 +14,7 @@ type Props = {
 };
 
 export const StatsCard = ({
+  isRewardCard = false,
   isTimeCard = false,
   statsData,
   noData,
@@ -23,6 +27,7 @@ export const StatsCard = ({
     data: statsData,
     smooth: true,
   };
+  const { defaultAsset } = useAsset();
 
   return (
     <Styled.StatsCard className={noData ? "no-data" : ""}>
@@ -30,6 +35,7 @@ export const StatsCard = ({
       <Styled.StatsCardValue>
         {noData ? "No Data" : data}
         {isTimeCard && !noData ? <span> seconds</span> : ""}
+        {isRewardCard && !noData ? <span> {defaultAsset?.symbol}</span> : ""}
       </Styled.StatsCardValue>
       <TinyArea {...config} />
     </Styled.StatsCard>

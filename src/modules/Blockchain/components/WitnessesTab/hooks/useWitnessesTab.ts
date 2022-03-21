@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
-import { useAsset } from "../../../../../common/hooks";
+import { useAsset, useBlockchain } from "../../../../../common/hooks";
 
 import { WitnessData, WitnessesTab } from "./useWitnessesTab.types";
 
@@ -20,7 +20,8 @@ export function useWitnessesTab(): WitnessesTab {
     },
   });
   const { dbApi } = usePeerplaysApiContext();
-  const { defaultAsset, formAssetBalanceById } = useAsset();
+  const { defaultAsset, formAssetBalanceById, setPrecision } = useAsset();
+  const { getChainData } = useBlockchain();
 
   useEffect(() => {
     setInterval(() => getWitnessData(), 3000);
@@ -28,6 +29,12 @@ export function useWitnessesTab(): WitnessesTab {
 
   const getWitnessData = async () => {
     if (defaultAsset) {
+      const chainData = await getChainData();
+      const rewardAmount = setPrecision(
+        false,
+        chainData.parameters.witness_pay_per_block,
+        defaultAsset.precision
+      );
       const witnessesID = await dbApi("lookup_witness_accounts", [
         "",
         100,
@@ -35,17 +42,17 @@ export function useWitnessesTab(): WitnessesTab {
       const rawWitnesses = await dbApi("get_witnesses", [
         witnessesID.map((item) => item[1]),
       ]).then(async (e) => {
-        let allWitnesses = e.map(async (item) => {
+        let allWitnesses = e.map(async (item, index) => {
           const votesAsset = await formAssetBalanceById(
             defaultAsset.id,
             Number(item.total_votes)
           );
           return {
-            rank: 0,
+            rank: index + 1,
             name: witnessesID.filter((name) => name[1] === item.id)[0][0],
             totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
             lastBlock: item.last_confirmed_block_num,
-            missedBlocks: 0,
+            missedBlocks: item.total_missed,
             url: item.url,
           };
         });
@@ -54,12 +61,12 @@ export function useWitnessesTab(): WitnessesTab {
       });
       setWitnesses({
         activeWitnesses: rawWitnesses.length,
-        reward: 0,
+        reward: rewardAmount,
         earnings: 0,
         data: rawWitnesses,
         stats: {
           active: updateStatsArray(witnesses.stats.active, rawWitnesses.length),
-          reward: [],
+          reward: updateStatsArray(witnesses.stats.reward, rewardAmount),
           earnings: [],
         },
       });
@@ -76,9 +83,9 @@ export function useWitnessesTab(): WitnessesTab {
     return arr;
   };
 
-  const onSearch = async (symbol: string) => {
+  const onSearch = async (name: string) => {
     setLoading(true);
-    setSearchValue(symbol);
+    setSearchValue(name);
     setLoading(false);
   };
 

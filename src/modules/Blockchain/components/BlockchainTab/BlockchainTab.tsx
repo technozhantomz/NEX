@@ -30,7 +30,7 @@ export const BlockchainTab = (): JSX.Element => {
           statsData={blockchainData.stats.witnesses}
         />
         <StatsCard
-          isTimeCard={true}
+          isTimeCard
           noData={blockchainData.avgTime === 0}
           title="Confimation Time"
           data={`${blockchainData.avgTime}`}

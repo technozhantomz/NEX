@@ -21,6 +21,14 @@ export type Block = {
 };
 
 export type ChainData = {
+  active_committee_members: string[];
+  active_sons: any[];
+  active_witnesses: string[];
+  id: string;
+  next_available_vote_id: number;
+  parameters: BlockDataParameters;
+};
+export type BlockData = {
   accounts_registered_this_interval: number;
   current_aslot: number;
   current_witness: string;
@@ -37,14 +45,6 @@ export type ChainData = {
   son_budget: number;
   time: string;
   witness_budget: number;
-};
-export type BlockData = {
-  active_committee_members: string[];
-  active_sons: any[];
-  active_witnesses: string[];
-  id: string;
-  next_available_vote_id: number;
-  parameters: BlockDataParameters;
 };
 export type Dynamic = {
   accumulated_fees: number;

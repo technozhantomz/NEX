@@ -8,12 +8,12 @@ export function useBlockchain(): Blockchain {
   const { dbApi } = usePeerplaysApiContext();
 
   const getChainData = useCallback(async () => {
-    const chainData = await dbApi("get_objects", [["2.1.0"]]);
+    const chainData = await dbApi("get_objects", [["2.0.0"]]);
     return chainData[0];
   }, []);
 
   const getBlockData = useCallback(async () => {
-    const blockData = await dbApi("get_objects", [["2.0.0"]]);
+    const blockData = await dbApi("get_objects", [["2.1.0"]]);
     return blockData[0];
   }, []);
 

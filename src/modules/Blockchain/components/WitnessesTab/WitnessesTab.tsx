@@ -17,6 +17,7 @@ export const WitnessesTab = (): JSX.Element => {
           statsData={witnesses.stats.active}
         />
         <StatsCard
+          isRewardCard
           noData={witnesses.reward === 0}
           title="Block Reward"
           data={`${witnesses.reward}`}

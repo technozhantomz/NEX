@@ -92,19 +92,19 @@ export function useBlockchainTab(): UseBlockchainTab {
       );
       if (defaultAsset) {
         setBlockchainData({
-          currentBlock: chainData.head_block_number,
+          currentBlock: blockData.head_block_number,
           supply: {
             amount:
               Number(dynamic.current_supply) / 10 ** defaultAsset.precision,
             symbol: defaultAsset.symbol,
           },
-          activeWitnesses: blockData.active_witnesses,
+          activeWitnesses: chainData.active_witnesses,
           avgTime: Number(chainAvgTime.toFixed(0)),
           recentBlocks: blockRows,
           stats: {
             blocks: updateStatsArray(
               blockchainData.stats.blocks,
-              chainData.head_block_number
+              blockData.head_block_number
             ),
             supply: updateStatsArray(
               blockchainData.stats.supply,
@@ -112,7 +112,7 @@ export function useBlockchainTab(): UseBlockchainTab {
             ),
             witnesses: updateStatsArray(
               blockchainData.stats.witnesses,
-              blockData.active_witnesses.length
+              chainData.active_witnesses.length
             ),
             times: updateStatsArray(
               blockchainData.stats.times,

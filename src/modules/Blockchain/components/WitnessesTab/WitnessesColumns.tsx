@@ -44,7 +44,7 @@ export const WitnessesColumns = [
     dataIndex: "url",
     key: "url",
     render: (url: string): JSX.Element => (
-      <Link href={`${url}`}>
+      <Link href={`${url}`} passHref>
         <LinkOutlined rotate={45} />
       </Link>
     ),
