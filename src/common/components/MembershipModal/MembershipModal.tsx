@@ -10,6 +10,7 @@ type Props = {
   handleOk: () => void;
   modalText: string;
   confirmLoading: boolean;
+  isEnableToPay: boolean;
 };
 
 export const MembershipModal = ({
@@ -18,36 +19,33 @@ export const MembershipModal = ({
   handleOk,
   modalText,
   confirmLoading,
+  isEnableToPay,
 }: Props): JSX.Element => {
-  const { validatePassword, useResetFormOnCloseModal, passwordModalForm } =
-    useMembershipForm();
-
-  useResetFormOnCloseModal(passwordModalForm, visible);
-
   return (
     <>
-      <Modal
-        title="Warning"
+      <Styled.MembershipModal
+        title="Membership"
         visible={visible}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={onCancel}
+        centered={true}
+        footer={[
+          <Button key="back" onClick={onCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={confirmLoading}
+            onClick={handleOk}
+          >
+            Continue
+          </Button>,
+        ]}
       >
         <p>{modalText}</p>
-      </Modal>
+      </Styled.MembershipModal>
     </>
-    // <Styled.MembershipModal
-    //   title="Warning"
-    //   visible={visible}
-    //   centered={true}
-    //   onOk={() => {
-    //     passwordModalForm.submit();
-    //   }}
-    //   onCancel={onCancel}
-    //   footer={null}
-    // >
-    //   <p>For this operations you'll have to pay 10000 TEST fee. Do you want to continue?</p>
-
-    // </Styled.MembershipModal>
   );
 };

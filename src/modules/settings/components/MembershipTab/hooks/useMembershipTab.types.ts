@@ -1,23 +1,22 @@
-import { FormInstance, Rule } from "antd/lib/form";
+import { FormInstance } from "antd/lib/form";
+import FormFinishInfo from "rc-field-form";
 
-export type KeyManagementTabTypes = {
-  updateSetting: () => void;
+export type MembershipTabTypes = {
+  handleMembershipUpgrade: (password: string) => void;
   requestedKey: string | undefined;
-  KeyManagementForm: FormInstance<KeyManagementFormData>;
-  formValdation: FormValidation;
-  visible: boolean;
+  isMembershipModalVisible: boolean;
   handleCancel: () => void;
   handleOk: () => void;
   confirmLoading: boolean;
   modalText: string;
+  visible: boolean;
+  onCancel: () => void;
+  onFormFinish: (name: string, info: FormFinishInfo) => void;
+  membershipForm: FormInstance<MembershipFormData>;
+  confirm: () => void;
+  isEnableToPay: boolean;
 };
 
-export type FormValidation = {
-  selectRole: Rule[];
-};
-
-export type KeyManagementFormData = {
+export type MembershipFormData = {
   password: string;
-  roles: string;
-  generatedKey: number;
 };
