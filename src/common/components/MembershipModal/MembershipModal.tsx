@@ -11,6 +11,7 @@ type Props = {
   modalText: string;
   confirmLoading: boolean;
   isEnableToPay: boolean;
+  inProgress: boolean;
 };
 
 export const MembershipModal = ({
@@ -20,6 +21,7 @@ export const MembershipModal = ({
   modalText,
   confirmLoading,
   isEnableToPay,
+  inProgress
 }: Props): JSX.Element => {
   return (
     <>
@@ -30,19 +32,22 @@ export const MembershipModal = ({
         confirmLoading={confirmLoading}
         onCancel={onCancel}
         centered={true}
-        footer={[
-          <Button key="back" onClick={onCancel}>
-            Cancel
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={confirmLoading}
-            onClick={handleOk}
-          >
-            Continue
-          </Button>,
-        ]}
+        footer={inProgress
+          ? null
+          : [
+            <Button key="back" onClick={onCancel}>
+              Cancel
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={confirmLoading}
+              onClick={handleOk}
+            >
+              Continue
+            </Button>,
+          ]}
+
       >
         <p>{modalText}</p>
       </Styled.MembershipModal>

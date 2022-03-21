@@ -20,6 +20,7 @@ export const MembershipTab = (): JSX.Element => {
     membershipForm,
     isEnableToPay,
     confirm,
+    inProgress
   } = useMembershipTab();
 
   return (
@@ -33,6 +34,7 @@ export const MembershipTab = (): JSX.Element => {
             modalText={modalText}
             confirmLoading={confirmLoading}
             isEnableToPay={isEnableToPay}
+            inProgress={inProgress}
           />
 
           <Styled.Space direction="vertical">

@@ -29,6 +29,7 @@ export function useMembershipTab(): MembershipTabTypes {
   const { getPrivateKey } = useAccount();
   const [visible, setVisible] = useState<boolean>(false);
   const [isEnableToPay, setIsEnableToPay] = useState<boolean>(true);
+  const [inProgress, setInProgress] = useState(false);
 
   const onFormFinish = (name: string, info: FormFinishInfo) => {
     const { values, forms } = info;
@@ -45,6 +46,7 @@ export function useMembershipTab(): MembershipTabTypes {
     setVisible(false);
     setIsMembershipModalVisible(true);
     setModalText(`Transaction is being processed please wait`);
+    setInProgress(true);
 
     const fees = { amount: 0, asset_id: "1.3.0" };
     const activeKey = getPrivateKey(password, "active");
@@ -68,6 +70,8 @@ export function useMembershipTab(): MembershipTabTypes {
       setModalText(`Transaction couldn't processed`);
       setTimeout(() => {
         setIsMembershipModalVisible(false);
+        setInProgress(false);
+
       }, 2000);
     }
 
@@ -75,6 +79,7 @@ export function useMembershipTab(): MembershipTabTypes {
       setModalText(`Transaction completed`);
       setTimeout(() => {
         setIsMembershipModalVisible(false);
+        setInProgress(false);
       }, 2000);
       console.log(trxResult);
     }
@@ -131,5 +136,6 @@ export function useMembershipTab(): MembershipTabTypes {
     membershipForm,
     confirm,
     isEnableToPay,
+    inProgress,
   };
 }
