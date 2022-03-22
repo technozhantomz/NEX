@@ -20,7 +20,8 @@ export const MembershipTab = (): JSX.Element => {
     membershipForm,
     isEnableToPay,
     confirm,
-    inProgress
+    inProgress,
+    name,
   } = useMembershipTab();
 
   return (
@@ -56,8 +57,8 @@ export const MembershipTab = (): JSX.Element => {
 
             <Styled.TextHeader strong>Fee Allocation</Styled.TextHeader>
             <Styled.Paragraph>
-              Every time pays a transaction fee, that fee is divided among
-              several different accounts
+              Every time {`< ${name} >`} pays a transaction fee, that fee is
+              divided among several different accounts
             </Styled.Paragraph>
 
             <Styled.ListDiv>
@@ -128,9 +129,9 @@ export const MembershipTab = (): JSX.Element => {
 
             <Styled.TextHeader strong>Pending fees</Styled.TextHeader>
             <Styled.Paragraph>
-              Fees paid by are divided among the network, referrers, and
-              registrars once every maintenance interval (3600 seconds). The
-              next maintenance time is 24 Feb 2022 16:00:00.
+              Fees paid by {`< ${name} >`} are divided among the network,
+              referrers, and registrars once every maintenance interval (3600
+              seconds). The next maintenance time is 24 Feb 2022 16:00:00.
             </Styled.Paragraph>
 
             <Styled.TextHeader strong>Vesting fees</Styled.TextHeader>

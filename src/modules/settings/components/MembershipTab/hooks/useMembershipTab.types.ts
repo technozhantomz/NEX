@@ -16,6 +16,7 @@ export type MembershipTabTypes = {
   confirm: () => void;
   isEnableToPay: boolean;
   inProgress: boolean;
+  name: string;
 };
 
 export type MembershipFormData = {

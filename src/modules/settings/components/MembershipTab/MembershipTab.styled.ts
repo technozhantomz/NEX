@@ -1,4 +1,5 @@
 import {
+  CardFormButton as button,
   Paragraph as Para,
   Space as space,
   styled,
@@ -14,6 +15,9 @@ export const MembershipCard = styled.div`
   opacity: 1;
   margin-left: 30px;
   height: 856px;
+  @media (max-width: 500px) {
+    height: 950px;
+  }
 `;
 
 export const TextHeader = styled(text)`
@@ -33,6 +37,9 @@ export const Paragraph = styled(Para)`
   color: #212121;
   opacity: 1;
   width: 75%;
+  @media (max-width: 500px) {
+    width: 95%;
+  }
 `;
 
 export const Space = styled(space)``;
@@ -53,15 +60,27 @@ export const ListDiv = styled.div`
 
 export const HeaderDiv = styled.div`
   width: 15%;
+  @media (max-width: 500px) {
+    width: 40%;
+  }
 `;
 
 export const PercentageDiv = styled.div`
   width: 10%;
   text-align: right;
+  @media (max-width: 500px) {
+    width: 40%;
+    text-align: right;
+  }
 `;
 
 export const BtnDiv = styled.div`
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
+
+export const Button = styled(button)``;

@@ -23,7 +23,7 @@ export function useMembershipTab(): MembershipTabTypes {
   const [feeData, setFeeData] = useState<TransactionFee>();
   const { getFees } = useFees();
   const { getAssetById } = useAsset();
-  const { assets } = useUserContext();
+  const { assets, name } = useUserContext();
   const [rawFee, setRawFee] = useState<number>(0);
   const { trxBuilder } = useTransactionBuilder();
   const { getPrivateKey } = useAccount();
@@ -71,7 +71,6 @@ export function useMembershipTab(): MembershipTabTypes {
       setTimeout(() => {
         setIsMembershipModalVisible(false);
         setInProgress(false);
-
       }, 2000);
     }
 
@@ -137,5 +136,6 @@ export function useMembershipTab(): MembershipTabTypes {
     confirm,
     isEnableToPay,
     inProgress,
+    name,
   };
 }
