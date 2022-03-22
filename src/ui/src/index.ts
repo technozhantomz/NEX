@@ -6,6 +6,7 @@ export { DownOutlined } from "./DownOutlined";
 export { CardFrom, CardFormButton } from "./CardFrom";
 export { MenuCard } from "./MenuCard";
 export { Avatar } from "./Avatar";
+export { StatsCardsDeck } from "./StatsCardDeck";
 
 export {
   Row,

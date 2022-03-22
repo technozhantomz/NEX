@@ -9,14 +9,14 @@ export const CommitteeTab = (): JSX.Element => {
 
   return (
     <Styled.CommitteeTabWrapper>
-      <Styled.StatsCardsWrapper>
+      <Styled.StatsCardsDeck>
         <StatsCard
           noData={committee.activeCommittee === 0}
           title="Active Committee"
           data={`${committee.activeCommittee}`}
           statsData={committee.stats.active}
         />
-      </Styled.StatsCardsWrapper>
+      </Styled.StatsCardsDeck>
       <Styled.CommitteeSearch
         size="large"
         placeholder="Search Committee"

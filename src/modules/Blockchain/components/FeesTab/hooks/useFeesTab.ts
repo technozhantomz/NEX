@@ -42,52 +42,42 @@ export function useFeesTab(): UseFeesTab {
       const bizOps: FeesTableRow[] | any[] = [];
       const gameOps: FeesTableRow[] | any[] = [];
 
-      //   TODO: use Filter to set arrays for each type
-      //   then use eatch type and put it throw the form to get the correct data structure
-      //   rawOperations.forEach((op) => {
-      //     if (op.operation.includes("asset")) {
-      //       assetOps.push(op);
-      //     } else if (op.operation.includes("account")) {
-      //       accountOps.push(op);
-      //     } else if (
-      //       op.operation.includes("witness") ||
-      //       op.operation.includes("committee")
-      //     ) {
-      //       bizOps.push(op);
-      //     } else if (
-      //       op.operation.includes("tournament") ||
-      //       op.operation.includes("bet") ||
-      //       op.operation.includes("betting")
-      //     ) {
-      //       gameOps.push(op);
-      //     } else {
-      //       genOps.push(formRows(genOps, op));
-      //     }
-      //   });
-      const rawAssetOps = rawOperations.filter((op) =>
-        op.operation.includes("asset")
+      const rawAssetOps = rawOperations.filter(
+        (op) => op.operation.includes("asset") || op.operation.includes("nft")
       );
       const rawAccountOps = rawOperations.filter((op) =>
         op.operation.includes("account")
       );
       const rawBizOps = rawOperations.filter(
         (op) =>
-          op.operation.includes("witness") || op.operation.includes("committee")
+          op.operation.includes("witness") ||
+          op.operation.includes("committee") ||
+          op.operation.includes("proposal")
       );
       const rawGameOps = rawOperations.filter(
         (op) =>
+          op.operation.includes("game") ||
+          op.operation.includes("sport") ||
           op.operation.includes("tournament") ||
+          op.operation.includes("bid") ||
           op.operation.includes("bet") ||
+          op.operation.includes("blind") ||
           op.operation.includes("betting")
       );
       const rawGenOps = rawOperations.filter(
         (op) =>
           !op.operation.includes("asset") &&
+          !op.operation.includes("nft") &&
           !op.operation.includes("account") &&
           !op.operation.includes("witness") &&
           !op.operation.includes("committee") &&
+          !op.operation.includes("proposal") &&
+          !op.operation.includes("game") &&
+          !op.operation.includes("sport") &&
           !op.operation.includes("tournament") &&
+          !op.operation.includes("bid") &&
           !op.operation.includes("bet") &&
+          !op.operation.includes("blind") &&
           !op.operation.includes("betting")
       );
       rawAccountOps.forEach((op) => formRows(accountOps, op));

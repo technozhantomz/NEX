@@ -26,11 +26,17 @@ export const StatsCard = ({
     autoFit: false,
     data: statsData,
     smooth: true,
+    // line: {
+    //   color: "#FF6CB3",
+    // },
+    // areaStyle: {
+    //   fill: "l(90) 0:#FF6CB3 1:#fff",
+    // },
   };
   const { defaultAsset } = useAsset();
 
   return (
-    <Styled.StatsCard className={noData ? "no-data" : ""}>
+    <Styled.StatsCard className={noData ? "no-data stats-card" : "stats-card"}>
       <Styled.StatsCardHeading>{title}</Styled.StatsCardHeading>
       <Styled.StatsCardValue>
         {noData ? "No Data" : data}

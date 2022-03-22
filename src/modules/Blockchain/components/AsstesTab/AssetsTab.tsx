@@ -9,14 +9,14 @@ export const AssetsTab = (): JSX.Element => {
 
   return (
     <Styled.AssetsTabWrapper>
-      <Styled.StatsCardsWrapper>
+      <Styled.StatsCardsDeck>
         <StatsCard
           noData={assets.data.length === 0}
           title="Assets"
           data={`${assets.data.length}`}
           statsData={assets.stats}
         />
-      </Styled.StatsCardsWrapper>
+      </Styled.StatsCardsDeck>
       <Styled.AssetsSearch
         size="large"
         placeholder="Search Assets"

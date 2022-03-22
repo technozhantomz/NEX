@@ -10,7 +10,7 @@ export const BlockchainTab = (): JSX.Element => {
 
   return (
     <Styled.BlockTabWrapper>
-      <Styled.StatsCardsWrapper>
+      <Styled.StatsCardsDeck>
         <StatsCard
           noData={blockchainData.currentBlock === 0}
           title="Current Block"
@@ -36,7 +36,7 @@ export const BlockchainTab = (): JSX.Element => {
           data={`${blockchainData.avgTime}`}
           statsData={blockchainData.stats.times}
         />
-      </Styled.StatsCardsWrapper>
+      </Styled.StatsCardsDeck>
       <Styled.BlockSearch
         size="large"
         placeholder="Search Blocks"
