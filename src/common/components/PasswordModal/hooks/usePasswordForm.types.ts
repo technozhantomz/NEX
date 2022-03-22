@@ -1,4 +1,4 @@
-import { FormInstance } from "antd/lib/form";
+import { FormInstance } from "../../../../ui/src";
 
 export type IUsePasswordForm = {
   validatePassword: (_: unknown, value: string) => Promise<void>;

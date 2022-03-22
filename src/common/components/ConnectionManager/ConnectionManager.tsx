@@ -9,6 +9,7 @@ type Props = {
 
 export const ConnectionManager = ({ children }: Props): JSX.Element => {
   const { isLoadingConnection, isConnectionError } = usePeerplaysApiContext();
+
   if (isLoadingConnection) {
     return (
       <div>

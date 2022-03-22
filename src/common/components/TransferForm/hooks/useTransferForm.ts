@@ -1,33 +1,42 @@
-import { Form } from "antd";
-import { FormFinishInfo } from "rc-field-form";
 import { useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../api/params/networkparams";
-import { useAccount, useFees, useTransfer } from "../../../hooks";
-import { TransactionFee } from "../../../hooks/useFees.types";
+import { Form } from "../../../../ui/src";
+import {
+  roundNum,
+  useAccount,
+  useFees,
+  useSonNetwork,
+  useTransactionBuilder,
+  useTransferTransactionBuilder,
+} from "../../../hooks";
+import { Account } from "../../../types";
 import { useUserContext } from "../../UserProvider";
 
 import { TransferForm } from "./useTransferForm.types";
 
 export function useTransferForm(): TransferForm {
-  const [status, upStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
-  const [feeData, setFeeData] = useState<TransactionFee>({
-    amount: 0,
-    asset_id: "1.3.0",
-  });
-  const { getAccountByName, formAccountBalancesByName } = useAccount();
-  const { handleTransfer } = useTransfer();
+  const [feeAmount, setFeeAmount] = useState<number>(0);
+  const [toAccount, setToAccount] = useState<Account>();
+  const [fromAccount, setFromAccount] = useState<Account>();
+  const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
+    useAccount();
   const { localStorageAccount, assets } = useUserContext();
-  const { getFees, feeCalculator } = useFees();
+  const { trxBuilder } = useTransactionBuilder();
+  const { calculteTransferFee } = useFees();
+  const { buildTransferTransaction } = useTransferTransactionBuilder();
+  const { sonAccount, getSonNetworkStatus } = useSonNetwork();
   const [transferForm] = Form.useForm();
 
   useEffect(() => {
-    if (localStorageAccount !== null) {
-      getFeeData();
-      transferForm.setFieldsValue({ from: localStorageAccount });
+    const transferFee = calculteTransferFee(transferForm.getFieldValue("memo"));
+    if (transferFee) {
+      setFeeAmount(transferFee);
     }
-  }, [localStorageAccount, assets]);
+    transferForm.setFieldsValue({ from: localStorageAccount });
+  }, [localStorageAccount, calculteTransferFee, assets]);
 
   const onCancel = () => {
     setVisible(false);
@@ -39,7 +48,7 @@ export function useTransferForm(): TransferForm {
     });
   };
 
-  const onFormFinish = (name: string, info: FormFinishInfo) => {
+  const onFormFinish = (name: string, info: { values: any; forms: any }) => {
     const { values, forms } = info;
     const { passwordModal } = forms;
     if (name === "passwordModal") {
@@ -49,72 +58,137 @@ export function useTransferForm(): TransferForm {
     }
   };
 
-  const getFeeData = async () => {
-    const rawFeeData = (await getFees()).filter(
-      (item) => item.name === "TRANSFER"
-    )[0];
-    setFeeData({
-      amount: rawFeeData.fee,
-      asset_id: "1.3.0",
-    });
+  const handleValuesChange = (changedValues: any) => {
+    setStatus("");
+    if (changedValues.amount) {
+      if (changedValues.amount < 0) {
+        transferForm.setFieldsValue({ amount: 0 });
+      } else {
+        const selectedAsset = transferForm.getFieldValue("asset");
+        const selectedAccountAsset = assets.find(
+          (asset) => asset.symbol === selectedAsset
+        );
+
+        if (selectedAccountAsset && changedValues.amount > 0) {
+          transferForm.setFieldsValue({
+            amount: roundNum(
+              changedValues.amount,
+              selectedAccountAsset.precision
+            ),
+          });
+        }
+      }
+    }
   };
 
   const sendTransfer = async (password: string) => {
     const values = transferForm.getFieldsValue();
-    const trxResult = await handleTransfer(transferForm, password);
+    const from = (
+      fromAccount ? fromAccount : await getAccountByName(values.from)
+    ) as Account;
+    const to = (
+      toAccount ? toAccount : await getAccountByName(values.to)
+    ) as Account;
+    const activeKey = getPrivateKey(password, "active");
+    const asset = assets.filter((asset) => asset.symbol === values.asset)[0];
+    const trx = buildTransferTransaction(
+      from,
+      to,
+      values.memo,
+      asset,
+      password,
+      values.amount
+    );
+    let trxResult;
+    try {
+      trxResult = await trxBuilder([trx], [activeKey]);
+    } catch (e) {
+      console.log(e);
+    }
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
       setVisible(false);
-      upStatus(
-        `Successfully Transfered ${values.amount} ${values.coin} to ${values.to}`
+      setStatus(
+        `Successfully Transfered ${values.amount} ${values.asset} to ${values.to}`
       );
+      transferForm.resetFields();
+    } else {
+      setVisible(false);
+      setStatus("Server error, please try again later.");
     }
   };
 
   const validateFrom = async (_: unknown, value: string) => {
     if (value !== localStorageAccount)
       return Promise.reject(new Error("Not your Account"));
+    setFromAccount(await getAccountByName(value));
     return Promise.resolve();
   };
 
   const validateTo = async (_: unknown, value: string) => {
     const acc = await getAccountByName(value);
-    if (value === localStorageAccount)
+    if (value === localStorageAccount) {
       return Promise.reject(new Error("Can not send to yourself"));
-    if (acc === undefined) return Promise.reject(new Error("User not found"));
+    }
+    if (!acc) {
+      return Promise.reject(new Error("User not found"));
+    }
+    if (
+      sonAccount &&
+      (acc.id === sonAccount.id || acc.name === sonAccount.name)
+    ) {
+      const sonNetworkStatus = await getSonNetworkStatus();
+      if (!sonNetworkStatus.isSonNetworkOk) {
+        return Promise.reject(new Error("SONs network is not available now"));
+      }
+    }
+    setToAccount(acc);
     return Promise.resolve();
   };
 
-  const validateQuantity = async (_: unknown, value: number) => {
-    const coin = transferForm.getFieldValue("coin");
-    const accountAsset = assets.find((asset) => asset.symbol === coin);
-    if (canPayFee(value, feeData?.amount)) return Promise.resolve();
-    return Promise.reject(
-      new Error(`Must be less then ${accountAsset ? accountAsset.amount : ""}`)
+  const validateAmount = async (_: unknown, value: number) => {
+    const selectedAsset = transferForm.getFieldValue("asset");
+    const isDefaultAsset = selectedAsset === defaultToken;
+    const selectedAccountAsset = assets.find(
+      (asset) => asset.symbol === selectedAsset
     );
+    if (!selectedAccountAsset) {
+      return Promise.reject(new Error("Balance is not enough"));
+    }
+
+    if (isDefaultAsset) {
+      const total = Number(value) + feeAmount;
+      if ((selectedAccountAsset.amount as number) < total) {
+        return Promise.reject(new Error("Balance is not enough"));
+      }
+      return Promise.resolve();
+    } else {
+      const accountDefaultAsset = assets.find(
+        (asset) => asset.symbol === defaultToken
+      );
+      if ((selectedAccountAsset.amount as number) < value) {
+        return Promise.reject(new Error("Balance is not enough"));
+      }
+      if (!accountDefaultAsset) {
+        return Promise.reject(
+          new Error("Balance is not enough to pay the fee")
+        );
+      }
+      if ((accountDefaultAsset.amount as number) < feeAmount) {
+        return Promise.reject(
+          new Error("Balance is not enough to pay the fee")
+        );
+      }
+      return Promise.resolve();
+    }
   };
 
   const validateMemo = async (_: unknown, value: string) => {
-    const updatedFee = await feeCalculator.transfer(value);
-    const sendAmount = transferForm.getFieldValue("amount");
-    setFeeData({ amount: updatedFee, asset_id: "1.3.0" });
-    if (canPayFee(sendAmount, updatedFee)) return Promise.resolve();
-    return Promise.reject(new Error(`Insufficient Funds`));
-  };
-
-  const canPayFee = (
-    amount: number,
-    feeAmount: number
-  ): boolean | undefined => {
-    const coin = transferForm.getFieldValue("coin");
-    const sendAsset = assets.find((asset) => asset.symbol === coin);
-    const feeAsset = assets.find((asset) => asset.symbol === defaultToken);
-    if (feeAsset?.amount !== undefined && sendAsset?.amount !== undefined) {
-      if (coin === defaultToken) {
-        return amount + feeAmount > sendAsset?.amount;
-      }
-      return feeAsset.amount > feeAmount;
+    const updatedFee = calculteTransferFee(value);
+    if (updatedFee) {
+      setFeeAmount(updatedFee);
     }
+    return Promise.resolve();
   };
 
   const formValdation = {
@@ -127,21 +201,22 @@ export function useTransferForm(): TransferForm {
       { validator: validateTo },
     ],
     amount: [
-      { required: true, message: "Quantity is required" },
-      { validator: validateQuantity },
+      { required: true, message: "Amount is required" },
+      { validator: validateAmount },
     ],
-    coin: [{ required: true, message: "Coin is required" }],
+    asset: [{ required: true, message: "Asset is required" }],
     memo: [{ validator: validateMemo }],
   };
 
   return {
     status,
     visible,
-    feeData,
+    feeAmount,
     transferForm,
     formValdation,
     confirm,
     onCancel,
     onFormFinish,
+    handleValuesChange,
   };
 }

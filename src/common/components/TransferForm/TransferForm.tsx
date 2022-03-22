@@ -1,6 +1,5 @@
-import { Form, Input } from "antd";
-
-import { defaultToken } from "../../../api/params/networkparams";
+import { Form, Input } from "../../../ui/src";
+import { useAsset } from "../../hooks";
 import { PasswordModal } from "../PasswordModal";
 import { useUserContext } from "../UserProvider";
 
@@ -16,13 +15,15 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
   const {
     status,
     visible,
-    feeData,
+    feeAmount,
     transferForm,
     formValdation,
     onCancel,
     confirm,
     onFormFinish,
+    handleValuesChange,
   } = useTransferForm();
+  const { defaultAsset } = useAsset();
 
   return (
     <Form.Provider onFormFinish={onFormFinish}>
@@ -31,6 +32,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
         name="transferForm"
         onFinish={confirm}
         size="large"
+        onValuesChange={handleValuesChange}
       >
         <div className="two-input-row">
           <Form.Item
@@ -40,7 +42,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             validateTrigger="onBlur"
             initialValue={localStorageAccount}
           >
-            <Input placeholder="From" />
+            <Input disabled={true} placeholder="From" />
           </Form.Item>
           <Form.Item
             name="to"
@@ -58,29 +60,24 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             rules={formValdation.amount}
             validateTrigger="onBlur"
           >
-            <Input placeholder="Quantity" type="number" />
+            <Input placeholder="Amount" type="number" />
           </Form.Item>
           <Form.Item
-            name="coin"
+            name="asset"
             validateFirst={true}
-            rules={formValdation.coin}
+            rules={formValdation.asset}
             validateTrigger="onBlur"
             initialValue={`${asset}`}
           >
-            <Input placeholder="Coin (Default)" />
+            <Input disabled={true} />
           </Form.Item>
         </div>
         <p>Only members with memo key can read your memos</p>
-        <Form.Item
-          name="memo"
-          validateFirst={true}
-          rules={formValdation.memo}
-          validateTrigger="onBlur"
-        >
+        <Form.Item name="memo" validateFirst={true} rules={formValdation.memo}>
           <Input placeholder="Memo" />
         </Form.Item>
         <p>
-          Fees: {feeData ? feeData.amount : 0} {defaultToken}
+          Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>

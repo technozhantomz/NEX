@@ -1,1 +1,1 @@
-export * from "./passwordModal";
+export * from "./PasswordModal";

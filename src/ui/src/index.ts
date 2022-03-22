@@ -1,8 +1,7 @@
 export { default as styled, css } from "styled-components";
-export { Box, Flex } from "reflexbox/styled-components";
-export { Dropdown } from "./Dropdown";
-export { Select, Option } from "./Select";
 export { Button } from "./Button";
+export { Select, Option } from "./Select";
+export { Dropdown } from "./Dropdown";
 export { DownOutlined } from "./DownOutlined";
 export { CardFrom, CardFormButton } from "./CardFrom";
 export { MenuCard } from "./MenuCard";
@@ -18,11 +17,11 @@ export {
   Menu,
   Modal,
   Table,
-  Checkbox,
+  Tooltip,
   Card,
+  Checkbox,
   Switch,
   List,
-  Tooltip,
   Space,
 } from "antd";
 
@@ -48,3 +47,5 @@ export type { FormInstance } from "antd";
 export type { Rule } from "antd/lib/form";
 
 export type { CheckboxChangeEvent } from "antd/lib/checkbox";
+
+export type { BaseOptionType, DefaultOptionType } from "antd/lib/select";

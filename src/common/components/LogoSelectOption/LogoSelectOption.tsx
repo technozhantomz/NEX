@@ -1,11 +1,9 @@
-import { BaseOptionType, DefaultOptionType } from "antd/lib/select";
 import React from "react";
 
-import { defaultToken } from "../../../api/params/networkparams";
-import BitcoinIcon from "../../../ui/src/icons/BitcoinIcon.svg";
-import PPYIcon from "../../../ui/src/icons/PPYIcon.svg";
+import { BaseOptionType, DefaultOptionType } from "../../../ui/src";
+import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 
-import * as Styled from "./LogoSelectOption.style";
+import * as Styled from "./LogoSelectOption.styled";
 
 type LogoSelectionProps = {
   onChange?:
@@ -19,12 +17,15 @@ type LogoSelectionProps = {
     | undefined;
   labelInValue?: boolean;
   defaultValue?: string;
-  forWithraw?: boolean;
 };
 
 export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
   return (
-    <Styled.SelectContainer {...props} bordered={false}>
+    <Styled.SelectContainer
+      onChange={props.onChange}
+      defaultValue={props.defaultValue}
+      bordered={false}
+    >
       <Styled.SelectOptionContainer value="BTC">
         <Styled.OptionsDiv>
           <Styled.IconDiv>
@@ -33,18 +34,6 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
           <Styled.NamePara>BTC</Styled.NamePara>
         </Styled.OptionsDiv>
       </Styled.SelectOptionContainer>
-      {!props.forWithraw ? (
-        <Styled.SelectOptionContainer value={defaultToken}>
-          <Styled.OptionsDiv>
-            <Styled.IconDiv>
-              <PPYIcon width="30px" height="30px" />
-            </Styled.IconDiv>
-            <Styled.NamePara>{defaultToken}</Styled.NamePara>
-          </Styled.OptionsDiv>
-        </Styled.SelectOptionContainer>
-      ) : (
-        ""
-      )}
     </Styled.SelectContainer>
   );
 };

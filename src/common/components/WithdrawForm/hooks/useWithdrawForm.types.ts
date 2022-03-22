@@ -1,19 +1,15 @@
-import { FormInstance, Rule } from "antd/lib/form";
-import { FormFinishInfo } from "rc-field-form";
-
-import { TransactionFee } from "../../../hooks/useFees.types";
+import { FormInstance, Rule } from "../../../../ui/src";
 
 export type WithdrawForm = {
   status: string;
-  loggedIn: boolean;
   visible: boolean;
-  feeData: TransactionFee | undefined;
+  feeAmount: number;
   formValdation: FormValidation;
   withdrawForm: FormInstance<TransferFormData>;
-  onFormFinish: (name: string, info: FormFinishInfo) => void;
+  onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   onCancel: () => void;
   confirm: () => void;
-  handleAssetChange: (value: unknown) => void;
+  handleValuesChange: (changedValues: any) => void;
 };
 
 export type FormField = {
@@ -24,13 +20,15 @@ export type FormField = {
 };
 
 export type FormValidation = {
-  asset: Rule[];
+  from: Rule[];
   amount: Rule[];
   withdrawAddress: Rule[];
+  withdrawPublicKey: Rule[];
 };
 
 export type TransferFormData = {
-  asset: string;
+  from: string;
   amount: number;
   withdrawAddress: string;
+  withdrawPublicKey: string;
 };

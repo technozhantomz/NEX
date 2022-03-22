@@ -2,7 +2,7 @@ import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { Radio } from "antd";
 import React from "react";
 
-import { useCopyKey } from "../../../../common/components/KeyIsGenerated/hooks";
+import { useCopyText } from "../../../../common/hooks";
 import { usePasswordForm } from "../../../../common/components/PasswordModal/hooks";
 import { CardFormButton } from "../../../../ui/src";
 import { CopyIcon } from "../../../../ui/src/icons";
@@ -63,7 +63,7 @@ export const KeyManagementTab = (): JSX.Element => {
                 value={requestedKey}
                 iconRender={(visible) => (
                   <div>
-                    <CopyIcon onClick={() => useCopyKey(requestedKey)} />
+                    <CopyIcon onClick={() => useCopyText(requestedKey)} />
                     {visible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
                   </div>
                 )}
