@@ -1,4 +1,5 @@
 import { Form } from "antd";
+import Link from "next/link";
 import React from "react";
 
 import { MembershipModal, PasswordModal } from "../../../../common/components";
@@ -7,6 +8,20 @@ import { CardFormButton } from "../../../../ui/src";
 import * as Styled from "./MembershipTab.styled";
 import { useMembershipTab } from "./hooks/useMembershipTab";
 
+const allocationKeyLabels = [
+  "Network",
+  "Lifetime Reviewer",
+  "Registrar",
+  "Affiliate Referrer",
+  "Membership Expiration",
+];
+const allocationKeys = [
+  "network",
+  "reviewer",
+  "registrar",
+  "referrer",
+  "expiration",
+];
 export const MembershipTab = (): JSX.Element => {
   const {
     handleCancel,
@@ -22,8 +37,12 @@ export const MembershipTab = (): JSX.Element => {
     confirm,
     inProgress,
     name,
+    membershipData,
   } = useMembershipTab();
 
+  const { origin } = window.location;
+  const link = origin;
+  console.log(membershipData);
   return (
     <Styled.MembershipCard>
       <Form.Provider onFormFinish={onFormFinish}>
@@ -39,21 +58,35 @@ export const MembershipTab = (): JSX.Element => {
           />
 
           <Styled.Space direction="vertical">
-            <Styled.TextHeader strong>
-              Upgrade for 80% Cashback
-            </Styled.TextHeader>
-            <Styled.Paragraph>
-              Lifetime Members get 80% cashback on every transaction fee they
-              pay and qualify to earn referral income from users they register
-              with or refer to the network. A Lifetime Membership is just 5 PPY.
-            </Styled.Paragraph>
-            <Styled.BtnDiv>
-              <Form.Item>
-                <CardFormButton type="primary" htmlType="submit">
-                  Buy lifetime subscription
-                </CardFormButton>
-              </Form.Item>
-            </Styled.BtnDiv>
+            {!membershipData?.isLifetimeMember ? (
+              <Styled.Space direction="vertical">
+                <Styled.TextHeader strong>
+                  Upgrade for 80% Cashback
+                </Styled.TextHeader>
+                <Styled.Paragraph>
+                  Lifetime Members get 80% cashback on every transaction fee
+                  they pay and qualify to earn referral income from users they
+                  register with or refer to the network. A Lifetime Membership
+                  is just 5 PPY.
+                </Styled.Paragraph>
+
+                <Styled.BtnDiv>
+                  <Form.Item>
+                    <CardFormButton type="primary" htmlType="submit">
+                      Buy lifetime subscription
+                    </CardFormButton>
+                  </Form.Item>
+                </Styled.BtnDiv>
+              </Styled.Space>
+            ) : (
+              <Styled.Space direction="vertical">
+                <Styled.TextHeader strong>Your referral link</Styled.TextHeader>
+                <Styled.Paragraph>
+                  Give this to link to people you want to refer to BitShares:{" "}
+                  {`${link}s/?r=${name}`}
+                </Styled.Paragraph>
+              </Styled.Space>
+            )}
 
             <Styled.TextHeader strong>Fee Allocation</Styled.TextHeader>
             <Styled.Paragraph>
@@ -61,60 +94,29 @@ export const MembershipTab = (): JSX.Element => {
               divided among several different accounts
             </Styled.Paragraph>
 
-            <Styled.ListDiv>
-              <Styled.HeaderDiv>
-                <Styled.TextHeader>Network reviewer</Styled.TextHeader> <br />
-              </Styled.HeaderDiv>
-
-              <Styled.PercentageDiv>
-                <Styled.PercentageText>100%</Styled.PercentageText>
-              </Styled.PercentageDiv>
-            </Styled.ListDiv>
-
-            <Styled.ListDiv>
-              <Styled.HeaderDiv>
-                <Styled.TextHeader>Lifetime reviewer</Styled.TextHeader> <br />
-                <a>pbsa-official</a>
-              </Styled.HeaderDiv>
-
-              <Styled.PercentageDiv>
-                <Styled.PercentageText>0%</Styled.PercentageText>
-              </Styled.PercentageDiv>
-            </Styled.ListDiv>
-
-            <Styled.ListDiv>
-              <Styled.HeaderDiv>
-                <Styled.TextHeader>Registrar</Styled.TextHeader> <br />
-                <a>pbsa-official</a>
-              </Styled.HeaderDiv>
-
-              <Styled.PercentageDiv>
-                <Styled.PercentageText>0%</Styled.PercentageText>
-              </Styled.PercentageDiv>
-            </Styled.ListDiv>
-
-            <Styled.ListDiv>
-              <Styled.HeaderDiv>
-                <Styled.TextHeader>Affiliate referrer</Styled.TextHeader> <br />
-                <a>pbsa-official</a>
-              </Styled.HeaderDiv>
-
-              <Styled.PercentageDiv>
-                <Styled.PercentageText>0%</Styled.PercentageText>
-              </Styled.PercentageDiv>
-            </Styled.ListDiv>
-
-            <Styled.ListDiv>
-              <Styled.HeaderDiv>
-                <Styled.TextHeader>Membership expiration</Styled.TextHeader>{" "}
-                <br />
-                <a>pbsa-official</a>
-              </Styled.HeaderDiv>
-
-              <Styled.PercentageDiv>
-                <Styled.PercentageText>NA</Styled.PercentageText>
-              </Styled.PercentageDiv>
-            </Styled.ListDiv>
+            {allocationKeys.map((key, id) => {
+              const item = membershipData?.allocation[key];
+              return (
+                <Styled.ListDiv key={id}>
+                  <Styled.HeaderDiv>
+                    <Styled.TextHeader>
+                      {allocationKeyLabels[id]}
+                    </Styled.TextHeader>{" "}
+                    <br />
+                    {item?.user && (
+                      <Link href={`/user/${item.user}`}>{item.user}</Link>
+                    )}
+                  </Styled.HeaderDiv>
+                  <Styled.PercentageDiv>
+                    <Styled.PercentageText>
+                      {item?.percent || item?.percent === 0
+                        ? `${item.percent}%`
+                        : item?.date}
+                    </Styled.PercentageText>
+                  </Styled.PercentageDiv>
+                </Styled.ListDiv>
+              );
+            })}
 
             <Styled.TextHeader strong>Fee statistics</Styled.TextHeader>
             <Styled.ListDiv>

@@ -4,3 +4,4 @@ export * from "./Exchanges";
 export * from "./Fee";
 export * from "./Cache";
 export * from "./Settings";
+export * from "./Membership";

@@ -61,12 +61,12 @@ export const ListDiv = styled.div`
 export const HeaderDiv = styled.div`
   width: 15%;
   @media (max-width: 500px) {
-    width: 40%;
+    width: 53%;
   }
 `;
 
 export const PercentageDiv = styled.div`
-  width: 10%;
+  width: 20%;
   text-align: right;
   @media (max-width: 500px) {
     width: 40%;

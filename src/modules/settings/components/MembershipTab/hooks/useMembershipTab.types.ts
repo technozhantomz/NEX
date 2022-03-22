@@ -1,6 +1,8 @@
 import { FormInstance } from "antd/lib/form";
 import FormFinishInfo from "rc-field-form";
 
+import { Membership } from "../../../../../common/types";
+
 export type MembershipTabTypes = {
   handleMembershipUpgrade: (password: string) => void;
   requestedKey: string | undefined;
@@ -17,6 +19,7 @@ export type MembershipTabTypes = {
   isEnableToPay: boolean;
   inProgress: boolean;
   name: string;
+  membershipData: Membership | undefined;
 };
 
 export type MembershipFormData = {
