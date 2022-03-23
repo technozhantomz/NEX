@@ -1,6 +1,6 @@
 export type Membership = {
   isLifetimeMember: boolean;
-  feesPaid: number;
+  feesPaid: string;
 
   allocation: {
     network: {

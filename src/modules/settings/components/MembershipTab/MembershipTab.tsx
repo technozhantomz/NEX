@@ -22,18 +22,17 @@ const allocationKeys = [
   "referrer",
   "expiration",
 ];
+
 export const MembershipTab = (): JSX.Element => {
   const {
     handleCancel,
     handleOk,
-    confirmLoading,
     modalText,
     isMembershipModalVisible,
     visible,
     onCancel,
     onFormFinish,
     membershipForm,
-    isEnableToPay,
     confirm,
     hideFooter,
     name,
@@ -52,8 +51,6 @@ export const MembershipTab = (): JSX.Element => {
             onCancel={handleCancel}
             handleOk={handleOk}
             modalText={modalText}
-            confirmLoading={confirmLoading}
-            isEnableToPay={isEnableToPay}
             hideFooter={hideFooter}
           />
 
@@ -125,7 +122,9 @@ export const MembershipTab = (): JSX.Element => {
               </Styled.HeaderDiv>
 
               <Styled.PercentageDiv>
-                <Styled.PercentageText>10 PPY</Styled.PercentageText>
+                <Styled.PercentageText>
+                  {membershipData?.feesPaid}
+                </Styled.PercentageText>
               </Styled.PercentageDiv>
             </Styled.ListDiv>
 
