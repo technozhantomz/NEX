@@ -11,7 +11,7 @@ type Props = {
   modalText: string;
   confirmLoading: boolean;
   isEnableToPay: boolean;
-  inProgress: boolean;
+  hideFooter: boolean;
 };
 
 export const MembershipModal = ({
@@ -20,8 +20,7 @@ export const MembershipModal = ({
   handleOk,
   modalText,
   confirmLoading,
-  isEnableToPay,
-  inProgress,
+  hideFooter,
 }: Props): JSX.Element => {
   return (
     <>
@@ -33,7 +32,7 @@ export const MembershipModal = ({
         onCancel={onCancel}
         centered={true}
         footer={
-          inProgress
+          hideFooter
             ? null
             : [
                 <Button key="back" onClick={onCancel}>

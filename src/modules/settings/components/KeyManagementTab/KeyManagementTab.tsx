@@ -2,8 +2,8 @@ import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { Radio } from "antd";
 import React from "react";
 
-import { useCopyText } from "../../../../common/hooks";
 import { usePasswordForm } from "../../../../common/components/PasswordModal/hooks";
+import { useCopyText } from "../../../../common/hooks";
 import { CardFormButton } from "../../../../ui/src";
 import { CopyIcon } from "../../../../ui/src/icons";
 

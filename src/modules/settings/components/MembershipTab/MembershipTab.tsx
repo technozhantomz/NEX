@@ -35,14 +35,14 @@ export const MembershipTab = (): JSX.Element => {
     membershipForm,
     isEnableToPay,
     confirm,
-    inProgress,
+    hideFooter,
     name,
     membershipData,
   } = useMembershipTab();
 
   const { origin } = window.location;
   const link = origin;
-  console.log(membershipData);
+
   return (
     <Styled.MembershipCard>
       <Form.Provider onFormFinish={onFormFinish}>
@@ -54,7 +54,7 @@ export const MembershipTab = (): JSX.Element => {
             modalText={modalText}
             confirmLoading={confirmLoading}
             isEnableToPay={isEnableToPay}
-            inProgress={inProgress}
+            hideFooter={hideFooter}
           />
 
           <Styled.Space direction="vertical">

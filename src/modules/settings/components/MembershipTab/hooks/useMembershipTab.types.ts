@@ -17,7 +17,7 @@ export type MembershipTabTypes = {
   membershipForm: FormInstance<MembershipFormData>;
   confirm: () => void;
   isEnableToPay: boolean;
-  inProgress: boolean;
+  hideFooter: boolean;
   name: string;
   membershipData: Membership | undefined;
 };

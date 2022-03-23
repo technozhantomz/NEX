@@ -1,7 +1,7 @@
 import { Form, Input } from "../../../ui/src";
 
-import { usePasswordForm } from "./hooks";
 import * as Styled from "./PasswordModal.styled";
+import { usePasswordForm } from "./hooks";
 
 type Props = {
   visible: boolean;

@@ -1,52 +1,46 @@
-/** @format */
+import { Form } from "antd";
+import { FormFinishInfo } from "rc-field-form";
+import { useCallback, useEffect, useState } from "react";
 
-import { Form } from 'antd';
-import { FormFinishInfo } from 'rc-field-form';
-import { useCallback, useEffect, useState } from 'react';
-import { defaultToken } from '../../../../../api/params';
-
-// import { defaultToken } from "../../../../../api/params/networkparams";
-import { useUserContext } from '../../../../../common/components/UserProvider';
+import { useUserContext } from "../../../../../common/components/UserProvider";
 import {
   useAccount,
   useAsset,
   useFees,
   useTransactionBuilder,
-} from '../../../../../common/hooks';
-import { TransactionFee } from '../../../../../common/hooks/useFees.types';
-import { FullAccount, Membership } from '../../../../../common/types';
+} from "../../../../../common/hooks";
+import { FeeParameter } from "../../../../../common/hooks/fees/useFees.types";
+import { TransactionFee } from "../../../../../common/hooks/useFees.types";
+import { FullAccount, Membership } from "../../../../../common/types";
 
-import { MembershipTabTypes } from './useMembershipTab.types';
+import { MembershipTabTypes } from "./useMembershipTab.types";
 
 export function useMembershipTab(): MembershipTabTypes {
   const [isMembershipModalVisible, setIsMembershipModalVisible] =
     useState<boolean>(false);
   const [requestedKey, setRequestedKey] = useState();
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('');
+  const [modalText, setModalText] = useState("");
   const [rawFee, setRawFee] = useState<number>(0);
   const [visible, setVisible] = useState<boolean>(false);
   const [isEnableToPay, setIsEnableToPay] = useState<boolean>(true);
-  const [inProgress, setInProgress] = useState(false);
+  const [hideFooter, setHideFooter] = useState(false);
   const [membershipData, setMembershipData] = useState<Membership>();
+  const [feeAmount, setFeeAmount] = useState<number>();
   const [membershipForm] = Form.useForm();
-  const [feeData, setFeeData] = useState<TransactionFee>();
-  const { getFees } = useFees();
-  const { getAssetById, getAssetBySymbol } = useAsset();
+  const { findOperationFee, feeParameters } = useFees();
+  const { getAssetById, getAssetBySymbol, defaultAsset, setPrecision } =
+    useAsset();
   const { assets, name } = useUserContext();
   const { trxBuilder } = useTransactionBuilder();
   const { getPrivateKey, getFullAccount } = useAccount();
   const { localStorageAccount } = useUserContext();
 
-  console.log(feeData);
-  console.log(rawFee);
-  console.log(assets);
-
   const onFormFinish = (name: string, info: FormFinishInfo) => {
     const { values, forms } = info;
     const { passwordModal } = forms;
 
-    if (name === 'passwordModal') {
+    if (name === "passwordModal") {
       passwordModal.validateFields().then(() => {
         handleMembershipUpgrade(values.password);
       });
@@ -57,16 +51,16 @@ export function useMembershipTab(): MembershipTabTypes {
     setVisible(false);
     setIsMembershipModalVisible(true);
     setModalText(`Transaction is being processed please wait`);
-    setInProgress(true);
+    setHideFooter(true);
 
-    const fees = { amount: 0, asset_id: '1.3.0' };
-    const activeKey = getPrivateKey(password, 'active');
+    const fees = { amount: 0, asset_id: "1.3.0" };
+    const activeKey = getPrivateKey(password, "active");
 
     const trx = {
-      type: 'account_upgrade',
+      type: "account_upgrade",
       params: {
         fee: fees,
-        account_to_upgrade: '1.2.78',
+        account_to_upgrade: "1.2.78",
         upgrade_to_lifetime_member: true,
       },
     };
@@ -81,7 +75,7 @@ export function useMembershipTab(): MembershipTabTypes {
       setModalText(`Transaction couldn't processed`);
       setTimeout(() => {
         setIsMembershipModalVisible(false);
-        setInProgress(false);
+        setHideFooter(false);
       }, 2000);
     }
 
@@ -89,7 +83,7 @@ export function useMembershipTab(): MembershipTabTypes {
       setModalText(`Transaction completed`);
       setTimeout(() => {
         setIsMembershipModalVisible(false);
-        setInProgress(false);
+        setHideFooter(false);
       }, 2000);
       console.log(trxResult);
     }
@@ -107,46 +101,51 @@ export function useMembershipTab(): MembershipTabTypes {
   const confirm = () => {
     setIsMembershipModalVisible(true);
 
-    const userAsset = assets.find((asset) => asset.symbol === defaultToken);
-    console.log(userAsset);
-
-    const getasset = getAssetById('1.3.0');
-    console.log(getasset);
-
     if (rawFee > 0) {
-      console.log('low');
+      if (
+        defaultAsset?.amount &&
+        feeAmount &&
+        defaultAsset.amount < feeAmount
+      ) {
+        setModalText("Balance is not enough.");
+        setHideFooter(true);
+      } else {
+        setModalText(
+          `For this operations you'll have to pay 10000 TEST fee. Do you want to continue?`
+        );
+        setHideFooter(false);
+      }
     }
-    setModalText(
-      `For this operations you'll have to pay 10000 TEST fee. Do you want to continue?`
-    );
   };
 
   const handleCancel = () => {
     setIsMembershipModalVisible(false);
   };
 
-  const getFeeData = async () => {
-    const rawFeeData = (await getFees()).filter(
-      (item) => item.name === 'ACCOUNT UPGRADE'
-    )[0];
+  const getFeeData = useCallback(() => {
+    if (feeParameters.length && name && defaultAsset) {
+      const accountUpgradeParameter = findOperationFee(
+        "account_upgrade"
+      ) as FeeParameter;
+      const accountUpgradeFee = accountUpgradeParameter[1];
+      const rawFee = accountUpgradeFee.membership_lifetime_fee as number;
+      console.log(rawFee);
 
-    setRawFee(rawFeeData.fee || rawFeeData.membership_lifetime_fee);
-
-    setFeeData({
-      amount: rawFeeData.fee,
-      asset_id: '1.3.0',
-    });
-  };
+      const feeAmount = setPrecision(false, rawFee, defaultAsset.precision);
+      setRawFee(rawFee);
+      setFeeAmount(feeAmount);
+      console.log(defaultAsset?.amount);
+      console.log(feeAmount);
+    }
+  }, [feeParameters, findOperationFee]);
 
   useEffect(() => {
     getFeeData();
     getAccountMemberData();
-  }, [localStorageAccount]);
+  }, [name, feeParameters]);
 
   const getAccountMemberData = async () => {
-    console.log(name);
     const fullAcc = await getFullAccount(name, false);
-    console.log(fullAcc);
     const membership = await formMembershipData(fullAcc);
     setMembershipData(membership);
   };
@@ -180,10 +179,10 @@ export function useMembershipTab(): MembershipTabTypes {
 
     let date = account.membership_expiration_date;
 
-    if (date === '1970-01-01T00:00:00') {
-      date = 'N/A';
-    } else if (date === '1969-12-31T23:59:59') {
-      date = 'Never';
+    if (date === "1970-01-01T00:00:00") {
+      date = "N/A";
+    } else if (date === "1969-12-31T23:59:59") {
+      date = "Never";
     }
 
     const allocation = {
@@ -222,7 +221,7 @@ export function useMembershipTab(): MembershipTabTypes {
     membershipForm,
     confirm,
     isEnableToPay,
-    inProgress,
+    hideFooter,
     name,
     membershipData,
   };
