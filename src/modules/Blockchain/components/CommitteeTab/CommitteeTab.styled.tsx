@@ -1,6 +1,7 @@
 import {
   Input,
   styled,
+  List as UiList,
   StatsCardsDeck as UIStatsCardsDeck,
   Table as UiTable,
 } from "../../../../ui/src";
@@ -47,5 +48,25 @@ export const CommitteeTable = styled(UiTable)`
     background: ${colors.assetTag};
     border: none;
     color: ${colors.textColor};
+  }
+`;
+
+export const CommiteeListItem = styled(UiList.Item)`
+  padding: 15px 20px;
+`;
+
+export const CommiteeItemContent = styled.div`
+  margin: 18px 0 25px;
+  .commitee-info {
+    margin: 5px 0;
+    display: flex;
+    .commitee-info-title {
+      font-weight: 300;
+      width: 100px;
+      color: ${colors.textColorSecondary};
+    }
+    .commitee-info-value {
+      font-weight: 500;
+    }
   }
 `;

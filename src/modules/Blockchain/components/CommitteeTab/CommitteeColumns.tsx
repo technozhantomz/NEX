@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-import { LinkOutlined } from "../../../../ui/src";
-
 import * as Styled from "./CommitteeColumns.styled";
 
 export const CommitteeColumns = [
@@ -45,7 +43,7 @@ export const CommitteeColumns = [
     key: "url",
     render: (url: string): JSX.Element => (
       <Link href={`${url}`} passHref>
-        <LinkOutlined rotate={45} />
+        <Styled.urlIcon rotate={45} />
       </Link>
     ),
   },

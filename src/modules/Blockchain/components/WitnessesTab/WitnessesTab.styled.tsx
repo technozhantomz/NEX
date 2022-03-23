@@ -1,6 +1,7 @@
 import {
   Input,
   styled,
+  List as UiList,
   StatsCardsDeck as UIStatsCardsDeck,
   Table as UiTable,
 } from "../../../../ui/src";
@@ -42,10 +43,24 @@ export const WitnessesTable = styled(UiTable)`
   .ant-table-tbody > tr > td {
     border: none;
   }
-  .ant-tag {
-    padding: 5px 15px;
-    background: ${colors.assetTag};
-    border: none;
-    color: ${colors.textColor};
+`;
+
+export const WitnessListItem = styled(UiList.Item)`
+  padding: 15px 20px;
+`;
+
+export const WitnessItemContent = styled.div`
+  margin: 18px 0 25px;
+  .witness-info {
+    margin: 5px 0;
+    display: flex;
+    .witness-info-title {
+      font-weight: 300;
+      width: 100px;
+      color: ${colors.textColorSecondary};
+    }
+    .witness-info-value {
+      font-weight: 500;
+    }
   }
 `;

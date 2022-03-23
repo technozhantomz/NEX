@@ -1,6 +1,7 @@
 import {
   Input,
   styled,
+  List as UiList,
   StatsCardsDeck as UIStatsCardsDeck,
   Table as UiTable,
 } from "../../../../ui/src";
@@ -47,5 +48,31 @@ export const AssetsTable = styled(UiTable)`
     background: ${colors.assetTag};
     border: none;
     color: ${colors.textColor};
+  }
+`;
+
+export const AssetListItem = styled(UiList.Item)`
+  padding: 15px 20px;
+`;
+
+export const AssetItemContent = styled.div`
+  margin: 18px 0 25px;
+  .asset-info {
+    margin: 5px 0;
+    display: flex;
+    .asset-info-title {
+      font-weight: 300;
+      width: 100px;
+      color: ${colors.textColorSecondary};
+    }
+    .asset-info-value {
+      font-weight: 500;
+      .ant-tag {
+        padding: 5px 15px;
+        background: ${colors.assetTag};
+        border: none;
+        color: ${colors.textColor};
+      }
+    }
   }
 `;
