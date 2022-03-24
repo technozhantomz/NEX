@@ -1,6 +1,5 @@
 import React from "react";
 
-import { CardFormButton } from "../../../../ui/src";
 import { useGeneralTab } from "../hooks/useGeneralTab";
 
 import * as Styled from "./SecurityTab.styled";
@@ -11,6 +10,7 @@ export const SecurityTab = (): JSX.Element => {
     handleLockWallet,
     walletLockTime,
     generalSettingForm,
+    successMsg,
   } = useGeneralTab();
 
   const TimeList = ["0", "30", "60", "90", "180", "210"];
@@ -35,11 +35,14 @@ export const SecurityTab = (): JSX.Element => {
               ))}
             </Styled.Select>
           </Styled.LockWalletFormItem>
-          <Styled.BtnFormItem>
-            <CardFormButton type="primary" htmlType="submit">
-              Save
-            </CardFormButton>
-          </Styled.BtnFormItem>
+          {successMsg && (
+            <Styled.SuccessText type="success" strong>
+              Setting saved!
+            </Styled.SuccessText>
+          )}
+          <Styled.Button type="primary" htmlType="submit">
+            Save
+          </Styled.Button>
         </Styled.SecurityTabForm>
       </Styled.SecurityTabForm.Provider>
     </Styled.SecuritySettingsCard>

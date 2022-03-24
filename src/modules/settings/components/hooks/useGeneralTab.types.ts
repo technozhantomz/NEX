@@ -10,6 +10,7 @@ export type GeneralTabTypes = {
   handleLockWallet: ((value: unknown) => void) | undefined;
   walletLockTime: number;
   updateWalletLockSetting: () => void;
+  successMsg: boolean;
 };
 
 export type GeneralSettingFormData = {

@@ -1,5 +1,5 @@
 import { Form } from "antd";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 import { useSettingsContext } from "../../../../common/components/SettingsProvider";
 import { Settings } from "../../../../common/types/Settings";
@@ -7,6 +7,7 @@ import { Settings } from "../../../../common/types/Settings";
 import { GeneralTabTypes } from "./useGeneralTab.types";
 
 export function useGeneralTab(): GeneralTabTypes {
+  const [successMsg, setSuccessMsg] = useState(false);
   const { settings, setSettings, setLocale } = useSettingsContext();
   const [generalSettingForm] = Form.useForm();
   const notification = settings?.notifications;
@@ -38,6 +39,10 @@ export function useGeneralTab(): GeneralTabTypes {
     };
     setLocale(values.selectedLanguage);
     setSettings(newSettings);
+    setSuccessMsg(true);
+    setTimeout(() => {
+      setSuccessMsg(false);
+    }, 2000);
   }, []);
 
   const updateWalletLockSetting = useCallback(async () => {
@@ -50,6 +55,10 @@ export function useGeneralTab(): GeneralTabTypes {
         : walletLockTime,
     };
     setSettings(newSettings);
+    setSuccessMsg(true);
+    setTimeout(() => {
+      setSuccessMsg(false);
+    }, 2000);
   }, []);
 
   return {
@@ -62,5 +71,6 @@ export function useGeneralTab(): GeneralTabTypes {
     handleLockWallet,
     walletLockTime,
     updateWalletLockSetting,
+    successMsg,
   };
 }

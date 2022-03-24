@@ -1,9 +1,13 @@
 import {
+  CardFormButton as button,
+  Checkbox as checkbox,
   Form as form,
+  Option as option,
   Select as select,
   Space as space,
   styled,
   Text as text,
+  Typography as typography,
 } from "../../../../ui/src";
 
 export const GeneralSettingsCard = styled.div`
@@ -15,7 +19,8 @@ export const GeneralSettingsCard = styled.div`
     color: #212121;
     opacity: 1;
     margin-left: 30px;
-    height: 856px;
+    height: 500px;
+    position: relative;
   }
 `;
 
@@ -61,3 +66,20 @@ export const FaucetURL = styled(text)`
 export const FaucetText = styled(space)`
   margin-top: 30px;
 `;
+
+export const Button = styled(button)`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 25%;
+`;
+
+export const Checkbox = styled(checkbox)``;
+
+export const Option = styled(option)``;
+
+export const Space = styled(space)``;
+
+export const Typography = styled(typography)``;
+
+export const Text = styled(text)``;

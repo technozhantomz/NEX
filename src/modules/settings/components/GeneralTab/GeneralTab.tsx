@@ -1,15 +1,10 @@
-import { Checkbox, Form, Select, Space, Typography } from "antd";
 import React from "react";
 
 import { defaultLocales } from "../../../../api/params/defaultLocales";
 import { faucetUrl } from "../../../../api/params/networkparams";
-import { CardFormButton } from "../../../../ui/src";
 import { useGeneralTab } from "../hooks/useGeneralTab";
 
 import * as Styled from "./GeneralTab.styled";
-
-const { Option } = Select;
-const { Text } = Typography;
 
 export const GeneralTab = (): JSX.Element => {
   const {
@@ -19,6 +14,7 @@ export const GeneralTab = (): JSX.Element => {
     generalSettingForm,
     handleNotificationCheckbox,
     notification,
+    successMsg,
   } = useGeneralTab();
 
   return (
@@ -35,37 +31,40 @@ export const GeneralTab = (): JSX.Element => {
               onChange={handleLanguageChange}
             >
               {defaultLocales.map((e, id) => (
-                <Option key={id} value={e.type}>
+                <Styled.Option key={id} value={e.type}>
                   {e.title}
-                </Option>
+                </Styled.Option>
               ))}
             </Styled.Select>
           </Styled.LanguageFormItem>
 
-          <Text strong>Enable transfers to my account</Text>
+          <Styled.Text strong>Enable transfers to my account</Styled.Text>
           <Styled.SecondItem name="isEnableTransfer">
-            <Checkbox
+            <Styled.Checkbox
               onChange={(e) => handleNotificationCheckbox(e.target.checked)}
               defaultChecked={notification}
             >
               Yes
-            </Checkbox>
+            </Styled.Checkbox>
           </Styled.SecondItem>
           <Styled.FaucetText direction="vertical">
-            <Text strong>Faucet</Text>
-            <Space direction="horizontal">
+            <Styled.Text strong>Faucet</Styled.Text>
+            <Styled.Space direction="horizontal">
               <Styled.FaucetURL>
                 Faucet URL:
                 {faucetUrl}
               </Styled.FaucetURL>
-              <Typography.Link copyable>Copy URL</Typography.Link>
-            </Space>
+              <Styled.Typography.Link copyable>Copy URL</Styled.Typography.Link>
+            </Styled.Space>
+            {successMsg && (
+              <Styled.Text type="success" strong>
+                Setting saved!
+              </Styled.Text>
+            )}
           </Styled.FaucetText>
-          <Form.Item>
-            <CardFormButton type="primary" htmlType="submit">
-              Save
-            </CardFormButton>
-          </Form.Item>
+          <Styled.Button type="primary" htmlType="submit">
+            Save
+          </Styled.Button>
         </Styled.GeneralTabForm>
       </Styled.GeneralTabForm.Provider>
     </Styled.GeneralSettingsCard>

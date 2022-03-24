@@ -1,4 +1,5 @@
 import {
+  CardFormButton as button,
   Form as form,
   Option as option,
   Select as select,
@@ -15,7 +16,8 @@ export const SecuritySettingsCard = styled.div`
     color: #212121;
     opacity: 1;
     margin-left: 30px;
-    height: 856px;
+    height: 500px;
+    position: relative;
   }
 `;
 
@@ -56,3 +58,12 @@ export const Select = styled(select)``;
 export const BtnFormItem = styled(form.Item)``;
 
 export const Option = styled(option)``;
+
+export const Button = styled(button)`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 25%;
+`;
+
+export const SuccessText = styled(text)``;

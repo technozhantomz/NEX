@@ -26,9 +26,7 @@ const SettingPage: NextPage = () => {
           <TabPane tab="General" key="1">
             <GeneralTab />
           </TabPane>
-          <TabPane tab="Account" key="2">
-            Content of Tab Pane 2
-          </TabPane>
+          <TabPane tab="Account" key="2"></TabPane>
           <TabPane tab="Security" key="3">
             <SecurityTab />
           </TabPane>
