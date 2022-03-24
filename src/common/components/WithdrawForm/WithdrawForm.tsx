@@ -1,5 +1,4 @@
-import { Form, Input } from "antd";
-
+import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
 import { PasswordModal } from "../PasswordModal";
 import { useUserContext } from "../UserProvider";
@@ -30,7 +29,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     <Form.Provider onFormFinish={onFormFinish}>
       <Styled.WithdrawForm
         form={withdrawForm}
-        name="transferForm"
+        name="withdrawForm"
         onFinish={confirm}
         onValuesChange={handleValuesChange}
         size="large"
@@ -62,15 +61,15 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
         >
           <Input placeholder="Withdraw address" />
         </Form.Item>
-
         <Form.Item
           name="amount"
           validateFirst={true}
           rules={formValdation.amount}
           validateTrigger="onBlur"
         >
-          <Input placeholder="Amount" type="number" />
+          <Input placeholder="amount" type="number" />
         </Form.Item>
+
         <p>
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
         </p>

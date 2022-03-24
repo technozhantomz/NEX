@@ -242,28 +242,21 @@ export function useWithdrawForm(selectedAsset: string): WithdrawForm {
   };
 
   // we need bitcoin pub key validation
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const validateWithdrawPublicKey = async (_: unknown, value: string) => {
     const sonNetworkStatus = await getSonNetworkStatus();
     if (!sonNetworkStatus.isSonNetworkOk) {
       return Promise.reject(new Error("SONs network is not available now"));
     }
-    if (selectedAsset === "BTC") {
-      if (!loadingSidechainAccounts) {
-        if (!hasBTCDepositAddress) {
-          return Promise.reject(
-            new Error("Please first generate bitcoin addresses at deposit tab")
-          );
-        }
-        return Promise.resolve();
-      }
-      return Promise.reject(new Error(""));
-    } else {
-      const updatedFee = calculteTransferFee(value);
-      if (updatedFee) {
-        setFeeAmount(updatedFee);
+    if (!loadingSidechainAccounts) {
+      if (!hasBTCDepositAddress) {
+        return Promise.reject(
+          new Error("Please first generate bitcoin addresses at deposit tab")
+        );
       }
       return Promise.resolve();
     }
+    return Promise.reject(new Error(""));
   };
 
   const formValdation = {

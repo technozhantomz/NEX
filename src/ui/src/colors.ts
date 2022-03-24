@@ -10,4 +10,5 @@ export const colors = {
   assetTag: `#FDBA86`,
   success: `#10AF77`,
   error: `#D01721`,
+  errorColor: `#ff4d4f`,
 };

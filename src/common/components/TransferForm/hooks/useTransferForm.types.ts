@@ -1,37 +1,36 @@
-import { FormInstance, Rule } from "../../../../../ui/src";
+import { FormInstance, Rule } from "../../../../ui/src";
 
-export type ITransferForm = {
+export type TransferForm = {
   status: string;
   visible: boolean;
   feeAmount: number;
-  formValdation: IFormValidation;
-  transferForm: FormInstance<ITransferFormData>;
+  formValdation: FormValidation;
+  transferForm: FormInstance<TransferFormData>;
   onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   onCancel: () => void;
   confirm: () => void;
   handleValuesChange: (changedValues: any) => void;
 };
 
-export type IFormField = {
+export type FormField = {
   field: string;
   fullField: string;
   type: string;
   validator: unknown;
 };
 
-export type IFormValidation = {
+export type FormValidation = {
   from: Rule[];
   to: Rule[];
-  quantity: Rule[];
+  amount: Rule[];
   asset: Rule[];
   memo: Rule[];
 };
 
-export type ITransferFormData = {
+export type TransferFormData = {
   form: string;
   to: string;
-  quantity: number;
+  amount: number;
   asset: string;
   memo: string;
-  password: string;
 };
