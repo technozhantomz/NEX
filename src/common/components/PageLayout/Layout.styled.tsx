@@ -11,14 +11,16 @@ export const Page = styled.section`
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     font-weight: 300;
     color: ${colors.white};
-    background: transparent
-      radial-gradient(
-        closest-side at 50% 50%,
-        ${colors.primaryColor} 0%,
-        #01245f 100%
-      )
-      0% 0% no-repeat padding-box;
+    // background: transparent
+    //   radial-gradient(
+    //     closest-side at 50% 50%,
+    //     ${colors.primaryColor} 0%,
+    //     #01245f 100%
+    //   )
+    //   0% 0% no-repeat padding-box;
+    background-color: #f4f4f4;
     .top-bar {
+      background-color: #012562;
       .dex-logo {
         display: none;
       }

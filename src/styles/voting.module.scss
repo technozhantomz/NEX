@@ -1,0 +1,258 @@
+.cusContainer {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.votingBoxCenterAlign {
+    display: flex;
+    padding: 40px 0;
+    justify-content: center;
+    .votingBox {
+        width: 850px;
+        > h1 {
+            font-size: 25px;
+            line-height: 35px;
+            margin: 0 0 20px 0;
+            color: #323232;
+        }
+        .childBox {
+            background-color: #fff;
+            .detailsAlignment {
+                padding: 30px;
+                span {
+                    font-size: 14px;
+                    line-height: 20px;
+                    display: block;
+                    padding: 0 0 20px 0;
+                    color: #afabab;
+                }
+                .balanceTopAlign {
+                    padding: 30px 0 0 0;
+                }
+                .buttonCenterAlign {
+                    width: 400px;
+                    padding: 0 60px;
+                    margin: 30px 0 0 0;
+                    div {
+                        button {
+                            padding: 8px 20px;
+                            font-size: 14px;
+                            font-weight: 500;
+                            cursor: pointer;
+                            width: 100%;
+                            line-height: 16px;
+                            border-radius: 4px;
+                            height: 40px;
+                        }
+                    }
+                    div:last-child {
+                        button {
+                            color: #0148be;
+                            background-color: transparent;
+                            border: none;
+                            outline: none;
+                        }
+                    }
+                    div:first-child {
+                        button {
+                            border: none;
+                            background-color: #0148be;
+                            color: #fff;
+                        }
+                    }
+                }
+                .counterInput {
+                    padding: 0 0 15px 0;
+                    max-width: 400px;
+                  b {
+                    height: 49px;
+                  }
+                    input {
+                        width: 400px;
+                        border: 1px solid #d0d0d0;
+                        height:52px;
+                        padding: 0 15px;
+                        font-size: 18px;
+                        line-height: 22px;
+                        color: #323232;
+                        border-radius: 6px;
+                        &:focus {
+                            outline: none;
+                        }
+                    }
+                    ::placeholder {
+                        font-size: 18px;
+                        line-height: 22px;
+                        margin: 0;
+                        color: #323232;
+                        font-weight: 500;
+                    }
+
+                }
+                .deposit {
+                    padding: 15px 0 0 0;
+                    span {
+                        font-size: 12px;
+                        line-height: 14px;
+                        display: block;
+                        font-weight: 500;
+                        color: #afabab;
+                    }
+                }
+                .openingBalance {
+                    width: 400px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 15px;
+                    border-radius: 6px;
+                    border: 1px solid #d0d0d0;
+                    > p {
+                        font-size: 16px;
+                        line-height: 20px;
+                        margin: 0;
+                        color: #323232;
+                        font-weight: 500;
+                    }
+                }
+                ul {
+                    margin: 0;
+                    padding: 0;
+                    padding-left: 20px;
+                    li {
+                        color: #afabab;
+                        font-size: 12px;
+                        line-height: 16px;
+                    }
+                }
+            }
+            .cusTabGrid {
+              display: grid;
+              grid-template-columns: repeat(3 , 1fr);
+              gap: 0;
+              border-bottom: 1px solid #d0d0d0;
+              .cusTabGridItems:nth-child(1) {
+                  border-bottom: 2px solid #003699;
+              }
+              .cusTabGridItems {
+                  padding: 10px 0 5px 0;
+                  span {
+                    //   font-size: 18px;
+                    //   text-align: center;
+                      color: #323232;
+                      font-weight: 500;
+                      cursor: pointer;
+                    //   display: block;
+                  }
+              }
+            }
+            .childMainGrid {
+                width: 630px;
+                display: grid;
+                grid-template-columns: 250px minmax( 0 , 1fr);
+                gap: 0 50px;
+                padding: 0 30px 30px 30px;
+                .childMainGridItems {
+                    button {
+                        width: 100%;
+                        height: 30px;
+                        border: none;
+                        cursor: pointer;
+                        margin: 0 0 1rem 0;
+                        border-radius: 4px;
+                        background-color: #0148be;
+                        color: #fff;
+                        font-size: 12px;
+                        line-height: 14px;
+                        padding: 5px 12px;
+                    }
+                    button:last-child {
+                        color: #0148be;
+                        background-color: transparent;
+                    }
+                    .availabelBalance {
+                        padding: 20px 0 0 0;
+                        p {
+                            font-size: 12px;
+                            line-height: 14px;
+                            font-weight: 400;
+                            color: #afabab;
+                            margin: 0 0 10px 0; 
+                        } 
+                    }
+                    .textAlignment {
+                        display: flex;
+                        align-items: center;
+                        padding: 0 0 10px 0;
+                        justify-content: space-between;
+                        h2 {
+                            font-size: 16px;
+                            line-height: 16px;
+                            margin: 0;
+                            color: #323232;
+                            font-weight: 500;
+                        }
+                        p {
+                            font-size: 12px;
+                            line-height: 14px;
+                            font-weight: 400;
+                            color: #afabab;
+                            margin: 0;
+                        }
+                        .errorColor {
+                            color: red;
+                        }
+                        span {
+                            font-size: 10px;
+                            line-height: 12px;
+                            display: block;
+                            font-weight: 400;
+                            color: #323232;
+                        }
+                    }
+                }
+            }
+            .gposRelatedDetails {
+                padding: 30px 30px 0 30px;
+                p {
+                    font-size: 12px;
+                    line-height: 14px;
+                    display: block;
+                    font-weight: 400;
+                    color: #afabab;
+                }
+                p:last-child {
+                    margin: 20px 0;
+                }
+                span {
+                    font-size: 12px;
+                    line-height: 14px;
+                    display: block;
+                    font-weight: 400;
+                    color: #afabab;
+                }
+            }
+            .cusTabChildGrid {
+              display: grid;
+              grid-template-columns: repeat(5 , 1fr);
+              gap: 0;
+              border-bottom: 1px solid #d0d0d0;
+              .cusTabGridItems:nth-child(1) {
+                  border-bottom: 2px solid #003699;
+              }
+              .cusTabGridItems {
+                  padding: 10px 0 5px 0;
+                  span {
+                    //   font-size: 18px;
+                    //   text-align: center;
+                    //   color: #323232;
+                      font-weight: 500;
+                      cursor: pointer;
+                      display: block;
+                  }
+              }
+            }
+        }
+    }
+}
