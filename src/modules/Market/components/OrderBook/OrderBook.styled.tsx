@@ -1,11 +1,8 @@
-import {
-  Dropdown,
-  Flex,
-  Menu,
-  styled,
-  Table as UiTable,
-} from "../../../../ui/src";
+import { Dropdown, Menu, styled, Table as UiTable } from "../../../../ui/src";
 
+export const Flex = styled.div`
+  display: flex;
+`;
 export const Table = styled(UiTable)`
   .ant-table-tbody > tr > td {
     border-bottom: none;
@@ -35,7 +32,8 @@ export const Table = styled(UiTable)`
 
 export const TableContainer = styled.div``;
 
-export const FilterContainer = styled(Flex)`
+export const FilterContainer = styled.div`
+  display: flex;
   padding-left: 30px;
   padding-right: 30px;
   margin-bottom: 25px;

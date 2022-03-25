@@ -1,7 +1,7 @@
-import { Form, Input } from "antd";
-
+import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
 import { PasswordModal } from "../PasswordModal";
+import { useUserContext } from "../UserProvider";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -10,7 +10,8 @@ type Props = {
   asset: string;
 };
 
-const WithdrawForm = ({ asset }: Props): JSX.Element => {
+export const WithdrawForm = ({ asset }: Props): JSX.Element => {
+  const { localStorageAccount } = useUserContext();
   const { defaultAsset } = useAsset();
   const {
     status,
@@ -21,25 +22,45 @@ const WithdrawForm = ({ asset }: Props): JSX.Element => {
     onCancel,
     confirm,
     onFormFinish,
-  } = useWithdrawForm();
+    handleValuesChange,
+  } = useWithdrawForm(asset);
 
   return (
     <Form.Provider onFormFinish={onFormFinish}>
       <Styled.WithdrawForm
         form={withdrawForm}
-        name="transferForm"
+        name="withdrawForm"
         onFinish={confirm}
+        onValuesChange={handleValuesChange}
         size="large"
       >
+        <Form.Item
+          name="from"
+          rules={formValdation.from}
+          validateFirst={true}
+          validateTrigger="onBlur"
+          initialValue={localStorageAccount}
+        >
+          <Input disabled={true} placeholder="From" />
+        </Form.Item>
+        {asset === "BTC" ? (
+          <Form.Item
+            name="withdrawPublicKey"
+            validateFirst={true}
+            rules={formValdation.withdrawPublicKey}
+          >
+            <Input placeholder="Withdraw public key" />
+          </Form.Item>
+        ) : (
+          ""
+        )}
         <Form.Item
           name="withdrawAddress"
           validateFirst={true}
           rules={formValdation.withdrawAddress}
-          validateTrigger="onBlur"
         >
-          <Input placeholder="withdrawAddress" />
+          <Input placeholder="Withdraw address" />
         </Form.Item>
-
         <Form.Item
           name="amount"
           validateFirst={true}
@@ -48,13 +69,14 @@ const WithdrawForm = ({ asset }: Props): JSX.Element => {
         >
           <Input placeholder="amount" type="number" />
         </Form.Item>
+
         <p>
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
           <Styled.WithdrawFormButton type="primary" htmlType="submit">
-            Send
+            Withdraw
           </Styled.WithdrawFormButton>
         </Form.Item>
       </Styled.WithdrawForm>
@@ -62,5 +84,3 @@ const WithdrawForm = ({ asset }: Props): JSX.Element => {
     </Form.Provider>
   );
 };
-
-export default WithdrawForm;

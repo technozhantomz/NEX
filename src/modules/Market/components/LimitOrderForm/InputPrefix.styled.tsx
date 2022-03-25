@@ -1,4 +1,4 @@
-import { Flex, styled } from "../../../../ui/src";
+import { styled } from "../../../../ui/src";
 
 export const InputPrefixConstLabel = styled.span`
   color: #6c6c6c;
@@ -10,7 +10,8 @@ export const InputPrefixAssetLabel = styled.span`
   font-size: 16px;
 `;
 
-export const InputPrefixContainer = styled(Flex)`
+export const InputPrefixContainer = styled.div`
+  display: flex;
   align-items: center;
 `;
 

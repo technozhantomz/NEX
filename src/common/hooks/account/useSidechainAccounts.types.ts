@@ -1,6 +1,10 @@
 import { SidechainAcccount } from "../../types";
 
-export type UseSidechainAccounts = {
+export type UseSidechainAccountsResult = {
   hasBTCDepositAddress: boolean;
-  getSidechainAccounts: (accountId: string) => Promise<SidechainAcccount[]>;
+  hasBTCWithdrawPublicKey: boolean;
+  getSidechainAccounts: (accountId: string) => Promise<void>;
+  sidechainAccounts: SidechainAcccount[];
+  bitcoinSidechainAccount: SidechainAcccount | undefined;
+  loadingSidechainAccounts: boolean;
 };

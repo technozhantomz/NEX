@@ -2,8 +2,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import { useEffect } from "react";
 
-import { FormDisclamer } from "../../../common/components/FormDisclamer";
-import { Layout } from "../../../common/components/PageLayout";
+import { FormDisclamer, Layout } from "../../../common/components";
 import { useAccount } from "../../../common/hooks";
 
 import * as Styled from "./LogoutPage.styled";
@@ -19,7 +18,7 @@ const LogoutPage: NextPage = () => {
     <Layout title="Logout" type="card" heading="Logout">
       <Styled.LogoutCard>
         <p>You have successfully logged out</p>
-        <Link href="/login">
+        <Link href="/login" passHref={true}>
           <Styled.LogoutButton type="primary">Log in</Styled.LogoutButton>
         </Link>
         <FormDisclamer>

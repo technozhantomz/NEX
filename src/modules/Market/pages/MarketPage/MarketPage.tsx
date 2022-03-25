@@ -1,7 +1,8 @@
 import type { NextPage } from "next";
 import React from "react";
 
-import { Col, Flex, Row } from "../../../../ui/src";
+import { Layout } from "../../../../common/components/PageLayout";
+import { Col, Row } from "../../../../ui/src";
 import { LimitOrderForm } from "../../components/LimitOrderForm";
 import { OrderTabs } from "../../components/OrderTabs";
 import { PairSelect } from "../../components/PairSelect";
@@ -10,14 +11,20 @@ import * as Styled from "./MarketPage.styled";
 
 const MarketPage: NextPage = () => {
   return (
-    <>
+    <Layout
+      title="market"
+      type="card-lrg"
+      heading="Market"
+      description="Market Page"
+      dexLayout={true}
+    >
       <Styled.Container>
         <Row>
           <Col span={7}>
-            <Flex flexDirection="column">
+            <Styled.ColumnFlex>
               <PairSelect />
               <OrderTabs />
-            </Flex>
+            </Styled.ColumnFlex>
           </Col>
           <Col span={17}>
             <Row>
@@ -31,7 +38,7 @@ const MarketPage: NextPage = () => {
           </Col>
         </Row>
       </Styled.Container>
-    </>
+    </Layout>
   );
 };
 

@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultQuote } from "../../../../../api/params/networkparams";
@@ -9,17 +8,16 @@ import { Asset } from "../../../../../common/types";
 
 import { IAssetRow, UseAssetsTabResult } from "./useAssetsTable.types";
 
-export function useAssetsTab(): UseAssetsTabResult {
+export function useAssetsTable(): UseAssetsTabResult {
   const [tableAssets, _setTableAssets] = useState<IAssetRow[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState<boolean>(true);
   const { dbApi } = usePeerplaysApiContext();
   const { assets, localStorageAccount } = useUserContext();
-  const router = useRouter();
   const { getAssetBySymbol } = useAsset();
   const { getMarketPairStats } = useMarketPairStats();
 
   useEffect(() => {
-    if (!localStorageAccount) router.push("/login");
     setTableAssets();
   }, [assets, localStorageAccount]);
 
@@ -59,11 +57,14 @@ export function useAssetsTab(): UseAssetsTabResult {
         setLoading(true);
         const assetsRows = await Promise.all(assets.map(formAssetRow));
         _setTableAssets(assetsRows);
+
         setLoading(false);
       } catch (e) {
         setLoading(false);
         console.log(e);
       }
+    } else {
+      setLoading(false);
     }
   }, [formAssetRow, _setTableAssets, setLoading, assets]);
 

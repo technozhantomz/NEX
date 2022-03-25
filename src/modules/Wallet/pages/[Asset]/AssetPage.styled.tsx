@@ -17,6 +17,10 @@ export const AssetCard = styled(UiCard)`
     .ant-tabs-ink-bar {
       height: 2pt;
     }
+    .ant-form {
+      margin: 0 20px 39px;
+      max-width: 566px;
+    }
   }
   ${breakpoint.sm} {
     .ant-card-body {
@@ -29,4 +33,9 @@ export const AssetCard = styled(UiCard)`
       }
     }
   }
+`;
+
+export const AssetFormWapper = styled.div`
+  margin: 0 20px 39px;
+  max-width: 566px;
 `;

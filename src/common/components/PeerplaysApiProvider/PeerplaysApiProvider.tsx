@@ -1,4 +1,4 @@
-import { ChainStore } from "peerplaysjs-lib";
+import { ChainConfig, ChainStore } from "peerplaysjs-lib";
 import React, {
   createContext,
   useCallback,
@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 
-import { defaultNodesList } from "../../../api/params";
+import { defaultNodesList, defaultToken } from "../../../api/params";
 import {
   initNode,
   InitNodeOutput,
@@ -105,6 +105,7 @@ export function PeerplaysApiProvider({ children }: Props): JSX.Element {
 
   useEffect(() => {
     initFirstNode();
+    ChainConfig.setPrefix(defaultToken);
   }, []);
   return (
     <peerplaysApiContext.Provider
