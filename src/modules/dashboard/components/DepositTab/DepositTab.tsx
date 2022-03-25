@@ -3,7 +3,6 @@ import React from "react";
 import {
   AddressGenerated,
   GenerateBitcoinAddress,
-  LogoSelectOption,
   useUserContext,
 } from "../../../../common/components";
 import { useSidechainAccounts } from "../../../../common/hooks";
@@ -24,7 +23,7 @@ export const DepositTab = (): JSX.Element => {
         <AddressGenerated bitcoinSidechainAccount={bitcoinSidechainAccount} />
       ) : (
         <>
-          <LogoSelectOption />
+          <Styled.LogoSelect labelInValue defaultValue={"BTC"} />
           <GenerateBitcoinAddress
             isLoggedIn={!!localStorageAccount}
             getSidechainAccounts={getSidechainAccounts}

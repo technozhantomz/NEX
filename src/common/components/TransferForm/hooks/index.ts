@@ -1,1 +1,1 @@
-export * from "./useTransferForm";
+export { useTransferForm } from "./useTransferForm";

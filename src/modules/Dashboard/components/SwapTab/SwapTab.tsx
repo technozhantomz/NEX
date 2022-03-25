@@ -1,36 +1,108 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
-import React from "react";
+import { Form, Input } from "antd";
 
+import { defaultToken } from "../../../../api/params/networkparams";
+import { PasswordModal } from "../../../../common/components";
 import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
+import { InfoCircleOutlined, SwapOutlined } from "../../../../ui/src";
 
 import * as Styled from "./SwapTab.styled";
+import { useSwap } from "./hooks/useSwapTab";
 
 export const SwapTab = (): JSX.Element => {
+  const {
+    visible,
+    onCancel,
+    onFormFinish,
+    confirm,
+    handleAssetChange,
+    swapForm,
+    formValdation,
+    feeAmount,
+    swapAsset,
+    status,
+    assetValueInfo,
+  } = useSwap();
+
+  const InfoToolTip = (
+    <Styled.TooltipPara>
+      {status === "" ? "" : status}
+      {status === "" ? "" : <p>Transaction Type : Trade</p>}
+      Fees : {feeAmount} {defaultToken}
+    </Styled.TooltipPara>
+  );
+
   return (
     <Styled.SwapContainer>
-      <Styled.SwapForm>
-        <LogoSelectOption />
-        <LogoSelectOption />
-        <Styled.InfoDiv>
-          <Styled.InfoPara>
-            1 USDT= 0.0004475 ETH
+      <Styled.SwapForm.Provider onFormFinish={onFormFinish}>
+        <Styled.SwapForm form={swapForm} name="swapForm" onFinish={confirm}>
+          <Styled.SwapButton
+            icon={<SwapOutlined rotate={90} />}
+            shape="circle"
+            onClick={swapAsset}
+          />
+          <Styled.SwapSellItem
+            name="sellAmount"
+            rules={formValdation.sellAmount}
+            validateFirst={true}
+            validateTrigger="onBlur"
+          >
+            <Input
+              placeholder="0.00000"
+              type="number"
+              prefix={
+                <Styled.SwapFormItem
+                  name="sellAsset"
+                  rules={formValdation.sellAsset}
+                  validateFirst={true}
+                  validateTrigger="onBlur"
+                >
+                  <LogoSelectOption labelInValue onChange={handleAssetChange} />
+                </Styled.SwapFormItem>
+              }
+            />
+          </Styled.SwapSellItem>
+          <Styled.SwapItem
+            name="buyAmount"
+            rules={formValdation.buyAmount}
+            validateFirst={true}
+            validateTrigger="onBlur"
+          >
+            <Input
+              placeholder="0.00000"
+              type="number"
+              prefix={
+                <Styled.SwapFormItem
+                  name="buyAsset"
+                  rules={formValdation.buyAsset}
+                  validateFirst={true}
+                  validateTrigger="onBlur"
+                >
+                  <LogoSelectOption labelInValue onChange={handleAssetChange} />
+                </Styled.SwapFormItem>
+              }
+            />
+          </Styled.SwapItem>
+          <Form.Item>
+            <Styled.FormButton type="primary" htmlType="submit">
+              Swap Coins
+            </Styled.FormButton>
+          </Form.Item>
+        </Styled.SwapForm>
+        <PasswordModal visible={visible} onCancel={onCancel} />
+      </Styled.SwapForm.Provider>
+      <Styled.InfoDiv>
+        <Styled.InfoPara>
+          {assetValueInfo}
+          <Styled.Tooltip placement="left" title={InfoToolTip} color="#E3EBF8">
             <InfoCircleOutlined />
-          </Styled.InfoPara>
-        </Styled.InfoDiv>
-        <Styled.Button type="primary" htmlType="submit">
-          Swap Coins
-        </Styled.Button>
-        <Styled.HistoryLinkDiv>
-          <Styled.HistoryLink>See My Swap History</Styled.HistoryLink>
-        </Styled.HistoryLinkDiv>
-        <Styled.FooterPara>
-          Your swap was completed and you received 1.001 ETH for 2240.02 USDT{" "}
-          <br />
-          <br />
-          Transaction Type : Trade <br />
-          Fees : 0.01121 PPY
-        </Styled.FooterPara>
-      </Styled.SwapForm>
+          </Styled.Tooltip>
+        </Styled.InfoPara>
+      </Styled.InfoDiv>
+      <Styled.FooterPara>
+        {status === "" ? "" : status}
+        {status === "" ? "" : "Transaction Type : Trade"}
+        Fees : {feeAmount} {defaultToken}
+      </Styled.FooterPara>
     </Styled.SwapContainer>
   );
 };

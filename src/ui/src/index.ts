@@ -35,6 +35,7 @@ export {
   CheckOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
+  SwapOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";

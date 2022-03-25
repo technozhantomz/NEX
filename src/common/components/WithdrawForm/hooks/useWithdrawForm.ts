@@ -1,65 +1,51 @@
+import { Form } from "antd";
+import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
-import { defaultToken } from "../../../../api/params";
-import { Form } from "../../../../ui/src";
 import {
-  roundNum,
   useAccount,
+  useAsset,
   useFees,
-  useSidechainAccounts,
-  useSidechainTransactionBuilder,
-  useSonNetwork,
   useTransactionBuilder,
-  useTransferTransactionBuilder,
 } from "../../../hooks";
-import { Account } from "../../../types";
+import { Account, SidechainAcccount } from "../../../types";
+import { usePeerplaysApiContext } from "../../PeerplaysApiProvider";
 import { useUserContext } from "../../UserProvider";
 
-import { WithdrawForm } from "./useWithdrawForm.types";
+import { SonNetworkStatus, UseWithdrawForm } from "./useWithdrawForm.types";
 
-export function useWithdrawForm(selectedAsset: string): WithdrawForm {
+export function useWithdrawForm(): UseWithdrawForm {
   const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
-  const { getSonNetworkStatus, sonAccount } = useSonNetwork();
-  const {
-    bitcoinSidechainAccount,
-    sidechainAccounts,
-    hasBTCDepositAddress,
-    loadingSidechainAccounts,
-    getSidechainAccounts,
-  } = useSidechainAccounts();
+  const [bitcoinAccount, setBitcoinsAccount] = useState<SidechainAcccount>();
   const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
     useAccount();
-  const { localStorageAccount, assets, id } = useUserContext();
+  const { defaultAsset } = useAsset();
+  const { localStorageAccount, assets, sidechainAcccounts } = useUserContext();
   const { trxBuilder } = useTransactionBuilder();
   const { calculteTransferFee } = useFees();
-  const { buildTransferTransaction } = useTransferTransactionBuilder();
-  const {
-    buildAddingBitcoinSidechainTransaction,
-    buildDeletingBitcoinSidechainTransaction,
-  } = useSidechainTransactionBuilder();
   const [withdrawForm] = Form.useForm();
+  const { dbApi } = usePeerplaysApiContext();
 
   useEffect(() => {
     const withdrawFee = calculteTransferFee("");
     if (withdrawFee) {
       setFeeAmount(withdrawFee);
     }
-  }, [assets, calculteTransferFee]);
-
-  useEffect(() => {
-    if (
-      selectedAsset === "BTC" &&
-      !loadingSidechainAccounts &&
-      bitcoinSidechainAccount
-    ) {
-      withdrawForm.setFieldsValue({
-        withdrawAddress: bitcoinSidechainAccount?.withdraw_address,
-        withdrawPublicKey: bitcoinSidechainAccount?.withdraw_public_key,
-      });
+    if (localStorageAccount !== null) {
+      withdrawForm.setFieldsValue({ from: localStorageAccount });
+      if (sidechainAcccounts && sidechainAcccounts.length > 0) {
+        const bitcoinAccount = sidechainAcccounts.find(
+          (act) => act.sidechain === "bitcoin"
+        );
+        setBitcoinsAccount(bitcoinAccount);
+        withdrawForm.setFieldsValue({
+          withdrawAddress: bitcoinAccount?.withdraw_address,
+        });
+      }
     }
-  }, [loadingSidechainAccounts, sidechainAccounts, bitcoinSidechainAccount]);
+  }, [localStorageAccount, assets, sidechainAcccounts, calculteTransferFee]);
 
   const onCancel = () => {
     setVisible(false);
@@ -81,98 +67,89 @@ export function useWithdrawForm(selectedAsset: string): WithdrawForm {
     }
   };
 
-  const handleValuesChange = (changedValues: any) => {
-    setStatus("");
-    if (changedValues.amount) {
-      if (changedValues.amount < 0) {
-        withdrawForm.setFieldsValue({ amount: 0 });
-      } else {
-        const selectedAccountAsset = assets.find(
-          (asset) => asset.symbol === selectedAsset
-        );
-
-        if (selectedAccountAsset && changedValues.amount > 0) {
-          withdrawForm.setFieldsValue({
-            amount: roundNum(
-              changedValues.amount,
-              selectedAccountAsset.precision
-            ),
-          });
-        }
-      }
-    }
-  };
-
   const handleWithdraw = async (password: string) => {
     const values = withdrawForm.getFieldsValue();
     const from = (await getAccountByName(localStorageAccount)) as Account;
-    const to = sonAccount
-      ? sonAccount
-      : ((await getAccountByName("son-account")) as Account);
-    const activeKey = getPrivateKey(password, "active");
-    let memo = "";
-    if (selectedAsset === "BTC") {
-      if (
-        values.withdrawAddress !== bitcoinSidechainAccount?.withdraw_address ||
-        values.withdrawPublicKey !==
-          bitcoinSidechainAccount?.withdraw_public_key
-      ) {
-        const deleteTrx = buildDeletingBitcoinSidechainTransaction(
-          id,
-          bitcoinSidechainAccount?.id as string,
-          id
-        );
-        try {
-          const deleteTrxResult = await trxBuilder([deleteTrx], [activeKey]);
-          if (deleteTrxResult) {
-            const addTrx = buildAddingBitcoinSidechainTransaction(
-              id,
-              id,
-              bitcoinSidechainAccount?.deposit_public_key as string,
-              values.withdrawPublicKey,
-              values.withdrawAddress
-            );
-            try {
-              const addTrxResult = await trxBuilder([addTrx], [activeKey]);
-              await getSidechainAccounts(id);
-              if (!addTrxResult) {
-                setVisible(false);
-                setStatus("Server error, please try again later.");
-                return;
-              }
-            } catch (e) {
-              await getSidechainAccounts(id);
-              setVisible(false);
-              setStatus("Server error, please try again later.");
-              console.log(e);
-              return;
-            }
-          } else {
-            setVisible(false);
-            setStatus("Server error, please try again later.");
-            return;
-          }
-        } catch (e) {
-          console.log(e);
-          setVisible(false);
-          setStatus("Server error, please try again later.");
-          return;
-        }
+    const to = (await getAccountByName("son-account")) as Account;
+    const gpo = await dbApi("get_global_properties");
+    const son_account = gpo.parameters.extensions.son_account;
+    if (to.id === son_account) {
+      const sonNetworkStatus = await getSonNetworkStatus();
+      if (!sonNetworkStatus.isSonNetworkOk) {
+        throw new Error("son network not available");
       }
-    } else {
-      memo = values.withdrawAddress;
     }
-    const asset = assets.filter((asset) => asset.symbol === selectedAsset)[0];
-    const trx = buildTransferTransaction(
-      from,
-      to,
-      memo,
-      asset,
-      password,
-      values.amount
-    );
-    let trxResult;
+    const asset = assets.filter((asset) => asset.symbol === "BTC")[0];
+    const activeKey = getPrivateKey(password, "active");
+    let memoFromPublic, memoToPublic;
+    if (values.memo) {
+      memoFromPublic = from.options.memo_key;
+      memoToPublic = to.options.memo_key;
+    }
+    let memoFromPrivkey;
+    if (values.memo) {
+      if (from.options.memo_key === from.active.key_auths[0][0]) {
+        memoFromPrivkey = getPrivateKey(password, "active");
+      } else {
+        memoFromPrivkey = getPrivateKey(password, "memo");
+      }
+      if (!memoFromPrivkey) {
+        throw new Error("Missing private memo key for sender: " + from.name);
+      }
+    }
+    let memoObject;
 
+    if (values.memo && memoFromPublic && memoToPublic) {
+      if (
+        !/111111111111111111111/.test(memoFromPublic) &&
+        !/111111111111111111111/.test(memoToPublic)
+      ) {
+        const nonce = TransactionHelper.unique_nonce_uint64();
+        const message = Aes.encrypt_with_checksum(
+          memoFromPrivkey,
+          memoToPublic,
+          nonce,
+          values.memo
+        );
+        memoObject = {
+          from: memoFromPublic,
+          to: memoToPublic,
+          nonce,
+          message,
+        };
+      } else {
+        memoObject = {
+          from: memoFromPublic,
+          to: memoToPublic,
+          nonce: 0,
+          message: Buffer.isBuffer(values.memo)
+            ? values.memo
+            : Buffer.concat([
+                Buffer.alloc(4),
+                Buffer.from(values.memo.toString("utf-8"), "utf-8"),
+              ]),
+        };
+      }
+    }
+    const amount = {
+      amount: values.amount * 10 ** Number(asset?.precision),
+      asset_id: asset?.id,
+    };
+
+    const trx = {
+      type: "transfer",
+      params: {
+        fee: {
+          amount: 0,
+          asset_id: defaultAsset?.id,
+        },
+        from: from.id,
+        to: to.id,
+        amount,
+        memo: memoObject,
+      },
+    };
+    let trxResult;
     try {
       trxResult = await trxBuilder([trx], [activeKey]);
     } catch (e) {
@@ -182,7 +159,6 @@ export function useWithdrawForm(selectedAsset: string): WithdrawForm {
       formAccountBalancesByName(localStorageAccount);
       setVisible(false);
       setStatus(`Successfully withdrew ${values.amount}`);
-      withdrawForm.resetFields();
     } else {
       setVisible(false);
       setStatus("Server error, please try again later.");
@@ -190,92 +166,97 @@ export function useWithdrawForm(selectedAsset: string): WithdrawForm {
   };
 
   const validateAmount = async (_: unknown, value: number) => {
-    const accountAsset = assets.find((asset) => asset.symbol === selectedAsset);
-    const accountDefaultAsset = assets.find(
-      (asset) => asset.symbol === defaultToken
+    const accountAsset = assets.find((asset) => asset.symbol === "BTC");
+    if (accountAsset !== undefined && accountAsset.amount > Number(value))
+      return Promise.resolve();
+    return Promise.reject(
+      new Error(`Must be less then ${accountAsset ? accountAsset.amount : ""}`)
     );
-    if (!accountAsset) {
-      return Promise.reject(new Error("Balance is not enough"));
-    }
-    if ((accountAsset.amount as number) < Number(value)) {
-      return Promise.reject(new Error("Balance is not enough"));
-    }
-    if (!accountDefaultAsset) {
-      return Promise.reject(new Error("Balance is not enough to pay the fee"));
-    }
-    if ((accountDefaultAsset.amount as number) < feeAmount) {
-      return Promise.reject(new Error("Balance is not enough to pay the fee"));
-    }
-
-    return Promise.resolve();
   };
 
-  const validateFrom = async (_: unknown, value: string) => {
-    if (value !== localStorageAccount)
-      return Promise.reject(new Error("Not your Account"));
-    return Promise.resolve();
-  };
-
-  // we need bitcoin address validation
   const validateWithdrawAddress = async (_: unknown, value: string) => {
-    const sonNetworkStatus = await getSonNetworkStatus();
-    if (!sonNetworkStatus.isSonNetworkOk) {
-      return Promise.reject(new Error("SONs network is not available now"));
-    }
-    if (selectedAsset === "BTC") {
-      if (!loadingSidechainAccounts) {
-        if (!hasBTCDepositAddress) {
-          return Promise.reject(
-            new Error("Please first generate bitcoin addresses at deposit tab")
-          );
-        }
-        return Promise.resolve();
-      }
-      return Promise.reject(new Error(""));
-    } else {
-      const updatedFee = calculteTransferFee(value);
-      if (updatedFee) {
-        setFeeAmount(updatedFee);
-      }
-      return Promise.resolve();
-    }
-  };
-
-  // we need bitcoin pub key validation
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const validateWithdrawPublicKey = async (_: unknown, value: string) => {
-    const sonNetworkStatus = await getSonNetworkStatus();
-    if (!sonNetworkStatus.isSonNetworkOk) {
-      return Promise.reject(new Error("SONs network is not available now"));
-    }
-    if (!loadingSidechainAccounts) {
-      if (!hasBTCDepositAddress) {
-        return Promise.reject(
-          new Error("Please first generate bitcoin addresses at deposit tab")
-        );
-      }
-      return Promise.resolve();
-    }
-    return Promise.reject(new Error(""));
+    const withdrawAddress = bitcoinAccount?.withdraw_address;
+    if (withdrawAddress === value) return Promise.resolve();
+    return Promise.reject(
+      new Error(`Current withdraw address is ${withdrawAddress}`)
+    );
   };
 
   const formValdation = {
-    from: [
-      { required: true, message: "From is required" },
-      { validator: validateFrom },
-    ],
     amount: [
       { required: true, message: "Quantity is required" },
       { validator: validateAmount },
     ],
     withdrawAddress: [
-      { required: true, message: "Withdraw address is required" },
+      { required: true, message: "" },
       { validator: validateWithdrawAddress },
     ],
-    withdrawPublicKey: [
-      { required: true, message: "Withdraw address is required" },
-      { validator: validateWithdrawPublicKey },
-    ],
+  };
+
+  const getSonNetworkStatus = async (): Promise<SonNetworkStatus> => {
+    const result = { status: [], isSonNetworkOk: false } as SonNetworkStatus;
+    let activeSons = 0;
+    try {
+      const gpo = await dbApi("get_global_properties");
+      if (!gpo.active_sons || gpo.active_sons.length == 0) {
+        return result;
+      }
+      const sonIds = gpo.active_sons.map(
+        (active_son: { son_id: any }) => active_son.son_id
+      );
+      const sons = await dbApi("get_sons", [sonIds]);
+      for (const son of sons) {
+        if (son) {
+          const sonStatisticsObject = await dbApi("get_objects", [
+            [son.statistics],
+          ]).then((e: any[]) => e[0]);
+          const now = new Date();
+          const utcNowMS = new Date(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate(),
+            now.getUTCHours(),
+            now.getUTCMinutes(),
+            now.getUTCSeconds(),
+            now.getUTCMilliseconds()
+          ).getTime();
+          if (
+            new Date(sonStatisticsObject.last_active_timestamp).getTime() +
+              gpo.parameters.extensions.son_heartbeat_frequency * 1000 >
+            utcNowMS
+          ) {
+            result.status.push([son.id, "OK, regular SON heartbeat"]);
+            activeSons = activeSons + 1;
+          } else {
+            if (
+              new Date(sonStatisticsObject.last_active_timestamp).getTime() +
+                gpo.parameters.extensions.son_down_time * 1000 >
+              utcNowMS
+            ) {
+              result.status.push([
+                son.id,
+                "OK, irregular SON heartbeat, but not triggering SON down proposal",
+              ]);
+            } else {
+              result.status.push([
+                son.id,
+                "NOT OK, irregular SON heartbeat, triggering SON down proposal",
+              ]);
+            }
+          }
+        } else {
+          result.status.push([son.id, "NOT OK, invalid SON id"]);
+        }
+      }
+      result.isSonNetworkOk =
+        activeSons / gpo.parameters.extensions.maximum_son_count > 2 / 3
+          ? true
+          : false;
+      return result;
+    } catch (e) {
+      console.log(e);
+      return result;
+    }
   };
 
   return {
@@ -287,6 +268,5 @@ export function useWithdrawForm(selectedAsset: string): WithdrawForm {
     confirm,
     onCancel,
     onFormFinish,
-    handleValuesChange,
   };
 }

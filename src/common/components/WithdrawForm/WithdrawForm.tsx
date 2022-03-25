@@ -1,20 +1,22 @@
-import { Form, Input } from "../../../ui/src";
+import { Form, Input } from "antd";
+
 import { useAsset } from "../../hooks";
+import { LogoSelectOption } from "../LogoSelectOption/LogoSelectOption";
 import { PasswordModal } from "../PasswordModal";
-import { useUserContext } from "../UserProvider";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
 
 type Props = {
   asset: string;
+  withAssetSelector: boolean;
 };
 
-export const WithdrawForm = ({ asset }: Props): JSX.Element => {
-  const { localStorageAccount } = useUserContext();
+export const WithdrawForm = (props: Props): JSX.Element => {
   const { defaultAsset } = useAsset();
   const {
     status,
+    loggedIn,
     visible,
     feeAmount,
     withdrawForm,
@@ -22,8 +24,8 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     onCancel,
     confirm,
     onFormFinish,
-    handleValuesChange,
-  } = useWithdrawForm(asset);
+    handleAssetChange,
+  } = useWithdrawForm();
 
   return (
     <Form.Provider onFormFinish={onFormFinish}>
@@ -31,52 +33,58 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
         form={withdrawForm}
         name="withdrawForm"
         onFinish={confirm}
-        onValuesChange={handleValuesChange}
         size="large"
       >
-        <Form.Item
-          name="from"
-          rules={formValdation.from}
-          validateFirst={true}
-          validateTrigger="onBlur"
-          initialValue={localStorageAccount}
-        >
-          <Input disabled={true} placeholder="From" />
-        </Form.Item>
-        {asset === "BTC" ? (
-          <Form.Item
-            name="withdrawPublicKey"
-            validateFirst={true}
-            rules={formValdation.withdrawPublicKey}
-          >
-            <Input placeholder="Withdraw public key" />
-          </Form.Item>
+        {props.withAssetSelector ? (
+          <>
+            <Styled.WithdrawFormAssetAmount
+              name="amount"
+              validateFirst={true}
+              rules={formValdation.amount}
+              validateTrigger="onBlur"
+            >
+              <Input
+                placeholder="0.00000"
+                type="number"
+                prefix={
+                  <Styled.WithdrawFormAsset name="asset">
+                    <LogoSelectOption
+                      defaultValue="BTC"
+                      onChange={handleAssetChange}
+                      forWithraw={true}
+                    />
+                  </Styled.WithdrawFormAsset>
+                }
+              />
+            </Styled.WithdrawFormAssetAmount>
+            <p className="label">Withdraw Address</p>
+          </>
         ) : (
-          ""
+          <Form.Item
+            name="amount"
+            validateFirst={true}
+            rules={formValdation.amount}
+            validateTrigger="onBlur"
+          >
+            <Input placeholder="amount" type="number" />
+          </Form.Item>
         )}
+
         <Form.Item
           name="withdrawAddress"
           validateFirst={true}
           rules={formValdation.withdrawAddress}
-        >
-          <Input placeholder="Withdraw address" />
-        </Form.Item>
-        <Form.Item
-          name="amount"
-          validateFirst={true}
-          rules={formValdation.amount}
           validateTrigger="onBlur"
         >
-          <Input placeholder="amount" type="number" />
+          <Input disabled={true} placeholder="withdrawAddress" />
         </Form.Item>
-
         <p>
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
           <Styled.WithdrawFormButton type="primary" htmlType="submit">
-            Withdraw
+            {loggedIn ? "Withdraw" : "Log in"}
           </Styled.WithdrawFormButton>
         </Form.Item>
       </Styled.WithdrawForm>

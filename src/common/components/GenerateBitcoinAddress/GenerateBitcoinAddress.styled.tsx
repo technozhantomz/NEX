@@ -6,19 +6,17 @@ export const DepositForm = styled(Form)`
 `;
 
 export const Row = styled(UiRow)`
-  background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border: 1px solid #c1c2c4;
+  background: ${colors.white} 0% 0% no-repeat padding-box;
+  border: 1px solid ${colors.borderColorBase};
   border-radius: 4px;
   opacity: 1;
   height: 65px;
   width: 90%;
   margin-left: auto;
   margin-right: auto;
-  color: var(---text-icons);
   font: normal normal medium 20px/24px Inter;
   letter-spacing: 0px;
-  color: #212121;
+  color: ${colors.textColor};
   font-size: 20px;
 `;
 
