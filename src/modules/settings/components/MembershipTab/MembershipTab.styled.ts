@@ -17,6 +17,7 @@ export const MembershipCard = styled.div`
   height: 856px;
   @media (max-width: 500px) {
     height: 950px;
+    margin-left: 10px;
   }
 `;
 

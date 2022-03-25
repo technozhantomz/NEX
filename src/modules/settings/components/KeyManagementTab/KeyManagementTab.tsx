@@ -4,7 +4,6 @@ import React from "react";
 
 import { usePasswordForm } from "../../../../common/components/PasswordModal/hooks";
 import { useCopyText } from "../../../../common/hooks";
-import { CardFormButton } from "../../../../ui/src";
 import { CopyIcon } from "../../../../ui/src/icons";
 
 import * as Styled from "./KeyManagementTab.styled";
@@ -46,10 +45,10 @@ export const KeyManagementTab = (): JSX.Element => {
             </Radio.Group>
           </Styled.SecondItem>
 
-          <Styled.BtnFormItem wrapperCol={{ offset: 1, span: 8 }}>
-            <CardFormButton type="primary" htmlType="submit">
+          <Styled.BtnFormItem>
+            <Styled.Button type="primary" htmlType="submit">
               Let’s Go!
-            </CardFormButton>
+            </Styled.Button>
           </Styled.BtnFormItem>
 
           {requestedKey && (

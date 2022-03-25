@@ -1,4 +1,5 @@
 import {
+  CardFormButton as button,
   Form as form,
   Input as input,
   styled,
@@ -13,11 +14,11 @@ export const KeyManagementCard = styled.div`
     letter-spacing: 0px;
     color: #212121;
     opacity: 1;
-    margin-left: 30px;
     height: 856px;
     margin-left: 30px;
     @media (max-width: 500px) {
       margin: 5px;
+      text-align: center;
     }
   }
 `;
@@ -33,18 +34,26 @@ export const LockWalletFormItem = styled(form.Item)`
   border-radius: 4px;
   opacity: 1;
   @media (max-width: 500px) {
-    width: 100%;
+    width: 90%;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
   }
   .ant-input-affix-wrapper > input.ant-input {
     @media (max-width: 500px) {
-      font-size: 10px;
+      font-size: 12px;
     }
   }
 `;
 
 export const Text = styled(text)``;
 
-export const BtnFormItem = styled(form.Item)``;
+export const BtnFormItem = styled.div`
+  margin-bottom: 20px;
+  @media (min-width: 500px) {
+    width: 50%;
+  }
+`;
 
 export const Input = styled(input.Password)`
   height: 50px;
@@ -75,3 +84,5 @@ export const GeneratedKeyInput = styled(input.Password)`
     }
   }
 `;
+
+export const Button = styled(button)``;

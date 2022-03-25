@@ -20,7 +20,9 @@ export const GeneralSettingsCard = styled.div`
     opacity: 1;
     margin-left: 30px;
     height: 500px;
-    position: relative;
+    @media (min-width: 500px) {
+      position: relative;
+    }
   }
 `;
 
@@ -49,6 +51,9 @@ export const LanguageFormItem = styled(form.Item)`
     padding: 0 11px;
     align-items: center;
   }
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 
 export const Select = styled(select)``;
@@ -68,10 +73,13 @@ export const FaucetText = styled(space)`
 `;
 
 export const Button = styled(button)`
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 25%;
+  margin-top: 50px;
+  @media (min-width: 500px) {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 25%;
+  }
 `;
 
 export const Checkbox = styled(checkbox)``;

@@ -3,7 +3,6 @@ import Link from "next/link";
 import React from "react";
 
 import { MembershipModal, PasswordModal } from "../../../../common/components";
-import { CardFormButton } from "../../../../ui/src";
 
 import * as Styled from "./MembershipTab.styled";
 import { useMembershipTab } from "./hooks/useMembershipTab";
@@ -68,11 +67,9 @@ export const MembershipTab = (): JSX.Element => {
                 </Styled.Paragraph>
 
                 <Styled.BtnDiv>
-                  <Form.Item>
-                    <CardFormButton type="primary" htmlType="submit">
-                      Buy lifetime subscription
-                    </CardFormButton>
-                  </Form.Item>
+                  <Styled.Button type="primary" htmlType="submit">
+                    Buy lifetime subscription
+                  </Styled.Button>
                 </Styled.BtnDiv>
               </Styled.Space>
             ) : (

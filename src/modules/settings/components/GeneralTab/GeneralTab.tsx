@@ -54,7 +54,9 @@ export const GeneralTab = (): JSX.Element => {
                 Faucet URL:
                 {faucetUrl}
               </Styled.FaucetURL>
-              <Styled.Typography.Link copyable>Copy URL</Styled.Typography.Link>
+              <Styled.Typography.Link copyable={{ text: faucetUrl }}>
+                Copy URL
+              </Styled.Typography.Link>
             </Styled.Space>
             {successMsg && (
               <Styled.Text type="success" strong>
