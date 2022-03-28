@@ -7,7 +7,6 @@ import {
 } from "../../../../../../ui/src";
 import {
   Blockchain,
-  Contacts,
   Dashboard,
   Market,
   Vote,

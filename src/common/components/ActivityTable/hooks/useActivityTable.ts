@@ -297,6 +297,7 @@ export function useActivityTable(): UseActivityTable {
     try {
       setLoading(true);
       let history = await getAccountHistoryById(id);
+      // this should change based on designer decision
       history = history.filter(
         (el: { op: number[] }) =>
           (el.op[0] >= 0 && el.op[0] <= 8) ||

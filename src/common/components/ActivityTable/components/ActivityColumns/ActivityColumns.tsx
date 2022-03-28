@@ -1,6 +1,6 @@
 //import Link from "next/link";
 
-import { ActivityRow } from "../../hooks/useActivityTable.types";
+//import { ActivityRow } from "../../hooks/useActivityTable.types";
 import { ActivityTag } from "../ActivityTag";
 
 export const ActivityColumns = [
@@ -19,7 +19,7 @@ export const ActivityColumns = [
     title: "Info",
     dataIndex: "info",
     key: "info",
-    render: (_value: unknown, record: ActivityRow): JSX.Element => (
+    render: (_value: unknown): JSX.Element => (
       // <Link href={"/"}>{_value}</Link>
       <span>{_value}</span>
     ),
