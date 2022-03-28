@@ -10,7 +10,7 @@ export const Page = styled.section`
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     font-weight: 300;
-    color: ${colors.white};
+    color: ${colors.textColorSecondary};
     background: transparent
       radial-gradient(
         closest-side at 50% 50%,
