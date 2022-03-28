@@ -8,4 +8,5 @@ export const colors = {
   white: `#ffffff`,
   borderColorBase: `#C1C2C4`,
   errorColor: `#ff4d4f`,
+  successTag: `#B8F4C9`,
 };

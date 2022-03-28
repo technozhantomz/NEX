@@ -13,4 +13,5 @@ export type UseAccountResult = {
   formAccountAfterConfirmation: (fullAccount: FullAccount) => Promise<void>;
   removeAccount: () => void;
   validateAccountPassword: (password: string, account: Account) => boolean;
+  getUserNameById: (id: string) => Promise<string>;
 };

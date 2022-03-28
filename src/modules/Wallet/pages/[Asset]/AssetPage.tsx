@@ -87,10 +87,6 @@ const AssetPage: NextPage = () => {
             ) : (
               ""
             )}
-
-            <TabPane tab="All Activity" key="activity">
-              {/* <TransferTab asset={asset} /> */}
-            </TabPane>
           </Tabs>
         </Styled.AssetCard>
       )}

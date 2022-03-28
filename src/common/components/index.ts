@@ -12,3 +12,4 @@ export * from "./SettingsProvider";
 export * from "./UserProvider";
 export * from "./ViewportProvider";
 export * from "./HIVEAndHBDDeposit";
+export * from "./ActivityTable";
