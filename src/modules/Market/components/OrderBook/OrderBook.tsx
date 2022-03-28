@@ -17,9 +17,6 @@ export const OrderBook = (): JSX.Element => {
   } = useOrderBook();
   const types: OrderType[] = ["total", "sell", "buy"];
 
-  console.log("this is bids", bids);
-  console.log("this is asks", asks);
-  console.log("this is selected", ordersRows);
 
   const thresholdMenu = (
     <Styled.ThresholdMenu onClick={handleThresholdChange}>

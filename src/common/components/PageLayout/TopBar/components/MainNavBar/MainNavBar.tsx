@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   BellOutlined,
   MoreOutlined,
@@ -11,6 +13,8 @@ import { ProfileMenu } from "../ProfileMenu";
 import * as Styled from "./MainNavBar.styled";
 import { useToggleMenu } from "./hooks/useToggleMenu";
 
+const { useEffect, useRef } = React;
+
 export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
@@ -20,6 +24,27 @@ export const MainNavBar = (): JSX.Element => {
     profileMenuOpen,
     mainMenuOpen,
   } = useToggleMenu();
+
+  const wrapperRef = useRef(null);
+  useEffect(() => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function handleClickOutside(event: any) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        // setDropDownOpen(false);
+        closeMenu();
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [wrapperRef]);
+
   return (
     <>
       <Styled.MainNavBar>
@@ -29,6 +54,7 @@ export const MainNavBar = (): JSX.Element => {
               className={"bell"}
               onMouseOver={() => toggleMenu("notify")}
               onClick={() => toggleMenu("notify")}
+              ref={wrapperRef}
             />
             <div
               onMouseOver={() => toggleMenu("profile")}

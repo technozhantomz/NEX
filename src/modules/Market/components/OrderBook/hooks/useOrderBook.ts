@@ -42,8 +42,6 @@ export function useOrderBook(): UseOrderBookResult {
 
   const getOrderBook = useCallback(
     async (base: Asset, quote: Asset) => {
-      console.log("this is base", base);
-      console.log("this is quote", quote);
       const { asks, bids } = await dbApi("get_order_book", [
         base.symbol,
         quote.symbol,
@@ -67,12 +65,12 @@ export function useOrderBook(): UseOrderBookResult {
     if (currentBase !== undefined && currentQuote !== undefined) {
       setColumns([
         {
-          title: currentQuote.symbol,
+          title: currentQuote?.symbol,
           dataIndex: "quote",
           key: "quote",
         },
         {
-          title: currentBase.symbol,
+          title: currentBase?.symbol,
           dataIndex: "base",
           key: "base",
         },

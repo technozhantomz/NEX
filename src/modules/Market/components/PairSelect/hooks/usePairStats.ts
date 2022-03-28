@@ -20,13 +20,13 @@ export function usePairStats(): UsePairStatsResult {
   const getPairStats = useCallback(
     async (base: Asset, quote: Asset) => {
       const ticker: Ticker = await dbApi("get_ticker", [
-        base.symbol,
-        quote.symbol,
+        base?.symbol,
+        quote?.symbol,
       ]);
 
-      setLatest(roundNum(Number(ticker.latest), base.precision));
-      setChange(roundNum(Number(ticker.percent_change, 1)) || 0.0);
-      setVolume(roundNum(Number(ticker.quote_volume), 3));
+      setLatest(roundNum(Number(ticker?.latest), base?.precision));
+      setChange(roundNum(Number(ticker?.percent_change, 1)) || 0.0);
+      setVolume(roundNum(Number(ticker?.quote_volume), 3));
     },
     [dbApi, setLatest, setChange, setVolume]
   );
