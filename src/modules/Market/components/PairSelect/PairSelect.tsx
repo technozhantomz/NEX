@@ -1,16 +1,17 @@
 import { Col, DownOutlined, Row } from "../../../../ui/src";
 
+import { PairModal } from "./PairModal";
 import * as Styled from "./PairSelect.styled";
-import { usePairSelect } from "./hooks/usePairSelect";
-import { usePairStats } from "./hooks/usePairStats";
+import { usePairSelect, usePairStats } from "./hooks";
 
 export const PairSelect = (): JSX.Element => {
-  const { activePair } = usePairSelect();
+  const { activePair, visible, onCancel, onSelectPair } = usePairSelect();
   const { latest, change, volume } = usePairStats();
+
   return (
     <Styled.PairSelectContainer>
       <Styled.PairButtonRow>
-        <Styled.PairButton>
+        <Styled.PairButton onClick={onSelectPair}>
           {activePair} <DownOutlined />
         </Styled.PairButton>
       </Styled.PairButtonRow>
@@ -34,6 +35,7 @@ export const PairSelect = (): JSX.Element => {
           </Styled.ColumnFlex>
         </Col>
       </Row>
+      <PairModal visible={visible} onCancel={onCancel} />
     </Styled.PairSelectContainer>
   );
 };

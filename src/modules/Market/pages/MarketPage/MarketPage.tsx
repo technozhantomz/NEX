@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import React from "react";
 
 import { Layout } from "../../../../common/components/PageLayout";
@@ -10,12 +11,15 @@ import { PairSelect } from "../../components/PairSelect";
 import * as Styled from "./MarketPage.styled";
 
 const MarketPage: NextPage = () => {
+  const router = useRouter();
+  const { pair } = router.query;
+
   return (
     <Layout
       title="market"
       type="card-lrg"
       heading="Market"
-      description="Market Page"
+      description={`Market Page | ${pair}`}
       dexLayout={true}
     >
       <Styled.Container>

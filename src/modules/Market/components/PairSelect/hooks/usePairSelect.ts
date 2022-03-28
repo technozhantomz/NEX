@@ -16,6 +16,7 @@ export function usePairSelect(): UsePairSelectResult {
   const { dbApi } = usePeerplaysApiContext();
   const [currentBase, setCurrentBase] = useState<Asset>();
   const [currentQuote, setCurrentQuote] = useState<Asset>();
+  const [visible, setVisible] = useState<boolean>(false);
 
   const getPairData = useCallback(
     async (assets: string[]) => {
@@ -43,16 +44,27 @@ export function usePairSelect(): UsePairSelectResult {
     [recentPairs, setExchanges]
   );
 
+  const onSelectPair = () => {
+    setVisible(true);
+  };
+
+  const onCancel = () => {
+    setVisible(false);
+  };
+
   useEffect(() => {
     setActivePair(exchanges.active);
     setRecentPairs(exchanges.list);
     getPairData(exchanges.active.split("_"));
   }, [exchanges, setActivePair, setRecentPairs, getPairData]);
   return {
+    visible,
     activePair,
     recentPairs,
     currentBase,
     currentQuote,
     handleSelectPair,
+    onSelectPair,
+    onCancel,
   };
 }
