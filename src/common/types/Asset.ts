@@ -5,3 +5,8 @@ export type Asset = {
   symbol: string;
   amount?: number;
 };
+
+export type Amount = {
+  amount: number;
+  asset_id: string;
+};

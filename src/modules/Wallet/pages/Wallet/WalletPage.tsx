@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 
+import { ActivityTable } from "../../../../common/components";
 import { Layout } from "../../../../common/components/PageLayout";
 import { AssetsTable } from "../../components/AssetsTable";
 
@@ -21,7 +22,9 @@ const WalletPage: NextPage = () => {
           <TabPane tab="Assets" key="1">
             <AssetsTable />
           </TabPane>
-          {/* <TabPane tab="Contacts" key="2"></TabPane> */}
+          <TabPane tab="All Activity" key="activity">
+            <ActivityTable />
+          </TabPane>
         </Styled.Tabs>
       </Styled.WalletCard>
     </Layout>

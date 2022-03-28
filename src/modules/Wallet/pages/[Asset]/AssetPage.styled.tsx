@@ -4,7 +4,6 @@ import { breakpoint } from "../../../../ui/src/breakpoints";
 export const AssetCard = styled(UiCard)`
   .ant-card-body {
     padding: 0;
-    max-width: 710px;
     .ant-tabs-tab,
     .ant-tabs-extra-content {
       justify-content: center;
@@ -13,6 +12,10 @@ export const AssetCard = styled(UiCard)`
     .ant-tabs-top > .ant-tabs-nav::before {
       border-bottom: 2pt solid #f0f0f0;
       max-width: 566px;
+    }
+    .ant-tabs > .ant-tabs-nav,
+    .ant-tabs > div > .ant-tabs-nav {
+      max-width: 710px;
     }
     .ant-tabs-ink-bar {
       height: 2pt;
@@ -29,6 +32,8 @@ export const AssetCard = styled(UiCard)`
       }
       .ant-table-wrapper {
         margin: 0 20px 39px;
+      }
+      .asset-table {
         max-width: 566px;
       }
     }
