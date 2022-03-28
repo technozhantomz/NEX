@@ -6,6 +6,7 @@ export * from "./PageLayout";
 export * from "./PasswordModal";
 export * from "./TransferForm";
 export * from "./WithdrawForm";
+export * from "./MembershipModal";
 export * from "./ConnectionManager";
 export * from "./PeerplaysApiProvider";
 export * from "./SettingsProvider";

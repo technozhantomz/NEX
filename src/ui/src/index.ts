@@ -7,6 +7,7 @@ export { CardFrom, CardFormButton } from "./CardFrom";
 export { MenuCard } from "./MenuCard";
 export { Avatar } from "./Avatar";
 export { Tag } from "./Tag";
+export { Typography, Text, Paragraph } from "./Typography";
 
 export {
   Row,
@@ -22,6 +23,7 @@ export {
   Checkbox,
   Switch,
   List,
+  Space,
 } from "antd";
 
 export {
@@ -36,6 +38,7 @@ export {
   CheckOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
+  SwapOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";

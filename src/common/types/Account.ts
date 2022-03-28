@@ -5,6 +5,9 @@ export type FullAccount = {
   referrer_name: string;
   registrar_name: string;
   balances: Balance[];
+  statistics: {
+    lifetime_fees_paid: number;
+  };
 };
 
 export type Account = {
