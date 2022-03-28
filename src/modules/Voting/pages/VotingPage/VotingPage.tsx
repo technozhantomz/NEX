@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import React from "react";
 
 import { Layout } from "../../../../common/components";
+import { AdvisorTab } from "../../components/AdvisorTab";
 import { WitnessTab } from "../../components/WitnessTab";
 
 import * as Styled from "./VotingPage.styled";
@@ -18,7 +19,7 @@ const VotingPage: NextPage = () => {
       description="Voting Page"
       dexLayout={true}
     >
-      <Styled.VottingPageCard>
+      <Styled.VotingPageCard>
         <Tabs defaultActiveKey="1">
           <TabPane tab="GPOS" key="1">
             <Styled.Text>GPOS Tab</Styled.Text>
@@ -30,13 +31,13 @@ const VotingPage: NextPage = () => {
             <Styled.Text>SONs Tab</Styled.Text>
           </TabPane>
           <TabPane tab="Advisors" key="4">
-            <Styled.Text>Advisors Tab</Styled.Text>
+            <AdvisorTab tab="Advisors" />
           </TabPane>
           <TabPane tab="Proxy" key="5">
             <Styled.Text>Proxy Tab</Styled.Text>
           </TabPane>
         </Tabs>
-      </Styled.VottingPageCard>
+      </Styled.VotingPageCard>
     </Layout>
   );
 };

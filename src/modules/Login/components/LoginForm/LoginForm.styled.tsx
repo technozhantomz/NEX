@@ -1,4 +1,4 @@
-import { CardFormButton, CardFrom, styled } from "../../../../ui/src";
+import { CardFormButton, CardForm, styled } from "../../../../ui/src";
 
-export const LoginForm = styled(CardFrom)``;
+export const LoginForm = styled(CardForm)``;
 export const LoginFormButton = styled(CardFormButton)``;

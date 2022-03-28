@@ -16,7 +16,7 @@ export const CardFormButton = styled(Button)`
     }
   }
 `;
-export const CardFrom = styled(AntdForm)`
+export const CardForm = styled(AntdForm)`
   .ant-input,
   .ant-input-affix-wrapper {
     border-radius: 4px;

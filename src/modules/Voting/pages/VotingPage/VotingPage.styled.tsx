@@ -1,7 +1,7 @@
 import { styled, Text as text, Card as UiCard } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 
-export const VottingPageCard = styled(UiCard)`
+export const VotingPageCard = styled(UiCard)`
   .ant-card-body {
     padding: 0;
     width: 100%;

@@ -1,6 +1,6 @@
-import { CardFormButton, CardFrom, styled } from "../../../ui/src";
+import { CardFormButton, CardForm, styled } from "../../../ui/src";
 
-export const WithdrawForm = styled(CardFrom)`
+export const WithdrawForm = styled(CardForm)`
   margin: 0 20px;
 `;
 

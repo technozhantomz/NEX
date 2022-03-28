@@ -1,6 +1,6 @@
 import {
   CardFormButton,
-  CardFrom,
+  CardForm,
   styled,
   Checkbox as UICheckbox,
   Input as UIInput,
@@ -41,5 +41,5 @@ export const Checkbox = styled(UICheckbox)`
   }
 `;
 
-export const SignupForm = styled(CardFrom)``;
+export const SignupForm = styled(CardForm)``;
 export const SignupFormButton = styled(CardFormButton)``;
