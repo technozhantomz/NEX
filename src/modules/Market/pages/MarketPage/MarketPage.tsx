@@ -3,6 +3,7 @@ import React from "react";
 
 import { Layout } from "../../../../common/components/PageLayout";
 import { Col, Row } from "../../../../ui/src";
+import { AssetActionButton } from "../../../Wallet/components/AssetActionButton/index";
 import { LimitOrderForm } from "../../components/LimitOrderForm";
 import { OrderTabs } from "../../components/OrderTabs";
 import { PairSelect } from "../../components/PairSelect";
@@ -30,9 +31,11 @@ const MarketPage: NextPage = () => {
             <Row>
               <Col span={12}>
                 <LimitOrderForm isBuyOrder={true} />
+                <AssetActionButton txt={"BUY"} href={""} />
               </Col>
               <Col span={12}>
                 <LimitOrderForm isBuyOrder={false} />
+                <AssetActionButton txt={"SELL"} href={""} />
               </Col>
             </Row>
           </Col>
