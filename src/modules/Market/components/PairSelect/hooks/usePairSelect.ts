@@ -9,7 +9,7 @@ import { Exchanges } from "../../../../../common/types/Exchanges";
 import { UsePairSelectResult } from "./usePariSelect.types";
 
 export function usePairSelect(
-  currentPair: string | undefined
+  currentPair?: string | undefined
 ): UsePairSelectResult {
   const { exchanges, setExchanges } = useSettingsContext();
   // Active pair example: BTC_TEST
@@ -35,9 +35,9 @@ export function usePairSelect(
     (selectedPair: string) => {
       let list: string[] = [];
       if (selectedPair !== activePair) {
-        recentPairs.includes(selectedPair.split("_").join(" / "))
+        recentPairs.includes(selectedPair.split("_").join("/"))
           ? (list = [...recentPairs])
-          : [...recentPairs, selectedPair];
+          : recentPairs.push(selectedPair);
 
         setExchanges({
           active: selectedPair,

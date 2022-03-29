@@ -25,7 +25,7 @@ export const PairSelect = ({ currentPair }: Props): JSX.Element => {
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.PairButtonRow>
           <Styled.PairButton onClick={onSelectPair}>
-            {activePair} <DownOutlined />
+            {activePair.split("_").join("/")} <DownOutlined />
           </Styled.PairButton>
         </Styled.PairButtonRow>
         <Row>

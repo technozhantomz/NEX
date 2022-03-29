@@ -20,5 +20,7 @@ export type FeeAmounts = {
 export type FeeParameter = [number, FeeAmounts];
 
 export type UseFeesResult = {
+  feeParameters: FeeParameter[];
+  findOperationFee: (operationType: string) => FeeParameter | undefined;
   calculteTransferFee: (memo: string) => number | undefined;
 };

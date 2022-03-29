@@ -75,12 +75,15 @@ export function useFees(): UseFeesResult {
     },
     [feeParameters, findOperationFee, account]
   );
+
   useEffect(() => {
     getFeesFromGlobal();
     setAccount();
   }, [localStorageAccount, dbApi]);
 
   return {
+    feeParameters,
+    findOperationFee,
     calculteTransferFee,
   };
 }

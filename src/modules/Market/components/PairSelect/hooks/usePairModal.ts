@@ -17,7 +17,7 @@ export function usePairModal(recentPairs: string[]): PairModal {
     const quote = pairModalForm.getFieldValue("quote");
     const base = pairModalForm.getFieldValue("base");
     if (recentPairs[0] && !quote && !base) {
-      const recentPair = recentPairs[0].split(" / ");
+      const recentPair = recentPairs[0].split("/");
       pairModalForm.setFieldsValue({ quote: recentPair[0] });
       pairModalForm.setFieldsValue({ base: recentPair[1] });
     } else if (assets.length > 1 && !quote && !base) {
