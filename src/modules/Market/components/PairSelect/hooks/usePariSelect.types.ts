@@ -9,4 +9,5 @@ export type UsePairSelectResult = {
   handleSelectPair: (selectedPair: string) => void;
   onSelectPair: () => void;
   onCancel: () => void;
+  onFormFinish: (name: string, info: { values: any; forms: any }) => void;
 };

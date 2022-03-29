@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
 import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
@@ -7,7 +8,9 @@ import { Exchanges } from "../../../../../common/types/Exchanges";
 
 import { UsePairSelectResult } from "./usePariSelect.types";
 
-export function usePairSelect(): UsePairSelectResult {
+export function usePairSelect(
+  currentPair: string | undefined
+): UsePairSelectResult {
   const { exchanges, setExchanges } = useSettingsContext();
   // Active pair example: BTC_TEST
   const [activePair, setActivePair] = useState<string>(exchanges.active);
@@ -17,6 +20,7 @@ export function usePairSelect(): UsePairSelectResult {
   const [currentBase, setCurrentBase] = useState<Asset>();
   const [currentQuote, setCurrentQuote] = useState<Asset>();
   const [visible, setVisible] = useState<boolean>(false);
+  const router = useRouter();
 
   const getPairData = useCallback(
     async (assets: string[]) => {
@@ -44,6 +48,18 @@ export function usePairSelect(): UsePairSelectResult {
     [recentPairs, setExchanges]
   );
 
+  const onFormFinish = (name: string, info: { values: any; forms: any }) => {
+    console.log(currentPair);
+    const { values, forms } = info;
+    const { pairModal } = forms;
+    if (name === "pairModal") {
+      pairModal.validateFields().then(() => {
+        setVisible(false);
+        router.push(`/market/${values.quote}_${values.base}`);
+      });
+    }
+  };
+
   const onSelectPair = () => {
     setVisible(true);
   };
@@ -53,10 +69,12 @@ export function usePairSelect(): UsePairSelectResult {
   };
 
   useEffect(() => {
+    if (currentPair && currentPair !== activePair) handleSelectPair(currentPair as string);
     setActivePair(exchanges.active);
     setRecentPairs(exchanges.list);
     getPairData(exchanges.active.split("_"));
-  }, [exchanges, setActivePair, setRecentPairs, getPairData]);
+  }, [currentPair, exchanges, setActivePair, setRecentPairs, getPairData]);
+
   return {
     visible,
     activePair,
@@ -66,5 +84,6 @@ export function usePairSelect(): UsePairSelectResult {
     handleSelectPair,
     onSelectPair,
     onCancel,
+    onFormFinish,
   };
 }

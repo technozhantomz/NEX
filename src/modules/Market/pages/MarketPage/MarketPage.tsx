@@ -26,7 +26,7 @@ const MarketPage: NextPage = () => {
         <Row>
           <Col span={7}>
             <Styled.ColumnFlex>
-              <PairSelect />
+              <PairSelect currentPair={pair as string} />
               <OrderTabs />
             </Styled.ColumnFlex>
           </Col>

@@ -5,20 +5,24 @@ import { usePairModal } from "./hooks";
 
 type Props = {
   visible: boolean;
+  recentPairs: string[];
   onCancel: () => void;
 };
 
 const { Option } = Select;
 
-export const PairModal = ({ visible, onCancel }: Props): JSX.Element => {
+export const PairModal = ({
+  visible,
+  recentPairs,
+  onCancel,
+}: Props): JSX.Element => {
   const {
     pairModalForm,
     assets,
-    recentPairs,
     formValdation,
     useResetFormOnCloseModal,
-    updatePair,
-  } = usePairModal();
+    onSeletRecent,
+  } = usePairModal(recentPairs);
 
   useResetFormOnCloseModal(pairModalForm, visible);
 
@@ -29,45 +33,35 @@ export const PairModal = ({ visible, onCancel }: Props): JSX.Element => {
       centered={true}
       onOk={pairModalForm.submit}
       onCancel={onCancel}
-      //   footer={null}
     >
-      <Styled.PairModalForm
-        form={pairModalForm}
-        name="pairModal"
-        size="large"
-        onFinish={updatePair}
-      >
+      <Styled.PairModalForm form={pairModalForm} name="pairModal" size="large">
         <Form.Item
           name="quote"
           validateFirst={true}
           rules={formValdation.quote}
         >
-          <Select defaultValue={assets[0]}>
+          <Select>
             {assets.map((asset) => (
               <Option value={asset}>{asset}</Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item name="base" validateFirst={true} rules={formValdation.base}>
-          <Select defaultValue={assets[1]}>
+          <Select>
             {assets.map((asset) => (
               <Option value={asset}>{asset}</Option>
             ))}
           </Select>
         </Form.Item>
-        <p>Recent Pairs</p>
-        <Form.Item
-          name="recents"
-          validateFirst={true}
-          //rules={formValdation.recents}
-        >
-          <Select defaultValue={recentPairs[0]}>
-            {recentPairs.map((pair) => (
-              <Option value={pair}>{pair}</Option>
-            ))}
-          </Select>
-        </Form.Item>
       </Styled.PairModalForm>
+      <p>Recent Pairs</p>
+      <Form.Item name="recents">
+        <Select onSelect={onSeletRecent} defaultValue={recentPairs[0]}>
+          {recentPairs.map((pair) => (
+            <Option value={pair}>{pair}</Option>
+          ))}
+        </Select>
+      </Form.Item>
     </Styled.PairModal>
   );
 };

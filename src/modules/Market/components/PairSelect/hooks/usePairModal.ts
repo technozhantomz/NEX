@@ -5,10 +5,8 @@ import { usePeerplaysApiContext } from "../../../../../common/components";
 import { Form, FormInstance } from "../../../../../ui/src";
 
 import { PairForm, PairModal } from "./usePairModal.types";
-import { usePairSelect } from "./usePairSelect";
 
-export function usePairModal(): PairModal {
-  const { recentPairs } = usePairSelect();
+export function usePairModal(recentPairs: string[]): PairModal {
   const [pairModalForm] = Form.useForm();
   const [assets, setAssets] = useState<string[]>([]);
   const { dbApi } = usePeerplaysApiContext();
@@ -16,10 +14,15 @@ export function usePairModal(): PairModal {
 
   useEffect(() => {
     getAssets();
-    if (recentPairs[0].length > 0) {
+    const quote = pairModalForm.getFieldValue("quote");
+    const base = pairModalForm.getFieldValue("base");
+    if (recentPairs[0] && !quote && !base) {
       const recentPair = recentPairs[0].split(" / ");
       pairModalForm.setFieldsValue({ quote: recentPair[0] });
       pairModalForm.setFieldsValue({ base: recentPair[1] });
+    } else if (assets.length > 1 && !quote && !base) {
+      pairModalForm.setFieldsValue({ quote: assets[0] });
+      pairModalForm.setFieldsValue({ base: assets[1] });
     }
   }, [assets, recentPairs]);
 
@@ -46,16 +49,16 @@ export function usePairModal(): PairModal {
     setAssets(assetList);
   };
 
-  const updatePair = (values: any) => {
-    console.log(values);
-    router.push(`/market/${values.quote}_${values.price}`);
+  const updatePair = (values: PairForm) => {
+    pairModalForm.validateFields().then(() => {
+      router.push(`/market/${values.quote}_${values.base}`);
+    });
   };
 
-  const validateRecents = (_: unknown, value: string) => {
+  const onSeletRecent = (value: string) => {
     const pair = value.split("/");
     pairModalForm.setFieldsValue({ quote: pair[0] });
     pairModalForm.setFieldsValue({ base: pair[1] });
-    return Promise.resolve();
   };
 
   const validateQuote = (_: unknown, value: string) => {
@@ -75,15 +78,14 @@ export function usePairModal(): PairModal {
   const formValdation = {
     quote: [{ validator: validateQuote }],
     base: [{ validator: validateBase }],
-    recents: [{ validator: validateRecents }],
   };
 
   return {
     pairModalForm,
     formValdation,
     assets,
-    recentPairs,
     useResetFormOnCloseModal,
     updatePair,
+    onSeletRecent,
   };
 }
