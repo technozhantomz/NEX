@@ -2,7 +2,10 @@ import React from "react";
 
 import * as Styled from "./VoteForm.styled";
 
-export const VoteForm = (props: { tab: string }): JSX.Element => {
+export const VoteForm = (props: {
+  tab: string;
+  account: string;
+}): JSX.Element => {
   return (
     <>
       <Styled.Title>Vote for {props.tab}</Styled.Title>
