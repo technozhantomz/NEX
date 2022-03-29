@@ -53,7 +53,7 @@ export function useGenerateBitcoinAddress(
   const generateBitcoinAddresses = useCallback(
     async (password: string) => {
       const sonNetworkStatus = await getSonNetworkStatus();
-      console.log(sonNetworkStatus);
+
       if (!sonNetworkStatus.isSonNetworkOk) {
         setVisible(false);
         setStatus("SONs network is not available now. Please try again later!");

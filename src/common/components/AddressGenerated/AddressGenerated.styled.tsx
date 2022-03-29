@@ -1,5 +1,5 @@
 import { Input, styled } from "../../../ui/src";
-import { breakpoints } from "../../../ui/src/breakpoints";
+import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 
 export const DepositHeader = styled.p`
@@ -27,10 +27,6 @@ export const DisclaimerFooter = styled.p`
   font: normal normal normal 14px/20px Inter;
   letter-spacing: 0px;
   opacity: 1;
-
-  ${breakpoints.sm} {
-    font-size: 0.4em;
-  }
 `;
 
 export const GeneratedBitcoinAddress = styled(Input)`
@@ -44,7 +40,7 @@ export const GeneratedBitcoinAddress = styled(Input)`
   text-align: left;
   padding: 10px;
 
-  @media (max-width: 500px) {
+  ${breakpoint.sm} {
     width: 100%;
   }
 `;
@@ -59,7 +55,7 @@ export const InfoBox = styled.div`
     margin-right: 20px;
     margin-left: 20px;
 
-    ${breakpoints.sm} {
+    ${breakpoint.sm} {
       margin-right: 5px;
       margin-left: 5px;
     }

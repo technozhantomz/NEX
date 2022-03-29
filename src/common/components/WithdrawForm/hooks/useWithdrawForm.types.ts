@@ -1,15 +1,19 @@
 import { FormInstance, Rule } from "../../../../ui/src";
 
-export type WithdrawForm = {
+export type UseWithdrawFormResult = {
   status: string;
+  //loggedIn: boolean;
   visible: boolean;
   feeAmount: number;
   formValdation: FormValidation;
-  withdrawForm: FormInstance<TransferFormData>;
+  withdrawForm: FormInstance<WithdrawForm>;
   onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   onCancel: () => void;
   confirm: () => void;
   handleValuesChange: (changedValues: any) => void;
+  // change unknown
+  handleAssetChange: (value: unknown) => void;
+  selectedAsset: string;
 };
 
 export type FormField = {
@@ -26,7 +30,8 @@ export type FormValidation = {
   withdrawPublicKey: Rule[];
 };
 
-export type TransferFormData = {
+export type WithdrawForm = {
+  //asset: string;
   from: string;
   amount: number;
   withdrawAddress: string;

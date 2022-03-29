@@ -9,8 +9,10 @@ export const TopBar = (): JSX.Element => {
   return (
     <Styled.TopBar className="top-bar">
       <div className={"topbar-left"}>
-        <Link href={"/"} passHref>
-          <Logo className={"logo"} />
+        <Link href="/" passHref>
+          <a>
+            <Logo className={"logo"} />
+          </a>
         </Link>
         <p className="dex-logo">DEX</p>
       </div>

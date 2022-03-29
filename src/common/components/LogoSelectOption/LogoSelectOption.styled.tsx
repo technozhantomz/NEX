@@ -6,17 +6,16 @@ export const SelectOptionContainer = styled(Option)`
   font-size: 20px;
 `;
 
-export const OptionsDiv = styled.div`
+export const OptionDiv = styled.div`
   display: flex;
   justify-content: flex-start;
   width: 10px;
   font-size:20px;
-
 }
 `;
 
-export const IconDiv = styled.div`
+export const IconContainer = styled.div`
   margin-right: 10px;
 `;
 
-export const NamePara = styled.p``;
+export const AssetName = styled.p``;

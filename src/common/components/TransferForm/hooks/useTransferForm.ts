@@ -13,9 +13,9 @@ import {
 import { Account } from "../../../types";
 import { useUserContext } from "../../UserProvider";
 
-import { TransferForm } from "./useTransferForm.types";
+import { UseTransferFormResult } from "./useTransferForm.types";
 
-export function useTransferForm(): TransferForm {
+export function useTransferForm(): UseTransferFormResult {
   const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
