@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import { Form } from "../../../../ui/src";
@@ -15,11 +15,12 @@ import {
 import { Account } from "../../../types";
 import { useUserContext } from "../../UserProvider";
 
-import { WithdrawForm } from "./useWithdrawForm.types";
+import { UseWithdrawFormResult } from "./useWithdrawForm.types";
 
-export function useWithdrawForm(selectedAsset: string): WithdrawForm {
+export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
+  const [selectedAsset, setSelectedAsset] = useState<string>(asset);
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const { getSonNetworkStatus, sonAccount } = useSonNetwork();
   const {
@@ -52,14 +53,24 @@ export function useWithdrawForm(selectedAsset: string): WithdrawForm {
     if (
       selectedAsset === "BTC" &&
       !loadingSidechainAccounts &&
-      bitcoinSidechainAccount
+      bitcoinSidechainAccount &&
+      hasBTCDepositAddress
     ) {
       withdrawForm.setFieldsValue({
         withdrawAddress: bitcoinSidechainAccount?.withdraw_address,
         withdrawPublicKey: bitcoinSidechainAccount?.withdraw_public_key,
       });
+    } else {
+      withdrawForm.setFieldsValue({
+        withdrawAddress: "",
+      });
     }
-  }, [loadingSidechainAccounts, sidechainAccounts, bitcoinSidechainAccount]);
+  }, [
+    loadingSidechainAccounts,
+    sidechainAccounts,
+    bitcoinSidechainAccount,
+    selectedAsset,
+  ]);
 
   const onCancel = () => {
     setVisible(false);
@@ -102,6 +113,13 @@ export function useWithdrawForm(selectedAsset: string): WithdrawForm {
       }
     }
   };
+
+  const handleAssetChange = useCallback(
+    (value: unknown) => {
+      setSelectedAsset(value as string);
+    },
+    [setSelectedAsset]
+  );
 
   const handleWithdraw = async (password: string) => {
     const values = withdrawForm.getFieldsValue();
@@ -194,6 +212,9 @@ export function useWithdrawForm(selectedAsset: string): WithdrawForm {
     const accountDefaultAsset = assets.find(
       (asset) => asset.symbol === defaultToken
     );
+    if (Number(value) <= 0) {
+      return Promise.reject(new Error("Amount should be greater than 0"));
+    }
     if (!accountAsset) {
       return Promise.reject(new Error("Balance is not enough"));
     }
@@ -265,7 +286,7 @@ export function useWithdrawForm(selectedAsset: string): WithdrawForm {
       { validator: validateFrom },
     ],
     amount: [
-      { required: true, message: "Quantity is required" },
+      { required: true, message: "Amount is required" },
       { validator: validateAmount },
     ],
     withdrawAddress: [
@@ -285,8 +306,11 @@ export function useWithdrawForm(selectedAsset: string): WithdrawForm {
     withdrawForm,
     formValdation,
     confirm,
+    //loggedIn: localStorageAccount !== null && localStorageAccount !== "",
     onCancel,
     onFormFinish,
     handleValuesChange,
+    selectedAsset,
+    handleAssetChange,
   };
 }

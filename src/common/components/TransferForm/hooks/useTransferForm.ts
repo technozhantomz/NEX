@@ -13,9 +13,9 @@ import {
 import { Account } from "../../../types";
 import { useUserContext } from "../../UserProvider";
 
-import { TransferForm } from "./useTransferForm.types";
+import { UseTransferFormResult } from "./useTransferForm.types";
 
-export function useTransferForm(): TransferForm {
+export function useTransferForm(): UseTransferFormResult {
   const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
@@ -152,6 +152,9 @@ export function useTransferForm(): TransferForm {
     const selectedAccountAsset = assets.find(
       (asset) => asset.symbol === selectedAsset
     );
+    if (Number(value) <= 0) {
+      return Promise.reject(new Error("Amount should be greater than 0"));
+    }
     if (!selectedAccountAsset) {
       return Promise.reject(new Error("Balance is not enough"));
     }

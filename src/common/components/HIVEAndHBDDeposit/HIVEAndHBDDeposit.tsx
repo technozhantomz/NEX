@@ -17,13 +17,13 @@ export const HIVEAndHBDDeposit = ({
         <Styled.LogoContainer>
           <HIVEIcon width="20px" height="20px" />
         </Styled.LogoContainer>
-        <span>
+        <Styled.DepositInstruction>
           {`To deposit ${assetSymbol} to `}
           <Styled.AccountContainer>{`${localStorageAccount} `}</Styled.AccountContainer>
           please send your funds to son-account on the Hive blockchain with the
           memo
           <Styled.AccountContainer>{` ${localStorageAccount}`}</Styled.AccountContainer>
-        </span>
+        </Styled.DepositInstruction>
       </Styled.Container>
     </>
   );
