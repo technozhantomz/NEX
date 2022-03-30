@@ -90,7 +90,7 @@ export function useGenerateBitcoinAddress(
       if (trxResult) {
         setTimeout(async () => {
           await getSidechainAccounts(id);
-        }, 1000);
+        }, 2000);
         setVisible(false);
       }
     },

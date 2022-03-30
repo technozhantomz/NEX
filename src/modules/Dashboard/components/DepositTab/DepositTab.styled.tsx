@@ -1,5 +1,6 @@
 import { LogoSelectOption } from "../../../../common/components";
 import { styled } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
 export const LogoSelect = styled(LogoSelectOption)`
@@ -8,10 +9,12 @@ export const LogoSelect = styled(LogoSelectOption)`
   border: 1px solid ${colors.borderColorBase};
   border-radius: 4px;
   opacity: 1;
-  width: 100%;
-  .ant-select-selection-item {
-    height: 45px;
-    margin-top: 15px;
+  max-width: 95%;
+  display: flex;
+  align-items: center;
+  margin: 25px 20px;
+  ${breakpoint.sm} {
+    margin: 35px 30px;
   }
 `;
 
@@ -30,5 +33,19 @@ export const DepositFormContainer = styled.div`
     .ant-input {
       height: 62px;
     }
+  }
+`;
+
+export const AddressGeneratedContainer = styled.div`
+  margin: 25px 20px;
+  ${breakpoint.sm} {
+    margin: 35px 30px;
+  }
+`;
+
+export const HIVEDepositContainer = styled.div`
+  margin: 25px 20px;
+  ${breakpoint.sm} {
+    margin: 35px 30px;
   }
 `;

@@ -55,7 +55,7 @@ export const WithdrawForm = ({
               name="amount"
               validateFirst={true}
               rules={formValdation.amount}
-              validateTrigger="onBlur"
+              validateTrigger="onChange"
             >
               <Input
                 placeholder="0.00000"
@@ -71,7 +71,11 @@ export const WithdrawForm = ({
                 }
               />
             </Styled.WithdrawFormAssetAmount>
-            <p className="label">Withdraw Address</p>
+            {selectedAsset === "BTC" ? (
+              <p className="label">Withdraw Public key & Address</p>
+            ) : (
+              <p className="label">Hive blockchain account</p>
+            )}
           </>
         ) : (
           ""
@@ -92,7 +96,13 @@ export const WithdrawForm = ({
           validateFirst={true}
           rules={formValdation.withdrawAddress}
         >
-          <Input placeholder="Withdraw address" />
+          <Input
+            placeholder={
+              selectedAsset === "BTC"
+                ? "Withdraw address"
+                : "Hive blockchain account"
+            }
+          />
         </Form.Item>
         {!withAssetSelector ? (
           <Form.Item

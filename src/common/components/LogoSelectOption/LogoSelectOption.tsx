@@ -19,8 +19,9 @@ type LogoSelectionProps = {
       ) => void)
     | undefined;
   labelInValue?: boolean;
-  defaultValue?: string;
+  defaultValue: string;
   assets: Asset[];
+  className?: string;
 };
 
 export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
@@ -38,15 +39,33 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
       onChange={props.onChange}
       defaultValue={props.defaultValue}
       bordered={false}
+      className={props.className}
     >
-      {props.assets.map((asset) => (
-        <Styled.SelectOptionContainer value={asset.symbol}>
-          <Styled.OptionDiv>
-            <Styled.IconContainer>{icons[asset.symbol]}</Styled.IconContainer>
-            <Styled.AssetName>{asset.symbol}</Styled.AssetName>
-          </Styled.OptionDiv>
-        </Styled.SelectOptionContainer>
-      ))}
+      <Styled.SelectOptionContainer
+        value={props.defaultValue}
+        label={props.defaultValue}
+      >
+        <Styled.OptionDiv>
+          <Styled.IconContainer>
+            {icons[props.defaultValue]}
+          </Styled.IconContainer>
+          <Styled.AssetName>{props.defaultValue}</Styled.AssetName>
+        </Styled.OptionDiv>
+      </Styled.SelectOptionContainer>
+      {props.assets
+        .filter((asset) => asset.symbol !== props.defaultValue)
+        .map((asset) => (
+          <Styled.SelectOptionContainer
+            key={asset.symbol}
+            value={asset.symbol}
+            label={asset.symbol}
+          >
+            <Styled.OptionDiv>
+              <Styled.IconContainer>{icons[asset.symbol]}</Styled.IconContainer>
+              <Styled.AssetName>{asset.symbol}</Styled.AssetName>
+            </Styled.OptionDiv>
+          </Styled.SelectOptionContainer>
+        ))}
     </Styled.SelectContainer>
   );
 };

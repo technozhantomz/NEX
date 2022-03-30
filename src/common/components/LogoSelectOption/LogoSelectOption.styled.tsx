@@ -9,7 +9,6 @@ export const SelectOptionContainer = styled(Option)`
 export const OptionDiv = styled.div`
   display: flex;
   justify-content: flex-start;
-  width: 10px;
   font-size:20px;
 }
 `;

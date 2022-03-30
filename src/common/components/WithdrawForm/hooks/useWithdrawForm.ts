@@ -53,7 +53,8 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     if (
       selectedAsset === "BTC" &&
       !loadingSidechainAccounts &&
-      bitcoinSidechainAccount
+      bitcoinSidechainAccount &&
+      hasBTCDepositAddress
     ) {
       withdrawForm.setFieldsValue({
         withdrawAddress: bitcoinSidechainAccount?.withdraw_address,
@@ -211,6 +212,9 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     const accountDefaultAsset = assets.find(
       (asset) => asset.symbol === defaultToken
     );
+    if (Number(value) <= 0) {
+      return Promise.reject(new Error("Amount should be greater than 0"));
+    }
     if (!accountAsset) {
       return Promise.reject(new Error("Balance is not enough"));
     }
@@ -282,7 +286,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       { validator: validateFrom },
     ],
     amount: [
-      { required: true, message: "Quantity is required" },
+      { required: true, message: "Amount is required" },
       { validator: validateAmount },
     ],
     withdrawAddress: [

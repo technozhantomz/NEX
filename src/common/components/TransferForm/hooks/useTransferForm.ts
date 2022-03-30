@@ -152,6 +152,9 @@ export function useTransferForm(): UseTransferFormResult {
     const selectedAccountAsset = assets.find(
       (asset) => asset.symbol === selectedAsset
     );
+    if (Number(value) <= 0) {
+      return Promise.reject(new Error("Amount should be greater than 0"));
+    }
     if (!selectedAccountAsset) {
       return Promise.reject(new Error("Balance is not enough"));
     }
