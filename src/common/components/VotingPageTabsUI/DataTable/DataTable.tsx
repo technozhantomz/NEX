@@ -52,13 +52,24 @@ export const DataTable = ({ approved }: Props): JSX.Element => {
     },
   ];
 
+  const tableHeader = (
+    <Styled.TableTitle strong>
+      {approved ? `Approved by roger104` : `Not approved by roger104`}
+      {approved ? <Styled.Check /> : <Styled.Xmark />}
+    </Styled.TableTitle>
+  )
+
   return (
     <Styled.ActionFormTabCard>
-      <Styled.TableTitle strong>
-        {approved ? `Approved by roger104` : `Not approved by roger104`}
-        {approved ? <Styled.Check /> : <Styled.Xmark />}
-      </Styled.TableTitle>
-      <Styled.Table columns={columns} dataSource={data} size="small" />
+      <Styled.Table
+        columns={columns}
+        dataSource={data}
+        size="small"
+        title={() =>
+          <Styled.TableTitle strong>
+            {approved ? `Approved by roger104` : `Not approved by roger104`}
+            {approved ? <Styled.Check /> : <Styled.Xmark />}
+          </Styled.TableTitle>} />
     </Styled.ActionFormTabCard>
   );
 };
