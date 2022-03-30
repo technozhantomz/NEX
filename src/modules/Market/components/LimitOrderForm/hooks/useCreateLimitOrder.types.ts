@@ -18,5 +18,4 @@ export type UseCreateLimitOrderResult = {
   onCancel: () => void;
   onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   confirm: () => void;
-  handleValuesChange: (changedValues: any) => void;
 };

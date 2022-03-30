@@ -20,7 +20,6 @@ export const LimitOrderForm = ({ isBuyOrder }: Props): JSX.Element => {
     userBalances,
     onCancel,
     confirm,
-    handleValuesChange,
     onFormFinish,
   } = useCreateLimitOrder({ isBuyOrder });
 
@@ -33,7 +32,6 @@ export const LimitOrderForm = ({ isBuyOrder }: Props): JSX.Element => {
             form={orderForm}
             name="orderForm"
             onFinish={confirm}
-            onValuesChange={handleValuesChange}
             size="large"
           >
             <Styled.FormItem name="price">
@@ -49,7 +47,7 @@ export const LimitOrderForm = ({ isBuyOrder }: Props): JSX.Element => {
                 type="number"
               />
             </Styled.FormItem>
-            <Styled.FormItem>
+            <Styled.FormItem name="quantity">
               <Styled.InputNumber
                 prefix={
                   <InputPrefix
@@ -61,7 +59,7 @@ export const LimitOrderForm = ({ isBuyOrder }: Props): JSX.Element => {
                 type="number"
               />
             </Styled.FormItem>
-            <Styled.FormItem>
+            <Styled.FormItem name="total">
               <Styled.InputNumber
                 prefix={
                   <InputPrefix

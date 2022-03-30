@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 
 import { useUserContext } from "../../../../../common/components";
-import { useAccount, useAsset, useFees } from "../../../../../common/hooks";
+import {
+  useAccount,
+  useAsset,
+  useFees,
+  useTransactionBuilder,
+} from "../../../../../common/hooks";
 import { FeeParameter } from "../../../../../common/hooks/fees/useFees.types";
 import { Form } from "../../../../../ui/src";
 import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
@@ -23,9 +28,11 @@ export function useCreateLimitOrder({
   });
   const [orderForm] = Form.useForm();
   const { activePair } = usePairSelect();
-  const { defaultAsset, setPrecision } = useAsset();
+  const { defaultAsset, setPrecision, getAssetBySymbol } = useAsset();
+  const { getPrivateKey, formAccountBalancesByName } = useAccount();
   const { feeParameters, findOperationFee } = useFees();
-  const { localStorageAccount, assets } = useUserContext();
+  const { localStorageAccount, assets, id } = useUserContext();
+  const { trxBuilder } = useTransactionBuilder();
 
   useEffect(() => {
     if (feeParameters.length > 0) getFees();
@@ -71,12 +78,73 @@ export function useCreateLimitOrder({
   };
 
   const handleLimitOrder = async (password: string) => {
-    console.log(isBuyOrder);
-    console.log(password);
+    const values = orderForm.getFieldsValue();
+    let amount_to_sell, min_to_receive;
+    if (isBuyOrder) {
+      const sellAsset = await getAssetBySymbol(activePair.split("_")[1]);
+      const buyAsset = await getAssetBySymbol(activePair.split("_")[0]);
+      amount_to_sell = {
+        amount: values.quantity,
+        asset_id: sellAsset.id,
+      };
+
+      min_to_receive = {
+        amount: values.total,
+        asset_id: buyAsset.id,
+      };
+    } else {
+      const sellAsset = await getAssetBySymbol(activePair.split("_")[0]);
+      const buyAsset = await getAssetBySymbol(activePair.split("_")[1]);
+      amount_to_sell = {
+        amount: values.total,
+        asset_id: sellAsset.id,
+      };
+
+      min_to_receive = {
+        amount: values.quantity,
+        asset_id: buyAsset.id,
+      };
+    }
+    const expiration = new Date(
+      new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+    ).toISOString();
+    const activeKey = getPrivateKey(password, "active");
+    const trx = {
+      type: "limit_order_create",
+      params: {
+        fee: { amount: 0, asset_id: defaultAsset?.id },
+        seller: id,
+        amount_to_sell,
+        min_to_receive,
+        expiration,
+        fill_or_kill: false,
+        extensions: [],
+      },
+    };
+    let trxResult;
+
+    try {
+      trxResult = await trxBuilder([trx], [activeKey]);
+    } catch (e) {
+      console.log(e);
+    }
+    if (trxResult) {
+      formAccountBalancesByName(localStorageAccount);
+      setVisible(false);
+      resetForm();
+      //setStatus();
+    } else {
+      setVisible(false);
+      //setStatus();
+    }
   };
 
-  const handleValuesChange = (changedValues: any) => {
-    console.log(changedValues);
+  const resetForm = () => {
+    orderForm.setFieldsValue({
+      price: 0,
+      quantity: 0,
+      total: 0,
+    });
   };
 
   return {
@@ -87,7 +155,6 @@ export function useCreateLimitOrder({
     userBalances,
     onCancel,
     confirm,
-    handleValuesChange,
     onFormFinish,
   };
 }
