@@ -6,8 +6,8 @@ import { useOrderBook } from "./hooks/useOrderBook";
 
 export const OrderBook = (): JSX.Element => {
   const {
-    bids,
-    asks,
+    // bids,
+    // asks,
     orderType,
     threshold,
     ordersRows,
@@ -17,9 +17,9 @@ export const OrderBook = (): JSX.Element => {
   } = useOrderBook();
   const types: OrderType[] = ["total", "sell", "buy"];
 
-  console.log("this is bids", bids);
-  console.log("this is asks", asks);
-  console.log("this is selected", ordersRows);
+  // console.log("this is bids", bids);
+  // console.log("this is asks", asks);
+  // console.log("this is selected", ordersRows);
 
   const thresholdMenu = (
     <Styled.ThresholdMenu onClick={handleThresholdChange}>

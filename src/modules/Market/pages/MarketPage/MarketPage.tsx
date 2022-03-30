@@ -57,6 +57,7 @@ const MarketPage: NextPage = () => {
               </Col>
             </Row>
             <Row>
+              {/* <OrderTabs /> maybe use this with isUserOnly */}
               <Styled.Tabs>
                 <TabPane tab="My Open Orders" key="my-open-orders">
                   my orders here

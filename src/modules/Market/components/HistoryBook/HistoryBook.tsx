@@ -3,7 +3,7 @@ import { useHistory } from "./hooks/useHistory";
 
 export const HistoryBook = (): JSX.Element => {
   const { orderHistoryRow, columns } = useHistory();
-  console.log("this is history", orderHistoryRow);
+
   return (
     <>
       <Styled.TableContainer>
