@@ -1,5 +1,5 @@
-import { styled } from "../../../../../../ui/src";
-import { breakpoint } from "../../../../../../ui/src/breakpoints";
+import { styled } from "../../../ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const Card = styled.div`
   height: 100px;
