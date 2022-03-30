@@ -7,6 +7,7 @@ export { CardFrom, CardFormButton } from "./CardFrom";
 export { MenuCard } from "./MenuCard";
 export { Avatar } from "./Avatar";
 export { Typography, Text, Paragraph, Link } from "./Typography";
+export { StatsCardsDeck } from "./StatsCardDeck";
 
 export {
   Row,
@@ -17,6 +18,7 @@ export {
   Menu,
   Modal,
   Table,
+  Tag,
   Tooltip,
   Card,
   Checkbox,
@@ -26,6 +28,7 @@ export {
 } from "antd";
 
 export {
+  LinkOutlined,
   DollarOutlined,
   PoweroffOutlined,
   SettingOutlined,

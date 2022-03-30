@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Logo } from "../../../../ui/src/icons";
 
 import * as Styled from "./TopBar.styled";
@@ -7,8 +9,12 @@ export const TopBar = (): JSX.Element => {
   return (
     <Styled.TopBar className="top-bar">
       <div className={"topbar-left"}>
-        <Logo className={"logo"} />
-        <p className="dex-logo">DEX</p>
+        <Link href={`/`}>
+          <>
+            <Logo className={"logo"} />
+            <p className="dex-logo">DEX</p>
+          </>
+        </Link>
       </div>
       <div className={"topbar-right"}>
         <MainNavBar />
