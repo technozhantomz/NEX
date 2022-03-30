@@ -13,7 +13,7 @@ import { useWitnessesTab } from "./hooks";
 export const WitnessesTab = (): JSX.Element => {
   const { loading, witnesses, searchValue, onSearch } = useWitnessesTab();
   const { width } = useViewportContext();
-
+console.log(witnesses)
   return (
     <Styled.WitnessesTabWrapper>
       <Styled.StatsCardsDeck>
