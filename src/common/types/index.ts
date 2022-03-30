@@ -10,3 +10,4 @@ export * from "./MarketPairStats";
 export * from "./Transaction";
 export * from "./History";
 export * from "./BlockHeader";
+export * from "./Vote";

@@ -34,7 +34,8 @@ export const Form = styled(form)`
 export const FormItem = styled(form.Item)``;
 
 export const CardFormButton = styled(button)`
-  width: 185px;
+  max-width: 185px;
+  width: 100%;
   height: 45px;
   margin-left: 15px;
   background: ${colors.primaryColor};
