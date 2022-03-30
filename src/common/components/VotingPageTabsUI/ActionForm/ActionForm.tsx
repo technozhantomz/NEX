@@ -1,9 +1,6 @@
-import { Input } from "antd";
 import React from "react";
 
 import * as Styled from "./ActionForm.styled";
-
-const { Search } = Input;
 
 export const ActionForm = (): JSX.Element => {
   return (
@@ -11,8 +8,13 @@ export const ActionForm = (): JSX.Element => {
       <Styled.Row gutter={{ xs: 8, sm: 16, md: 24, lg: 12 }}>
         <Styled.Col xs={24} sm={4} md={6} lg={6}>
           <Styled.TitleDiv>
-            <Styled.Title>Vote for Witnesses</Styled.Title>
-            <Styled.DetailsTitle>See details here</Styled.DetailsTitle>
+            <Styled.Space direction="vertical">
+              <Styled.Title strong>Vote for witness</Styled.Title>
+              <Styled.Link>
+                <Styled.Info />
+                <Styled.DetailsLink>See details here</Styled.DetailsLink>
+              </Styled.Link>
+            </Styled.Space>
           </Styled.TitleDiv>
         </Styled.Col>
         <Styled.Col xs={24} sm={4} md={6} lg={12}>
@@ -22,7 +24,12 @@ export const ActionForm = (): JSX.Element => {
                 xs={{ span: 24, order: 1 }}
                 md={{ span: 14, order: 1 }}
               >
-                <Search placeholder="input search text" allowClear />
+                <Styled.FormItem>
+                  <Styled.SearchInput
+                    placeholder="Search accounts"
+                    allowClear
+                  />
+                </Styled.FormItem>
               </Styled.Col>
 
               <Styled.Col
@@ -38,7 +45,12 @@ export const ActionForm = (): JSX.Element => {
                 xs={{ span: 24, order: 4 }}
                 md={{ span: 14, order: 3 }}
               >
-                <Styled.DetailsTitle>Reset Changes</Styled.DetailsTitle>
+                <Styled.ResetBtnDiv>
+                  <Styled.Link>
+                    <Styled.Reset />
+                    <Styled.ResetLink>Reset Changes</Styled.ResetLink>
+                  </Styled.Link>
+                </Styled.ResetBtnDiv>
               </Styled.Col>
 
               <Styled.Col

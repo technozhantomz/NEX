@@ -6,7 +6,7 @@ export { DownOutlined } from "./DownOutlined";
 export { CardFrom, CardFormButton } from "./CardFrom";
 export { MenuCard } from "./MenuCard";
 export { Avatar } from "./Avatar";
-export { Typography, Text, Paragraph } from "./Typography";
+export { Typography, Text, Paragraph, Link } from "./Typography";
 
 export {
   Row,
