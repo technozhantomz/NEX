@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { useUserContext } from "../../../../../common/components";
 import {
+  roundNum,
   useAccount,
   useAsset,
   useFees,
@@ -9,6 +10,8 @@ import {
 } from "../../../../../common/hooks";
 import { FeeParameter } from "../../../../../common/hooks/fees/useFees.types";
 import { Form } from "../../../../../ui/src";
+import { useHistory } from "../../HistoryBook/hooks/useHistory";
+import { useOrderBook } from "../../OrderBook/hooks/useOrderBook";
 import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
 
 import {
@@ -33,6 +36,8 @@ export function useCreateLimitOrder({
   const { feeParameters, findOperationFee } = useFees();
   const { localStorageAccount, assets, id } = useUserContext();
   const { trxBuilder } = useTransactionBuilder();
+  const { refreshOrderBook } = useOrderBook();
+  const { refreshHistory } = useHistory();
 
   useEffect(() => {
     if (feeParameters.length > 0) getFees();
@@ -84,24 +89,36 @@ export function useCreateLimitOrder({
       const sellAsset = await getAssetBySymbol(activePair.split("_")[1]);
       const buyAsset = await getAssetBySymbol(activePair.split("_")[0]);
       amount_to_sell = {
-        amount: values.quantity,
+        amount: roundNum(
+          values.quantity * 10 ** sellAsset.precision,
+          sellAsset.precision
+        ),
         asset_id: sellAsset.id,
       };
 
       min_to_receive = {
-        amount: values.total,
+        amount: roundNum(
+          values.total * 10 ** buyAsset.precision,
+          buyAsset.precision
+        ),
         asset_id: buyAsset.id,
       };
     } else {
       const sellAsset = await getAssetBySymbol(activePair.split("_")[0]);
       const buyAsset = await getAssetBySymbol(activePair.split("_")[1]);
       amount_to_sell = {
-        amount: values.total,
+        amount: roundNum(
+          values.total * 10 ** sellAsset.precision,
+          sellAsset.precision
+        ),
         asset_id: sellAsset.id,
       };
 
       min_to_receive = {
-        amount: values.quantity,
+        amount: roundNum(
+          values.quantity * 10 ** buyAsset.precision,
+          buyAsset.precision
+        ),
         asset_id: buyAsset.id,
       };
     }
@@ -132,9 +149,13 @@ export function useCreateLimitOrder({
       formAccountBalancesByName(localStorageAccount);
       setVisible(false);
       resetForm();
+      refreshOrderBook();
+      refreshHistory();
       //setStatus();
     } else {
       setVisible(false);
+      refreshOrderBook();
+      refreshHistory();
       //setStatus();
     }
   };

@@ -24,9 +24,10 @@ export const TradingPairCard = ({
     positiveTheme,
     negativeTheme,
   } = useTradingPairStyles(percentChange);
-  console.log(showChangeAndVolume);
+
   return (
     <Styled.Card
+      className="trading-card"
       onMouseEnter={handleMouseHover}
       onMouseLeave={handleMouseOut}
       theme={changeBackgroundColor ? positiveTheme : negativeTheme}

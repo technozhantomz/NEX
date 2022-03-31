@@ -1,8 +1,12 @@
 import * as Styled from "./HistoryBook.styled";
 import { useHistory } from "./hooks/useHistory";
 
-export const HistoryBook = (): JSX.Element => {
-  const { orderHistoryRow, columns } = useHistory();
+type Props = {
+  forUser?: boolean;
+};
+
+export const HistoryBook = ({ forUser = false }: Props): JSX.Element => {
+  const { orderHistoryRow, userOrderHistoryRow, columns } = useHistory();
 
   return (
     <>
@@ -11,7 +15,7 @@ export const HistoryBook = (): JSX.Element => {
           scroll={{ scrollToFirstRowOnChange: false, y: 600 }}
           pagination={false}
           columns={columns}
-          dataSource={orderHistoryRow}
+          dataSource={forUser ? userOrderHistoryRow : orderHistoryRow}
           bordered={false}
           rowClassName={(record) => {
             return record.isBuyOrder ? "buy" : "sell";

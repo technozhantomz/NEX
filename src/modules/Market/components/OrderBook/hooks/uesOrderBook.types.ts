@@ -2,8 +2,10 @@ export type UseOrderBookResult = {
   asks: Order[];
   bids: Order[];
   ordersRows: OrderRow[];
+  userOrdersRows: OrderRow[];
   orderType: OrderType;
   threshold: number;
+  refreshOrderBook: () => void;
   handleThresholdChange: (menuInfo: any) => void;
   handleFilterChange: (type: OrderType) => void;
   columns: OrderColumn[];

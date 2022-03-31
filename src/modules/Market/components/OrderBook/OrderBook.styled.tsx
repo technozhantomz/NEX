@@ -6,6 +6,9 @@ export const Flex = styled.div`
 export const Table = styled(UiTable)`
   .ant-table-tbody > tr > td {
     border-bottom: none;
+    font-size: 1em;
+    padding: 0;
+    text-align: center;
   }
   .ant-table-thead > tr > th {
     background: #fff;

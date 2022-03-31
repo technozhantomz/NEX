@@ -4,22 +4,21 @@ import * as Styled from "./OrderBook.styled";
 import { OrderType } from "./hooks/uesOrderBook.types";
 import { useOrderBook } from "./hooks/useOrderBook";
 
-export const OrderBook = (): JSX.Element => {
+type Props = {
+  forUser?: boolean;
+};
+
+export const OrderBook = ({ forUser = false }: Props): JSX.Element => {
   const {
-    // bids,
-    // asks,
     orderType,
     threshold,
     ordersRows,
+    userOrdersRows,
     handleThresholdChange,
     handleFilterChange,
     columns,
   } = useOrderBook();
   const types: OrderType[] = ["total", "sell", "buy"];
-
-  // console.log("this is bids", bids);
-  // console.log("this is asks", asks);
-  // console.log("this is selected", ordersRows);
 
   const thresholdMenu = (
     <Styled.ThresholdMenu onClick={handleThresholdChange}>
@@ -31,42 +30,46 @@ export const OrderBook = (): JSX.Element => {
 
   return (
     <>
-      <Styled.FilterContainer>
-        <Styled.Flex>
-          {types.map((type) => (
-            <Styled.OrdersFilter
-              key={type}
-              onClick={() => handleFilterChange(type)}
-              className={`order-filters__type--${type}${
-                type === orderType ? " active" : ""
-              }`}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </Styled.OrdersFilter>
-          ))}
-        </Styled.Flex>
-        <Styled.Flex>
-          <Styled.ThresholdDropdown overlay={thresholdMenu}>
-            <a
-              className="ant-dropdown-link"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Styled.ThresholdLabel>Threshold</Styled.ThresholdLabel>
-              <Styled.ThresholdValue>{threshold}</Styled.ThresholdValue>
-              <DownOutlined />
-            </a>
-          </Styled.ThresholdDropdown>
-        </Styled.Flex>
-      </Styled.FilterContainer>
+      {forUser ? (
+        ""
+      ) : (
+        <Styled.FilterContainer>
+          <Styled.Flex>
+            {types.map((type) => (
+              <Styled.OrdersFilter
+                key={type}
+                onClick={() => handleFilterChange(type)}
+                className={`order-filters__type--${type}${
+                  type === orderType ? " active" : ""
+                }`}
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </Styled.OrdersFilter>
+            ))}
+          </Styled.Flex>
+          <Styled.Flex>
+            <Styled.ThresholdDropdown overlay={thresholdMenu}>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Styled.ThresholdLabel>Threshold</Styled.ThresholdLabel>
+                <Styled.ThresholdValue>{threshold}</Styled.ThresholdValue>
+                <DownOutlined />
+              </a>
+            </Styled.ThresholdDropdown>
+          </Styled.Flex>
+        </Styled.FilterContainer>
+      )}
       <Styled.TableContainer>
         <Styled.Table
           scroll={{ scrollToFirstRowOnChange: false, y: 600 }}
           pagination={false}
           columns={columns}
-          dataSource={ordersRows}
+          dataSource={forUser ? userOrdersRows : ordersRows}
           rowClassName={(record) => {
             return record.isBuyOrder ? "buy" : "sell";
           }}

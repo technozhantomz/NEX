@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useUserContext } from "../../../../../common/components";
 import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
-import { useAsset, useFormDate } from "../../../../../common/hooks";
+import { useAsset } from "../../../../../common/hooks";
 import { roundNum } from "../../../../../common/hooks/useRoundNum";
 import { Asset } from "../../../../../common/types/Asset";
 import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
@@ -29,7 +29,7 @@ export function useOrderBook(): UseOrderBookResult {
   const { currentBase, currentQuote } = usePairSelect();
   const { localStorageAccount } = useUserContext();
   const { dbApi } = usePeerplaysApiContext();
-  const { getAssetById, setPrecision } = useAsset();
+  const { setPrecision } = useAsset();
 
   const handleFilterChange = useCallback(
     (type: OrderType) => {
@@ -47,8 +47,6 @@ export function useOrderBook(): UseOrderBookResult {
 
   const getOrderBook = useCallback(
     async (base: Asset, quote: Asset) => {
-      // console.log("this is base", base);
-      // console.log("this is quote", quote);
       const { asks, bids } = await dbApi("get_order_book", [
         base.symbol,
         quote.symbol,
@@ -70,52 +68,63 @@ export function useOrderBook(): UseOrderBookResult {
 
   const getUserOrderBook = useCallback(
     async (base: Asset, quote: Asset) => {
-      dbApi("get_full_accounts", [[localStorageAccount], false])
-        .then((e) =>
-          e[0][1].limit_orders.filter((e) => {
-            const prices = e.sell_price;
-            const orderAssets = [prices.base.asset_id, prices.quote.asset_id];
-            return (
-              orderAssets.includes(base.id) && orderAssets.includes(quote.id)
-            );
-          })
-        )
-        .then(async (orders) => {
-          if (!orders.length) return false;
-
-          const rows = await Promise.all(
-            orders.map(async (order) => {
-              console.log(order);
-              // const expiration = useFormDate(order.expiration);
-
-              // const baseAsset = await getAssetById(order.sell_price.base.asset_id);
-              // const quoteAsset = await getAssetById(order.sell_price.quote.asset_id);
-
-              // const orderVal = setPrecision(false, order.for_sale, );
-
-              // let price = 0,
-              //     base = 0,
-              //     quote = 0;
-
-              // if(base.id === baseAsset.id){
-              //     base = orderVal;
-              //     price = baseAsset.calculatePrice(quoteAsset);
-              //     quote = roundNum(base / price);
-              // } else {
-              //     quote = orderVal;
-              //     price = quoteAsset.calculatePrice(baseAsset);
-              //     base = roundNum(price * quote);
-              // }
-
-              // return { expiration, base, quote, price, action }
-            })
+      const baseAsset = base;
+      const quoteAsset = quote;
+      const rawOrders = await dbApi("get_full_accounts", [
+        [localStorageAccount],
+        false,
+      ]).then((e) =>
+        e[0][1].limit_orders.filter((e) => {
+          const prices = e.sell_price;
+          const orderAssets = [prices.base.asset_id, prices.quote.asset_id];
+          return (
+            orderAssets.includes(baseAsset.id) &&
+            orderAssets.includes(quoteAsset.id)
           );
-          console.log(rows);
-          // return {rows, tableHead};
-        });
+        })
+      );
+      const rows = await Promise.all(
+        rawOrders.map((order) => {
+          const orderVal = setPrecision(
+            false,
+            order.for_sale,
+            baseAsset.precision
+          );
+          const sellBase = order.sell_price.base;
+          const sellQuote = order.sell_price.quote;
+          const key = order.id;
+
+          let price = 0,
+            base = 0,
+            quote = 0,
+            isBuyOrder = false;
+
+          if (baseAsset.id === sellBase.asset_id) {
+            base = orderVal;
+            price = setPrecision(false, sellBase.amount, baseAsset.precision);
+            quote = roundNum(base / price);
+            isBuyOrder = true;
+          } else {
+            quote = orderVal;
+            price = setPrecision(false, sellQuote.amount, quoteAsset.precision);
+            base = roundNum(price * quote);
+            isBuyOrder = false;
+          }
+
+          return { key, quote, base, price, isBuyOrder };
+        })
+      );
+      setUserOrdersRows(rows);
     },
-    [dbApi, setAsks, setBids]
+    [dbApi]
   );
+
+  const refreshOrderBook = useCallback(() => {
+    if (currentBase !== undefined && currentQuote !== undefined) {
+      getOrderBook(currentBase, currentQuote);
+      getUserOrderBook(currentBase, currentQuote);
+    }
+  }, [currentBase, currentQuote, getOrderBook, getUserOrderBook]);
 
   useEffect(() => {
     if (currentBase !== undefined && currentQuote !== undefined) {
@@ -139,7 +148,7 @@ export function useOrderBook(): UseOrderBookResult {
       getOrderBook(currentBase, currentQuote);
       getUserOrderBook(currentBase, currentQuote);
     }
-  }, [currentBase, currentQuote, getOrderBook]);
+  }, [currentBase, currentQuote, getOrderBook, getUserOrderBook]);
 
   useEffect(() => {
     let selectedOrders: Order[] = [];
@@ -191,6 +200,8 @@ export function useOrderBook(): UseOrderBookResult {
     orderType,
     threshold,
     ordersRows,
+    userOrdersRows,
+    refreshOrderBook,
     handleThresholdChange,
     handleFilterChange,
     columns,

@@ -6,7 +6,7 @@ export const Flex = styled.div`
 export const Table = styled(UiTable)`
   .ant-table-tbody > tr > td {
     border-bottom: none;
-    font-size: 0.7em;
+    font-size: 1em;
     padding: 0;
     text-align: center;
   }

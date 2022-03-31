@@ -7,9 +7,13 @@ import { usePairSelect, usePairStats } from "./hooks";
 
 type Props = {
   currentPair: string;
+  showStats?: boolean;
 };
 
-export const PairSelect = ({ currentPair }: Props): JSX.Element => {
+export const PairSelect = ({
+  currentPair,
+  showStats = true,
+}: Props): JSX.Element => {
   const {
     activePair,
     visible,
@@ -28,26 +32,30 @@ export const PairSelect = ({ currentPair }: Props): JSX.Element => {
             {activePair.split("_").join("/")} <DownOutlined />
           </Styled.PairButton>
         </Styled.PairButtonRow>
-        <Row>
-          <Col span={10}>
-            <Styled.ColumnFlex>
-              <span>{latest}</span>
-              <Styled.PairInfoLabel>Current price</Styled.PairInfoLabel>
-            </Styled.ColumnFlex>
-          </Col>
-          <Col span={7}>
-            <Styled.ColumnFlex>
-              <span>{change}%</span>
-              <Styled.PairInfoLabel>Change</Styled.PairInfoLabel>
-            </Styled.ColumnFlex>
-          </Col>
-          <Col span={7}>
-            <Styled.ColumnFlex>
-              <span>{volume}</span>
-              <Styled.PairInfoLabel>Volume</Styled.PairInfoLabel>
-            </Styled.ColumnFlex>
-          </Col>
-        </Row>
+        {showStats ? (
+          <Row>
+            <Col span={10}>
+              <Styled.ColumnFlex>
+                <span>{latest}</span>
+                <Styled.PairInfoLabel>Current price</Styled.PairInfoLabel>
+              </Styled.ColumnFlex>
+            </Col>
+            <Col span={7}>
+              <Styled.ColumnFlex>
+                <span>{change}%</span>
+                <Styled.PairInfoLabel>Change</Styled.PairInfoLabel>
+              </Styled.ColumnFlex>
+            </Col>
+            <Col span={7}>
+              <Styled.ColumnFlex>
+                <span>{volume}</span>
+                <Styled.PairInfoLabel>Volume</Styled.PairInfoLabel>
+              </Styled.ColumnFlex>
+            </Col>
+          </Row>
+        ) : (
+          ""
+        )}
         <PairModal
           visible={visible}
           onCancel={onCancel}

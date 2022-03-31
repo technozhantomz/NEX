@@ -8,9 +8,13 @@ import { useCreateLimitOrder } from "./hooks/useCreateLimitOrder";
 
 type Props = {
   isBuyOrder: boolean;
+  showTitle?: boolean;
 };
 
-export const LimitOrderForm = ({ isBuyOrder }: Props): JSX.Element => {
+export const LimitOrderForm = ({
+  isBuyOrder,
+  showTitle = true,
+}: Props): JSX.Element => {
   const { defaultAsset } = useAsset();
   const {
     activePair,
@@ -27,7 +31,11 @@ export const LimitOrderForm = ({ isBuyOrder }: Props): JSX.Element => {
     <>
       <Styled.FormContainer>
         <Form.Provider onFormFinish={onFormFinish}>
-          <Styled.FormTitle>{isBuyOrder ? "BUY" : "SELL"}</Styled.FormTitle>
+          {showTitle ? (
+            <Styled.FormTitle>{isBuyOrder ? "BUY" : "SELL"}</Styled.FormTitle>
+          ) : (
+            ""
+          )}
           <Styled.Form
             form={orderForm}
             name="orderForm"
@@ -71,30 +79,32 @@ export const LimitOrderForm = ({ isBuyOrder }: Props): JSX.Element => {
                 type="number"
               />
             </Styled.FormItem>
-            <Styled.OrderInfo>
-              <Styled.OderInfoItem>
-                <span>Fees:</span>
-                <span>{`${feeAmount} ${
-                  defaultAsset ? defaultAsset.symbol : ""
-                }`}</span>
-              </Styled.OderInfoItem>
-              <Styled.OderInfoItem>
-                <span>Market Fee:</span>
-                <span>{`0 ${defaultAsset ? defaultAsset.symbol : ""}`}</span>
-              </Styled.OderInfoItem>
-              <Styled.OderInfoItem>
-                <span>Balance:</span>
-                <span>{`${
-                  isBuyOrder
-                    ? userBalances.buyBalance
-                    : userBalances.sellBalance
-                } ${
-                  isBuyOrder
-                    ? activePair.split("_")[1]
-                    : activePair.split("_")[0]
-                }`}</span>
-              </Styled.OderInfoItem>
-            </Styled.OrderInfo>
+            <Styled.FormItem>
+              <Styled.OrderInfo>
+                <Styled.OderInfoItem>
+                  <span>Fees:</span>
+                  <span>{`${feeAmount} ${
+                    defaultAsset ? defaultAsset.symbol : ""
+                  }`}</span>
+                </Styled.OderInfoItem>
+                <Styled.OderInfoItem>
+                  <span>Market Fee:</span>
+                  <span>{`0 ${defaultAsset ? defaultAsset.symbol : ""}`}</span>
+                </Styled.OderInfoItem>
+                <Styled.OderInfoItem>
+                  <span>Balance:</span>
+                  <span>{`${
+                    isBuyOrder
+                      ? userBalances.buyBalance
+                      : userBalances.sellBalance
+                  } ${
+                    isBuyOrder
+                      ? activePair.split("_")[1]
+                      : activePair.split("_")[0]
+                  }`}</span>
+                </Styled.OderInfoItem>
+              </Styled.OrderInfo>
+            </Styled.FormItem>
             <Styled.FormItem>
               <Styled.FormButton type="primary" htmlType="submit">
                 {`${isBuyOrder ? "Buy" : "Sell"} ${activePair.split("_")[1]}`}
