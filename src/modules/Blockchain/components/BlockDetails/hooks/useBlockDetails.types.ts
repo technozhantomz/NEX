@@ -1,6 +1,6 @@
 import { BlockTableRow } from "../../../types";
 
-export type BlockPage = {
-  blockData: BlockTableRow;
+export type UseBlockDetailsResult = {
+  blockDetails: BlockTableRow;
   loading: boolean;
 };

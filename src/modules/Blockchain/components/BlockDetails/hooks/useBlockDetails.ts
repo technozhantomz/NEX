@@ -3,10 +3,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useBlockchain } from "../../../../../common/hooks";
 import { BlockTableRow } from "../../../types";
 
-import { BlockPage } from "./useBlockPage.types";
+import { UseBlockDetailsResult } from "./useBlockDetails.types";
 
-export function useBlockPage(block: string): BlockPage {
-  const [blockData, setBlockData] = useState<BlockTableRow>({
+export function useBlockDetails(block: string): UseBlockDetailsResult {
+  const [blockDetails, setBlockDetails] = useState<BlockTableRow>({
     key: block,
     blockID: block,
     time: "",
@@ -16,12 +16,12 @@ export function useBlockPage(block: string): BlockPage {
   const [loading, setLoading] = useState<boolean>(true);
   const { getBlock } = useBlockchain();
 
-  const getBlockData = useCallback(async () => {
+  const getBlockDetails = useCallback(async () => {
     try {
       setLoading(true);
       const rawBlock = await getBlock(Number(block));
       if (rawBlock) {
-        setBlockData({
+        setBlockDetails({
           key: block,
           blockID: block,
           time: new Date(rawBlock.timestamp).toLocaleString(),
@@ -35,11 +35,11 @@ export function useBlockPage(block: string): BlockPage {
     } catch (e) {
       console.log(e);
     }
-  }, [block, setBlockData]);
+  }, [block, setBlockDetails]);
 
   useEffect(() => {
-    getBlockData();
+    getBlockDetails();
   }, [block]);
 
-  return { blockData, loading };
+  return { blockDetails, loading };
 }

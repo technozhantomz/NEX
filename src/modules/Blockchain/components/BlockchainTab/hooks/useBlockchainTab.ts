@@ -1,3 +1,5 @@
+import { ParsedUrlQuery } from "querystring";
+
 import { ChainStore } from "peerplaysjs-lib";
 import { useCallback, useEffect, useState } from "react";
 
@@ -27,7 +29,9 @@ const defaultData: BlockChainData = {
   },
 };
 
-export function useBlockchainTab(): UseBlockchainTabResult {
+export function useBlockchainTab(
+  routerQuery: ParsedUrlQuery
+): UseBlockchainTabResult {
   const [searchValue, setSearchValue] = useState<string>("");
   const [blockchainData, setBlockchainData] =
     useState<BlockChainData>(defaultData);
@@ -169,7 +173,7 @@ export function useBlockchainTab(): UseBlockchainTabResult {
     const intervalTime =
       blockchainData.avgTime > 0 ? blockchainData.avgTime * 1000 : 3000;
     setInterval(() => getBlockchainData(), intervalTime);
-  }, [defaultAsset, getBlockchainData]);
+  }, [defaultAsset, getBlockchainData, routerQuery]);
 
   return {
     loading,

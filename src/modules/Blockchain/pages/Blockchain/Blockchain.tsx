@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../../common/components";
 import { Tabs } from "../../../../ui/src";
-import { BlockchainTab } from "../../components";
+import { BlockchainTab, BlockDetails } from "../../components";
 
 import * as Styled from "./Blockchain.styled";
 
@@ -11,6 +11,7 @@ const { TabPane } = Tabs;
 
 const Blockchain: NextPage = () => {
   const router = useRouter();
+  const { blockNumber } = router.query;
   return (
     <Layout
       title="Blockchain"
@@ -26,7 +27,11 @@ const Blockchain: NextPage = () => {
           }}
         >
           <TabPane tab="Blockchain" key="blockchain">
-            <BlockchainTab />
+            {blockNumber ? (
+              <BlockDetails block={blockNumber as string} />
+            ) : (
+              <BlockchainTab routerQuery={router.query} />
+            )}
           </TabPane>
           <TabPane tab="Assets" key="assets"></TabPane>
           <TabPane tab="Witnesses" key="witnesses"></TabPane>

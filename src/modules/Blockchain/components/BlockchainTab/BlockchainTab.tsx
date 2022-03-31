@@ -1,12 +1,17 @@
+import { ParsedUrlQuery } from "querystring";
+
 import { StatsCard } from "../StatsCard";
 
 import * as Styled from "./BlockchainTab.styled";
 import { BlockTable } from "./components";
 import { useBlockchainTab } from "./hooks";
 
-export const BlockchainTab = (): JSX.Element => {
+type Props = {
+  routerQuery: ParsedUrlQuery;
+};
+export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
   const { loading, blockchainData, searchValue, searchResult, handleSearch } =
-    useBlockchainTab();
+    useBlockchainTab(routerQuery);
 
   return (
     <Styled.BlockTabWrapper>
