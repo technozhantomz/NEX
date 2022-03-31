@@ -6,6 +6,7 @@ export { DownOutlined } from "./DownOutlined";
 export { CardFrom, CardFormButton } from "./CardFrom";
 export { MenuCard } from "./MenuCard";
 export { Avatar } from "./Avatar";
+export { Tag } from "./Tag";
 
 export {
   Row,
@@ -35,6 +36,7 @@ export {
   CheckOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
+  SwapOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";
@@ -44,3 +46,5 @@ export type { FormInstance } from "antd";
 export type { Rule } from "antd/lib/form";
 
 export type { CheckboxChangeEvent } from "antd/lib/checkbox";
+
+export type { BaseOptionType, DefaultOptionType } from "antd/lib/select";

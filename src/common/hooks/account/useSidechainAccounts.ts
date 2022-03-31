@@ -33,16 +33,20 @@ export function useSidechainAccounts(): UseSidechainAccountsResult {
           const bitcoinSidechain = accounts.find(
             (account) => account.sidechain === "bitcoin"
           );
-          if (
-            bitcoinSidechain &&
-            bitcoinSidechain.deposit_address &&
-            bitcoinSidechain.deposit_address !== ""
-          ) {
+          if (bitcoinSidechain) {
             setBitcoinSidechainAccount(bitcoinSidechain);
-            setHasBTCDepositAddress(true);
-          }
-          if (bitcoinSidechain && bitcoinSidechain.withdraw_public_key !== "") {
-            setHasBTCWithdrawPublicKey(true);
+            if (
+              bitcoinSidechain.deposit_address &&
+              bitcoinSidechain.deposit_address !== ""
+            ) {
+              setHasBTCDepositAddress(true);
+            }
+            if (
+              bitcoinSidechain.withdraw_public_key &&
+              bitcoinSidechain.withdraw_public_key !== ""
+            ) {
+              setHasBTCWithdrawPublicKey(true);
+            }
           }
         }
         setLoadingSidechainAccounts(false);

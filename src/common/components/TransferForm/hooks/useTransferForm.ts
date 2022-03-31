@@ -13,9 +13,9 @@ import {
 import { Account } from "../../../types";
 import { useUserContext } from "../../UserProvider";
 
-import { ITransferForm } from "./useTransferForm.types";
+import { UseTransferFormResult } from "./useTransferForm.types";
 
-export function useTransferForm(): ITransferForm {
+export function useTransferForm(): UseTransferFormResult {
   const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
@@ -60,19 +60,19 @@ export function useTransferForm(): ITransferForm {
 
   const handleValuesChange = (changedValues: any) => {
     setStatus("");
-    if (changedValues.quantity) {
-      if (changedValues.quantity < 0) {
-        transferForm.setFieldsValue({ quantity: 0 });
+    if (changedValues.amount) {
+      if (changedValues.amount < 0) {
+        transferForm.setFieldsValue({ amount: 0 });
       } else {
         const selectedAsset = transferForm.getFieldValue("asset");
         const selectedAccountAsset = assets.find(
           (asset) => asset.symbol === selectedAsset
         );
 
-        if (selectedAccountAsset && changedValues.quantity > 0) {
+        if (selectedAccountAsset && changedValues.amount > 0) {
           transferForm.setFieldsValue({
-            quantity: roundNum(
-              changedValues.quantity,
+            amount: roundNum(
+              changedValues.amount,
               selectedAccountAsset.precision
             ),
           });
@@ -97,7 +97,7 @@ export function useTransferForm(): ITransferForm {
       values.memo,
       asset,
       password,
-      values.quantity
+      values.amount
     );
     let trxResult;
     try {
@@ -109,7 +109,7 @@ export function useTransferForm(): ITransferForm {
       formAccountBalancesByName(localStorageAccount);
       setVisible(false);
       setStatus(
-        `Successfully Transfered ${values.quantity} ${values.asset} to ${values.to}`
+        `Successfully Transfered ${values.amount} ${values.asset} to ${values.to}`
       );
       transferForm.resetFields();
     } else {
@@ -146,12 +146,15 @@ export function useTransferForm(): ITransferForm {
     return Promise.resolve();
   };
 
-  const validateQuantity = async (_: unknown, value: number) => {
+  const validateAmount = async (_: unknown, value: number) => {
     const selectedAsset = transferForm.getFieldValue("asset");
     const isDefaultAsset = selectedAsset === defaultToken;
     const selectedAccountAsset = assets.find(
       (asset) => asset.symbol === selectedAsset
     );
+    if (Number(value) <= 0) {
+      return Promise.reject(new Error("Amount should be greater than 0"));
+    }
     if (!selectedAccountAsset) {
       return Promise.reject(new Error("Balance is not enough"));
     }
@@ -200,9 +203,9 @@ export function useTransferForm(): ITransferForm {
       { required: true, message: "To is required" },
       { validator: validateTo },
     ],
-    quantity: [
-      { required: true, message: "Quantity is required" },
-      { validator: validateQuantity },
+    amount: [
+      { required: true, message: "Amount is required" },
+      { validator: validateAmount },
     ],
     asset: [{ required: true, message: "Asset is required" }],
     memo: [{ validator: validateMemo }],

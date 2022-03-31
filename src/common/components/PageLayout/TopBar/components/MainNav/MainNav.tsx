@@ -7,7 +7,6 @@ import {
 } from "../../../../../../ui/src";
 import {
   Blockchain,
-  Contacts,
   Dashboard,
   Market,
   Vote,
@@ -92,13 +91,6 @@ export const MainNav = (): JSX.Element => {
                 Href="/voting"
                 Icon={<Vote className={"menu-icon"} />}
                 Label="Voting"
-              />
-            </li>
-            <li>
-              <MenuItem
-                Href="/contacts"
-                Icon={<Contacts className={"menu-icon"} />}
-                Label="Contacts"
               />
             </li>
           </>

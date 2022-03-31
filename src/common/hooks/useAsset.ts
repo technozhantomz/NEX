@@ -57,7 +57,6 @@ export function useAsset(): UseAssetResult {
         const assets =
           cache.assets.length > 0 ? [...cache.assets, asset] : [asset];
         setCache({ created: cache.created, assets: assets } as Cache);
-
         return asset;
       } catch (e) {
         console.log(e);

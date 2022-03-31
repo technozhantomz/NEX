@@ -1,6 +1,7 @@
+import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
+import PPYIcon from "../../../../ui/src/icons/Cryptocurrencies/PPYIcon.svg";
+
 import * as Styled from "./InputPrefix.styled";
-import BitcoinIcon from "./icons/BitcoinIcon.svg";
-import PPYIcon from "./icons/PPYIcon.svg";
 
 type Props = {
   inputSymbol: string;

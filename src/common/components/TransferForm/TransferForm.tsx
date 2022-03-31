@@ -1,5 +1,4 @@
-import { Form, Input } from "antd";
-
+import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
 import { PasswordModal } from "../PasswordModal";
 import { useUserContext } from "../UserProvider";
@@ -56,12 +55,12 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
         </div>
         <div className="two-input-row">
           <Form.Item
-            name="quantity"
+            name="amount"
             validateFirst={true}
-            rules={formValdation.quantity}
+            rules={formValdation.amount}
             validateTrigger="onBlur"
           >
-            <Input placeholder="Quantity" type="number" />
+            <Input placeholder="Amount" type="number" />
           </Form.Item>
           <Form.Item
             name="asset"

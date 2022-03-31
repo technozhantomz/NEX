@@ -5,7 +5,13 @@ import { useAsset } from "..";
 import { defaultToken } from "../../../api/params";
 import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
 import { useUserContext } from "../../components/UserProvider";
-import { Account, Asset, FullAccount, UserKey } from "../../types";
+import {
+  Account,
+  Asset,
+  FullAccount,
+  UserKey,
+  WitnessAccount,
+} from "../../types";
 
 import { UseAccountResult } from "./useAccount.types";
 
@@ -167,6 +173,28 @@ export function useAccount(): UseAccountResult {
     []
   );
 
+  const getUserNameById = useCallback(
+    async (id: string): Promise<string> => {
+      const activeUser = await getAccountByName(localStorageAccount);
+      if (activeUser?.id === id) {
+        return activeUser?.name;
+      }
+
+      let userID = id;
+
+      if (id.includes("1.6.")) {
+        const witness: WitnessAccount = (
+          await dbApi("get_witnesses", [[id]])
+        )[0];
+        userID = witness.witness_account;
+      }
+
+      const user: Account = (await dbApi("get_accounts", [[userID]]))[0];
+      return user.name;
+    },
+    [dbApi]
+  );
+
   return {
     formAccountByName,
     loading,
@@ -177,5 +205,6 @@ export function useAccount(): UseAccountResult {
     formAccountAfterConfirmation,
     removeAccount,
     validateAccountPassword,
+    getUserNameById,
   };
 }
