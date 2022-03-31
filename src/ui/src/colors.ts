@@ -1,7 +1,6 @@
 export const colors = {
   primaryColor: `#0148BE`,
   additionalBlue: `#1084FF`,
-  fontSizeBase: `14px`,
   headingColor: `#212121`,
   textColor: `#212121`,
   textColorSecondary: `#6C6C6C`,
@@ -9,4 +8,5 @@ export const colors = {
   borderColorBase: `#C1C2C4`,
   errorColor: `#ff4d4f`,
   successTag: `#B8F4C9`,
+  assetTag: `#FDBA86`,
 };

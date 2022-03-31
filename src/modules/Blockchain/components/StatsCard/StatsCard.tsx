@@ -28,7 +28,7 @@ export const StatsCard = ({
     <Styled.StatsCard className={noData ? "no-data" : ""}>
       <Styled.StatsCardHeading>{title}</Styled.StatsCardHeading>
       <Styled.StatsCardValue>
-        {data}
+        {noData ? "No Data" : data}
         {isTimeCard && !noData ? <span> seconds</span> : ""}
       </Styled.StatsCardValue>
       <TinyArea {...config} />

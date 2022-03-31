@@ -94,8 +94,7 @@ export function useBlockchainTab(
           },
           activeWitnesses: blockData.active_witnesses,
           avgTime: Number(chainAvgTime.toFixed(0)),
-          recentBlocks:
-            searchValue === "" ? blockRows : blockchainData.recentBlocks,
+          recentBlocks: blockRows,
           stats: {
             blocks: updateStatsArray(
               blockchainData.stats.blocks,

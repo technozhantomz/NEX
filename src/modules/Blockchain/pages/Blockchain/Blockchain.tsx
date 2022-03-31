@@ -3,25 +3,28 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../../common/components";
 import { Tabs } from "../../../../ui/src";
-import { BlockchainTab, BlockDetails } from "../../components";
+import { AssetsTab, BlockchainTab, BlockDetails } from "../../components";
 
 import * as Styled from "./Blockchain.styled";
+import { useBlockchainPage } from "./hooks";
 
 const { TabPane } = Tabs;
 
 const Blockchain: NextPage = () => {
   const router = useRouter();
-  const { blockNumber } = router.query;
+  const { blockNumber, tab } = router.query;
+  const { pageMeta } = useBlockchainPage(tab as string);
   return (
     <Layout
-      title="Blockchain"
+      title={`${pageMeta.title}`}
       type="card-lrg"
-      heading="PeerPlays Blockchain"
-      description={`Blockchain | `}
+      heading={`${pageMeta.heading}`}
+      description={`${pageMeta.description}`}
       dexLayout={true}
     >
       <Styled.BlockchainCard>
         <Tabs
+          defaultActiveKey={`${tab ? tab : "blockchain"}`}
           onTabClick={(key) => {
             router.push(`/blockchain?tab=${key}`);
           }}
@@ -33,7 +36,9 @@ const Blockchain: NextPage = () => {
               <BlockchainTab routerQuery={router.query} />
             )}
           </TabPane>
-          <TabPane tab="Assets" key="assets"></TabPane>
+          <TabPane tab="Assets" key="assets">
+            <AssetsTab />
+          </TabPane>
           <TabPane tab="Witnesses" key="witnesses"></TabPane>
           <TabPane tab="Committe" key="committe"></TabPane>
           <TabPane tab="Fees" key="fees"></TabPane>

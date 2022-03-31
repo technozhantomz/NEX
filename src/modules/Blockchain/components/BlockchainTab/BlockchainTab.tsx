@@ -19,40 +19,26 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
         <StatsCard
           noData={blockchainData.currentBlock === 0}
           title="Current Block"
-          data={`${
-            blockchainData.currentBlock > 0
-              ? blockchainData.currentBlock
-              : "no data"
-          }`}
+          data={`${blockchainData.currentBlock}`}
           statsData={blockchainData.stats.blocks}
         />
         <StatsCard
           noData={blockchainData.supply.amount === 0}
           title={`Supply (${blockchainData.supply.symbol})`}
-          data={`${
-            blockchainData.supply.amount > 0
-              ? blockchainData.supply.amount
-              : "no data"
-          }`}
+          data={`${blockchainData.supply.amount}`}
           statsData={blockchainData.stats.supply}
         />
         <StatsCard
           noData={blockchainData.activeWitnesses.length === 0}
           title="Active Witness"
-          data={`${
-            blockchainData.activeWitnesses.length > 0
-              ? blockchainData.activeWitnesses.length
-              : "no data"
-          }`}
+          data={`${blockchainData.activeWitnesses.length}`}
           statsData={blockchainData.stats.witnesses}
         />
         <StatsCard
           isTimeCard={true}
           noData={blockchainData.avgTime === 0}
           title="Confimation Time"
-          data={`${
-            blockchainData.avgTime > 0 ? blockchainData.avgTime : "no data"
-          }`}
+          data={`${blockchainData.avgTime}`}
           statsData={blockchainData.stats.times}
         />
       </Styled.StatsCardsWrapper>

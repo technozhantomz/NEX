@@ -10,3 +10,4 @@ export * from "./Transaction";
 export * from "./Blockchain";
 export * from "./History";
 export * from "./BlockHeader";
+export * from "./PageMeta";
