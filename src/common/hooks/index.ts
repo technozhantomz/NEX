@@ -8,4 +8,5 @@ export * from "./transactions";
 export * from "./useFormKeys";
 export * from "./useMarketPairStats";
 export * from "./sonNetwork";
+export * from "./useBlockChain";
 export * from "./useCopyText";
