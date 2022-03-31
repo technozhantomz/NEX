@@ -1,105 +1,98 @@
 import { useEffect, useState } from "react";
 
+import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
 import { useAsset, useBlockchain } from "../../../../../common/hooks";
 
-import {
-  BlockChainData,
-  BlockTableRow,
-  UseBlockchainTab,
-} from "./useWitnessTab.types";
+import { WitnessData, WitnessesTab } from "./useWitnessTab.types";
 
-const defaultData = {
-  currentBlock: 0,
-  supply: {
-    amount: 0,
-    symbol: "",
-  },
-  activeWitnesses: [],
-  avgTime: 0,
-  recentBlocks: [],
-  stats: {
-    blocks: [],
-    supply: [],
-    witnesses: [],
-    times: [],
-  },
-};
-
-export function useWitnessTab(): UseBlockchainTab {
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [blockchainData, setBlockchainData] =
-    useState<BlockChainData>(defaultData);
-  const [searchResult, setSearchResult] = useState<BlockTableRow[]>();
+export function useWitnessTab(): WitnessesTab {
   const [loading, setLoading] = useState<boolean>(false);
-  const { defaultAsset } = useAsset();
-  const {
-    getChainData,
-    getBlockData,
-    getDynamic,
-    getRecentBlocks,
-    getAvgBlockTime,
-    getBlock,
-  } = useBlockchain();
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [witnesses, setWitnesses] = useState<WitnessData>({
+    // activeWitnesses: 0,
+    // reward: 0,
+    // earnings: 0,
+    data: [],
+    // stats: {
+    //   active: [],
+    //   reward: [],
+    //   earnings: [],
+    // },
+  });
+  const { dbApi } = usePeerplaysApiContext();
+  const { defaultAsset, formAssetBalanceById, setPrecision } = useAsset();
+  const { getChainData, getAvgBlockTime } = useBlockchain();
 
   useEffect(() => {
-    const intervalTime =
-      blockchainData.avgTime > 0 ? blockchainData.avgTime * 1000 : 3000;
-    setInterval(() => getBlockchainData(), intervalTime);
+    setInterval(() => getWitnessData(), 3000);
   }, [defaultAsset]);
 
-  const getBlockchainData = async () => {
-    //setLoading(true);
-    const recentBlocks = getRecentBlocks();
-    const chainData = await getChainData();
-    const blockData = await getBlockData();
-    const dynamic = await getDynamic();
-    const avgBlockTime = getAvgBlockTime();
-    try {
-      const blockRows = recentBlocks.map((block: any) => {
-        return {
-          key: block?.id.toString(),
-          blockID: block?.id.toString(),
-          time: block.timestamp.toLocaleTimeString(),
-          witness: block.witness_account_name,
-          transaction: block.transactions.length,
-        };
+  const getWitnessData = async () => {
+    if (defaultAsset) {
+      const witnessesID = await dbApi("lookup_witness_accounts", [
+        "",
+        100,
+      ]).then((e: any) => e);
+
+      const activeUsers = await dbApi("get_global_properties").then((e:any) => e);
+
+      const rawWitnesses = await dbApi("get_witnesses", [
+        witnessesID.map((item: any[]) => item[1]),
+      ]).then(async (e: any) => {
+        let allWitnesses = e.map(
+          async (
+            item: {
+              total_votes: any;
+              id: any;
+              last_confirmed_block_num: any;
+              total_missed: any;
+              url: any;
+            },
+            index: number
+          ) => {
+            const votesAsset = await formAssetBalanceById(
+              defaultAsset.id,
+              Number(item.total_votes)
+            );
+            return {
+              ...item,
+              name: witnessesID.filter(
+                (name: any[]) => name[1] === item.id
+              )[0][0],
+              totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+              url: item.url,
+            };
+          }
+        );
+
+        allWitnesses = await Promise.all(allWitnesses);
+
+        return allWitnesses.map((item: any) => ({
+          ...item,
+          active: activeUsers["active_witnesses"].indexOf(item.id) >= 0,
+        }));
       });
-      if (defaultAsset) {
-        setBlockchainData({
-          currentBlock: blockData.head_block_number,
-          supply: {
-            amount:
-              Number(dynamic.current_supply) / 10 ** defaultAsset.precision,
-            symbol: defaultAsset.symbol,
-          },
-          activeWitnesses: chainData.active_witnesses,
-          avgTime: Number(avgBlockTime.toFixed(0)),
-          recentBlocks: blockRows,
-          stats: {
-            blocks: updateStatsArray(
-              blockchainData.stats.blocks,
-              blockData.head_block_number
-            ),
-            supply: updateStatsArray(
-              blockchainData.stats.supply,
-              Number(dynamic.current_supply) / 10 ** defaultAsset.precision
-            ),
-            witnesses: updateStatsArray(
-              blockchainData.stats.witnesses,
-              chainData.active_witnesses.length
-            ),
-            times: updateStatsArray(
-              blockchainData.stats.times,
-              Number(avgBlockTime.toFixed(0))
-            ),
-          },
-        });
-      }
-      //setLoading(false);
-    } catch (e) {
-      console.log(e);
-      //setLoading(false);
+
+      setWitnesses({
+        // activeWitnesses: rawWitnesses.length,
+        // reward: rewardAmount,
+        // earnings: Number(earnings),
+        data: rawWitnesses,
+        // stats: {
+        //   active: updateStatsArray(witnesses.stats.active, rawWitnesses.length),
+        //   reward: updateStatsArray(witnesses.stats.reward, rewardAmount),
+        //   earnings: updateStatsArray(
+        //     witnesses.stats.earnings,
+        //     Number(earnings)
+        //   ),
+        // },
+      });
     }
+  };
+
+  const getDaysInThisMonth = () => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   };
 
   const updateStatsArray = (arr: number[], value: number) => {
@@ -112,35 +105,11 @@ export function useWitnessTab(): UseBlockchainTab {
     return arr;
   };
 
-  const onSearch = async (value: string) => {
+  const onSearch = async (name: string) => {
     setLoading(true);
-    setSearchValue(value);
-    const inRecents = blockchainData.recentBlocks.filter((block) =>
-      block.key.startsWith(value)
-    );
-    if (inRecents.length > 0) {
-      setSearchResult(undefined);
-      setLoading(false);
-    } else {
-      const block = await getBlock(Number(value));
-      setSearchResult([
-        {
-          key: value,
-          blockID: value,
-          time: new Date(block.timestamp).toLocaleTimeString(),
-          witness: block.witness_account_name,
-          transaction: block.transactions.length,
-        },
-      ]);
-      setLoading(false);
-    }
+    setSearchValue(name);
+    setLoading(false);
   };
 
-  return {
-    loading,
-    blockchainData,
-    searchValue,
-    searchResult,
-    onSearch,
-  };
+  return { loading, witnesses, searchValue, onSearch };
 }

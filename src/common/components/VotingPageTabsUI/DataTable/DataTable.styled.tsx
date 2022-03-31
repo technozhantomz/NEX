@@ -1,8 +1,4 @@
-import {
-  styled,
-  Table as table,
-  Text as text,
-} from "../../../../ui/src";
+import { styled, Table as table, Text as text } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 import { Check as check, Xmark as xmark } from "../../../../ui/src/icons";
 

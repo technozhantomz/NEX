@@ -5,14 +5,13 @@ import {
   ActionForm,
   DataTable,
 } from "../../../../common/components/VotingPageTabsUI";
-import { useWitnessTab } from "./hooks";
 
 import * as Styled from "./WitnessTab.styled";
+import { useWitnessTab } from "./hooks";
 
 export const WitnessTab = (): JSX.Element => {
-  const { loading, blockchainData, searchValue, searchResult, onSearch } =
-    useWitnessTab();
-  console.log(blockchainData);
+  const { loading, witnesses, searchValue, onSearch } = useWitnessTab();
+  console.log(witnesses.data);
   return (
     <Styled.WitnessTabCard>
       <ActionForm />

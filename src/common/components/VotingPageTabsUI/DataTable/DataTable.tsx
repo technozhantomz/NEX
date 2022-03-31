@@ -57,7 +57,7 @@ export const DataTable = ({ approved }: Props): JSX.Element => {
       {approved ? `Approved by roger104` : `Not approved by roger104`}
       {approved ? <Styled.Check /> : <Styled.Xmark />}
     </Styled.TableTitle>
-  )
+  );
 
   return (
     <Styled.ActionFormTabCard>
@@ -65,11 +65,13 @@ export const DataTable = ({ approved }: Props): JSX.Element => {
         columns={columns}
         dataSource={data}
         size="small"
-        title={() =>
+        title={() => (
           <Styled.TableTitle strong>
             {approved ? `Approved by roger104` : `Not approved by roger104`}
             {approved ? <Styled.Check /> : <Styled.Xmark />}
-          </Styled.TableTitle>} />
+          </Styled.TableTitle>
+        )}
+      />
     </Styled.ActionFormTabCard>
   );
 };

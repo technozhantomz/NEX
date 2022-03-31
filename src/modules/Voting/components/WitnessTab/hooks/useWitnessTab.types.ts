@@ -1,32 +1,30 @@
-export type UseBlockchainTab = {
+export type WitnessesTab = {
   loading: boolean;
-  blockchainData: BlockChainData;
+  witnesses: WitnessData;
   searchValue: string;
-  searchResult: BlockTableRow[] | undefined;
-  onSearch: (value: string) => void;
+  onSearch: (name: string) => void;
 };
 
-export type BlockTableRow = {
-  key: string;
-  blockID: string;
-  time: string;
-  witness: string;
-  transaction: number;
+export type WitnessData = {
+  // activeWitnesses: number;
+  // reward: number;
+  // earnings: number;
+  data: WitnessTableRow[];
+  // stats: WitnessStats;
 };
 
-export type BlockChainData = {
-  currentBlock: number;
-  supply: {
-    amount: number;
-    symbol: string;
-  };
-  activeWitnesses: string[];
-  avgTime: number;
-  recentBlocks: BlockTableRow[];
-  stats: {
-    blocks: number[];
-    supply: number[];
-    witnesses: number[];
-    times: number[];
-  };
+export type WitnessStats = {
+  active: number[];
+  reward: number[];
+  earnings: number[];
+};
+
+export type WitnessTableRow = {
+  key: number;
+  rank: number;
+  name: string;
+  totalVotes: string;
+  lastBlock: number;
+  missedBlocks: number;
+  url: string;
 };
