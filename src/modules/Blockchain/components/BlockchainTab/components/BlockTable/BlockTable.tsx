@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-import { BlockTableRow } from "../../hooks/useBlockchainTab.types";
+import { BlockTableRow } from "../../../../types";
 
 import { BlockColumns } from "./BlockColumns";
 import * as Styled from "./BlockTable.styled";

@@ -1,10 +1,6 @@
-export type BlockPage = {
-  blockData: BlockData;
-};
+import { BlockTableRow } from "../../../types";
 
-export type BlockData = {
-  blockID: string;
-  time: string;
-  transactions: number;
-  witness: string;
+export type BlockPage = {
+  blockData: BlockTableRow;
+  loading: boolean;
 };

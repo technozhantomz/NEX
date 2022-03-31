@@ -3,10 +3,10 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useAsset, useBlockchain } from "../../../../../common/hooks";
 import { Block } from "../../../../../common/types";
+import { BlockTableRow } from "../../../types";
 
 import {
   BlockChainData,
-  BlockTableRow,
   UseBlockchainTabResult,
 } from "./useBlockchainTab.types";
 

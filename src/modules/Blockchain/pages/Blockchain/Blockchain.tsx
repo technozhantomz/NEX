@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 
-import { Layout } from "../../../../common/components/PageLayout";
+import { Layout } from "../../../../common/components";
 import { Tabs } from "../../../../ui/src";
 import { BlockchainTab } from "../../components";
 
@@ -9,6 +10,7 @@ import * as Styled from "./Blockchain.styled";
 const { TabPane } = Tabs;
 
 const Blockchain: NextPage = () => {
+  const router = useRouter();
   return (
     <Layout
       title="Blockchain"
@@ -18,7 +20,11 @@ const Blockchain: NextPage = () => {
       dexLayout={true}
     >
       <Styled.BlockchainCard>
-        <Tabs>
+        <Tabs
+          onTabClick={(key) => {
+            router.push(`/blockchain?tab=${key}`);
+          }}
+        >
           <TabPane tab="Blockchain" key="blockchain">
             <BlockchainTab />
           </TabPane>

@@ -1,9 +1,9 @@
-import { Tabs } from "antd";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { Layout } from "../../../../common/components/PageLayout";
+import { Layout } from "../../../../common/components";
+import { Tabs } from "../../../../ui/src";
 
 import * as Styled from "./BlockPage.styled";
 import { useBlockPage } from "./hooks";
@@ -13,7 +13,7 @@ const { TabPane } = Tabs;
 const BlockPage: NextPage = () => {
   const router = useRouter();
   const { block } = router.query;
-  const { blockData } = useBlockPage(block);
+  const { blockData } = useBlockPage(block as string);
 
   return (
     <Layout
@@ -24,7 +24,11 @@ const BlockPage: NextPage = () => {
       dexLayout={true}
     >
       <Styled.BlockCard>
-        <Tabs>
+        <Tabs
+          onTabClick={(key) => {
+            router.push(`/blockchain?tab=${key}`);
+          }}
+        >
           <TabPane tab="Blockchain" key="blockchain">
             <Styled.BlockWrapper>
               <Styled.BlockNumber>
@@ -40,7 +44,7 @@ const BlockPage: NextPage = () => {
               <Styled.BlockInfoTitle>Block Information</Styled.BlockInfoTitle>
               <Styled.BlockInfo>
                 <span>Transactions</span>
-                <span>{blockData.transactions}</span>
+                <span>{blockData.transaction}</span>
               </Styled.BlockInfo>
               <Styled.BlockInfo>
                 <span>Witness</span>

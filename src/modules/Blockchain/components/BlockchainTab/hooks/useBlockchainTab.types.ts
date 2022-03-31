@@ -1,17 +1,11 @@
+import { BlockTableRow } from "../../../types";
+
 export type UseBlockchainTabResult = {
   loading: boolean;
   blockchainData: BlockChainData;
   searchValue: string;
   searchResult: BlockTableRow[] | undefined;
   handleSearch: (value: string) => void;
-};
-
-export type BlockTableRow = {
-  key: string;
-  blockID: string;
-  time: string;
-  witness: string;
-  transaction: number;
 };
 
 export type BlockChainData = {
