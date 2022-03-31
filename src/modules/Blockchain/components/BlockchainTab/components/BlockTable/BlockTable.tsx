@@ -33,7 +33,6 @@ export const BlockTable = ({
       onRow={(record, _rowIndex) => {
         return {
           onClick: (_event) => {
-            console.log(record);
             router.push(`/blockchain/${record.blockID}`);
           },
         };

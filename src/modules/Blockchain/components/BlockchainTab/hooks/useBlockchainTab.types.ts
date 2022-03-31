@@ -1,9 +1,9 @@
-export type UseBlockchainTab = {
+export type UseBlockchainTabResult = {
   loading: boolean;
   blockchainData: BlockChainData;
   searchValue: string;
   searchResult: BlockTableRow[] | undefined;
-  onSearch: (value: string) => void;
+  handleSearch: (value: string) => void;
 };
 
 export type BlockTableRow = {

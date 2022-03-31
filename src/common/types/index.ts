@@ -7,3 +7,4 @@ export * from "./Settings";
 export * from "./Ticker";
 export * from "./MarketPairStats";
 export * from "./Transaction";
+export * from "./Blockchain";

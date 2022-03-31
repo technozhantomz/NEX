@@ -5,7 +5,7 @@ import { BlockTable } from "./components";
 import { useBlockchainTab } from "./hooks";
 
 export const BlockchainTab = (): JSX.Element => {
-  const { loading, blockchainData, searchValue, searchResult, onSearch } =
+  const { loading, blockchainData, searchValue, searchResult, handleSearch } =
     useBlockchainTab();
 
   return (
@@ -54,7 +54,7 @@ export const BlockchainTab = (): JSX.Element => {
       <Styled.BlockSearch
         size="large"
         placeholder="Search Blocks"
-        onSearch={onSearch}
+        onSearch={handleSearch}
         loading={loading}
       />
       <div>
