@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 import * as Styled from "./TradingPairCard.styled";
@@ -24,28 +25,34 @@ export const TradingPairCard = ({
     positiveTheme,
     negativeTheme,
   } = useTradingPairStyles(percentChange);
-  console.log(showChangeAndVolume);
+
   return (
-    <Styled.Card
-      onMouseEnter={handleMouseHover}
-      onMouseLeave={handleMouseOut}
-      theme={changeBackgroundColor ? positiveTheme : negativeTheme}
-    >
-      <Styled.ContentHeader>
-        <Styled.TradingPair>{tradingPair}</Styled.TradingPair>
-        {showChangeAndVolume && (
-          <Styled.PercentChange
-            theme={changeBackgroundColor ? positiveTheme : negativeTheme}
+    <Link href={`/market/${tradingPair.replace("/", "_")}`}>
+      <a>
+        <Styled.Card
+          onMouseEnter={handleMouseHover}
+          onMouseLeave={handleMouseOut}
+          theme={changeBackgroundColor ? positiveTheme : negativeTheme}
+        >
+          <Styled.ContentHeader>
+            <Styled.TradingPair>{tradingPair}</Styled.TradingPair>
+            {showChangeAndVolume && (
+              <Styled.PercentChange
+                theme={changeBackgroundColor ? positiveTheme : negativeTheme}
+              >
+                {changeBackgroundColor ? "+" : "-"}
+                {percentChange}
+              </Styled.PercentChange>
+            )}
+          </Styled.ContentHeader>
+          <Styled.Price
+            theme={showChangeAndVolume ? positiveTheme : negativeTheme}
           >
-            {changeBackgroundColor ? "+" : "-"}
-            {percentChange}
-          </Styled.PercentChange>
-        )}
-      </Styled.ContentHeader>
-      <Styled.Price theme={showChangeAndVolume ? positiveTheme : negativeTheme}>
-        {price}
-      </Styled.Price>
-      {showChangeAndVolume && <Styled.Volume>{volume}</Styled.Volume>}
-    </Styled.Card>
+            {price}
+          </Styled.Price>
+          {showChangeAndVolume && <Styled.Volume>{volume}</Styled.Volume>}
+        </Styled.Card>
+      </a>
+    </Link>
   );
 };

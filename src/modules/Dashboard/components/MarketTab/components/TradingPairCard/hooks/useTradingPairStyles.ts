@@ -25,7 +25,7 @@ export function useTradingPairStyles(
   };
   const handleMouseHover = useCallback(() => {
     const PercentChangeNumber = parseInt(percentChange);
-    console.log("PercentChangeNumber", PercentChangeNumber);
+
     if (PercentChangeNumber >= 0) {
       setChangeBackgroundColor(true);
     } else {

@@ -43,7 +43,6 @@ export function useAsset(): UseAssetResult {
 
   const getAssetBySymbol = useCallback(
     async (symbol: string) => {
-      console.log("this is asset", symbol);
       if (
         Object.keys(cache).length > 0 &&
         cache.assets.length > 0 &&
