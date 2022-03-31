@@ -21,10 +21,7 @@ export type WitnessStats = {
 
 export type WitnessTableRow = {
   key: number;
-  rank: number;
   name: string;
-  totalVotes: string;
-  lastBlock: number;
-  missedBlocks: number;
+  total_votes: string;
   url: string;
 };

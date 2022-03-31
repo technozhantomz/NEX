@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
 import { useAsset, useBlockchain } from "../../../../../common/hooks";
@@ -24,17 +24,20 @@ export function useWitnessTab(): WitnessesTab {
   const { getChainData, getAvgBlockTime } = useBlockchain();
 
   useEffect(() => {
-    setInterval(() => getWitnessData(), 3000);
+    getWitnessData();
+    // setInterval(() => getWitnessData(), 3000);
   }, [defaultAsset]);
 
-  const getWitnessData = async () => {
+  const getWitnessData = useCallback(async () => {
     if (defaultAsset) {
       const witnessesID = await dbApi("lookup_witness_accounts", [
         "",
         100,
       ]).then((e: any) => e);
 
-      const activeUsers = await dbApi("get_global_properties").then((e:any) => e);
+      const activeUsers = await dbApi("get_global_properties").then(
+        (e: any) => e
+      );
 
       const rawWitnesses = await dbApi("get_witnesses", [
         witnessesID.map((item: any[]) => item[1]),
@@ -44,8 +47,6 @@ export function useWitnessTab(): WitnessesTab {
             item: {
               total_votes: any;
               id: any;
-              last_confirmed_block_num: any;
-              total_missed: any;
               url: any;
             },
             index: number
@@ -55,18 +56,18 @@ export function useWitnessTab(): WitnessesTab {
               Number(item.total_votes)
             );
             return {
-              ...item,
               name: witnessesID.filter(
                 (name: any[]) => name[1] === item.id
               )[0][0],
-              totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+              totalVotes: `${item.total_votes} ${votesAsset.symbol}`,
               url: item.url,
             };
           }
         );
 
         allWitnesses = await Promise.all(allWitnesses);
-
+        console.log(allWitnesses);
+        // return allWitnesses;
         return allWitnesses.map((item: any) => ({
           ...item,
           active: activeUsers["active_witnesses"].indexOf(item.id) >= 0,
@@ -74,21 +75,10 @@ export function useWitnessTab(): WitnessesTab {
       });
 
       setWitnesses({
-        // activeWitnesses: rawWitnesses.length,
-        // reward: rewardAmount,
-        // earnings: Number(earnings),
         data: rawWitnesses,
-        // stats: {
-        //   active: updateStatsArray(witnesses.stats.active, rawWitnesses.length),
-        //   reward: updateStatsArray(witnesses.stats.reward, rewardAmount),
-        //   earnings: updateStatsArray(
-        //     witnesses.stats.earnings,
-        //     Number(earnings)
-        //   ),
-        // },
       });
     }
-  };
+  }, [witnesses, defaultAsset]);
 
   const getDaysInThisMonth = () => {
     const now = new Date();

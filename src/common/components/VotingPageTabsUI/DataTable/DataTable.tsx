@@ -4,53 +4,55 @@ import * as Styled from "./DataTable.styled";
 
 type Props = {
   approved: boolean;
+  columns: any[];
+  data: any[];
 };
 
-export const DataTable = ({ approved }: Props): JSX.Element => {
-  const columns = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      render: () => <p>some-witness</p>,
-    },
-    {
-      title: "Webpage",
-      dataIndex: "",
-      render: () => <p>https://example.com/peerplays</p>,
-    },
-    {
-      title: "Votes",
-      dataIndex: "",
-      render: () => <p>1521896 PPY</p>,
-    },
-    {
-      title: "Action",
-      dataIndex: "",
-      key: "x",
-      render: () => <a>{approved ? `REMOVE` : `ADD`}</a>,
-    },
-  ];
+export const DataTable = ({ approved, columns, data }: Props): JSX.Element => {
+  // const columns = [
+  //   {
+  //     title: "Name",
+  //     dataIndex: "name",
+  //     render: (t) => <p>{t}</p>,
+  //   },
+  //   {
+  //     title: "Webpage",
+  //     dataIndex: "",
+  //     render: () => <p>https://example.com/peerplays</p>,
+  //   },
+  //   {
+  //     title: "Votes",
+  //     dataIndex: "",
+  //     render: () => <p>1521896 PPY</p>,
+  //   },
+  //   {
+  //     title: "Action",
+  //     dataIndex: "",
+  //     key: "x",
+  //     render: () => <a>{approved ? `REMOVE` : `ADD`}</a>,
+  //   },
+  // ];
 
-  const data = [
-    {
-      key: "1",
-      name: "John Brown",
-      votes: 32,
-      webpage: "New York No. 1 Lake Park",
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      votes: 42,
-      webpage: "London No. 1 Lake Park",
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      votes: 32,
-      webpage: "Sidney No. 1 Lake Park",
-    },
-  ];
+  // const data = [
+  //   {
+  //     key: "1",
+  //     name: "John Brown",
+  //     votes: 32,
+  //     webpage: "New York No. 1 Lake Park",
+  //   },
+  //   {
+  //     key: "2",
+  //     name: "Jim Green",
+  //     votes: 42,
+  //     webpage: "London No. 1 Lake Park",
+  //   },
+  //   {
+  //     key: "3",
+  //     name: "Joe Black",
+  //     votes: 32,
+  //     webpage: "Sidney No. 1 Lake Park",
+  //   },
+  // ];
 
   const tableHeader = (
     <Styled.TableTitle strong>
