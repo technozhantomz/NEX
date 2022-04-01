@@ -12,7 +12,7 @@ export type Block = {
   witness_signature: string;
 };
 
-export type Chain = {
+export type BlockData = {
   accounts_registered_this_interval: number;
   current_aslot: number;
   current_witness: string;
@@ -31,9 +31,9 @@ export type Chain = {
   witness_budget: number;
 };
 
-export type BlockData = {
+export type Chain = {
   active_committee_members: string[];
-  active_sons: any[];
+  active_sons: string[];
   active_witnesses: string[];
   id: string;
   next_available_vote_id: number;

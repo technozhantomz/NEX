@@ -1,3 +1,4 @@
+import { ChainStore } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
 import { usePeerplaysApiContext } from "../components/PeerplaysApiProvider";
@@ -17,7 +18,7 @@ export function useBlockchain(): UseBlockchainResult {
 
   const getChain = useCallback(async () => {
     try {
-      const chainsData = await dbApi("get_objects", [["2.1.0"]]);
+      const chainsData = await dbApi("get_objects", [["2.0.0"]]);
       if (chainsData && chainsData.length) {
         return chainsData[0] as Chain;
       }
@@ -28,7 +29,7 @@ export function useBlockchain(): UseBlockchainResult {
 
   const getBlockData = useCallback(async () => {
     try {
-      const blockData = await dbApi("get_objects", [["2.0.0"]]);
+      const blockData = await dbApi("get_objects", [["2.1.0"]]);
       if (blockData && blockData.length > 0) {
         return blockData[0] as BlockData;
       }
@@ -47,6 +48,40 @@ export function useBlockchain(): UseBlockchainResult {
       console.log(e);
     }
   }, [dbApi]);
+
+  const getRecentBlocks = useCallback(() => {
+    let recentBlocks: Block[] = ChainStore.getRecentBlocks().toJS();
+    recentBlocks = recentBlocks.sort(
+      (a, b) => (b.id as number) - (a.id as number)
+    );
+    return recentBlocks;
+  }, []);
+
+  const getAvgBlockTime = useCallback(() => {
+    const recentBlocks = getRecentBlocks();
+
+    const blockTimes: [number, number][] = [[0, 0]];
+    let previousTime: number;
+
+    recentBlocks.forEach((block, index: number) => {
+      if (index > 0) {
+        const delta =
+          (previousTime -
+            new Date(block.timestamp.toLocaleString()).getTime()) /
+          1000;
+
+        blockTimes.push([block.id as number, delta]);
+      }
+
+      previousTime = new Date(block.timestamp.toLocaleString()).getTime();
+    });
+
+    const chainAvgTime = blockTimes.reduce((previous, current, _idx, array) => {
+      return previous + current[1] / array.length;
+    }, 0);
+
+    return chainAvgTime;
+  }, [getRecentBlocks]);
 
   const getBlock = useCallback(
     async (value: number) => {
@@ -91,5 +126,13 @@ export function useBlockchain(): UseBlockchainResult {
     [dbApi]
   );
 
-  return { getChain, getBlockData, getDynamic, getBlock, getBlocks };
+  return {
+    getChain,
+    getBlockData,
+    getDynamic,
+    getRecentBlocks,
+    getAvgBlockTime,
+    getBlock,
+    getBlocks,
+  };
 }

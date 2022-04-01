@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { usePeerplaysApiContext } from "../../../../../common/components";
 import { Account, Asset } from "../../../../../common/types";
+import { useUpdateStatsArray } from "../../../hooks";
 
 import { AssetTableRow, UseAssetsTabResult } from "./useAssetsTab.types";
 
@@ -11,17 +12,7 @@ export function useAssetsTab(): UseAssetsTabResult {
   const [assetTableRows, setAssetTableRows] = useState<AssetTableRow[]>([]);
   const [assetsStats, setAssetsStats] = useState<number[]>([]);
   const { dbApi } = usePeerplaysApiContext();
-
-  const updateStatsArray = useCallback((arr: number[], value: number) => {
-    if (arr.length >= 99) {
-      arr.shift();
-      arr.push(value);
-      return arr;
-    }
-    arr.push(value);
-    return arr;
-  }, []);
-
+  const { updateStatsArray } = useUpdateStatsArray();
   const getAssetRows = useCallback(async () => {
     try {
       const rawAssets: Asset[] = await dbApi("list_assets", ["", 99]);
@@ -48,7 +39,7 @@ export function useAssetsTab(): UseAssetsTabResult {
     } catch (e) {
       console.log(e);
     }
-  }, [dbApi, setAssetsStats, setAssetTableRows, updateStatsArray]);
+  }, [dbApi, setAssetsStats, setAssetTableRows, useUpdateStatsArray]);
 
   const handleSearch = useCallback(
     (symbol: string) => {

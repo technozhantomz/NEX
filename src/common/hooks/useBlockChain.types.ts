@@ -4,6 +4,8 @@ export type UseBlockchainResult = {
   getChain: () => Promise<Chain | undefined>;
   getBlockData: () => Promise<BlockData | undefined>;
   getDynamic: () => Promise<Dynamic | undefined>;
+  getRecentBlocks: () => Block[];
+  getAvgBlockTime: () => number;
   getBlock: (value: number) => Promise<Block | undefined>;
   getBlocks: (
     first: number,

@@ -1,0 +1,101 @@
+import { useCallback, useEffect, useState } from "react";
+
+import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
+import { useAsset } from "../../../../../common/hooks";
+import { CommitteeMember } from "../../../../../common/types";
+import { useUpdateStatsArray } from "../../../hooks";
+
+import {
+  CommitteeTableRow,
+  UseCommitteeTabResult,
+} from "./useCommitteeTab.types";
+
+export function useCommitteeTab(): UseCommitteeTabResult {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [activeCommittee, setActiveCommittee] = useState<number>(0);
+  const [committeeStats, setCommitteeStats] = useState<number[]>([]);
+  const [committeeTableRows, setCommitteeTableRows] = useState<
+    CommitteeTableRow[]
+  >([]);
+  const { dbApi } = usePeerplaysApiContext();
+  const { defaultAsset, formAssetBalanceById } = useAsset();
+  const { updateStatsArray } = useUpdateStatsArray();
+
+  const getCommittees = useCallback(async () => {
+    if (defaultAsset) {
+      try {
+        const committeeIds: [string, string][] = await dbApi(
+          "lookup_committee_member_accounts",
+          ["", 100]
+        );
+        if (committeeIds && committeeIds.length > 0) {
+          const committees: CommitteeMember[] = await dbApi(
+            "get_committee_members",
+            [committeeIds.map((committeeId) => committeeId[1])]
+          );
+          committees.sort((a, b) => b.total_votes - a.total_votes);
+
+          if (committees && committees.length > 0) {
+            const committeeRows: CommitteeTableRow[] = [];
+            let index = 0;
+            for (const committee of committees) {
+              const votesAsset = await formAssetBalanceById(
+                defaultAsset.id,
+                Number(committee.total_votes)
+              );
+              committeeRows.push({
+                key: index,
+                rank: index + 1,
+                name: committeeIds.filter(
+                  (committeeId) => committeeId[1] === committee.id
+                )[0][0],
+                totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+                url: committee.url,
+              } as CommitteeTableRow);
+              index = index + 1;
+            }
+
+            setCommitteeTableRows(committeeRows);
+            setActiveCommittee(committees.length);
+            setCommitteeStats(
+              updateStatsArray(committeeStats, committees.length)
+            );
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, [
+    dbApi,
+    formAssetBalanceById,
+    setCommitteeTableRows,
+    setActiveCommittee,
+    setCommitteeStats,
+    updateStatsArray,
+    defaultAsset,
+  ]);
+
+  const handleSearch = useCallback(
+    (name: string) => {
+      setLoading(true);
+      setSearchValue(name);
+      setLoading(false);
+    },
+    [setLoading, setSearchValue]
+  );
+
+  useEffect(() => {
+    setInterval(() => getCommittees(), 3000);
+  }, [defaultAsset]);
+
+  return {
+    loading,
+    activeCommittee,
+    committeeStats,
+    committeeTableRows,
+    searchValue,
+    handleSearch,
+  };
+}

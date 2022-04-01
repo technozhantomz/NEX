@@ -1,10 +1,9 @@
 import { ParsedUrlQuery } from "querystring";
 
-import { ChainStore } from "peerplaysjs-lib";
 import { useCallback, useEffect, useState } from "react";
 
 import { useAsset, useBlockchain } from "../../../../../common/hooks";
-import { Block } from "../../../../../common/types";
+import { useUpdateStatsArray } from "../../../hooks";
 import { BlockTableRow } from "../../../types";
 
 import {
@@ -38,41 +37,25 @@ export function useBlockchainTab(
   const [searchResult, setSearchResult] = useState<BlockTableRow[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const { defaultAsset } = useAsset();
-  const { getChain, getBlockData, getDynamic, getBlock } = useBlockchain();
+  const { updateStatsArray } = useUpdateStatsArray();
+  const {
+    getChain,
+    getBlockData,
+    getDynamic,
+    getRecentBlocks,
+    getAvgBlockTime,
+    getBlock,
+  } = useBlockchain();
 
   const getBlockchainData = useCallback(async () => {
     try {
-      let recentBlocks: Block[] = ChainStore.getRecentBlocks().toJS();
+      const recentBlocks = getRecentBlocks();
 
       const chain = await getChain();
       const blockData = await getBlockData();
       const dynamic = await getDynamic();
-      recentBlocks = recentBlocks.sort(
-        (a, b) => (b.id as number) - (a.id as number)
-      );
 
-      const blockTimes: [number, number][] = [[0, 0]];
-      let previousTime: number;
-
-      recentBlocks.forEach((block, index: number) => {
-        if (index > 0) {
-          const delta =
-            (previousTime -
-              new Date(block.timestamp.toLocaleString()).getTime()) /
-            1000;
-
-          blockTimes.push([block.id as number, delta]);
-        }
-
-        previousTime = new Date(block.timestamp.toLocaleString()).getTime();
-      });
-
-      const chainAvgTime = blockTimes.reduce(
-        (previous, current, _idx, array) => {
-          return previous + current[1] / array.length;
-        },
-        0
-      );
+      const chainAvgTime = getAvgBlockTime();
 
       const blockRows = recentBlocks.map((block) => {
         return {
@@ -86,19 +69,19 @@ export function useBlockchainTab(
 
       if (defaultAsset && chain && blockData && dynamic) {
         setBlockchainData({
-          currentBlock: chain.head_block_number,
+          currentBlock: blockData.head_block_number,
           supply: {
             amount:
               Number(dynamic.current_supply) / 10 ** defaultAsset.precision,
             symbol: defaultAsset.symbol,
           },
-          activeWitnesses: blockData.active_witnesses,
+          activeWitnesses: chain.active_witnesses,
           avgTime: Number(chainAvgTime.toFixed(0)),
           recentBlocks: blockRows,
           stats: {
             blocks: updateStatsArray(
               blockchainData.stats.blocks,
-              chain.head_block_number
+              blockData.head_block_number
             ),
             supply: updateStatsArray(
               blockchainData.stats.supply,
@@ -106,7 +89,7 @@ export function useBlockchainTab(
             ),
             witnesses: updateStatsArray(
               blockchainData.stats.witnesses,
-              blockData.active_witnesses.length
+              chain.active_witnesses.length
             ),
             times: updateStatsArray(
               blockchainData.stats.times,
@@ -119,16 +102,6 @@ export function useBlockchainTab(
       console.log(e);
     }
   }, [getChain, getBlockData, getDynamic, setBlockchainData, defaultAsset]);
-
-  const updateStatsArray = useCallback((arr: number[], value: number) => {
-    if (arr.length >= 99) {
-      arr.shift();
-      arr.push(value);
-      return arr;
-    }
-    arr.push(value);
-    return arr;
-  }, []);
 
   const handleSearch = useCallback(
     async (value: string) => {
