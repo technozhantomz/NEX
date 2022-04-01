@@ -1,14 +1,23 @@
 import React from "react";
 
+import { IVoteRow } from "../VoteTable/hooks/useVoteTable.types";
+
 import * as Styled from "./VoteForm.styled";
 
-export const VoteForm = (props: {
+type Props = {
   tab: string;
   account: string;
-}): JSX.Element => {
+  doAction: (txt: string, tableRow?: IVoteRow) => Promise<void>;
+};
+
+export const VoteForm = ({
+  tab,
+  account,
+  doAction,
+}: Props): JSX.Element => {
   return (
     <>
-      <Styled.Title>Vote for {props.tab}</Styled.Title>
+      <Styled.Title>Vote for {tab}</Styled.Title>
       <a href="#">
         <Styled.Info />
         <Styled.DetailsLink>See details here</Styled.DetailsLink>
@@ -26,7 +35,7 @@ export const VoteForm = (props: {
                 </Styled.OverlapContainer>
               </Styled.FormItem>
               <Styled.FormItem name="something">
-                <Styled.CardFormLinkButton>
+                <Styled.CardFormLinkButton onClick={() => doAction("RESET")}>
                   <Styled.Reset />
                   Reset Changes
                 </Styled.CardFormLinkButton>
@@ -37,7 +46,9 @@ export const VoteForm = (props: {
                 <Styled.CardFormButton>Add</Styled.CardFormButton>
               </Styled.FormItem>
               <Styled.FormItem name="else">
-                <Styled.CardFormButton>Publish Changes</Styled.CardFormButton>
+                <Styled.CardFormButton onClick={() => doAction("PUBLISH")}>
+                  Publish Changes
+                </Styled.CardFormButton>
               </Styled.FormItem>
             </Styled.Col>
           </Styled.Row>

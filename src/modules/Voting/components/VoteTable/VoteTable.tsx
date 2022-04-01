@@ -1,21 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { useViewportContext } from "../../../../common/components/ViewportProvider/ViewportProvider";
 import { List } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
-import { VoteActionButton } from "../VoteActionButton";
 
 import * as Styled from "./VoteTable.styled";
-import { useVoteTable } from "./hooks";
+import { IVoteRow } from "./hooks/useVoteTable.types";
 
-export const VoteTable = (props: {
+type Props = {
+  table: IVoteRow[];
   tab: string;
-  approved: boolean;
+  tableType: string;
   account: string;
   filterVote?: string;
-}): JSX.Element => {
-  const { tableVotes, tableNotVotes, loading } = useVoteTable();
+  loading: boolean;
+  doAction: (txt: string, tableRow?: IVoteRow) => Promise<void>;
+};
+
+export const VoteTable = ({
+  table,
+  tab,
+  tableType,
+  account,
+  filterVote = "",
+  loading,
+  doAction,
+}: Props): JSX.Element => {
+  const [dataSource, setDataSource] = useState<IVoteRow[]>([]);
   const { width } = useViewportContext();
+  useEffect(() => {
+    const t = table.map((x) => {
+      return x;
+    });
+    const d =
+      filterVote === ""
+        ? t
+            .filter((item) => {
+              return item.type === tab;
+            })
+            .sort((a, b) => {
+              return b.votes - a.votes;
+            })
+            .sort((a, b) => {
+              return a.action.charCodeAt(0) - b.action.charCodeAt(0);
+            })
+        : t
+            .filter((item) => {
+              return item.type === tab;
+            })
+            .filter((item) => {
+              return item.name.startsWith(filterVote);
+            })
+            .sort((a, b) => {
+              return b.votes - a.votes;
+            })
+            .sort((a, b) => {
+              return a.action.charCodeAt(0) - b.action.charCodeAt(0);
+            });
+    setDataSource(d);
+  }, [table]);
   const columns = [
     {
       title: "Name",
@@ -31,47 +74,77 @@ export const VoteTable = (props: {
       title: "Votes",
       dataIndex: "votes",
       key: "votes",
+      render: (_value: number, _record: any) => {
+        const totalVotesDisplay = _value / 100000; // Precision is 5.
+        return (
+          <>
+            {totalVotesDisplay.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })} {"PPY"}
+          </>
+        );
+      },
     },
     {
-      title: "Action",
-      dataIndex: "action",
-      key: "action",
+      title: "Actions",
+      dataIndex: "actions",
+      key: "actions",
       render: (_value: any, _record: any) => {
-        if (props.approved) {
-          return <VoteActionButton txt="REMOVE" href={`#`} />;
+        if (tableType === "approved") {
+          return (
+            <Styled.VoteActionButton
+              onClick={() => doAction("REMOVE", _record)}
+            >
+              {"REMOVE VOTE"}
+            </Styled.VoteActionButton>
+          );
+        } else if (tableType === "notapproved") {
+          return (
+            <Styled.VoteActionButton onClick={() => doAction("ADD", _record)}>
+              {"ADD VOTE"}
+            </Styled.VoteActionButton>
+          );
         } else {
-          return <VoteActionButton txt="ADD" href={`#`} />;
+          return (
+            <Styled.VoteActionButton onClick={() => doAction("UNDO", _record)}>
+              {"UNDO"}
+            </Styled.VoteActionButton>
+          );
         }
       },
     },
   ];
 
+  const columnsWithPending = columns.concat([
+    {
+      title: "Pending Change",
+      dataIndex: "action",
+      key: "action",
+    },
+  ]);
+
   return (
     <>
       <Styled.Title>
-        {props.approved
-          ? `Approved by ${props.account} `
-          : `Not approved by ${props.account} `}
-        {props.approved ? <Styled.Check /> : <Styled.Xmark />}
+        {tableType === "approved"
+          ? `Approved by ${account} `
+          : tableType === "notapproved"
+          ? `Not approved by ${account} `
+          : `Unpublished changes by ${account} `}
+        {tableType === "approved" ? (
+          <Styled.Check />
+        ) : tableType === "notapproved" ? (
+          <Styled.Xmark />
+        ) : (
+          <Styled.Exmark />
+        )}
       </Styled.Title>
       <Styled.Container>
         {width > breakpoints.sm ? (
           <Styled.VoteTable
-            columns={columns}
-            dataSource={
-              props.approved
-                ? tableVotes
-                    .filter((item) => item.type === props.tab)
-                    .sort((a, b) => b.votes - a.votes)
-                : props.filterVote === ""
-                ? tableNotVotes
-                    .filter((item) => item.type === props.tab)
-                    .sort((a, b) => b.votes - a.votes)
-                : tableNotVotes
-                    .filter((item) => item.type === props.tab)
-                    .filter((item) => item.name === props.filterVote)
-                    .sort((a, b) => b.votes - a.votes)
-            }
+            columns={tableType === "changes" ? columnsWithPending : columns}
+            dataSource={dataSource}
             loading={loading}
             pagination={false}
             size="small"
@@ -79,28 +152,35 @@ export const VoteTable = (props: {
         ) : (
           <List
             itemLayout="vertical"
-            dataSource={
-              props.approved
-                ? tableVotes
-                    .filter((item) => item.type === props.tab)
-                    .sort((a, b) => b.votes - a.votes)
-                : props.filterVote === ""
-                ? tableNotVotes
-                    .filter((item) => item.type === props.tab)
-                    .sort((a, b) => b.votes - a.votes)
-                : tableNotVotes
-                    .filter((item) => item.type === props.tab)
-                    .filter((item) => item.name === props.filterVote)
-                    .sort((a, b) => b.votes - a.votes)
-            }
+            dataSource={dataSource}
             loading={loading}
             renderItem={(item) => (
               <Styled.VoteListItem
                 key={item.key}
                 actions={
-                  props.approved
-                    ? [<VoteActionButton txt="REMOVE" href={`#`} />]
-                    : [<VoteActionButton txt="ADD" href={`#`} />]
+                  tableType == "approved"
+                    ? [
+                        <Styled.VoteActionButton
+                          onClick={() => doAction("REMOVE", item)}
+                        >
+                          {"REMOVE VOTE"}
+                        </Styled.VoteActionButton>,
+                      ]
+                    : tableType == "notapproved"
+                    ? [
+                        <Styled.VoteActionButton
+                          onClick={() => doAction("ADD", item)}
+                        >
+                          {"ADD VOTE"}
+                        </Styled.VoteActionButton>,
+                      ]
+                    : [
+                        <Styled.VoteActionButton
+                          onClick={() => doAction("UNDO", item)}
+                        >
+                          {"UNDO"}
+                        </Styled.VoteActionButton>,
+                      ]
                 }
               >
                 <Styled.VoteItemContent>
@@ -116,6 +196,16 @@ export const VoteTable = (props: {
                     <span className="asset-info-title">{columns[2].title}</span>
                     <span className="asset-info-value">{item.votes}</span>
                   </div>
+                  {tableType === "changes" ? (
+                    <div className="asset-info">
+                      <span className="asset-info-title">
+                        {columnsWithPending[4].title}
+                      </span>
+                      <span className="asset-info-value">{item.action}</span>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </Styled.VoteItemContent>
               </Styled.VoteListItem>
             )}

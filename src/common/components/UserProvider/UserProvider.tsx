@@ -110,7 +110,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
 
           const votes: Vote[] = await dbApi("lookup_vote_ids", [
             //fullAccount.account.options.votes,
-            ["1:0", "1:1"],
+            ["0:11", "0:12"],
             false,
           ]).then((e: any) =>
             e.length

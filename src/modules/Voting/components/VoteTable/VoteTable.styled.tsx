@@ -2,11 +2,16 @@ import {
   Col as col,
   Row as row,
   styled,
+  Button as UiButton,
   List as UiList,
   Table as UiTable,
 } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
-import { Check as check, Xmark as xmark } from "../../../../ui/src/icons";
+import {
+  Check as check,
+  Exclamation as exmark,
+  Xmark as xmark,
+} from "../../../../ui/src/icons";
 
 export const VoteTable = styled(UiTable)`
 max-width: 100% !important;
@@ -60,6 +65,23 @@ export const VoteItemContent = styled.div`
   }
 `;
 
+export const VoteActionButton = styled(UiButton)`
+   {
+    width: unset !important;
+    margin: 0px;
+    font-size: 16px;
+    background: none;
+    border: none;
+    padding: 0;
+    color: ${colors.additionalBlue};
+    text-align: right;
+    vertical-align: middle;
+    &:hover {
+      color: #2369cc;
+    }
+  }
+`;
+
 export const Container = styled.div`
   margin-bottom: 25px;
 `;
@@ -97,5 +119,10 @@ export const Check = styled(check)`
 
 export const Xmark = styled(xmark)`
   color: #d01721;
+  margin-left: 15px;
+`;
+
+export const Exmark = styled(exmark)`
+  color: #d4af37;
   margin-left: 15px;
 `;

@@ -10,3 +10,4 @@ export { default as Reset } from "./ResetIcon";
 export { default as Check } from "./CheckIcon";
 export { default as Xmark } from "./XmarkIcon";
 export { default as Search } from "./SearchIcon";
+export { default as Exclamation } from "./ExclamationIcon";
