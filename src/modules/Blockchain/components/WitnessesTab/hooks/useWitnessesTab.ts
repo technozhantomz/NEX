@@ -37,7 +37,6 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   }, []);
 
   const getWitnessData = useCallback(async () => {
-    console.log("ghasem");
     if (defaultAsset) {
       try {
         const chain = await getChain();
