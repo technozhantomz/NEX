@@ -26,6 +26,7 @@ export {
 } from "antd";
 
 export {
+  LinkOutlined,
   DollarOutlined,
   PoweroffOutlined,
   SettingOutlined,
