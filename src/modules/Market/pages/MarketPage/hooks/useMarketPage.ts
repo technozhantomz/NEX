@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { useSettingsContext } from "../../../../../common/components";
 import { useAsset, useMarketPairStats } from "../../../../../common/hooks";
 
 import {
@@ -8,78 +9,67 @@ import {
 } from "./useMarketPage.types";
 
 export function useMarketPage(): UseMarketPageResult {
+  const { exchanges } = useSettingsContext();
   const { getMarketPairStats } = useMarketPairStats();
   const { getAssetBySymbol, defaultAsset } = useAsset();
   const [statPairs, setPairs] = useState<PairNameAndMarketStats[]>([]);
 
   const formPairStats = useCallback(
-    async (pair: PairNameAndMarketStats): Promise<PairNameAndMarketStats> => {
-      const quoteSymbol = pair.tradingPair.split("/")[0];
-      const baseSymbol = pair.tradingPair.split("/")[1];
+    async (pair: string): Promise<PairNameAndMarketStats> => {
+      const quoteSymbol = pair.split("/")[0];
+      const baseSymbol = pair.split("/")[1];
       const quote = await getAssetBySymbol(quoteSymbol);
       const base = await getAssetBySymbol(baseSymbol);
       if (base && quote) {
         const marketPairStats = await getMarketPairStats(base, quote);
         return {
-          tradingPair: pair.tradingPair,
+          tradingPair: pair,
           marketPairStats,
         } as PairNameAndMarketStats;
       } else {
-        return pair;
+        return {
+          tradingPair: pair,
+          marketPairStats: {
+            volume: 0,
+            latest: 0,
+            percentChange: 0,
+          },
+        } as PairNameAndMarketStats;
       }
     },
     [getAssetBySymbol, getMarketPairStats]
   );
-  const getMarketPairStatsForPairs = useCallback(async () => {
-    if (statPairs.length > 0) {
+
+  const getMarketPairStatsForPairs = useCallback(
+    async (defaultAsset, exchanges) => {
       try {
-        const updatedPairs = await Promise.all(statPairs.map(formPairStats));
+        const initPairs =
+          exchanges.list.length > 0
+            ? exchanges.list
+            : [
+                `BTC/${defaultAsset.symbol}`,
+                `HIVE/${defaultAsset.symbol}`,
+                `HBD/${defaultAsset.symbol}`,
+                `LARNYX/${defaultAsset.symbol}`,
+              ];
+        const updatedPairs = await Promise.all(initPairs.map(formPairStats));
         setPairs(updatedPairs);
       } catch (e) {
         console.log(e);
       }
-    }
-  }, [statPairs, setPairs, formPairStats]);
+    },
+    [statPairs, setPairs, formPairStats]
+  );
 
   useEffect(() => {
-    if (defaultAsset) {
-      setPairs([
-        {
-          tradingPair: `BTC/${defaultAsset.symbol}`,
-          marketPairStats: {
-            volume: 0,
-            latest: 0,
-            percentChange: 0,
-          },
-        },
-        {
-          tradingPair: `HIVE/${defaultAsset.symbol}`,
-          marketPairStats: {
-            volume: 0,
-            latest: 0,
-            percentChange: 0,
-          },
-        },
-        {
-          tradingPair: `HBD/${defaultAsset.symbol}`,
-          marketPairStats: {
-            volume: 0,
-            latest: 0,
-            percentChange: 0,
-          },
-        },
-        {
-          tradingPair: `LARNYX/${defaultAsset.symbol}`,
-          marketPairStats: {
-            volume: 0,
-            latest: 0,
-            percentChange: 0,
-          },
-        },
-      ]);
-      getMarketPairStatsForPairs();
+    if (defaultAsset && exchanges) {
+      // setInterval(
+      // () =>
+      getMarketPairStatsForPairs(defaultAsset, exchanges);
+      //   10000
+      // );
     }
-  }, [defaultAsset]);
+  }, [defaultAsset, exchanges]);
 
   return {
     statPairs,

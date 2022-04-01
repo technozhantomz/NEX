@@ -33,15 +33,14 @@ export function usePairSelect(
 
   const handleSelectPair = useCallback(
     (selectedPair: string) => {
-      let list: string[] = [];
       if (selectedPair !== activePair) {
         recentPairs.includes(selectedPair.split("_").join("/"))
-          ? (list = [...recentPairs])
-          : recentPairs.push(selectedPair);
+          ? (exchanges.list = [...recentPairs])
+          : exchanges.list.push(selectedPair.split("_").join("/"));
 
         setExchanges({
           active: selectedPair,
-          list: [...list],
+          list: exchanges.list,
         } as Exchanges);
       }
     },
