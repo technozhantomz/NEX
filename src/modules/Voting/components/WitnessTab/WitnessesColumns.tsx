@@ -7,7 +7,7 @@ export const WitnessesColumns = [
     title: "Name",
     dataIndex: "name",
     key: "name",
-    render: (name: string): JSX.Element => <p>{name}</p>,
+    render: (name: string) => <p>{name}</p>,
   },
   {
     title: "Url",
@@ -22,8 +22,8 @@ export const WitnessesColumns = [
   },
   {
     title: "Action",
-    dataIndex: "",
-    key: "x",
-    render: () => <a>REMOVE</a>,
+    dataIndex: "key",
+    key: "key",
+    render: (id: string): JSX.Element => <a onClick={() =>console.log(id)} >ADD</a>,
   },
 ];

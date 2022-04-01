@@ -3,21 +3,14 @@ export type WitnessesTab = {
   witnesses: WitnessData;
   searchValue: string;
   onSearch: (name: string) => void;
+  removeFromVote: (id: string) => void;
+  addToVote: (id: string) => void;
 };
 
 export type WitnessData = {
-  // activeWitnesses: number;
-  // reward: number;
-  // earnings: number;
   data: WitnessTableRow[];
-  // stats: WitnessStats;
 };
 
-export type WitnessStats = {
-  active: number[];
-  reward: number[];
-  earnings: number[];
-};
 
 export type WitnessTableRow = {
   key: number;

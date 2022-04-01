@@ -1,45 +1,34 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
-import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
-import { useAsset, useBlockchain } from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from '../../../../../common/components/PeerplaysApiProvider';
+import { useAsset, useBlockchain } from '../../../../../common/hooks';
 
-import { WitnessData, WitnessesTab } from "./useWitnessTab.types";
+import { WitnessData, WitnessesTab } from './useWitnessTab.types';
 
 export function useWitnessTab(): WitnessesTab {
   const [loading, setLoading] = useState<boolean>(false);
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [witnesses, setWitnesses] = useState<WitnessData>({
-    // activeWitnesses: 0,
-    // reward: 0,
-    // earnings: 0,
-    data: [],
-    // stats: {
-    //   active: [],
-    //   reward: [],
-    //   earnings: [],
-    // },
-  });
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [witnesses, setWitnesses] = useState<WitnessData>({ data: [] });
   const { dbApi } = usePeerplaysApiContext();
   const { defaultAsset, formAssetBalanceById, setPrecision } = useAsset();
   const { getChainData, getAvgBlockTime } = useBlockchain();
 
   useEffect(() => {
     getWitnessData();
-    // setInterval(() => getWitnessData(), 3000);
   }, [defaultAsset]);
 
   const getWitnessData = useCallback(async () => {
     if (defaultAsset) {
-      const witnessesID = await dbApi("lookup_witness_accounts", [
-        "",
+      const witnessesID = await dbApi('lookup_witness_accounts', [
+        '',
         100,
       ]).then((e: any) => e);
 
-      const activeUsers = await dbApi("get_global_properties").then(
+      const activeUsers = await dbApi('get_global_properties').then(
         (e: any) => e
       );
 
-      const rawWitnesses = await dbApi("get_witnesses", [
+      const rawWitnesses = await dbApi('get_witnesses', [
         witnessesID.map((item: any[]) => item[1]),
       ]).then(async (e: any) => {
         let allWitnesses = e.map(
@@ -56,6 +45,7 @@ export function useWitnessTab(): WitnessesTab {
               Number(item.total_votes)
             );
             return {
+              key: item.id,
               name: witnessesID.filter(
                 (name: any[]) => name[1] === item.id
               )[0][0],
@@ -67,10 +57,9 @@ export function useWitnessTab(): WitnessesTab {
 
         allWitnesses = await Promise.all(allWitnesses);
         console.log(allWitnesses);
-        // return allWitnesses;
         return allWitnesses.map((item: any) => ({
           ...item,
-          active: activeUsers["active_witnesses"].indexOf(item.id) >= 0,
+          active: activeUsers['active_witnesses'].indexOf(item.id) >= 0,
         }));
       });
 
@@ -80,19 +69,12 @@ export function useWitnessTab(): WitnessesTab {
     }
   }, [witnesses, defaultAsset]);
 
-  const getDaysInThisMonth = () => {
-    const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const addToVote = async (id: string) => {
+   
   };
 
-  const updateStatsArray = (arr: number[], value: number) => {
-    if (arr.length >= 99) {
-      arr.shift();
-      arr.push(value);
-      return arr;
-    }
-    arr.push(value);
-    return arr;
+  const removeFromVote =  async (id:string) => {
+   
   };
 
   const onSearch = async (name: string) => {
@@ -101,5 +83,12 @@ export function useWitnessTab(): WitnessesTab {
     setLoading(false);
   };
 
-  return { loading, witnesses, searchValue, onSearch };
+  return {
+    loading,
+    witnesses,
+    searchValue,
+    onSearch,
+    addToVote,
+    removeFromVote,
+  };
 }

@@ -11,7 +11,7 @@ import { WitnessesColumns } from "./WitnessesColumns";
 import { useWitnessTab } from "./hooks";
 
 export const WitnessTab = (): JSX.Element => {
-  const { loading, witnesses, searchValue, onSearch } = useWitnessTab();
+  const { loading, witnesses, searchValue, onSearch, addToVote, removeFromVote } = useWitnessTab();
   // console.log(witnesses.data);
   return (
     <Styled.WitnessTabCard>

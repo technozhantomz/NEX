@@ -18,13 +18,15 @@ export const ActionForm = (): JSX.Element => {
           </Styled.TitleDiv>
         </Styled.Col>
         <Styled.Col xs={24} sm={4} md={6} lg={12}>
-          <Styled.Form>
+          <Styled.Form
+            name="votingForm">
             <Styled.Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 12 }, 20]}>
               <Styled.Col
                 xs={{ span: 24, order: 1 }}
                 md={{ span: 14, order: 1 }}
               >
-                <Styled.FormItem>
+                <Styled.FormItem
+                  name="searchAccounts">
                   <Styled.SearchInput
                     placeholder="Search accounts"
                     allowClear
