@@ -34,9 +34,9 @@ export function useCommitteeTab(): UseCommitteeTabResult {
             "get_committee_members",
             [committeeIds.map((committeeId) => committeeId[1])]
           );
-          committees.sort((a, b) => b.total_votes - a.total_votes);
 
           if (committees && committees.length > 0) {
+            committees.sort((a, b) => b.total_votes - a.total_votes);
             const committeeRows: CommitteeTableRow[] = [];
             let index = 0;
             for (const committee of committees) {
