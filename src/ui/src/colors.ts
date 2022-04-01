@@ -9,4 +9,6 @@ export const colors = {
   errorColor: `#ff4d4f`,
   successTag: `#B8F4C9`,
   assetTag: `#FDBA86`,
+  successColor: `#10AF77`,
+  missedColor: `#D01721`,
 };
