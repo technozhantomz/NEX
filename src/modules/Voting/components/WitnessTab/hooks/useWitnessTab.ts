@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useUserContext } from '../../../../../common/components';
 
 import { usePeerplaysApiContext } from '../../../../../common/components/PeerplaysApiProvider';
 import { useAsset, useBlockchain } from '../../../../../common/hooks';
@@ -12,10 +13,11 @@ export function useWitnessTab(): WitnessesTab {
   const { dbApi } = usePeerplaysApiContext();
   const { defaultAsset, formAssetBalanceById, setPrecision } = useAsset();
   const { getChainData, getAvgBlockTime } = useBlockchain();
+  const { localStorageAccount } = useUserContext();
 
   useEffect(() => {
     getWitnessData();
-  }, [defaultAsset]);
+  }, [defaultAsset, witnesses]);
 
   const getWitnessData = useCallback(async () => {
     if (defaultAsset) {
@@ -45,6 +47,7 @@ export function useWitnessTab(): WitnessesTab {
               Number(item.total_votes)
             );
             return {
+              ...item,
               key: item.id,
               name: witnessesID.filter(
                 (name: any[]) => name[1] === item.id
@@ -56,7 +59,6 @@ export function useWitnessTab(): WitnessesTab {
         );
 
         allWitnesses = await Promise.all(allWitnesses);
-        console.log(allWitnesses);
         return allWitnesses.map((item: any) => ({
           ...item,
           active: activeUsers['active_witnesses'].indexOf(item.id) >= 0,
@@ -90,5 +92,6 @@ export function useWitnessTab(): WitnessesTab {
     onSearch,
     addToVote,
     removeFromVote,
+    localStorageAccount,
   };
 }

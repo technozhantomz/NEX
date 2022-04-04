@@ -5,6 +5,7 @@ export type WitnessesTab = {
   onSearch: (name: string) => void;
   removeFromVote: (id: string) => void;
   addToVote: (id: string) => void;
+  localStorageAccount: string;
 };
 
 export type WitnessData = {
@@ -17,4 +18,5 @@ export type WitnessTableRow = {
   name: string;
   total_votes: string;
   url: string;
+  active: boolean;
 };

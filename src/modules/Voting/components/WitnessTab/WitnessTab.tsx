@@ -12,17 +12,21 @@ import { useWitnessTab } from "./hooks";
 
 export const WitnessTab = (): JSX.Element => {
   const { loading, witnesses, searchValue, onSearch, addToVote, removeFromVote } = useWitnessTab();
-  // console.log(witnesses.data);
+ 
   return (
     <Styled.WitnessTabCard>
       <ActionForm />
       <DataTable
         approved={true}
         columns={WitnessesColumns}
-        data={witnesses.data}
+        data={witnesses.data.filter(item => item?.active)}
       />
       <Divider />
-      {/* <DataTable approved={false} /> */}
+      <DataTable
+        approved={false}
+        columns={WitnessesColumns}
+        data={witnesses.data.filter(item => !item?.active)}
+      />
     </Styled.WitnessTabCard>
   );
 };
