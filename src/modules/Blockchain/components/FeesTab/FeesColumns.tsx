@@ -1,7 +1,5 @@
 import { Tag } from "../../../../ui/src";
 
-import { FeesTableRow } from "./hooks/useFeesTab.types";
-
 export const FeesColumns = [
   {
     title: "Operation",
@@ -15,7 +13,7 @@ export const FeesColumns = [
     title: "Fee Type",
     dataIndex: "types",
     key: "types",
-    render: (types: string[], record: FeesTableRow): JSX.Element => (
+    render: (types: string[], record: any): JSX.Element => (
       <>
         {types.map((type, index) => (
           <div key={`${record.key}-${index}`}>{type}</div>
@@ -27,7 +25,7 @@ export const FeesColumns = [
     title: "Standard Fee",
     dataIndex: "fees",
     key: "fees",
-    render: (fees: string[], record: FeesTableRow): JSX.Element => (
+    render: (fees: string[], record: any): JSX.Element => (
       <>
         {fees.map((fee, index) => (
           <div key={`${record.key}-${fees.length + index}`}>{fee}</div>
