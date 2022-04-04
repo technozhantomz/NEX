@@ -31,7 +31,7 @@ export const StatsCard = ({
   const { defaultAsset } = useAsset();
 
   return (
-    <Styled.StatsCard className={noData ? "no-data" : ""}>
+    <Styled.StatsCard className={noData ? "no-data stats-card" : "stats-card"}>
       <Styled.StatsCardHeading>{title}</Styled.StatsCardHeading>
       <Styled.StatsCardValue>
         {noData ? "No Data" : data}

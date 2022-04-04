@@ -8,6 +8,7 @@ import {
   BlockchainTab,
   BlockDetails,
   CommitteeTab,
+  FeesTab,
   WitnessesTab,
 } from "../../components";
 
@@ -51,7 +52,9 @@ const Blockchain: NextPage = () => {
           <TabPane tab="Committee" key="committee">
             <CommitteeTab />
           </TabPane>
-          <TabPane tab="Fees" key="fees"></TabPane>
+          <TabPane tab="Fees" key="fees">
+            <FeesTab />
+          </TabPane>
         </Tabs>
       </Styled.BlockchainCard>
     </Layout>
