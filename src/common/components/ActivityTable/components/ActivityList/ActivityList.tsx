@@ -6,8 +6,12 @@ import { ActivityTag } from "../ActivityTag";
 
 import * as Styled from "./ActivityList.styled";
 
-export const ActivityList = (): JSX.Element => {
-  const { activitiesTable, loading } = useActivityTable();
+type Props = {
+  userName?: string;
+};
+
+export const ActivityList = ({ userName }: Props): JSX.Element => {
+  const { activitiesTable, loading } = useActivityTable(userName);
 
   return (
     <List

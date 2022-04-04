@@ -10,7 +10,7 @@ import { useViewportContext } from "../../ViewportProvider";
 
 import { ActivityRow, UseActivityTable } from "./useActivityTable.types";
 
-export function useActivityTable(): UseActivityTable {
+export function useActivityTable(userName?: string): UseActivityTable {
   const [activitiesTable, _setActivitiesTable] = useState<ActivityRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { dbApi } = usePeerplaysApiContext();
@@ -18,7 +18,7 @@ export function useActivityTable(): UseActivityTable {
   const { width } = useViewportContext();
   const { formAssetBalanceById, getDefaultAsset, getAssetById, setPrecision } =
     useAsset();
-  const { getUserNameById } = useAccount();
+  const { getUserNameById, getAccountByName } = useAccount();
   const { getAccountHistoryById } = useAccountHistory();
 
   const formDate = useCallback(
@@ -58,7 +58,7 @@ export function useActivityTable(): UseActivityTable {
     }) => {
       const registrarName = await getUserNameById(registrar);
       const userName = await getUserNameById(name);
-      return `${registrarName} registered the account ${userName}`;
+      return `[userlink=${registrarName}] registered the account [userlink=${userName}]`;
     },
     account_upgrade: async ({
       account_to_upgrade,
@@ -147,7 +147,7 @@ export function useActivityTable(): UseActivityTable {
       const user = await getUserNameById(account_id);
       const paysAmount = `${buyAsset.amount} ${buyAsset.symbol}`;
       const receivesAmmount = `${sellAsset.amount} ${sellAsset.symbol}`;
-      return `%${user} bought ${paysAmount} for ${receivesAmmount} for order #${id}`;
+      return `${user} bought ${paysAmount} for ${receivesAmmount} for order #${id}`;
     },
     asset_fund_fee_pool: async ({
       from_account,
@@ -296,7 +296,13 @@ export function useActivityTable(): UseActivityTable {
   const setActivitiesTable = useCallback(async () => {
     try {
       setLoading(true);
-      let history = await getAccountHistoryById(id);
+      let history;
+      if (userName) {
+        const user = await getAccountByName(userName);
+        history = await getAccountHistoryById(user?.id);
+      } else {
+        history = await getAccountHistoryById(id);
+      }
       // this should change based on designer decision
       history = history.filter(
         (el: { op: number[] }) =>

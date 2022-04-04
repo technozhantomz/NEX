@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   Card,
   PoweroffOutlined,
@@ -48,7 +50,9 @@ export const ProfileMenu = (): JSX.Element => {
           </>
         ) : (
           <li className={"link"}>
-            <a>See all account activity</a>
+            <Link href={`/user/${localStorageAccount}`}>
+              <a>See all account activity</a>
+            </Link>
           </li>
         )}
 
@@ -61,7 +65,9 @@ export const ProfileMenu = (): JSX.Element => {
         </li>
         {width < breakpoints.xs ? (
           <li className={"link"}>
-            <a>See all account activity</a>
+            <Link href={`/user/${localStorageAccount}`}>
+              <a>See all account activity</a>
+            </Link>
           </li>
         ) : (
           " "

@@ -3,6 +3,8 @@
 //import { ActivityRow } from "../../hooks/useActivityTable.types";
 import { ActivityTag } from "../ActivityTag";
 
+import { InfoBlock } from "./InfoBlock/InfoBlock";
+
 export const ActivityColumns = [
   {
     title: "Time",
@@ -19,10 +21,7 @@ export const ActivityColumns = [
     title: "Info",
     dataIndex: "info",
     key: "info",
-    render: (_value: unknown): JSX.Element => (
-      // <Link href={"/"}>{_value}</Link>
-      <span>{_value}</span>
-    ),
+    render: (value: unknown): JSX.Element => <InfoBlock infoString={value} />,
   },
   {
     title: "ID",
