@@ -1,4 +1,8 @@
-import { Input, styled } from "../../../../ui/src";
+import {
+  Input,
+  styled,
+  StatsCardsDeck as UIStatsCardsDeck,
+} from "../../../../ui/src";
 
 const { Search } = Input;
 
@@ -6,11 +10,7 @@ export const BlockTabWrapper = styled.div`
   margin: 0 25px;
 `;
 
-export const StatsCardsWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 25px 0 35px;
-`;
+export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
 
 export const BlockSearch = styled(Search)`
   max-width: 520px;

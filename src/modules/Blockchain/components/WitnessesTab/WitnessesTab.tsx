@@ -18,7 +18,7 @@ export const WitnessesTab = (): JSX.Element => {
 
   return (
     <Styled.WitnessesTabWrapper>
-      <Styled.StatsCardsWrapper>
+      <Styled.StatsCardsDeck>
         <StatsCard
           noData={activeWitnesses === 0}
           title="Active Witnesses"
@@ -39,7 +39,7 @@ export const WitnessesTab = (): JSX.Element => {
           data={`${earnings}`}
           statsData={witnessStats.earnings}
         />
-      </Styled.StatsCardsWrapper>
+      </Styled.StatsCardsDeck>
       <Styled.WitnessesSearch
         size="large"
         placeholder="Search Witnesses"

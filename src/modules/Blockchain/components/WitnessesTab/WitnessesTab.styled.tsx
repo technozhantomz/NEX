@@ -1,4 +1,9 @@
-import { Input, styled, Table as UiTable } from "../../../../ui/src";
+import {
+  Input,
+  styled,
+  StatsCardsDeck as UIStatsCardsDeck,
+  Table as UiTable,
+} from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
 const { Search } = Input;
@@ -7,14 +12,7 @@ export const WitnessesTabWrapper = styled.div`
   margin: 0 25px;
 `;
 
-export const StatsCardsWrapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  margin: 25px 0 35px;
-  div {
-    margin-right 15px;
-  }
-`;
+export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
 
 export const WitnessesSearch = styled(Search)`
   max-width: 520px;

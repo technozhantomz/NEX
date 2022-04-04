@@ -82,5 +82,6 @@ export function useFees(): UseFeesResult {
 
   return {
     calculteTransferFee,
+    feeParameters,
   };
 }
