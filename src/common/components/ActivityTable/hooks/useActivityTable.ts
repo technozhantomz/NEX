@@ -58,7 +58,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
     }) => {
       const registrarName = await getUserNameById(registrar);
       const userName = await getUserNameById(name);
-      return `[userlink=${registrarName}] registered the account [userlink=${userName}]`;
+      return `[userlink=${registrarName}], registered the account ,[userlink=${userName}]`;
     },
     account_upgrade: async ({
       account_to_upgrade,
@@ -66,15 +66,15 @@ export function useActivityTable(userName?: string): UseActivityTable {
       account_to_upgrade: string;
     }) => {
       const user = await getUserNameById(account_to_upgrade);
-      return `${user} upgraded account to lifetime member`;
+      return `[userlink=${user}], upgraded account to lifetime member`;
     },
     worker_create: async ({ owner }: { owner: string }) => {
       const user = await getUserNameById(owner);
-      return `${user} created a worker proposal with daily pay of ${getDefaultAsset()}`;
+      return `[userlink=${user}], created a worker proposal with daily pay of ${getDefaultAsset()}`;
     },
     account_update: async ({ account }: { account: string }) => {
       const user = await getUserNameById(account);
-      return `${user} updated account data`;
+      return `[userlink=${user}], updated account data`;
     },
     transfer: async ({
       from,
@@ -88,7 +88,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
       const asset = await formAssetBalanceById(amount.asset_id, amount.amount);
       const sender = await getUserNameById(from);
       const receiver = await getUserNameById(to);
-      return `${sender} send ${asset.amount} ${asset.symbol} to ${receiver}`;
+      return `[userlink=${sender}], send ${asset.amount} ${asset.symbol} to ,[userlink=${receiver}]`;
     },
     limit_order_cancel: async ({
       fee_paying_account,
@@ -99,7 +99,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
     }) => {
       const id = order.split(".")[2];
       const user = await getUserNameById(fee_paying_account);
-      return `${user} cancelled order #${id}`;
+      return `[userlink=${user}], cancelled order #${id}`;
     },
     limit_order_create: async (
       {
@@ -125,7 +125,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
       const orderId = id.split(".")[2];
       const buyAmount = `${buyAsset.amount} ${buyAsset.symbol}`;
       const sellAmount = `${sellAsset.amount} ${sellAsset.symbol}`;
-      return `${creator} placed order #${orderId} to buy ${buyAmount} for ${sellAmount}`;
+      return `[userlink=${creator}], placed order #${orderId} to buy ${buyAmount} for ${sellAmount}`;
     },
     fill_order: async ({
       receives,
@@ -147,7 +147,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
       const user = await getUserNameById(account_id);
       const paysAmount = `${buyAsset.amount} ${buyAsset.symbol}`;
       const receivesAmmount = `${sellAsset.amount} ${sellAsset.symbol}`;
-      return `${user} bought ${paysAmount} for ${receivesAmmount} for order #${id}`;
+      return `[userlink=${user}], bought ${paysAmount} for ${receivesAmmount} for order #${id}`;
     },
     asset_fund_fee_pool: async ({
       from_account,
@@ -160,7 +160,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
     }) => {
       const asset = await formAssetBalanceById(asset_id, amount);
       const from = await getUserNameById(from_account);
-      return `${from} funded ${asset.symbol} fee pool with ${asset.amount}`;
+      return `[userlink=${from}], funded ${asset.symbol} fee pool with ${asset.amount}`;
     },
     account_whitelist: async ({
       account_to_list,
@@ -180,7 +180,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
       };
       const issuerName = await getUserNameById(account_to_list);
       const listed = await getUserNameById(authorizing_account);
-      return `${issuerName} ${statuses[new_listing]} the account ${listed}`;
+      return `[userlink=${issuerName}], ${statuses[new_listing]} the account ,[userlink=${listed}]`;
     },
     asset_create: async ({
       symbol,
@@ -190,7 +190,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
       issuer: string;
     }) => {
       const issuerName = await getUserNameById(issuer);
-      return `${issuerName} created the asset ${symbol}`;
+      return `[userlink=${issuerName}], created the asset ${symbol}`;
     },
     asset_issue: async ({
       asset_to_issue,
@@ -207,7 +207,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
       );
       const issuerName = await getUserNameById(issuer);
       const receiver = await getUserNameById(issue_to_account);
-      return `${issuerName} issued ${asset.amount} ${asset.symbol} to ${receiver}`;
+      return `[userlink=${issuerName}], issued ${asset.amount} ${asset.symbol} to ,[userlink=${receiver}]`;
     },
     asset_update: async ({
       issuer,
@@ -218,7 +218,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
     }) => {
       const issuerName = await getUserNameById(issuer);
       const asset = await getAssetById(asset_to_update);
-      return `${issuerName} updated asset ${asset.symbol}`;
+      return `[userlink=${issuerName}], updated asset ${asset.symbol}`;
     },
     asset_claim_pool: async ({
       amount_to_claim,
@@ -235,7 +235,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
       );
       const issuerName = await getUserNameById(issuer);
       const asset = await getAssetById(asset_id);
-      return `${issuerName} claimed ${claimedAsset.amount} ${claimedAsset.symbol} from ${asset.symbol} fee pool`;
+      return `[userlink=${issuerName}], claimed ${claimedAsset.amount} ${claimedAsset.symbol} from ${asset.symbol} fee pool`;
     },
     asset_update_issuer: async ({
       new_issuer,
@@ -249,7 +249,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
       const issuerName = await getUserNameById(issuer);
       const asset = await getAssetById(asset_to_update);
       const newOwner = await getUserNameById(new_issuer);
-      return `${issuerName} transferred rights for ${asset.symbol} to ${newOwner}`;
+      return `[userlink=${issuerName}], transferred rights for ${asset.symbol} to .[userlink=${newOwner}]`;
     },
     asset_update_feed_producers: async ({
       asset_to_update,
@@ -260,7 +260,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
     }) => {
       const issuerName = await getUserNameById(issuer);
       const asset = await getAssetById(asset_to_update);
-      return `${issuerName} updated the feed producers for the asset ${asset.symbol}`;
+      return `[userlink=${issuerName}], updated the feed producers for the asset ${asset.symbol}`;
     },
   };
 

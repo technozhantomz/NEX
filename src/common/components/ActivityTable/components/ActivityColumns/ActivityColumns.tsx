@@ -1,9 +1,5 @@
-//import Link from "next/link";
-
-//import { ActivityRow } from "../../hooks/useActivityTable.types";
 import { ActivityTag } from "../ActivityTag";
-
-import { InfoBlock } from "./InfoBlock/InfoBlock";
+import { AvtivityInfo } from "../AvtivityInfo";
 
 export const ActivityColumns = [
   {
@@ -21,7 +17,7 @@ export const ActivityColumns = [
     title: "Info",
     dataIndex: "info",
     key: "info",
-    render: (value: unknown): JSX.Element => <InfoBlock infoString={value} />,
+    render: (value: string): JSX.Element => <AvtivityInfo infoString={value} />,
   },
   {
     title: "ID",
