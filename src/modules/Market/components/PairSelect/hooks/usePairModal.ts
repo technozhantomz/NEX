@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { usePeerplaysApiContext } from "../../../../../common/components";
 import { Form, FormInstance } from "../../../../../ui/src";
 
-import { PairForm, PairModal } from "./usePairModal.types";
+import { PairForm, UsePairModal } from "./usePairModal.types";
 
-export function usePairModal(recentPairs: string[]): PairModal {
+export function usePairModal(recentPairs: string[]): UsePairModal {
   const [pairModalForm] = Form.useForm();
   const [assets, setAssets] = useState<string[]>([]);
   const { dbApi } = usePeerplaysApiContext();

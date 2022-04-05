@@ -1,6 +1,6 @@
 import { FormInstance, Rule } from "../../../../../ui/src";
 
-export type PairModal = {
+export type UsePairModal = {
   pairModalForm: FormInstance<PairForm>;
   assets: string[];
   formValdation: FormValidation;

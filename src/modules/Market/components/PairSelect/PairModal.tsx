@@ -58,7 +58,9 @@ export const PairModal = ({
       <Form.Item name="recents">
         <Select onSelect={onSeletRecent} defaultValue={recentPairs[0]}>
           {recentPairs.map((pair) => (
-            <Option value={pair}>{pair}</Option>
+            <Option value={pair} key={pair}>
+              {pair}
+            </Option>
           ))}
         </Select>
       </Form.Item>
