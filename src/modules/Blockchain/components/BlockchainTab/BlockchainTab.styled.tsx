@@ -3,11 +3,15 @@ import {
   styled,
   StatsCardsDeck as UIStatsCardsDeck,
 } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 
 const { Search } = Input;
 
 export const BlockTabWrapper = styled.div`
-  margin: 0 25px;
+  margin: 0 15px;
+  ${breakpoint.sm} {
+    margin: 0 25px;
+  }
 `;
 
 export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
