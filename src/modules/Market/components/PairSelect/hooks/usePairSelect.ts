@@ -54,7 +54,7 @@ export function usePairSelect(
     if (name === "pairModal") {
       pairModal.validateFields().then(() => {
         setVisible(false);
-        router.push(`/market/${values.quote}_${values.base}`);
+        router.push(`/market/${values.quote.trim()}_${values.base.trim()}`);
       });
     }
   };

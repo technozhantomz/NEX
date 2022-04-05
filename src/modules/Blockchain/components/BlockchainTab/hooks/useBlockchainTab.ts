@@ -35,7 +35,7 @@ export function useBlockchainTab(
   const [blockchainData, setBlockchainData] =
     useState<BlockChainData>(defaultData);
   const [searchResult, setSearchResult] = useState<BlockTableRow[]>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const { defaultAsset } = useAsset();
   const { updateStatsArray } = useUpdateStatsArray();
   const {
@@ -97,11 +97,20 @@ export function useBlockchainTab(
             ),
           },
         });
+        setLoading(false);
       }
     } catch (e) {
+      setLoading(false);
       console.log(e);
     }
-  }, [getChain, getBlockData, getDynamic, setBlockchainData, defaultAsset]);
+  }, [
+    getChain,
+    getBlockData,
+    getDynamic,
+    setBlockchainData,
+    defaultAsset,
+    setLoading,
+  ]);
 
   const handleSearch = useCallback(
     async (value: string) => {

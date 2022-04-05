@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
+import { usePeerplaysApiContext } from "../../../../../common/components";
 import { useAsset } from "../../../../../common/hooks";
 import { CommitteeMember } from "../../../../../common/types";
 import { useUpdateStatsArray } from "../../../hooks";
@@ -11,7 +11,7 @@ import {
 } from "./useCommitteeTab.types";
 
 export function useCommitteeTab(): UseCommitteeTabResult {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
   const [activeCommittee, setActiveCommittee] = useState<number>(0);
   const [committeeStats, setCommitteeStats] = useState<number[]>([]);
@@ -61,9 +61,11 @@ export function useCommitteeTab(): UseCommitteeTabResult {
             setCommitteeStats(
               updateStatsArray(committeeStats, committees.length)
             );
+            setLoading(false);
           }
         }
       } catch (e) {
+        setLoading(false);
         console.log(e);
       }
     }
@@ -75,6 +77,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
     setCommitteeStats,
     updateStatsArray,
     defaultAsset,
+    setLoading,
   ]);
 
   const handleSearch = useCallback(

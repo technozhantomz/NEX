@@ -1,39 +1,15 @@
-import {
-  Input,
-  styled,
-  List as UiList,
-  StatsCardsDeck as UIStatsCardsDeck,
-  Table as UiTable,
-} from "../../../../ui/src";
+import { styled, List as UiList, Table as UiTable } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
-const { Search } = Input;
-
-export const AssetsTabWrapper = styled.div`
+export const FeesTabWrapper = styled.div`
   margin: 0 15px;
   ${breakpoint.sm} {
     margin: 0 25px;
   }
 `;
 
-export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
-
-export const AssetsSearch = styled(Search)`
-  max-width: 520px;
-  margin-bottom: 35px;
-  .ant-input {
-    border-radius: 4px;
-  }
-  > .ant-input-group
-    > .ant-input-group-addon:last-child
-    .ant-input-search-button {
-    border-radius: 0 4px 4px 0;
-    border-left: none;
-  }
-`;
-
-export const AssetsTable = styled(UiTable)`
+export const FeesTable = styled(UiTable)`
   .ant-table-thead > tr > th {
     color: ${colors.textColorSecondary};
     background: ${colors.white};
@@ -46,35 +22,58 @@ export const AssetsTable = styled(UiTable)`
   }
   .ant-table-tbody > tr > td {
     border: none;
+    div:not(:last-child) {
+      margin-bottom: 15px;
+    }
   }
   .ant-tag {
     padding: 5px 15px;
     background: ${colors.assetTag};
     border: none;
     color: ${colors.textColor};
+    text-transform: capitalize;
   }
 `;
 
-export const AssetListItem = styled(UiList.Item)``;
+export const FeeSpecificHeader = styled.h3`
+  margin-top: 15px;
+  margin-bottom: 15px;
+  ${breakpoint.sm} {
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+`;
 
-export const AssetItemContent = styled.div`
+export const FeeListItem = styled(UiList.Item)``;
+
+export const FeeItemContent = styled.div`
   margin: 18px 0 25px;
-  .asset-info {
+  .fee-info {
     margin: 5px 0;
     display: flex;
-    .asset-info-title {
+    .fee-info-title {
       font-weight: 300;
-      width: 100px;
+      width: 85px;
+      margin-right: 5px;
       color: ${colors.textColorSecondary};
     }
-    .asset-info-value {
+    .fee-info-value {
       font-weight: 500;
       .ant-tag {
         padding: 5px 15px;
         background: ${colors.assetTag};
         border: none;
         color: ${colors.textColor};
+        text-transform: capitalize;
       }
     }
+  }
+`;
+
+export const FeeTypeOrValueContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  span:not(:last-child) {
+    margin-bottom: 5px;
   }
 `;

@@ -7,7 +7,7 @@ import { useUpdateStatsArray } from "../../../hooks";
 import { AssetTableRow, UseAssetsTabResult } from "./useAssetsTab.types";
 
 export function useAssetsTab(): UseAssetsTabResult {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
   const [assetTableRows, setAssetTableRows] = useState<AssetTableRow[]>([]);
   const [assetsStats, setAssetsStats] = useState<number[]>([]);
@@ -35,11 +35,19 @@ export function useAssetsTab(): UseAssetsTabResult {
         );
         setAssetTableRows(assetsRows);
         setAssetsStats(updateStatsArray(assetsStats, assetsRows.length));
+        setLoading(false);
       }
     } catch (e) {
+      setLoading(false);
       console.log(e);
     }
-  }, [dbApi, setAssetsStats, setAssetTableRows, useUpdateStatsArray]);
+  }, [
+    dbApi,
+    setAssetsStats,
+    setAssetTableRows,
+    useUpdateStatsArray,
+    setLoading,
+  ]);
 
   const handleSearch = useCallback(
     (symbol: string) => {

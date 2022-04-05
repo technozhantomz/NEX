@@ -12,7 +12,7 @@ import {
 } from "./useWitnessesTab.types";
 
 export function useWitnessesTab(): UseWitnessesTabResult {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
   const [witnessTableRows, setWitnessTableRows] = useState<WitnessTableRow[]>(
     []
@@ -98,10 +98,12 @@ export function useWitnessesTab(): UseWitnessesTabResult {
                   Number(earnings)
                 ),
               });
+              setLoading(false);
             }
           }
         }
       } catch (e) {
+        setLoading(false);
         console.log(e);
       }
     }
@@ -118,6 +120,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     setEarnings,
     setWitnessStats,
     updateStatsArray,
+    setLoading,
   ]);
 
   const handleSearch = useCallback(

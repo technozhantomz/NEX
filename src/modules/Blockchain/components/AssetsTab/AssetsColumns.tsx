@@ -36,7 +36,7 @@ export const AssetsColumns = [
     title: "Info",
     dataIndex: "info",
     key: "info",
-    render: (info: any): JSX.Element => (
+    render: (info: string): JSX.Element => (
       <Tooltip placement="top" title={info}>
         <InfoCircleOutlined />
       </Tooltip>
