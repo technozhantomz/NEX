@@ -1,15 +1,20 @@
 import {
   Input,
   styled,
+  List as UiList,
   StatsCardsDeck as UIStatsCardsDeck,
   Table as UiTable,
 } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
 const { Search } = Input;
 
 export const WitnessesTabWrapper = styled.div`
-  margin: 0 25px;
+  margin: 0 15px;
+  ${breakpoint.sm} {
+    margin: 0 25px;
+  }
 `;
 
 export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
@@ -47,5 +52,23 @@ export const WitnessesTable = styled(UiTable)`
     background: ${colors.assetTag};
     border: none;
     color: ${colors.textColor};
+  }
+`;
+
+export const WitnessListItem = styled(UiList.Item)``;
+
+export const WitnessItemContent = styled.div`
+  margin: 18px 0 25px;
+  .witness-info {
+    margin: 5px 0;
+    display: flex;
+    .witness-info-title {
+      font-weight: 300;
+      width: 100px;
+      color: ${colors.textColorSecondary};
+    }
+    .witness-info-value {
+      font-weight: 500;
+    }
   }
 `;

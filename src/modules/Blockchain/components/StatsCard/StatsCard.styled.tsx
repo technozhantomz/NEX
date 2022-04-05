@@ -3,7 +3,7 @@ import { colors } from "../../../../ui/src/colors";
 
 export const StatsCard = styled.div`
   height: 120px;
-  width: 220px;
+  min-width: 220px;
   border: 1px solid ${colors.borderColorBase};
   border-radius: 4px;
   padding: 15px;

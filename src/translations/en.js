@@ -9,6 +9,7 @@ export const en = {
       fee_per_day: "Price per day",
       fee_per_kb: "Price per KByte Transaction Size",
       long_symbol: "Longer Symbols",
+      lottery_asset: "Lottery asset",
       membership_annual_fee: "Annual Membership",
       membership_lifetime_fee: "Lifetime Membership",
       premium_fee: "Fee for Premium Names",
