@@ -24,6 +24,8 @@ export const WitnessesColumns = [
     title: "Action",
     dataIndex: "key",
     key: "key",
-    render: (id: string): JSX.Element => <a onClick={() =>console.log(id)} >ADD</a>,
+    render: (id: string): JSX.Element => (
+      <a onClick={() => console.log(id)}>ADD</a>
+    ),
   },
 ];

@@ -6,12 +6,15 @@ export type WitnessesTab = {
   removeFromVote: (id: string) => void;
   addToVote: (id: string) => void;
   localStorageAccount: string;
+  approvedList: any[];
+  unPublishedList: any[];
+  undoUnPublished: (row: string) => void;
+  notApprovedList: any[];
 };
 
 export type WitnessData = {
   data: WitnessTableRow[];
 };
-
 
 export type WitnessTableRow = {
   key: number;

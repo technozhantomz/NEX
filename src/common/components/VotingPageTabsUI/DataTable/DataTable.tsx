@@ -12,7 +12,6 @@ type Props = {
 export const DataTable = ({ approved, columns, data }: Props): JSX.Element => {
   const { localStorageAccount } = useDataTable();
 
-
   return (
     <Styled.ActionFormTabCard>
       <Styled.Table
@@ -21,7 +20,9 @@ export const DataTable = ({ approved, columns, data }: Props): JSX.Element => {
         size="small"
         title={() => (
           <Styled.TableTitle strong>
-            {approved ? `Approved by ${localStorageAccount}` : `Not approved by ${localStorageAccount}`}
+            {approved
+              ? `Approved by ${localStorageAccount}`
+              : `Not approved by ${localStorageAccount}`}
             {approved ? <Styled.Check /> : <Styled.Xmark />}
           </Styled.TableTitle>
         )}
