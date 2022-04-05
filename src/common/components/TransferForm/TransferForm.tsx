@@ -80,11 +80,11 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
         </p>
         {status === "" ? "" : <p>{status}</p>}
-        <Form.Item>
+        <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">
             Send
           </Styled.TransferFormButton>
-        </Form.Item>
+        </Styled.FormItem>
       </Styled.TransferForm>
       <PasswordModal visible={visible} onCancel={onCancel} />
     </Form.Provider>

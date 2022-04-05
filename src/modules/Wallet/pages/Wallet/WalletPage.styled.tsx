@@ -15,6 +15,9 @@ export const Tabs = styled(UiTabs)`
 `;
 
 export const WalletCard = styled(UiCard)`
+  .ant-table-wrapper {
+    margin-left: 35px;
+  }
   .ant-card-body {
     padding: 0;
     .ant-tabs-nav-list {

@@ -2,6 +2,9 @@ import { styled, Card as UiCard } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 
 export const AssetCard = styled(UiCard)`
+  .ant-table-wrapper {
+    width: 566px;
+  }
   .ant-card-body {
     padding: 0;
     .ant-tabs-tab,

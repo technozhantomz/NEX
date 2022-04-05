@@ -1,4 +1,10 @@
-import { CardFormButton, CardFrom, styled } from "../../../ui/src";
+import {
+  CardFormButton,
+  CardFrom,
+  styled,
+  Form as UIForm,
+} from "../../../ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const WithdrawForm = styled(CardFrom)`
   margin: 0 20px;
@@ -29,4 +35,17 @@ export const WithdrawFormAsset = styled(CardFrom.Item)`
   }
 `;
 
-export const WithdrawFormButton = styled(CardFormButton)``;
+export const WithdrawFormButton = styled(CardFormButton)`
+  width: 100%;
+`;
+
+export const FormItem = styled(UIForm.Item)`
+  width: 255px;
+  margin-left: auto;
+  margin-right: auto;
+  ${breakpoint.sm} {
+    margin-left: 150px;
+    width: 290px;
+    height: 45px;
+  }
+`;

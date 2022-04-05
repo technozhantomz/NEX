@@ -1,4 +1,11 @@
-import { Col, Form, styled, Row as UiRow } from "../../../ui/src";
+import {
+  Col,
+  Form,
+  styled,
+  Form as UIForm,
+  Row as UiRow,
+} from "../../../ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 
 export const DepositForm = styled(Form)`
@@ -29,4 +36,15 @@ export const SelectOptionCol = styled(Col)`
 
 export const SonError = styled.span`
   color: ${colors.errorColor};
+`;
+
+export const FormItem = styled(UIForm.Item)`
+  width: 255px;
+  margin-left: auto;
+  margin-right: auto;
+  ${breakpoint.sm} {
+    margin-left: 150px;
+    width: 290px;
+    height: 45px;
+  }
 `;
