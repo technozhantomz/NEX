@@ -1,10 +1,5 @@
 import { useRouter } from "next/router";
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-} from "react";
+import React, { createContext, useContext, useEffect } from "react";
 
 import { useLocalStorage } from "../../hooks";
 
@@ -31,20 +26,10 @@ export const HistoryProvider = ({ children }: Props): JSX.Element => {
     if (!history) setHistory([asPath]);
     else {
       if (history[history.length - 1] !== asPath) {
-        setHistory(updateArray(history, asPath));
+        setHistory([...history, asPath]);
       }
     }
   }, [asPath]);
-
-  const updateArray = useCallback((arr: string[], value: string): string[] => {
-    if (arr.length >= 99) {
-      arr.shift();
-      arr.push(value);
-      return arr;
-    }
-    arr.push(value);
-    return arr;
-  }, []);
 
   return (
     <HistoryContext.Provider value={{ history }}>
