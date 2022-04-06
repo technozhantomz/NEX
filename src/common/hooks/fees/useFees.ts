@@ -75,6 +75,7 @@ export function useFees(): UseFeesResult {
     },
     [feeParameters, findOperationFee, account]
   );
+
   useEffect(() => {
     getFeesFromGlobal();
     setAccount();

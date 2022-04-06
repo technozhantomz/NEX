@@ -3,8 +3,7 @@ import type { NextPage } from "next";
 import React from "react";
 
 import { Layout } from "../../../../common/components";
-import { AdvisorTab } from "../../components/AdvisorTab";
-import { WitnessTab } from "../../components/WitnessTab";
+import { VoteTab } from "../../components/VoteTab";
 
 import * as Styled from "./VotingPage.styled";
 
@@ -24,14 +23,14 @@ const VotingPage: NextPage = () => {
           <TabPane tab="GPOS" key="1">
             <Styled.Text>GPOS Tab</Styled.Text>
           </TabPane>
-          <TabPane tab="Witness" key="2">
-            <WitnessTab />
+          <TabPane tab="Witnesses" key="2">
+            <VoteTab tab="Witnesses" />
           </TabPane>
           <TabPane tab="SONs" key="3">
-            <Styled.Text>SONs Tab</Styled.Text>
+            <VoteTab tab="SONs" />
           </TabPane>
           <TabPane tab="Advisors" key="4">
-            <AdvisorTab tab="Advisors" />
+            <VoteTab tab="Advisors" />
           </TabPane>
           <TabPane tab="Proxy" key="5">
             <Styled.Text>Proxy Tab</Styled.Text>

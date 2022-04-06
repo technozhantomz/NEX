@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { CSSProperties, ReactNode, useEffect, useState } from "react";
 
 import { useViewportContext } from "../../../../common/components/ViewportProvider/ViewportProvider";
 import { List } from "../../../../ui/src";
@@ -12,7 +12,7 @@ type Props = {
   tab: string;
   tableType: string;
   account: string;
-  filterVote?: string;
+  filterVote: string;
   loading: boolean;
   doAction: (txt: string, tableRow?: IVoteRow) => Promise<void>;
 };
@@ -22,7 +22,7 @@ export const VoteTable = ({
   tab,
   tableType,
   account,
-  filterVote = "",
+  filterVote,
   loading,
   doAction,
 }: Props): JSX.Element => {
@@ -146,7 +146,30 @@ export const VoteTable = ({
             columns={tableType === "changes" ? columnsWithPending : columns}
             dataSource={dataSource}
             loading={loading}
-            pagination={false}
+            pagination={{
+              position: ["bottomRight"],
+              size: "small",
+              pageSize: 5,
+              itemRender: (
+                _page: number,
+                type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
+                element: ReactNode
+              ) => {
+                if (type === "prev") {
+                  return (
+                    <a style={{ marginRight: "8px" } as CSSProperties}>
+                      Previous
+                    </a>
+                  );
+                }
+                if (type === "next") {
+                  return (
+                    <a style={{ marginLeft: "8px" } as CSSProperties}>Next</a>
+                  );
+                }
+                return element;
+              },
+            }}
             size="small"
           />
         ) : (
@@ -154,6 +177,7 @@ export const VoteTable = ({
             itemLayout="vertical"
             dataSource={dataSource}
             loading={loading}
+            pagination={{ position: "bottom", size: "small", pageSize: 20 }}
             renderItem={(item) => (
               <Styled.VoteListItem
                 key={item.key}

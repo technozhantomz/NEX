@@ -1,6 +1,5 @@
 import {
-  CardFormButton as button,
-  Col as col,
+  Button as button,
   Form as form,
   Input as input,
   Row as row,
@@ -12,18 +11,17 @@ import {
   Info as info,
   Reset as reset,
   Search as search,
+  Xmark as xmark,
 } from "../../../../ui/src/icons";
 
 export const FormContainer = styled.div`
   margin-top: 25px;
 `;
 
-export const Col = styled(col)`
-  width: 50%;
-`;
-
 export const Row = styled(row)`
   width: 100%;
+  justify-content: end;
+  flex-flow: row;
 `;
 
 export const Form = styled(form)`
@@ -31,44 +29,73 @@ export const Form = styled(form)`
   height: unset !important;
 `;
 
-export const FormItem = styled(form.Item)``;
+export const FormItemRow1 = styled(form.Item)`
+  width: 100%;
+  margin: 0px 0px 15px 0px;
+`;
+
+export const FormItemRow2 = styled(form.Item)`
+  margin: 0px 0px 15px 15px;
+`;
+
+export const ClearButton = styled(button)`
+  position: absolute;
+  display: unset !important;
+  margin-top: 0px;
+  right: 0;
+  margin-right: 40px;
+  margin-top: -1px;
+  background: none;
+  border: 0px;
+  color: ${colors.additionalBlue};
+  &:hover {
+    border: 0px;
+    background: none;
+  }
+`;
 
 export const CardFormButton = styled(button)`
   max-width: 185px;
   width: 100%;
   height: 45px;
-  margin-left: 15px;
   background: ${colors.primaryColor};
   border-radius: 4px;
   color: #ffffff;
+  float: right;
   &:hover {
     background: #015ef4;
     color: #ffffff;
   }
 `;
 
-export const SearchButton = styled(button)`
-  position: absolute;
-  display: unset !important;
-  width: 54px;
-  height: 43px;
-  border: 0px;
-  margin-top: 1px;
-  margin-left: -55px;
-  margin-right: 20px;
-`;
-
 export const CardFormLinkButton = styled(button)`
-  width: unset !important;
+  max-width: 185px;
+  width: 100%;
   margin: 0px;
   font-size: 16px;
   background: none;
   border: none;
   padding: 0;
-  color: ${colors.additionalBlue};
   text-align: right;
-  vertical-align: middle;
   float: right;
+  vertical-align: middle;
+  color: ${colors.additionalBlue};
+`;
+
+export const CardFormLinkButtonDisabled = styled(button)`
+  max-width: 185px;
+  width: 100%;
+  margin: 0px;
+  font-size: 16px;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: right;
+  float: right;
+  vertical-align: middle;
+  color: rgba(0, 0, 0, 0.25);
+  cursor: not-allowed;
+  pointer-events: none;
 `;
 
 export const DetailsLink = styled(text)`
@@ -91,7 +118,7 @@ export const InputText = styled(input)`
   font-size: 16px;
   border-radius: 4px;
   padding-left: 30px;
-  padding-right: 58px;
+  padding-right: 145px;
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -129,9 +156,15 @@ export const Info = styled(info)`
 `;
 
 export const Search = styled(search)`
+  position: absolute;
+  display: unset !important;
+  margin-top: 14px;
+  margin-left: -40px;
   font-size: 15px;
   color: #b9b9b9;
-  ${SearchButton}:hover & {
-    color: #2369cc;
-  }
+`;
+
+export const Xmark = styled(xmark)`
+  font-size: 18px;
+  color: #d01721;
 `;

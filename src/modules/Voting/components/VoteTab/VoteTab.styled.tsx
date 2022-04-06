@@ -4,7 +4,7 @@ export const Container = styled.div`
   padding: 10px 35px;
 `;
 
-export const AdvisorTabCard = styled.div`
+export const VoteTabCard = styled.div`
   .ant-form-horizontal {
     color: var(---text-icons);
     text-align: left;

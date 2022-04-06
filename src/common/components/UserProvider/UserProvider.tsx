@@ -106,21 +106,16 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
             })
           );
 
-          console.log(fullAccount);
-
           const votes: Vote[] = await dbApi("lookup_vote_ids", [
-            //fullAccount.account.options.votes,
-            ["0:11", "0:12"],
+            fullAccount.account.options.votes,
             false,
           ]).then((e: any) =>
             e.length
               ? e.map((v: Vote) => {
                   return v;
                 })
-              : undefined
+              : []
           );
-
-          console.log(votes);
 
           updateAccount(
             fullAccount.account.id,
