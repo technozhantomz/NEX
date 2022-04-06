@@ -1,7 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../../../../../common/components/UserProvider/UserProvider";
+import {
+  useHistoryContext,
+  useUserContext,
+} from "../../../../../common/components";
 import { useAccount, useCreateAccount } from "../../../../../common/hooks";
 import { ISignupFormData } from "../../../../../common/types";
 import { CheckboxChangeEvent, Form } from "../../../../../ui/src";
@@ -14,12 +17,16 @@ export function useSignUpForm(): ISignUpForm {
   const { createAccount } = useCreateAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
   const [validUser, setValidUser] = useState(false);
+  const { history } = useHistoryContext();
   const [signUpForm] = Form.useForm();
   const router = useRouter();
 
   useEffect(() => {
     if (localStorageAccount) {
-      router.push("/dashboard");
+      if (history.length === 1) {
+        router.push("/dashboard");
+      }
+      router.push(history[history.length - 2]);
     } else {
       signUpForm.setFieldsValue({
         password: useGeneratePassword(),
