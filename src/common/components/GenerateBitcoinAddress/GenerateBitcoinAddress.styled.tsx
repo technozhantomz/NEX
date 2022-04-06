@@ -1,4 +1,5 @@
 import {
+  CardFormButton,
   Col,
   Form,
   styled,
@@ -43,8 +44,12 @@ export const FormItem = styled(UIForm.Item)`
   margin-left: auto;
   margin-right: auto;
   ${breakpoint.sm} {
-    margin-left: 150px;
-    width: 290px;
+    margin-left: 106px;
+    width: 399px;
     height: 45px;
   }
+`;
+
+export const Button = styled(CardFormButton)`
+  width: 100%;
 `;
