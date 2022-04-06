@@ -120,11 +120,11 @@ export const WithdrawForm = ({
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
         </p>
         {status === "" ? "" : <p>{status}</p>}
-        <Form.Item>
+        <Styled.FormItem>
           <Styled.WithdrawFormButton type="primary" htmlType="submit">
             Withdraw
           </Styled.WithdrawFormButton>
-        </Form.Item>
+        </Styled.FormItem>
       </Styled.WithdrawForm>
       <PasswordModal visible={visible} onCancel={onCancel} />
     </Form.Provider>

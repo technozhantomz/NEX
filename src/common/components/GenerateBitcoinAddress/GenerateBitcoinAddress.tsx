@@ -24,13 +24,13 @@ export const GenerateBitcoinAddress = ({
     <>
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.DepositForm name="generateAddressForm" onFinish={confirm}>
-          <Form.Item>
-            <CardFormButton type="primary" htmlType="submit">
+          <Styled.FormItem>
+            <Styled.Button type="primary" htmlType="submit">
               {isLoggedIn
                 ? "Generate Bitcoin Address"
                 : "Log in & Generate Bitcoin Address"}
-            </CardFormButton>
-          </Form.Item>
+            </Styled.Button>
+          </Styled.FormItem>
         </Styled.DepositForm>
         {status === "" ? (
           ""
