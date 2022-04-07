@@ -5,6 +5,7 @@ export type FullAccount = {
   referrer_name: string;
   registrar_name: string;
   balances: Balance[];
+  statistics: AccountStatistics;
 };
 
 export type Account = {
@@ -107,4 +108,21 @@ export type WitnessAccount = {
   total_missed: number;
   last_confirmed_block_num: number;
   pay_vb: string;
+};
+
+export type AccountStatistics = {
+  core_in_balance: number;
+  has_cashback_vb: boolean;
+  id: string;
+  is_voting: false;
+  last_vote_time: string;
+  lifetime_fees_paid: number;
+  most_recent_op: string;
+  name: string;
+  owner: string;
+  pending_fees: number;
+  pending_vested_fees: number;
+  removed_ops: number;
+  total_core_in_orders: number;
+  total_ops: number;
 };

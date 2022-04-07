@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { Button } from "./Button";
 import { breakpoint } from "./breakpoints";
+import { colors } from "./colors";
 
 export const CardFormButton = styled(Button)`
    {
@@ -23,7 +24,7 @@ export const CardFrom = styled(AntdForm)`
   }
   .ant-form-item-has-success {
     .ant-input-suffix {
-      color: var(--ant-success-color);
+      color: ${colors.successColor};
     }
   }
   .ant-form-item-has-error {
