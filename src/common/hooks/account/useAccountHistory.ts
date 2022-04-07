@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { usePeerplaysApiContext } from "../../components";
+import { usePeerplaysApiContext } from "../../providers";
 import { History } from "../../types";
 
 import { UseAccountHistoryResult } from "./useAccountHistory.types";

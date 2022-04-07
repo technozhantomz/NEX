@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../api/params";
-import { usePeerplaysApiContext } from "../components/PeerplaysApiProvider";
-import { useSettingsContext } from "../components/SettingsProvider";
+import { usePeerplaysApiContext, useSettingsContext } from "../providers";
 import { Asset, Cache } from "../types";
 
 import { UseAssetResult } from "./useAsset.types";

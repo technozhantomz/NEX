@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import { useAccount, useCreateAccount } from "../../../../../common/hooks";
 import {
   useHistoryContext,
   useUserContext,
-} from "../../../../../common/components";
-import { useAccount, useCreateAccount } from "../../../../../common/hooks";
+} from "../../../../../common/providers";
 import { ISignupFormData } from "../../../../../common/types";
 import { CheckboxChangeEvent, Form } from "../../../../../ui/src";
 

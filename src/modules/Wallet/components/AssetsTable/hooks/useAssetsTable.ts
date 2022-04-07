@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultQuote } from "../../../../../api/params/networkparams";
-import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
-import { useUserContext } from "../../../../../common/components/UserProvider";
 import { useAsset, useMarketPairStats } from "../../../../../common/hooks";
+import {
+  usePeerplaysApiContext,
+  useUserContext,
+} from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
 
 import { IAssetRow, UseAssetsTabResult } from "./useAssetsTable.types";

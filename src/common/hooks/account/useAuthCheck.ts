@@ -1,7 +1,7 @@
 import router from "next/router";
 import { useEffect } from "react";
 
-import { useUserContext } from "../../components";
+import { useUserContext } from "../../providers";
 
 import { AuthCheck } from "./useAuthCheck.types";
 

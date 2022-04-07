@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components";
 import { useAsset, useBlockchain } from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { WitnessAccount } from "../../../../../common/types";
 import { useUpdateStatsArray } from "../../../hooks";
 

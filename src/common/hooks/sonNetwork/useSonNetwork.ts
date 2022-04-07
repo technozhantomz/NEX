@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
+import { usePeerplaysApiContext } from "../../providers";
 import { Account } from "../../types";
 
 import { SonNetworkStatus, UseSonNetworkResult } from "./useSonNetwork.types";
