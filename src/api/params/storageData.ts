@@ -6,7 +6,12 @@ export const defaultSettings: Settings = {
   language: "en",
   darkTheme: false,
   advancedMode: false,
-  notifications: true,
+  notifications: {
+    allow: true,
+    additional: {
+      transferToMe: true,
+    },
+  },
   walletLock: 0,
   nodeAutoselect: true,
   defaultAsset: defaultQuote as string,
