@@ -4,13 +4,16 @@ import { colors } from "../../../ui/src/colors";
 
 export const DepositHeader = styled.p`
   margin-left: 10px;
-  margin-top: 3px;
+  margin-top: 7px;
   color: ${colors.textColor};
   text-align: center;
   font: normal normal medium 16px/20px Inter;
   letter-spacing: 0px;
   opacity: 1;
   font-size: 16px;
+  ${breakpoint.sm} {
+    margin-top: 3px;
+  }
 `;
 
 export const AddressDownloadLink = styled.a`
@@ -24,9 +27,13 @@ export const AddressDownloadLink = styled.a`
 export const DisclaimerFooter = styled.p`
   color: ${colors.textColor};
   text-align: left;
-  font: normal normal normal 14px/20px Inter;
   letter-spacing: 0px;
   opacity: 1;
+  font: normal normal normal 12px/20px Inter;
+  max-width: 100%;
+  ${breakpoint.sm} {
+    font: normal normal normal 14px/20px Inter;
+  }
 `;
 
 export const GeneratedBitcoinAddress = styled(Input)`
@@ -42,21 +49,24 @@ export const GeneratedBitcoinAddress = styled(Input)`
   ${breakpoint.sm} {
     width: 100%;
   }
+  .ant-input.ant-input-disabled.ant-input-sm {
+    font-size: 12px;
+    ${breakpoint.sm} {
+      font-size: 14px;
+    }
+  }
 `;
 
 export const InfoBox = styled.div`
    {
     display: flex;
-    margin: 10px;
   }
-  .anticon {
+  .anticon svg {
+    height: 15px;
+    margin-right: 10px;
     color: var(--ant-warning-color);
-    margin-right: 20px;
-    margin-left: 20px;
-
     ${breakpoint.sm} {
-      margin-right: 5px;
-      margin-left: 5px;
+      margin-right: 15px;
     }
   }
 `;
@@ -74,3 +84,5 @@ export const AddressContainer = styled.div`
     text-align: center;
   }
 `;
+
+export const IconDiv = styled.div``;

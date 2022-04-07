@@ -3,6 +3,12 @@ import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const WithdrawForm = styled(CardFrom)`
   margin: 0 20px;
+  .form-input {
+    font-size: 12px;
+    ${breakpoint.sm} {
+      font-size: 20px;
+    }
+  }
 `;
 
 export const WithdrawFormAssetAmount = styled(CardFrom.Item)`
@@ -15,6 +21,10 @@ export const WithdrawFormAssetAmount = styled(CardFrom.Item)`
     .ant-input {
       text-align: right;
       padding-right: 30px;
+      font-size: 16px;
+      ${breakpoint.sm} {
+        font-size: 20px;
+      }
     }
   }
 `;

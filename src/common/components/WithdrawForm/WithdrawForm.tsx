@@ -86,7 +86,7 @@ export const WithdrawForm = ({
             validateFirst={true}
             rules={formValdation.withdrawPublicKey}
           >
-            <Input placeholder="Withdraw public key" />
+            <Input placeholder="Withdraw public key" className="form-input" />
           </Form.Item>
         ) : (
           ""
@@ -102,6 +102,7 @@ export const WithdrawForm = ({
                 ? "Withdraw address"
                 : "Hive blockchain account"
             }
+            className="form-input"
           />
         </Form.Item>
         {!withAssetSelector ? (
