@@ -1,4 +1,5 @@
 import { Col as col, Row as row, styled } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 
 export const MarketContainer = styled.div`
   background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
@@ -13,17 +14,10 @@ export const MarketContainer = styled.div`
   text-align: center;
 `;
 
-export const Row = styled(row)`
-  margin-bottom: 20px;
-  @media (min-width: 500px) {
-    margin-left: 25px;
-    margin-top: 25px;
-    margin-right: auto;
-  }
-`;
-export const Col = styled(col)`
-  margin: 5px;
-`;
+export const Row = styled(row)``;
+
+export const Col = styled(col)``;
+
 export const HeadingPara = styled.p`
   text-align: left;
   font: normal normal normal 14px/17px Inter;
@@ -31,9 +25,17 @@ export const HeadingPara = styled.p`
   color: #6c6c6c;
   opacity: 1;
   margin-left: 30px;
-  margin-top: 30px;
+  margin-top: 25px;
   @media (max-width: 500px) {
     font-size: 12px;
     margin-left: 7px;
+  }
+`;
+
+export const Div = styled.div`
+  margin: 10px;
+
+  ${breakpoint.sm} {
+    margin: 25px;
   }
 `;

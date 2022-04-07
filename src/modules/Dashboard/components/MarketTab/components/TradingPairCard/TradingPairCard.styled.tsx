@@ -2,7 +2,10 @@ import { styled } from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
 
 export const Card = styled.div`
-  height: 100px;
+  height: 65px;
+  ${breakpoint.sm} {
+    height: 100px;
+  }
   /* UI Properties */
   background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -42,6 +45,9 @@ export const Card = styled.div`
 export const ContentHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  @media (max-width: 500px) {
+    height: 25px;
+  }
 `;
 export const TradingPair = styled.p`
   text-align: left;
@@ -49,7 +55,10 @@ export const TradingPair = styled.p`
   letter-spacing: 0px;
   color: #6c6c6c;
   opacity: 1;
-  font-size: 14px;
+  font-size: 10px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
   margin: 10px;
 `;
 export const PercentChange = styled.p`
@@ -73,10 +82,13 @@ export const Price = styled.p`
   letter-spacing: 0px;
   color: #212121;
   opacity: 1;
-  font-size: 28px;
+  font-size: 26px;
   margin-left: 10px;
   display: ${(props) =>
     props.theme ? props.theme.display : props.theme.display};
+  ${breakpoint.sm} {
+    font-size: 28px;
+  }
 `;
 export const Volume = styled.p`
   color: var(---text-icons);
@@ -85,9 +97,9 @@ export const Volume = styled.p`
   letter-spacing: 0px;
   color: #212121;
   opacity: 1;
-  font-size: 28px;
+  font-size: 26px;
   margin-left: 10px;
   ${breakpoint.sm} {
-    font-size: 26px;
+    font-size: 28px;
   }
 `;
