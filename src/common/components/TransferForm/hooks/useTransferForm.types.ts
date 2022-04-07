@@ -1,11 +1,11 @@
 import { FormInstance, Rule } from "../../../../ui/src";
 
-export type TransferForm = {
+export type UseTransferFormResult = {
   status: string;
   visible: boolean;
   feeAmount: number;
   formValdation: FormValidation;
-  transferForm: FormInstance<TransferFormData>;
+  transferForm: FormInstance<TransferForm>;
   onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   onCancel: () => void;
   confirm: () => void;
@@ -27,7 +27,7 @@ export type FormValidation = {
   memo: Rule[];
 };
 
-export type TransferFormData = {
+export type TransferForm = {
   form: string;
   to: string;
   amount: number;

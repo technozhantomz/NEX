@@ -109,4 +109,5 @@ export type WitnessAccount = {
   url: string;
   total_missed: number;
   last_confirmed_block_num: number;
+  pay_vb: string;
 };

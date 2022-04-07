@@ -6,6 +6,7 @@ export { DownOutlined } from "./DownOutlined";
 export { CardForm, CardFormButton } from "./CardForm";
 export { MenuCard } from "./MenuCard";
 export { Avatar } from "./Avatar";
+export { StatsCardsDeck } from "./StatsCardDeck";
 export { Tag } from "./Tag";
 export { Typography, Text, Paragraph } from "./Typography";
 
@@ -27,6 +28,7 @@ export {
 } from "antd";
 
 export {
+  LinkOutlined,
   DollarOutlined,
   PoweroffOutlined,
   SettingOutlined,
