@@ -1,8 +1,8 @@
 import type { AppProps } from "next/app";
 
 import {
+  BrowserHistoryProvider,
   ConnectionManager,
-  HistoryProvider,
   PeerplaysApiProvider,
   SettingsProvider,
   UserProvider,
@@ -16,11 +16,11 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
       <SettingsProvider>
         <PeerplaysApiProvider>
           <ConnectionManager>
-            <HistoryProvider>
+            <BrowserHistoryProvider>
               <UserProvider>
                 <Component {...pageProps} />
               </UserProvider>
-            </HistoryProvider>
+            </BrowserHistoryProvider>
           </ConnectionManager>
         </PeerplaysApiProvider>
       </SettingsProvider>
