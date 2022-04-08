@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import { useAccount } from "../../../../../common/hooks";
 import {
   useHistoryContext,
   useUserContext,
-} from "../../../../../common/components";
-import { useAccount } from "../../../../../common/hooks";
+} from "../../../../../common/providers";
 import { FullAccount } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 

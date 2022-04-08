@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components";
 import { useAsset } from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { CommitteeMember } from "../../../../../common/types";
 import { useUpdateStatsArray } from "../../../hooks";
 

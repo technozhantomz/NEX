@@ -11,12 +11,15 @@ interface Props {
 
 const DefaultHistoryState: HistoryContextType = {
   history: [],
+  pathname: "",
+  privatePaths: ["/wallet", "/settings", "/voting"],
 };
 
 const HistoryContext = createContext<HistoryContextType>(DefaultHistoryState);
 
 export const HistoryProvider = ({ children }: Props): JSX.Element => {
-  const { asPath } = useRouter();
+  const { asPath, pathname } = useRouter();
+  const privatePaths = DefaultHistoryState.privatePaths;
   const [history, setHistory] = useLocalStorage("history") as [
     string[],
     (value: string[]) => void
@@ -32,7 +35,7 @@ export const HistoryProvider = ({ children }: Props): JSX.Element => {
   }, [asPath]);
 
   return (
-    <HistoryContext.Provider value={{ history }}>
+    <HistoryContext.Provider value={{ history, pathname, privatePaths }}>
       {children}
     </HistoryContext.Provider>
   );

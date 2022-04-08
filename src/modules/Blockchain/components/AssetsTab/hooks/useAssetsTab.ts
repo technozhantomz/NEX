@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components";
+import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Account, Asset } from "../../../../../common/types";
 import { useUpdateStatsArray } from "../../../hooks";
 

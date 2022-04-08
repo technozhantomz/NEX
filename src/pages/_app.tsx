@@ -7,7 +7,7 @@ import {
   SettingsProvider,
   UserProvider,
   ViewportProvider,
-} from "../common/components";
+} from "../common/providers";
 import "../ui/src/ui.less";
 
 function App({ Component, pageProps }: AppProps): JSX.Element {

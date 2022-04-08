@@ -4,9 +4,9 @@ import {
   AddressGenerated,
   GenerateBitcoinAddress,
   HIVEAndHBDDeposit,
-  useUserContext,
 } from "../../../../common/components";
 import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
+import { useUserContext } from "../../../../common/providers";
 
 import * as Styled from "./DepositTab.styled";
 import { useDepositTab } from "./hooks";

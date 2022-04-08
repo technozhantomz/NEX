@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
-import { useUserContext } from "../../components/UserProvider";
+import { usePeerplaysApiContext, useUserContext } from "../../providers";
 import { SidechainAcccount } from "../../types";
 
 import { UseSidechainAccountsResult } from "./useSidechainAccounts.types";

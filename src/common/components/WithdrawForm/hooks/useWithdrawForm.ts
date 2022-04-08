@@ -12,8 +12,8 @@ import {
   useTransactionBuilder,
   useTransferTransactionBuilder,
 } from "../../../hooks";
+import { useUserContext } from "../../../providers";
 import { Account } from "../../../types";
-import { useUserContext } from "../../UserProvider";
 
 import { UseWithdrawFormResult } from "./useWithdrawForm.types";
 
