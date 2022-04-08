@@ -15,6 +15,13 @@ export const Tabs = styled(UiTabs)`
 `;
 
 export const WalletCard = styled(UiCard)`
+  .ant-tabs {
+    min-height: 856px;
+    padding: 35px 0 0 0;
+    border-radius: 4px;
+    opacity: 1;
+    max-width: 1070px;
+  }
   .ant-table-wrapper {
     margin-left: 35px;
   }
