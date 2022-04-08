@@ -1,4 +1,5 @@
 import { styled } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 
 export const InfoBar = styled.div`
    {
@@ -9,7 +10,7 @@ export const InfoBar = styled.div`
   }
   .anticon {
     margin-right: 10px;
-    color: var(--ant-warning-color);
+    color: ${colors.warningColor};
   }
 `;
 export const InfoBarText = styled.div`
