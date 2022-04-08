@@ -11,10 +11,10 @@ import {
   Market,
   Vote,
 } from "../../../../../../ui/src/icons";
-import { useUserContext } from "../../../../UserProvider";
+import { useUserContext } from "../../../../../providers/UserProvider";
 import { MenuItem } from "../MenuItem";
 
-import { useAdvancedMode } from "./hooks/useAdvancedMode";
+import { useAdvancedMode } from "./hooks";
 
 export const MainNav = (): JSX.Element => {
   const { advancedMode, handleAdvancedModeChange } = useAdvancedMode();

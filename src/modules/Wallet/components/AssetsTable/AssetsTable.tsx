@@ -1,5 +1,5 @@
-import { useViewportContext } from "../../../../common/components/ViewportProvider";
 import { useAsset } from "../../../../common/hooks";
+import { useViewportContext } from "../../../../common/providers";
 import { List } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import { AssetActionButton } from "../AssetActionButton";

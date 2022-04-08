@@ -1,13 +1,13 @@
 import type { AppProps } from "next/app";
 
 import {
+  BrowserHistoryProvider,
   ConnectionManager,
-  HistoryProvider,
   PeerplaysApiProvider,
   SettingsProvider,
   UserProvider,
   ViewportProvider,
-} from "../common/components";
+} from "../common/providers";
 import "../ui/src/ui.less";
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
@@ -16,11 +16,11 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
       <SettingsProvider>
         <PeerplaysApiProvider>
           <ConnectionManager>
-            <HistoryProvider>
+            <BrowserHistoryProvider>
               <UserProvider>
                 <Component {...pageProps} />
               </UserProvider>
-            </HistoryProvider>
+            </BrowserHistoryProvider>
           </ConnectionManager>
         </PeerplaysApiProvider>
       </SettingsProvider>

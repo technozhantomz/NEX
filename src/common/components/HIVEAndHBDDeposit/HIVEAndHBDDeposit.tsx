@@ -1,5 +1,5 @@
-import { useUserContext } from "..";
 import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
+import { useUserContext } from "../../providers";
 
 import * as Styled from "./HIVEAndHBDDeposit.styled";
 
