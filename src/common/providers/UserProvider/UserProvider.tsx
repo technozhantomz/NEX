@@ -1,4 +1,3 @@
-import router from "next/router";
 import React, {
   createContext,
   useCallback,
@@ -9,7 +8,6 @@ import React, {
 
 import { useAsset, useLocalStorage } from "../../hooks";
 import { Asset, FullAccount } from "../../types";
-import { useBrowserHistoryContext } from "../BrowserHistoryProvider";
 import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
 import { UserContextType } from "./UserProvider.types";
@@ -51,7 +49,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const [name, setName] = useState<string>("");
   const [assets, _setAssets] = useState<Asset[]>([]);
   const [isAccountLocked, _setIsAccountLocked] = useState<boolean>(true);
-  const { pathname, privatePaths } = useBrowserHistoryContext();
 
   const updateAccount = useCallback(
     (id: string, name: string, assets: Asset[]) => {
@@ -108,12 +105,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
       formInitialAccountByName(localStorageAccount);
     }
   }, []);
-
-  useEffect(() => {
-    if (!localStorageAccount && privatePaths.includes(pathname)) {
-      router.replace("/login");
-    }
-  }, [localStorageAccount]);
 
   return (
     <UserContext.Provider

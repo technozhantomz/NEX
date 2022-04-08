@@ -7,6 +7,7 @@ import React, {
 } from "react";
 
 import { useArrayLimiter, useSessionStorage } from "../../hooks";
+import { useUserContext } from "../UserProvider";
 
 import { BrowserHistoryContextType } from "./BrowserHistoryProvider.types";
 
@@ -17,7 +18,7 @@ interface Props {
 const DefaultBrowserHistoryState: BrowserHistoryContextType = {
   browserHistory: [],
   pathname: "",
-  privatePaths: ["/wallet", "/settings", "/voting"],
+  privatePaths: ["/wallet", "/wallet/[asset]", "/settings", "/voting"],
   handleLoginRedirect: function (): void {
     throw new Error(`Function not implemented.`);
   },
@@ -29,6 +30,7 @@ const BrowserHistoryContext = createContext<BrowserHistoryContextType>(
 
 export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
   const { asPath, pathname } = useRouter();
+  const { localStorageAccount } = useUserContext();
   const { updateArrayWithLmit } = useArrayLimiter();
   const privatePaths = DefaultBrowserHistoryState.privatePaths;
   const [browserHistory, setBrowserHistory] = useSessionStorage("history") as [
@@ -47,6 +49,12 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
     }
   }, []);
 
+  const isAuthOnlyPage = (path: string) => {
+    if (path === "/") return false;
+    if (pathname.includes(path)) return true;
+    return false;
+  };
+
   useEffect(() => {
     if (!browserHistory) setBrowserHistory([asPath]);
     else {
@@ -57,6 +65,28 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
       }
     }
   }, [asPath]);
+
+  useEffect(() => {
+    const handleStart = (url) => {
+      console.log(`Loading: ${url}`);
+      if (!localStorageAccount && privatePaths.includes(pathname)) {
+        router.replace("/login");
+      }
+    };
+    const handleStop = () => {
+      console.log("finised");
+    };
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleStop);
+    router.events.on("routeChangeError", handleStop);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleStop);
+      router.events.off("routeChangeError", handleStop);
+    };
+  }, [router]);
 
   return (
     <BrowserHistoryContext.Provider

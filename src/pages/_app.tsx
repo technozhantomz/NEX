@@ -16,11 +16,11 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
       <SettingsProvider>
         <PeerplaysApiProvider>
           <ConnectionManager>
-            <BrowserHistoryProvider>
-              <UserProvider>
+            <UserProvider>
+              <BrowserHistoryProvider>
                 <Component {...pageProps} />
-              </UserProvider>
-            </BrowserHistoryProvider>
+              </BrowserHistoryProvider>
+            </UserProvider>
           </ConnectionManager>
         </PeerplaysApiProvider>
       </SettingsProvider>
