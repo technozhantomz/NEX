@@ -1,3 +1,4 @@
+import { Skeleton } from "antd";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -11,7 +12,10 @@ import {
   WithdrawForm,
 } from "../../../../common/components";
 import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
-import { useUserContext } from "../../../../common/providers";
+import {
+  useBrowserHistoryContext,
+  useUserContext,
+} from "../../../../common/providers";
 import { Tabs } from "../../../../ui/src";
 import { AssetsTable } from "../../components/AssetsTable";
 
@@ -30,6 +34,23 @@ const AssetPage: NextPage = () => {
     getSidechainAccounts,
   } = useSidechainAccounts();
   const { localStorageAccount } = useUserContext();
+  const { pageLoading } = useBrowserHistoryContext();
+
+  if (pageLoading) {
+    return (
+      <Layout
+        title="Wallet"
+        type="card-lrg"
+        heading="Wallet"
+        description={`Wallet Page | ${asset} ${tab}`}
+        dexLayout={true}
+      >
+        <Styled.AssetCard>
+          <Skeleton active />
+        </Styled.AssetCard>
+      </Layout>
+    );
+  }
 
   return (
     <Layout

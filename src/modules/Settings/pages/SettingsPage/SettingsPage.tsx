@@ -1,8 +1,10 @@
+import { Skeleton } from "antd";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 
 import { Layout } from "../../../../common/components";
+import { useBrowserHistoryContext } from "../../../../common/providers";
 import { Tabs } from "../../../../ui/src";
 import { GeneralTab, MembershipTab, SecurityTab } from "../../components";
 
@@ -13,6 +15,23 @@ const { TabPane } = Tabs;
 const SettingPage: NextPage = () => {
   const router = useRouter();
   const { tab } = router.query;
+  const { pageLoading } = useBrowserHistoryContext();
+
+  if (pageLoading) {
+    return (
+      <Layout
+        title="Settings"
+        type="card-lrg"
+        heading="Settings"
+        description="Settings Page"
+        dexLayout={true}
+      >
+        <Styled.SettingsCard>
+          <Skeleton active />
+        </Styled.SettingsCard>
+      </Layout>
+    );
+  }
   return (
     <Layout
       title="Settings"
