@@ -22,6 +22,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
     confirm,
     onFormFinish,
     handleValuesChange,
+    loading,
   } = useTransferForm();
   const { defaultAsset } = useAsset();
 
@@ -81,7 +82,11 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
-          <Styled.TransferFormButton type="primary" htmlType="submit">
+          <Styled.TransferFormButton
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+          >
             Send
           </Styled.TransferFormButton>
         </Form.Item>

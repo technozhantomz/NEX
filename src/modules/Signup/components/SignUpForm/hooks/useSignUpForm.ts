@@ -10,6 +10,7 @@ import { useGeneratePassword } from "./useGeneratePassword";
 import { IFormValidation, ISignUpForm } from "./useSignUpForm.types";
 
 export function useSignUpForm(): ISignUpForm {
+  const [loading, setLoading] = useState(false);
   const { formAccountAfterConfirmation, getFullAccount } = useAccount();
   const { createAccount } = useCreateAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
@@ -28,10 +29,12 @@ export function useSignUpForm(): ISignUpForm {
   }, [localStorageAccount]);
 
   const handleSignUp = async (formData: unknown) => {
+    setLoading(true);
     const fullAccount = await createAccount(formData as ISignupFormData);
     if (fullAccount) {
       await formAccountAfterConfirmation(fullAccount);
       setLocalStorageAccount(fullAccount.account.name);
+      setLoading(false);
     }
   };
 
@@ -100,5 +103,6 @@ export function useSignUpForm(): ISignUpForm {
     validateUsername,
     formValdation,
     signUpForm,
+    loading,
   };
 }

@@ -16,6 +16,7 @@ import { useUserContext } from "../../UserProvider";
 import { UseTransferFormResult } from "./useTransferForm.types";
 
 export function useTransferForm(): UseTransferFormResult {
+  const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
@@ -82,6 +83,7 @@ export function useTransferForm(): UseTransferFormResult {
   };
 
   const sendTransfer = async (password: string) => {
+    setLoading(true);
     const values = transferForm.getFieldsValue();
     const from = (
       fromAccount ? fromAccount : await getAccountByName(values.from)
@@ -104,6 +106,7 @@ export function useTransferForm(): UseTransferFormResult {
       trxResult = await trxBuilder([trx], [activeKey]);
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
@@ -111,9 +114,11 @@ export function useTransferForm(): UseTransferFormResult {
       setStatus(
         `Successfully Transfered ${values.amount} ${values.asset} to ${values.to}`
       );
+      setLoading(false);
       transferForm.resetFields();
     } else {
       setVisible(false);
+      setLoading(false);
       setStatus("Server error, please try again later.");
     }
   };
@@ -221,5 +226,6 @@ export function useTransferForm(): UseTransferFormResult {
     onCancel,
     onFormFinish,
     handleValuesChange,
+    loading,
   };
 }

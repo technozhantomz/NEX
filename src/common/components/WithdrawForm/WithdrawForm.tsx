@@ -28,6 +28,7 @@ export const WithdrawForm = ({
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
+    loading,
   } = useWithdrawForm(asset);
 
   return (
@@ -121,7 +122,11 @@ export const WithdrawForm = ({
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
-          <Styled.WithdrawFormButton type="primary" htmlType="submit">
+          <Styled.WithdrawFormButton
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+          >
             Withdraw
           </Styled.WithdrawFormButton>
         </Form.Item>

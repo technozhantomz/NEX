@@ -10,6 +10,7 @@ export type UseTransferFormResult = {
   onCancel: () => void;
   confirm: () => void;
   handleValuesChange: (changedValues: any) => void;
+  loading: boolean;
 };
 
 export type FormField = {

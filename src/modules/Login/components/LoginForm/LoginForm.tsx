@@ -7,7 +7,8 @@ import * as Styled from "./LoginForm.styled";
 import { useLoginForm } from "./hooks";
 
 export const LoginForm: React.FC = () => {
-  const { validUser, loginForm, handleLogin, formValdation } = useLoginForm();
+  const { validUser, loginForm, handleLogin, formValdation, loading } =
+    useLoginForm();
   return (
     <Styled.LoginForm
       form={loginForm}
@@ -35,7 +36,11 @@ export const LoginForm: React.FC = () => {
         <Input.Password placeholder="Enter password" />
       </Form.Item>
       <Form.Item>
-        <Styled.LoginFormButton type="primary" htmlType="submit">
+        <Styled.LoginFormButton
+          type="primary"
+          htmlType="submit"
+          loading={loading}
+        >
           Log in
         </Styled.LoginFormButton>
       </Form.Item>

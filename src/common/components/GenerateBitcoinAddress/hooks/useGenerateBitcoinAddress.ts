@@ -16,6 +16,7 @@ import { GenerateBitcoinAddressResult } from "./useGenerateBitcoinAddress.types"
 export function useGenerateBitcoinAddress(
   getSidechainAccounts: (accountId: string) => Promise<void>
 ): GenerateBitcoinAddressResult {
+  const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const { trxBuilder } = useTransactionBuilder();
@@ -52,6 +53,7 @@ export function useGenerateBitcoinAddress(
 
   const generateBitcoinAddresses = useCallback(
     async (password: string) => {
+      setLoading(true);
       const sonNetworkStatus = await getSonNetworkStatus();
 
       if (!sonNetworkStatus.isSonNetworkOk) {
@@ -86,12 +88,14 @@ export function useGenerateBitcoinAddress(
       } catch (error) {
         console.log(error);
         setVisible(false);
+        setLoading(false);
       }
       if (trxResult) {
         setTimeout(async () => {
           await getSidechainAccounts(id);
         }, 3000);
         setVisible(false);
+        setLoading(false);
       }
     },
     [
@@ -103,5 +107,5 @@ export function useGenerateBitcoinAddress(
     ]
   );
 
-  return { visible, onCancel, onFormFinish, confirm, status };
+  return { visible, onCancel, onFormFinish, confirm, status, loading };
 }

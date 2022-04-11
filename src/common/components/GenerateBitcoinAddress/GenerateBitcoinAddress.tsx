@@ -17,7 +17,7 @@ export const GenerateBitcoinAddress = ({
   isLoggedIn = false,
   getSidechainAccounts,
 }: Props): JSX.Element => {
-  const { visible, onCancel, onFormFinish, confirm, status } =
+  const { visible, onCancel, onFormFinish, confirm, status, loading } =
     useGenerateBitcoinAddress(getSidechainAccounts);
 
   return (
@@ -25,7 +25,7 @@ export const GenerateBitcoinAddress = ({
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.DepositForm name="generateAddressForm" onFinish={confirm}>
           <Form.Item>
-            <CardFormButton type="primary" htmlType="submit">
+            <CardFormButton type="primary" htmlType="submit" loading={loading}>
               {isLoggedIn
                 ? "Generate Bitcoin Address"
                 : "Log in & Generate Bitcoin Address"}

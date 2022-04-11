@@ -18,6 +18,7 @@ import { useUserContext } from "../../UserProvider";
 import { UseWithdrawFormResult } from "./useWithdrawForm.types";
 
 export function useWithdrawForm(asset: string): UseWithdrawFormResult {
+  const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedAsset, setSelectedAsset] = useState<string>(asset);
@@ -122,6 +123,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   );
 
   const handleWithdraw = async (password: string) => {
+    setLoading(true);
     const values = withdrawForm.getFieldsValue();
     const from = (await getAccountByName(localStorageAccount)) as Account;
     const to = sonAccount
@@ -156,24 +158,28 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
               if (!addTrxResult) {
                 setVisible(false);
                 setStatus("Server error, please try again later.");
+                setLoading(false);
                 return;
               }
             } catch (e) {
               await getSidechainAccounts(id);
               setVisible(false);
               setStatus("Server error, please try again later.");
+              setLoading(false);
               console.log(e);
               return;
             }
           } else {
             setVisible(false);
             setStatus("Server error, please try again later.");
+            setLoading(false);
             return;
           }
         } catch (e) {
           console.log(e);
           setVisible(false);
           setStatus("Server error, please try again later.");
+          setLoading(false);
           return;
         }
       }
@@ -195,15 +201,18 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       trxResult = await trxBuilder([trx], [activeKey]);
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
       setVisible(false);
       setStatus(`Successfully withdrew ${values.amount}`);
+      setLoading(false);
       withdrawForm.resetFields();
     } else {
       setVisible(false);
       setStatus("Server error, please try again later.");
+      setLoading(false);
     }
   };
 
@@ -312,5 +321,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
+    loading,
   };
 }

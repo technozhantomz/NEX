@@ -4,4 +4,5 @@ export type GenerateBitcoinAddressResult = {
   onCancel: () => void;
   confirm: () => void;
   status: string;
+  loading: boolean;
 };

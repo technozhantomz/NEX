@@ -14,6 +14,7 @@ export type UseWithdrawFormResult = {
   // change unknown
   handleAssetChange: (value: unknown) => void;
   selectedAsset: string;
+  loading: boolean;
 };
 
 export type FormField = {
