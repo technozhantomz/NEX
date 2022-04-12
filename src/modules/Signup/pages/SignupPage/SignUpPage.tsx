@@ -6,12 +6,12 @@ import { FormDisclamer, Layout } from "../../../../common/components";
 import { Card } from "../../../../ui/src";
 import { SignUpForm } from "../../components/SignUpForm";
 
-// import * as Styled from "./SignUpPage.styled";
+import * as Styled from "./SignUpPage.styled";
 
 const SignUpPage: NextPage = () => {
   return (
     <Layout title="SignUp" type="card" heading="Create your account">
-      <Card>
+      <Styled.SignUpFormCard>
         <SignUpForm />
         <FormDisclamer>
           <span>Already have a Peerplays account? </span>
@@ -19,7 +19,7 @@ const SignUpPage: NextPage = () => {
             <a>Log in</a>
           </Link>
         </FormDisclamer>
-      </Card>
+      </Styled.SignUpFormCard>
     </Layout>
   );
 };

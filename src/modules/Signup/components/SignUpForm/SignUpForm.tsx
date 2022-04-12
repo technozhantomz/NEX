@@ -77,12 +77,18 @@ export const SignUpForm: React.FC = () => {
         name="confirm"
         rules={formValdation.confirm}
         valuePropName="confirmed"
+        className="checkbox-item"
       >
         <Styled.Checkbox onChange={setCheckboxVlaue}>
           I understand Peerplays cannot recover my lost password
         </Styled.Checkbox>
       </Form.Item>
-      <Form.Item name="saved" rules={formValdation.saved} valuePropName="saved">
+      <Form.Item
+        name="saved"
+        rules={formValdation.saved}
+        valuePropName="saved"
+        className="checkbox-item"
+      >
         <Styled.Checkbox onChange={setCheckboxVlaue}>
           I have securely saved my password
         </Styled.Checkbox>

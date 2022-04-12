@@ -1,15 +1,16 @@
-import { styled } from "../../../../ui/src";
+import { InfoCircleOutlined, styled } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
 export const InfoBar = styled.div`
    {
     display: flex;
     text-align: left;
-    font-size: 0.9em;
-    align-items: center;
+    font-size: 16px;
+    // align-items: center;
   }
   .anticon {
     margin-right: 10px;
+    margin-top: 50%;
     color: ${colors.warningColor};
   }
 `;
@@ -17,3 +18,7 @@ export const InfoBarText = styled.div`
   margin: 0;
   max-width: 388px;
 `;
+
+export const InfoIcon = styled(InfoCircleOutlined)``;
+
+export const InfoDiv = styled.div``;
