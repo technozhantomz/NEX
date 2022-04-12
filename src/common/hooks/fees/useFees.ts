@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useAccount, useAsset } from "..";
 import { usePeerplaysApiContext, useUserContext } from "../../providers";
-import { Account } from "../../types";
+import { Account, FeeParameter, GlobalProperties } from "../../types";
 
 import { ChainOperations, UseFeesResult } from "./useFees.types";
 

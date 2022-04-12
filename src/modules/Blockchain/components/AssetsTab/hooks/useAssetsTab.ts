@@ -12,7 +12,7 @@ export function useAssetsTab(): UseAssetsTabResult {
   const [assetTableRows, setAssetTableRows] = useState<AssetTableRow[]>([]);
   const [assetsStats, setAssetsStats] = useState<number[]>([]);
   const { dbApi } = usePeerplaysApiContext();
-  const { updateArrayWithLmit } = useArrayLimiter();
+  const { updateArrayWithLimit } = useArrayLimiter();
   const getAssetRows = useCallback(async () => {
     try {
       const rawAssets: Asset[] = await dbApi("list_assets", ["", 99]);
@@ -35,7 +35,7 @@ export function useAssetsTab(): UseAssetsTabResult {
         );
         setAssetTableRows(assetsRows);
         setAssetsStats(
-          updateArrayWithLmit(assetsStats, assetsRows.length, 99) as number[]
+          updateArrayWithLimit(assetsStats, assetsRows.length, 99)
         );
         setLoading(false);
       }
@@ -47,7 +47,7 @@ export function useAssetsTab(): UseAssetsTabResult {
     dbApi,
     setAssetsStats,
     setAssetTableRows,
-    updateArrayWithLmit,
+    updateArrayWithLimit,
     setLoading,
   ]);
 

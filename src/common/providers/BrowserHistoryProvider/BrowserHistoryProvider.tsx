@@ -33,7 +33,7 @@ const BrowserHistoryContext = createContext<BrowserHistoryContextType>(
 export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
   const { asPath, pathname } = useRouter();
   const { localStorageAccount } = useUserContext();
-  const { updateArrayWithLmit } = useArrayLimiter();
+  const { updateArrayWithLimit } = useArrayLimiter();
   const privatePaths = DefaultBrowserHistoryState.privatePaths;
   const [pageLoading, setPageLoading] = useState<boolean>(
     DefaultBrowserHistoryState.pageLoading
@@ -64,11 +64,11 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
     else {
       if (browserHistory[browserHistory.length - 1] !== asPath) {
         setBrowserHistory(
-          updateArrayWithLmit(browserHistory, asPath, 99) as string[]
+          updateArrayWithLimit(browserHistory, asPath, 99) as string[]
         );
       }
     }
-  }, [asPath]);
+  }, [asPath, localStorageAccount]);
 
   return (
     <BrowserHistoryContext.Provider
