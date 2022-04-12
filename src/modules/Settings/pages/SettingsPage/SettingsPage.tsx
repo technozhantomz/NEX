@@ -4,7 +4,12 @@ import React from "react";
 
 import { Layout } from "../../../../common/components";
 import { Tabs } from "../../../../ui/src";
-import { GeneralTab, MembershipTab, SecurityTab } from "../../components";
+import {
+  GeneralTab,
+  KeyManagementTab,
+  MembershipTab,
+  SecurityTab,
+} from "../../components";
 
 import * as Styled from "./SettingsPage.styled";
 
@@ -34,9 +39,9 @@ const SettingPage: NextPage = () => {
           <TabPane tab="Security" key="security">
             <SecurityTab />
           </TabPane>
-          {/* <TabPane tab="Key management" key="4">
+          <TabPane tab="Key management" key="key-management">
             <KeyManagementTab />
-          </TabPane> */}
+          </TabPane>
           <TabPane tab="Membership" key="membership">
             <MembershipTab />
           </TabPane>

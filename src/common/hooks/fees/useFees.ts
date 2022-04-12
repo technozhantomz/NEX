@@ -77,6 +77,18 @@ export function useFees(): UseFeesResult {
     [feeParameters, findOperationFee, account, defaultAsset]
   );
 
+  const calculateUpdateAccountFee = useCallback(() => {
+    if (feeParameters.length && defaultAsset) {
+      const updateAccountFeeParameter = findOperationFee(
+        "account_update"
+      ) as FeeParameter;
+      const updateAccountFee = updateAccountFeeParameter[1];
+      const fee = updateAccountFee.fee as number;
+
+      return setPrecision(false, fee, defaultAsset.precision);
+    }
+  }, [feeParameters, findOperationFee, defaultAsset]);
+
   const calculateAccountUpgradeFee = useCallback(() => {
     if (feeParameters.length && defaultAsset) {
       const accountUpgradeFeeParameter = findOperationFee(
@@ -98,6 +110,7 @@ export function useFees(): UseFeesResult {
   return {
     calculteTransferFee,
     calculateAccountUpgradeFee,
+    calculateUpdateAccountFee,
     feeParameters,
   };
 }
