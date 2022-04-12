@@ -8,6 +8,7 @@ export type UseKeyManagementTabResult = {
   memoWarning: string;
   passwordModalVisible: boolean;
   handlePassowrdCancel: () => void;
+  fee: number;
 };
 
 export type FormValidation = {

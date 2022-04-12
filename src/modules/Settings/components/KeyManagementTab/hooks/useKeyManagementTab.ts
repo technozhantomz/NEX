@@ -24,7 +24,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     if (updateAccountFee) {
       setFee(updateAccountFee);
     }
-  }, [calculateUpdateAccountFee]);
+  }, [calculateUpdateAccountFee, setFee]);
 
   const handlePassowrdCancel = useCallback(() => {
     setPasswordModalVisible(false);
@@ -72,5 +72,6 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     memoWarning,
     passwordModalVisible,
     handlePassowrdCancel,
+    fee,
   };
 }
