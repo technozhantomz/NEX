@@ -2,8 +2,8 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 
-import { Layout } from "../../../../common/components/PageLayout";
-import { LoginForm } from "../../components/LoginForm";
+import { Layout } from "../../../../common/components";
+import { LoginForm } from "../../components";
 
 import * as Styled from "./LoginPage.styled";
 
