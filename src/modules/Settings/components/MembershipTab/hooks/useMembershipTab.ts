@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 
 import {
-  usePeerplaysApiContext,
-  useUserContext,
-} from "../../../../../common/components";
-import {
   useAccount,
   useAsset,
   useFees,
   useMaintenace,
   useTransactionBuilder,
 } from "../../../../../common/hooks";
+import {
+  usePeerplaysApiContext,
+  useUserContext,
+} from "../../../../../common/providers";
 import { GlobalProperties } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 

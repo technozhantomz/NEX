@@ -1,6 +1,7 @@
 import { isNil } from "lodash";
 import { useEffect, useState } from "react";
 
+import { config } from "../../api/params";
 import { Cache, Exchanges, Settings } from "../types";
 
 type Value =
@@ -17,18 +18,21 @@ type Value =
 
 type Result = [Value, (value?: Value) => void];
 
-export const useLocalStorage = (key: string): Result => {
-  const localStorageItem =
-    typeof window !== "undefined" ? localStorage.getItem(key) : "";
+export const useSessionStorage = (key: string): Result => {
+  const { defaultChainID } = config;
+  const sessionStorageItem =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem(`${key}-${defaultChainID}`)
+      : "";
   const [value, setValue] = useState<Value>(
-    localStorageItem && JSON.parse(localStorageItem)
+    sessionStorageItem && JSON.parse(sessionStorageItem)
   );
 
   useEffect(() => {
     if (!isNil(value) && value !== null && value !== "") {
-      localStorage.setItem(key, JSON.stringify(value));
+      sessionStorage.setItem(`${key}-${defaultChainID}`, JSON.stringify(value));
     } else {
-      localStorage.removeItem(key);
+      sessionStorage.removeItem(`${key}-${defaultChainID}`);
     }
   }, [value, key]);
 

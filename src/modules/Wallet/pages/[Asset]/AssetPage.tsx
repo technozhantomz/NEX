@@ -8,10 +8,10 @@ import {
   HIVEAndHBDDeposit,
   Layout,
   TransferForm,
-  useUserContext,
   WithdrawForm,
 } from "../../../../common/components";
 import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
+import { useUserContext } from "../../../../common/providers";
 import { Tabs } from "../../../../ui/src";
 import { AssetsTable } from "../../components/AssetsTable";
 
