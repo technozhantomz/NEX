@@ -1,14 +1,14 @@
 import { useCallback } from "react";
 
 export function useArrayLimiter(): {
-  updateArrayWithLmit: (
-    arr: unknown[],
-    value: unknown,
+  updateArrayWithLimit: <Type>(
+    arr: Type[],
+    value: Type,
     limit: number
-  ) => unknown[];
+  ) => Type[];
 } {
-  const updateArrayWithLmit = useCallback(
-    (arr: unknown[], value: unknown, limit: number): unknown[] => {
+  const updateArrayWithLimit = useCallback(
+    <Type>(arr: Type[], value: Type, limit: number): Type[] => {
       if (arr.length >= limit) {
         arr.shift();
         arr.push(value);
@@ -19,5 +19,5 @@ export function useArrayLimiter(): {
     },
     []
   );
-  return { updateArrayWithLmit };
+  return { updateArrayWithLimit };
 }

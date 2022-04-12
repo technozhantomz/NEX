@@ -19,7 +19,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
   >([]);
   const { dbApi } = usePeerplaysApiContext();
   const { defaultAsset, formAssetBalanceById } = useAsset();
-  const { updateArrayWithLmit } = useArrayLimiter();
+  const { updateArrayWithLimit } = useArrayLimiter();
 
   const getCommittees = useCallback(async () => {
     if (defaultAsset) {
@@ -58,11 +58,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
             setCommitteeTableRows(committeeRows);
             setActiveCommittee(committees.length);
             setCommitteeStats(
-              updateArrayWithLmit(
-                committeeStats,
-                committees.length,
-                99
-              ) as number[]
+              updateArrayWithLimit(committeeStats, committees.length, 99)
             );
             setLoading(false);
           }
@@ -78,7 +74,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
     setCommitteeTableRows,
     setActiveCommittee,
     setCommitteeStats,
-    updateArrayWithLmit,
+    updateArrayWithLimit,
     defaultAsset,
     setLoading,
   ]);

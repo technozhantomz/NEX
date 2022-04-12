@@ -29,7 +29,7 @@ const BrowserHistoryContext = createContext<BrowserHistoryContextType>(
 
 export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
   const { asPath, pathname } = useRouter();
-  const { updateArrayWithLmit } = useArrayLimiter();
+  const { updateArrayWithLimit } = useArrayLimiter();
   const privatePaths = DefaultBrowserHistoryState.privatePaths;
   const [browserHistory, setBrowserHistory] = useSessionStorage("history") as [
     string[],
@@ -51,9 +51,7 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
     if (!browserHistory) setBrowserHistory([asPath]);
     else {
       if (browserHistory[browserHistory.length - 1] !== asPath) {
-        setBrowserHistory(
-          updateArrayWithLmit(browserHistory, asPath, 99) as string[]
-        );
+        setBrowserHistory(updateArrayWithLimit(browserHistory, asPath, 99));
       }
     }
   }, [asPath]);

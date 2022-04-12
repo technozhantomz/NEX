@@ -11,7 +11,7 @@ import {
   Market,
   Vote,
 } from "../../../../../../ui/src/icons";
-import { useUserContext } from "../../../../../providers/UserProvider";
+import { useUserContext } from "../../../../../providers";
 import { MenuItem } from "../MenuItem";
 
 import { useAdvancedMode } from "./hooks";

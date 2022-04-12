@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../api/params";
 import { usePeerplaysApiContext, useSettingsContext } from "../providers";
-import { Asset, Cache } from "../types";
+import { Asset, Cache, GlobalProperties } from "../types";
 
 import { UseAssetResult } from "./useAsset.types";
 import { roundNum } from "./useRoundNum";
