@@ -38,6 +38,7 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
 
   const handleLoginRedirect = useCallback(() => {
     if (
+      !browserHistory ||
       browserHistory.length === 1 ||
       browserHistory[browserHistory.length - 2] === "/logout"
     ) {
@@ -45,13 +46,14 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
     } else {
       router.push(browserHistory[browserHistory.length - 2]);
     }
-  }, []);
+  }, [browserHistory, router]);
 
   useEffect(() => {
     if (!browserHistory) setBrowserHistory([asPath]);
     else {
       if (browserHistory[browserHistory.length - 1] !== asPath) {
-        setBrowserHistory(updateArrayWithLimit(browserHistory, asPath, 99));
+        const newHistory = updateArrayWithLimit(browserHistory, asPath, 99);
+        setBrowserHistory([...newHistory]);
       }
     }
   }, [asPath]);
