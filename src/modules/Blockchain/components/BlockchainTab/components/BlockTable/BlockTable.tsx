@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { useViewportContext } from "../../../../../../common/components";
+import { useViewportContext } from "../../../../../../common/providers";
 import { List } from "../../../../../../ui/src";
 import { breakpoints } from "../../../../../../ui/src/breakpoints";
 import { BlockTableRow } from "../../../../types";

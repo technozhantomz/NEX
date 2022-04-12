@@ -1,8 +1,10 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../../../../../common/components/UserProvider/UserProvider";
 import { useAccount } from "../../../../../common/hooks";
+import {
+  useBrowserHistoryContext,
+  useUserContext,
+} from "../../../../../common/providers";
 import { FullAccount } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 
@@ -19,12 +21,12 @@ export function useLoginForm(): ILoginForm {
     validateAccountPassword,
   } = useAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
+  const { handleLoginRedirect } = useBrowserHistoryContext();
   const [loginForm] = Form.useForm();
-  const router = useRouter();
 
   useEffect(() => {
     if (localStorageAccount) {
-      router.push("/dashboard");
+      handleLoginRedirect();
     }
   }, [localStorageAccount]);
 

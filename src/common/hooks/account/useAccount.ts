@@ -3,8 +3,7 @@ import { useCallback, useState } from "react";
 
 import { useAsset } from "..";
 import { defaultToken } from "../../../api/params";
-import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
-import { useUserContext } from "../../components/UserProvider";
+import { usePeerplaysApiContext, useUserContext } from "../../providers";
 import {
   Account,
   Asset,

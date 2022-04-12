@@ -1,4 +1,4 @@
-import { useViewportContext } from "../../../../common/components";
+import { useViewportContext } from "../../../../common/providers";
 import { List, Tag } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 
