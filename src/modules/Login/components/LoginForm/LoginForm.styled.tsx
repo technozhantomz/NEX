@@ -4,12 +4,17 @@ import { breakpoint } from "../../../../ui/src/breakpoints";
 export const LoginForm = styled(CardFrom)`
   text-align: center;
   .ant-form-item-control-input-content {
-    height: 50px;
+    height: 40px;
+    ${breakpoint.sm} {
+      height: 50px;
+    }
   }
   .ant-input,
   .ant-input-affix-wrapper {
     height: 100%;
-    padding-left: 30px;
+    ${breakpoint.sm} {
+      padding-left: 30px;
+    }
   }
   .ant-form-large .ant-form-item-control-input {
     width: 539px;
