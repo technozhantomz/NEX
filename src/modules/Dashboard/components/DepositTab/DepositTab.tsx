@@ -28,11 +28,8 @@ export const DepositTab = (): JSX.Element => {
         defaultValue={selectedAsset}
         onChange={handleAssetChange}
       />
-
       {selectedAsset === "BTC" ? (
-        loadingSidechainAccounts ? (
-          ""
-        ) : hasBTCDepositAddress ? (
+        hasBTCDepositAddress ? (
           <Styled.AddressGeneratedContainer>
             <AddressGenerated
               bitcoinSidechainAccount={bitcoinSidechainAccount}
