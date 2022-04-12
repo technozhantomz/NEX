@@ -34,11 +34,11 @@ export const LoginForm: React.FC = () => {
       >
         <Input.Password placeholder="Enter password" />
       </Form.Item>
-      <Form.Item>
+      <Styled.ButtonDiv className="form-button">
         <Styled.LoginFormButton type="primary" htmlType="submit">
           Log in
         </Styled.LoginFormButton>
-      </Form.Item>
+      </Styled.ButtonDiv>
     </Styled.LoginForm>
   );
 };
