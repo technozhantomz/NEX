@@ -45,6 +45,7 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
 
   const handleLoginRedirect = useCallback(() => {
     if (
+      !browserHistory ||
       browserHistory.length === 1 ||
       browserHistory[browserHistory.length - 2] === "/logout"
     ) {
@@ -52,7 +53,7 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
     } else {
       router.push(browserHistory[browserHistory.length - 2]);
     }
-  }, []);
+  }, [browserHistory, router]);
 
   useEffect(() => {
     if (!localStorageAccount && privatePaths.includes(pathname)) {
@@ -63,9 +64,8 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
     if (!browserHistory) setBrowserHistory([asPath]);
     else {
       if (browserHistory[browserHistory.length - 1] !== asPath) {
-        setBrowserHistory(
-          updateArrayWithLimit(browserHistory, asPath, 99) as string[]
-        );
+        const newHistory = updateArrayWithLimit(browserHistory, asPath, 99);
+        setBrowserHistory([...newHistory]);
       }
     }
   }, [asPath, localStorageAccount]);
