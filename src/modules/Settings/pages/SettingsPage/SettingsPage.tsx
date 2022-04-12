@@ -17,21 +17,6 @@ const SettingPage: NextPage = () => {
   const { tab } = router.query;
   const { pageLoading } = useBrowserHistoryContext();
 
-  if (pageLoading) {
-    return (
-      <Layout
-        title="Settings"
-        type="card-lrg"
-        heading="Settings"
-        description="Settings Page"
-        dexLayout={true}
-      >
-        <Styled.SettingsCard>
-          <Skeleton active />
-        </Styled.SettingsCard>
-      </Layout>
-    );
-  }
   return (
     <Layout
       title="Settings"
@@ -41,25 +26,29 @@ const SettingPage: NextPage = () => {
       dexLayout={true}
     >
       <Styled.SettingsCard>
-        <Tabs
-          onTabClick={(key) => {
-            router.push(`/settings?tab=${key}`);
-          }}
-          defaultActiveKey={`${tab ? tab : "general"}`}
-        >
-          <TabPane tab="General" key="general">
-            <GeneralTab />
-          </TabPane>
-          <TabPane tab="Security" key="security">
-            <SecurityTab />
-          </TabPane>
-          {/* <TabPane tab="Key management" key="4">
+        {pageLoading ? (
+          <Skeleton active />
+        ) : (
+          <Tabs
+            onTabClick={(key) => {
+              router.push(`/settings?tab=${key}`);
+            }}
+            defaultActiveKey={`${tab ? tab : "general"}`}
+          >
+            <TabPane tab="General" key="general">
+              <GeneralTab />
+            </TabPane>
+            <TabPane tab="Security" key="security">
+              <SecurityTab />
+            </TabPane>
+            {/* <TabPane tab="Key management" key="4">
             <KeyManagementTab />
           </TabPane> */}
-          <TabPane tab="Membership" key="membership">
-            <MembershipTab />
-          </TabPane>
-        </Tabs>
+            <TabPane tab="Membership" key="membership">
+              <MembershipTab />
+            </TabPane>
+          </Tabs>
+        )}
       </Styled.SettingsCard>
     </Layout>
   );

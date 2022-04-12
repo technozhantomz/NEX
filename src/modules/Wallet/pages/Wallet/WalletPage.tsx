@@ -12,22 +12,6 @@ const { TabPane } = Styled.Tabs;
 const WalletPage: NextPage = () => {
   const { pageLoading } = useBrowserHistoryContext();
 
-  if (pageLoading) {
-    return (
-      <Layout
-        title="Wallet"
-        type="card-lrg"
-        heading="Wallet"
-        description="Wallet Page"
-        dexLayout={true}
-      >
-        <Styled.WalletCard>
-          <Skeleton active />
-        </Styled.WalletCard>
-      </Layout>
-    );
-  }
-
   return (
     <Layout
       title="Wallet"
@@ -37,14 +21,18 @@ const WalletPage: NextPage = () => {
       dexLayout={true}
     >
       <Styled.WalletCard>
-        <Styled.Tabs defaultActiveKey="1" centered={true}>
-          <TabPane tab="Assets" key="1">
-            <AssetsTable />
-          </TabPane>
-          <TabPane tab="All Activity" key="activity">
-            <ActivityTable />
-          </TabPane>
-        </Styled.Tabs>
+        {pageLoading ? (
+          <Skeleton active />
+        ) : (
+          <Styled.Tabs defaultActiveKey="1" centered={true}>
+            <TabPane tab="Assets" key="1">
+              <AssetsTable />
+            </TabPane>
+            <TabPane tab="All Activity" key="activity">
+              <ActivityTable />
+            </TabPane>
+          </Styled.Tabs>
+        )}
       </Styled.WalletCard>
     </Layout>
   );

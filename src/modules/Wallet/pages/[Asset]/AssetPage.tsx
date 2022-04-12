@@ -36,22 +36,6 @@ const AssetPage: NextPage = () => {
   const { localStorageAccount } = useUserContext();
   const { pageLoading } = useBrowserHistoryContext();
 
-  if (pageLoading) {
-    return (
-      <Layout
-        title="Wallet"
-        type="card-lrg"
-        heading="Wallet"
-        description={`Wallet Page | ${asset} ${tab}`}
-        dexLayout={true}
-      >
-        <Styled.AssetCard>
-          <Skeleton active />
-        </Styled.AssetCard>
-      </Layout>
-    );
-  }
-
   return (
     <Layout
       title="Wallet"
@@ -62,53 +46,63 @@ const AssetPage: NextPage = () => {
     >
       {!loadingSidechainAssets && (
         <Styled.AssetCard>
-          <Tabs
-            defaultActiveKey={`${tab}`}
-            tabBarExtraContent={<Link href="/wallet">Back to Assets</Link>}
-            onTabClick={(key) => {
-              router.push(`/wallet/${asset}?tab=${key}`);
-            }}
-          >
-            <TabPane tab="Transfer" key="transfer">
-              <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-              <TransferForm asset={`${asset}`} />
-            </TabPane>
-            {sidechainAssets
-              .map((sideAsset) => sideAsset.symbol)
-              .includes(asset as string) ? (
-              <>
-                <TabPane tab="Withdraw" key="withdraw">
-                  <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-                  <WithdrawForm asset={`${asset}`} />
-                </TabPane>
-                <TabPane tab="Deposit" key="deposit">
-                  <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-                  {!loadingSidechainAccounts ? (
-                    <Styled.AssetFormWapper>
-                      {asset === "BTC" ? (
-                        hasBTCDepositAddress ? (
-                          <AddressGenerated
-                            bitcoinSidechainAccount={bitcoinSidechainAccount}
-                          />
+          {pageLoading ? (
+            <Skeleton active />
+          ) : (
+            <Tabs
+              defaultActiveKey={`${tab}`}
+              tabBarExtraContent={<Link href="/wallet">Back to Assets</Link>}
+              onTabClick={(key) => {
+                router.push(`/wallet/${asset}?tab=${key}`);
+              }}
+            >
+              <TabPane tab="Transfer" key="transfer">
+                <AssetsTable showActions={false} fillterAsset={`${asset}`} />
+                <TransferForm asset={`${asset}`} />
+              </TabPane>
+              {sidechainAssets
+                .map((sideAsset) => sideAsset.symbol)
+                .includes(asset as string) ? (
+                <>
+                  <TabPane tab="Withdraw" key="withdraw">
+                    <AssetsTable
+                      showActions={false}
+                      fillterAsset={`${asset}`}
+                    />
+                    <WithdrawForm asset={`${asset}`} />
+                  </TabPane>
+                  <TabPane tab="Deposit" key="deposit">
+                    <AssetsTable
+                      showActions={false}
+                      fillterAsset={`${asset}`}
+                    />
+                    {!loadingSidechainAccounts ? (
+                      <Styled.AssetFormWapper>
+                        {asset === "BTC" ? (
+                          hasBTCDepositAddress ? (
+                            <AddressGenerated
+                              bitcoinSidechainAccount={bitcoinSidechainAccount}
+                            />
+                          ) : (
+                            <GenerateBitcoinAddress
+                              isLoggedIn={!!localStorageAccount}
+                              getSidechainAccounts={getSidechainAccounts}
+                            />
+                          )
                         ) : (
-                          <GenerateBitcoinAddress
-                            isLoggedIn={!!localStorageAccount}
-                            getSidechainAccounts={getSidechainAccounts}
-                          />
-                        )
-                      ) : (
-                        <HIVEAndHBDDeposit assetSymbol={asset as string} />
-                      )}
-                    </Styled.AssetFormWapper>
-                  ) : (
-                    ""
-                  )}
-                </TabPane>
-              </>
-            ) : (
-              ""
-            )}
-          </Tabs>
+                          <HIVEAndHBDDeposit assetSymbol={asset as string} />
+                        )}
+                      </Styled.AssetFormWapper>
+                    ) : (
+                      ""
+                    )}
+                  </TabPane>
+                </>
+              ) : (
+                ""
+              )}
+            </Tabs>
+          )}
         </Styled.AssetCard>
       )}
     </Layout>
