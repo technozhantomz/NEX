@@ -64,9 +64,11 @@ export const SignupForm = styled(CardFrom)`
   .checkbox-item {
     height: 10px;
   }
+  .create-button {
+    margin-top: 50px;
+  }
 `;
 export const SignupFormButton = styled(CardFormButton)`
-  margin-top: 35px;
   width: 400px;
   height: 45px;
 `;

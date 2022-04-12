@@ -3,6 +3,9 @@ import { Card, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 
 export const SignUpFormCard = styled(Card)`
+  .ant-card-body {
+    padding: 35px 30px;
+  }
   border-radius: 4px;
   opacity: 1;
   height: 487px;

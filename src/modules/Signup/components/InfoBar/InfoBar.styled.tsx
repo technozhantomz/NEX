@@ -6,7 +6,7 @@ export const InfoBar = styled.div`
     display: flex;
     text-align: left;
     font-size: 16px;
-    // align-items: center;
+    margin-top: 35px;
   }
   .anticon {
     margin-right: 10px;

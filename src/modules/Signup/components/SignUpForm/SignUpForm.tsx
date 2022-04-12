@@ -93,7 +93,7 @@ export const SignUpForm: React.FC = () => {
           I have securely saved my password
         </Styled.Checkbox>
       </Form.Item>
-      <Form.Item>
+      <Form.Item className="create-button">
         <Styled.SignupFormButton type="primary" htmlType="submit">
           Create account
         </Styled.SignupFormButton>
