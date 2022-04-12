@@ -3,10 +3,12 @@ import { useCallback, useEffect, useState } from "react";
 
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import { useAccount, useAccountHistory, useAsset } from "../../../hooks";
+import {
+  usePeerplaysApiContext,
+  useUserContext,
+  useViewportContext,
+} from "../../../providers";
 import { Amount, BlockHeader, Fee, History } from "../../../types";
-import { usePeerplaysApiContext } from "../../PeerplaysApiProvider";
-import { useUserContext } from "../../UserProvider";
-import { useViewportContext } from "../../ViewportProvider";
 
 import { ActivityRow, UseActivityTable } from "./useActivityTable.types";
 

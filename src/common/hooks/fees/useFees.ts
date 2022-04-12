@@ -2,8 +2,7 @@ import { ChainTypes, TransactionHelper } from "peerplaysjs-lib";
 import { useCallback, useEffect, useState } from "react";
 
 import { useAccount, useAsset } from "..";
-import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
-import { useUserContext } from "../../components/UserProvider";
+import { usePeerplaysApiContext, useUserContext } from "../../providers";
 import { Account, FeeParameter, GlobalProperties } from "../../types";
 
 import { ChainOperations, UseFeesResult } from "./useFees.types";

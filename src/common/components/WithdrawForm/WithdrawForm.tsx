@@ -1,6 +1,7 @@
-import { LogoSelectOption, PasswordModal, useUserContext } from "..";
+import { LogoSelectOption, PasswordModal } from "..";
 import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
+import { useUserContext } from "../../providers";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
