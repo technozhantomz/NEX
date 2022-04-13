@@ -1,4 +1,3 @@
-import { Skeleton } from "antd";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -13,11 +12,11 @@ import {
 } from "../../../../common/components";
 import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
 import {
-  useBrowserHistoryContext,
+  //useBrowserHistoryContext,
   useUserContext,
 } from "../../../../common/providers";
 import { Tabs } from "../../../../ui/src";
-import { AssetsTable } from "../../components/AssetsTable";
+import { AssetsTable } from "../../components";
 
 import * as Styled from "./AssetPage.styled";
 
@@ -34,7 +33,7 @@ const AssetPage: NextPage = () => {
     getSidechainAccounts,
   } = useSidechainAccounts();
   const { localStorageAccount } = useUserContext();
-  const { pageLoading } = useBrowserHistoryContext();
+  //const { pageLoading } = useBrowserHistoryContext();
 
   return (
     <Layout
@@ -46,63 +45,54 @@ const AssetPage: NextPage = () => {
     >
       {!loadingSidechainAssets && (
         <Styled.AssetCard>
-          {pageLoading ? (
-            <Skeleton active />
-          ) : (
-            <Tabs
-              defaultActiveKey={`${tab}`}
-              tabBarExtraContent={<Link href="/wallet">Back to Assets</Link>}
-              onTabClick={(key) => {
-                router.push(`/wallet/${asset}?tab=${key}`);
-              }}
-            >
-              <TabPane tab="Transfer" key="transfer">
-                <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-                <TransferForm asset={`${asset}`} />
-              </TabPane>
-              {sidechainAssets
-                .map((sideAsset) => sideAsset.symbol)
-                .includes(asset as string) ? (
-                <>
-                  <TabPane tab="Withdraw" key="withdraw">
-                    <AssetsTable
-                      showActions={false}
-                      fillterAsset={`${asset}`}
-                    />
-                    <WithdrawForm asset={`${asset}`} />
-                  </TabPane>
-                  <TabPane tab="Deposit" key="deposit">
-                    <AssetsTable
-                      showActions={false}
-                      fillterAsset={`${asset}`}
-                    />
-                    {!loadingSidechainAccounts ? (
-                      <Styled.AssetFormWapper>
-                        {asset === "BTC" ? (
-                          hasBTCDepositAddress ? (
-                            <AddressGenerated
-                              bitcoinSidechainAccount={bitcoinSidechainAccount}
-                            />
-                          ) : (
-                            <GenerateBitcoinAddress
-                              isLoggedIn={!!localStorageAccount}
-                              getSidechainAccounts={getSidechainAccounts}
-                            />
-                          )
+          (
+          <Tabs
+            defaultActiveKey={`${tab}`}
+            tabBarExtraContent={<Link href="/wallet">Back to Assets</Link>}
+            onTabClick={(key) => {
+              router.push(`/wallet/${asset}?tab=${key}`);
+            }}
+          >
+            <TabPane tab="Transfer" key="transfer">
+              <AssetsTable showActions={false} fillterAsset={`${asset}`} />
+              <TransferForm asset={`${asset}`} />
+            </TabPane>
+            {sidechainAssets
+              .map((sideAsset) => sideAsset.symbol)
+              .includes(asset as string) ? (
+              <>
+                <TabPane tab="Withdraw" key="withdraw">
+                  <AssetsTable showActions={false} fillterAsset={`${asset}`} />
+                  <WithdrawForm asset={`${asset}`} />
+                </TabPane>
+                <TabPane tab="Deposit" key="deposit">
+                  <AssetsTable showActions={false} fillterAsset={`${asset}`} />
+                  {!loadingSidechainAccounts ? (
+                    <Styled.AssetFormWapper>
+                      {asset === "BTC" ? (
+                        hasBTCDepositAddress ? (
+                          <AddressGenerated
+                            bitcoinSidechainAccount={bitcoinSidechainAccount}
+                          />
                         ) : (
-                          <HIVEAndHBDDeposit assetSymbol={asset as string} />
-                        )}
-                      </Styled.AssetFormWapper>
-                    ) : (
-                      ""
-                    )}
-                  </TabPane>
-                </>
-              ) : (
-                ""
-              )}
-            </Tabs>
-          )}
+                          <GenerateBitcoinAddress
+                            isLoggedIn={!!localStorageAccount}
+                            getSidechainAccounts={getSidechainAccounts}
+                          />
+                        )
+                      ) : (
+                        <HIVEAndHBDDeposit assetSymbol={asset as string} />
+                      )}
+                    </Styled.AssetFormWapper>
+                  ) : (
+                    ""
+                  )}
+                </TabPane>
+              </>
+            ) : (
+              ""
+            )}
+          </Tabs>
         </Styled.AssetCard>
       )}
     </Layout>

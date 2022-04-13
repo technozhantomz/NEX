@@ -7,8 +7,8 @@ import React, {
   useState,
 } from "react";
 
+import { useUserContext } from "..";
 import { useArrayLimiter, useSessionStorage } from "../../hooks";
-import { useUserContext } from "../UserProvider";
 
 import { BrowserHistoryContextType } from "./BrowserHistoryProvider.types";
 

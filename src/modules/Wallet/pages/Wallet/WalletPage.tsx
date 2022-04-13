@@ -1,8 +1,7 @@
-import { Skeleton } from "antd";
 import type { NextPage } from "next";
 
 import { ActivityTable, Layout } from "../../../../common/components";
-import { useBrowserHistoryContext } from "../../../../common/providers";
+//import { useBrowserHistoryContext } from "../../../../common/providers";
 import { AssetsTable } from "../../components/AssetsTable";
 
 import * as Styled from "./WalletPage.styled";
@@ -10,7 +9,7 @@ import * as Styled from "./WalletPage.styled";
 const { TabPane } = Styled.Tabs;
 
 const WalletPage: NextPage = () => {
-  const { pageLoading } = useBrowserHistoryContext();
+  //const { pageLoading } = useBrowserHistoryContext();
 
   return (
     <Layout
@@ -21,18 +20,14 @@ const WalletPage: NextPage = () => {
       dexLayout={true}
     >
       <Styled.WalletCard>
-        {pageLoading ? (
-          <Skeleton active />
-        ) : (
-          <Styled.Tabs defaultActiveKey="1" centered={true}>
-            <TabPane tab="Assets" key="1">
-              <AssetsTable />
-            </TabPane>
-            <TabPane tab="All Activity" key="activity">
-              <ActivityTable />
-            </TabPane>
-          </Styled.Tabs>
-        )}
+        <Styled.Tabs defaultActiveKey="1" centered={true}>
+          <TabPane tab="Assets" key="1">
+            <AssetsTable />
+          </TabPane>
+          <TabPane tab="All Activity" key="activity">
+            <ActivityTable />
+          </TabPane>
+        </Styled.Tabs>
       </Styled.WalletCard>
     </Layout>
   );
