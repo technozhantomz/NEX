@@ -82,16 +82,12 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
-          <Styled.TransferFormButton
-            type="primary"
-            htmlType="submit"
-            loading={loading}
-          >
+          <Styled.TransferFormButton type="primary" htmlType="submit">
             Send
           </Styled.TransferFormButton>
         </Form.Item>
       </Styled.TransferForm>
-      <PasswordModal visible={visible} onCancel={onCancel} />
+      <PasswordModal visible={visible} onCancel={onCancel} loading={loading} />
     </Form.Provider>
   );
 };

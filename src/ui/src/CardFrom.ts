@@ -10,6 +10,9 @@ export const CardFormButton = styled(Button)`
     display: block;
     width: 85%;
     margin: 0 auto;
+    .ant-btn-loading-icon {
+      float: right;
+    }
   }
   ${breakpoint.xs} {
      {

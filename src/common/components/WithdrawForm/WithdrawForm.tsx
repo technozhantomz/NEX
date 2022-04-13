@@ -122,16 +122,12 @@ export const WithdrawForm = ({
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
-          <Styled.WithdrawFormButton
-            type="primary"
-            htmlType="submit"
-            loading={loading}
-          >
+          <Styled.WithdrawFormButton type="primary" htmlType="submit">
             Withdraw
           </Styled.WithdrawFormButton>
         </Form.Item>
       </Styled.WithdrawForm>
-      <PasswordModal visible={visible} onCancel={onCancel} />
+      <PasswordModal visible={visible} onCancel={onCancel} loading={loading} />
     </Form.Provider>
   );
 };
