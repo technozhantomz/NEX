@@ -6,7 +6,7 @@ export const Disclamer = styled.p`
    {
     font-size: 12px;
     ${breakpoint.sm} {
-      font-size: 16px;
+      font-size: 14px;
     }
     font-weight: 300;
     text-align: center;

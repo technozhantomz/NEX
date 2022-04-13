@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 import { CardFormButton, Form } from "../../../ui/src";
@@ -17,6 +18,7 @@ export const GenerateBitcoinAddress = ({
   isLoggedIn = false,
   getSidechainAccounts,
 }: Props): JSX.Element => {
+  const router = useRouter();
   const { visible, onCancel, onFormFinish, confirm, status } =
     useGenerateBitcoinAddress(getSidechainAccounts);
 
@@ -25,11 +27,21 @@ export const GenerateBitcoinAddress = ({
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.DepositForm name="generateAddressForm" onFinish={confirm}>
           <Form.Item>
-            <CardFormButton type="primary" htmlType="submit">
-              {isLoggedIn
-                ? "Generate Bitcoin Address"
-                : "Log in & Generate Bitcoin Address"}
-            </CardFormButton>
+            {isLoggedIn ? (
+              <CardFormButton type="primary" htmlType="submit">
+                Generate Bitcoin Address
+              </CardFormButton>
+            ) : (
+              <CardFormButton
+                type="primary"
+                htmlType="button"
+                onClick={() => {
+                  router.push("/login");
+                }}
+              >
+                Log in & Generate Bitcoin Address
+              </CardFormButton>
+            )}
           </Form.Item>
         </Styled.DepositForm>
         {status === "" ? (
