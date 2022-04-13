@@ -48,8 +48,10 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
   const handleLoginRedirect = useCallback(() => {
     if (
       !browserHistory ||
-      browserHistory.length === 1 ||
-      browserHistory[browserHistory.length - 2] === "/logout"
+      browserHistory.length < 2 ||
+      browserHistory[browserHistory.length - 2] === "/logout" ||
+      browserHistory[browserHistory.length - 2] === "/signup" ||
+      browserHistory[browserHistory.length - 2] === "/login"
     ) {
       router.push("/dashboard");
     } else {
@@ -57,14 +59,10 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
     }
   }, [browserHistory, router]);
 
-  useEffect(() => {
-    if (!localStorageAccount && privatePaths.includes(pathname)) {
-      router.replace("/login");
+  const updateBrowserHistory = useCallback(() => {
+    if (!browserHistory) {
+      setBrowserHistory([asPath]);
     } else {
-      setPageLoading(false);
-    }
-    if (!browserHistory) setBrowserHistory([asPath]);
-    else {
       if (browserHistory[browserHistory.length - 1] !== asPath) {
         const newHistory = updateArrayWithLimit(
           browserHistory,
@@ -74,6 +72,15 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
         setBrowserHistory([...newHistory]);
       }
     }
+  }, [browserHistory, setBrowserHistory, asPath, updateArrayWithLimit]);
+
+  useEffect(() => {
+    if (!localStorageAccount && privatePaths.includes(pathname)) {
+      router.replace("/login");
+    } else {
+      setPageLoading(false);
+    }
+    updateBrowserHistory();
   }, [asPath, localStorageAccount]);
 
   return (
