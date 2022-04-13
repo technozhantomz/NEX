@@ -16,9 +16,9 @@ export const InfoBar: React.FC = () => {
           <span>Keep your password safe to avoid losing any funds. </span>
           <a
             href="#"
-            onClick={() => {
-              getRecoveryPassword(signUpForm.getFieldValue("password"));
-            }}
+            onClick={() =>
+              getRecoveryPassword(signUpForm.getFieldValue("password"))
+            }
           >
             Download Recovery password file here
           </a>
