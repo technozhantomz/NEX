@@ -46,29 +46,22 @@ export const MenuWrapper = styled.div`{
       margin: 30px 20px 0 0;
   }
   ${breakpoint.xs} {
+      position: absolute;
+      top:75px;
+      height: inherit;
+      width: 210px;
+      background: transparent;
       .close{
           display: none;
       }
       &.main-menu-wrapper{
-          position: absolute;
-          top:75px;
           right:32px;
-          height: inherit;
-          width: 210px;
       }
       &.profile-wrapper{
-          position: absolute;
-          top:75px;
           right:60px;
-          height: inherit;
-          width: 210px;
       }
       &.notification-menu-wrapper{
-          position: absolute;
-          top:75px;
           right:110px;
-          height: inherit;
-          width: 210px;
       }
   }
 `;

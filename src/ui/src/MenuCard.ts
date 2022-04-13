@@ -7,6 +7,7 @@ import { colors } from "./colors";
 export const MenuCard = styled(AntdCard)`
    {
     height: 93%;
+    border-radius: 4px;
     ul {
       list-style: none;
       margin: 0;

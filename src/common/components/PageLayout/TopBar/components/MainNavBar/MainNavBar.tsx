@@ -14,7 +14,9 @@ import { useToggleMenu } from "./hooks";
 export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
-    toggleMenu,
+    toggleMainMenu,
+    toggleNotificationMenu,
+    toggleProfileMenu,
     closeMenu,
     notificationMenuOpen,
     profileMenuOpen,
@@ -27,13 +29,10 @@ export const MainNavBar = (): JSX.Element => {
           <>
             <BellOutlined
               className={"bell"}
-              onMouseOver={() => toggleMenu("notify")}
-              onClick={() => toggleMenu("notify")}
+              onMouseOver={toggleNotificationMenu}
+              onClick={toggleNotificationMenu}
             />
-            <div
-              onMouseOver={() => toggleMenu("profile")}
-              onClick={() => toggleMenu("profile")}
-            >
+            <div onMouseOver={toggleProfileMenu} onClick={toggleProfileMenu}>
               <Styled.MainNavBarAvitar
                 icon={localStorageAccount ? "" : <UserOutlined />}
               >
@@ -46,8 +45,8 @@ export const MainNavBar = (): JSX.Element => {
         )}
         <MoreOutlined
           className={"hambuger"}
-          onMouseOver={() => toggleMenu("main")}
-          onClick={() => toggleMenu("main")}
+          onMouseOver={toggleMainMenu}
+          onClick={toggleMainMenu}
         />
       </Styled.MainNavBar>
       <Styled.MenuWrapper

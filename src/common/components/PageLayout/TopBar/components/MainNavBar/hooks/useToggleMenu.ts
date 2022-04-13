@@ -8,28 +8,23 @@ export function useToggleMenu(): UseToggleMenuResult {
   const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
   const [mainMenuOpen, setMainMenuOpen] = useState<boolean>(false);
 
-  const toggleMenu = useCallback(
-    (menuName: string) => {
-      switch (true) {
-        case menuName === "notify":
-          setNotificationMenuOpen(notificationMenuOpen ? false : true);
-          setProfileMenuOpen(false);
-          setMainMenuOpen(false);
-          break;
-        case menuName === "profile":
-          setProfileMenuOpen(profileMenuOpen ? false : true);
-          setNotificationMenuOpen(false);
-          setMainMenuOpen(false);
-          break;
-        case menuName === "main":
-          setMainMenuOpen(mainMenuOpen ? false : true);
-          setNotificationMenuOpen(false);
-          setProfileMenuOpen(false);
-          break;
-      }
-    },
-    [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]
-  );
+  const toggleMainMenu = useCallback(() => {
+    setMainMenuOpen(mainMenuOpen ? false : true);
+    setNotificationMenuOpen(false);
+    setProfileMenuOpen(false);
+  }, [setMainMenuOpen]);
+
+  const toggleNotificationMenu = useCallback(() => {
+    setNotificationMenuOpen(notificationMenuOpen ? false : true);
+    setProfileMenuOpen(false);
+    setMainMenuOpen(false);
+  }, [setNotificationMenuOpen]);
+
+  const toggleProfileMenu = useCallback(() => {
+    setProfileMenuOpen(profileMenuOpen ? false : true);
+    setNotificationMenuOpen(false);
+    setMainMenuOpen(false);
+  }, [setProfileMenuOpen]);
 
   const closeMenu = useCallback(() => {
     setNotificationMenuOpen(false);
@@ -38,7 +33,9 @@ export function useToggleMenu(): UseToggleMenuResult {
   }, [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]);
 
   return {
-    toggleMenu,
+    toggleMainMenu,
+    toggleNotificationMenu,
+    toggleProfileMenu,
     closeMenu,
     notificationMenuOpen,
     profileMenuOpen,
