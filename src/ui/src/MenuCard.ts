@@ -22,9 +22,15 @@ export const MenuCard = styled(AntdCard)`
       display: flex;
       justify-content: space-between;
       color: ${colors.textColor};
+      &.active {
+        .menu-icon {
+          color: ${colors.primaryColor};
+        }
+      }
     }
     .menu-icon {
       color: ${colors.borderColorBase};
+      margin-right: 20px;
     }
     .advanced {
       border: none;
@@ -44,6 +50,9 @@ export const MenuCard = styled(AntdCard)`
   }
   ${breakpoint.xs} {
     height: inherit;
+    .ant-card-body {
+      padding: 20px;
+    }
     ul {
       li {
         border-bottom: none;

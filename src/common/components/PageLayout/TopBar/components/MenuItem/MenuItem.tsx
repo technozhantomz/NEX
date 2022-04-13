@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 
 import { RightOutlined } from "../../../../../../ui/src";
+import { useBrowserHistoryContext } from "../../../../../providers";
 
 interface MenuItemProps {
   Href: string;
@@ -10,11 +11,12 @@ interface MenuItemProps {
 }
 
 export const MenuItem = ({ Href, Icon, Label }: MenuItemProps): JSX.Element => {
+  const {pathname} = useBrowserHistoryContext();
   return (
     <Link href={Href}>
-      <a className={"menu-item"}>
+      <a className={`menu-item ${pathname === Href ? "active" : " "}`}>
         <div>
-          {Icon} {Label}
+          {Icon}<span>{Label}</span>
         </div>
         <div>
           {Href == "/logout" ? (
