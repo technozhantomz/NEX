@@ -9,7 +9,7 @@ export const InfoBar = styled.div`
     font-size: 12px;
     margin-top: 23px;
     ${breakpoint.sm} {
-      margin-top: 35px;
+      margin-top: 0px;
       font-size: 16px;
     }
   }

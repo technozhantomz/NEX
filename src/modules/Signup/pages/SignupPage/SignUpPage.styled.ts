@@ -10,16 +10,16 @@ export const SignUpFormCard = styled(Card)`
   }
   border-radius: 4px;
   opacity: 1;
-  height: 487px;
+  height: auto;
   max-width: 600px;
   ${breakpoint.sm} {
-    min-height: 610px;
+    height: auto;
   }
 `;
 
 export const FormDisclamerDiv = styled.div`
-  margin-top: 5px;
+  margin-top: 25px;
   ${breakpoint.sm} {
-    margin-top: 20px;
+    margin-top: 40px;
   }
 `;

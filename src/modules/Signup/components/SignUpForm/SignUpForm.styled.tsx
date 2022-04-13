@@ -83,7 +83,7 @@ export const SignupForm = styled(CardFrom)`
   .create-button {
     margin-top: 35px;
     ${breakpoint.sm} {
-      margin-top: 65px;
+      margin-top: 45px;
     }
   }
   .ant-row.ant-form-item.ant-form-item-with-help.checkbox-item.ant-form-item-has-error {
