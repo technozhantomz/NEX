@@ -26,10 +26,16 @@ export const Checkbox = styled(UICheckbox)`
         left: 35%;
       }
     }
+    .p-text {
+      margin-top: 8px;
+    }
   }
   ${breakpoint.xs} {
      {
       align-items: flex-start;
+      .p-text {
+        margin-top: 0px;
+      }
       .ant-checkbox-inner {
         width: 20px;
         height: 20px;
@@ -40,7 +46,10 @@ export const Checkbox = styled(UICheckbox)`
     }
   }
   .ant-checkbox + span {
-    font-size: 16px;
+    font-size: 12px;
+    ${breakpoint.sm} {
+      font-size: 16px;
+    }
   }
 `;
 
@@ -62,13 +71,32 @@ export const SignupForm = styled(CardFrom)`
     width: 539px;
   }
   .checkbox-item {
-    height: 10px;
+    height: 20px;
+
+    ${breakpoint.sm} {
+      height: 10px;
+    }
+    .ant-form-item-control-input-content {
+      height: 80%;
+    }
   }
   .create-button {
-    margin-top: 50px;
+    margin-top: 35px;
+    ${breakpoint.sm} {
+      margin-top: 65px;
+    }
+  }
+  .ant-row.ant-form-item.ant-form-item-with-help.checkbox-item.ant-form-item-has-error {
+    height: 50px;
   }
 `;
 export const SignupFormButton = styled(CardFormButton)`
-  width: 400px;
-  height: 45px;
+  width: 255px;
+  height: 35px;
+  ${breakpoint.sm} {
+    width: 400px;
+    height: 45px;
+  }
 `;
+
+export const FormItem = styled(CardFrom.Item)``;

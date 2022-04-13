@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 
 import { Layout } from "../../../../common/components";
+import { FormDisclamer } from "../../../../common/components/FormDisclamer";
 import { SignUpForm } from "../../components/SignUpForm";
 
 import * as Styled from "./SignUpPage.styled";
@@ -12,12 +13,14 @@ const SignUpPage: NextPage = () => {
     <Layout title="SignUp" type="card" heading="Create your account">
       <Styled.SignUpFormCard>
         <SignUpForm />
-        <Styled.FormDisclamer>
-          <span>Already have a Peerplays account? </span>
-          <Link href="/login">
-            <a>Log in</a>
-          </Link>
-        </Styled.FormDisclamer>
+        <Styled.FormDisclamerDiv>
+          <FormDisclamer>
+            <span>Already have a Peerplays account? </span>
+            <Link href="/login">
+              <a>Log in</a>
+            </Link>
+          </FormDisclamer>
+        </Styled.FormDisclamerDiv>
       </Styled.SignUpFormCard>
     </Layout>
   );

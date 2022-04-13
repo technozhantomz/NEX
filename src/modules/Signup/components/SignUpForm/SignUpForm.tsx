@@ -90,14 +90,14 @@ export const SignUpForm: React.FC = () => {
         className="checkbox-item"
       >
         <Styled.Checkbox onChange={setCheckboxVlaue}>
-          I have securely saved my password
+          <p className="p-text">I have securely saved my password</p>
         </Styled.Checkbox>
       </Form.Item>
-      <Form.Item className="create-button">
+      <div className="create-button">
         <Styled.SignupFormButton type="primary" htmlType="submit">
           Create account
         </Styled.SignupFormButton>
-      </Form.Item>
+      </div>
     </Styled.SignupForm>
   );
 };

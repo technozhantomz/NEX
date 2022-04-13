@@ -1,12 +1,17 @@
 import { InfoCircleOutlined, styled } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
 export const InfoBar = styled.div`
    {
     display: flex;
     text-align: left;
-    font-size: 16px;
-    margin-top: 35px;
+    font-size: 12px;
+    margin-top: 23px;
+    ${breakpoint.sm} {
+      margin-top: 35px;
+      font-size: 16px;
+    }
   }
   .anticon {
     margin-right: 10px;

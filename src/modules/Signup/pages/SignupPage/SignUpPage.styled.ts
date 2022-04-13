@@ -1,10 +1,12 @@
-import { FormDisclamer as FD } from "../../../../common/components/FormDisclamer";
 import { Card, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 
 export const SignUpFormCard = styled(Card)`
   .ant-card-body {
-    padding: 35px 30px;
+    padding: 25px 20px;
+    ${breakpoint.sm} {
+      padding: 35px 30px;
+    }
   }
   border-radius: 4px;
   opacity: 1;
@@ -15,6 +17,9 @@ export const SignUpFormCard = styled(Card)`
   }
 `;
 
-export const FormDisclamer = styled(FD)`
-  margin-top: 35px;
+export const FormDisclamerDiv = styled.div`
+  margin-top: 5px;
+  ${breakpoint.sm} {
+    margin-top: 20px;
+  }
 `;
