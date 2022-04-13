@@ -1,6 +1,10 @@
-import { LogoSelectOption, PasswordModal, useUserContext } from "..";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
+import { FormDisclamer, LogoSelectOption, PasswordModal } from "..";
 import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
+import { useUserContext } from "../../providers";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -14,6 +18,7 @@ export const WithdrawForm = ({
   asset,
   withAssetSelector,
 }: Props): JSX.Element => {
+  const router = useRouter();
   const { localStorageAccount } = useUserContext();
   const { defaultAsset, sidechainAssets } = useAsset();
   const {
@@ -122,11 +127,38 @@ export const WithdrawForm = ({
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Form.Item>
-          <Styled.WithdrawFormButton type="primary" htmlType="submit">
-            Withdraw
-          </Styled.WithdrawFormButton>
+          {localStorageAccount && localStorageAccount !== "" ? (
+            <>
+              <Styled.WithdrawFormButton type="primary" htmlType="submit">
+                Withdraw
+              </Styled.WithdrawFormButton>
+            </>
+          ) : (
+            <>
+              <Styled.WithdrawFormButton
+                type="primary"
+                htmlType="button"
+                onClick={() => {
+                  router.push("/login");
+                }}
+              >
+                Log in & Withdraw
+              </Styled.WithdrawFormButton>
+            </>
+          )}
         </Form.Item>
       </Styled.WithdrawForm>
+      {localStorageAccount && localStorageAccount !== "" ? (
+        ""
+      ) : (
+        <FormDisclamer>
+          <span>Don't have a Peerplays account? </span>
+          <Link href="/signup">
+            <a>Create account</a>
+          </Link>
+        </FormDisclamer>
+      )}
+
       <PasswordModal visible={visible} onCancel={onCancel} loading={loading} />
     </Form.Provider>
   );

@@ -43,9 +43,4 @@ export const AddressGeneratedContainer = styled.div`
   }
 `;
 
-export const HIVEDepositContainer = styled.div`
-  margin: 25px 20px;
-  ${breakpoint.sm} {
-    margin: 35px 30px;
-  }
-`;
+export const HIVEDepositContainer = styled.div``;

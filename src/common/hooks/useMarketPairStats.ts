@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { usePeerplaysApiContext } from "../components/PeerplaysApiProvider";
+import { usePeerplaysApiContext } from "../providers";
 import { Asset, MarketPairStats, Ticker } from "../types";
 
 import { roundNum } from ".";

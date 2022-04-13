@@ -9,7 +9,7 @@ import {
   useSonNetwork,
   useTransactionBuilder,
 } from "../../../hooks";
-import { useUserContext } from "../../UserProvider";
+import { useUserContext } from "../../../providers";
 
 import { GenerateBitcoinAddressResult } from "./useGenerateBitcoinAddress.types";
 

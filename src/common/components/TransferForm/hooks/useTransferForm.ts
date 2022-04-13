@@ -10,8 +10,8 @@ import {
   useTransactionBuilder,
   useTransferTransactionBuilder,
 } from "../../../hooks";
+import { useUserContext } from "../../../providers";
 import { Account } from "../../../types";
-import { useUserContext } from "../../UserProvider";
 
 import { UseTransferFormResult } from "./useTransferForm.types";
 

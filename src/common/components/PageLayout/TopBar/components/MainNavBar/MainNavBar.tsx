@@ -3,13 +3,13 @@ import {
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
-import { useUserContext } from "../../../../UserProvider/UserProvider";
+import { useUserContext } from "../../../../../providers";
 import { MainNav } from "../MainNav";
 import { NotificationMenu } from "../NotificationMenu";
 import { ProfileMenu } from "../ProfileMenu";
 
 import * as Styled from "./MainNavBar.styled";
-import { useToggleMenu } from "./hooks/useToggleMenu";
+import { useToggleMenu } from "./hooks";
 
 export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();

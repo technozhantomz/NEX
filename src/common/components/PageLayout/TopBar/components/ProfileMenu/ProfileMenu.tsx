@@ -5,8 +5,7 @@ import {
 } from "../../../../../../ui/src";
 import { breakpoints } from "../../../../../../ui/src/breakpoints";
 import { Contacts, Vote } from "../../../../../../ui/src/icons";
-import { useUserContext } from "../../../../UserProvider/UserProvider";
-import { useViewportContext } from "../../../../ViewportProvider";
+import { useUserContext, useViewportContext } from "../../../../../providers";
 import { MenuItem } from "../MenuItem";
 
 import * as Styled from "./ProfileMenu.styled";

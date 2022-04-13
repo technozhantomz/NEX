@@ -17,18 +17,18 @@ type Value =
 
 type Result = [Value, (value?: Value) => void];
 
-export const useLocalStorage = (key: string): Result => {
-  const localStorageItem =
-    typeof window !== "undefined" ? localStorage.getItem(key) : "";
+export const useSessionStorage = (key: string): Result => {
+  const sessionStorageItem =
+    typeof window !== "undefined" ? sessionStorage.getItem(key) : "";
   const [value, setValue] = useState<Value>(
-    localStorageItem && JSON.parse(localStorageItem)
+    sessionStorageItem && JSON.parse(sessionStorageItem)
   );
 
   useEffect(() => {
     if (!isNil(value) && value !== null && value !== "") {
-      localStorage.setItem(key, JSON.stringify(value));
+      sessionStorage.setItem(key, JSON.stringify(value));
     } else {
-      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
     }
   }, [value, key]);
 

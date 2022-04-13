@@ -1,7 +1,7 @@
 import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
+import { useUserContext } from "../../providers";
 import { PasswordModal } from "../PasswordModal";
-import { useUserContext } from "../UserProvider";
 
 import * as Styled from "./TransferForm.styled";
 import { useTransferForm } from "./hooks";
