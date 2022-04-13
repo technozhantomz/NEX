@@ -1,4 +1,8 @@
-import { styled, Avatar as UiAvatar } from "../../../../../../ui/src";
+import {
+  styled,
+  Avatar as UiAvatar,
+  Button as UiButton,
+} from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
 
@@ -33,17 +37,8 @@ export const MenuWrapper = styled.div`{
   color: ${colors.textColor};
   z-index: 2;
   &.open{
-      display: block;
-  }
-  .close{
-      color: ${colors.textColor};
-      position: relative;
-      text-align: left;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-end;
-      justify-content: flex-end;
-      margin: 30px 20px 0 0;
+    display: flex;
+    flex-direction: column;
   }
   ${breakpoint.xs} {
       position: absolute;
@@ -51,9 +46,6 @@ export const MenuWrapper = styled.div`{
       height: inherit;
       width: 210px;
       background: transparent;
-      .close{
-          display: none;
-      }
       &.main-menu-wrapper{
           right:32px;
       }
@@ -63,6 +55,16 @@ export const MenuWrapper = styled.div`{
       &.notification-menu-wrapper{
           right:110px;
       }
+  }
+`;
+
+export const CloseButton = styled(UiButton)`
+  color: ${colors.textColor};
+  position: relative;
+  text-align: right;
+  margin: 30px 20px 0 0;
+  ${breakpoint.xs} {
+    display: none;
   }
 `;
 

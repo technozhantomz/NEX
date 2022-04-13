@@ -8,23 +8,35 @@ export function useToggleMenu(): UseToggleMenuResult {
   const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
   const [mainMenuOpen, setMainMenuOpen] = useState<boolean>(false);
 
-  const toggleMainMenu = useCallback(() => {
-    setMainMenuOpen(mainMenuOpen ? false : true);
-    setNotificationMenuOpen(false);
-    setProfileMenuOpen(false);
-  }, [setMainMenuOpen]);
-
-  const toggleNotificationMenu = useCallback(() => {
-    setNotificationMenuOpen(notificationMenuOpen ? false : true);
-    setProfileMenuOpen(false);
-    setMainMenuOpen(false);
-  }, [setNotificationMenuOpen]);
-
-  const toggleProfileMenu = useCallback(() => {
-    setProfileMenuOpen(profileMenuOpen ? false : true);
-    setNotificationMenuOpen(false);
-    setMainMenuOpen(false);
-  }, [setProfileMenuOpen]);
+  const toggleMenu = useCallback(
+    (menuName: string) => {
+      switch (true) {
+        case menuName === "notify":
+          setNotificationMenuOpen(!notificationMenuOpen);
+          setProfileMenuOpen(false);
+          setMainMenuOpen(false);
+          break;
+        case menuName === "profile":
+          setProfileMenuOpen(!profileMenuOpen);
+          setNotificationMenuOpen(false);
+          setMainMenuOpen(false);
+          break;
+        case menuName === "main":
+          setMainMenuOpen(!mainMenuOpen);
+          setNotificationMenuOpen(false);
+          setProfileMenuOpen(false);
+          break;
+      }
+    },
+    [
+      notificationMenuOpen,
+      profileMenuOpen,
+      mainMenuOpen,
+      setNotificationMenuOpen,
+      setProfileMenuOpen,
+      setMainMenuOpen,
+    ]
+  );
 
   const closeMenu = useCallback(() => {
     setNotificationMenuOpen(false);
@@ -33,9 +45,7 @@ export function useToggleMenu(): UseToggleMenuResult {
   }, [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]);
 
   return {
-    toggleMainMenu,
-    toggleNotificationMenu,
-    toggleProfileMenu,
+    toggleMenu,
     closeMenu,
     notificationMenuOpen,
     profileMenuOpen,

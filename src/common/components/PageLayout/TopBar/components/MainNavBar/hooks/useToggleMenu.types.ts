@@ -1,7 +1,5 @@
 export type UseToggleMenuResult = {
-  toggleMainMenu: () => void;
-  toggleNotificationMenu: () => void;
-  toggleProfileMenu: () => void;
+  toggleMenu: (menuName: string) => void;
   closeMenu: () => void;
   notificationMenuOpen: boolean;
   profileMenuOpen: boolean;

@@ -1,5 +1,6 @@
 import {
   BellOutlined,
+  Button,
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
@@ -14,9 +15,7 @@ import { useToggleMenu } from "./hooks";
 export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
-    toggleMainMenu,
-    toggleNotificationMenu,
-    toggleProfileMenu,
+    toggleMenu,
     closeMenu,
     notificationMenuOpen,
     profileMenuOpen,
@@ -29,10 +28,13 @@ export const MainNavBar = (): JSX.Element => {
           <>
             <BellOutlined
               className={"bell"}
-              onMouseOver={toggleNotificationMenu}
-              onClick={toggleNotificationMenu}
+              onMouseOver={() => toggleMenu("notify")}
+              onClick={() => toggleMenu("notify")}
             />
-            <div onMouseOver={toggleProfileMenu} onClick={toggleProfileMenu}>
+            <div
+              onMouseOver={() => toggleMenu("profile")}
+              onClick={() => toggleMenu("profile")}
+            >
               <Styled.MainNavBarAvitar
                 icon={localStorageAccount ? "" : <UserOutlined />}
               >
@@ -45,8 +47,8 @@ export const MainNavBar = (): JSX.Element => {
         )}
         <MoreOutlined
           className={"hambuger"}
-          onMouseOver={toggleMainMenu}
-          onClick={toggleMainMenu}
+          onMouseOver={() => toggleMenu("main")}
+          onClick={() => toggleMenu("main")}
         />
       </Styled.MainNavBar>
       <Styled.MenuWrapper
@@ -54,25 +56,37 @@ export const MainNavBar = (): JSX.Element => {
           notificationMenuOpen ? " open" : ""
         }`}
       >
-        <a className="close" onClick={closeMenu}>
+        <Styled.CloseButton
+          type="text"
+          shape="circle"
+          onClick={() => closeMenu()}
+        >
           X
-        </a>
+        </Styled.CloseButton>
         <NotificationMenu />
       </Styled.MenuWrapper>
       <Styled.MenuWrapper
         className={`profile-wrapper${profileMenuOpen ? " open" : ""}`}
       >
-        <a className="close" onClick={closeMenu}>
+        <Styled.CloseButton
+          type="text"
+          shape="circle"
+          onClick={() => closeMenu()}
+        >
           X
-        </a>
+        </Styled.CloseButton>
         <ProfileMenu />
       </Styled.MenuWrapper>
       <Styled.MenuWrapper
         className={`main-menu-wrapper${mainMenuOpen ? " open" : ""}`}
       >
-        <a className="close" onClick={closeMenu}>
+        <Styled.CloseButton
+          type="text"
+          shape="circle"
+          onClick={() => closeMenu()}
+        >
           X
-        </a>
+        </Styled.CloseButton>
         <MainNav />
       </Styled.MenuWrapper>
     </>
