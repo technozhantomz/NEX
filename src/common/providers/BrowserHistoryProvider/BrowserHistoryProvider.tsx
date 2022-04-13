@@ -16,6 +16,8 @@ interface Props {
   children: React.ReactNode;
 }
 
+const BROWSER_HISTORY_LENGTH = 20;
+
 const DefaultBrowserHistoryState: BrowserHistoryContextType = {
   browserHistory: [],
   pathname: "",
@@ -64,7 +66,11 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
     if (!browserHistory) setBrowserHistory([asPath]);
     else {
       if (browserHistory[browserHistory.length - 1] !== asPath) {
-        const newHistory = updateArrayWithLimit(browserHistory, asPath, 99);
+        const newHistory = updateArrayWithLimit(
+          browserHistory,
+          asPath,
+          BROWSER_HISTORY_LENGTH
+        );
         setBrowserHistory([...newHistory]);
       }
     }

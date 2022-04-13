@@ -30,18 +30,27 @@ export const DepositTab = (): JSX.Element => {
       />
 
       {selectedAsset === "BTC" ? (
-        loadingSidechainAccounts ? (
-          ""
-        ) : hasBTCDepositAddress ? (
-          <Styled.AddressGeneratedContainer>
-            <AddressGenerated
-              bitcoinSidechainAccount={bitcoinSidechainAccount}
-            />
-          </Styled.AddressGeneratedContainer>
+        localStorageAccount && localStorageAccount !== "" ? (
+          loadingSidechainAccounts ? (
+            ""
+          ) : hasBTCDepositAddress ? (
+            <Styled.AddressGeneratedContainer>
+              <AddressGenerated
+                bitcoinSidechainAccount={bitcoinSidechainAccount}
+              />
+            </Styled.AddressGeneratedContainer>
+          ) : (
+            <>
+              <GenerateBitcoinAddress
+                isLoggedIn={!!localStorageAccount}
+                getSidechainAccounts={getSidechainAccounts}
+              />
+            </>
+          )
         ) : (
           <>
             <GenerateBitcoinAddress
-              isLoggedIn={!!localStorageAccount}
+              isLoggedIn={false}
               getSidechainAccounts={getSidechainAccounts}
             />
           </>

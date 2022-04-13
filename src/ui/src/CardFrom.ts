@@ -6,15 +6,13 @@ import { breakpoint } from "./breakpoints";
 import { colors } from "./colors";
 
 export const CardFormButton = styled(Button)`
-   {
-    display: block;
-    width: 85%;
-    margin: 0 auto;
-  }
+  display: block;
+  width: 85%;
+  margin: 0 auto;
+  font-size: 12px;
   ${breakpoint.xs} {
-     {
-      width: 70%;
-    }
+    font-size: 16px;
+    width: 70%;
   }
 `;
 export const CardFrom = styled(AntdForm)`
