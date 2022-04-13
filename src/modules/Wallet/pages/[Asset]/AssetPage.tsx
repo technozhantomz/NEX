@@ -11,9 +11,12 @@ import {
   WithdrawForm,
 } from "../../../../common/components";
 import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
-import { useUserContext } from "../../../../common/providers";
+import {
+  //useBrowserHistoryContext,
+  useUserContext,
+} from "../../../../common/providers";
 import { Tabs } from "../../../../ui/src";
-import { AssetsTable } from "../../components/AssetsTable";
+import { AssetsTable } from "../../components";
 
 import * as Styled from "./AssetPage.styled";
 
@@ -30,6 +33,7 @@ const AssetPage: NextPage = () => {
     getSidechainAccounts,
   } = useSidechainAccounts();
   const { localStorageAccount } = useUserContext();
+  //const { pageLoading } = useBrowserHistoryContext();
 
   return (
     <Layout
@@ -41,6 +45,7 @@ const AssetPage: NextPage = () => {
     >
       {!loadingSidechainAssets && (
         <Styled.AssetCard>
+          (
           <Tabs
             defaultActiveKey={`${tab}`}
             tabBarExtraContent={<Link href="/wallet">Back to Assets</Link>}

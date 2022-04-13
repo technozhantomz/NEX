@@ -4,8 +4,10 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useState,
 } from "react";
 
+import { useUserContext } from "..";
 import { useArrayLimiter, useSessionStorage } from "../../hooks";
 
 import { BrowserHistoryContextType } from "./BrowserHistoryProvider.types";
@@ -17,7 +19,8 @@ interface Props {
 const DefaultBrowserHistoryState: BrowserHistoryContextType = {
   browserHistory: [],
   pathname: "",
-  privatePaths: ["/wallet", "/settings", "/voting"],
+  privatePaths: ["/wallet", "/wallet/[asset]", "/settings", "/voting"],
+  pageLoading: true,
   handleLoginRedirect: function (): void {
     throw new Error(`Function not implemented.`);
   },
@@ -29,8 +32,12 @@ const BrowserHistoryContext = createContext<BrowserHistoryContextType>(
 
 export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
   const { asPath, pathname } = useRouter();
+  const { localStorageAccount } = useUserContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const privatePaths = DefaultBrowserHistoryState.privatePaths;
+  const [pageLoading, setPageLoading] = useState<boolean>(
+    DefaultBrowserHistoryState.pageLoading
+  );
   const [browserHistory, setBrowserHistory] = useSessionStorage("history") as [
     string[],
     (value: string[]) => void
@@ -49,6 +56,11 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
   }, [browserHistory, router]);
 
   useEffect(() => {
+    if (!localStorageAccount && privatePaths.includes(pathname)) {
+      router.replace("/login");
+    } else {
+      setPageLoading(false);
+    }
     if (!browserHistory) setBrowserHistory([asPath]);
     else {
       if (browserHistory[browserHistory.length - 1] !== asPath) {
@@ -56,11 +68,17 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
         setBrowserHistory([...newHistory]);
       }
     }
-  }, [asPath]);
+  }, [asPath, localStorageAccount]);
 
   return (
     <BrowserHistoryContext.Provider
-      value={{ browserHistory, pathname, privatePaths, handleLoginRedirect }}
+      value={{
+        browserHistory,
+        pathname,
+        privatePaths,
+        pageLoading,
+        handleLoginRedirect,
+      }}
     >
       {children}
     </BrowserHistoryContext.Provider>
