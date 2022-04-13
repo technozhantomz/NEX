@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import { Layout } from "../../../../common/components";
+//import { useBrowserHistoryContext } from "../../../../common/providers";
 import { Tabs } from "../../../../ui/src";
 import { GeneralTab, MembershipTab, SecurityTab } from "../../components";
 
@@ -13,6 +14,8 @@ const { TabPane } = Tabs;
 const SettingPage: NextPage = () => {
   const router = useRouter();
   const { tab } = router.query;
+  //const { pageLoading } = useBrowserHistoryContext();
+
   return (
     <Layout
       title="Settings"

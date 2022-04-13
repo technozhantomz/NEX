@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 
 import { ActivityTable, Layout } from "../../../../common/components";
+//import { useBrowserHistoryContext } from "../../../../common/providers";
 import { AssetsTable } from "../../components/AssetsTable";
 
 import * as Styled from "./WalletPage.styled";
@@ -8,6 +9,8 @@ import * as Styled from "./WalletPage.styled";
 const { TabPane } = Styled.Tabs;
 
 const WalletPage: NextPage = () => {
+  //const { pageLoading } = useBrowserHistoryContext();
+
   return (
     <Layout
       title="Wallet"
