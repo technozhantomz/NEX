@@ -1,3 +1,5 @@
+import { Dropdown } from "antd";
+
 import {
   BellOutlined,
   MoreOutlined,
@@ -44,11 +46,10 @@ export const MainNavBar = (): JSX.Element => {
         ) : (
           ""
         )}
-        <MoreOutlined
-          className={"hambuger"}
-          onMouseOver={() => toggleMenu("main")}
-          onClick={() => toggleMenu("main")}
-        />
+
+        <Dropdown overlay={<MainNav />}>
+          <MoreOutlined className={"hambuger"} />
+        </Dropdown>
       </Styled.MainNavBar>
       <Styled.MenuWrapper
         className={`notification-menu-wrapper${
