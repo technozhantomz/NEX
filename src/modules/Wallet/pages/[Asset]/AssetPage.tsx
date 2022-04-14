@@ -73,6 +73,7 @@ const AssetPage: NextPage = () => {
                         hasBTCDepositAddress ? (
                           <AddressGenerated
                             bitcoinSidechainAccount={bitcoinSidechainAccount}
+                            getSidechainAccounts={getSidechainAccounts}
                           />
                         ) : (
                           <GenerateBitcoinAddress
