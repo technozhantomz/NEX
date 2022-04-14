@@ -14,15 +14,15 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
-    visible,
+    isPasswordModalVisible,
     feeAmount,
     transferForm,
     formValdation,
-    onCancel,
+    handlePasswordModalCancel,
     confirm,
     onFormFinish,
     handleValuesChange,
-    loading,
+    submittingPassword,
   } = useTransferForm();
   const { defaultAsset } = useAsset();
 
@@ -87,7 +87,11 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           </Styled.TransferFormButton>
         </Form.Item>
       </Styled.TransferForm>
-      <PasswordModal visible={visible} onCancel={onCancel} loading={loading} />
+      <PasswordModal
+        visible={isPasswordModalVisible}
+        onCancel={handlePasswordModalCancel}
+        submitting={submittingPassword}
+      />
     </Form.Provider>
   );
 };

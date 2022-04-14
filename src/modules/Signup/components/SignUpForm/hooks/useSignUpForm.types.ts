@@ -11,7 +11,7 @@ export type ISignUpForm = {
   validateUsername: (_: unknown, value: string) => Promise<void>;
   formValdation: IFormValidation;
   signUpForm: FormInstance;
-  loading: boolean;
+  submitting: boolean;
 };
 
 export type IFormField = {

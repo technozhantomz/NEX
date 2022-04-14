@@ -20,7 +20,7 @@ export const SignUpForm: React.FC = () => {
     setCheckboxVlaue,
     formValdation,
     signUpForm,
-    loading,
+    submitting,
   } = useSignUpForm();
 
   return (
@@ -92,7 +92,7 @@ export const SignUpForm: React.FC = () => {
         <Styled.SignupFormButton
           type="primary"
           htmlType="submit"
-          loading={loading}
+          loading={submitting}
         >
           Create account
         </Styled.SignupFormButton>

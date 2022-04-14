@@ -16,9 +16,10 @@ import { Account } from "../../../types";
 import { UseTransferFormResult } from "./useTransferForm.types";
 
 export function useTransferForm(): UseTransferFormResult {
-  const [loading, setLoading] = useState(false);
+  const [submittingPassword, setSubmittingPassword] = useState(false);
   const [status, setStatus] = useState<string>("");
-  const [visible, setVisible] = useState<boolean>(false);
+  const [isPasswordModalVisible, setIsPasswordModalVisible] =
+    useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [toAccount, setToAccount] = useState<Account>();
   const [fromAccount, setFromAccount] = useState<Account>();
@@ -39,13 +40,13 @@ export function useTransferForm(): UseTransferFormResult {
     transferForm.setFieldsValue({ from: localStorageAccount });
   }, [localStorageAccount, calculteTransferFee, assets]);
 
-  const onCancel = () => {
-    setVisible(false);
+  const handlePasswordModalCancel = () => {
+    setIsPasswordModalVisible(false);
   };
 
   const confirm = () => {
     transferForm.validateFields().then(() => {
-      setVisible(true);
+      setIsPasswordModalVisible(true);
     });
   };
 
@@ -54,7 +55,7 @@ export function useTransferForm(): UseTransferFormResult {
     const { passwordModal } = forms;
     if (name === "passwordModal") {
       passwordModal.validateFields().then(() => {
-        sendTransfer(values.password);
+        transfer(values.password);
       });
     }
   };
@@ -82,8 +83,8 @@ export function useTransferForm(): UseTransferFormResult {
     }
   };
 
-  const sendTransfer = async (password: string) => {
-    setLoading(true);
+  const transfer = async (password: string) => {
+    setSubmittingPassword(true);
     const values = transferForm.getFieldsValue();
     const from = (
       fromAccount ? fromAccount : await getAccountByName(values.from)
@@ -106,19 +107,19 @@ export function useTransferForm(): UseTransferFormResult {
       trxResult = await trxBuilder([trx], [activeKey]);
     } catch (e) {
       console.log(e);
-      setLoading(false);
+      setSubmittingPassword(false);
     }
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
-      setVisible(false);
+      setIsPasswordModalVisible(false);
       setStatus(
         `Successfully Transfered ${values.amount} ${values.asset} to ${values.to}`
       );
-      setLoading(false);
+      setSubmittingPassword(false);
       transferForm.resetFields();
     } else {
-      setVisible(false);
-      setLoading(false);
+      setIsPasswordModalVisible(false);
+      setSubmittingPassword(false);
       setStatus("Server error, please try again later.");
     }
   };
@@ -218,14 +219,14 @@ export function useTransferForm(): UseTransferFormResult {
 
   return {
     status,
-    visible,
+    isPasswordModalVisible,
     feeAmount,
     transferForm,
     formValdation,
     confirm,
-    onCancel,
+    handlePasswordModalCancel,
     onFormFinish,
     handleValuesChange,
-    loading,
+    submittingPassword,
   };
 }

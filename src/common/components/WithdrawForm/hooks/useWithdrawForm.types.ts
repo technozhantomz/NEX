@@ -3,18 +3,18 @@ import { FormInstance, Rule } from "../../../../ui/src";
 export type UseWithdrawFormResult = {
   status: string;
   //loggedIn: boolean;
-  visible: boolean;
+  isPasswordModalVisible: boolean;
   feeAmount: number;
   formValdation: FormValidation;
   withdrawForm: FormInstance<WithdrawForm>;
   onFormFinish: (name: string, info: { values: any; forms: any }) => void;
-  onCancel: () => void;
+  handlePasswordModalCancel: () => void;
   confirm: () => void;
   handleValuesChange: (changedValues: any) => void;
   // change unknown
   handleAssetChange: (value: unknown) => void;
   selectedAsset: string;
-  loading: boolean;
+  submittingPassword: boolean;
 };
 
 export type FormField = {
