@@ -20,6 +20,7 @@ export const SignUpForm: React.FC = () => {
     setCheckboxVlaue,
     formValdation,
     signUpForm,
+    submitting,
   } = useSignUpForm();
 
   return (
@@ -88,7 +89,11 @@ export const SignUpForm: React.FC = () => {
         </Styled.Checkbox>
       </Form.Item>
       <Form.Item>
-        <Styled.SignupFormButton type="primary" htmlType="submit">
+        <Styled.SignupFormButton
+          type="primary"
+          htmlType="submit"
+          loading={submitting}
+        >
           Create account
         </Styled.SignupFormButton>
       </Form.Item>

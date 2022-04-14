@@ -11,6 +11,7 @@ import { Form } from "../../../../../ui/src";
 import { ILoginForm } from "./useLoginForm.types";
 
 export function useLoginForm(): ILoginForm {
+  const [submitting, setSubmitting] = useState(false);
   const [validUser, setValidUser] = useState(false);
   const [temporaryFullAccount, setTemporaryFullAccount] = useState<
     FullAccount | undefined
@@ -31,11 +32,13 @@ export function useLoginForm(): ILoginForm {
   }, [localStorageAccount]);
 
   const handleLogin = async () => {
+    setSubmitting(true);
     loginForm.validateFields().then(async () => {
       if (temporaryFullAccount) {
         await formAccountAfterConfirmation(temporaryFullAccount);
         setLocalStorageAccount(temporaryFullAccount.account.name);
       }
+      setSubmitting(false);
     });
   };
 
@@ -80,5 +83,6 @@ export function useLoginForm(): ILoginForm {
     loginForm,
     handleLogin,
     formValdation,
+    submitting,
   };
 }

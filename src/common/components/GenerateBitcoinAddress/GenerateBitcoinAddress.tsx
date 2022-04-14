@@ -19,8 +19,14 @@ export const GenerateBitcoinAddress = ({
   getSidechainAccounts,
 }: Props): JSX.Element => {
   const router = useRouter();
-  const { visible, onCancel, onFormFinish, confirm, status } =
-    useGenerateBitcoinAddress(getSidechainAccounts);
+  const {
+    isPasswordModalVisible,
+    handlePasswordModalCancel,
+    onFormFinish,
+    confirm,
+    status,
+    submittingPassword,
+  } = useGenerateBitcoinAddress(getSidechainAccounts);
 
   return (
     <>
@@ -61,7 +67,11 @@ export const GenerateBitcoinAddress = ({
             </Link>
           </FormDisclamer>
         )}
-        <PasswordModal visible={visible} onCancel={onCancel} />
+        <PasswordModal
+          visible={isPasswordModalVisible}
+          onCancel={handlePasswordModalCancel}
+          submitting={submittingPassword}
+        />
       </Form.Provider>
     </>
   );
