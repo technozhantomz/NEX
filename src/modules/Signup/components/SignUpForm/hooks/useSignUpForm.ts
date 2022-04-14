@@ -12,11 +12,12 @@ import { useGeneratePassword } from "./useGeneratePassword";
 import { IFormValidation, ISignUpForm } from "./useSignUpForm.types";
 
 export function useSignUpForm(): ISignUpForm {
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [generatedPassword, setGeneratedPassword] = useState<string>("");
   const { formAccountAfterConfirmation, getFullAccount } = useAccount();
   const { createAccount } = useCreateAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
-  const [validUser, setValidUser] = useState(false);
+  const [validUser, setValidUser] = useState<boolean>(false);
   const { handleLoginRedirect } = useBrowserHistoryContext();
   const [signUpForm] = Form.useForm();
 
@@ -24,11 +25,13 @@ export function useSignUpForm(): ISignUpForm {
     if (localStorageAccount) {
       handleLoginRedirect();
     } else {
+      const password = useGeneratePassword();
       signUpForm.setFieldsValue({
-        password: useGeneratePassword(),
+        password: password,
       });
+      setGeneratedPassword(password);
     }
-  }, [localStorageAccount]);
+  }, [localStorageAccount, useGeneratePassword, setGeneratedPassword]);
 
   const handleSignUp = async (formData: unknown) => {
     setSubmitting(true);
@@ -106,5 +109,6 @@ export function useSignUpForm(): ISignUpForm {
     formValdation,
     signUpForm,
     submitting,
+    generatedPassword,
   };
 }

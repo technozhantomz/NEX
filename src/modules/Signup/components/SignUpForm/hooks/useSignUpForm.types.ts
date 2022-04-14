@@ -12,6 +12,7 @@ export type ISignUpForm = {
   formValdation: IFormValidation;
   signUpForm: FormInstance;
   submitting: boolean;
+  generatedPassword: string;
 };
 
 export type IFormField = {
