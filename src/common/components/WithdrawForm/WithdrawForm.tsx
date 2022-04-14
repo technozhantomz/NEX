@@ -23,16 +23,17 @@ export const WithdrawForm = ({
   const { defaultAsset, sidechainAssets } = useAsset();
   const {
     status,
-    visible,
+    isPasswordModalVisible,
     feeAmount,
     withdrawForm,
     formValdation,
-    onCancel,
+    handlePasswordModalCancel,
     confirm,
     onFormFinish,
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
+    submittingPassword,
   } = useWithdrawForm(asset);
 
   return (
@@ -158,7 +159,11 @@ export const WithdrawForm = ({
         </FormDisclamer>
       )}
 
-      <PasswordModal visible={visible} onCancel={onCancel} />
+      <PasswordModal
+        visible={isPasswordModalVisible}
+        onCancel={handlePasswordModalCancel}
+        submitting={submittingPassword}
+      />
     </Form.Provider>
   );
 };
