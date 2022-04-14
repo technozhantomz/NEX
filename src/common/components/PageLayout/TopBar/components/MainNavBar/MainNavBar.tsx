@@ -1,6 +1,5 @@
 import {
   BellOutlined,
-  Button,
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
@@ -56,37 +55,31 @@ export const MainNavBar = (): JSX.Element => {
           notificationMenuOpen ? " open" : ""
         }`}
       >
-        <Styled.CloseButton
-          type="text"
-          shape="circle"
-          onClick={() => closeMenu()}
-        >
-          X
-        </Styled.CloseButton>
+        <Styled.TopBar>
+          <Styled.CloseButton type="text" shape="circle" onClick={closeMenu}>
+            X
+          </Styled.CloseButton>
+        </Styled.TopBar>
         <NotificationMenu />
       </Styled.MenuWrapper>
       <Styled.MenuWrapper
         className={`profile-wrapper${profileMenuOpen ? " open" : ""}`}
       >
-        <Styled.CloseButton
-          type="text"
-          shape="circle"
-          onClick={() => closeMenu()}
-        >
-          X
-        </Styled.CloseButton>
+        <Styled.TopBar>
+          <Styled.CloseButton type="text" shape="circle" onClick={closeMenu}>
+            X
+          </Styled.CloseButton>
+        </Styled.TopBar>
         <ProfileMenu />
       </Styled.MenuWrapper>
       <Styled.MenuWrapper
         className={`main-menu-wrapper${mainMenuOpen ? " open" : ""}`}
       >
-        <Styled.CloseButton
-          type="text"
-          shape="circle"
-          onClick={() => closeMenu()}
-        >
-          X
-        </Styled.CloseButton>
+        <Styled.TopBar>
+          <Styled.CloseButton type="text" shape="circle" onClick={closeMenu}>
+            X
+          </Styled.CloseButton>
+        </Styled.TopBar>
         <MainNav />
       </Styled.MenuWrapper>
     </>

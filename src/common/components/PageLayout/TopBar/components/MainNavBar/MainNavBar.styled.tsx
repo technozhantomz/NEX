@@ -37,7 +37,7 @@ export const MenuWrapper = styled.div`{
   color: ${colors.textColor};
   z-index: 2;
   &.open{
-    display: flex;
+    display: block;
     flex-direction: column;
   }
   ${breakpoint.xs} {
@@ -61,8 +61,17 @@ export const MenuWrapper = styled.div`{
 export const CloseButton = styled(UiButton)`
   color: ${colors.textColor};
   position: relative;
-  text-align: right;
-  margin: 30px 20px 0 0;
+  text-align: center;
+  margin: 20px 20px 0 20px;
+  ${breakpoint.xs} {
+    display: none;
+  }
+`;
+
+export const TopBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
   ${breakpoint.xs} {
     display: none;
   }

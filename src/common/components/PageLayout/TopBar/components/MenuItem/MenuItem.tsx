@@ -11,12 +11,13 @@ interface MenuItemProps {
 }
 
 export const MenuItem = ({ Href, Icon, Label }: MenuItemProps): JSX.Element => {
-  const {pathname} = useBrowserHistoryContext();
+  const { pathname } = useBrowserHistoryContext();
   return (
     <Link href={Href}>
       <a className={`menu-item ${pathname === Href ? "active" : " "}`}>
         <div>
-          {Icon}<span>{Label}</span>
+          {Icon}
+          <span>{Label}</span>
         </div>
         <div>
           {Href == "/logout" ? (
