@@ -16,8 +16,10 @@ import { GenerateBitcoinAddressResult } from "./useGenerateBitcoinAddress.types"
 export function useGenerateBitcoinAddress(
   getSidechainAccounts: (accountId: string) => Promise<void>
 ): GenerateBitcoinAddressResult {
+  const [submittingPassword, setSubmittingPassword] = useState(false);
   const [status, setStatus] = useState<string>("");
-  const [visible, setVisible] = useState<boolean>(false);
+  const [isPasswordModalVisible, setIsPasswordModalVisible] =
+    useState<boolean>(false);
   const { trxBuilder } = useTransactionBuilder();
   const { getPrivateKey } = useAccount();
   const { id } = useUserContext();
@@ -31,13 +33,13 @@ export function useGenerateBitcoinAddress(
       .join("");
   }, []);
 
-  const onCancel = () => {
-    setVisible(false);
+  const handlePasswordModalCancel = () => {
+    setIsPasswordModalVisible(false);
   };
 
   const confirm = () => {
     setStatus("");
-    setVisible(true);
+    setIsPasswordModalVisible(true);
   };
 
   const onFormFinish = (name: string, info: { values: any; forms: any }) => {
@@ -52,10 +54,11 @@ export function useGenerateBitcoinAddress(
 
   const generateBitcoinAddresses = useCallback(
     async (password: string) => {
+      setSubmittingPassword(true);
       const sonNetworkStatus = await getSonNetworkStatus();
 
       if (!sonNetworkStatus.isSonNetworkOk) {
-        setVisible(false);
+        setIsPasswordModalVisible(false);
         setStatus("SONs network is not available now. Please try again later!");
         return;
       }
@@ -85,23 +88,32 @@ export function useGenerateBitcoinAddress(
         trxResult = await trxBuilder([trx], [activeKey]);
       } catch (error) {
         console.log(error);
-        setVisible(false);
+        setIsPasswordModalVisible(false);
+        setSubmittingPassword(false);
       }
       if (trxResult) {
         setTimeout(async () => {
           await getSidechainAccounts(id);
         }, 3000);
-        setVisible(false);
+        setIsPasswordModalVisible(false);
+        setSubmittingPassword(false);
       }
     },
     [
       getPrivateKey,
       buildAddingBitcoinSidechainTransaction,
       trxBuilder,
-      setVisible,
+      setIsPasswordModalVisible,
       getSidechainAccounts,
     ]
   );
 
-  return { visible, onCancel, onFormFinish, confirm, status };
+  return {
+    isPasswordModalVisible,
+    handlePasswordModalCancel,
+    onFormFinish,
+    confirm,
+    status,
+    submittingPassword,
+  };
 }
