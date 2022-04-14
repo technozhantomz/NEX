@@ -1,4 +1,4 @@
-export const getRecoveryPassword = (password: string): void => {
+export const useGetRecoveryPassword = (password: string): void => {
   const element = document.createElement("a");
   const file = new Blob([password], {
     type: "text/plain",
