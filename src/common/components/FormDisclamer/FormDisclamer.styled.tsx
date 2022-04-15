@@ -10,8 +10,7 @@ export const Disclamer = styled.p`
     }
     font-weight: 300;
     text-align: center;
-    letter-spacing: 0px;
-    opacity: 1;
+    margin-bottom: 0;
     color: ${colors.textColor};
   }
 `;
