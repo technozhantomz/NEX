@@ -1,7 +1,8 @@
 export type GenerateBitcoinAddressResult = {
-  visible: boolean;
+  isPasswordModalVisible: boolean;
   onFormFinish: (name: string, info: { values: any; forms: any }) => void;
-  onCancel: () => void;
+  handlePasswordModalCancel: () => void;
   confirm: () => void;
   status: string;
+  submittingPassword: boolean;
 };

@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components";
-import { useAsset, useBlockchain } from "../../../../../common/hooks";
+import {
+  useArrayLimiter,
+  useAsset,
+  useBlockchain,
+} from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { WitnessAccount } from "../../../../../common/types";
-import { useUpdateStatsArray } from "../../../hooks";
 
 import {
   UseWitnessesTabResult,
@@ -26,7 +29,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const [reward, setReward] = useState<number>(0);
   const [earnings, setEarnings] = useState<number>(0);
 
-  const { updateStatsArray } = useUpdateStatsArray();
+  const { updateArrayWithLimit } = useArrayLimiter();
   const { dbApi } = usePeerplaysApiContext();
   const { defaultAsset, formAssetBalanceById, setPrecision } = useAsset();
   const { getChain, getAvgBlockTime } = useBlockchain();
@@ -88,14 +91,20 @@ export function useWitnessesTab(): UseWitnessesTabResult {
               setReward(rewardAmount);
               setEarnings(Number(earnings));
               setWitnessStats({
-                active: updateStatsArray(
+                active: updateArrayWithLimit(
                   witnessStats.active,
-                  witnessesRows.length
+                  witnessesRows.length,
+                  99
                 ),
-                reward: updateStatsArray(witnessStats.reward, rewardAmount),
-                earnings: updateStatsArray(
+                reward: updateArrayWithLimit(
+                  witnessStats.reward,
+                  rewardAmount,
+                  99
+                ),
+                earnings: updateArrayWithLimit(
                   witnessStats.earnings,
-                  Number(earnings)
+                  Number(earnings),
+                  99
                 ),
               });
               setLoading(false);
@@ -119,7 +128,6 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     setReward,
     setEarnings,
     setWitnessStats,
-    updateStatsArray,
     setLoading,
   ]);
 

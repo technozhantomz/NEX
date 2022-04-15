@@ -20,6 +20,8 @@ export const SignUpForm: React.FC = () => {
     setCheckboxVlaue,
     formValdation,
     signUpForm,
+    submitting,
+    generatedPassword,
   } = useSignUpForm();
 
   return (
@@ -72,7 +74,7 @@ export const SignUpForm: React.FC = () => {
           visibilityToggle={false}
         />
       </Form.Item>
-      <InfoBar />
+      <InfoBar password={generatedPassword} />
       <Form.Item
         name="confirm"
         rules={formValdation.confirm}

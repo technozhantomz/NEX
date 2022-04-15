@@ -2,8 +2,11 @@ import { ParsedUrlQuery } from "querystring";
 
 import { useCallback, useEffect, useState } from "react";
 
-import { useAsset, useBlockchain } from "../../../../../common/hooks";
-import { useUpdateStatsArray } from "../../../hooks";
+import {
+  useArrayLimiter,
+  useAsset,
+  useBlockchain,
+} from "../../../../../common/hooks";
 import { BlockTableRow } from "../../../types";
 
 import {
@@ -37,7 +40,7 @@ export function useBlockchainTab(
   const [searchResult, setSearchResult] = useState<BlockTableRow[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const { defaultAsset } = useAsset();
-  const { updateStatsArray } = useUpdateStatsArray();
+  const { updateArrayWithLimit } = useArrayLimiter();
   const {
     getChain,
     getBlockData,
@@ -79,21 +82,25 @@ export function useBlockchainTab(
           avgTime: Number(chainAvgTime.toFixed(0)),
           recentBlocks: blockRows,
           stats: {
-            blocks: updateStatsArray(
+            blocks: updateArrayWithLimit(
               blockchainData.stats.blocks,
-              blockData.head_block_number
+              blockData.head_block_number,
+              99
             ),
-            supply: updateStatsArray(
+            supply: updateArrayWithLimit(
               blockchainData.stats.supply,
-              Number(dynamic.current_supply) / 10 ** defaultAsset.precision
+              Number(dynamic.current_supply) / 10 ** defaultAsset.precision,
+              99
             ),
-            witnesses: updateStatsArray(
+            witnesses: updateArrayWithLimit(
               blockchainData.stats.witnesses,
-              chain.active_witnesses.length
+              chain.active_witnesses.length,
+              99
             ),
-            times: updateStatsArray(
+            times: updateArrayWithLimit(
               blockchainData.stats.times,
-              Number(chainAvgTime.toFixed(0))
+              Number(chainAvgTime.toFixed(0)),
+              99
             ),
           },
         });

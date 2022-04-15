@@ -4,9 +4,9 @@ import {
   AddressGenerated,
   GenerateBitcoinAddress,
   HIVEAndHBDDeposit,
-  useUserContext,
 } from "../../../../common/components";
 import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
+import { useUserContext } from "../../../../common/providers";
 
 import * as Styled from "./DepositTab.styled";
 import { useDepositTab } from "./hooks";
@@ -30,18 +30,27 @@ export const DepositTab = (): JSX.Element => {
       />
 
       {selectedAsset === "BTC" ? (
-        loadingSidechainAccounts ? (
-          ""
-        ) : hasBTCDepositAddress ? (
-          <Styled.AddressGeneratedContainer>
-            <AddressGenerated
-              bitcoinSidechainAccount={bitcoinSidechainAccount}
-            />
-          </Styled.AddressGeneratedContainer>
+        localStorageAccount && localStorageAccount !== "" ? (
+          loadingSidechainAccounts ? (
+            ""
+          ) : hasBTCDepositAddress ? (
+            <Styled.AddressGeneratedContainer>
+              <AddressGenerated
+                bitcoinSidechainAccount={bitcoinSidechainAccount}
+              />
+            </Styled.AddressGeneratedContainer>
+          ) : (
+            <>
+              <GenerateBitcoinAddress
+                isLoggedIn={!!localStorageAccount}
+                getSidechainAccounts={getSidechainAccounts}
+              />
+            </>
+          )
         ) : (
           <>
             <GenerateBitcoinAddress
-              isLoggedIn={!!localStorageAccount}
+              isLoggedIn={false}
               getSidechainAccounts={getSidechainAccounts}
             />
           </>

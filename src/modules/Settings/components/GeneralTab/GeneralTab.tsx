@@ -1,5 +1,5 @@
 import { defaultLocales, faucetUrl } from "../../../../api/params";
-import { useSettingsContext } from "../../../../common/components";
+import { useSettingsContext } from "../../../../common/providers";
 import { useSettings } from "../../hooks";
 
 import * as Styled from "./GeneralTab.styled";

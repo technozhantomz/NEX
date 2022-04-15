@@ -44,6 +44,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   ) as [string, (value: string) => void];
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
+
   const [id, setId] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [assets, _setAssets] = useState<Asset[]>([]);
@@ -104,6 +105,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
       formInitialAccountByName(localStorageAccount);
     }
   }, []);
+
   return (
     <UserContext.Provider
       value={{

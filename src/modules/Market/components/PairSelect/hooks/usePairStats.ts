@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
-import { roundNum } from "../../../../../common/hooks/useRoundNum";
+import { roundNum } from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
 
 import { usePairSelect } from "./usePairSelect";

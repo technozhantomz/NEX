@@ -59,10 +59,12 @@ export const Layout = styled.main`{
 `;
 
 export const PageHeading = styled.h1`
-   {
-    color: ${colors.white};
+  color: ${colors.white};
+  font-size: 20px;
+  font-weight: 300;
+  margin: 20px 0 25px;
+  ${breakpoint.xs} {
+    margin: 45px 0 45px;
     font-size: 24px;
-    font-weight: 300;
-    margin: 40px 0 20px;
   }
 `;
