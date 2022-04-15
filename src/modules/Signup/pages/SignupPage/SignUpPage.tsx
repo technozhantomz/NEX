@@ -13,14 +13,14 @@ const SignUpPage: NextPage = () => {
     <Layout title="SignUp" type="card" heading="Create your account">
       <Styled.SignUpFormCard>
         <SignUpForm />
-        <Styled.FormDisclamerDiv>
+        <Styled.FormDisclamerContainer>
           <FormDisclamer>
             <span>Already have a Peerplays account? </span>
             <Link href="/login">
               <a>Log in</a>
             </Link>
           </FormDisclamer>
-        </Styled.FormDisclamerDiv>
+        </Styled.FormDisclamerContainer>
       </Styled.SignUpFormCard>
     </Layout>
   );

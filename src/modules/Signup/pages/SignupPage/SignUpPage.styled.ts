@@ -9,7 +9,6 @@ export const SignUpFormCard = styled(Card)`
     }
   }
   border-radius: 4px;
-  opacity: 1;
   height: auto;
   max-width: 600px;
   ${breakpoint.sm} {
@@ -17,9 +16,4 @@ export const SignUpFormCard = styled(Card)`
   }
 `;
 
-export const FormDisclamerDiv = styled.div`
-  margin-top: 25px;
-  ${breakpoint.sm} {
-    margin-top: 40px;
-  }
-`;
+export const FormDisclamerContainer = styled.div``;

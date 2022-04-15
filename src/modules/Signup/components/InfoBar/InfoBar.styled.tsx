@@ -7,9 +7,9 @@ export const InfoBar = styled.div`
     display: flex;
     text-align: left;
     font-size: 12px;
-    margin-top: 23px;
+    margin-bottom: 25px;
     ${breakpoint.sm} {
-      margin-top: 0px;
+      margin-bottom: 28px;
       font-size: 16px;
     }
   }
@@ -22,6 +22,9 @@ export const InfoBar = styled.div`
 export const InfoBarText = styled.div`
   margin: 0;
   max-width: 388px;
+  p {
+    margin-bottom: 0;
+  }
 `;
 
 export const InfoIcon = styled(InfoCircleOutlined)``;
