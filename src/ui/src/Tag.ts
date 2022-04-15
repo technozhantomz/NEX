@@ -1,9 +1,8 @@
-import { Tag as AntdTag } from "antd";
 import styled from "styled-components";
 
 import { colors } from "./colors";
 
-export const Tag = styled(AntdTag)`
+export const Tag = styled.span`
   background: ${colors.successTag};
   color: ${colors.textColor};
   border: none;

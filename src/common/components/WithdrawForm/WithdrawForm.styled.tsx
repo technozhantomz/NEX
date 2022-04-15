@@ -8,6 +8,16 @@ import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const WithdrawForm = styled(CardFrom)`
   margin: 0 20px;
+  .ant-form-item-control-input-content {
+    max-width: 520px;
+    height: 50px;
+  }
+  .ant-input {
+    height: 100%;
+  }
+  .amt-div {
+    height: 60px;
+  }
 `;
 
 export const WithdrawFormAssetAmount = styled(CardFrom.Item)`
@@ -47,5 +57,6 @@ export const FormItem = styled(UIForm.Item)`
     margin-left: 150px;
     width: 290px;
     height: 45px;
+    margin-top: 33px;
   }
 `;

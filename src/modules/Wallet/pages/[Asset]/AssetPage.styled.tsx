@@ -24,7 +24,7 @@ export const AssetCard = styled(UiCard)`
       height: 2pt;
     }
     .ant-form {
-      margin: 0 20px 39px;
+      margin: 0 35px;
       max-width: 566px;
     }
   }
@@ -34,7 +34,7 @@ export const AssetCard = styled(UiCard)`
         display: flex;
       }
       .ant-table-wrapper {
-        margin: 0 20px 39px;
+        margin: 0 35px;
       }
       .asset-table {
         max-width: 566px;

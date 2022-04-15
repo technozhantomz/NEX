@@ -14,9 +14,23 @@ export const TransferForm = styled(CardFrom)`
     .two-input-row {
       display: flex;
       justify-content: space-between;
+      width: 710px;
+      height: 70px;
       .ant-form-item {
         width: 49%;
       }
+    }
+    .ant-input {
+      //     border-radius: 4px;
+      height: 100%;
+
+      //     padding: 15px 30px;
+    }
+    .ant-form-item-control-input-content {
+      height: 50px;
+    }
+    #transferForm_memo {
+      width: 710px;
     }
   }
 `;

@@ -105,14 +105,16 @@ export const WithdrawForm = ({
           />
         </Form.Item>
         {!withAssetSelector ? (
-          <Form.Item
-            name="amount"
-            validateFirst={true}
-            rules={formValdation.amount}
-            validateTrigger="onBlur"
-          >
-            <Input placeholder="amount" type="number" />
-          </Form.Item>
+          <div className="amt-div">
+            <Form.Item
+              name="amount"
+              validateFirst={true}
+              rules={formValdation.amount}
+              validateTrigger="onBlur"
+            >
+              <Input placeholder="amount" type="number" />
+            </Form.Item>
+          </div>
         ) : (
           ""
         )}
