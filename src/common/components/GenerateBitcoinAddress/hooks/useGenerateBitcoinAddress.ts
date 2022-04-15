@@ -13,19 +13,21 @@ import {
 import { useUserContext } from "../../../providers";
 
 import {
-  AddressDetails,
-  GenerateBitcoinAddressResult,
-  PrivateKeyResult,
+  BitcoinAccount,
+  BitcoinSidechainAccounts,
+  UseGenerateBitcoinAddressResult,
 } from "./useGenerateBitcoinAddress.types";
 
 export function useGenerateBitcoinAddress(
   getSidechainAccounts: (accountId: string) => Promise<void>
-): GenerateBitcoinAddressResult {
+): UseGenerateBitcoinAddressResult {
   const [submittingPassword, setSubmittingPassword] = useState(false);
   const [status, setStatus] = useState<string>("");
-  const [privateKeyResult, setPrivateKeyResult] = useSessionStorage(
-    "privateKeyResult"
-  ) as [PrivateKeyResult, (value: PrivateKeyResult) => void];
+  const [bitcoinSidechainAccounts, setBitcoinSidechainAccounts] =
+    useSessionStorage("bitcoinSidechainAccounts") as [
+      BitcoinSidechainAccounts,
+      (value: BitcoinSidechainAccounts) => void
+    ];
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
     useState<boolean>(false);
   const { trxBuilder } = useTransactionBuilder();
@@ -60,7 +62,7 @@ export function useGenerateBitcoinAddress(
     }
   };
 
-  const generateNewAddress = (): AddressDetails => {
+  const generateNewAddress = (): BitcoinAccount => {
     const ECPair = ECPairFactory(ecc);
     const keyPair = ECPair.makeRandom();
     const address = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey });
@@ -84,7 +86,7 @@ export function useGenerateBitcoinAddress(
       const deposit = generateNewAddress();
       const withdraw = generateNewAddress();
 
-      setPrivateKeyResult({ deposit, withdraw });
+      setBitcoinSidechainAccounts({ deposit, withdraw });
 
       const activeKey = getPrivateKey(password, "active");
       const trx = buildAddingBitcoinSidechainTransaction(
@@ -118,15 +120,17 @@ export function useGenerateBitcoinAddress(
       trxBuilder,
       setIsPasswordModalVisible,
       getSidechainAccounts,
+      setBitcoinSidechainAccounts,
+      setSubmittingPassword,
     ]
   );
 
   return {
     isPasswordModalVisible,
-    privateKeyResult,
+    bitcoinSidechainAccounts,
     status,
     submittingPassword,
-    setPrivateKeyResult,
+    setBitcoinSidechainAccounts,
     handlePasswordModalCancel,
     onFormFinish,
     confirm,

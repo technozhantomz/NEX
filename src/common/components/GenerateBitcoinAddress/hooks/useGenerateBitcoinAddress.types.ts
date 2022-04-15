@@ -1,22 +1,22 @@
-export type GenerateBitcoinAddressResult = {
+export type UseGenerateBitcoinAddressResult = {
   isPasswordModalVisible: boolean;
-  privateKeyResult: PrivateKeyResult | undefined;
+  bitcoinSidechainAccounts: BitcoinSidechainAccounts | undefined;
   status: string;
   submittingPassword: boolean;
-  setPrivateKeyResult: (value: PrivateKeyResult) => void;
+  setBitcoinSidechainAccounts: (value: BitcoinSidechainAccounts) => void;
   onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   handlePasswordModalCancel: () => void;
   confirm: () => void;
 };
 
-export type PrivateKeyResult =
+export type BitcoinSidechainAccounts =
   | {
-      deposit: AddressDetails;
-      withdraw: AddressDetails;
+      deposit: BitcoinAccount;
+      withdraw: BitcoinAccount;
     }
   | undefined;
 
-export type AddressDetails = {
+export type BitcoinAccount = {
   address: string;
   pubKey: string;
   privateKey: string;
