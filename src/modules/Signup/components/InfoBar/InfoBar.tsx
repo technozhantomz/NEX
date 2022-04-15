@@ -12,7 +12,9 @@ type Props = {
 export const InfoBar = ({ password }: Props): JSX.Element => {
   return (
     <Styled.InfoBar>
-      <InfoCircleOutlined />
+      <Styled.InfoDiv>
+        <InfoCircleOutlined />
+      </Styled.InfoDiv>
       <Styled.InfoBarText>
         <p>
           <span>Keep your password safe to avoid losing any funds. </span>
