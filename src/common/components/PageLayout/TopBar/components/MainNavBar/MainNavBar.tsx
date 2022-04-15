@@ -27,12 +27,15 @@ export const MainNavBar = (): JSX.Element => {
       <Styled.MainNavBar>
         {localStorageAccount ? (
           <>
-            <BellOutlined
+            {/* <BellOutlined
               className={"bell"}
               onMouseOver={() => toggleMenu("notify")}
               onClick={() => toggleMenu("notify")}
-            />
-            <div
+            /> */}
+            <Dropdown overlay={<NotificationMenu />}>
+              <BellOutlined className={"bell"} />
+            </Dropdown>
+            {/* <div
               onMouseOver={() => toggleMenu("profile")}
               onClick={() => toggleMenu("profile")}
             >
@@ -41,7 +44,15 @@ export const MainNavBar = (): JSX.Element => {
               >
                 {localStorageAccount ? localStorageAccount.charAt(0) : ""}
               </Styled.MainNavBarAvitar>
-            </div>
+            </div> */}
+
+            <Dropdown overlay={<ProfileMenu />}>
+              <Styled.MainNavBarAvitar
+                icon={localStorageAccount ? "" : <UserOutlined />}
+              >
+                {localStorageAccount ? localStorageAccount.charAt(0) : ""}
+              </Styled.MainNavBarAvitar>
+            </Dropdown>
           </>
         ) : (
           ""
@@ -51,7 +62,8 @@ export const MainNavBar = (): JSX.Element => {
           <MoreOutlined className={"hambuger"} />
         </Dropdown>
       </Styled.MainNavBar>
-      <Styled.MenuWrapper
+
+      {/* <Styled.MenuWrapper
         className={`notification-menu-wrapper${
           notificationMenuOpen ? " open" : ""
         }`}
@@ -76,7 +88,7 @@ export const MainNavBar = (): JSX.Element => {
           X
         </a>
         <MainNav />
-      </Styled.MenuWrapper>
+      </Styled.MenuWrapper> */}
     </>
   );
 };
