@@ -1,10 +1,15 @@
 import { styled } from "../../../ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 
 export const Container = styled.div`
   display: flex;
   padding-left: 8px;
   align-items: center;
+  margin: 25px 20px;
+  ${breakpoint.sm} {
+    margin: 35px 30px;
+  }
 `;
 
 export const LogoContainer = styled.div`
@@ -18,7 +23,13 @@ export const AccountContainer = styled.span`
 export const DepositInstruction = styled.div`
   color: ${colors.textColor};
   text-align: left;
-  font: normal normal normal 14px/20px Inter;
-  letter-spacing: 0px;
-  opacity: 1;
+  font-size: 14px;
+`;
+
+export const LoginContainer = styled.div`
+  padding-top: 10px;
+`;
+
+export const FormDisclaimerContainer = styled.div`
+  margin-top: 24px;
 `;

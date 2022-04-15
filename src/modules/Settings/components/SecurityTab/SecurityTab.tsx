@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useSettingsContext } from "../../../../common/components";
+import { useSettingsContext } from "../../../../common/providers";
 import { useSettings } from "../../hooks";
 
 import * as Styled from "./SecurityTab.styled";

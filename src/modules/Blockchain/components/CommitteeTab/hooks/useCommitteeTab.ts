@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components";
-import { useAsset } from "../../../../../common/hooks";
+import { useArrayLimiter, useAsset } from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { CommitteeMember } from "../../../../../common/types";
-import { useUpdateStatsArray } from "../../../hooks";
 
 import {
   CommitteeTableRow,
@@ -20,7 +19,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
   >([]);
   const { dbApi } = usePeerplaysApiContext();
   const { defaultAsset, formAssetBalanceById } = useAsset();
-  const { updateStatsArray } = useUpdateStatsArray();
+  const { updateArrayWithLimit } = useArrayLimiter();
 
   const getCommittees = useCallback(async () => {
     if (defaultAsset) {
@@ -59,7 +58,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
             setCommitteeTableRows(committeeRows);
             setActiveCommittee(committees.length);
             setCommitteeStats(
-              updateStatsArray(committeeStats, committees.length)
+              updateArrayWithLimit(committeeStats, committees.length, 99)
             );
             setLoading(false);
           }
@@ -75,7 +74,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
     setCommitteeTableRows,
     setActiveCommittee,
     setCommitteeStats,
-    updateStatsArray,
+    updateArrayWithLimit,
     defaultAsset,
     setLoading,
   ]);

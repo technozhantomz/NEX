@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 import { CardFormButton, Form } from "../../../ui/src";
@@ -17,19 +18,36 @@ export const GenerateBitcoinAddress = ({
   isLoggedIn = false,
   getSidechainAccounts,
 }: Props): JSX.Element => {
-  const { visible, onCancel, onFormFinish, confirm, status } =
-    useGenerateBitcoinAddress(getSidechainAccounts);
+  const router = useRouter();
+  const {
+    isPasswordModalVisible,
+    handlePasswordModalCancel,
+    onFormFinish,
+    confirm,
+    status,
+    submittingPassword,
+  } = useGenerateBitcoinAddress(getSidechainAccounts);
 
   return (
     <>
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.DepositForm name="generateAddressForm" onFinish={confirm}>
           <Form.Item>
-            <CardFormButton type="primary" htmlType="submit">
-              {isLoggedIn
-                ? "Generate Bitcoin Address"
-                : "Log in & Generate Bitcoin Address"}
-            </CardFormButton>
+            {isLoggedIn ? (
+              <CardFormButton type="primary" htmlType="submit">
+                Generate Bitcoin Address
+              </CardFormButton>
+            ) : (
+              <CardFormButton
+                type="primary"
+                htmlType="button"
+                onClick={() => {
+                  router.push("/login");
+                }}
+              >
+                Log in & Generate Bitcoin Address
+              </CardFormButton>
+            )}
           </Form.Item>
         </Styled.DepositForm>
         {status === "" ? (
@@ -49,7 +67,11 @@ export const GenerateBitcoinAddress = ({
             </Link>
           </FormDisclamer>
         )}
-        <PasswordModal visible={visible} onCancel={onCancel} />
+        <PasswordModal
+          visible={isPasswordModalVisible}
+          onCancel={handlePasswordModalCancel}
+          submitting={submittingPassword}
+        />
       </Form.Provider>
     </>
   );

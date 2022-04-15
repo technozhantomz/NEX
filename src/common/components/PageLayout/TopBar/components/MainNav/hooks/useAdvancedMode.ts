@@ -1,7 +1,7 @@
 import { useState } from "react";
 
+import { useSettingsContext } from "../../../../../../providers";
 import { Settings } from "../../../../../../types";
-import { useSettingsContext } from "../../../../../SettingsProvider";
 
 import { UseAdvancedModeResult } from "./useAdvancedMode.types";
 

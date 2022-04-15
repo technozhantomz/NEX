@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../components";
+import { usePeerplaysApiContext } from "../../providers";
 import { BlockData, GlobalProperties } from "../../types";
 
 import { UseMaintenanceResult } from "./useMaintenance.types";

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { useSettingsContext } from "../../../common/components";
+import { useSettingsContext } from "../../../common/providers";
 import { Settings } from "../../../common/types";
 import { Form } from "../../../ui/src";
 

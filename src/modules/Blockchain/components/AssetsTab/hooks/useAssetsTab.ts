@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components";
+import { useArrayLimiter } from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Account, Asset } from "../../../../../common/types";
-import { useUpdateStatsArray } from "../../../hooks";
 
 import { AssetTableRow, UseAssetsTabResult } from "./useAssetsTab.types";
 
@@ -12,7 +12,7 @@ export function useAssetsTab(): UseAssetsTabResult {
   const [assetTableRows, setAssetTableRows] = useState<AssetTableRow[]>([]);
   const [assetsStats, setAssetsStats] = useState<number[]>([]);
   const { dbApi } = usePeerplaysApiContext();
-  const { updateStatsArray } = useUpdateStatsArray();
+  const { updateArrayWithLimit } = useArrayLimiter();
   const getAssetRows = useCallback(async () => {
     try {
       const rawAssets: Asset[] = await dbApi("list_assets", ["", 99]);
@@ -34,7 +34,9 @@ export function useAssetsTab(): UseAssetsTabResult {
           })
         );
         setAssetTableRows(assetsRows);
-        setAssetsStats(updateStatsArray(assetsStats, assetsRows.length));
+        setAssetsStats(
+          updateArrayWithLimit(assetsStats, assetsRows.length, 99)
+        );
         setLoading(false);
       }
     } catch (e) {
@@ -45,7 +47,7 @@ export function useAssetsTab(): UseAssetsTabResult {
     dbApi,
     setAssetsStats,
     setAssetTableRows,
-    useUpdateStatsArray,
+    updateArrayWithLimit,
     setLoading,
   ]);
 
