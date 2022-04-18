@@ -2,7 +2,7 @@ export interface ActivityRow {
   key: string;
   time: string;
   type: string;
-  info: string;
+  info: JSX.Element;
   id: string;
   fee: string;
 }
