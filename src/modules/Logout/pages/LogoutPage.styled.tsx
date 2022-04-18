@@ -17,7 +17,8 @@ export const LogoutCard = styled(AntdCard)`
   }
 `;
 export const LogoutButton = styled(CardFormButton)`
-   {
-    margin: 5% auto;
+  margin: 5% auto;
+  span {
+    padding: 4px 15px;
   }
 `;

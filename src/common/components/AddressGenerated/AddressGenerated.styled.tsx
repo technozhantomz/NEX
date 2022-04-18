@@ -38,7 +38,6 @@ export const DisclaimerFooter = styled.p`
 
 export const GeneratedBitcoinAddress = styled(Input)`
   height: 50px;
-  background: ${colors.textColor} 0% 0% no-repeat padding-box;
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
   border-radius: 4px;

@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
-import { CardFormButton, Form } from "../../../ui/src";
+import { Form } from "../../../ui/src";
 import { FormDisclamer } from "../FormDisclamer";
 import { PasswordModal } from "../PasswordModal";
 
@@ -17,19 +18,36 @@ export const GenerateBitcoinAddress = ({
   isLoggedIn = false,
   getSidechainAccounts,
 }: Props): JSX.Element => {
-  const { visible, onCancel, onFormFinish, confirm, status } =
-    useGenerateBitcoinAddress(getSidechainAccounts);
+  const router = useRouter();
+  const {
+    isPasswordModalVisible,
+    handlePasswordModalCancel,
+    onFormFinish,
+    confirm,
+    status,
+    submittingPassword,
+  } = useGenerateBitcoinAddress(getSidechainAccounts);
 
   return (
     <>
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.DepositForm name="generateAddressForm" onFinish={confirm}>
           <Styled.FormItem>
-            <Styled.Button type="primary" htmlType="submit">
-              {isLoggedIn
-                ? "Generate Bitcoin Address"
-                : "Log in & Generate Bitcoin Address"}
-            </Styled.Button>
+            {isLoggedIn ? (
+              <Styled.Button type="primary" htmlType="submit">
+                Generate Bitcoin Address
+              </Styled.Button>
+            ) : (
+              <Styled.Button
+                type="primary"
+                htmlType="button"
+                onClick={() => {
+                  router.push("/login");
+                }}
+              >
+                Log in & Generate Bitcoin Address
+              </Styled.Button>
+            )}
           </Styled.FormItem>
         </Styled.DepositForm>
         {status === "" ? (
@@ -49,7 +67,11 @@ export const GenerateBitcoinAddress = ({
             </Link>
           </FormDisclamer>
         )}
-        <PasswordModal visible={visible} onCancel={onCancel} />
+        <PasswordModal
+          visible={isPasswordModalVisible}
+          onCancel={handlePasswordModalCancel}
+          submitting={submittingPassword}
+        />
       </Form.Provider>
     </>
   );

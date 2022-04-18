@@ -1,5 +1,5 @@
 import { breakpoints } from "../../../ui/src/breakpoints";
-import { useViewportContext } from "../ViewportProvider";
+import { useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityTable.styled";
 import { ActivityColumns as columns } from "./components";
