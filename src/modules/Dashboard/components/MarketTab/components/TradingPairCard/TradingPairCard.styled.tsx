@@ -4,7 +4,7 @@ import { colors } from "../../../../../../ui/src/colors";
 
 export const Card = styled.div`
   height: 65px;
-  ${breakpoint.sm} {
+  ${breakpoint.xs} {
     height: 100px;
   }
   /* UI Properties */
@@ -39,20 +39,14 @@ export const ContentHeader = styled.div`
   }
 `;
 export const TradingPair = styled.p`
-  text-align: left;
-  font: normal normal medium 14px/17px Inter;
-  letter-spacing: 0px;
   color: ${colors.textColorSecondary};
-  opacity: 1;
-  font-size: 10px;
+  font-size: 12px;
   ${breakpoint.sm} {
     font-size: 14px;
   }
   margin: 10px;
 `;
 export const PercentChange = styled.p`
-  font: normal normal medium 14px/17px Inter;
-  letter-spacing: 0px;
   color: ${(props) =>
     props.theme
       ? props.theme.percentChangeColor
@@ -66,11 +60,9 @@ export const PercentChange = styled.p`
 `;
 export const Price = styled.p`
   text-align: left;
-  font: normal normal medium 28px/34px Inter;
-  letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  font-size: 26px;
+  font-size: 16px;
   margin-left: 10px;
   display: ${(props) =>
     props.theme ? props.theme.display : props.theme.display};
@@ -80,11 +72,9 @@ export const Price = styled.p`
 `;
 export const Volume = styled.p`
   text-align: left;
-  font: normal normal medium 28px/34px Inter;
-  letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  font-size: 26px;
+  font-size: 16px;
   margin-left: 10px;
   ${breakpoint.sm} {
     font-size: 28px;

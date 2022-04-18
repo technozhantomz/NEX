@@ -1,3 +1,4 @@
+import { FormDisclamer as UiFormDisclamer } from "..";
 import { CardFormButton, CardFrom, Form, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 
@@ -40,6 +41,13 @@ export const WithdrawFormAsset = styled(CardFrom.Item)`
   }
 `;
 
+export const Fee = styled.p`
+  font-size: 12px;
+  ${breakpoint.xs} {
+    font-size: 14px;
+  }
+`;
+
 export const WithdrawFormButton = styled(CardFormButton)`
   width: 100%;
 `;
@@ -52,5 +60,12 @@ export const FormItem = styled(Form.Item)`
   ${breakpoint.sm} {
     width: 399px;
     height: 44px;
+  }
+`;
+
+export const FormDisclamer = styled(UiFormDisclamer)`
+  margin-bottom: 15px;
+  ${breakpoint.xs} {
+    margin-bottom: 25px;
   }
 `;

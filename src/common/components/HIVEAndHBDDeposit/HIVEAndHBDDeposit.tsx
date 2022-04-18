@@ -34,7 +34,7 @@ export const HIVEAndHBDDeposit = ({
         </Styled.Container>
       ) : (
         <Styled.LoginContainer>
-          <CardFormButton
+          <Styled.Button
             type="primary"
             htmlType="button"
             onClick={() => {
@@ -42,15 +42,14 @@ export const HIVEAndHBDDeposit = ({
             }}
           >
             {`Log in & Deposit ${assetSymbol}`}
-          </CardFormButton>
-          <Styled.FormDisclaimerContainer>
-            <FormDisclamer>
-              <span>Don't have a Peerplays account? </span>
-              <Link href="/signup">
-                <a>Create account</a>
-              </Link>
-            </FormDisclamer>
-          </Styled.FormDisclaimerContainer>
+          </Styled.Button>
+
+          <Styled.FormDisclamer>
+            <span>Don't have a Peerplays account? </span>
+            <Link href="/signup">
+              <a>Create account</a>
+            </Link>
+          </Styled.FormDisclamer>
         </Styled.LoginContainer>
       )}
     </>

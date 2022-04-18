@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import { Form } from "../../../ui/src";
-import { FormDisclamer } from "../FormDisclamer";
 import { PasswordModal } from "../PasswordModal";
 
 import * as Styled from "./GenerateBitcoinAddress.styled";
@@ -53,19 +52,19 @@ export const GenerateBitcoinAddress = ({
         {status === "" ? (
           ""
         ) : (
-          <FormDisclamer>
+          <Styled.FormDisclamer>
             <Styled.SonError>{status}</Styled.SonError>
-          </FormDisclamer>
+          </Styled.FormDisclamer>
         )}
         {isLoggedIn ? (
           ""
         ) : (
-          <FormDisclamer>
+          <Styled.FormDisclamer>
             <span>Don't have a Peerplays account? </span>
             <Link href="/signup">
               <a>Create account</a>
             </Link>
-          </FormDisclamer>
+          </Styled.FormDisclamer>
         )}
         <PasswordModal
           visible={isPasswordModalVisible}

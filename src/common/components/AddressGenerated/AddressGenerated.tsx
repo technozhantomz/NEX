@@ -27,7 +27,7 @@ export const AddressGenerated = ({
         <Styled.IconDiv>
           <BitcoinIcon
             height={width > breakpoints.sm ? "30" : "18"}
-            width="30"
+            width={width > breakpoints.sm ? "30" : "18"}
           />
         </Styled.IconDiv>
         <Styled.DepositHeader>Copy your Bitcoin address</Styled.DepositHeader>
