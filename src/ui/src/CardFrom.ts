@@ -3,17 +3,19 @@ import styled from "styled-components";
 
 import { Button } from "./Button";
 import { breakpoint } from "./breakpoints";
+import { colors } from "./colors";
 
 export const CardFormButton = styled(Button)`
-   {
-    display: block;
-    width: 85%;
-    margin: 0 auto;
+  display: block;
+  width: 85%;
+  margin: 0 auto;
+  font-size: 12px;
+  .ant-btn-loading-icon {
+    float: right;
   }
   ${breakpoint.xs} {
-     {
-      width: 70%;
-    }
+    font-size: 16px;
+    width: 70%;
   }
 `;
 export const CardFrom = styled(AntdForm)`
@@ -23,7 +25,7 @@ export const CardFrom = styled(AntdForm)`
   }
   .ant-form-item-has-success {
     .ant-input-suffix {
-      color: var(--ant-success-color);
+      color: ${colors.successColor};
     }
   }
   .ant-form-item-has-error {

@@ -10,9 +10,7 @@ export const MarketTab = (): JSX.Element => {
 
   return (
     <Styled.MarketContainer>
-      <Styled.HeadingPara>
-        Choose the trading pair you want to use
-      </Styled.HeadingPara>
+      <Styled.Heading>Choose the trading pair you want to use</Styled.Heading>
       <Styled.Row>
         {pairs.map((pair, index) => (
           <Styled.Col span={11} key={index}>

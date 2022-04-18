@@ -1,8 +1,10 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../../../../../common/components/UserProvider/UserProvider";
 import { useAccount, useCreateAccount } from "../../../../../common/hooks";
+import {
+  useBrowserHistoryContext,
+  useUserContext,
+} from "../../../../../common/providers";
 import { ISignupFormData } from "../../../../../common/types";
 import { CheckboxChangeEvent, Form } from "../../../../../ui/src";
 
@@ -10,28 +12,34 @@ import { useGeneratePassword } from "./useGeneratePassword";
 import { IFormValidation, ISignUpForm } from "./useSignUpForm.types";
 
 export function useSignUpForm(): ISignUpForm {
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [generatedPassword, setGeneratedPassword] = useState<string>("");
   const { formAccountAfterConfirmation, getFullAccount } = useAccount();
   const { createAccount } = useCreateAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
-  const [validUser, setValidUser] = useState(false);
+  const [validUser, setValidUser] = useState<boolean>(false);
+  const { handleLoginRedirect } = useBrowserHistoryContext();
   const [signUpForm] = Form.useForm();
-  const router = useRouter();
 
   useEffect(() => {
     if (localStorageAccount) {
-      router.push("/dashboard");
+      handleLoginRedirect();
     } else {
+      const password = useGeneratePassword();
       signUpForm.setFieldsValue({
-        password: useGeneratePassword(),
+        password: password,
       });
+      setGeneratedPassword(password);
     }
-  }, [localStorageAccount]);
+  }, [localStorageAccount, useGeneratePassword, setGeneratedPassword]);
 
   const handleSignUp = async (formData: unknown) => {
+    setSubmitting(true);
     const fullAccount = await createAccount(formData as ISignupFormData);
     if (fullAccount) {
       await formAccountAfterConfirmation(fullAccount);
       setLocalStorageAccount(fullAccount.account.name);
+      setSubmitting(false);
     }
   };
 
@@ -100,5 +108,7 @@ export function useSignUpForm(): ISignUpForm {
     validateUsername,
     formValdation,
     signUpForm,
+    submitting,
+    generatedPassword,
   };
 }

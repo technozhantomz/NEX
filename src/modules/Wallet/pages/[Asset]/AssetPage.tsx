@@ -8,12 +8,15 @@ import {
   HIVEAndHBDDeposit,
   Layout,
   TransferForm,
-  useUserContext,
   WithdrawForm,
 } from "../../../../common/components";
 import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
+import {
+  //useBrowserHistoryContext,
+  useUserContext,
+} from "../../../../common/providers";
 import { Tabs } from "../../../../ui/src";
-import { AssetsTable } from "../../components/AssetsTable";
+import { AssetsTable } from "../../components";
 
 import * as Styled from "./AssetPage.styled";
 
@@ -30,6 +33,7 @@ const AssetPage: NextPage = () => {
     getSidechainAccounts,
   } = useSidechainAccounts();
   const { localStorageAccount } = useUserContext();
+  //const { pageLoading } = useBrowserHistoryContext();
 
   return (
     <Layout
@@ -68,6 +72,7 @@ const AssetPage: NextPage = () => {
                         hasBTCDepositAddress ? (
                           <AddressGenerated
                             bitcoinSidechainAccount={bitcoinSidechainAccount}
+                            getSidechainAccounts={getSidechainAccounts}
                           />
                         ) : (
                           <GenerateBitcoinAddress

@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider";
-import { useSettingsContext } from "../../../../../common/components/SettingsProvider";
-import { Asset } from "../../../../../common/types/Asset";
-import { Exchanges } from "../../../../../common/types/Exchanges";
+import {
+  usePeerplaysApiContext,
+  useSettingsContext,
+} from "../../../../../common/providers";
+import { Asset, Exchanges } from "../../../../../common/types";
 
 import { UsePairSelectResult } from "./usePariSelect.types";
 

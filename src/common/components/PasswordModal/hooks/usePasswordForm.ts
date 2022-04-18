@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 import { Form, FormInstance } from "../../../../ui/src";
 import { useAccount } from "../../../hooks";
-import { useUserContext } from "../../UserProvider";
+import { useUserContext } from "../../../providers";
 
 import { IPasswordForm, IUsePasswordForm } from "./usePasswordForm.types";
 

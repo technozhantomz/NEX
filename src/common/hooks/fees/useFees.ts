@@ -2,11 +2,10 @@ import { ChainTypes, TransactionHelper } from "peerplaysjs-lib";
 import { useCallback, useEffect, useState } from "react";
 
 import { useAccount, useAsset } from "..";
-import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
-import { useUserContext } from "../../components/UserProvider";
-import { Account } from "../../types";
+import { usePeerplaysApiContext, useUserContext } from "../../providers";
+import { Account, FeeParameter, GlobalProperties } from "../../types";
 
-import { ChainOperations, FeeParameter, UseFeesResult } from "./useFees.types";
+import { ChainOperations, UseFeesResult } from "./useFees.types";
 
 export function useFees(): UseFeesResult {
   const [feeParameters, setFeeParameters] = useState<FeeParameter[]>([]);
@@ -26,9 +25,10 @@ export function useFees(): UseFeesResult {
 
   const getFeesFromGlobal = useCallback(async () => {
     try {
-      const globalProperties = await dbApi("get_global_properties");
-      const feeParameters = globalProperties.parameters.current_fees
-        .parameters as FeeParameter[];
+      const globalProperties: GlobalProperties = await dbApi(
+        "get_global_properties"
+      );
+      const feeParameters = globalProperties.parameters.current_fees.parameters;
       setFeeParameters(feeParameters);
     } catch (e) {
       console.log(e);
@@ -73,8 +73,21 @@ export function useFees(): UseFeesResult {
         return setPrecision(true, feeAmount, defaultAsset.precision);
       }
     },
-    [feeParameters, findOperationFee, account]
+    [feeParameters, findOperationFee, account, defaultAsset]
   );
+
+  const calculateAccountUpgradeFee = useCallback(() => {
+    if (feeParameters.length && defaultAsset) {
+      const accountUpgradeFeeParameter = findOperationFee(
+        "account_upgrade"
+      ) as FeeParameter;
+      const accountUpgradeFee = accountUpgradeFeeParameter[1];
+      const membershipLifetimeFee =
+        accountUpgradeFee.membership_lifetime_fee as number;
+
+      return setPrecision(false, membershipLifetimeFee, defaultAsset.precision);
+    }
+  }, [feeParameters, findOperationFee, defaultAsset]);
 
   useEffect(() => {
     getFeesFromGlobal();
@@ -85,6 +98,6 @@ export function useFees(): UseFeesResult {
     feeParameters,
     findOperationFee,
     calculteTransferFee,
-    feeParameters,
+    calculateAccountUpgradeFee,
   };
 }

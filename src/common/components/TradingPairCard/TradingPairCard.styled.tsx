@@ -4,6 +4,7 @@ import { colors } from "../../../ui/src/colors";
 
 export const Card = styled.div`
   height: 100px;
+  /* UI Properties */
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
   border-radius: 4px;
@@ -12,7 +13,7 @@ export const Card = styled.div`
   transition: all 0.3s ease-out;
 
   &:hover {
-    border: 1px solid ${colors.borderColorBase};
+    border: 1px solid ${colors.primaryColor};
     background: transparent
       linear-gradient(
         180deg,
@@ -48,10 +49,10 @@ export const PercentChange = styled.p`
       ? props.theme.percentChangeColor
       : props.theme.percentChangeColor};
   opacity: 1;
-  font-size: 14px;
+  font-size: 12px;
   margin: 10px;
-  @media (max-width: 500px) {
-    font-size: 12px;
+  ${breakpoint.xs} {
+    font-size: 14px;
   }
 `;
 export const Price = styled.p`
@@ -71,9 +72,9 @@ export const Volume = styled.p`
   letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  font-size: 28px;
+  font-size: 26px;
   margin-left: 10px;
   ${breakpoint.sm} {
-    font-size: 26px;
+    font-size: 28px;
   }
 `;

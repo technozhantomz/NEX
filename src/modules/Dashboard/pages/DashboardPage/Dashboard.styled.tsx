@@ -14,7 +14,6 @@ export const HeaderContainer = styled.div`
 `;
 
 export const HeaderContainerItem = styled.div`
-  background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 4px;
   opacity: 1;
@@ -43,16 +42,12 @@ export const Btn = styled(Button)`
 `;
 
 export const Buttons = styled.div`
-  background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 4px;
   opacity: 1;
   font-size: 14px;
   height: 32px;
   cursor: pointer;
-  // &:hover {
-  // background: #E3EBF8 0% 0% no-repeat padding-box;
-  // }
 
   &:hover,
   &:active,
@@ -61,9 +56,7 @@ export const Buttons = styled.div`
   }
 `;
 export const ButtonNames = styled.p`
-  color: var(---text-icons);
   text-align: center;
-  font: normal normal medium 14px/17px Inter;
   letter-spacing: 0px;
   color: #212121;
   opacity: 1;
