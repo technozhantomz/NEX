@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { FormDisclamer } from "..";
-import { CardFormButton } from "../../../ui/src";
 import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import { useUserContext } from "../../providers";
 
