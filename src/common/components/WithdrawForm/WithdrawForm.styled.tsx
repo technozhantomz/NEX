@@ -14,6 +14,7 @@ export const WithdrawForm = styled(CardFrom)`
   }
   .ant-input {
     height: 100%;
+    padding: 15px 30px;
   }
   .amt-div {
     height: 60px;
@@ -59,4 +60,8 @@ export const FormItem = styled(UIForm.Item)`
     height: 45px;
     margin-top: 33px;
   }
+`;
+
+export const FeeLabel = styled.p`
+  margin-top: 10px;
 `;

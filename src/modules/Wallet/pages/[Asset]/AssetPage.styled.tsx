@@ -24,9 +24,15 @@ export const AssetCard = styled(UiCard)`
       height: 2pt;
     }
     .ant-form {
-      margin: 0 35px;
-      max-width: 566px;
+      margin: 39px 35px;
+      min-width: 566px;
     }
+  }
+  .ant-tabs {
+    min-height: 564px;
+    border-radius: 4px;
+    opacity: 1;
+    max-width: 335px;
   }
   ${breakpoint.sm} {
     .ant-card-body {
@@ -39,6 +45,13 @@ export const AssetCard = styled(UiCard)`
       .asset-table {
         max-width: 566px;
       }
+    }
+    .ant-tabs {
+      min-height: 856px;
+      padding: 35px 0 0 0;
+      border-radius: 4px;
+      opacity: 1;
+      max-width: 1070px;
     }
   }
 `;

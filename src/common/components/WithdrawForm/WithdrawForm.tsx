@@ -118,9 +118,9 @@ export const WithdrawForm = ({
         ) : (
           ""
         )}
-        <p>
+        <Styled.FeeLabel>
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
-        </p>
+        </Styled.FeeLabel>
         {status === "" ? "" : <p>{status}</p>}
         <Styled.FormItem>
           <Styled.WithdrawFormButton type="primary" htmlType="submit">

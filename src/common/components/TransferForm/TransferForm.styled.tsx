@@ -23,8 +23,7 @@ export const TransferForm = styled(CardFrom)`
     .ant-input {
       //     border-radius: 4px;
       height: 100%;
-
-      //     padding: 15px 30px;
+      padding: 15px 30px;
     }
     .ant-form-item-control-input-content {
       height: 50px;
