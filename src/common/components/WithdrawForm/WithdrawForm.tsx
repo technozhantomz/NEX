@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { FormDisclamer, LogoSelectOption, PasswordModal } from "..";
+import { LogoSelectOption, PasswordModal } from "..";
 import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
 import { useUserContext } from "../../providers";
@@ -92,7 +92,7 @@ export const WithdrawForm = ({
             validateFirst={true}
             rules={formValdation.withdrawPublicKey}
           >
-            <Input placeholder="Withdraw public key" />
+            <Input placeholder="Withdraw public key" className="form-input" />
           </Form.Item>
         ) : (
           ""
@@ -108,6 +108,7 @@ export const WithdrawForm = ({
                 ? "Withdraw address"
                 : "Hive blockchain account"
             }
+            className="form-input"
           />
         </Form.Item>
         {!withAssetSelector ? (
@@ -122,11 +123,12 @@ export const WithdrawForm = ({
         ) : (
           ""
         )}
-        <p>
+        <Styled.Fee>
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
-        </p>
+        </Styled.Fee>
         {status === "" ? "" : <p>{status}</p>}
-        <Form.Item>
+
+        <Styled.FormItem>
           {localStorageAccount && localStorageAccount !== "" ? (
             <>
               <Styled.WithdrawFormButton type="primary" htmlType="submit">
@@ -146,17 +148,17 @@ export const WithdrawForm = ({
               </Styled.WithdrawFormButton>
             </>
           )}
-        </Form.Item>
+        </Styled.FormItem>
       </Styled.WithdrawForm>
       {localStorageAccount && localStorageAccount !== "" ? (
         ""
       ) : (
-        <FormDisclamer>
+        <Styled.FormDisclamer>
           <span>Don't have a Peerplays account? </span>
           <Link href="/signup">
             <a>Create account</a>
           </Link>
-        </FormDisclamer>
+        </Styled.FormDisclamer>
       )}
 
       <PasswordModal

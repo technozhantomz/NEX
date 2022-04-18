@@ -3,7 +3,10 @@ import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
 
 export const Card = styled.div`
-  height: 100px;
+  height: 65px;
+  ${breakpoint.xs} {
+    height: 100px;
+  }
   /* UI Properties */
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
@@ -31,19 +34,19 @@ export const Card = styled.div`
 export const ContentHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  @media (max-width: 500px) {
+    height: 25px;
+  }
 `;
 export const TradingPair = styled.p`
-  text-align: left;
-  font: normal normal medium 14px/17px Inter;
-  letter-spacing: 0px;
   color: ${colors.textColorSecondary};
-  opacity: 1;
-  font-size: 14px;
+  font-size: 12px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
   margin: 10px;
 `;
 export const PercentChange = styled.p`
-  font: normal normal medium 14px/17px Inter;
-  letter-spacing: 0px;
   color: ${(props) =>
     props.theme
       ? props.theme.percentChangeColor
@@ -57,22 +60,21 @@ export const PercentChange = styled.p`
 `;
 export const Price = styled.p`
   text-align: left;
-  font: normal normal medium 28px/34px Inter;
-  letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  font-size: 28px;
+  font-size: 16px;
   margin-left: 10px;
   display: ${(props) =>
     props.theme ? props.theme.display : props.theme.display};
+  ${breakpoint.sm} {
+    font-size: 28px;
+  }
 `;
 export const Volume = styled.p`
   text-align: left;
-  font: normal normal medium 28px/34px Inter;
-  letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  font-size: 26px;
+  font-size: 16px;
   margin-left: 10px;
   ${breakpoint.sm} {
     font-size: 28px;

@@ -4,7 +4,7 @@ import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
 export const LogoSelect = styled(LogoSelectOption)`
-  height: 65px;
+  height: 50px;
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
   border-radius: 4px;
@@ -14,6 +14,7 @@ export const LogoSelect = styled(LogoSelectOption)`
   align-items: center;
   margin: 25px 20px;
   ${breakpoint.sm} {
+    height: 65px;
     margin: 35px 30px;
   }
 `;
@@ -37,9 +38,9 @@ export const DepositFormContainer = styled.div`
 `;
 
 export const AddressGeneratedContainer = styled.div`
-  margin: 25px 20px;
+  margin: 0px 20px 15px 20px;
   ${breakpoint.sm} {
-    margin: 35px 30px;
+    margin: 0px 30px 25px 30px;
   }
 `;
 
