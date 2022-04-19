@@ -3,10 +3,15 @@ import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
 export const FeesTabWrapper = styled.div`
-  margin: 0 15px;
+  margin: 0 15px 15px;
   ${breakpoint.sm} {
-    margin: 0 25px;
+    margin: 0 25px 25px;
   }
+`;
+
+export const Section = styled.section`
+  padding-bottom: 25px;
+  border-bottom: 1px solid ${colors.borderColorBase};
 `;
 
 export const FeesTable = styled(UiTable)`
