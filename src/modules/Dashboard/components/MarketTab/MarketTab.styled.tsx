@@ -1,10 +1,11 @@
 import { styled, Col as UiCol, Row as UiRow } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const MarketContainer = styled.div`
   background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   color: white;
   width: 600px;
   margin: 10px;

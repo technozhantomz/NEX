@@ -1,6 +1,7 @@
 import { styled } from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
+import { mixIns } from "../../../../../../ui/src/mixins";
 
 export const Card = styled.div`
   height: 65px;
@@ -10,7 +11,7 @@ export const Card = styled.div`
   /* UI Properties */
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   opacity: 1;
   cursor: pointer;
   transition: all 0.3s ease-out;
@@ -27,7 +28,7 @@ export const Card = styled.div`
         ${colors.white} 100%
       )
       0% 0% no-repeat padding-box;
-    border-radius: 4px;
+    ${mixIns.borderRadius}
     opacity: 1;
   }
 `;

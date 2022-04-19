@@ -28,7 +28,12 @@ export const FeesColumns = [
     render: (fees: string[], record: any): JSX.Element => (
       <>
         {fees.map((fee, index) => (
-          <div key={`${record.key}-${fees.length + index}`}>{fee}</div>
+          <div
+            className="standard-fee"
+            key={`${record.key}-${fees.length + index}`}
+          >
+            {fee}
+          </div>
         ))}
       </>
     ),

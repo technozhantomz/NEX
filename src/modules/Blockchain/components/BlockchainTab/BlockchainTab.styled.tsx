@@ -4,6 +4,7 @@ import {
   StatsCardsDeck as UIStatsCardsDeck,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { mixIns } from "../../../../ui/src/mixins";
 
 const { Search } = Input;
 
@@ -20,7 +21,7 @@ export const BlockSearch = styled(Search)`
   max-width: 520px;
   margin-bottom: 35px;
   .ant-input {
-    border-radius: 4px;
+    ${mixIns.borderRadius}
   }
   > .ant-input-group
     > .ant-input-group-addon:last-child

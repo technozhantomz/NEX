@@ -10,6 +10,7 @@ export const FeesTabWrapper = styled.div`
 `;
 
 export const FeesTable = styled(UiTable)`
+  max-width: 592px;
   .ant-table-thead > tr > th {
     color: ${colors.textColorSecondary};
     background: ${colors.white};
@@ -22,6 +23,7 @@ export const FeesTable = styled(UiTable)`
   }
   .ant-table-tbody > tr > td {
     border: none;
+    vertical-align: baseline;
     div:not(:last-child) {
       margin-bottom: 15px;
     }
@@ -32,6 +34,9 @@ export const FeesTable = styled(UiTable)`
     border: none;
     color: ${colors.textColor};
     text-transform: capitalize;
+  }
+  .standard-fee {
+    text-align: right;
   }
 `;
 

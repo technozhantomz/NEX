@@ -1,4 +1,5 @@
 import { styled, Form as UiForm, Input as UiInput } from "../../../../ui/src";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const FormContainer = styled.div`
   padding: 10px;
@@ -13,7 +14,7 @@ export const InputNumber = styled(UiInput)`
   width: 100%;
   font-size: 20px;
   margin-bottom: 10px;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   padding: 16px 20px;
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {

@@ -7,6 +7,7 @@ import {
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 const { Search } = Input;
 
@@ -23,7 +24,7 @@ export const CommitteeSearch = styled(Search)`
   max-width: 520px;
   margin-bottom: 35px;
   .ant-input {
-    border-radius: 4px;
+    ${mixIns.borderRadius}
   }
   > .ant-input-group
     > .ant-input-group-addon:last-child
@@ -34,6 +35,7 @@ export const CommitteeSearch = styled(Search)`
 `;
 
 export const CommitteeTable = styled(UiTable)`
+  max-width: 798px;
   .ant-table-thead > tr > th {
     color: ${colors.textColorSecondary};
     background: ${colors.white};
@@ -47,11 +49,8 @@ export const CommitteeTable = styled(UiTable)`
   .ant-table-tbody > tr > td {
     border: none;
   }
-  .ant-tag {
-    padding: 5px 15px;
-    background: ${colors.assetTag};
-    border: none;
-    color: ${colors.textColor};
+  .anticon-link {
+    color: ${colors.linkColor};
   }
 `;
 

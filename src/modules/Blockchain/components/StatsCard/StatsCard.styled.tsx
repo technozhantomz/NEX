@@ -1,11 +1,12 @@
 import { styled } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const StatsCard = styled.div`
   height: 120px;
   min-width: 220px;
   border: 1px solid ${colors.borderColorBase};
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   padding: 15px;
   &:hover {
     border: 2px solid #0a48be;

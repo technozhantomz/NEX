@@ -10,6 +10,8 @@ export const BlockchainCard = styled(UiCard)`
       .ant-tabs-tab {
         justify-content: center;
         padding: 33px 28px 10px;
+        width: 100%;
+        margin: 0;
       }
       .ant-tabs-top > .ant-tabs-nav::before {
         border-bottom: 2pt solid #f0f0f0;

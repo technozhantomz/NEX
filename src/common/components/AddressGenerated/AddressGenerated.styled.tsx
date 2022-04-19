@@ -1,6 +1,7 @@
 import { Input, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
+import { mixIns } from "../../../ui/src/mixins";
 
 export const DepositHeader = styled.p`
   margin-left: 10px;
@@ -33,7 +34,7 @@ export const GeneratedBitcoinAddress = styled(Input)`
   height: 50px;
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   padding: 10px;
   margin-bottom: 15px;
   ${breakpoint.sm} {
