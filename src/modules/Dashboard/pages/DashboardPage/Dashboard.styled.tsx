@@ -51,7 +51,8 @@ export const Buttons = styled.div`
 
   &:hover,
   &:active,
-  &:focus {
+  &:focus,
+  &.active {
     background: #e3ebf8 0% 0% no-repeat padding-box;
   }
 `;
