@@ -33,7 +33,11 @@ const Dashboard: React.FC = () => {
             {Tabs.map((e, i) => (
               <Styled.Col key={i} className="gutter-row" span={6}>
                 <Styled.Buttons
-                  className={activeTab === e.tabName ? "active" : ""}
+                  className={
+                    activeTab.toLowerCase() === e.tabName.toLowerCase()
+                      ? "active"
+                      : ""
+                  }
                   onClick={() => changeTab(e.tabName)}
                 >
                   <Styled.ButtonNames>{e.tabName}</Styled.ButtonNames>
