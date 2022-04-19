@@ -1,4 +1,10 @@
-import { Dropdown } from "antd";
+import {
+  AppstoreOutlined,
+  MailOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
+import { Dropdown, Menu, MenuProps } from "antd";
+import { useState } from "react";
 
 import {
   BellOutlined,
@@ -22,29 +28,79 @@ export const MainNavBar = (): JSX.Element => {
     profileMenuOpen,
     mainMenuOpen,
   } = useToggleMenu();
+
+  const [current, setCurrent] = useState("mail");
+
+  const onClick: MenuProps["onClick"] = (e) => {
+    console.log("click ", e);
+    setCurrent(e.key);
+  };
+
+  const items: MenuProps["items"] = [
+    {
+      label: "Navigation One",
+      key: "mail",
+      icon: <MailOutlined />,
+    },
+    {
+      label: "Navigation Two",
+      key: "app",
+      icon: <AppstoreOutlined />,
+      disabled: true,
+    },
+    {
+      label: "Navigation Three - Submenu",
+      key: "SubMenu",
+      icon: <SettingOutlined />,
+      children: [
+        {
+          type: "group",
+          label: "Item 1",
+          children: [
+            {
+              label: "Option 1",
+              key: "setting:1",
+            },
+            {
+              label: "Option 2",
+              key: "setting:2",
+            },
+          ],
+        },
+        {
+          type: "group",
+          label: "Item 2",
+          children: [
+            {
+              label: "Option 3",
+              key: "setting:3",
+            },
+            {
+              label: "Option 4",
+              key: "setting:4",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: (
+        <a href="https://ant.design" target="_blank" rel="noopener noreferrer">
+          Navigation Four - Link
+        </a>
+      ),
+      key: "alipay",
+    },
+  ];
+
   return (
     <>
-      <Styled.MainNavBar>
+      {/* <Styled.MainNavBar>
         {localStorageAccount ? (
           <>
-            {/* <BellOutlined
-              className={"bell"}
-              onMouseOver={() => toggleMenu("notify")}
-              onClick={() => toggleMenu("notify")}
-            /> */}
             <Dropdown overlay={<NotificationMenu />}>
               <BellOutlined className={"bell"} />
             </Dropdown>
-            {/* <div
-              onMouseOver={() => toggleMenu("profile")}
-              onClick={() => toggleMenu("profile")}
-            >
-              <Styled.MainNavBarAvitar
-                icon={localStorageAccount ? "" : <UserOutlined />}
-              >
-                {localStorageAccount ? localStorageAccount.charAt(0) : ""}
-              </Styled.MainNavBarAvitar>
-            </div> */}
 
             <Dropdown overlay={<ProfileMenu />}>
               <Styled.MainNavBarAvitar
@@ -61,34 +117,13 @@ export const MainNavBar = (): JSX.Element => {
         <Dropdown overlay={<MainNav />}>
           <MoreOutlined className={"hambuger"} />
         </Dropdown>
-      </Styled.MainNavBar>
-
-      {/* <Styled.MenuWrapper
-        className={`notification-menu-wrapper${
-          notificationMenuOpen ? " open" : ""
-        }`}
-      >
-        <a className="close" onClick={closeMenu}>
-          X
-        </a>
-        <NotificationMenu />
-      </Styled.MenuWrapper>
-      <Styled.MenuWrapper
-        className={`profile-wrapper${profileMenuOpen ? " open" : ""}`}
-      >
-        <a className="close" onClick={closeMenu}>
-          X
-        </a>
-        <ProfileMenu />
-      </Styled.MenuWrapper>
-      <Styled.MenuWrapper
-        className={`main-menu-wrapper${mainMenuOpen ? " open" : ""}`}
-      >
-        <a className="close" onClick={closeMenu}>
-          X
-        </a>
-        <MainNav />
-      </Styled.MenuWrapper> */}
+      </Styled.MainNavBar> */}
+      <Menu
+        onClick={onClick}
+        selectedKeys={[current]}
+        mode="horizontal"
+        items={items}
+      />
     </>
   );
 };
