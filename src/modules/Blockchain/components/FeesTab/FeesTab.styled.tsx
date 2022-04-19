@@ -1,17 +1,22 @@
-import { styled, List as UiList, Table as UiTable } from "../../../../ui/src";
+import {
+  styled,
+  ListItem as UiListItem,
+  Table as UiTable,
+} from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const FeesTabWrapper = styled.div`
-  margin: 0 15px 15px;
+  margin: 0 0 15px;
   ${breakpoint.sm} {
     margin: 0 25px 25px;
   }
 `;
 
 export const Section = styled.section`
-  padding-bottom: 25px;
-  border-bottom: 1px solid ${colors.borderColorBase};
+  padding: 0 15px 25px;
+  ${mixIns.hairline}
 `;
 
 export const FeesTable = styled(UiTable)`
@@ -54,7 +59,7 @@ export const FeeSpecificHeader = styled.h3`
   }
 `;
 
-export const FeeListItem = styled(UiList.Item)``;
+export const FeeListItem = styled(UiListItem)``;
 
 export const FeeItemContent = styled.div`
   margin: 18px 0 25px;
