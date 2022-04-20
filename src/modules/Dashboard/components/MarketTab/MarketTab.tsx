@@ -1,6 +1,6 @@
 import React from "react";
 
-import { TradingPairCard } from "../../../../common/components/TradingPairCard";
+import { TradingPairCard } from "../../../../common/components";
 
 import * as Styled from "./MarketTab.styled";
 import { useMarketTab } from "./hooks";

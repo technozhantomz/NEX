@@ -2,16 +2,11 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 
-import {
-  Layout,
-  TradingPairCard,
-  useViewportContext,
-} from "../../../../common/components";
+import { Layout, TradingPairCard } from "../../../../common/components";
+import { useViewportContext } from "../../../../common/providers";
 import { Col, Row } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
-import { LimitOrderForm } from "../../components/LimitOrderForm";
-import { OrderTabs } from "../../components/OrderTabs";
-import { PairSelect } from "../../components/PairSelect";
+import { LimitOrderForm, OrderTabs, PairSelect } from "../../components";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -19,7 +14,7 @@ import { useMarketPage } from "./hooks";
 const { TabPane } = Styled.Tabs;
 
 const MarketPage: NextPage = () => {
-  const { statPairs } = useMarketPage();
+  const { tradingPairsStats } = useMarketPage();
   const router = useRouter();
   const { width } = useViewportContext();
   const { pair } = router.query;
@@ -38,23 +33,23 @@ const MarketPage: NextPage = () => {
             <Col span={7}>
               <Styled.ColumnFlex>
                 <PairSelect currentPair={pair as string} />
-                <OrderTabs />
+                {/* <OrderTabs /> */}
               </Styled.ColumnFlex>
             </Col>
             <Col span={17}>
               <Row>
                 <Styled.StatsCardsDeck>
-                  {statPairs.map((statPair, _index) => (
+                  {tradingPairsStats.map((pairStats, _index) => (
                     <TradingPairCard
-                      tradingPair={statPair.tradingPair}
-                      price={`${statPair.marketPairStats.latest}`}
-                      percentChange={`${statPair.marketPairStats.percentChange}%`}
-                      volume={`${statPair.marketPairStats.volume}`}
+                      tradingPair={pairStats.tradingPair}
+                      price={`${pairStats.marketPairStats.latest}`}
+                      percentChange={`${pairStats.marketPairStats.percentChange}%`}
+                      volume={`${pairStats.marketPairStats.volume}`}
                     />
                   ))}
                 </Styled.StatsCardsDeck>
               </Row>
-              <Row>
+              {/* <Row>
                 <Col span={12}>
                   <LimitOrderForm isBuyOrder={true} />
                 </Col>
@@ -64,20 +59,20 @@ const MarketPage: NextPage = () => {
               </Row>
               <Row>
                 <OrderTabs forUser={true} />
-              </Row>
+              </Row> */}
             </Col>
           </Row>
         </Styled.Container>
       ) : (
         <>
-          <Styled.Container>
+          {/* <Styled.Container>
             <Styled.StatsCardsDeck>
-              {statPairs.map((statPair, _index) => (
+              {tradingPairsStats.map((pairStats, _index) => (
                 <TradingPairCard
-                  tradingPair={statPair.tradingPair}
-                  price={`${statPair.marketPairStats.latest}`}
-                  percentChange={`${statPair.marketPairStats.percentChange}%`}
-                  volume={`${statPair.marketPairStats.volume}`}
+                  tradingPair={pairStats.tradingPair}
+                  price={`${pairStats.marketPairStats.latest}`}
+                  percentChange={`${pairStats.marketPairStats.percentChange}%`}
+                  volume={`${pairStats.marketPairStats.volume}`}
                 />
               ))}
             </Styled.StatsCardsDeck>
@@ -98,7 +93,7 @@ const MarketPage: NextPage = () => {
                 <LimitOrderForm isBuyOrder={false} showTitle={false} />
               </TabPane>
             </Styled.Tabs>
-          </Styled.Container>
+          </Styled.Container> */}
         </>
       )}
     </Layout>

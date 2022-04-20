@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../../../../../common/components";
 import {
   roundNum,
   useAccount,
@@ -9,6 +8,7 @@ import {
   useTransactionBuilder,
 } from "../../../../../common/hooks";
 import { FeeParameter } from "../../../../../common/hooks/fees/useFees.types";
+import { useUserContext } from "../../../../../common/providers";
 import { Form } from "../../../../../ui/src";
 import { useHistory } from "../../HistoryBook/hooks/useHistory";
 import { useOrderBook } from "../../OrderBook/hooks/useOrderBook";

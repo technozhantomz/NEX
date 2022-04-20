@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { roundNum, useAsset, useFormDate } from "../../../../../common/hooks";
-import { usePeerplaysApiContext } from "../../../../../common/providers";
+import {
+  usePeerplaysApiContext,
+  useUserContext,
+} from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
-import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
+import { usePairSelect } from "../../PairSelect/hooks";
 
 import {
   OrderHistory,

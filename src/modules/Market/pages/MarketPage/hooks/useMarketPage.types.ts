@@ -1,7 +1,8 @@
 import { MarketPairStats } from "../../../../../common/types";
 
 export type UseMarketPageResult = {
-  statPairs: PairNameAndMarketStats[];
+  tradingPairsStats: PairNameAndMarketStats[];
+  loading: boolean;
 };
 
 export type PairNameAndMarketStats = {

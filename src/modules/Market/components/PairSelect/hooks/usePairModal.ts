@@ -1,30 +1,44 @@
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../../../common/components";
+import { useUpdateExchanges } from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from "../../../../../common/providers";
+import { Asset } from "../../../../../common/types";
 import { Form, FormInstance } from "../../../../../ui/src";
 
-import { PairForm, UsePairModal } from "./usePairModal.types";
+import { PairForm, UsePairModalResult } from "./usePairModal.types";
 
-export function usePairModal(recentPairs: string[]): UsePairModal {
+export function usePairModal(recentPairs: string[]): UsePairModalResult {
   const [pairModalForm] = Form.useForm();
-  const [assets, setAssets] = useState<string[]>([]);
+  const [allAssetsSymbols, setAllAssetsSymbols] = useState<string[]>([]);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
   const { dbApi } = usePeerplaysApiContext();
+  const { exchanges, updateExchanges } = useUpdateExchanges();
   const router = useRouter();
 
-  useEffect(() => {
-    getAssets();
-    const quote = pairModalForm.getFieldValue("quote");
-    const base = pairModalForm.getFieldValue("base");
-    if (recentPairs[0] && !quote && !base) {
-      const recentPair = recentPairs[0].split("/");
-      pairModalForm.setFieldsValue({ quote: recentPair[0] });
-      pairModalForm.setFieldsValue({ base: recentPair[1] });
-    } else if (assets.length > 1 && !quote && !base) {
-      pairModalForm.setFieldsValue({ quote: assets[0] });
-      pairModalForm.setFieldsValue({ base: assets[1] });
-    }
-  }, [assets, recentPairs]);
+  const handleCancle = useCallback(() => {
+    setIsVisible(false);
+  }, [setIsVisible]);
+
+  const handleSelectPair = useCallback(
+    (values: PairForm) => {
+      pairModalForm.validateFields().then(() => {
+        const selectedPair = `${values.quote.trim()}_${values.base.trim()}`;
+        if (selectedPair !== exchanges.active) {
+          updateExchanges(selectedPair);
+          setIsVisible(false);
+          router.push(`/market/${selectedPair}`);
+        } else {
+          setIsVisible(false);
+        }
+      });
+    },
+    [setIsVisible, exchanges, updateExchanges]
+  );
+
+  const handleClickOnPair = useCallback(() => {
+    setIsVisible(true);
+  }, [setIsVisible]);
 
   const useResetFormOnCloseModal = (
     form: FormInstance<PairForm>,
@@ -43,17 +57,11 @@ export function usePairModal(recentPairs: string[]): UsePairModal {
     }, [visible]);
   };
 
-  const getAssets = async () => {
-    const rawAssets = await dbApi("list_assets", ["", 25]).then((a) => a);
-    const assetList = await Promise.all(rawAssets.map(async (a) => a.symbol));
-    setAssets(assetList);
-  };
-
-  const updatePair = (values: PairForm) => {
-    pairModalForm.validateFields().then(() => {
-      router.push(`/market/${values.quote}_${values.base}`);
-    });
-  };
+  const getAllAssetsSymbols = useCallback(async () => {
+    const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
+    const allAssetsSymbols = allAssets.map((asset) => asset.symbol);
+    setAllAssetsSymbols(allAssetsSymbols);
+  }, [dbApi, setAllAssetsSymbols]);
 
   const onSeletRecent = (value: string) => {
     const pair = value.split("/");
@@ -80,7 +88,22 @@ export function usePairModal(recentPairs: string[]): UsePairModal {
     base: [{ validator: validateBase }],
   };
 
+  useEffect(() => {
+    getAllAssetsSymbols();
+    const quote = pairModalForm.getFieldValue("quote");
+    const base = pairModalForm.getFieldValue("base");
+    if (recentPairs[0] && !quote && !base) {
+      const recentPair = recentPairs[0].split("/");
+      pairModalForm.setFieldsValue({ quote: recentPair[0] });
+      pairModalForm.setFieldsValue({ base: recentPair[1] });
+    } else if (assets.length > 1 && !quote && !base) {
+      pairModalForm.setFieldsValue({ quote: assets[0] });
+      pairModalForm.setFieldsValue({ base: assets[1] });
+    }
+  }, [assets, recentPairs]);
+
   return {
+    isVisible,
     pairModalForm,
     formValdation,
     assets,

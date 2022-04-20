@@ -1,20 +1,29 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { roundNum } from "../../../../../common/hooks";
+import { roundNum, useMarketPairStats } from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
 
-import { usePairSelect } from "./usePairSelect";
 import { UsePairStatsResult } from "./usePairStats.types";
+
+type Props = {
+  currentBase: Asset | undefined;
+  currentQuote: Asset | undefined;
+  loadingAssets: boolean;
+};
+
 // We should get additional infor for bit assets
-export function usePairStats(): UsePairStatsResult {
+export function usePairStats({
+  currentBase,
+  currentQuote,
+  loadingAssets,
+}: Props): UsePairStatsResult {
   // latest price for base asset in 24hr
   const [latest, setLatest] = useState<number>(0);
   // change in price of base asset in 24hr
   const [change, setChange] = useState<number>(0);
   // trade volume of quote asset in 24hr
   const [volume, setVolume] = useState<number>(0);
-  const { currentBase, currentQuote } = usePairSelect();
   const { getMarketPairStats } = useMarketPairStats();
   const { dbApi } = usePeerplaysApiContext();
 
@@ -29,10 +38,14 @@ export function usePairStats(): UsePairStatsResult {
     [dbApi, setLatest, setChange, setVolume]
   );
   useEffect(() => {
-    if (currentBase !== undefined && currentQuote !== undefined) {
+    if (
+      !loadingAssets &&
+      currentBase !== undefined &&
+      currentQuote !== undefined
+    ) {
       getPairStats(currentBase, currentQuote);
     }
-  }, [currentBase, currentQuote, getPairStats]);
+  }, [currentBase, currentQuote, getPairStats, loadingAssets]);
   return {
     latest,
     change,

@@ -1,89 +1,47 @@
-import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
-import {
-  usePeerplaysApiContext,
-  useSettingsContext,
-} from "../../../../../common/providers";
-import { Asset, Exchanges } from "../../../../../common/types";
+import { useUpdateExchanges } from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from "../../../../../common/providers";
+import { Asset } from "../../../../../common/types";
 
 import { UsePairSelectResult } from "./usePariSelect.types";
 
-export function usePairSelect(
-  currentPair?: string | undefined
-): UsePairSelectResult {
-  const { exchanges, setExchanges } = useSettingsContext();
+export function usePairSelect(currentPair: string): UsePairSelectResult {
   // Active pair example: BTC_TEST
-  const [activePair, setActivePair] = useState<string>(exchanges.active);
-  // Recent pairs example: ["BTC / TEST"]
-  const [recentPairs, setRecentPairs] = useState<string[]>([]);
+  // Recent pairs example: ["BTC/TEST"]
   const { dbApi } = usePeerplaysApiContext();
   const [currentBase, setCurrentBase] = useState<Asset>();
   const [currentQuote, setCurrentQuote] = useState<Asset>();
-  const [visible, setVisible] = useState<boolean>(false);
-  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(true);
+  const { exchanges, updateExchanges } = useUpdateExchanges();
 
-  const getPairData = useCallback(
+  const getPairAssets = useCallback(
     async (assets: string[]) => {
-      const [quote, base] = await dbApi("lookup_asset_symbols", [assets]);
-      setCurrentBase(base as Asset);
-      setCurrentQuote(quote as Asset);
-    },
-    [dbApi, setCurrentBase, setCurrentQuote]
-  );
-
-  const handleSelectPair = useCallback(
-    (selectedPair: string) => {
-      if (selectedPair !== activePair) {
-        recentPairs.includes(selectedPair.split("_").join("/"))
-          ? (exchanges.list = [...recentPairs])
-          : exchanges.list.push(selectedPair.split("_").join("/"));
-
-        setExchanges({
-          active: selectedPair,
-          list: exchanges.list,
-        } as Exchanges);
+      try {
+        setLoading(true);
+        const [quote, base] = await dbApi("lookup_asset_symbols", [assets]);
+        setCurrentBase(base as Asset);
+        setCurrentQuote(quote as Asset);
+        setLoading(false);
+      } catch (e) {
+        setLoading(false);
+        console.log(e);
       }
     },
-    [recentPairs, setExchanges]
+    [dbApi, setCurrentBase, setCurrentQuote, setLoading]
   );
 
-  const onFormFinish = (name: string, info: { values: any; forms: any }) => {
-    console.log(currentPair);
-    const { values, forms } = info;
-    const { pairModal } = forms;
-    if (name === "pairModal") {
-      pairModal.validateFields().then(() => {
-        setVisible(false);
-        router.push(`/market/${values.quote.trim()}_${values.base.trim()}`);
-      });
-    }
-  };
-
-  const onSelectPair = () => {
-    setVisible(true);
-  };
-
-  const onCancel = () => {
-    setVisible(false);
-  };
-
   useEffect(() => {
-    if (currentPair && currentPair !== activePair) handleSelectPair(currentPair as string);
-    setActivePair(exchanges.active);
-    setRecentPairs(exchanges.list);
-    getPairData(exchanges.active.split("_"));
-  }, [currentPair, exchanges, setActivePair, setRecentPairs, getPairData]);
+    if (currentPair !== exchanges.active) {
+      updateExchanges(currentPair);
+    }
+    getPairAssets(currentPair.split("_"));
+    // I think should remove exchanges
+  }, [currentPair, exchanges, getPairAssets, updateExchanges]);
 
   return {
-    visible,
-    activePair,
-    recentPairs,
+    loading,
     currentBase,
     currentQuote,
-    handleSelectPair,
-    onSelectPair,
-    onCancel,
-    onFormFinish,
   };
 }

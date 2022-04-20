@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useSettingsContext } from "../../../../../common/components";
 import { useAsset, useMarketPairStats } from "../../../../../common/hooks";
+import { useSettingsContext } from "../../../../../common/providers";
 
 import {
   PairNameAndMarketStats,
@@ -12,7 +12,10 @@ export function useMarketPage(): UseMarketPageResult {
   const { exchanges } = useSettingsContext();
   const { getMarketPairStats } = useMarketPairStats();
   const { getAssetBySymbol, defaultAsset } = useAsset();
-  const [statPairs, setPairs] = useState<PairNameAndMarketStats[]>([]);
+  const [tradingPairsStats, setTradingPairsStats] = useState<
+    PairNameAndMarketStats[]
+  >([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const formPairStats = useCallback(
     async (pair: string): Promise<PairNameAndMarketStats> => {
@@ -40,10 +43,11 @@ export function useMarketPage(): UseMarketPageResult {
     [getAssetBySymbol, getMarketPairStats]
   );
 
-  const getMarketPairStatsForPairs = useCallback(
+  const getTradingPairsStats = useCallback(
     async (defaultAsset, exchanges) => {
       try {
-        const initPairs =
+        setLoading(true);
+        const initPairs: string[] =
           exchanges.list.length > 0
             ? exchanges.list
             : [
@@ -53,25 +57,24 @@ export function useMarketPage(): UseMarketPageResult {
                 `LARNYX/${defaultAsset.symbol}`,
               ];
         const updatedPairs = await Promise.all(initPairs.map(formPairStats));
-        setPairs(updatedPairs);
+        setTradingPairsStats(updatedPairs);
+        setLoading(false);
       } catch (e) {
         console.log(e);
+        setLoading(false);
       }
     },
-    [statPairs, setPairs, formPairStats]
+    [setTradingPairsStats, formPairStats]
   );
 
   useEffect(() => {
     if (defaultAsset && exchanges) {
-      // setInterval(
-      // () =>
-      getMarketPairStatsForPairs(defaultAsset, exchanges);
-      //   10000
-      // );
+      getTradingPairsStats(defaultAsset, exchanges);
     }
-  }, [defaultAsset, exchanges]);
+  }, [defaultAsset, exchanges.list]);
 
   return {
-    statPairs,
+    tradingPairsStats,
+    loading,
   };
 }
