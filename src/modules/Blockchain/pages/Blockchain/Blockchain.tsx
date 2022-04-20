@@ -1,8 +1,12 @@
+import { Menu, MenuProps } from "antd";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { ReactChild, ReactFragment, ReactPortal, useState } from "react";
 
 import { Layout } from "../../../../common/components";
-import { Tabs } from "../../../../ui/src";
+import { useViewportContext } from "../../../../common/providers";
+import { Button, DownOutlined, Tabs } from "../../../../ui/src";
+import { breakpoints } from "../../../../ui/src/breakpoints";
 import {
   AssetsTab,
   BlockchainTab,
@@ -19,8 +23,38 @@ const { TabPane } = Tabs;
 
 const Blockchain: NextPage = () => {
   const router = useRouter();
+  const [visible, setVisible] = useState<boolean>(false);
   const { blockNumber, tab } = router.query;
   const { pageMeta } = useBlockchainPage(tab as string);
+  const { width } = useViewportContext();
+  const renderTabBar = (props: any, DefaultTabBar: any) => (
+    <>
+      {width > breakpoints.sm ? (
+        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
+      ) : (
+        <Styled.MobileDropdownWrapper>
+          <Styled.MobileDropdown
+            visible={visible}
+            overlay={
+              <Styled.MobileTabsWrapper>
+                <Menu>
+                  <DefaultTabBar {...props}>
+                    {(node: any) => (
+                      <Menu.Item key={node.key}>{node}</Menu.Item>
+                    )}
+                  </DefaultTabBar>
+                </Menu>
+              </Styled.MobileTabsWrapper>
+            }
+          >
+            <Button type="text" onClick={() => setVisible(!visible)}>
+              {tab ? tab : "blockchain"} <DownOutlined />
+            </Button>
+          </Styled.MobileDropdown>
+        </Styled.MobileDropdownWrapper>
+      )}
+    </>
+  );
   return (
     <Layout
       title={`${pageMeta.title}`}
@@ -31,9 +65,12 @@ const Blockchain: NextPage = () => {
     >
       <Styled.BlockchainCard>
         <Tabs
+          renderTabBar={renderTabBar}
+          accessKey={`${tab ? tab : "blockchain"}`}
           defaultActiveKey={`${tab ? tab : "blockchain"}`}
           onTabClick={(key) => {
             router.push(`/blockchain?tab=${key}`);
+            if (width < breakpoints.sm) setVisible(false);
           }}
         >
           <TabPane tab="Blockchain" key="blockchain">
