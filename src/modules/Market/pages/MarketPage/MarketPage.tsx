@@ -6,18 +6,24 @@ import { Layout, TradingPairCard } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { Col, Row } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
-import { LimitOrderForm, OrderTabs, PairSelect } from "../../components";
+import { OrderTabs, PairSelect } from "../../components";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
 
-const { TabPane } = Styled.Tabs;
+//const { TabPane } = Styled.Tabs;
 
 const MarketPage: NextPage = () => {
-  const { tradingPairsStats } = useMarketPage();
   const router = useRouter();
   const { width } = useViewportContext();
   const { pair } = router.query;
+  const {
+    tradingPairsStats,
+    //loadingTradingPairs,
+    currentBase,
+    currentQuote,
+    loadingSelectedPair,
+  } = useMarketPage({ currentPair: pair as string });
 
   return (
     <Layout
@@ -27,13 +33,22 @@ const MarketPage: NextPage = () => {
       description={`Market Page | ${pair}`}
       dexLayout={true}
     >
-      {width > breakpoints.sm ? (
+      {width > breakpoints.md ? (
         <Styled.Container>
           <Row>
             <Col span={7}>
               <Styled.ColumnFlex>
-                <PairSelect currentPair={pair as string} />
-                {/* <OrderTabs /> */}
+                <PairSelect
+                  currentPair={pair as string}
+                  currentBase={currentBase}
+                  currentQuote={currentQuote}
+                  loadingSelectedPair={loadingSelectedPair}
+                />
+                <OrderTabs
+                  currentBase={currentBase}
+                  currentQuote={currentQuote}
+                  loadingSelectedPair={loadingSelectedPair}
+                />
               </Styled.ColumnFlex>
             </Col>
             <Col span={17}>
@@ -45,6 +60,7 @@ const MarketPage: NextPage = () => {
                       price={`${pairStats.marketPairStats.latest}`}
                       percentChange={`${pairStats.marketPairStats.percentChange}%`}
                       volume={`${pairStats.marketPairStats.volume}`}
+                      key={`tradingPair_${_index}`}
                     />
                   ))}
                 </Styled.StatsCardsDeck>

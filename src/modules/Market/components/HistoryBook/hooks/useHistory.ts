@@ -6,7 +6,6 @@ import {
   useUserContext,
 } from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
-import { usePairSelect } from "../../PairSelect/hooks";
 
 import {
   OrderHistory,
@@ -15,53 +14,85 @@ import {
   UseHistoryResult,
 } from "./useHistory.types";
 
-export function useHistory(): UseHistoryResult {
+type Props = {
+  currentBase: Asset | undefined;
+  currentQuote: Asset | undefined;
+  loadingSelectedPair: boolean;
+};
+
+export function useHistory({
+  currentBase,
+  currentQuote,
+  loadingSelectedPair,
+}: Props): UseHistoryResult {
   const { historyApi, dbApi } = usePeerplaysApiContext();
-  const { currentBase, currentQuote } = usePairSelect();
-  const [orderHistoryRow, setOrderHistoryRow] = useState<OrderHistoryRow[]>([]);
-  const [userOrderHistoryRow, setUserOrderHistoryRow] = useState<
+
+  const [orderHistoryRows, setOrderHistoryRows] = useState<OrderHistoryRow[]>(
+    []
+  );
+  const [userOrderHistoryRows, setUserOrderHistoryRows] = useState<
     OrderHistoryRow[]
   >([]);
+  const [loadingOrderHistoryRows, setLoadingOrderHistoryRows] =
+    useState<boolean>(true);
   const [columns, setColumns] = useState<OrderHistoryColumn[]>([]);
   const { id } = useUserContext();
   const { setPrecision } = useAsset();
 
   const getHistory = useCallback(
     async (base: Asset, quote: Asset) => {
-      const history: OrderHistory[] = await historyApi(
-        "get_fill_order_history",
-        [base.id, quote.id, 100]
-      );
-      setOrderHistoryRow(
-        history.map((h) => {
-          const time = useFormDate(h.time, ["month", "year", "time"]);
-          const { pays, receives } = h.op;
-          let baseAmount = 0,
-            quoteAmount = 0,
-            isBuyOrder = false;
-          // this is sell orders
-          if (pays.asset_id === base.id) {
-            baseAmount = setPrecision(false, pays.amount, base.precision);
-            quoteAmount = setPrecision(false, receives.amount, quote.precision);
-            isBuyOrder = false;
-            //this is buy orders
-          } else {
-            baseAmount = setPrecision(false, receives.amount, base.precision);
-            quoteAmount = setPrecision(false, pays.amount, quote.precision);
-            isBuyOrder = true;
-          }
+      try {
+        setLoadingOrderHistoryRows(true);
+        const history: OrderHistory[] = await historyApi(
+          "get_fill_order_history",
+          [base.id, quote.id, 100]
+        );
+        setOrderHistoryRows(
+          history.map((h) => {
+            const time = useFormDate(h.time, ["month", "year", "time"]);
+            const { pays, receives } = h.op;
+            let baseAmount = 0,
+              quoteAmount = 0,
+              isBuyOrder = false;
+            // this is sell orders
+            if (pays.asset_id === base.id) {
+              baseAmount = setPrecision(false, pays.amount, base.precision);
+              quoteAmount = setPrecision(
+                false,
+                receives.amount,
+                quote.precision
+              );
+              isBuyOrder = false;
+              //this is buy orders
+            } else {
+              baseAmount = setPrecision(false, receives.amount, base.precision);
+              quoteAmount = setPrecision(false, pays.amount, quote.precision);
+              isBuyOrder = true;
+            }
 
-          return {
-            price: roundNum(baseAmount / quoteAmount),
-            base: baseAmount,
-            quote: quoteAmount,
-            date: time,
-            isBuyOrder,
-          };
-        })
-      );
+            return {
+              price: roundNum(baseAmount / quoteAmount),
+              base: baseAmount,
+              quote: quoteAmount,
+              date: time,
+              isBuyOrder,
+            };
+          })
+        );
+        setLoadingOrderHistoryRows(false);
+      } catch (e) {
+        console.log(e);
+        setLoadingOrderHistoryRows(false);
+      }
     },
-    [historyApi]
+    [
+      historyApi,
+      setOrderHistoryRows,
+      useFormDate,
+      setPrecision,
+      roundNum,
+      setLoadingOrderHistoryRows,
+    ]
   );
 
   const getUserHistory = useCallback(
@@ -125,7 +156,7 @@ export function useHistory(): UseHistoryResult {
           return { key, price, base, quote, date, isBuyOrder };
         })
       );
-      setUserOrderHistoryRow(rows);
+      setUserOrderHistoryRows(rows);
     },
     [historyApi]
   );
@@ -138,7 +169,11 @@ export function useHistory(): UseHistoryResult {
   }, [currentBase, currentQuote, getHistory, getUserHistory]);
 
   useEffect(() => {
-    if (currentBase !== undefined && currentQuote !== undefined) {
+    if (
+      !loadingSelectedPair &&
+      currentBase !== undefined &&
+      currentQuote !== undefined
+    ) {
       setColumns([
         {
           title: currentBase.symbol,
@@ -162,14 +197,21 @@ export function useHistory(): UseHistoryResult {
         },
       ]);
       getHistory(currentBase, currentQuote);
-      getUserHistory(currentBase, currentQuote);
+      //getUserHistory(currentBase, currentQuote);
     }
-  }, [currentBase, currentQuote, getHistory, getUserHistory]);
+  }, [
+    loadingSelectedPair,
+    currentBase,
+    currentQuote,
+    getHistory,
+    //getUserHistory,
+  ]);
 
   return {
-    orderHistoryRow,
-    userOrderHistoryRow,
+    orderHistoryRows,
+    userOrderHistoryRows,
     columns,
     refreshHistory,
+    loadingOrderHistoryRows,
   };
 }

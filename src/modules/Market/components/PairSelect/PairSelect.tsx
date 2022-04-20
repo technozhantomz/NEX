@@ -1,33 +1,45 @@
-import { useSettingsContext } from "../../../../common/providers";
+import { useUpdateExchanges } from "../../../../common/hooks";
+import { Asset } from "../../../../common/types";
 import { Col, DownOutlined, Row } from "../../../../ui/src";
-import { Form } from "../LimitOrderForm/LimitOrderForm.styled";
 
 import { PairModal } from "./PairModal";
 import * as Styled from "./PairSelect.styled";
-import { usePairSelect, usePairStats } from "./hooks";
+import { usePairModal, usePairStats } from "./hooks";
 
 type Props = {
   currentPair: string;
+  currentBase: Asset | undefined;
+  currentQuote: Asset | undefined;
+  loadingSelectedPair: boolean;
   showStats?: boolean;
 };
 
 export const PairSelect = ({
   currentPair,
+  currentBase,
+  currentQuote,
+  loadingSelectedPair,
   showStats = true,
 }: Props): JSX.Element => {
-  const {
-    loading: loadingAssets,
-    currentBase,
-    currentQuote,
-  } = usePairSelect(currentPair);
-
-  const { exchanges } = useSettingsContext();
+  const { exchanges } = useUpdateExchanges();
 
   const { latest, change, volume } = usePairStats({
     currentBase,
     currentQuote,
-    loadingAssets,
+    loadingAssets: loadingSelectedPair,
   });
+
+  const {
+    isVisible,
+    pairModalForm,
+    formValdation,
+    allAssetsSymbols,
+    useResetFormOnCloseModal,
+    handleCancel,
+    handleSelectPair,
+    handleClickOnPair,
+    handleSelectRecent,
+  } = usePairModal();
 
   return (
     <Styled.PairSelectContainer>
@@ -61,9 +73,15 @@ export const PairSelect = ({
         ""
       )}
       <PairModal
-        visible={isPairModalVisible}
-        onCancel={handleCanclePairModal}
-        recentPairs={exchanges.list}
+        isVisible={isVisible}
+        handleCancel={handleCancel}
+        exchanges={exchanges}
+        pairModalForm={pairModalForm}
+        formValdation={formValdation}
+        allAssetsSymbols={allAssetsSymbols}
+        useResetFormOnCloseModal={useResetFormOnCloseModal}
+        handleSelectPair={handleSelectPair}
+        handleSelectRecent={handleSelectRecent}
       />
     </Styled.PairSelectContainer>
   );

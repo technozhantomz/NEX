@@ -1,14 +1,26 @@
+import { useViewportContext } from "../../../../common/providers";
+import { Asset } from "../../../../common/types";
 import { DownOutlined } from "../../../../ui/src";
+import { breakpoints } from "../../../../ui/src/breakpoints";
 
 import * as Styled from "./OrderBook.styled";
 import { OrderType } from "./hooks/uesOrderBook.types";
 import { useOrderBook } from "./hooks/useOrderBook";
 
 type Props = {
+  currentBase: Asset | undefined;
+  currentQuote: Asset | undefined;
+  loadingSelectedPair: boolean;
   forUser?: boolean;
 };
 
-export const OrderBook = ({ forUser = false }: Props): JSX.Element => {
+export const OrderBook = ({
+  forUser = false,
+  currentBase,
+  currentQuote,
+  loadingSelectedPair,
+}: Props): JSX.Element => {
+  const { width } = useViewportContext();
   const {
     orderType,
     threshold,
@@ -16,8 +28,11 @@ export const OrderBook = ({ forUser = false }: Props): JSX.Element => {
     userOrdersRows,
     handleThresholdChange,
     handleFilterChange,
+    loadingOrderRows,
     columns,
-  } = useOrderBook();
+  } = useOrderBook({ currentBase, currentQuote, loadingSelectedPair });
+  const dataSource = forUser ? userOrdersRows : ordersRows;
+
   const types: OrderType[] = ["total", "sell", "buy"];
 
   const thresholdMenu = (
@@ -66,10 +81,17 @@ export const OrderBook = ({ forUser = false }: Props): JSX.Element => {
       )}
       <Styled.TableContainer>
         <Styled.Table
-          scroll={{ scrollToFirstRowOnChange: false, y: 600 }}
+          scroll={
+            width > breakpoints.md
+              ? dataSource.length > 24
+                ? { scrollToFirstRowOnChange: false, y: 540 }
+                : {}
+              : {}
+          }
+          loading={forUser ? false : loadingOrderRows}
           pagination={false}
           columns={columns}
-          dataSource={forUser ? userOrdersRows : ordersRows}
+          dataSource={dataSource}
           rowClassName={(record) => {
             return record.isBuyOrder ? "buy" : "sell";
           }}

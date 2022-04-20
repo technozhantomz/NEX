@@ -1,8 +1,11 @@
-import { MarketPairStats } from "../../../../../common/types";
+import { Asset, MarketPairStats } from "../../../../../common/types";
 
 export type UseMarketPageResult = {
   tradingPairsStats: PairNameAndMarketStats[];
-  loading: boolean;
+  loadingTradingPairs: boolean;
+  loadingSelectedPair: boolean;
+  currentBase: Asset | undefined;
+  currentQuote: Asset | undefined;
 };
 
 export type PairNameAndMarketStats = {

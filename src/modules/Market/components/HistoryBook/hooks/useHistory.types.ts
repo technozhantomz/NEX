@@ -1,10 +1,11 @@
 import { Fee } from "../../../../../common/types";
 
 export type UseHistoryResult = {
-  orderHistoryRow: OrderHistoryRow[];
-  userOrderHistoryRow: OrderHistoryRow[];
+  orderHistoryRows: OrderHistoryRow[];
+  userOrderHistoryRows: OrderHistoryRow[];
   columns: OrderHistoryColumn[];
   refreshHistory: () => void;
+  loadingOrderHistoryRows: boolean;
 };
 
 export type OrderHistoryRow = {

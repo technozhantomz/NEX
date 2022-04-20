@@ -12,7 +12,6 @@ import { useUserContext } from "../../../../../common/providers";
 import { Form } from "../../../../../ui/src";
 import { useHistory } from "../../HistoryBook/hooks/useHistory";
 import { useOrderBook } from "../../OrderBook/hooks/useOrderBook";
-import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
 
 import {
   UseCreateLimitOrderArgs,
@@ -30,7 +29,7 @@ export function useCreateLimitOrder({
     sellBalance: 0,
   });
   const [orderForm] = Form.useForm();
-  const { activePair } = usePairSelect();
+
   const { defaultAsset, setPrecision, getAssetBySymbol } = useAsset();
   const { getPrivateKey, formAccountBalancesByName } = useAccount();
   const { feeParameters, findOperationFee } = useFees();

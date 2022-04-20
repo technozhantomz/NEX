@@ -6,7 +6,6 @@ import {
   useUserContext,
 } from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
-import { usePairSelect } from "../../PairSelect/hooks";
 
 import {
   Order,
@@ -16,7 +15,17 @@ import {
   UseOrderBookResult,
 } from "./uesOrderBook.types";
 
-export function useOrderBook(): UseOrderBookResult {
+type Props = {
+  currentBase: Asset | undefined;
+  currentQuote: Asset | undefined;
+  loadingSelectedPair: boolean;
+};
+
+export function useOrderBook({
+  currentBase,
+  currentQuote,
+  loadingSelectedPair,
+}: Props): UseOrderBookResult {
   // asks are buy orders
   const [asks, setAsks] = useState<Order[]>([]);
   // bids are sell orders
@@ -26,8 +35,9 @@ export function useOrderBook(): UseOrderBookResult {
   const [orderType, setOrderType] = useState<OrderType>("total");
   const [threshold, setThreshold] = useState<number>(0.001);
   const [columns, setColumns] = useState<OrderColumn[]>([]);
+  const [loadingOrderRows, setLoadingOrderRows] = useState<boolean>(true);
   //const [tableScroll, setTableScroll] = useState<TableScroll>();
-  const { currentBase, currentQuote } = usePairSelect();
+
   const { localStorageAccount } = useUserContext();
   const { dbApi } = usePeerplaysApiContext();
   const { setPrecision } = useAsset();
@@ -48,23 +58,30 @@ export function useOrderBook(): UseOrderBookResult {
 
   const getOrderBook = useCallback(
     async (base: Asset, quote: Asset) => {
-      const { asks, bids } = await dbApi("get_order_book", [
-        base.symbol,
-        quote.symbol,
-        50,
-      ]);
-      setAsks(
-        asks.map((ask: Order) => {
-          return { ...ask, isBuyOrder: false };
-        }) as Order[]
-      );
-      setBids(
-        bids.map((bid: Order) => {
-          return { ...bid, isBuyOrder: true };
-        }) as Order[]
-      );
+      try {
+        setLoadingOrderRows(true);
+        const { asks, bids } = await dbApi("get_order_book", [
+          base.symbol,
+          quote.symbol,
+          50,
+        ]);
+        setAsks(
+          asks.map((ask: Order) => {
+            return { ...ask, isBuyOrder: false };
+          }) as Order[]
+        );
+        setBids(
+          bids.map((bid: Order) => {
+            return { ...bid, isBuyOrder: true };
+          }) as Order[]
+        );
+        setLoadingOrderRows(false);
+      } catch (e) {
+        console.log(e);
+        setLoadingOrderRows(false);
+      }
     },
-    [dbApi, setAsks, setBids]
+    [dbApi, setAsks, setBids, setLoadingOrderRows]
   );
 
   const getUserOrderBook = useCallback(
@@ -121,14 +138,28 @@ export function useOrderBook(): UseOrderBookResult {
   );
 
   const refreshOrderBook = useCallback(() => {
-    if (currentBase !== undefined && currentQuote !== undefined) {
+    if (
+      !loadingSelectedPair &&
+      currentBase !== undefined &&
+      currentQuote !== undefined
+    ) {
       getOrderBook(currentBase, currentQuote);
       getUserOrderBook(currentBase, currentQuote);
     }
-  }, [currentBase, currentQuote, getOrderBook, getUserOrderBook]);
+  }, [
+    loadingSelectedPair,
+    currentBase,
+    currentQuote,
+    getOrderBook,
+    getUserOrderBook,
+  ]);
 
   useEffect(() => {
-    if (currentBase !== undefined && currentQuote !== undefined) {
+    if (
+      !loadingSelectedPair &&
+      currentBase !== undefined &&
+      currentQuote !== undefined
+    ) {
       setColumns([
         {
           title: currentQuote.symbol,
@@ -147,9 +178,15 @@ export function useOrderBook(): UseOrderBookResult {
         },
       ]);
       getOrderBook(currentBase, currentQuote);
-      getUserOrderBook(currentBase, currentQuote);
+      //getUserOrderBook(currentBase, currentQuote);
     }
-  }, [currentBase, currentQuote, getOrderBook, getUserOrderBook]);
+  }, [
+    loadingSelectedPair,
+    currentBase,
+    currentQuote,
+    getOrderBook,
+    //getUserOrderBook,
+  ]);
 
   useEffect(() => {
     let selectedOrders: Order[] = [];
@@ -173,7 +210,11 @@ export function useOrderBook(): UseOrderBookResult {
       default:
         break;
     }
-    if (currentBase !== undefined && currentQuote !== undefined) {
+    if (
+      !loadingSelectedPair &&
+      currentBase !== undefined &&
+      currentQuote !== undefined
+    ) {
       const orders: OrderRow[] = selectedOrders.map((order, index) => {
         return {
           key: String(index),
@@ -191,6 +232,7 @@ export function useOrderBook(): UseOrderBookResult {
     orderType,
     threshold,
     setOrdersRows,
+    loadingSelectedPair,
     currentBase,
     currentQuote,
   ]);
@@ -201,6 +243,7 @@ export function useOrderBook(): UseOrderBookResult {
     orderType,
     threshold,
     ordersRows,
+    loadingOrderRows,
     userOrdersRows,
     refreshOrderBook,
     handleThresholdChange,

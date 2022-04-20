@@ -5,6 +5,7 @@ export type UseOrderBookResult = {
   userOrdersRows: OrderRow[];
   orderType: OrderType;
   threshold: number;
+  loadingOrderRows: boolean;
   refreshOrderBook: () => void;
   handleThresholdChange: (menuInfo: any) => void;
   handleFilterChange: (type: OrderType) => void;

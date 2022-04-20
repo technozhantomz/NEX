@@ -1,21 +1,50 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useAsset, useMarketPairStats } from "../../../../../common/hooks";
-import { useSettingsContext } from "../../../../../common/providers";
+import {
+  useAsset,
+  useMarketPairStats,
+  useUpdateExchanges,
+} from "../../../../../common/hooks";
+import { usePeerplaysApiContext } from "../../../../../common/providers";
+import { Asset } from "../../../../../common/types";
 
 import {
   PairNameAndMarketStats,
   UseMarketPageResult,
 } from "./useMarketPage.types";
 
-export function useMarketPage(): UseMarketPageResult {
-  const { exchanges } = useSettingsContext();
+type Props = {
+  currentPair: string;
+};
+
+export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
+  const { dbApi } = usePeerplaysApiContext();
+  const { exchanges, updateExchanges } = useUpdateExchanges();
   const { getMarketPairStats } = useMarketPairStats();
   const { getAssetBySymbol, defaultAsset } = useAsset();
   const [tradingPairsStats, setTradingPairsStats] = useState<
     PairNameAndMarketStats[]
   >([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingTradingPairs, setLoadingTradingPairs] = useState<boolean>(true);
+  const [currentBase, setCurrentBase] = useState<Asset>();
+  const [currentQuote, setCurrentQuote] = useState<Asset>();
+  const [loadingSelectedPair, setLoadingSelectedPair] = useState<boolean>(true);
+
+  const getPairAssets = useCallback(
+    async (assets: string[]) => {
+      try {
+        setLoadingSelectedPair(true);
+        const [quote, base] = await dbApi("lookup_asset_symbols", [assets]);
+        setCurrentBase(base as Asset);
+        setCurrentQuote(quote as Asset);
+        setLoadingSelectedPair(false);
+      } catch (e) {
+        setLoadingSelectedPair(false);
+        console.log(e);
+      }
+    },
+    [dbApi, setCurrentBase, setCurrentQuote, setLoadingSelectedPair]
+  );
 
   const formPairStats = useCallback(
     async (pair: string): Promise<PairNameAndMarketStats> => {
@@ -46,7 +75,7 @@ export function useMarketPage(): UseMarketPageResult {
   const getTradingPairsStats = useCallback(
     async (defaultAsset, exchanges) => {
       try {
-        setLoading(true);
+        setLoadingTradingPairs(true);
         const initPairs: string[] =
           exchanges.list.length > 0
             ? exchanges.list
@@ -58,14 +87,21 @@ export function useMarketPage(): UseMarketPageResult {
               ];
         const updatedPairs = await Promise.all(initPairs.map(formPairStats));
         setTradingPairsStats(updatedPairs);
-        setLoading(false);
+        setLoadingTradingPairs(false);
       } catch (e) {
         console.log(e);
-        setLoading(false);
+        setLoadingTradingPairs(false);
       }
     },
-    [setTradingPairsStats, formPairStats]
+    [setTradingPairsStats, formPairStats, setLoadingTradingPairs]
   );
+
+  useEffect(() => {
+    if (currentPair !== exchanges.active) {
+      updateExchanges(currentPair);
+    }
+    getPairAssets(currentPair.split("_"));
+  }, [currentPair, getPairAssets, updateExchanges]);
 
   useEffect(() => {
     if (defaultAsset && exchanges) {
@@ -75,6 +111,9 @@ export function useMarketPage(): UseMarketPageResult {
 
   return {
     tradingPairsStats,
-    loading,
+    loadingTradingPairs,
+    currentBase,
+    currentQuote,
+    loadingSelectedPair,
   };
 }
