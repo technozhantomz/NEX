@@ -14,11 +14,11 @@ export type UseCreateLimitOrderResult = {
   balance: number;
   orderForm: FormInstance<OrderForm>;
   formValdation: FormValidation;
+  handleValuesChange: (changedValues: any, allValues: any) => void;
   isPasswordModalVisible: boolean;
   handleCancelPasswordModal: () => void;
-  onFormFinish: (name: string, info: { values: any; forms: any }) => void;
+  //onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   confirm: () => void;
-  handleRelationsBetweenInputs: (changedValues: any, allValues: any) => void;
 };
 
 export type FormField = {

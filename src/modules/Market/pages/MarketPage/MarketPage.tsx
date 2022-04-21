@@ -68,15 +68,19 @@ const MarketPage: NextPage = () => {
               <Row>
                 <Col span={12}>
                   <LimitOrderForm
+                    activePair={pair as string}
                     currentBase={currentBase}
                     currentQuote={currentQuote}
                     isBuyOrder={true}
+                    loadingSelectedPair={loadingSelectedPair}
                   />
                 </Col>
                 <Col span={12}>
                   <LimitOrderForm
+                    activePair={pair as string}
                     currentBase={currentBase}
                     currentQuote={currentQuote}
+                    loadingSelectedPair={loadingSelectedPair}
                     isBuyOrder={false}
                   />
                 </Col>

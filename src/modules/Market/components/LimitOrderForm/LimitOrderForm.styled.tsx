@@ -4,9 +4,12 @@ import {
   Form as UiForm,
   Input as UiInput,
 } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 
 export const FormContainer = styled.div`
-  padding: 10px;
+  ${breakpoint.md} {
+    padding: 40px 20px 10px 20px;
+  }
 `;
 
 export const Form = styled(UiForm)``;

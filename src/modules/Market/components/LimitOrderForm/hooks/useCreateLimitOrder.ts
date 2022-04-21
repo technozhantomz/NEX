@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { defaultToken } from "../../../../../api/params";
 
 import {
   roundNum,
@@ -47,11 +48,55 @@ export function useCreateLimitOrder({
     loadingSelectedPair,
   });
 
+  const handleNegativeValuesAndAssetPrecission = useCallback(
+    (changedValues) => {
+      if (
+        !loadingSelectedPair &&
+        currentBase !== undefined &&
+        currentQuote !== undefined
+      ) {
+        if (changedValues.price) {
+          if (changedValues.price < 0) {
+            orderForm.setFieldsValue({ price: 0 });
+          } else if (changedValues.price > 0) {
+            orderForm.setFieldsValue({
+              price: roundNum(changedValues.price, currentBase.precision),
+            });
+          }
+        } else if (changedValues.total) {
+          if (changedValues.total < 0) {
+            orderForm.setFieldsValue({ total: 0 });
+          } else if (changedValues.total > 0) {
+            orderForm.setFieldsValue({
+              total: roundNum(changedValues.total, currentBase.precision),
+            });
+          }
+        } else if (changedValues.quantity) {
+          if (changedValues.quantity < 0) {
+            orderForm.setFieldsValue({ quantity: 0 });
+          } else if (changedValues.quantity > 0) {
+            orderForm.setFieldsValue({
+              quantity: roundNum(
+                changedValues.quantity,
+                currentQuote.precision
+              ),
+            });
+          }
+        }
+      }
+    },
+    [orderForm, currentBase, currentQuote, loadingSelectedPair, roundNum]
+  );
+
   const handleRelationsBetweenInputs = useCallback(
     (changedValues, allValues) => {
       let baseRoundTo = 5;
       let quoteRoundTo = 5;
-      if (currentBase !== undefined && currentQuote != undefined) {
+      if (
+        !loadingSelectedPair &&
+        currentBase !== undefined &&
+        currentQuote != undefined
+      ) {
         baseRoundTo = currentBase.precision;
         quoteRoundTo = currentQuote.precision;
       }
@@ -82,6 +127,14 @@ export function useCreateLimitOrder({
     [orderForm, currentBase, currentQuote, roundNum]
   );
 
+  const handleValuesChange = useCallback(
+    (changedValues: any, allValues: any) => {
+      handleNegativeValuesAndAssetPrecission(changedValues);
+      handleRelationsBetweenInputs(changedValues, allValues);
+    },
+    [handleNegativeValuesAndAssetPrecission, handleRelationsBetweenInputs]
+  );
+
   const handleCancelPasswordModal = useCallback(() => {
     setIsPasswordModalVisible(false);
   }, [setIsPasswordModalVisible]);
@@ -97,7 +150,7 @@ export function useCreateLimitOrder({
     const { passwordModal } = forms;
     if (name === "passwordModal") {
       passwordModal.validateFields().then(() => {
-        handleCreateLimitOrder(values.password);
+        //handleCreateLimitOrder(values.password);
       });
     }
   };
@@ -137,95 +190,167 @@ export function useCreateLimitOrder({
     isBuyOrder,
   ]);
 
-  const handleCreateLimitOrder = async (password: string) => {
-    const values = orderForm.getFieldsValue();
-    let amount_to_sell, min_to_receive;
+  // const handleCreateLimitOrder = async (password: string) => {
+  //   const values = orderForm.getFieldsValue();
+  //   let amount_to_sell, min_to_receive;
+  //   if (isBuyOrder) {
+  //     const sellAsset = await getAssetBySymbol(activePair.split("_")[1]);
+  //     const buyAsset = await getAssetBySymbol(activePair.split("_")[0]);
+  //     amount_to_sell = {
+  //       amount: roundNum(
+  //         values.quantity * 10 ** sellAsset.precision,
+  //         sellAsset.precision
+  //       ),
+  //       asset_id: sellAsset.id,
+  //     };
+
+  //     min_to_receive = {
+  //       amount: roundNum(
+  //         values.total * 10 ** buyAsset.precision,
+  //         buyAsset.precision
+  //       ),
+  //       asset_id: buyAsset.id,
+  //     };
+  //   } else {
+  //     const sellAsset = await getAssetBySymbol(activePair.split("_")[0]);
+  //     const buyAsset = await getAssetBySymbol(activePair.split("_")[1]);
+  //     amount_to_sell = {
+  //       amount: roundNum(
+  //         values.total * 10 ** sellAsset.precision,
+  //         sellAsset.precision
+  //       ),
+  //       asset_id: sellAsset.id,
+  //     };
+
+  //     min_to_receive = {
+  //       amount: roundNum(
+  //         values.quantity * 10 ** buyAsset.precision,
+  //         buyAsset.precision
+  //       ),
+  //       asset_id: buyAsset.id,
+  //     };
+  //   }
+  //   const expiration = new Date(
+  //     new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+  //   ).toISOString();
+  //   const activeKey = getPrivateKey(password, "active");
+  //   const trx = {
+  //     type: "limit_order_create",
+  //     params: {
+  //       fee: { amount: 0, asset_id: defaultAsset?.id },
+  //       seller: id,
+  //       amount_to_sell,
+  //       min_to_receive,
+  //       expiration,
+  //       fill_or_kill: false,
+  //       extensions: [],
+  //     },
+  //   };
+  //   let trxResult;
+
+  //   try {
+  //     trxResult = await trxBuilder([trx], [activeKey]);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  //   if (trxResult) {
+  //     formAccountBalancesByName(localStorageAccount);
+  //     setIsPasswordModalVisible(false);
+  //     resetForm();
+  //     refreshOrderBook();
+  //     refreshHistory();
+  //     //setStatus();
+  //   } else {
+  //     setIsPasswordModalVisible(false);
+  //     refreshOrderBook();
+  //     refreshHistory();
+  //     //setStatus();
+  //   }
+  // };
+
+  const validatePrice = (_: unknown, value: number) => {
+    if (Number(value) <= 0) {
+      return Promise.reject(new Error("Price should be greater than 0"));
+    }
+    return Promise.resolve();
+  };
+
+  const validateQuantity = (_: unknown, value: number) => {
+    if (Number(value) <= 0) {
+      return Promise.reject(new Error("Price should be greater than 0"));
+    }
+    const userQuoteAsset = assets.find(
+      (asset) => asset.symbol === currentQuote?.symbol
+    );
     if (isBuyOrder) {
-      const sellAsset = await getAssetBySymbol(activePair.split("_")[1]);
-      const buyAsset = await getAssetBySymbol(activePair.split("_")[0]);
-      amount_to_sell = {
-        amount: roundNum(
-          values.quantity * 10 ** sellAsset.precision,
-          sellAsset.precision
-        ),
-        asset_id: sellAsset.id,
-      };
-
-      min_to_receive = {
-        amount: roundNum(
-          values.total * 10 ** buyAsset.precision,
-          buyAsset.precision
-        ),
-        asset_id: buyAsset.id,
-      };
-    } else {
-      const sellAsset = await getAssetBySymbol(activePair.split("_")[0]);
-      const buyAsset = await getAssetBySymbol(activePair.split("_")[1]);
-      amount_to_sell = {
-        amount: roundNum(
-          values.total * 10 ** sellAsset.precision,
-          sellAsset.precision
-        ),
-        asset_id: sellAsset.id,
-      };
-
-      min_to_receive = {
-        amount: roundNum(
-          values.quantity * 10 ** buyAsset.precision,
-          buyAsset.precision
-        ),
-        asset_id: buyAsset.id,
-      };
+      if (!userQuoteAsset) {
+        return Promise.reject(new Error("Balance is not enough"));
+      }
+      if (currentQuote?.symbol === defaultToken) {
+        if (Number(value) + feeAmount > (userQuoteAsset?.amount as number)) {
+          return Promise.reject(new Error("Balance is not enough"));
+        }
+      } else {
+        if (Number(value) > (userQuoteAsset?.amount as number)) {
+          return Promise.reject(new Error("Balance is not enough"));
+        }
+      }
     }
-    const expiration = new Date(
-      new Date().getTime() + 1000 * 60 * 60 * 24 * 365
-    ).toISOString();
-    const activeKey = getPrivateKey(password, "active");
-    const trx = {
-      type: "limit_order_create",
-      params: {
-        fee: { amount: 0, asset_id: defaultAsset?.id },
-        seller: id,
-        amount_to_sell,
-        min_to_receive,
-        expiration,
-        fill_or_kill: false,
-        extensions: [],
-      },
-    };
-    let trxResult;
+    return Promise.resolve();
+  };
 
-    try {
-      trxResult = await trxBuilder([trx], [activeKey]);
-    } catch (e) {
-      console.log(e);
+  // put fee here
+  const validateTotal = (_: unknown, value: number) => {
+    if (Number(value) <= 0) {
+      return Promise.reject(new Error("Price should be greater than 0"));
     }
-    if (trxResult) {
-      formAccountBalancesByName(localStorageAccount);
-      setIsPasswordModalVisible(false);
-      resetForm();
-      refreshOrderBook();
-      refreshHistory();
-      //setStatus();
-    } else {
-      setIsPasswordModalVisible(false);
-      refreshOrderBook();
-      refreshHistory();
-      //setStatus();
+    const userDefaultAsset = assets.find(
+      (asset) => asset.symbol === defaultToken
+    );
+    if (
+      userDefaultAsset === undefined ||
+      feeAmount > (userDefaultAsset?.amount as number)
+    ) {
+      return Promise.reject(new Error("Balance is not enough to pay the fee"));
     }
+
+    const userBaseAsset = assets.find(
+      (asset) => asset.symbol === currentBase?.symbol
+    );
+    if (!isBuyOrder) {
+      if (!userBaseAsset) {
+        return Promise.reject(new Error("Balance is not enough"));
+      }
+      if (currentBase?.symbol === defaultToken) {
+        if (Number(value) + feeAmount > (userBaseAsset?.amount as number)) {
+          return Promise.reject(new Error("Balance is not enough"));
+        }
+      } else {
+        if (Number(value) > (userBaseAsset?.amount as number)) {
+          return Promise.reject(new Error("Balance is not enough"));
+        }
+      }
+      if (
+        userBaseAsset === undefined ||
+        Number(value) > (userBaseAsset?.amount as number)
+      ) {
+        return Promise.reject(new Error("Balance is not enough"));
+      }
+    }
+    return Promise.resolve();
   };
 
   const formValdation = {
     price: [
-      { required: true, message: "From is required" },
+      { required: true, message: "This field is required" },
       { validator: validatePrice },
     ],
     quantity: [
-      { required: true, message: "Amount is required" },
+      { required: true, message: "This field is required" },
       { validator: validateQuantity },
     ],
     total: [
-      { required: true, message: "Withdraw address is required" },
+      { required: true, message: "This field is required" },
       { validator: validateTotal },
     ],
   };
@@ -269,7 +394,7 @@ export function useCreateLimitOrder({
     isPasswordModalVisible,
     handleCancelPasswordModal,
     confirm,
-    onFormFinish,
-    handleRelationsBetweenInputs,
+    //onFormFinish,
+    handleValuesChange,
   };
 }
