@@ -1,5 +1,7 @@
 import { CardFormButton, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const GPOSTabWrapper = styled.div`
   display: flex;
@@ -19,7 +21,31 @@ export const GPOSContentWrapper = styled.div`
     flex-direction: row;
   }
 `;
-export const GPOSContentInfo = styled.div``;
-export const GPOSContentActions = styled.div`
+export const GPOSContentInfo = styled.div`
+  max-width: 266px;
+  width: 100%;
+  ${breakpoint.sm} {
+    margin-right: 40px;
+  }
 `;
-export const GPOSTButton = styled(CardFormButton)``;
+export const GPOSContentActions = styled.div`
+  ${mixIns.hairline}
+  width: 100%;
+  ${breakpoint.sm} {
+    max-width: 435px;
+  }
+`;
+export const GPOSTButton = styled(CardFormButton)`
+  margin-bottom: 15px;
+  &.ant-btn-text {
+    margin-top: 5px;
+    color: ${colors.linkColor};
+  }
+  ${breakpoint.sm} {
+    width: 100%;
+    margin-bottom: 25px;
+    &.ant-btn-text {
+      margin-top: 10px;
+    }
+  }
+`;
