@@ -1,14 +1,12 @@
 import {
-  Input,
   styled,
-  List as UiList,
+  ListItem as UiListItem,
   StatsCardsDeck as UIStatsCardsDeck,
   Table as UiTable,
+  TableSearch as UiTableSearch,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
-
-const { Search } = Input;
 
 export const WitnessesTabWrapper = styled.div`
   margin: 0 15px;
@@ -19,21 +17,10 @@ export const WitnessesTabWrapper = styled.div`
 
 export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
 
-export const WitnessesSearch = styled(Search)`
-  max-width: 520px;
-  margin-bottom: 35px;
-  .ant-input {
-    border-radius: 4px;
-  }
-  > .ant-input-group
-    > .ant-input-group-addon:last-child
-    .ant-input-search-button {
-    border-radius: 0 4px 4px 0;
-    border-left: none;
-  }
-`;
+export const WitnessesSearch = styled(UiTableSearch)``;
 
 export const WitnessesTable = styled(UiTable)`
+  max-width: 798px;
   .ant-table-thead > tr > th {
     color: ${colors.textColorSecondary};
     background: ${colors.white};
@@ -47,15 +34,12 @@ export const WitnessesTable = styled(UiTable)`
   .ant-table-tbody > tr > td {
     border: none;
   }
-  .ant-tag {
-    padding: 5px 15px;
-    background: ${colors.assetTag};
-    border: none;
-    color: ${colors.textColor};
+  .anticon-link {
+    color: ${colors.linkColor};
   }
 `;
 
-export const WitnessListItem = styled(UiList.Item)``;
+export const WitnessListItem = styled(UiListItem)``;
 
 export const WitnessItemContent = styled.div`
   margin: 18px 0 25px;

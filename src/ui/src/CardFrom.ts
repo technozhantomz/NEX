@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Button } from "./Button";
 import { breakpoint } from "./breakpoints";
 import { colors } from "./colors";
+import { mixIns } from "./mixins";
 
 export const CardFormButton = styled(Button)`
   display: block;
@@ -21,7 +22,7 @@ export const CardFormButton = styled(Button)`
 export const CardFrom = styled(AntdForm)`
   .ant-input,
   .ant-input-affix-wrapper {
-    border-radius: 4px;
+    ${mixIns.borderRadius}
   }
   .ant-form-item-has-success {
     .ant-input-suffix {

@@ -1,8 +1,9 @@
 import { styled } from "../../../../ui/src";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const Container = styled.div`
   background-color: #fff;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
 `;
 
 export const ColumnFlex = styled.div`

@@ -8,6 +8,7 @@ import {
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const SecuritySettingsCard = styled.div`
   .ant-form-horizontal {
@@ -30,7 +31,7 @@ export const LockWalletFormItem = styled(UiForm.Item)`
   margin-top: 15px;
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
     width: 100%;
     height: 50px;
