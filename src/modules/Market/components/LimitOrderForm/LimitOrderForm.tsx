@@ -138,7 +138,7 @@ export const LimitOrderForm = ({
             </Styled.FormItem>
             <Styled.FormItem>
               <Styled.FormButton type="primary" htmlType="submit">
-                {`${isBuyOrder ? "Buy" : "Sell"} ${activePair.split("_")[1]}`}
+                {`${isBuyOrder ? "Buy" : "Sell"} ${activePair.split("_")[0]}`}
               </Styled.FormButton>
             </Styled.FormItem>
           </Styled.Form>
