@@ -14,7 +14,7 @@ import {
   UseHistoryResult,
 } from "./useHistory.types";
 
-type Props = {
+type Args = {
   currentBase: Asset | undefined;
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
@@ -24,7 +24,7 @@ export function useHistory({
   currentBase,
   currentQuote,
   loadingSelectedPair,
-}: Props): UseHistoryResult {
+}: Args): UseHistoryResult {
   const { historyApi, dbApi } = usePeerplaysApiContext();
 
   const [orderHistoryRows, setOrderHistoryRows] = useState<OrderHistoryRow[]>(

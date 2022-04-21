@@ -6,7 +6,7 @@ import { Asset } from "../../../../../common/types";
 
 import { UsePairStatsResult } from "./usePairStats.types";
 
-type Props = {
+type Args = {
   currentBase: Asset | undefined;
   currentQuote: Asset | undefined;
   loadingAssets: boolean;
@@ -17,7 +17,7 @@ export function usePairStats({
   currentBase,
   currentQuote,
   loadingAssets,
-}: Props): UsePairStatsResult {
+}: Args): UsePairStatsResult {
   // latest price for base asset in 24hr
   const [latest, setLatest] = useState<number>(0);
   // change in price of base asset in 24hr

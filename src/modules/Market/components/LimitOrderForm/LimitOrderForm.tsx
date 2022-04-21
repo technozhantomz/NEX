@@ -1,5 +1,6 @@
 import { PasswordModal } from "../../../../common/components";
 import { useAsset } from "../../../../common/hooks";
+import { Asset } from "../../../../common/types";
 import { Form } from "../../../../ui/src";
 
 import { InputPrefix } from "./InputPrefix";
@@ -7,25 +8,36 @@ import * as Styled from "./LimitOrderForm.styled";
 import { useCreateLimitOrder } from "./hooks/useCreateLimitOrder";
 
 type Props = {
+  currentBase: Asset | undefined;
+  currentQuote: Asset | undefined;
+  loadingSelectedPair: boolean;
   isBuyOrder: boolean;
   showTitle?: boolean;
 };
 
 export const LimitOrderForm = ({
+  currentBase,
+  currentQuote,
+  loadingSelectedPair,
   isBuyOrder,
   showTitle = true,
 }: Props): JSX.Element => {
   const { defaultAsset } = useAsset();
   const {
-    activePair,
-    orderForm,
-    visible,
     feeAmount,
-    userBalances,
-    onCancel,
+    marketFeePercent,
+    balance,
+    orderForm,
+    isPasswordModalVisible,
+    handleCancelPasswordModal,
     confirm,
     onFormFinish,
-  } = useCreateLimitOrder({ isBuyOrder });
+  } = useCreateLimitOrder({
+    currentBase,
+    currentQuote,
+    loadingSelectedPair,
+    isBuyOrder,
+  });
 
   return (
     <>

@@ -6,7 +6,7 @@ import { Layout, TradingPairCard } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { Col, Row } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
-import { OrderTabs, PairSelect } from "../../components";
+import { LimitOrderForm, OrderTabs, PairSelect } from "../../components";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -65,15 +65,23 @@ const MarketPage: NextPage = () => {
                   ))}
                 </Styled.StatsCardsDeck>
               </Row>
-              {/* <Row>
+              <Row>
                 <Col span={12}>
-                  <LimitOrderForm isBuyOrder={true} />
+                  <LimitOrderForm
+                    currentBase={currentBase}
+                    currentQuote={currentQuote}
+                    isBuyOrder={true}
+                  />
                 </Col>
                 <Col span={12}>
-                  <LimitOrderForm isBuyOrder={false} />
+                  <LimitOrderForm
+                    currentBase={currentBase}
+                    currentQuote={currentQuote}
+                    isBuyOrder={false}
+                  />
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 <OrderTabs forUser={true} />
               </Row> */}
             </Col>

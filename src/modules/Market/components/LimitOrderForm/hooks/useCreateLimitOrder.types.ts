@@ -1,21 +1,41 @@
-import { FormInstance } from "../../../../../ui/src";
+import { Asset } from "../../../../../common/types";
+import { FormInstance, Rule } from "../../../../../ui/src";
 
 export type UseCreateLimitOrderArgs = {
+  currentBase: Asset | undefined;
+  currentQuote: Asset | undefined;
+  loadingSelectedPair: boolean;
   isBuyOrder: boolean;
 };
 
-export type UserBalances = {
-  buyBalance: number;
-  sellBalance: number;
-};
-
 export type UseCreateLimitOrderResult = {
-  activePair: string;
-  orderForm: FormInstance;
-  visible: boolean;
   feeAmount: number;
-  userBalances: UserBalances;
-  onCancel: () => void;
+  marketFeePercent: number;
+  balance: number;
+  orderForm: FormInstance<OrderForm>;
+  formValdation: FormValidation;
+  isPasswordModalVisible: boolean;
+  handleCancelPasswordModal: () => void;
   onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   confirm: () => void;
+  handleRelationsBetweenInputs: (changedValues: any, allValues: any) => void;
+};
+
+export type FormField = {
+  field: string;
+  fullField: string;
+  type: string;
+  validator: unknown;
+};
+
+export type FormValidation = {
+  price: Rule[];
+  quantity: Rule[];
+  total: Rule[];
+};
+
+export type OrderForm = {
+  price: number;
+  quantity: number;
+  total: number;
 };

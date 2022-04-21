@@ -15,7 +15,7 @@ import {
   UseOrderBookResult,
 } from "./uesOrderBook.types";
 
-type Props = {
+type Args = {
   currentBase: Asset | undefined;
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
@@ -25,7 +25,7 @@ export function useOrderBook({
   currentBase,
   currentQuote,
   loadingSelectedPair,
-}: Props): UseOrderBookResult {
+}: Args): UseOrderBookResult {
   // asks are buy orders
   const [asks, setAsks] = useState<Order[]>([]);
   // bids are sell orders

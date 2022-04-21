@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   roundNum,
@@ -7,7 +7,6 @@ import {
   useFees,
   useTransactionBuilder,
 } from "../../../../../common/hooks";
-import { FeeParameter } from "../../../../../common/hooks/fees/useFees.types";
 import { useUserContext } from "../../../../../common/providers";
 import { Form } from "../../../../../ui/src";
 import { useHistory } from "../../HistoryBook/hooks/useHistory";
@@ -16,72 +15,129 @@ import { useOrderBook } from "../../OrderBook/hooks/useOrderBook";
 import {
   UseCreateLimitOrderArgs,
   UseCreateLimitOrderResult,
-  UserBalances,
 } from "./useCreateLimitOrder.types";
 
 export function useCreateLimitOrder({
+  currentBase,
+  currentQuote,
+  loadingSelectedPair,
   isBuyOrder,
 }: UseCreateLimitOrderArgs): UseCreateLimitOrderResult {
-  const [visible, setVisible] = useState<boolean>(false);
+  const [isPasswordModalVisible, setIsPasswordModalVisible] =
+    useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
-  const [userBalances, setBalances] = useState<UserBalances>({
-    buyBalance: 0,
-    sellBalance: 0,
-  });
-  const [orderForm] = Form.useForm();
+  const [marketFeePercent, setMarketFeePercent] = useState<number>(0);
+  const [balance, _setBalance] = useState<number>(0);
+  const [submittingPassword, setSubmittingPassword] = useState<boolean>(false);
 
-  const { defaultAsset, setPrecision, getAssetBySymbol } = useAsset();
+  const [orderForm] = Form.useForm();
+  const { defaultAsset, getAssetBySymbol } = useAsset();
   const { getPrivateKey, formAccountBalancesByName } = useAccount();
-  const { feeParameters, findOperationFee } = useFees();
+  const { calculateCreateLimitOrderFee } = useFees();
   const { localStorageAccount, assets, id } = useUserContext();
   const { trxBuilder } = useTransactionBuilder();
-  const { refreshOrderBook } = useOrderBook();
-  const { refreshHistory } = useHistory();
+  const { refreshOrderBook } = useOrderBook({
+    currentBase,
+    currentQuote,
+    loadingSelectedPair,
+  });
+  const { refreshHistory } = useHistory({
+    currentBase,
+    currentQuote,
+    loadingSelectedPair,
+  });
 
-  useEffect(() => {
-    if (feeParameters.length > 0) getFees();
-  }, [feeParameters, defaultAsset, localStorageAccount, assets]);
+  const handleRelationsBetweenInputs = useCallback(
+    (changedValues, allValues) => {
+      let baseRoundTo = 5;
+      let quoteRoundTo = 5;
+      if (currentBase !== undefined && currentQuote != undefined) {
+        baseRoundTo = currentBase.precision;
+        quoteRoundTo = currentQuote.precision;
+      }
+      if (changedValues.price || changedValues.quantity) {
+        if (
+          allValues.price &&
+          allValues.price > 0 &&
+          allValues.quantity &&
+          allValues.quantity > 0
+        ) {
+          orderForm.setFieldsValue({
+            total: roundNum(allValues.price * allValues.quantity, baseRoundTo),
+          });
+        }
+      } else if (changedValues.total) {
+        if (
+          allValues.price &&
+          allValues.price > 0 &&
+          allValues.total &&
+          allValues.total > 0
+        ) {
+          orderForm.setFieldsValue({
+            quantity: roundNum(allValues.total / allValues.price, quoteRoundTo),
+          });
+        }
+      }
+    },
+    [orderForm, currentBase, currentQuote, roundNum]
+  );
 
-  const onCancel = () => {
-    setVisible(false);
-  };
+  const handleCancelPasswordModal = useCallback(() => {
+    setIsPasswordModalVisible(false);
+  }, [setIsPasswordModalVisible]);
 
-  const confirm = () => {
+  const confirm = useCallback(() => {
     orderForm.validateFields().then(() => {
-      setVisible(true);
+      setIsPasswordModalVisible(true);
     });
-  };
-
-  const getFees = () => {
-    const feeParam = findOperationFee("limit_order_create") as FeeParameter;
-    const fee = feeParam[1].fee;
-    const sellBalance = assets.find(
-      (asset) => asset.symbol === activePair.split("_")[0]
-    );
-    const buyBalance = assets.find(
-      (asset) => asset.symbol === activePair.split("_")[1]
-    );
-    setFeeAmount(
-      setPrecision(true, fee as number, defaultAsset?.precision as number)
-    );
-    setBalances({
-      buyBalance: buyBalance ? (buyBalance.amount as number) : 0,
-      sellBalance: sellBalance ? (sellBalance.amount as number) : 0,
-    });
-  };
+  }, [orderForm, setIsPasswordModalVisible]);
 
   const onFormFinish = (name: string, info: { values: any; forms: any }) => {
     const { values, forms } = info;
     const { passwordModal } = forms;
     if (name === "passwordModal") {
       passwordModal.validateFields().then(() => {
-        setVisible(false);
-        handleLimitOrder(values.password);
+        handleCreateLimitOrder(values.password);
       });
     }
   };
 
-  const handleLimitOrder = async (password: string) => {
+  const resetForm = useCallback(() => {
+    orderForm.setFieldsValue({
+      price: 0,
+      quantity: 0,
+      total: 0,
+    });
+  }, [orderForm]);
+
+  const setBalance = useCallback(() => {
+    if (
+      !loadingSelectedPair &&
+      currentBase !== undefined &&
+      currentQuote !== undefined
+    ) {
+      if (assets.length > 0) {
+        const userBaseAsset = assets.find(
+          (asset) => asset.symbol === currentBase.symbol
+        );
+        const userQuoteAsset = assets.find(
+          (asset) => asset.symbol === currentQuote.symbol
+        );
+        isBuyOrder
+          ? _setBalance(userBaseAsset ? (userBaseAsset.amount as number) : 0)
+          : _setBalance(userQuoteAsset ? (userQuoteAsset.amount as number) : 0);
+      }
+    }
+  }, [
+    assets,
+    _setBalance,
+    currentBase,
+    currentQuote,
+    loadingSelectedPair,
+    isBuyOrder,
+  ]);
+
+  const handleCreateLimitOrder = async (password: string) => {
     const values = orderForm.getFieldsValue();
     let amount_to_sell, min_to_receive;
     if (isBuyOrder) {
@@ -146,35 +202,74 @@ export function useCreateLimitOrder({
     }
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
-      setVisible(false);
+      setIsPasswordModalVisible(false);
       resetForm();
       refreshOrderBook();
       refreshHistory();
       //setStatus();
     } else {
-      setVisible(false);
+      setIsPasswordModalVisible(false);
       refreshOrderBook();
       refreshHistory();
       //setStatus();
     }
   };
 
-  const resetForm = () => {
-    orderForm.setFieldsValue({
-      price: 0,
-      quantity: 0,
-      total: 0,
-    });
+  const formValdation = {
+    price: [
+      { required: true, message: "From is required" },
+      { validator: validatePrice },
+    ],
+    quantity: [
+      { required: true, message: "Amount is required" },
+      { validator: validateQuantity },
+    ],
+    total: [
+      { required: true, message: "Withdraw address is required" },
+      { validator: validateTotal },
+    ],
   };
 
+  useEffect(() => {
+    setBalance();
+
+    if (
+      !loadingSelectedPair &&
+      currentBase !== undefined &&
+      currentQuote !== undefined
+    ) {
+      const createLimitOrderFee = calculateCreateLimitOrderFee(
+        currentBase,
+        currentQuote
+      );
+      if (createLimitOrderFee !== undefined) {
+        setFeeAmount(createLimitOrderFee.fee);
+        isBuyOrder
+          ? setMarketFeePercent(createLimitOrderFee.buyMarketFeePercent)
+          : setMarketFeePercent(createLimitOrderFee.sellMarketFeePercent);
+      }
+    }
+  }, [
+    setBalance,
+    loadingSelectedPair,
+    currentQuote,
+    currentBase,
+    calculateCreateLimitOrderFee,
+    setFeeAmount,
+    isBuyOrder,
+    setMarketFeePercent,
+  ]);
+
   return {
-    activePair,
-    orderForm,
-    visible,
     feeAmount,
-    userBalances,
-    onCancel,
+    marketFeePercent,
+    balance,
+    orderForm,
+    formValdation,
+    isPasswordModalVisible,
+    handleCancelPasswordModal,
     confirm,
     onFormFinish,
+    handleRelationsBetweenInputs,
   };
 }
