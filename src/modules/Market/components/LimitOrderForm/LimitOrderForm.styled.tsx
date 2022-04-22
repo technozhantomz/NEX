@@ -8,7 +8,7 @@ import { breakpoint } from "../../../../ui/src/breakpoints";
 
 export const FormContainer = styled.div`
   ${breakpoint.md} {
-    padding: 40px 20px 10px 20px;
+    padding: 40px 20px 60px 20px;
   }
 `;
 

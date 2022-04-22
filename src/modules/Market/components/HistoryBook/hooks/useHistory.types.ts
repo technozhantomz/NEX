@@ -6,9 +6,11 @@ export type UseHistoryResult = {
   columns: OrderHistoryColumn[];
   refreshHistory: () => void;
   loadingOrderHistoryRows: boolean;
+  loadingUserHistoryRows: boolean;
 };
 
 export type OrderHistoryRow = {
+  key: string;
   price: number;
   base: number;
   quote: number;

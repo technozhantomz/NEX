@@ -1,4 +1,5 @@
 import { Dropdown, Menu, styled, Table as UiTable } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 
 export const Flex = styled.div`
   display: flex;
@@ -33,7 +34,12 @@ export const Table = styled(UiTable)`
   }
 `;
 
-export const TableContainer = styled.div``;
+export const TableContainer = styled.div`
+  ${breakpoint.md} {
+    height: ${(props) => (props.forUser ? "230px" : "750px")};
+    overflow-y: auto;
+  }
+`;
 
 export const FilterContainer = styled.div`
   display: flex;

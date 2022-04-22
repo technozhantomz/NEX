@@ -39,7 +39,7 @@ export const HistoryBook = ({
             width > breakpoints.md
               ? dataSource.length > 24
                 ? { scrollToFirstRowOnChange: false, y: 540 }
-                : {}
+                : { scrollToFirstRowOnChange: false }
               : {}
           }
           loading={forUser ? false : loadingOrderHistoryRows}

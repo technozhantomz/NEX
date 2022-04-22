@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { roundNum, useAsset } from "../../../../../common/hooks";
+import {
+  roundNum,
+  useAccount,
+  useAsset,
+  useFormDate,
+} from "../../../../../common/hooks";
 import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
-import { Asset } from "../../../../../common/types";
+import { Asset, LimitOrder } from "../../../../../common/types";
 
 import {
   Order,
@@ -34,13 +39,17 @@ export function useOrderBook({
   const [userOrdersRows, setUserOrdersRows] = useState<OrderRow[]>([]);
   const [orderType, setOrderType] = useState<OrderType>("total");
   const [threshold, setThreshold] = useState<number>(0.001);
-  const [columns, setColumns] = useState<OrderColumn[]>([]);
+  const [orderColumns, setOrderColumns] = useState<OrderColumn[]>([]);
+  const [userOrderColumns, setUserOrderColumns] = useState<OrderColumn[]>([]);
   const [loadingOrderRows, setLoadingOrderRows] = useState<boolean>(true);
+  const [loadingUserOrderRows, setLoadingUserOrderRows] =
+    useState<boolean>(true);
   //const [tableScroll, setTableScroll] = useState<TableScroll>();
 
   const { localStorageAccount } = useUserContext();
   const { dbApi } = usePeerplaysApiContext();
   const { setPrecision } = useAsset();
+  const { getFullAccount } = useAccount();
 
   const handleFilterChange = useCallback(
     (type: OrderType) => {
@@ -84,57 +93,97 @@ export function useOrderBook({
     [dbApi, setAsks, setBids, setLoadingOrderRows]
   );
 
+  const formUserOrderRow = useCallback(
+    (baseAsset: Asset, quoteAsset: Asset, limitOrder: LimitOrder): OrderRow => {
+      let price = 0,
+        base = 0,
+        quote = 0,
+        isBuyOrder = false;
+      const key = limitOrder.id;
+      const expiration = useFormDate(limitOrder.expiration);
+      if (baseAsset.id === limitOrder.sell_price.base.asset_id) {
+        base = setPrecision(false, limitOrder.for_sale, baseAsset.precision);
+        price = roundNum(
+          setPrecision(
+            false,
+            limitOrder.sell_price.base.amount,
+            baseAsset.precision
+          ) /
+            setPrecision(
+              false,
+              limitOrder.sell_price.quote.amount,
+              quoteAsset.precision
+            ),
+          baseAsset.precision
+        );
+
+        quote = roundNum(base / price, quoteAsset.precision);
+        isBuyOrder = true;
+      } else {
+        quote = setPrecision(false, limitOrder.for_sale, quoteAsset.precision);
+        price = roundNum(
+          setPrecision(
+            false,
+            limitOrder.sell_price.quote.amount,
+            baseAsset.precision
+          ) /
+            setPrecision(
+              false,
+              limitOrder.sell_price.base.amount,
+              quoteAsset.precision
+            ),
+          baseAsset.precision
+        );
+        base = roundNum(price * quote, baseAsset.precision);
+        isBuyOrder = false;
+      }
+
+      return {
+        key,
+        base,
+        quote,
+        price,
+        isBuyOrder,
+        expiration,
+      } as OrderRow;
+    },
+    [setPrecision, roundNum]
+  );
+
   const getUserOrderBook = useCallback(
     async (base: Asset, quote: Asset) => {
-      const baseAsset = base;
-      const quoteAsset = quote;
-      const rawOrders = await dbApi("get_full_accounts", [
-        [localStorageAccount],
-        false,
-      ]).then((e) =>
-        e[0][1].limit_orders.filter((e) => {
-          const prices = e.sell_price;
-          const orderAssets = [prices.base.asset_id, prices.quote.asset_id];
-          return (
-            orderAssets.includes(baseAsset.id) &&
-            orderAssets.includes(quoteAsset.id)
-          );
-        })
-      );
-      const rows = await Promise.all(
-        rawOrders.map((order) => {
-          const orderVal = setPrecision(
-            false,
-            order.for_sale,
-            baseAsset.precision
-          );
-          const sellBase = order.sell_price.base;
-          const sellQuote = order.sell_price.quote;
-          const key = order.id;
-
-          let price = 0,
-            base = 0,
-            quote = 0,
-            isBuyOrder = false;
-
-          if (baseAsset.id === sellBase.asset_id) {
-            base = orderVal;
-            price = setPrecision(false, sellBase.amount, baseAsset.precision);
-            quote = roundNum(base / price);
-            isBuyOrder = true;
-          } else {
-            quote = orderVal;
-            price = setPrecision(false, sellQuote.amount, quoteAsset.precision);
-            base = roundNum(price * quote);
-            isBuyOrder = false;
-          }
-
-          return { key, quote, base, price, isBuyOrder };
-        })
-      );
-      setUserOrdersRows(rows);
+      try {
+        setLoadingUserOrderRows(true);
+        const fullAccount = await getFullAccount(localStorageAccount, false);
+        if (fullAccount !== undefined) {
+          const limitOrders = fullAccount.limit_orders;
+          const limitOrdersForThePair = limitOrders.filter((limitOrder) => {
+            const orderAssetsIds = [
+              limitOrder.sell_price.base.asset_id,
+              limitOrder.sell_price.quote.asset_id,
+            ];
+            return (
+              orderAssetsIds.includes(base.id) &&
+              orderAssetsIds.includes(quote.id)
+            );
+          });
+          const userOrderRows = limitOrdersForThePair.map((limitOrder) => {
+            return formUserOrderRow(base, quote, limitOrder);
+          });
+          setUserOrdersRows(userOrderRows);
+          setLoadingUserOrderRows(false);
+        }
+      } catch (e) {
+        console.log(e);
+        setLoadingUserOrderRows(false);
+      }
     },
-    [dbApi]
+    [
+      getFullAccount,
+      formUserOrderRow,
+      setUserOrdersRows,
+      setLoadingUserOrderRows,
+    ]
   );
 
   const refreshOrderBook = useCallback(() => {
@@ -160,7 +209,29 @@ export function useOrderBook({
       currentBase !== undefined &&
       currentQuote !== undefined
     ) {
-      setColumns([
+      setOrderColumns([
+        {
+          title: "Price",
+          dataIndex: "price",
+          key: "price",
+        },
+        {
+          title: currentQuote.symbol,
+          dataIndex: "quote",
+          key: "quote",
+        },
+        {
+          title: currentBase.symbol,
+          dataIndex: "base",
+          key: "base",
+        },
+      ]);
+      setUserOrderColumns([
+        {
+          title: "Price",
+          dataIndex: "price",
+          key: "price",
+        },
         {
           title: currentQuote.symbol,
           dataIndex: "quote",
@@ -172,20 +243,21 @@ export function useOrderBook({
           key: "base",
         },
         {
-          title: "Price",
-          dataIndex: "price",
-          key: "price",
+          title: "Expiration",
+          dataIndex: "expiration",
+          key: "expiration",
         },
       ]);
       getOrderBook(currentBase, currentQuote);
-      //getUserOrderBook(currentBase, currentQuote);
+      getUserOrderBook(currentBase, currentQuote);
     }
   }, [
     loadingSelectedPair,
     currentBase,
     currentQuote,
     getOrderBook,
-    //getUserOrderBook,
+    getUserOrderBook,
+    setOrderColumns,
   ]);
 
   useEffect(() => {
@@ -245,9 +317,11 @@ export function useOrderBook({
     ordersRows,
     loadingOrderRows,
     userOrdersRows,
+    loadingUserOrderRows,
     refreshOrderBook,
     handleThresholdChange,
     handleFilterChange,
-    columns,
+    orderColumns,
+    userOrderColumns,
   };
 }

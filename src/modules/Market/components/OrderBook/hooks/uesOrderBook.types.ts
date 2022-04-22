@@ -6,10 +6,12 @@ export type UseOrderBookResult = {
   orderType: OrderType;
   threshold: number;
   loadingOrderRows: boolean;
+  loadingUserOrderRows: boolean;
   refreshOrderBook: () => void;
   handleThresholdChange: (menuInfo: any) => void;
   handleFilterChange: (type: OrderType) => void;
-  columns: OrderColumn[];
+  orderColumns: OrderColumn[];
+  userOrderColumns: OrderColumn[];
 };
 
 export type Order = {
@@ -33,6 +35,7 @@ export type OrderRow = {
   base: number;
   price: number;
   isBuyOrder: boolean;
+  expiration?: string;
 };
 
 export type TableScroll = {

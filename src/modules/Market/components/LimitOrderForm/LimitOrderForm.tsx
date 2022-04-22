@@ -1,5 +1,9 @@
-import { PasswordModal } from "../../../../common/components";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
+import { FormDisclamer, PasswordModal } from "../../../../common/components";
 import { useAsset } from "../../../../common/hooks";
+import { useUserContext } from "../../../../common/providers";
 import { Asset } from "../../../../common/types";
 import { Form } from "../../../../ui/src";
 
@@ -24,6 +28,8 @@ export const LimitOrderForm = ({
   isBuyOrder,
   showTitle = true,
 }: Props): JSX.Element => {
+  const router = useRouter();
+  const { localStorageAccount } = useUserContext();
   const { defaultAsset } = useAsset();
   const {
     feeAmount,
@@ -137,11 +143,36 @@ export const LimitOrderForm = ({
               </Styled.OrderInfo>
             </Styled.FormItem>
             <Styled.FormItem>
-              <Styled.FormButton type="primary" htmlType="submit">
-                {`${isBuyOrder ? "Buy" : "Sell"} ${activePair.split("_")[0]}`}
-              </Styled.FormButton>
+              {localStorageAccount !== null && localStorageAccount !== "" ? (
+                <Styled.FormButton type="primary" htmlType="submit">
+                  {`${isBuyOrder ? "Buy" : "Sell"} ${activePair.split("_")[0]}`}
+                </Styled.FormButton>
+              ) : (
+                <Styled.FormButton
+                  type="primary"
+                  htmlType="button"
+                  onClick={() => {
+                    router.push("/login");
+                  }}
+                >
+                  {`Log in & ${isBuyOrder ? "Buy" : "Sell"} ${
+                    activePair.split("_")[0]
+                  }`}
+                </Styled.FormButton>
+              )}
             </Styled.FormItem>
           </Styled.Form>
+          {localStorageAccount !== null && localStorageAccount !== "" ? (
+            ""
+          ) : (
+            <FormDisclamer>
+              <span>Don't have a Peerplays account? </span>
+              <Link href="/signup">
+                <a>Create account</a>
+              </Link>
+            </FormDisclamer>
+          )}
+
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={handleCancelPasswordModal}

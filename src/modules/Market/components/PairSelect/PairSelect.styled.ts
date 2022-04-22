@@ -19,6 +19,7 @@ export const PairButton = styled(Button)`
   &.ant-btn:hover,
   &.ant-btn:focus,
   &.ant-btn:active {
+    box-shadow: none;
     outline: none;
     border: none;
     color: ${colors.textColor};

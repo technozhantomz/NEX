@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { roundNum, useAsset, useFormDate } from "../../../../../common/hooks";
+import {
+  roundNum,
+  useAccountHistory,
+  useAsset,
+  useFormDate,
+} from "../../../../../common/hooks";
 import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
-import { Asset } from "../../../../../common/types";
+import { Asset, BlockHeader, History } from "../../../../../common/types";
 
 import {
   OrderHistory,
@@ -35,13 +40,18 @@ export function useHistory({
   >([]);
   const [loadingOrderHistoryRows, setLoadingOrderHistoryRows] =
     useState<boolean>(true);
+  const [loadingUserHistoryRows, setLoadingUserHistoryRows] =
+    useState<boolean>(true);
+
   const [columns, setColumns] = useState<OrderHistoryColumn[]>([]);
   const { id } = useUserContext();
   const { setPrecision } = useAsset();
+  const { getAccountHistoryById } = useAccountHistory();
 
   const getHistory = useCallback(
     async (base: Asset, quote: Asset) => {
       try {
+        setOrderHistoryRows([]);
         setLoadingOrderHistoryRows(true);
         const history: OrderHistory[] = await historyApi(
           "get_fill_order_history",
@@ -71,6 +81,7 @@ export function useHistory({
             }
 
             return {
+              key: h.id,
               price: roundNum(baseAmount / quoteAmount),
               base: baseAmount,
               quote: quoteAmount,
@@ -95,78 +106,122 @@ export function useHistory({
     ]
   );
 
+  const formUserHistoryRow = useCallback(
+    async (
+      baseAsset: Asset,
+      quoteAsset: Asset,
+      history: History
+    ): Promise<OrderHistoryRow> => {
+      const blockHeader: BlockHeader = await dbApi("get_block_header", [
+        history.block_num,
+      ]);
+      const date = useFormDate(blockHeader.timestamp);
+      const operationDetails = history.op[1];
+      const key = history.id;
+
+      let price = 0,
+        base = 0,
+        quote = 0,
+        isBuyOrder = false;
+
+      if (operationDetails.receives.asset_id === quoteAsset.id) {
+        quote = setPrecision(
+          false,
+          operationDetails.receives.amount,
+          quoteAsset.precision
+        );
+        base = setPrecision(
+          false,
+          operationDetails.pays.amount,
+          baseAsset.precision
+        );
+        price = roundNum(base / quote, baseAsset.precision);
+        isBuyOrder = true;
+      } else {
+        quote = setPrecision(
+          false,
+          operationDetails.pays.amount,
+          quoteAsset.precision
+        );
+        base = setPrecision(
+          false,
+          operationDetails.receives.amount,
+          baseAsset.precision
+        );
+        price = roundNum(base / quote, baseAsset.precision);
+        isBuyOrder = false;
+      }
+
+      return { key, price, base, quote, date, isBuyOrder };
+    },
+    [dbApi, useFormDate, setPrecision, roundNum]
+  );
+
   const getUserHistory = useCallback(
     async (base: Asset, quote: Asset) => {
-      const baseAsset = base;
-      const quoteAsset = quote;
-      let history = await historyApi("get_account_history", [
-        id,
-        "1.11.0",
-        100,
-        "1.11.9999999999",
-      ]).then((history) => history.filter((el) => el.op[0] === 4));
-      history = history.filter((e) => {
-        if (e.op[0] === 4) {
-          const pays = e.op[1].pays;
-          const receives = e.op[1].receives;
-          const orderAssets = [pays.asset_id, receives.asset_id];
-          return (
-            orderAssets.includes(baseAsset.id) &&
-            orderAssets.includes(quoteAsset.id)
+      if (id !== null && id !== "") {
+        try {
+          setLoadingUserHistoryRows(true);
+          setUserOrderHistoryRows([]);
+          const userOperationsHistory = await getAccountHistoryById(id);
+          const fillOrdersHistory = userOperationsHistory.filter(
+            (userOperationHistory) => userOperationHistory.op[0] === 4
           );
+          const fillOrdersHistoryForThePair = fillOrdersHistory.filter(
+            (fillOrderHistory) => {
+              const pays = fillOrderHistory.op[1].pays;
+              const receives = fillOrderHistory.op[1].receives;
+              const orderAssetsIds = [pays.asset_id, receives.asset_id];
+              return (
+                orderAssetsIds.includes(base.id) &&
+                orderAssetsIds.includes(quote.id)
+              );
+            }
+          );
+          const userHistoryRows = await Promise.all(
+            fillOrdersHistoryForThePair.map(
+              async (fillOrderHistoryForThePair) => {
+                return await formUserHistoryRow(
+                  base,
+                  quote,
+                  fillOrderHistoryForThePair
+                );
+              }
+            )
+          );
+          setUserOrderHistoryRows(userHistoryRows);
+          setLoadingUserHistoryRows(false);
+        } catch (e) {
+          console.log(e);
+          setLoadingUserHistoryRows(false);
         }
-      });
-      const rows = await Promise.all(
-        history.map(async (item) => {
-          const date = await dbApi("get_block_header", [item.block_num]).then(
-            (block) => useFormDate(block.timestamp, ["month", "year", "time"])
-          );
-          const opData = item.op[1];
-          const key = item.id;
-
-          let price = 0,
-            base = 0,
-            quote = 0,
-            isBuyOrder = false;
-
-          if (opData.receives.asset_id === quoteAsset.id) {
-            quote = setPrecision(
-              false,
-              opData.receives.amount,
-              quoteAsset.precision
-            );
-            base = setPrecision(false, opData.pays.amount, baseAsset.precision);
-            price = roundNum(base / quote);
-            isBuyOrder = true;
-          } else {
-            quote = setPrecision(
-              false,
-              opData.pays.amount,
-              quoteAsset.precision
-            );
-            base = setPrecision(
-              false,
-              opData.receives.amount,
-              baseAsset.precision
-            );
-            price = roundNum(base / quote);
-            isBuyOrder = false;
-          }
-
-          return { key, price, base, quote, date, isBuyOrder };
-        })
-      );
-      setUserOrderHistoryRows(rows);
+      }
     },
-    [historyApi]
+    [
+      getAccountHistoryById,
+      formUserHistoryRow,
+      setUserOrderHistoryRows,
+      id,
+      setLoadingUserHistoryRows,
+    ]
   );
 
   const refreshHistory = useCallback(() => {
-    if (currentBase !== undefined && currentQuote !== undefined) {
+    if (
+      !loadingSelectedPair &&
+      currentBase !== undefined &&
+      currentQuote !== undefined
+    ) {
       getHistory(currentBase, currentQuote);
       getUserHistory(currentBase, currentQuote);
     }
-  }, [currentBase, currentQuote, getHistory, getUserHistory]);
+  }, [
+    loadingSelectedPair,
+    currentBase,
+    currentQuote,
+    getHistory,
+    getUserHistory,
+  ]);
 
   useEffect(() => {
     if (
@@ -197,14 +252,14 @@ export function useHistory({
         },
       ]);
       getHistory(currentBase, currentQuote);
-      //getUserHistory(currentBase, currentQuote);
+      getUserHistory(currentBase, currentQuote);
     }
   }, [
     loadingSelectedPair,
     currentBase,
     currentQuote,
     getHistory,
-    //getUserHistory,
+    getUserHistory,
   ]);
 
   return {
@@ -213,5 +268,6 @@ export function useHistory({
     columns,
     refreshHistory,
     loadingOrderHistoryRows,
+    loadingUserHistoryRows,
   };
 }

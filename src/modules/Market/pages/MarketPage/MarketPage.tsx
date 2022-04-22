@@ -85,9 +85,14 @@ const MarketPage: NextPage = () => {
                   />
                 </Col>
               </Row>
-              {/* <Row>
-                <OrderTabs forUser={true} />
-              </Row> */}
+              <Row>
+                <OrderTabs
+                  currentBase={currentBase}
+                  currentQuote={currentQuote}
+                  loadingSelectedPair={loadingSelectedPair}
+                  forUser={true}
+                />
+              </Row>
             </Col>
           </Row>
         </Styled.Container>

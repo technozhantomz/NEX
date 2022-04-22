@@ -1,7 +1,5 @@
-import { useViewportContext } from "../../../../common/providers";
 import { Asset } from "../../../../common/types";
-import { DownOutlined } from "../../../../ui/src";
-import { breakpoints } from "../../../../ui/src/breakpoints";
+import { DownOutlined, Tooltip } from "../../../../ui/src";
 
 import * as Styled from "./OrderBook.styled";
 import { OrderType } from "./hooks/uesOrderBook.types";
@@ -20,7 +18,6 @@ export const OrderBook = ({
   currentQuote,
   loadingSelectedPair,
 }: Props): JSX.Element => {
-  const { width } = useViewportContext();
   const {
     orderType,
     threshold,
@@ -29,7 +26,9 @@ export const OrderBook = ({
     handleThresholdChange,
     handleFilterChange,
     loadingOrderRows,
-    columns,
+    loadingUserOrderRows,
+    orderColumns,
+    userOrderColumns,
   } = useOrderBook({ currentBase, currentQuote, loadingSelectedPair });
   const dataSource = forUser ? userOrdersRows : ordersRows;
 
@@ -51,18 +50,24 @@ export const OrderBook = ({
         <Styled.FilterContainer>
           <Styled.Flex>
             {types.map((type) => (
-              <Styled.OrdersFilter
-                key={type}
-                onClick={() => handleFilterChange(type)}
-                className={`order-filters__type--${type}${
-                  type === orderType ? " active" : ""
-                }`}
+              <Tooltip
+                placement="top"
+                title={type.toUpperCase() + " ORDERS"}
+                key={`${type}_tooltip`}
               >
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </Styled.OrdersFilter>
+                <Styled.OrdersFilter
+                  key={type}
+                  onClick={() => handleFilterChange(type)}
+                  className={`order-filters__type--${type}${
+                    type === orderType ? " active" : ""
+                  }`}
+                >
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </Styled.OrdersFilter>
+              </Tooltip>
             ))}
           </Styled.Flex>
           <Styled.Flex>
@@ -79,20 +84,13 @@ export const OrderBook = ({
           </Styled.Flex>
         </Styled.FilterContainer>
       )}
-      <Styled.TableContainer>
+      <Styled.TableContainer forUser={forUser}>
         <Styled.Table
-          scroll={
-            width > breakpoints.md
-              ? dataSource.length > 24
-                ? { scrollToFirstRowOnChange: false, y: 540 }
-                : {}
-              : {}
-          }
-          loading={forUser ? false : loadingOrderRows}
+          loading={forUser ? loadingUserOrderRows : loadingOrderRows}
           pagination={false}
-          columns={columns}
+          columns={forUser ? userOrderColumns : orderColumns}
           dataSource={dataSource}
-          rowClassName={(record) => {
+          rowClassName={(record: any) => {
             return record.isBuyOrder ? "buy" : "sell";
           }}
         ></Styled.Table>
