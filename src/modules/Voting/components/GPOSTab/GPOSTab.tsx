@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { useViewportContext } from "../../../../common/providers";
@@ -7,6 +8,7 @@ import * as Styled from "./GPOSTab.styled";
 import { useGPOSTab } from "./hooks";
 
 export const GPOSTab = (): JSX.Element => {
+  const router = useRouter();
   const [readMore, setReadMore] = useState<boolean>(false);
   const { GPOSInfo } = useGPOSTab();
   const { width } = useViewportContext();
@@ -56,38 +58,75 @@ export const GPOSTab = (): JSX.Element => {
       </Styled.GPOSIntro>
       <Styled.GPOSContentWrapper>
         <Styled.GPOSContentInfo>
-          <div>
+          <Styled.GPOSContentInfoDetails>
             <ul>
               <li>
-                <span>GPOS Balance</span>
-                <span>{GPOSInfo.gposBalance}</span>
+                <Styled.GPOSContentInfoDetailsTitle>
+                  GPOS Balance
+                </Styled.GPOSContentInfoDetailsTitle>
+                <Styled.GPOSContentInfoDetailsValue>
+                  {GPOSInfo.gposBalance} {GPOSInfo.symbol}
+                </Styled.GPOSContentInfoDetailsValue>
               </li>
               <li>
-                <span>Voting Performance</span>
-                <span>{GPOSInfo.performance}</span>
+                <Styled.GPOSContentInfoDetailsTitle>
+                  Voting Performance
+                </Styled.GPOSContentInfoDetailsTitle>
+                <Styled.GPOSContentInfoDetailsValue
+                  className={GPOSInfo.performance
+                    .replace(" ", "-")
+                    .toLowerCase()}
+                >
+                  {GPOSInfo.performance}
+                </Styled.GPOSContentInfoDetailsValue>
               </li>
               <li>
-                <span>Qualified Reward %</span>
-                <span>{GPOSInfo.qualifiedReward}</span>
+                <Styled.GPOSContentInfoDetailsTitle>
+                  Qualified Reward %
+                </Styled.GPOSContentInfoDetailsTitle>
+                <Styled.GPOSContentInfoDetailsValue>
+                  {GPOSInfo.qualifiedReward} %
+                </Styled.GPOSContentInfoDetailsValue>
               </li>
               <li>
-                <span>Estimated Rake Reward %</span>
-                <span>{GPOSInfo.rakeReward}</span>
+                <Styled.GPOSContentInfoDetailsTitle>
+                  Estimated Rake Reward %
+                </Styled.GPOSContentInfoDetailsTitle>
+                <Styled.GPOSContentInfoDetailsValue>
+                  {GPOSInfo.rakeReward} %
+                </Styled.GPOSContentInfoDetailsValue>
               </li>
             </ul>
-          </div>
-          <div>
-            <p>Available Balance:</p>
-            <p>
+          </Styled.GPOSContentInfoDetails>
+          <Styled.GPOSContentInfoTotal>
+            <Styled.GPOSContentInfoTotalTitle>
+              Available Balance:
+            </Styled.GPOSContentInfoTotalTitle>
+            <Styled.GPOSContentInfoTotalValue>
               <span>{GPOSInfo.availableBalance}</span>
               <span>{GPOSInfo.symbol}</span>
-            </p>
-          </div>
+            </Styled.GPOSContentInfoTotalValue>
+          </Styled.GPOSContentInfoTotal>
         </Styled.GPOSContentInfo>
         <Styled.GPOSContentActions>
-          <Styled.GPOSTButton type="primary">Power Up</Styled.GPOSTButton>
-          <Styled.GPOSTButton type="primary">Power Down</Styled.GPOSTButton>
-          <Styled.GPOSTButton type="primary">Vote</Styled.GPOSTButton>
+          <Styled.GPOSTButton
+            type="primary"
+            onClick={() => router.push(`/gpos?tab=power-up`)}
+          >
+            Power Up
+          </Styled.GPOSTButton>
+          <Styled.GPOSTButton
+            type="primary"
+            onClick={() => router.push(`/gpos?tab=power-down`)}
+          >
+            Power Down
+          </Styled.GPOSTButton>
+          <Styled.GPOSTButton
+            type="primary"
+            onClick={() => router.push(`/voting?tab=witness`)}
+          >
+            Vote
+          </Styled.GPOSTButton>
           <Styled.GPOSTButton type="text">Cancel</Styled.GPOSTButton>
         </Styled.GPOSContentActions>
       </Styled.GPOSContentWrapper>

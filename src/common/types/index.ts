@@ -13,3 +13,4 @@ export * from "./BlockHeader";
 export * from "./PageMeta";
 export * from "./CommitteeMember";
 export * from "./GlobalProperties";
+export * from "./GPOS";

@@ -6,17 +6,15 @@ import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
 import { Button, DownOutlined, Menu, Tabs } from "../../../ui/src";
 import { breakpoints } from "../../../ui/src/breakpoints";
-import { GPOSTab } from "../components";
+import { PowerDownTab, PowerUpTab } from "../components";
 
-import * as Styled from "./VotingPage.styled";
-import { useVotingPage } from "./hooks";
+import * as Styled from "./GPOSPage.styled";
 
 const { TabPane } = Tabs;
 
-const VotingPage: NextPage = () => {
+const GPOSPage: NextPage = () => {
   const router = useRouter();
   const { tab } = router.query;
-  const { pageMeta } = useVotingPage(tab as string);
   const { width } = useViewportContext();
   const [visible, setVisible] = useState<boolean>(false);
   const renderTabBar = (props: any, DefaultTabBar: any) => (
@@ -40,7 +38,7 @@ const VotingPage: NextPage = () => {
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab ? tab : "gpos"} <DownOutlined />
+              {tab ? tab : "power-up"} <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -49,40 +47,33 @@ const VotingPage: NextPage = () => {
   );
   return (
     <Layout
-      title={`${pageMeta.title}`}
+      title="Peerplays (GPOS)"
       type="card-lrg"
-      heading={`${pageMeta.heading}`}
-      description={`${pageMeta.description}`}
+      heading="Peerplays (GPOS)"
+      description="Peerplays (GPOS)"
       dexLayout={true}
     >
-      <Styled.VotingCard>
+      <Styled.GPOSCard>
         <Tabs
           renderTabBar={renderTabBar}
-          activeKey={`${tab ? tab : "gpos"}`}
+          activeKey={`${tab ? tab : "power-up"}`}
           onTabClick={(key) => {
-            router.push(`/voting?tab=${key}`);
+            if (key === "vote") router.push(`/voting`);
+            else router.push(`/gpos?tab=${key}`);
             if (width < breakpoints.sm) setVisible(false);
           }}
         >
-          <TabPane tab="GPOS" key="gpos">
-            <GPOSTab />
+          <TabPane tab="Power up" key="power-up">
+            <PowerUpTab />
           </TabPane>
-          <TabPane tab="Witness" key="witness">
-            <p>witness</p>
+          <TabPane tab="Power Down" key="power-down">
+            <PowerDownTab />
           </TabPane>
-          <TabPane tab="SONs" key="sons">
-            <p>sons</p>
-          </TabPane>
-          <TabPane tab="Advisors" key="advisors">
-            <p>advisors</p>
-          </TabPane>
-          <TabPane tab="Proxy" key="proxy">
-            <p>proxy</p>
-          </TabPane>
+          <TabPane tab="Vote" key="vote"></TabPane>
         </Tabs>
-      </Styled.VotingCard>
+      </Styled.GPOSCard>
     </Layout>
   );
 };
 
-export default VotingPage;
+export default GPOSPage;

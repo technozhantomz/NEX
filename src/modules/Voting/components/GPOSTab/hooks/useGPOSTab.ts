@@ -5,8 +5,9 @@ import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
+import { GPOSInfoResponse } from "../../../../../common/types";
 
-import { GPOSInfo, GPOSInfoResponse, UseGPOSTab } from "./useGPOSTab.types";
+import { GPOSInfo, UseGPOSTab } from "./useGPOSTab.types";
 
 export function useGPOSTab(): UseGPOSTab {
   const [GPOSInfo, setGPOSInfo] = useState<GPOSInfo>({
@@ -63,27 +64,30 @@ export function useGPOSTab(): UseGPOSTab {
   const getGPOSInfo = async () => {
     const _GPOSInfo = await dbApi("get_gpos_info", [id]).then(
       async (gposInfo: GPOSInfoResponse) => {
-        const asset = await getAssetById(gposInfo.award.asset_id);
-        const totalBlockchainGPOS =
-          gposInfo.total_amount / 10 ** asset.precision;
-        const vestingFactor = parseInt(gposInfo.vesting_factor);
-        const qualifiedReward = trimNum(vestingFactor * 100 || 0, 2);
-        const performance = getPerformanceString(qualifiedReward);
-        return {
-          gposBalance: gposInfo.account_vested_balance / 10 ** asset.precision,
-          performance: performance,
-          qualifiedReward: qualifiedReward,
-          rakeReward: trimNum(
-            (gposInfo.account_vested_balance /
-              10 ** asset.precision /
-              totalBlockchainGPOS) *
-              trimNum(vestingFactor * 100 || 0, 2),
-            2
-          ),
-          availableBalance:
-            gposInfo.allowed_withdraw_amount / 10 ** asset.precision,
-          symbol: asset.symbol,
-        };
+        if (gposInfo) {
+          const asset = await getAssetById(gposInfo.award.asset_id);
+          const totalBlockchainGPOS =
+            gposInfo.total_amount / 10 ** asset.precision;
+          const vestingFactor = parseInt(gposInfo.vesting_factor);
+          const qualifiedReward = trimNum(vestingFactor * 100 || 0, 2);
+          const performance = getPerformanceString(qualifiedReward);
+          return {
+            gposBalance:
+              gposInfo.account_vested_balance / 10 ** asset.precision,
+            performance: performance,
+            qualifiedReward: qualifiedReward,
+            rakeReward: trimNum(
+              (gposInfo.account_vested_balance /
+                10 ** asset.precision /
+                totalBlockchainGPOS) *
+                trimNum(vestingFactor * 100 || 0, 2),
+              2
+            ),
+            availableBalance:
+              gposInfo.allowed_withdraw_amount / 10 ** asset.precision,
+            symbol: asset.symbol,
+          };
+        }
       }
     );
     setGPOSInfo(_GPOSInfo);
