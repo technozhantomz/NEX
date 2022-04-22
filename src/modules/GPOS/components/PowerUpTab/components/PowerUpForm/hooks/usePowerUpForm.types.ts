@@ -7,6 +7,7 @@ export type UsePowerUpForm = {
   submittingPassword: boolean;
   isPasswordModalVisible: boolean;
   handlePasswordModalCancel: () => void;
+  adjustDeposit: (direction: string) => void;
 };
 
 export type GPOSBalances = {

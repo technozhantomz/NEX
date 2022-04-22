@@ -3,10 +3,11 @@ import { FormInstance } from "antd";
 import { Asset } from "../../../../../../../common/types";
 
 export type UsePowerDownForm = {
-  powerUpForm: FormInstance<PowerDownForm>;
+  powerDownForm: FormInstance<PowerDownForm>;
   submittingPassword: boolean;
   isPasswordModalVisible: boolean;
   handlePasswordModalCancel: () => void;
+  adjustWithdraw: (direction: string) => void;
 };
 
 export type GPOSBalances = {

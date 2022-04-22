@@ -9,39 +9,26 @@ import { usePowerDownForm } from "./hooks";
 export const PowerDownForm = (): JSX.Element => {
   const router = useRouter();
   const {
-    powerUpForm,
+    powerDownForm,
     isPasswordModalVisible,
     submittingPassword,
     handlePasswordModalCancel,
+    adjustWithdraw,
   } = usePowerDownForm();
   return (
     <>
       <Form.Provider>
         <Styled.PowerDownForm
-          form={powerUpForm}
-          name="powerUpForm"
+          form={powerDownForm}
+          name="powerDownForm"
           // onFinish={confirm}
           // onValuesChange={handleValuesChange}
           size="large"
         >
-          <Form.Item
-            name="openingBalance"
-            label="Open Balance:"
-            //   rules={formValdation.from}
-            validateFirst={true}
-            validateTrigger="onBlur"
-            //   initialValue={localStorageAccount}
-            //   hidden={withAssetSelector ? true : false}
-          >
+          <Form.Item name="openingBalance" label="Open Balance:">
             <Input disabled={true} />
           </Form.Item>
-          <Form.Item
-            name="availableBalance"
-            label="Available Balance:"
-            //   rules={formValdation.from}
-            validateFirst={true}
-            validateTrigger="onBlur"
-          >
+          <Form.Item name="availableBalance" label="Available Balance:">
             <Input disabled={true} />
           </Form.Item>
           <Form.Item
@@ -52,17 +39,19 @@ export const PowerDownForm = (): JSX.Element => {
             validateTrigger="onBlur"
           >
             <InputNumber
-              addonBefore={<Button type="text">+</Button>}
-              addonAfter={<Button type="text">-</Button>}
+               addonBefore={
+                <Button type="text" onClick={() => adjustWithdraw("+")}>
+                  +
+                </Button>
+              }
+              addonAfter={
+                <Button type="text" onClick={() => adjustWithdraw("-")}>
+                  -
+                </Button>
+              }
             />
           </Form.Item>
-          <Form.Item
-            name="newBalance"
-            label="New Balance:"
-            //   rules={formValdation.from}
-            validateFirst={true}
-            validateTrigger="onBlur"
-          >
+          <Form.Item name="newBalance" label="New Balance:">
             <Input disabled={true} />
           </Form.Item>
           <Form.Item>

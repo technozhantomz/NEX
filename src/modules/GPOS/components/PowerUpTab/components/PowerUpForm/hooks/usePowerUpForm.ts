@@ -26,6 +26,7 @@ export function usePowerUpForm(): UsePowerUpForm {
   }, [id]);
 
   useEffect(() => {
+    //TODO: check that new amount not less then 0 or grater then account balance
     const newBalance = gposBalances?.openingBalance + depositAmount;
     powerUpForm.setFieldsValue({
       newBalance: newBalance + " " + gposBalances?.asset.symbol,
@@ -39,6 +40,13 @@ export function usePowerUpForm(): UsePowerUpForm {
 
   const handlePasswordModalCancel = () => {
     setIsPasswordModalVisible(false);
+  };
+
+  const adjustDeposit = (direction: string) => {
+    const currentAmount = powerUpForm.getFieldValue("depositAmount");
+    powerUpForm.setFieldsValue({
+      depositAmount: direction === "+" ? currentAmount + 1 : currentAmount - 1,
+    });
   };
 
   const getGPOSInfo = async () => {
@@ -67,5 +75,6 @@ export function usePowerUpForm(): UsePowerUpForm {
     submittingPassword,
     isPasswordModalVisible,
     handlePasswordModalCancel,
+    adjustDeposit,
   };
 }

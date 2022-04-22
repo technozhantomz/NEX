@@ -13,6 +13,7 @@ export const PowerUpForm = (): JSX.Element => {
     isPasswordModalVisible,
     submittingPassword,
     handlePasswordModalCancel,
+    adjustDeposit,
   } = usePowerUpForm();
   return (
     <>
@@ -24,15 +25,7 @@ export const PowerUpForm = (): JSX.Element => {
           // onValuesChange={handleValuesChange}
           size="large"
         >
-          <Form.Item
-            name="openingBalance"
-            label="Open Balance:"
-            //   rules={formValdation.from}
-            validateFirst={true}
-            validateTrigger="onBlur"
-            //   initialValue={localStorageAccount}
-            //   hidden={withAssetSelector ? true : false}
-          >
+          <Form.Item name="openingBalance" label="Open Balance:">
             <Input disabled={true} />
           </Form.Item>
           <Form.Item
@@ -43,17 +36,19 @@ export const PowerUpForm = (): JSX.Element => {
             validateTrigger="onBlur"
           >
             <InputNumber
-              addonBefore={<Button type="text">+</Button>}
-              addonAfter={<Button type="text">-</Button>}
+              addonBefore={
+                <Button type="text" onClick={() => adjustDeposit("+")}>
+                  +
+                </Button>
+              }
+              addonAfter={
+                <Button type="text" onClick={() => adjustDeposit("-")}>
+                  -
+                </Button>
+              }
             />
           </Form.Item>
-          <Form.Item
-            name="newBalance"
-            label="New Balance:"
-            //   rules={formValdation.from}
-            validateFirst={true}
-            validateTrigger="onBlur"
-          >
+          <Form.Item name="newBalance" label="New Balance:">
             <Input disabled={true} />
           </Form.Item>
           <Form.Item>

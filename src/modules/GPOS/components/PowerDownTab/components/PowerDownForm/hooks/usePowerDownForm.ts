@@ -6,7 +6,7 @@ import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../../../common/providers";
-import { GPOSInfoResponse } from "../../../../../../../common/types";
+import { Asset, GPOSInfoResponse } from "../../../../../../../common/types";
 
 import { GPOSBalances, UsePowerDownForm } from "./usePowerDownForm.types";
 
@@ -15,8 +15,8 @@ export function usePowerDownForm(): UsePowerDownForm {
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
     useState<boolean>(false);
   const [gposBalances, setGOPSBalances] = useState<GPOSBalances>();
-  const [powerUpForm] = Form.useForm();
-  const withdrawAmount = Form.useWatch("withdrawAmount", powerUpForm);
+  const [powerDownForm] = Form.useForm();
+  const withdrawAmount = Form.useWatch("withdrawAmount", powerDownForm);
   const { id } = useUserContext();
   const { dbApi } = usePeerplaysApiContext();
   const { getAssetById } = useAsset();
@@ -26,12 +26,34 @@ export function usePowerDownForm(): UsePowerDownForm {
   }, [id]);
 
   useEffect(() => {
-    //update other inputs heret
-    console.log(withdrawAmount);
+    //TODO: check that new amount not less then 0 or grater then account balance
+    const newBalance = gposBalances?.openingBalance + withdrawAmount;
+    const newAvailableBalance =
+      (gposBalances?.availableBalance as number) - withdrawAmount;
+    if (newAvailableBalance >= 0) {
+      powerDownForm.setFieldsValue({
+        availableBalance:
+          newAvailableBalance + " " + gposBalances?.asset.symbol,
+        newBalance: newBalance + " " + gposBalances?.asset.symbol,
+      });
+      setGOPSBalances({
+        openingBalance: gposBalances?.openingBalance as number,
+        newBalance: newBalance,
+        availableBalance: newAvailableBalance,
+        asset: gposBalances?.asset as Asset,
+      });
+    }
   }, [withdrawAmount]);
 
   const handlePasswordModalCancel = () => {
     setIsPasswordModalVisible(false);
+  };
+
+  const adjustWithdraw = (direction: string) => {
+    const currentAmount = powerDownForm.getFieldValue("withdrawAmount");
+    powerDownForm.setFieldsValue({
+      withdrawAmount: direction === "+" ? currentAmount + 1 : currentAmount - 1,
+    });
   };
 
   const getGPOSInfo = async () => {
@@ -49,7 +71,7 @@ export function usePowerDownForm(): UsePowerDownForm {
             newBalance: openingBalance,
             asset: asset,
           });
-          powerUpForm.setFieldsValue({
+          powerDownForm.setFieldsValue({
             openingBalance: openingBalance + " " + asset.symbol,
             availableBalance: availableBalance + " " + asset.symbol,
             withdrawAmount: 0,
@@ -60,9 +82,10 @@ export function usePowerDownForm(): UsePowerDownForm {
     );
   };
   return {
-    powerUpForm,
+    powerDownForm,
     submittingPassword,
     isPasswordModalVisible,
     handlePasswordModalCancel,
+    adjustWithdraw,
   };
 }
