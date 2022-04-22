@@ -6,8 +6,10 @@ export type UsePowerDownForm = {
   powerDownForm: FormInstance<PowerDownForm>;
   submittingPassword: boolean;
   isPasswordModalVisible: boolean;
+  confirm: () => void;
   handlePasswordModalCancel: () => void;
   adjustWithdraw: (direction: string) => void;
+  onFormFinish: (name: string, info: { values: any; forms: any }) => void;
 };
 
 export type GPOSBalances = {

@@ -6,6 +6,8 @@ export type UsePowerUpForm = {
   powerUpForm: FormInstance<PowerUpForm>;
   submittingPassword: boolean;
   isPasswordModalVisible: boolean;
+  confirm: () => void;
+  onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   handlePasswordModalCancel: () => void;
   adjustDeposit: (direction: string) => void;
 };

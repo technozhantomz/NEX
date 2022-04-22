@@ -38,6 +38,23 @@ export function usePowerUpForm(): UsePowerUpForm {
     });
   }, [depositAmount]);
 
+  const confirm = () => {
+    powerUpForm.validateFields().then(() => {
+      setIsPasswordModalVisible(true);
+    });
+  };
+
+  const onFormFinish = (name: string, info: { values: any; forms: any }) => {
+    const { values, forms } = info;
+    const { passwordModal } = forms;
+    if (name === "passwordModal") {
+      passwordModal.validateFields().then(() => {
+        //handlePowerUp(values.password);
+        console.log(values);
+      });
+    }
+  };
+
   const handlePasswordModalCancel = () => {
     setIsPasswordModalVisible(false);
   };
@@ -74,7 +91,9 @@ export function usePowerUpForm(): UsePowerUpForm {
     powerUpForm,
     submittingPassword,
     isPasswordModalVisible,
-    handlePasswordModalCancel,
+    confirm,
+    onFormFinish,
     adjustDeposit,
+    handlePasswordModalCancel,
   };
 }

@@ -12,8 +12,10 @@ export const PowerUpForm = (): JSX.Element => {
     powerUpForm,
     isPasswordModalVisible,
     submittingPassword,
-    handlePasswordModalCancel,
+    confirm,
+    onFormFinish,
     adjustDeposit,
+    handlePasswordModalCancel,
   } = usePowerUpForm();
   return (
     <>
@@ -21,8 +23,7 @@ export const PowerUpForm = (): JSX.Element => {
         <Styled.PowerUpForm
           form={powerUpForm}
           name="powerUpForm"
-          // onFinish={confirm}
-          // onValuesChange={handleValuesChange}
+          onFinish={confirm}
           size="large"
         >
           <Form.Item name="openingBalance" label="Open Balance:">

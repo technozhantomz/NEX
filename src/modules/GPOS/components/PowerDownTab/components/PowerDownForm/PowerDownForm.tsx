@@ -12,17 +12,18 @@ export const PowerDownForm = (): JSX.Element => {
     powerDownForm,
     isPasswordModalVisible,
     submittingPassword,
-    handlePasswordModalCancel,
+    confirm,
+    onFormFinish,
     adjustWithdraw,
+    handlePasswordModalCancel,
   } = usePowerDownForm();
   return (
     <>
-      <Form.Provider>
+      <Form.Provider onFormFinish={onFormFinish}>
         <Styled.PowerDownForm
           form={powerDownForm}
           name="powerDownForm"
-          // onFinish={confirm}
-          // onValuesChange={handleValuesChange}
+          onFinish={confirm}
           size="large"
         >
           <Form.Item name="openingBalance" label="Open Balance:">
@@ -39,7 +40,7 @@ export const PowerDownForm = (): JSX.Element => {
             validateTrigger="onBlur"
           >
             <InputNumber
-               addonBefore={
+              addonBefore={
                 <Button type="text" onClick={() => adjustWithdraw("+")}>
                   +
                 </Button>

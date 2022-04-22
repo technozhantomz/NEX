@@ -49,6 +49,23 @@ export function usePowerDownForm(): UsePowerDownForm {
     setIsPasswordModalVisible(false);
   };
 
+  const confirm = () => {
+    powerDownForm.validateFields().then(() => {
+      setIsPasswordModalVisible(true);
+    });
+  };
+
+  const onFormFinish = (name: string, info: { values: any; forms: any }) => {
+    const { values, forms } = info;
+    const { passwordModal } = forms;
+    if (name === "passwordModal") {
+      passwordModal.validateFields().then(() => {
+        //handlePowerUp(values.password);
+        console.log(values);
+      });
+    }
+  };
+
   const adjustWithdraw = (direction: string) => {
     const currentAmount = powerDownForm.getFieldValue("withdrawAmount");
     powerDownForm.setFieldsValue({
@@ -85,7 +102,9 @@ export function usePowerDownForm(): UsePowerDownForm {
     powerDownForm,
     submittingPassword,
     isPasswordModalVisible,
-    handlePasswordModalCancel,
+    confirm,
+    onFormFinish,
     adjustWithdraw,
+    handlePasswordModalCancel,
   };
 }
