@@ -7,17 +7,21 @@ import {
 import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const WithdrawForm = styled(CardFrom)`
-  margin: 0 20px;
-  .ant-form-item-control-input-content {
-    max-width: 520px;
-    height: 50px;
-  }
-  .ant-input {
-    height: 100%;
-    padding: 15px 30px;
-  }
-  .amt-div {
-    height: 60px;
+   {
+    margin: 0 20px;
+    .ant-form-item-control-input-content {
+      max-width: 520px;
+      height: 50px;
+    }
+    .amt-div {
+      height: 60px;
+    }
+    ${breakpoint.sm} {
+      .ant-input {
+        height: 100%;
+        padding: 15px 30px;
+      }
+    }
   }
 `;
 
@@ -48,9 +52,16 @@ export const WithdrawFormAsset = styled(CardFrom.Item)`
 
 export const WithdrawFormButton = styled(CardFormButton)`
   width: 100%;
+  height: 100%;
 `;
 
 export const FormItem = styled(UIForm.Item)`
+  .ant-btn-lg {
+    padding: 0px;
+  }
+  .ant-form-item-control-input-content {
+    height: 35px;
+  }
   width: 255px;
   margin-left: auto;
   margin-right: auto;
@@ -59,6 +70,9 @@ export const FormItem = styled(UIForm.Item)`
     width: 290px;
     height: 45px;
     margin-top: 33px;
+    .ant-form-item-control-input-content {
+      height: 45px;
+    }
   }
 `;
 

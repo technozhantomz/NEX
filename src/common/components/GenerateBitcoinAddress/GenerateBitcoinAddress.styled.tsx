@@ -43,13 +43,19 @@ export const FormItem = styled(UIForm.Item)`
   width: 255px;
   margin-left: auto;
   margin-right: auto;
+  .ant-form-item-control-input-content {
+    height: 35px;
+  }
   ${breakpoint.sm} {
     margin-left: 106px;
     width: 399px;
-    height: 45px;
+    .ant-form-item-control-input-content {
+      height: 45px;
+    }
   }
 `;
 
 export const Button = styled(CardFormButton)`
   width: 100%;
+  height 100%;
 `;

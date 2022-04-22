@@ -35,16 +35,24 @@ export const TransferForm = styled(CardFrom)`
 `;
 export const TransferFormButton = styled(CardFormButton)`
   width: 100%;
+  height: 100%;
 `;
 
 export const FormItem = styled(UIForm.Item)`
+  .ant-btn-lg {
+    padding: 0px;
+  }
   width: 255px;
   margin-left: auto;
   margin-right: auto;
-
+  .ant-form-item-control-input-content {
+    height: 35px;
+  }
   ${breakpoint.sm} {
     margin-left: 245px;
     width: 290px;
-    height: 45px;
+    .ant-form-item-control-input-content {
+      height: 45px;
+    }
   }
 `;

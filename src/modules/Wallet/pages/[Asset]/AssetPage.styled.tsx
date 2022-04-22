@@ -23,10 +23,6 @@ export const AssetCard = styled(UiCard)`
     .ant-tabs-ink-bar {
       height: 2pt;
     }
-    .ant-form {
-      margin: 39px 35px;
-      min-width: 566px;
-    }
   }
   .ant-tabs {
     min-height: 564px;
@@ -35,6 +31,10 @@ export const AssetCard = styled(UiCard)`
     max-width: 335px;
   }
   ${breakpoint.sm} {
+    .ant-form {
+      margin: 39px 35px;
+      min-width: 566px;
+    }
     .ant-card-body {
       .ant-tabs-nav-operations {
         display: flex;
