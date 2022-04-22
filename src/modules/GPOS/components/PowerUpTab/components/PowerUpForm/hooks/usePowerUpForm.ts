@@ -6,7 +6,7 @@ import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../../../common/providers";
-import { GPOSInfoResponse } from "../../../../../../../common/types";
+import { Asset, GPOSInfoResponse } from "../../../../../../../common/types";
 
 import { GPOSBalances, UsePowerUpForm } from "./usePowerUpForm.types";
 
@@ -16,7 +16,7 @@ export function usePowerUpForm(): UsePowerUpForm {
     useState<boolean>(false);
   const [gposBalances, setGOPSBalances] = useState<GPOSBalances>();
   const [powerUpForm] = Form.useForm();
-  const withdrawAmount = Form.useWatch("withdrawAmount", powerUpForm);
+  const depositAmount = Form.useWatch("depositAmount", powerUpForm);
   const { id } = useUserContext();
   const { dbApi } = usePeerplaysApiContext();
   const { getAssetById } = useAsset();
@@ -26,9 +26,16 @@ export function usePowerUpForm(): UsePowerUpForm {
   }, [id]);
 
   useEffect(() => {
-    //update other inputs heret
-    console.log(withdrawAmount);
-  }, [withdrawAmount]);
+    const newBalance = gposBalances?.openingBalance + depositAmount;
+    powerUpForm.setFieldsValue({
+      newBalance: newBalance + " " + gposBalances?.asset.symbol,
+    });
+    setGOPSBalances({
+      openingBalance: gposBalances?.openingBalance as number,
+      newBalance: newBalance,
+      asset: gposBalances?.asset as Asset,
+    });
+  }, [depositAmount]);
 
   const handlePasswordModalCancel = () => {
     setIsPasswordModalVisible(false);
