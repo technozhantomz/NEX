@@ -36,7 +36,7 @@ export const Table = styled(UiTable)`
 
 export const TableContainer = styled.div`
   ${breakpoint.md} {
-    height: ${(props) => (props.forUser ? "230px" : "750px")};
+    height: ${(props) => (props.forUser ? "230px" : "775px")};
     overflow-y: auto;
   }
 `;

@@ -1,6 +1,7 @@
 import { useViewportContext } from "../../../../common/providers";
 import { Asset } from "../../../../common/types";
 import { breakpoints } from "../../../../ui/src/breakpoints";
+import { OrderHistoryRow } from "../../types";
 
 import * as Styled from "./HistoryBook.styled";
 import { useHistory } from "./hooks/useHistory";
@@ -10,6 +11,12 @@ type Props = {
   currentBase: Asset | undefined;
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
+  getHistory: (base: Asset, quote: Asset) => Promise<void>;
+  orderHistoryRows: OrderHistoryRow[];
+  loadingOrderHistoryRows: boolean;
+  getUserHistory: (base: Asset, quote: Asset) => Promise<void>;
+  userOrderHistoryRows: OrderHistoryRow[];
+  loadingUserHistoryRows: boolean;
 };
 
 export const HistoryBook = ({
@@ -17,17 +24,20 @@ export const HistoryBook = ({
   currentBase,
   currentQuote,
   loadingSelectedPair,
+  getHistory,
+  orderHistoryRows,
+  loadingOrderHistoryRows,
+  getUserHistory,
+  userOrderHistoryRows,
+  loadingUserHistoryRows,
 }: Props): JSX.Element => {
   const { width } = useViewportContext();
-  const {
-    orderHistoryRows,
-    userOrderHistoryRows,
-    columns,
-    loadingOrderHistoryRows,
-  } = useHistory({
+  const { columns } = useHistory({
     currentBase,
     currentQuote,
     loadingSelectedPair,
+    getHistory,
+    getUserHistory,
   });
   const dataSource = forUser ? userOrderHistoryRows : orderHistoryRows;
 
@@ -42,7 +52,7 @@ export const HistoryBook = ({
                 : { scrollToFirstRowOnChange: false }
               : {}
           }
-          loading={forUser ? false : loadingOrderHistoryRows}
+          loading={forUser ? loadingUserHistoryRows : loadingOrderHistoryRows}
           pagination={false}
           columns={columns}
           dataSource={dataSource}

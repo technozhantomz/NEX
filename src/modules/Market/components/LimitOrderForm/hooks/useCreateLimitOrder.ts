@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { defaultToken } from "../../../../../api/params";
 
+import { defaultToken } from "../../../../../api/params";
 import {
   roundNum,
   useAccount,
-  useAsset,
   useFees,
+  useLimitOrderTransactionBuilder,
   useTransactionBuilder,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
+import { Asset } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
-import { useHistory } from "../../HistoryBook/hooks/useHistory";
-import { useOrderBook } from "../../OrderBook/hooks/useOrderBook";
 
 import {
   UseCreateLimitOrderArgs,
@@ -23,6 +22,8 @@ export function useCreateLimitOrder({
   currentQuote,
   loadingSelectedPair,
   isBuyOrder,
+  refreshHistory,
+  refreshOrderBook,
 }: UseCreateLimitOrderArgs): UseCreateLimitOrderResult {
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
     useState<boolean>(false);
@@ -32,21 +33,13 @@ export function useCreateLimitOrder({
   const [submittingPassword, setSubmittingPassword] = useState<boolean>(false);
 
   const [orderForm] = Form.useForm();
-  const { defaultAsset, getAssetBySymbol } = useAsset();
   const { getPrivateKey, formAccountBalancesByName } = useAccount();
   const { calculateCreateLimitOrderFee } = useFees();
   const { localStorageAccount, assets, id } = useUserContext();
   const { trxBuilder } = useTransactionBuilder();
-  const { refreshOrderBook } = useOrderBook({
-    currentBase,
-    currentQuote,
-    loadingSelectedPair,
-  });
-  const { refreshHistory } = useHistory({
-    currentBase,
-    currentQuote,
-    loadingSelectedPair,
-  });
+
+  const { buildCreateLimitOrderTransaction } =
+    useLimitOrderTransactionBuilder();
 
   const handleNegativeValuesAndAssetPrecission = useCallback(
     (changedValues) => {
@@ -145,24 +138,6 @@ export function useCreateLimitOrder({
     });
   }, [orderForm, setIsPasswordModalVisible]);
 
-  const onFormFinish = (name: string, info: { values: any; forms: any }) => {
-    const { values, forms } = info;
-    const { passwordModal } = forms;
-    if (name === "passwordModal") {
-      passwordModal.validateFields().then(() => {
-        //handleCreateLimitOrder(values.password);
-      });
-    }
-  };
-
-  const resetForm = useCallback(() => {
-    orderForm.setFieldsValue({
-      price: 0,
-      quantity: 0,
-      total: 0,
-    });
-  }, [orderForm]);
-
   const setBalance = useCallback(() => {
     if (
       !loadingSelectedPair &&
@@ -190,83 +165,66 @@ export function useCreateLimitOrder({
     isBuyOrder,
   ]);
 
-  // const handleCreateLimitOrder = async (password: string) => {
-  //   const values = orderForm.getFieldsValue();
-  //   let amount_to_sell, min_to_receive;
-  //   if (isBuyOrder) {
-  //     const sellAsset = await getAssetBySymbol(activePair.split("_")[1]);
-  //     const buyAsset = await getAssetBySymbol(activePair.split("_")[0]);
-  //     amount_to_sell = {
-  //       amount: roundNum(
-  //         values.quantity * 10 ** sellAsset.precision,
-  //         sellAsset.precision
-  //       ),
-  //       asset_id: sellAsset.id,
-  //     };
+  const onFormFinish = (name: string, info: { values: any; forms: any }) => {
+    const { values, forms } = info;
+    const { passwordModal } = forms;
+    if (name === "passwordModal") {
+      passwordModal.validateFields().then(() => {
+        handleCreateLimitOrder(values.password);
+      });
+    }
+  };
 
-  //     min_to_receive = {
-  //       amount: roundNum(
-  //         values.total * 10 ** buyAsset.precision,
-  //         buyAsset.precision
-  //       ),
-  //       asset_id: buyAsset.id,
-  //     };
-  //   } else {
-  //     const sellAsset = await getAssetBySymbol(activePair.split("_")[0]);
-  //     const buyAsset = await getAssetBySymbol(activePair.split("_")[1]);
-  //     amount_to_sell = {
-  //       amount: roundNum(
-  //         values.total * 10 ** sellAsset.precision,
-  //         sellAsset.precision
-  //       ),
-  //       asset_id: sellAsset.id,
-  //     };
+  const resetForm = useCallback(() => {
+    orderForm.setFieldsValue({
+      price: 0,
+      quantity: 0,
+      total: 0,
+    });
+  }, [orderForm]);
 
-  //     min_to_receive = {
-  //       amount: roundNum(
-  //         values.quantity * 10 ** buyAsset.precision,
-  //         buyAsset.precision
-  //       ),
-  //       asset_id: buyAsset.id,
-  //     };
-  //   }
-  //   const expiration = new Date(
-  //     new Date().getTime() + 1000 * 60 * 60 * 24 * 365
-  //   ).toISOString();
-  //   const activeKey = getPrivateKey(password, "active");
-  //   const trx = {
-  //     type: "limit_order_create",
-  //     params: {
-  //       fee: { amount: 0, asset_id: defaultAsset?.id },
-  //       seller: id,
-  //       amount_to_sell,
-  //       min_to_receive,
-  //       expiration,
-  //       fill_or_kill: false,
-  //       extensions: [],
-  //     },
-  //   };
-  //   let trxResult;
+  const handleCreateLimitOrder = async (password: string) => {
+    setSubmittingPassword(true);
+    const values = orderForm.getFieldsValue();
+    const expiration = new Date(
+      new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+    ).toISOString();
 
-  //   try {
-  //     trxResult = await trxBuilder([trx], [activeKey]);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  //   if (trxResult) {
-  //     formAccountBalancesByName(localStorageAccount);
-  //     setIsPasswordModalVisible(false);
-  //     resetForm();
-  //     refreshOrderBook();
-  //     refreshHistory();
-  //     //setStatus();
-  //   } else {
-  //     setIsPasswordModalVisible(false);
-  //     refreshOrderBook();
-  //     refreshHistory();
-  //     //setStatus();
-  //   }
-  // };
+    const activeKey = getPrivateKey(password, "active");
+    const trx = buildCreateLimitOrderTransaction(
+      id,
+      values.quantity,
+      values.total,
+      currentBase as Asset,
+      currentQuote as Asset,
+      expiration,
+      false,
+      [],
+      isBuyOrder
+    );
+    let trxResult;
+
+    try {
+      trxResult = await trxBuilder([trx], [activeKey]);
+    } catch (e) {
+      console.log(e);
+    }
+    if (trxResult) {
+      formAccountBalancesByName(localStorageAccount);
+      setIsPasswordModalVisible(false);
+      setSubmittingPassword(false);
+      resetForm();
+      refreshOrderBook();
+      refreshHistory();
+      //setStatus();
+    } else {
+      setIsPasswordModalVisible(false);
+      setSubmittingPassword(false);
+      refreshOrderBook();
+      refreshHistory();
+      //setStatus();
+    }
+  };
 
   const validatePrice = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
@@ -282,7 +240,7 @@ export function useCreateLimitOrder({
     const userQuoteAsset = assets.find(
       (asset) => asset.symbol === currentQuote?.symbol
     );
-    if (isBuyOrder) {
+    if (!isBuyOrder) {
       if (!userQuoteAsset) {
         return Promise.reject(new Error("Balance is not enough"));
       }
@@ -299,7 +257,6 @@ export function useCreateLimitOrder({
     return Promise.resolve();
   };
 
-  // put fee here
   const validateTotal = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
       return Promise.reject(new Error("Price should be greater than 0"));
@@ -317,7 +274,7 @@ export function useCreateLimitOrder({
     const userBaseAsset = assets.find(
       (asset) => asset.symbol === currentBase?.symbol
     );
-    if (!isBuyOrder) {
+    if (isBuyOrder) {
       if (!userBaseAsset) {
         return Promise.reject(new Error("Balance is not enough"));
       }
@@ -357,7 +314,6 @@ export function useCreateLimitOrder({
 
   useEffect(() => {
     setBalance();
-
     if (
       !loadingSelectedPair &&
       currentBase !== undefined &&
@@ -394,7 +350,8 @@ export function useCreateLimitOrder({
     isPasswordModalVisible,
     handleCancelPasswordModal,
     confirm,
-    //onFormFinish,
+    onFormFinish,
     handleValuesChange,
+    submittingPassword,
   };
 }

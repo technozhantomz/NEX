@@ -1,19 +1,31 @@
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { defaultToken } from "../../../../../api/params";
-import { useUpdateExchanges } from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
 import { Form, FormInstance } from "../../../../../ui/src";
 
 import { PairForm, UsePairModalResult } from "./usePairModal.types";
 
-export function usePairModal(): UsePairModalResult {
-  const { exchanges, updateExchanges } = useUpdateExchanges();
+type Args = {
+  setIsVisible: Dispatch<SetStateAction<boolean>>;
+  currentPair: string;
+};
+
+export function usePairModal({
+  setIsVisible,
+  currentPair,
+}: Args): UsePairModalResult {
   const [pairModalForm] = Form.useForm();
   const [allAssetsSymbols, setAllAssetsSymbols] = useState<string[]>([]);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
   const { dbApi } = usePeerplaysApiContext();
   const router = useRouter();
 
@@ -25,19 +37,14 @@ export function usePairModal(): UsePairModalResult {
     pairModalForm.validateFields().then(() => {
       const values = pairModalForm.getFieldsValue();
       const selectedPair = `${values.quote.trim()}_${values.base.trim()}`;
-      if (selectedPair !== exchanges.active) {
-        updateExchanges(selectedPair);
-        setIsVisible(false);
+      if (selectedPair !== currentPair) {
         router.push(`/market/${selectedPair}`);
+        setIsVisible(false);
       } else {
         setIsVisible(false);
       }
     });
-  }, [setIsVisible, exchanges, updateExchanges]);
-
-  const handleClickOnPair = useCallback(() => {
-    setIsVisible(true);
-  }, [setIsVisible]);
+  }, [setIsVisible, currentPair, pairModalForm]);
 
   const useResetFormOnCloseModal = (
     form: FormInstance<PairForm>,
@@ -62,11 +69,14 @@ export function usePairModal(): UsePairModalResult {
     setAllAssetsSymbols(allAssetsSymbols);
   }, [dbApi, setAllAssetsSymbols]);
 
-  const handleSelectRecent = (value: string) => {
-    const pair = value.split("/");
-    pairModalForm.setFieldsValue({ quote: pair[0] });
-    pairModalForm.setFieldsValue({ base: pair[1] });
-  };
+  const handleSelectRecent = useCallback(
+    (value: string) => {
+      const pair = value.split("/");
+      pairModalForm.setFieldsValue({ quote: pair[0] });
+      pairModalForm.setFieldsValue({ base: pair[1] });
+    },
+    [pairModalForm]
+  );
 
   const validateQuote = (_: unknown, value: string) => {
     const baseValue = pairModalForm.getFieldValue("base");
@@ -104,14 +114,12 @@ export function usePairModal(): UsePairModalResult {
   }, [getAllAssetsSymbols]);
 
   return {
-    isVisible,
     pairModalForm,
     formValdation,
     allAssetsSymbols,
     useResetFormOnCloseModal,
     handleCancel,
     handleSelectPair,
-    handleClickOnPair,
     handleSelectRecent,
   };
 }

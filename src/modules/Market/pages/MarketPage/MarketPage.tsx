@@ -6,7 +6,12 @@ import { Layout, TradingPairCard } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { Col, Row } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
-import { LimitOrderForm, OrderTabs, PairSelect } from "../../components";
+import {
+  LimitOrderForm,
+  OrderTabs,
+  PairModal,
+  PairSelect,
+} from "../../components";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -20,9 +25,30 @@ const MarketPage: NextPage = () => {
   const {
     tradingPairsStats,
     //loadingTradingPairs,
+    handleClickOnPair,
     currentBase,
     currentQuote,
     loadingSelectedPair,
+    isPairModalVisible,
+    setIsPairModalVisible,
+    exchanges,
+    getOrderBook,
+    asks,
+    bids,
+    ordersRows,
+    setOrdersRows,
+    loadingOrderRows,
+    getUserOrderBook,
+    userOrdersRows,
+    loadingUserOrderRows,
+    refreshOrderBook,
+    getHistory,
+    orderHistoryRows,
+    loadingOrderHistoryRows,
+    getUserHistory,
+    userOrderHistoryRows,
+    loadingUserHistoryRows,
+    refreshHistory,
   } = useMarketPage({ currentPair: pair as string });
 
   return (
@@ -39,6 +65,7 @@ const MarketPage: NextPage = () => {
             <Col span={7}>
               <Styled.ColumnFlex>
                 <PairSelect
+                  handleClickOnPair={handleClickOnPair}
                   currentPair={pair as string}
                   currentBase={currentBase}
                   currentQuote={currentQuote}
@@ -48,6 +75,21 @@ const MarketPage: NextPage = () => {
                   currentBase={currentBase}
                   currentQuote={currentQuote}
                   loadingSelectedPair={loadingSelectedPair}
+                  getOrderBook={getOrderBook}
+                  asks={asks}
+                  bids={bids}
+                  ordersRows={ordersRows}
+                  setOrdersRows={setOrdersRows}
+                  loadingOrderRows={loadingOrderRows}
+                  getUserOrderBook={getUserOrderBook}
+                  userOrdersRows={userOrdersRows}
+                  loadingUserOrderRows={loadingUserOrderRows}
+                  getHistory={getHistory}
+                  orderHistoryRows={orderHistoryRows}
+                  loadingOrderHistoryRows={loadingOrderHistoryRows}
+                  getUserHistory={getUserHistory}
+                  userOrderHistoryRows={userOrderHistoryRows}
+                  loadingUserHistoryRows={loadingUserHistoryRows}
                 />
               </Styled.ColumnFlex>
             </Col>
@@ -71,8 +113,10 @@ const MarketPage: NextPage = () => {
                     activePair={pair as string}
                     currentBase={currentBase}
                     currentQuote={currentQuote}
-                    isBuyOrder={true}
                     loadingSelectedPair={loadingSelectedPair}
+                    isBuyOrder={true}
+                    refreshOrderBook={refreshOrderBook}
+                    refreshHistory={refreshHistory}
                   />
                 </Col>
                 <Col span={12}>
@@ -82,6 +126,8 @@ const MarketPage: NextPage = () => {
                     currentQuote={currentQuote}
                     loadingSelectedPair={loadingSelectedPair}
                     isBuyOrder={false}
+                    refreshOrderBook={refreshOrderBook}
+                    refreshHistory={refreshHistory}
                   />
                 </Col>
               </Row>
@@ -91,43 +137,94 @@ const MarketPage: NextPage = () => {
                   currentQuote={currentQuote}
                   loadingSelectedPair={loadingSelectedPair}
                   forUser={true}
+                  getOrderBook={getOrderBook}
+                  asks={asks}
+                  bids={bids}
+                  ordersRows={ordersRows}
+                  setOrdersRows={setOrdersRows}
+                  loadingOrderRows={loadingOrderRows}
+                  getUserOrderBook={getUserOrderBook}
+                  userOrdersRows={userOrdersRows}
+                  loadingUserOrderRows={loadingUserOrderRows}
+                  getHistory={getHistory}
+                  orderHistoryRows={orderHistoryRows}
+                  loadingOrderHistoryRows={loadingOrderHistoryRows}
+                  getUserHistory={getUserHistory}
+                  userOrderHistoryRows={userOrderHistoryRows}
+                  loadingUserHistoryRows={loadingUserHistoryRows}
                 />
               </Row>
             </Col>
           </Row>
+          <PairModal
+            isVisible={isPairModalVisible}
+            setIsVisible={setIsPairModalVisible}
+            currentPair={pair as string}
+            exchanges={exchanges}
+          />
         </Styled.Container>
       ) : (
-        <>
-          {/* <Styled.Container>
-            <Styled.StatsCardsDeck>
-              {tradingPairsStats.map((pairStats, _index) => (
-                <TradingPairCard
-                  tradingPair={pairStats.tradingPair}
-                  price={`${pairStats.marketPairStats.latest}`}
-                  percentChange={`${pairStats.marketPairStats.percentChange}%`}
-                  volume={`${pairStats.marketPairStats.volume}`}
-                />
-              ))}
-            </Styled.StatsCardsDeck>
-          </Styled.Container>
-          <Styled.Container>
-            <PairSelect currentPair={pair as string} showStats={false} />
-            <OrderTabs />
-          </Styled.Container>
-          <Styled.Container>
-            <OrderTabs forUser={true} />
-          </Styled.Container>
-          <Styled.Container>
-            <Styled.Tabs>
-              <TabPane tab="Buy" key="buy">
-                <LimitOrderForm isBuyOrder={true} showTitle={false} />
-              </TabPane>
-              <TabPane tab="Sell" key="sell">
-                <LimitOrderForm isBuyOrder={false} showTitle={false} />
-              </TabPane>
-            </Styled.Tabs>
-          </Styled.Container> */}
-        </>
+        ""
+        // <>
+        //   <Styled.Container>
+        //     <Styled.StatsCardsDeck>
+        //       {tradingPairsStats.map((pairStats, _index) => (
+        //         <TradingPairCard
+        //           tradingPair={pairStats.tradingPair}
+        //           price={`${pairStats.marketPairStats.latest}`}
+        //           percentChange={`${pairStats.marketPairStats.percentChange}%`}
+        //           volume={`${pairStats.marketPairStats.volume}`}
+        //         />
+        //       ))}
+        //     </Styled.StatsCardsDeck>
+        //   </Styled.Container>
+        //   <Styled.Container>
+        //     <PairSelect
+        //       currentPair={pair as string}
+        //       currentBase={currentBase}
+        //       currentQuote={currentQuote}
+        //       loadingSelectedPair={loadingSelectedPair}
+        //       showStats={false}
+        //     />
+        //     <OrderTabs
+        //       currentBase={currentBase}
+        //       currentQuote={currentQuote}
+        //       loadingSelectedPair={loadingSelectedPair}
+        //     />
+        //   </Styled.Container>
+        //   <Styled.Container>
+        //     <OrderTabs
+        //       currentBase={currentBase}
+        //       currentQuote={currentQuote}
+        //       loadingSelectedPair={loadingSelectedPair}
+        //       forUser={true}
+        //     />
+        //   </Styled.Container>
+        //   <Styled.Container>
+        //     <Styled.Tabs>
+        //       <TabPane tab="Buy" key="buy">
+        //         <LimitOrderForm
+        //           activePair={pair as string}
+        //           currentBase={currentBase}
+        //           currentQuote={currentQuote}
+        //           loadingSelectedPair={loadingSelectedPair}
+        //           isBuyOrder={true}
+        //           showTitle={false}
+        //         />
+        //       </TabPane>
+        //       <TabPane tab="Sell" key="sell">
+        //         <LimitOrderForm
+        //           activePair={pair as string}
+        //           currentBase={currentBase}
+        //           currentQuote={currentQuote}
+        //           loadingSelectedPair={loadingSelectedPair}
+        //           isBuyOrder={false}
+        //           showTitle={false}
+        //         />
+        //       </TabPane>
+        //     </Styled.Tabs>
+        //   </Styled.Container>
+        // </>
       )}
     </Layout>
   );

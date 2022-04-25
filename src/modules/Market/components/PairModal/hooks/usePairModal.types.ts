@@ -1,7 +1,6 @@
 import { FormInstance, Rule } from "../../../../../ui/src";
 
 export type UsePairModalResult = {
-  isVisible: boolean;
   pairModalForm: FormInstance<PairForm>;
   allAssetsSymbols: string[];
   formValdation: FormValidation;
@@ -11,7 +10,6 @@ export type UsePairModalResult = {
   ) => void;
   handleCancel: () => void;
   handleSelectPair: () => void;
-  handleClickOnPair: () => void;
   handleSelectRecent: (value: string) => void;
 };
 

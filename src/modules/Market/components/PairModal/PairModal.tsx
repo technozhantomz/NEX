@@ -1,21 +1,15 @@
+import { Dispatch, SetStateAction } from "react";
+
 import { Exchanges } from "../../../../common/types";
-import { Form, FormInstance, Select } from "../../../../ui/src";
+import { Form, Select } from "../../../../ui/src";
 
 import * as Styled from "./PairModal.styled";
-import { FormValidation, PairForm } from "./hooks/usePairModal.types";
+import { usePairModal } from "./hooks";
 
 type Props = {
   isVisible: boolean;
-  pairModalForm: FormInstance<PairForm>;
-  allAssetsSymbols: string[];
-  formValdation: FormValidation;
-  useResetFormOnCloseModal: (
-    form: FormInstance<PairForm>,
-    visible: boolean
-  ) => void;
-  handleCancel: () => void;
-  handleSelectPair: () => void;
-  handleSelectRecent: (value: string) => void;
+  setIsVisible: Dispatch<SetStateAction<boolean>>;
+  currentPair: string;
   exchanges: Exchanges;
 };
 
@@ -23,17 +17,21 @@ const { Option } = Select;
 
 export const PairModal = ({
   isVisible,
-  pairModalForm,
-  allAssetsSymbols,
-  formValdation,
-  useResetFormOnCloseModal,
-  handleCancel,
-  handleSelectPair,
-  handleSelectRecent,
+  setIsVisible,
+  currentPair,
   exchanges,
 }: Props): JSX.Element => {
-  useResetFormOnCloseModal(pairModalForm, isVisible);
+  const {
+    pairModalForm,
+    formValdation,
+    allAssetsSymbols,
+    useResetFormOnCloseModal,
+    handleCancel,
+    handleSelectPair,
+    handleSelectRecent,
+  } = usePairModal({ setIsVisible, currentPair });
 
+  useResetFormOnCloseModal(pairModalForm, isVisible);
   return (
     <Styled.PairModal
       title="Selet Pair"
@@ -46,8 +44,8 @@ export const PairModal = ({
         form={pairModalForm}
         onFinish={handleSelectPair}
         initialValues={{
-          base: exchanges.active.split("_")[1],
-          quote: exchanges.active.split("_")[0],
+          base: currentPair.split("_")[1],
+          quote: currentPair.split("_")[0],
           recents: exchanges.list[exchanges.list.length - 1],
         }}
         name="pairModal"

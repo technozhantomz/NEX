@@ -1,15 +1,27 @@
+import { Dispatch, SetStateAction } from "react";
+
 import { Asset } from "../../../../common/types";
 import { DownOutlined, Tooltip } from "../../../../ui/src";
+import { Order, OrderRow } from "../../types";
 
 import * as Styled from "./OrderBook.styled";
-import { OrderType } from "./hooks/uesOrderBook.types";
 import { useOrderBook } from "./hooks/useOrderBook";
+import { OrderType } from "./hooks/useOrderBook.types";
 
 type Props = {
   currentBase: Asset | undefined;
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
   forUser?: boolean;
+  getOrderBook: (base: Asset, quote: Asset) => Promise<void>;
+  asks: Order[];
+  bids: Order[];
+  ordersRows: OrderRow[];
+  setOrdersRows: Dispatch<SetStateAction<OrderRow[]>>;
+  loadingOrderRows: boolean;
+  getUserOrderBook: (base: Asset, quote: Asset) => Promise<void>;
+  userOrdersRows: OrderRow[];
+  loadingUserOrderRows: boolean;
 };
 
 export const OrderBook = ({
@@ -17,19 +29,33 @@ export const OrderBook = ({
   currentBase,
   currentQuote,
   loadingSelectedPair,
+  getOrderBook,
+  asks,
+  bids,
+  ordersRows,
+  setOrdersRows,
+  loadingOrderRows,
+  getUserOrderBook,
+  userOrdersRows,
+  loadingUserOrderRows,
 }: Props): JSX.Element => {
   const {
     orderType,
     threshold,
-    ordersRows,
-    userOrdersRows,
     handleThresholdChange,
     handleFilterChange,
-    loadingOrderRows,
-    loadingUserOrderRows,
     orderColumns,
     userOrderColumns,
-  } = useOrderBook({ currentBase, currentQuote, loadingSelectedPair });
+  } = useOrderBook({
+    currentBase,
+    currentQuote,
+    loadingSelectedPair,
+    getOrderBook,
+    asks,
+    bids,
+    setOrdersRows,
+    getUserOrderBook,
+  });
   const dataSource = forUser ? userOrdersRows : ordersRows;
 
   const types: OrderType[] = ["total", "sell", "buy"];

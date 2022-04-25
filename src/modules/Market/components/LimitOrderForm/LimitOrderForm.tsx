@@ -18,6 +18,8 @@ type Props = {
   loadingSelectedPair: boolean;
   isBuyOrder: boolean;
   showTitle?: boolean;
+  refreshHistory: () => void;
+  refreshOrderBook: () => void;
 };
 
 export const LimitOrderForm = ({
@@ -27,6 +29,8 @@ export const LimitOrderForm = ({
   loadingSelectedPair,
   isBuyOrder,
   showTitle = true,
+  refreshHistory,
+  refreshOrderBook,
 }: Props): JSX.Element => {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
@@ -41,18 +45,21 @@ export const LimitOrderForm = ({
     handleCancelPasswordModal,
     confirm,
     handleValuesChange,
-    //onFormFinish,
+    onFormFinish,
+    submittingPassword,
   } = useCreateLimitOrder({
     currentBase,
     currentQuote,
     loadingSelectedPair,
     isBuyOrder,
+    refreshHistory,
+    refreshOrderBook,
   });
 
   return (
     <>
       <Styled.FormContainer>
-        <Form.Provider onFormFinish={() => {}}>
+        <Form.Provider onFormFinish={onFormFinish}>
           {showTitle ? (
             <Styled.FormTitle>{isBuyOrder ? "BUY" : "SELL"}</Styled.FormTitle>
           ) : (
@@ -176,7 +183,7 @@ export const LimitOrderForm = ({
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={handleCancelPasswordModal}
-            submitting={false}
+            submitting={submittingPassword}
           />
         </Form.Provider>
       </Styled.FormContainer>

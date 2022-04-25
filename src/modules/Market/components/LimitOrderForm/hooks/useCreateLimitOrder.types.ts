@@ -6,6 +6,8 @@ export type UseCreateLimitOrderArgs = {
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
   isBuyOrder: boolean;
+  refreshHistory: () => void;
+  refreshOrderBook: () => void;
 };
 
 export type UseCreateLimitOrderResult = {
@@ -17,8 +19,9 @@ export type UseCreateLimitOrderResult = {
   handleValuesChange: (changedValues: any, allValues: any) => void;
   isPasswordModalVisible: boolean;
   handleCancelPasswordModal: () => void;
-  //onFormFinish: (name: string, info: { values: any; forms: any }) => void;
+  onFormFinish: (name: string, info: { values: any; forms: any }) => void;
   confirm: () => void;
+  submittingPassword: boolean;
 };
 
 export type FormField = {
