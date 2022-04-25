@@ -1,11 +1,11 @@
-import { FormInstance } from "antd";
-
 import { Asset } from "../../../../../../../common/types";
+import { FormInstance, Rule } from "../../../../../../../ui/src";
 
 export type UsePowerDownForm = {
   status: string;
   statusType: string;
   powerDownForm: FormInstance<PowerDownForm>;
+  formValdation: FormValidation;
   submittingPassword: boolean;
   isPasswordModalVisible: boolean;
   confirm: () => void;
@@ -26,4 +26,8 @@ export type PowerDownForm = {
   availableBalance: string;
   withdrawAmount: number;
   newBalance: string;
+};
+
+export type FormValidation = {
+  withdrawAmount: Rule[];
 };

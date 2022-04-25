@@ -49,7 +49,7 @@ export const PasswordModal = ({
             htmlType="submit"
             loading={submitting}
           >
-            Send
+            Confirm
           </Styled.PasswordModalFormButton>
         </Form.Item>
       </Styled.PasswordModalForm>

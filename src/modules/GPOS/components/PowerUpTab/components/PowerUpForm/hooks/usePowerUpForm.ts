@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   useAccount,
   useAsset,
+  useFees,
   useTransactionBuilder,
 } from "../../../../../../../common/hooks";
 import {
@@ -18,31 +19,33 @@ export function usePowerUpForm(): UsePowerUpForm {
   const [submittingPassword, setSubmittingPassword] = useState(false);
   const [status, setStatus] = useState<string>("");
   const [statusType, setStatusType] = useState<string>("");
+  const [feeAmount, setFeeAmount] = useState<number>(0);
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
     useState<boolean>(false);
   const [gposBalances, setGOPSBalances] = useState<GPOSBalances>();
   const [powerUpForm] = Form.useForm();
   const depositAmount = Form.useWatch("depositAmount", powerUpForm);
-  const { id } = useUserContext();
+  const { localStorageAccount, id, assets } = useUserContext();
   const { dbApi } = usePeerplaysApiContext();
   const { trxBuilder } = useTransactionBuilder();
   const { getAssetById } = useAsset();
   const { getPrivateKey } = useAccount();
+  const { calulateGPOSFees } = useFees();
 
   useEffect(() => {
     getGPOSInfo();
   }, [id]);
 
   useEffect(() => {
+    const createVestingBalanceFee = calulateGPOSFees("create");
+    if (createVestingBalanceFee) setFeeAmount(createVestingBalanceFee);
+  }, [localStorageAccount, calulateGPOSFees, assets]);
+
+  useEffect(() => {
     //TODO: check that new amount not less then 0 or grater then account balance
     const newBalance = gposBalances?.openingBalance + depositAmount;
     powerUpForm.setFieldsValue({
       newBalance: newBalance + " " + gposBalances?.asset.symbol,
-    });
-    setGOPSBalances({
-      openingBalance: gposBalances?.openingBalance as number,
-      newBalance: newBalance,
-      asset: gposBalances?.asset as Asset,
     });
   }, [depositAmount]);
 
@@ -79,7 +82,7 @@ export function usePowerUpForm(): UsePowerUpForm {
     const values = powerUpForm.getFieldsValue();
     const activeKey = getPrivateKey(password, "active");
     const depositAmount =
-      values.depositAmount * 10 ** gposBalances?.asset.precision;
+      values.depositAmount * 10 ** (gposBalances?.asset.precision as number);
     const trx = {
       type: "vesting_balance_create",
       params: {
@@ -118,6 +121,7 @@ export function usePowerUpForm(): UsePowerUpForm {
       }
     } catch (e) {
       setSubmittingPassword(false);
+      setStatus("An Error has occurred");
       setStatusType("error");
       console.log(e);
       return;
@@ -145,10 +149,30 @@ export function usePowerUpForm(): UsePowerUpForm {
       }
     );
   };
+
+  const validateDepositAmount = async (_: unknown, value: number) => {
+    const accountAsset = assets.find(
+      (asset) => asset.symbol === gposBalances?.asset.symbol
+    );
+    const total = Number(value) + feeAmount;
+    if (value <= 0)
+      return Promise.reject(new Error("Amount should be greater than 0"));
+    if (total > (accountAsset?.amount as number))
+      return Promise.reject(new Error("Balance is not enough"));
+  };
+
+  const formValdation = {
+    depositAmount: [
+      { required: true, message: "From is required" },
+      { validator: validateDepositAmount },
+    ],
+  };
+
   return {
     status,
     statusType,
     powerUpForm,
+    formValdation,
     submittingPassword,
     isPasswordModalVisible,
     confirm,

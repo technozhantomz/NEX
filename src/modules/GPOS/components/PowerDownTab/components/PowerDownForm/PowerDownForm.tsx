@@ -12,6 +12,7 @@ export const PowerDownForm = (): JSX.Element => {
     status,
     statusType,
     powerDownForm,
+    formValdation,
     isPasswordModalVisible,
     submittingPassword,
     confirm,
@@ -38,7 +39,7 @@ export const PowerDownForm = (): JSX.Element => {
           <Form.Item
             name="withdrawAmount"
             label="Withdraw"
-            //   rules={formValdation.from}
+            rules={formValdation.withdrawAmount}
             validateFirst={true}
             validateTrigger="onBlur"
           >

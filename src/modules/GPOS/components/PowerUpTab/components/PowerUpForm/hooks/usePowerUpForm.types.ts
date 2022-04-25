@@ -1,10 +1,10 @@
-import { FormInstance } from "antd";
-
 import { Asset } from "../../../../../../../common/types";
+import { FormInstance, Rule } from "../../../../../../../ui/src";
 
 export type UsePowerUpForm = {
   status: string;
   statusType: string;
+  formValdation: FormValidation;
   powerUpForm: FormInstance<PowerUpForm>;
   submittingPassword: boolean;
   isPasswordModalVisible: boolean;
@@ -24,4 +24,8 @@ export type PowerUpForm = {
   openingBalance: string;
   depositAmount: number;
   newBalance: string;
+};
+
+export type FormValidation = {
+  depositAmount: Rule[];
 };

@@ -7,5 +7,6 @@ export type ChainOperations = {
 export type UseFeesResult = {
   calculteTransferFee: (memo: string) => number | undefined;
   calculateAccountUpgradeFee: () => number | undefined;
+  calulateGPOSFees: (transactionType: string) => number | undefined;
   feeParameters: FeeParameter[];
 };

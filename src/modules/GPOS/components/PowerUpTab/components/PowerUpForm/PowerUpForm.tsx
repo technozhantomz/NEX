@@ -12,6 +12,7 @@ export const PowerUpForm = (): JSX.Element => {
     status,
     statusType,
     powerUpForm,
+    formValdation,
     isPasswordModalVisible,
     submittingPassword,
     confirm,
@@ -35,7 +36,7 @@ export const PowerUpForm = (): JSX.Element => {
           <Form.Item
             name="depositAmount"
             label="Deposit"
-            //   rules={formValdation.from}
+            rules={formValdation.depositAmount}
             validateFirst={true}
             validateTrigger="onBlur"
           >

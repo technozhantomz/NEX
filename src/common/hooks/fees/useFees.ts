@@ -89,6 +89,31 @@ export function useFees(): UseFeesResult {
     }
   }, [feeParameters, findOperationFee, defaultAsset]);
 
+  const calulateGPOSFees = useCallback(
+    (transactionType: string) => {
+      if (feeParameters.length && defaultAsset) {
+        if (transactionType === "create") {
+          const createVestingBalanceFeeParameters = findOperationFee(
+            "vesting_balance_create"
+          ) as FeeParameter;
+          const createVestingBalanceFee = createVestingBalanceFeeParameters[1];
+          const feeAmount = createVestingBalanceFee.fee as number;
+          return setPrecision(false, feeAmount, defaultAsset.precision);
+        }
+        if (transactionType === "") {
+          const withdrawVestingBalanceFeeParameters = findOperationFee(
+            "vesting_balance_withdraw"
+          ) as FeeParameter;
+          const withdrawVestingBalanceFee =
+            withdrawVestingBalanceFeeParameters[1];
+          const feeAmount = withdrawVestingBalanceFee.fee as number;
+          return setPrecision(false, feeAmount, defaultAsset.precision);
+        }
+      }
+    },
+    [feeParameters, findOperationFee, defaultAsset]
+  );
+
   useEffect(() => {
     getFeesFromGlobal();
     setAccount();
@@ -97,6 +122,7 @@ export function useFees(): UseFeesResult {
   return {
     calculteTransferFee,
     calculateAccountUpgradeFee,
+    calulateGPOSFees,
     feeParameters,
   };
 }
