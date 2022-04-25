@@ -4,6 +4,7 @@ import {
   Col as UiCol,
   Row as UiRow,
 } from "../../../../ui/src/index";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const HeaderContainer = styled.div`
   display: flex;
@@ -15,7 +16,7 @@ export const HeaderContainer = styled.div`
 
 export const HeaderContainerItem = styled.div`
   background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   opacity: 1;
   color: white;
   font-size: 25px;
@@ -37,13 +38,13 @@ export const BodyContainer = styled.div`
 export const Btn = styled(Button)`
   height: 32px;
   background: #e3ebf8 0% 0% no-repeat padding-box;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   opacity: 1;
 `;
 
 export const Buttons = styled.div`
   background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   opacity: 1;
   font-size: 14px;
   height: 32px;

@@ -5,6 +5,7 @@ import {
   Tabs as UiTabs,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const StatsCardsDeck = styled(UIStatsCardsDeck)`
   justify-content: space-around;
@@ -29,7 +30,7 @@ export const StatsCardsDeck = styled(UIStatsCardsDeck)`
 `;
 
 export const Container = styled(UiCard)`
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   margin: 15px 0;
   .ant-card-body {
     padding: 0;

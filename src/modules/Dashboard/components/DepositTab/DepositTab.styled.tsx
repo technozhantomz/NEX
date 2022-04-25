@@ -2,12 +2,13 @@ import { LogoSelectOption } from "../../../../common/components";
 import { styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const LogoSelect = styled(LogoSelectOption)`
   height: 50px;
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   opacity: 1;
   max-width: 95%;
   display: flex;
@@ -21,7 +22,7 @@ export const LogoSelect = styled(LogoSelectOption)`
 
 export const DepositFormContainer = styled.div`
   background: ${colors.white} 0% 0% no-repeat padding-box;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   opacity: 1;
   font-size: 25px;
   text-align: center;
