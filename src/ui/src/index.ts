@@ -27,6 +27,7 @@ export {
   Space,
   Switch,
   List,
+  Carousel,
 } from "antd";
 
 export {

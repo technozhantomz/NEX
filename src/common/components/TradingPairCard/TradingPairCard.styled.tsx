@@ -1,7 +1,7 @@
-import { styled } from "../../../../../../ui/src";
-import { breakpoint } from "../../../../../../ui/src/breakpoints";
-import { colors } from "../../../../../../ui/src/colors";
-import { mixIns } from "../../../../../../ui/src/mixins";
+import { styled } from "../../../ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
+import { colors } from "../../../ui/src/colors";
+import { mixIns } from "../../../ui/src/mixins";
 
 export const Card = styled.div`
   height: 65px;
@@ -12,7 +12,6 @@ export const Card = styled.div`
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
   ${mixIns.borderRadius}
-  opacity: 1;
   cursor: pointer;
   transition: all 0.3s ease-out;
 
@@ -29,7 +28,6 @@ export const Card = styled.div`
       )
       0% 0% no-repeat padding-box;
     ${mixIns.borderRadius}
-    opacity: 1;
   }
 `;
 export const ContentHeader = styled.div`
@@ -52,7 +50,6 @@ export const PercentChange = styled.p`
     props.theme
       ? props.theme.percentChangeColor
       : props.theme.percentChangeColor};
-  opacity: 1;
   font-size: 12px;
   margin: 10px;
   ${breakpoint.xs} {
@@ -77,7 +74,7 @@ export const Volume = styled.p`
   opacity: 1;
   font-size: 16px;
   margin-left: 10px;
-  ${breakpoint.sm} {
+  ${breakpoint.xs} {
     font-size: 28px;
   }
 `;

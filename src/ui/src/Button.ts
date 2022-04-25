@@ -8,6 +8,9 @@ export const Button = styled(AntdButton)`
    {
     height: 35px;
     ${mixIns.borderRadius}
+    &:after {
+      display: none;
+    }
     ${breakpoint.xs} {
       height: 45px;
     }

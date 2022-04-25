@@ -3,9 +3,13 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useAccount, useAsset } from "..";
 import { usePeerplaysApiContext, useUserContext } from "../../providers";
-import { Account, FeeParameter, GlobalProperties } from "../../types";
+import { Account, Asset, FeeParameter, GlobalProperties } from "../../types";
 
-import { ChainOperations, UseFeesResult } from "./useFees.types";
+import {
+  ChainOperations,
+  CreateLimitOrderFee,
+  UseFeesResult,
+} from "./useFees.types";
 
 export function useFees(): UseFeesResult {
   const [feeParameters, setFeeParameters] = useState<FeeParameter[]>([]);
@@ -87,7 +91,34 @@ export function useFees(): UseFeesResult {
 
       return setPrecision(false, membershipLifetimeFee, defaultAsset.precision);
     }
-  }, [feeParameters, findOperationFee, defaultAsset]);
+  }, [feeParameters, findOperationFee, defaultAsset, setPrecision]);
+
+  const calculateCreateLimitOrderFee = useCallback(
+    (base: Asset, quote: Asset) => {
+      if (feeParameters.length && defaultAsset) {
+        const createLimitOrderFeeParameter = findOperationFee(
+          "limit_order_create"
+        ) as FeeParameter;
+        const createLimitOrderFee = createLimitOrderFeeParameter[1]
+          .fee as number;
+        let buyMarketFeePercent = 0;
+        let sellMarketFeePercent = 0;
+
+        if (base.symbol !== defaultAsset.symbol) {
+          sellMarketFeePercent = base.options.market_fee_percent / 100;
+        }
+        if (quote.symbol !== defaultAsset.symbol) {
+          buyMarketFeePercent = quote.options.market_fee_percent / 100;
+        }
+        return {
+          fee: setPrecision(false, createLimitOrderFee, defaultAsset.precision),
+          sellMarketFeePercent,
+          buyMarketFeePercent,
+        } as CreateLimitOrderFee;
+      }
+    },
+    [setPrecision, defaultAsset, findOperationFee]
+  );
 
   useEffect(() => {
     getFeesFromGlobal();
@@ -95,8 +126,10 @@ export function useFees(): UseFeesResult {
   }, [localStorageAccount, dbApi]);
 
   return {
+    feeParameters,
+    findOperationFee,
     calculteTransferFee,
     calculateAccountUpgradeFee,
-    feeParameters,
+    calculateCreateLimitOrderFee,
   };
 }

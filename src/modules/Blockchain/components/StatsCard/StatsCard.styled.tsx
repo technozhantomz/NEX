@@ -9,7 +9,7 @@ export const StatsCard = styled.div`
   ${mixIns.borderRadius}
   padding: 15px;
   &:hover {
-    border: 2px solid #0a48be;
+    border: 2px solid ${colors.linkColor};
     background: transparent
       linear-gradient(0deg, ${colors.white} 0%, #d9e6ff 100%) 0% 0% no-repeat
       padding-box;
