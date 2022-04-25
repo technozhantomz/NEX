@@ -26,3 +26,12 @@ export const PowerDownForm = styled(CardFrom)`
 export const PowerDownFormButton = styled(CardFormButton)`
   height: 45px;
 `;
+
+export const StatusMsg = styled.p`
+  &.success {
+    color: ${colors.successColor};
+  }
+  &.error {
+    color: ${colors.errorColor};
+  }
+`;

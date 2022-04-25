@@ -17,6 +17,7 @@ import { GPOSBalances, UsePowerDownForm } from "./usePowerDownForm.types";
 export function usePowerDownForm(): UsePowerDownForm {
   const [submittingPassword, setSubmittingPassword] = useState(false);
   const [status, setStatus] = useState<string>("");
+  const [statusType, setStatusType] = useState<string>("");
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
     useState<boolean>(false);
   const [gposBalances, setGOPSBalances] = useState<GPOSBalances>();
@@ -104,9 +105,11 @@ export function usePowerDownForm(): UsePowerDownForm {
         setStatus(
           `Successfull Withdrawn ${values.withdrawAmount} ${gposBalances?.asset.precision}`
         );
+        setStatusType("success");
       }
     } catch (e) {
       setSubmittingPassword(false);
+      setStatusType("error");
       console.log(e);
       return;
     }
@@ -146,6 +149,7 @@ export function usePowerDownForm(): UsePowerDownForm {
   };
   return {
     status,
+    statusType,
     powerDownForm,
     submittingPassword,
     isPasswordModalVisible,

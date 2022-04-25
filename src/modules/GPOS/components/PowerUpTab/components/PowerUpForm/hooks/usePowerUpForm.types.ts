@@ -4,6 +4,7 @@ import { Asset } from "../../../../../../../common/types";
 
 export type UsePowerUpForm = {
   status: string;
+  statusType: string;
   powerUpForm: FormInstance<PowerUpForm>;
   submittingPassword: boolean;
   isPasswordModalVisible: boolean;

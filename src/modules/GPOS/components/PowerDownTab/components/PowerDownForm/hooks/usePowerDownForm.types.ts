@@ -4,6 +4,7 @@ import { Asset } from "../../../../../../../common/types";
 
 export type UsePowerDownForm = {
   status: string;
+  statusType: string;
   powerDownForm: FormInstance<PowerDownForm>;
   submittingPassword: boolean;
   isPasswordModalVisible: boolean;

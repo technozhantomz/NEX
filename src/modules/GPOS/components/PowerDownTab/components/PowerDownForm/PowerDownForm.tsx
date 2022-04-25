@@ -10,6 +10,7 @@ export const PowerDownForm = (): JSX.Element => {
   const router = useRouter();
   const {
     status,
+    statusType,
     powerDownForm,
     isPasswordModalVisible,
     submittingPassword,
@@ -57,7 +58,11 @@ export const PowerDownForm = (): JSX.Element => {
           <Form.Item name="newBalance" label="New Balance:">
             <Input disabled={true} />
           </Form.Item>
-          {status === "" ? "" : <p>{status}</p>}
+          {status === "" ? (
+            ""
+          ) : (
+            <Styled.StatusMsg className={statusType}>{status}</Styled.StatusMsg>
+          )}
           <Form.Item>
             <Styled.PowerDownFormButton type="primary" htmlType="submit">
               Withdraw

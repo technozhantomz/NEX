@@ -17,6 +17,7 @@ import { GPOSBalances, UsePowerUpForm } from "./usePowerUpForm.types";
 export function usePowerUpForm(): UsePowerUpForm {
   const [submittingPassword, setSubmittingPassword] = useState(false);
   const [status, setStatus] = useState<string>("");
+  const [statusType, setStatusType] = useState<string>("");
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
     useState<boolean>(false);
   const [gposBalances, setGOPSBalances] = useState<GPOSBalances>();
@@ -113,9 +114,11 @@ export function usePowerUpForm(): UsePowerUpForm {
         setStatus(
           `Successfull Deposited ${values.depositAmount} ${gposBalances?.asset.symbol}`
         );
+        setStatusType("success");
       }
     } catch (e) {
       setSubmittingPassword(false);
+      setStatusType("error");
       console.log(e);
       return;
     }
@@ -144,6 +147,7 @@ export function usePowerUpForm(): UsePowerUpForm {
   };
   return {
     status,
+    statusType,
     powerUpForm,
     submittingPassword,
     isPasswordModalVisible,

@@ -10,6 +10,7 @@ export const PowerUpForm = (): JSX.Element => {
   const router = useRouter();
   const {
     status,
+    statusType,
     powerUpForm,
     isPasswordModalVisible,
     submittingPassword,
@@ -54,7 +55,11 @@ export const PowerUpForm = (): JSX.Element => {
           <Form.Item name="newBalance" label="New Balance:">
             <Input disabled={true} />
           </Form.Item>
-          {status === "" ? "" : <p>{status}</p>}
+          {status === "" ? (
+            ""
+          ) : (
+            <Styled.StatusMsg className={statusType}>{status}</Styled.StatusMsg>
+          )}
           <Form.Item>
             <Styled.PowerUpFormButton type="primary" htmlType="submit">
               Vest

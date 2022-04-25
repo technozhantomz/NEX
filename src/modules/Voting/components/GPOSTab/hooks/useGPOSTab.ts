@@ -23,7 +23,9 @@ export function useGPOSTab(): UseGPOSTab {
   const { getAssetById } = useAsset();
 
   useEffect(() => {
-    getGPOSInfo();
+    if (id) {
+      getGPOSInfo();
+    }
   }, [id]);
 
   const trimNum = (num: number, digits: number) => {
