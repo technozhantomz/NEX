@@ -54,6 +54,10 @@ export const BlockchainCard = styled(UiCard)`
       .ant-tabs-ink-bar {
         height: 2pt;
       }
+      .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+        color: ${colors.textColor};
+        text-shadow: 0 0 0.25px currentcolor;
+      }
     }
   }
 `;

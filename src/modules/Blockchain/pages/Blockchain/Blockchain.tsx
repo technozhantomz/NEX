@@ -1,11 +1,10 @@
-import { Menu, MenuProps } from "antd";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { ReactChild, ReactFragment, ReactPortal, useState } from "react";
+import { useState } from "react";
 
 import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
-import { Button, DownOutlined, Tabs } from "../../../../ui/src";
+import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import {
   AssetsTab,
