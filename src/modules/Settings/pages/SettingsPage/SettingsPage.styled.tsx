@@ -5,6 +5,9 @@ export const SettingsCard = styled(UiCard)`
   .ant-card-body {
     padding: 0;
     width: 100%;
+    height: 856px;
+    border-radius: 4px;
+    opacity: 1;
     .ant-tabs-tab,
     .ant-tabs-extra-content {
       justify-content: center;
