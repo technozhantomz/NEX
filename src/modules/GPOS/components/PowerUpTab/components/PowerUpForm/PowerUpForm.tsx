@@ -9,6 +9,7 @@ import { usePowerUpForm } from "./hooks";
 export const PowerUpForm = (): JSX.Element => {
   const router = useRouter();
   const {
+    status,
     powerUpForm,
     isPasswordModalVisible,
     submittingPassword,
@@ -19,9 +20,10 @@ export const PowerUpForm = (): JSX.Element => {
   } = usePowerUpForm();
   return (
     <>
-      <Form.Provider>
+      <Form.Provider onFormFinish={onFormFinish}>
         <Styled.PowerUpForm
           form={powerUpForm}
+          layout="vertical"
           name="powerUpForm"
           onFinish={confirm}
           size="large"
@@ -52,6 +54,7 @@ export const PowerUpForm = (): JSX.Element => {
           <Form.Item name="newBalance" label="New Balance:">
             <Input disabled={true} />
           </Form.Item>
+          {status === "" ? "" : <p>{status}</p>}
           <Form.Item>
             <Styled.PowerUpFormButton type="primary" htmlType="submit">
               Vest

@@ -9,6 +9,7 @@ import { usePowerDownForm } from "./hooks";
 export const PowerDownForm = (): JSX.Element => {
   const router = useRouter();
   const {
+    status,
     powerDownForm,
     isPasswordModalVisible,
     submittingPassword,
@@ -22,6 +23,7 @@ export const PowerDownForm = (): JSX.Element => {
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.PowerDownForm
           form={powerDownForm}
+          layout="vertical"
           name="powerDownForm"
           onFinish={confirm}
           size="large"
@@ -55,6 +57,7 @@ export const PowerDownForm = (): JSX.Element => {
           <Form.Item name="newBalance" label="New Balance:">
             <Input disabled={true} />
           </Form.Item>
+          {status === "" ? "" : <p>{status}</p>}
           <Form.Item>
             <Styled.PowerDownFormButton type="primary" htmlType="submit">
               Withdraw

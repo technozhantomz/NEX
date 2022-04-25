@@ -1,7 +1,11 @@
 import { Form } from "antd";
 import { useEffect, useState } from "react";
 
-import { useAsset } from "../../../../../../../common/hooks";
+import {
+  useAccount,
+  useAsset,
+  useTransactionBuilder,
+} from "../../../../../../../common/hooks";
 import {
   usePeerplaysApiContext,
   useUserContext,
@@ -12,6 +16,7 @@ import { GPOSBalances, UsePowerDownForm } from "./usePowerDownForm.types";
 
 export function usePowerDownForm(): UsePowerDownForm {
   const [submittingPassword, setSubmittingPassword] = useState(false);
+  const [status, setStatus] = useState<string>("");
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
     useState<boolean>(false);
   const [gposBalances, setGOPSBalances] = useState<GPOSBalances>();
@@ -19,7 +24,9 @@ export function usePowerDownForm(): UsePowerDownForm {
   const withdrawAmount = Form.useWatch("withdrawAmount", powerDownForm);
   const { id } = useUserContext();
   const { dbApi } = usePeerplaysApiContext();
+  const { trxBuilder } = useTransactionBuilder();
   const { getAssetById } = useAsset();
+  const { getPrivateKey } = useAccount();
 
   useEffect(() => {
     getGPOSInfo();
@@ -60,9 +67,48 @@ export function usePowerDownForm(): UsePowerDownForm {
     const { passwordModal } = forms;
     if (name === "passwordModal") {
       passwordModal.validateFields().then(() => {
-        //handlePowerUp(values.password);
-        console.log(values);
+        handlePowerDown(values.password);
       });
+    }
+  };
+
+  const handlePowerDown = async (password: string) => {
+    setSubmittingPassword(true);
+    const values = powerDownForm.getFieldsValue();
+    const activeKey = getPrivateKey(password, "active");
+    const vestingBalance = await dpApi("get_vesting_balances", [id]).then(
+      (balances) => balances.filter((balance) => balance.balance_type == "gpos")
+    );
+    const withdrawAmount =
+      values.withdrawAmount * 10 ** gposBalances?.asset.precision;
+    const trx = {
+      type: "vesting_balance_withdraw",
+      params: {
+        fee: {
+          amount: 0,
+          asset_id: gposBalances?.asset.id,
+        },
+        vesting_balance: vestingBalance.id,
+        owner: id,
+        amount: {
+          amount: withdrawAmount,
+          asset_id: gposBalances?.asset.id,
+        },
+      },
+    };
+    try {
+      const trxResult = await trxBuilder([trx], [activeKey]);
+      if (trxResult) {
+        setIsPasswordModalVisible(false);
+        setSubmittingPassword(false);
+        setStatus(
+          `Successfull Withdrawn ${values.withdrawAmount} ${gposBalances?.asset.precision}`
+        );
+      }
+    } catch (e) {
+      setSubmittingPassword(false);
+      console.log(e);
+      return;
     }
   };
 
@@ -99,6 +145,7 @@ export function usePowerDownForm(): UsePowerDownForm {
     );
   };
   return {
+    status,
     powerDownForm,
     submittingPassword,
     isPasswordModalVisible,

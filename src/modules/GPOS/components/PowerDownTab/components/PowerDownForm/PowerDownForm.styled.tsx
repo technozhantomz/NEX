@@ -1,15 +1,28 @@
 import { CardFormButton, CardFrom, styled } from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
+import { colors } from "../../../../../../ui/src/colors";
 
 export const PowerDownForm = styled(CardFrom)`
-  .form-input {
-    font-size: 12px;
-    ${breakpoint.sm} {
-      font-size: 20px;
+  .ant-input {
+    text-align: right;
+    height: 65px;
+  }
+  .ant-input[disabled] {
+    color: ${colors.textColor};
+    background: ${colors.white};
+  }
+  .ant-input-number-group-wrapper {
+    width: 100%;
+    .ant-input-number-lg input {
+      text-align: center;
+      height: 65px;
     }
+  }
+
+  ${breakpoint.sm} {
   }
 `;
 
 export const PowerDownFormButton = styled(CardFormButton)`
-  width: 100%;
+  height: 45px;
 `;
