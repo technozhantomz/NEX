@@ -5,6 +5,7 @@ import {
   Input as UiInput,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const FormContainer = styled.div`
   ${breakpoint.md} {
@@ -21,7 +22,7 @@ export const InputNumber = styled(UiInput)`
   width: 100%;
   font-size: 20px;
   margin-bottom: 10px;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   padding: 16px 20px;
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {

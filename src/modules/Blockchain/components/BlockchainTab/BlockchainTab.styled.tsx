@@ -1,11 +1,9 @@
 import {
-  Input,
   styled,
   StatsCardsDeck as UIStatsCardsDeck,
+  TableSearch as UiTableSearch,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
-
-const { Search } = Input;
 
 export const BlockTabWrapper = styled.div`
   margin: 0 15px;
@@ -16,16 +14,9 @@ export const BlockTabWrapper = styled.div`
 
 export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
 
-export const BlockSearch = styled(Search)`
-  max-width: 520px;
-  margin-bottom: 35px;
-  .ant-input {
-    border-radius: 4px;
-  }
-  > .ant-input-group
-    > .ant-input-group-addon:last-child
-    .ant-input-search-button {
-    border-radius: 0 4px 4px 0;
-    border-left: none;
+export const BlockSearch = styled(UiTableSearch)`
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
   }
 `;

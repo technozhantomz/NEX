@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { useViewportContext } from "../../../../common/providers";
 import { List, Tag } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
@@ -7,6 +9,11 @@ import * as Styled from "./FeesTab.styled";
 import { useFeesTab } from "./hooks";
 
 export const FeesTab = (): JSX.Element => {
+  const [generalFull, setGeneralFull] = useState<boolean>(false);
+  const [assetFull, setAssetFull] = useState<boolean>(false);
+  const [accountFull, setAccountFull] = useState<boolean>(false);
+  const [businessFull, setBusinessFull] = useState<boolean>(false);
+  const [gameFull, setGameFull] = useState<boolean>(false);
   const {
     loading,
     generalFeesRows,
@@ -19,205 +26,283 @@ export const FeesTab = (): JSX.Element => {
   const { width } = useViewportContext();
   return (
     <Styled.FeesTabWrapper>
-      <section>
+      <Styled.Section>
         <Styled.FeeSpecificHeader>General</Styled.FeeSpecificHeader>
         {width > breakpoints.sm ? (
-          <Styled.FeesTable
-            bordered={false}
-            dataSource={generalFeesRows}
-            columns={FeesColumns}
-            loading={loading}
-            pagination={false}
-          />
+          <>
+            <Styled.FeesTable
+              bordered={false}
+              dataSource={
+                generalFull
+                  ? generalFeesRows
+                  : generalFeesRows.filter((item, index) => {
+                      if (index < 5) return item;
+                    })
+              }
+              columns={FeesColumns}
+              loading={loading}
+              pagination={false}
+            />
+            {generalFull ? (
+              <a onClick={() => setGeneralFull(false)}>Show Less</a>
+            ) : (
+              <a onClick={() => setGeneralFull(true)}>Show More</a>
+            )}
+          </>
         ) : (
-          <List
-            itemLayout="vertical"
-            dataSource={generalFeesRows}
-            loading={loading}
-            renderItem={(item) => (
-              <Styled.FeeListItem key={item.operation}>
-                <Styled.FeeItemContent>
-                  {item.operation === "" ? (
-                    ""
-                  ) : (
+          <>
+            <List
+              itemLayout="vertical"
+              dataSource={
+                generalFull
+                  ? generalFeesRows
+                  : generalFeesRows.filter((item, index) => {
+                      if (index < 5) return item;
+                    })
+              }
+              loading={loading}
+              renderItem={(item) => (
+                <Styled.FeeListItem key={item.operation}>
+                  <Styled.FeeItemContent>
+                    {item.operation === "" ? (
+                      ""
+                    ) : (
+                      <div className="fee-info">
+                        <span className="fee-info-title">
+                          {FeesColumns[0].title}
+                        </span>
+                        <span className="fee-info-value">
+                          <Tag key={item.operation}>{item.operation}</Tag>
+                        </span>
+                      </div>
+                    )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[0].title}
+                        {FeesColumns[1].title}
                       </span>
-                      <span className="fee-info-value">
-                        <Tag key={item.operation}>{item.operation}</Tag>
-                      </span>
+                      <Styled.FeeTypeOrValueContainer>
+                        {item.types.map((type) => (
+                          <span
+                            key={`${item.operation}-${type}`}
+                            className="fee-info-value"
+                          >
+                            {type}
+                          </span>
+                        ))}
+                      </Styled.FeeTypeOrValueContainer>
                     </div>
-                  )}
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[1].title}
-                    </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.types.map((type) => (
-                        <span
-                          key={`${item.operation}-${type}`}
-                          className="fee-info-value"
-                        >
-                          {type}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[2].title}
-                    </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.fees.map((fee, index) => (
-                        <span
-                          key={`${item.operation}-${item.types[index]}-${fee}`}
-                          className="fee-info-value"
-                        >
-                          {fee}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                </Styled.FeeItemContent>
-              </Styled.FeeListItem>
+                    <div className="fee-info">
+                      <span className="fee-info-title">
+                        {FeesColumns[2].title}
+                      </span>
+                      <Styled.FeeTypeOrValueContainer>
+                        {item.fees.map((fee, index) => (
+                          <span
+                            key={`${item.operation}-${item.types[index]}-${fee}`}
+                            className="fee-info-value"
+                          >
+                            {fee}
+                          </span>
+                        ))}
+                      </Styled.FeeTypeOrValueContainer>
+                    </div>
+                  </Styled.FeeItemContent>
+                </Styled.FeeListItem>
+              )}
+            />
+            {generalFull ? (
+              <a onClick={() => setGeneralFull(false)}>Show Less</a>
+            ) : (
+              <a onClick={() => setGeneralFull(true)}>Show More</a>
             )}
-          />
+          </>
         )}
-      </section>
-      <section>
+      </Styled.Section>
+      <Styled.Section>
         <Styled.FeeSpecificHeader>Asset Specific</Styled.FeeSpecificHeader>
         {width > breakpoints.sm ? (
-          <Styled.FeesTable
-            bordered={false}
-            dataSource={assetFeesRows}
-            columns={FeesColumns}
-            loading={loading}
-            pagination={false}
-          />
+          <>
+            <Styled.FeesTable
+              bordered={false}
+              dataSource={
+                assetFull
+                  ? assetFeesRows
+                  : assetFeesRows.filter((item, index) => {
+                      if (index < 5) return item;
+                    })
+              }
+              columns={FeesColumns}
+              loading={loading}
+              pagination={false}
+            />
+            {assetFull ? (
+              <a onClick={() => setAssetFull(false)}>Show Less</a>
+            ) : (
+              <a onClick={() => setAssetFull(true)}>Show More</a>
+            )}
+          </>
         ) : (
-          <List
-            itemLayout="vertical"
-            dataSource={assetFeesRows}
-            loading={loading}
-            renderItem={(item) => (
-              <Styled.FeeListItem key={item.operation}>
-                <Styled.FeeItemContent>
-                  {item.operation === "" ? (
-                    ""
-                  ) : (
+          <>
+            <List
+              itemLayout="vertical"
+              dataSource={
+                assetFull
+                  ? assetFeesRows
+                  : assetFeesRows.filter((item, index) => {
+                      if (index < 5) return item;
+                    })
+              }
+              loading={loading}
+              renderItem={(item) => (
+                <Styled.FeeListItem key={item.operation}>
+                  <Styled.FeeItemContent>
+                    {item.operation === "" ? (
+                      ""
+                    ) : (
+                      <div className="fee-info">
+                        <span className="fee-info-title">
+                          {FeesColumns[0].title}
+                        </span>
+                        <span className="fee-info-value">
+                          <Tag key={item.operation}>{item.operation}</Tag>
+                        </span>
+                      </div>
+                    )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[0].title}
+                        {FeesColumns[1].title}
                       </span>
-                      <span className="fee-info-value">
-                        <Tag key={item.operation}>{item.operation}</Tag>
-                      </span>
+                      <Styled.FeeTypeOrValueContainer>
+                        {item.types.map((type) => (
+                          <span
+                            key={`${item.operation}-${type}`}
+                            className="fee-info-value"
+                          >
+                            {type}
+                          </span>
+                        ))}
+                      </Styled.FeeTypeOrValueContainer>
                     </div>
-                  )}
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[1].title}
-                    </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.types.map((type) => (
-                        <span
-                          key={`${item.operation}-${type}`}
-                          className="fee-info-value"
-                        >
-                          {type}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[2].title}
-                    </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.fees.map((fee, index) => (
-                        <span
-                          key={`${item.operation}-${item.types[index]}-${fee}`}
-                          className="fee-info-value"
-                        >
-                          {fee}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                </Styled.FeeItemContent>
-              </Styled.FeeListItem>
+                    <div className="fee-info">
+                      <span className="fee-info-title">
+                        {FeesColumns[2].title}
+                      </span>
+                      <Styled.FeeTypeOrValueContainer>
+                        {item.fees.map((fee, index) => (
+                          <span
+                            key={`${item.operation}-${item.types[index]}-${fee}`}
+                            className="fee-info-value"
+                          >
+                            {fee}
+                          </span>
+                        ))}
+                      </Styled.FeeTypeOrValueContainer>
+                    </div>
+                  </Styled.FeeItemContent>
+                </Styled.FeeListItem>
+              )}
+            />
+            {assetFull ? (
+              <a onClick={() => setAssetFull(false)}>Show Less</a>
+            ) : (
+              <a onClick={() => setAssetFull(true)}>Show More</a>
             )}
-          />
+          </>
         )}
-      </section>
-      <section>
+      </Styled.Section>
+      <Styled.Section>
         <Styled.FeeSpecificHeader>Account Specific</Styled.FeeSpecificHeader>
         {width > breakpoints.sm ? (
-          <Styled.FeesTable
-            bordered={false}
-            dataSource={accountFeesRows}
-            columns={FeesColumns}
-            loading={loading}
-            pagination={false}
-          />
+          <>
+            <Styled.FeesTable
+              bordered={false}
+              dataSource={
+                accountFull
+                  ? accountFeesRows
+                  : accountFeesRows.filter((item, index) => {
+                      if (index < 5) return item;
+                    })
+              }
+              columns={FeesColumns}
+              loading={loading}
+              pagination={false}
+            />
+            {accountFull ? (
+              <a onClick={() => setAccountFull(false)}>Show Less</a>
+            ) : (
+              <a onClick={() => setAccountFull(true)}>Show More</a>
+            )}
+          </>
         ) : (
-          <List
-            itemLayout="vertical"
-            dataSource={accountFeesRows}
-            loading={loading}
-            renderItem={(item) => (
-              <Styled.FeeListItem key={item.operation}>
-                <Styled.FeeItemContent>
-                  {item.operation === "" ? (
-                    ""
-                  ) : (
+          <>
+            <List
+              itemLayout="vertical"
+              dataSource={
+                accountFull
+                  ? accountFeesRows
+                  : accountFeesRows.filter((item, index) => {
+                      if (index < 5) return item;
+                    })
+              }
+              loading={loading}
+              renderItem={(item) => (
+                <Styled.FeeListItem key={item.operation}>
+                  <Styled.FeeItemContent>
+                    {item.operation === "" ? (
+                      ""
+                    ) : (
+                      <div className="fee-info">
+                        <span className="fee-info-title">
+                          {FeesColumns[0].title}
+                        </span>
+                        <span className="fee-info-value">
+                          <Tag key={item.operation}>{item.operation}</Tag>
+                        </span>
+                      </div>
+                    )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[0].title}
+                        {FeesColumns[1].title}
                       </span>
-                      <span className="fee-info-value">
-                        <Tag key={item.operation}>{item.operation}</Tag>
-                      </span>
+                      <Styled.FeeTypeOrValueContainer>
+                        {item.types.map((type) => (
+                          <span
+                            key={`${item.operation}-${type}`}
+                            className="fee-info-value"
+                          >
+                            {type}
+                          </span>
+                        ))}
+                      </Styled.FeeTypeOrValueContainer>
                     </div>
-                  )}
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[1].title}
-                    </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.types.map((type) => (
-                        <span
-                          key={`${item.operation}-${type}`}
-                          className="fee-info-value"
-                        >
-                          {type}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[2].title}
-                    </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.fees.map((fee, index) => (
-                        <span
-                          key={`${item.operation}-${item.types[index]}-${fee}`}
-                          className="fee-info-value"
-                        >
-                          {fee}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                </Styled.FeeItemContent>
-              </Styled.FeeListItem>
+                    <div className="fee-info">
+                      <span className="fee-info-title">
+                        {FeesColumns[2].title}
+                      </span>
+                      <Styled.FeeTypeOrValueContainer>
+                        {item.fees.map((fee, index) => (
+                          <span
+                            key={`${item.operation}-${item.types[index]}-${fee}`}
+                            className="fee-info-value"
+                          >
+                            {fee}
+                          </span>
+                        ))}
+                      </Styled.FeeTypeOrValueContainer>
+                    </div>
+                  </Styled.FeeItemContent>
+                </Styled.FeeListItem>
+              )}
+            />
+            {accountFull ? (
+              <a onClick={() => setAccountFull(false)}>Show Less</a>
+            ) : (
+              <a onClick={() => setAccountFull(true)}>Show More</a>
             )}
-          />
+          </>
         )}
-      </section>
-      <section>
+      </Styled.Section>
+      <Styled.Section>
         <Styled.FeeSpecificHeader>Market Specific</Styled.FeeSpecificHeader>
         {width > breakpoints.sm ? (
           <Styled.FeesTable
@@ -282,141 +367,193 @@ export const FeesTab = (): JSX.Element => {
             )}
           />
         )}
-      </section>
-      <section>
+      </Styled.Section>
+      <Styled.Section>
         <Styled.FeeSpecificHeader>
           Bussiness Administration
         </Styled.FeeSpecificHeader>
         {width > breakpoints.sm ? (
-          <Styled.FeesTable
-            bordered={false}
-            dataSource={businessFeesRows}
-            columns={FeesColumns}
-            loading={loading}
-            pagination={false}
-          />
+          <>
+            <Styled.FeesTable
+              bordered={false}
+              dataSource={
+                businessFull
+                  ? businessFeesRows
+                  : businessFeesRows.filter((item, index) => {
+                      if (index < 5) return item;
+                    })
+              }
+              columns={FeesColumns}
+              loading={loading}
+              pagination={false}
+            />
+            {businessFull ? (
+              <a onClick={() => setBusinessFull(false)}>Show Less</a>
+            ) : (
+              <a onClick={() => setBusinessFull(true)}>Show More</a>
+            )}
+          </>
         ) : (
-          <List
-            itemLayout="vertical"
-            dataSource={businessFeesRows}
-            loading={loading}
-            renderItem={(item) => (
-              <Styled.FeeListItem key={item.operation}>
-                <Styled.FeeItemContent>
-                  {item.operation === "" ? (
-                    ""
-                  ) : (
+          <>
+            <List
+              itemLayout="vertical"
+              dataSource={
+                businessFull
+                  ? businessFeesRows
+                  : businessFeesRows.filter((item, index) => {
+                      if (index < 5) return item;
+                    })
+              }
+              loading={loading}
+              renderItem={(item) => (
+                <Styled.FeeListItem key={item.operation}>
+                  <Styled.FeeItemContent>
+                    {item.operation === "" ? (
+                      ""
+                    ) : (
+                      <div className="fee-info">
+                        <span className="fee-info-title">
+                          {FeesColumns[0].title}
+                        </span>
+                        <span className="fee-info-value">
+                          <Tag key={item.operation}>{item.operation}</Tag>
+                        </span>
+                      </div>
+                    )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[0].title}
+                        {FeesColumns[1].title}
                       </span>
-                      <span className="fee-info-value">
-                        <Tag key={item.operation}>{item.operation}</Tag>
-                      </span>
+                      <Styled.FeeTypeOrValueContainer>
+                        {item.types.map((type) => (
+                          <span
+                            key={`${item.operation}-${type}`}
+                            className="fee-info-value"
+                          >
+                            {type}
+                          </span>
+                        ))}
+                      </Styled.FeeTypeOrValueContainer>
                     </div>
-                  )}
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[1].title}
-                    </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.types.map((type) => (
-                        <span
-                          key={`${item.operation}-${type}`}
-                          className="fee-info-value"
-                        >
-                          {type}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[2].title}
-                    </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.fees.map((fee, index) => (
-                        <span
-                          key={`${item.operation}-${item.types[index]}-${fee}`}
-                          className="fee-info-value"
-                        >
-                          {fee}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                </Styled.FeeItemContent>
-              </Styled.FeeListItem>
+                    <div className="fee-info">
+                      <span className="fee-info-title">
+                        {FeesColumns[2].title}
+                      </span>
+                      <Styled.FeeTypeOrValueContainer>
+                        {item.fees.map((fee, index) => (
+                          <span
+                            key={`${item.operation}-${item.types[index]}-${fee}`}
+                            className="fee-info-value"
+                          >
+                            {fee}
+                          </span>
+                        ))}
+                      </Styled.FeeTypeOrValueContainer>
+                    </div>
+                  </Styled.FeeItemContent>
+                </Styled.FeeListItem>
+              )}
+            />
+            {businessFull ? (
+              <a onClick={() => setBusinessFull(false)}>Show Less</a>
+            ) : (
+              <a onClick={() => setBusinessFull(true)}>Show More</a>
             )}
-          />
+          </>
         )}
-      </section>
-      <section>
+      </Styled.Section>
+      <Styled.Section>
         <Styled.FeeSpecificHeader>Game Specific</Styled.FeeSpecificHeader>
         {width > breakpoints.sm ? (
-          <Styled.FeesTable
-            bordered={false}
-            dataSource={gameFeesRows}
-            columns={FeesColumns}
-            loading={loading}
-            pagination={false}
-          />
+          <>
+            <Styled.FeesTable
+              bordered={false}
+              dataSource={
+                gameFull
+                  ? gameFeesRows
+                  : gameFeesRows.filter((item, index) => {
+                      if (index < 5) return item;
+                    })
+              }
+              columns={FeesColumns}
+              loading={loading}
+              pagination={false}
+            />
+            {gameFull ? (
+              <a onClick={() => setGameFull(false)}>Show Less</a>
+            ) : (
+              <a onClick={() => setGameFull(true)}>Show More</a>
+            )}
+          </>
         ) : (
-          <List
-            itemLayout="vertical"
-            dataSource={gameFeesRows}
-            loading={loading}
-            renderItem={(item) => (
-              <Styled.FeeListItem key={item.operation}>
-                <Styled.FeeItemContent>
-                  {item.operation === "" ? (
-                    ""
-                  ) : (
+          <>
+            <List
+              itemLayout="vertical"
+              dataSource={
+                gameFull
+                  ? gameFeesRows
+                  : gameFeesRows.filter((item, index) => {
+                      if (index < 5) return item;
+                    })
+              }
+              loading={loading}
+              renderItem={(item) => (
+                <Styled.FeeListItem key={item.operation}>
+                  <Styled.FeeItemContent>
+                    {item.operation === "" ? (
+                      ""
+                    ) : (
+                      <div className="fee-info">
+                        <span className="fee-info-title">
+                          {FeesColumns[0].title}
+                        </span>
+                        <span className="fee-info-value">
+                          <Tag key={item.operation}>{item.operation}</Tag>
+                        </span>
+                      </div>
+                    )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[0].title}
+                        {FeesColumns[1].title}
                       </span>
-                      <span className="fee-info-value">
-                        <Tag key={item.operation}>{item.operation}</Tag>
-                      </span>
+                      <Styled.FeeTypeOrValueContainer>
+                        {item.types.map((type) => (
+                          <span
+                            key={`${item.operation}-${type}`}
+                            className="fee-info-value"
+                          >
+                            {type}
+                          </span>
+                        ))}
+                      </Styled.FeeTypeOrValueContainer>
                     </div>
-                  )}
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[1].title}
-                    </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.types.map((type) => (
-                        <span
-                          key={`${item.operation}-${type}`}
-                          className="fee-info-value"
-                        >
-                          {type}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[2].title}
-                    </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.fees.map((fee, index) => (
-                        <span
-                          key={`${item.operation}-${item.types[index]}-${fee}`}
-                          className="fee-info-value"
-                        >
-                          {fee}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                </Styled.FeeItemContent>
-              </Styled.FeeListItem>
+                    <div className="fee-info">
+                      <span className="fee-info-title">
+                        {FeesColumns[2].title}
+                      </span>
+                      <Styled.FeeTypeOrValueContainer>
+                        {item.fees.map((fee, index) => (
+                          <span
+                            key={`${item.operation}-${item.types[index]}-${fee}`}
+                            className="fee-info-value"
+                          >
+                            {fee}
+                          </span>
+                        ))}
+                      </Styled.FeeTypeOrValueContainer>
+                    </div>
+                  </Styled.FeeItemContent>
+                </Styled.FeeListItem>
+              )}
+            />
+            {gameFull ? (
+              <a onClick={() => setGameFull(false)}>Show Less</a>
+            ) : (
+              <a onClick={() => setGameFull(true)}>Show More</a>
             )}
-          />
+          </>
         )}
-      </section>
+      </Styled.Section>
     </Styled.FeesTabWrapper>
   );
 };
