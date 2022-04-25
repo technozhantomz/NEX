@@ -1,7 +1,8 @@
 import React from "react";
 
+import { TradingPairCard } from "../../../../common/components";
+
 import * as Styled from "./MarketTab.styled";
-import { TradingPairCard } from "./components";
 import { useMarketTab } from "./hooks";
 
 export const MarketTab = (): JSX.Element => {

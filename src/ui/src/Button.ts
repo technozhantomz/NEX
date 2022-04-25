@@ -6,6 +6,9 @@ import { breakpoint } from "./breakpoints";
 export const Button = styled(AntdButton)`
    {
     height: 35px;
+    &:after {
+      display: none;
+    }
     border-radius: 4px;
     ${breakpoint.xs} {
       height: 45px;
