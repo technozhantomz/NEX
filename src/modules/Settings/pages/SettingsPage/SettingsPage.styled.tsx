@@ -16,12 +16,16 @@ export const SettingsCard = styled(UiCard)`
   }
   ${breakpoint.sm} {
     .ant-card-body {
+      height: 790px;
       .ant-tabs-nav-operations {
         display: flex;
       }
       .ant-table-wrapper {
         margin: 0 20px 39px;
         max-width: 566px;
+      }
+      .ant-tabs-nav {
+        width: 500px;
       }
     }
   }

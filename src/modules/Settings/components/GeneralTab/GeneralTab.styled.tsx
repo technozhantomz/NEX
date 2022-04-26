@@ -46,7 +46,7 @@ export const LanguageFormItem = styled(UiForm.Item)`
     }
   }
   ${breakpoint.xs} {
-    width: 40%;
+    width: 350px;
   }
 `;
 export const LabelText = styled(Text)`
