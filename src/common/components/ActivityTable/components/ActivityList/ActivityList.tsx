@@ -9,10 +9,17 @@ import * as Styled from "./ActivityList.styled";
 
 type Props = {
   userName?: string;
+  isWalletActivityTable?: boolean;
 };
 
-export const ActivityList = ({ userName }: Props): JSX.Element => {
-  const { activitiesTable, loading } = useActivityTable(userName);
+export const ActivityList = ({
+  userName,
+  isWalletActivityTable = false,
+}: Props): JSX.Element => {
+  const { activitiesTable, loading } = useActivityTable({
+    userName,
+    isWalletActivityTable,
+  });
 
   return (
     <List

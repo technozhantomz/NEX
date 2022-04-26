@@ -12,21 +12,25 @@ export const AvtivityInfo = ({ infoString }: Props): JSX.Element => {
     setStringParts(infoString.split(","));
   }, [infoString]);
 
-  const getUserLink = (userLink: string) => {
+  const getUserLink = (userLink: string, key: number) => {
     const userName = userLink.substring(
       userLink.indexOf("=") + 1,
       userLink.lastIndexOf("]")
     );
-    return <Link href={`/user/${userName}`}>{userName}</Link>;
+    return (
+      <Link key={key} href={`/user/${userName}`}>
+        {userName}
+      </Link>
+    );
   };
 
   return (
     <>
-      {stringParts.map((s) => {
-        if (s.includes("userlink")) {
-          return getUserLink(s);
+      {stringParts.map((stringPart, index) => {
+        if (stringPart.includes("userlink")) {
+          return getUserLink(stringPart, index);
         } else {
-          return <span>{s}</span>;
+          return <span key={index}>{stringPart}</span>;
         }
       })}
     </>

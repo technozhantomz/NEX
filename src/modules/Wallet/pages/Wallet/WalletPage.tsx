@@ -33,7 +33,7 @@ const WalletPage: NextPage = () => {
             <AssetsTable />
           </TabPane>
           <TabPane tab="Activities" key="activities">
-            <ActivityTable />
+            <ActivityTable isWalletActivityTable={true} />
           </TabPane>
         </Styled.Tabs>
       </Styled.WalletCard>

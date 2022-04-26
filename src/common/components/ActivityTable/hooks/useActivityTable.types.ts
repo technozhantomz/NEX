@@ -7,7 +7,12 @@ export interface ActivityRow {
   fee: string;
 }
 
-export type UseActivityTable = {
+export type UseActivityTableResult = {
   activitiesTable: ActivityRow[];
   loading: boolean;
+};
+
+export type UseActivityTableArgs = {
+  userName?: string;
+  isWalletActivityTable?: boolean;
 };

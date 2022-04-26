@@ -11,9 +11,16 @@ import {
 } from "../../../providers";
 import { Amount, BlockHeader, Fee, History } from "../../../types";
 
-import { ActivityRow, UseActivityTable } from "./useActivityTable.types";
+import {
+  ActivityRow,
+  UseActivityTableArgs,
+  UseActivityTableResult,
+} from "./useActivityTable.types";
 
-export function useActivityTable(userName?: string): UseActivityTable {
+export function useActivityTable({
+  userName,
+  isWalletActivityTable = false,
+}: UseActivityTableArgs): UseActivityTableResult {
   const [activitiesTable, _setActivitiesTable] = useState<ActivityRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { dbApi } = usePeerplaysApiContext();
@@ -223,6 +230,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
       const asset = await getAssetById(asset_to_update);
       return `[userlink=${issuerName}], updated asset ${asset.symbol}`;
     },
+    // unnecessary
     asset_claim_pool: async ({
       amount_to_claim,
       asset_id,
@@ -240,6 +248,7 @@ export function useActivityTable(userName?: string): UseActivityTable {
       const asset = await getAssetById(asset_id);
       return `[userlink=${issuerName}], claimed ${claimedAsset.amount} ${claimedAsset.symbol} from ${asset.symbol} fee pool`;
     },
+    // unnecessary
     asset_update_issuer: async ({
       new_issuer,
       asset_to_update,
@@ -312,16 +321,29 @@ export function useActivityTable(userName?: string): UseActivityTable {
         history = await getAccountHistoryById(id);
       }
       // this should change based on designer decision
-      history = history.filter(
-        (el: { op: number[] }) =>
-          (el.op[0] >= 0 && el.op[0] <= 8) ||
-          el.op[0] === 34 ||
-          el.op[0] === 10 ||
-          el.op[0] === 11 ||
-          el.op[0] === 13 ||
-          el.op[0] === 14 ||
-          el.op[0] === 16
-      );
+      if (isWalletActivityTable) {
+        history = history.filter(
+          (el: { op: number[] }) =>
+            (el.op[0] >= 0 && el.op[0] <= 8) ||
+            el.op[0] === 34 ||
+            el.op[0] === 10 ||
+            el.op[0] === 11 ||
+            el.op[0] === 13 ||
+            el.op[0] === 14 ||
+            el.op[0] === 16
+        );
+      } else {
+        history = history.filter(
+          (el: { op: number[] }) =>
+            (el.op[0] >= 0 && el.op[0] <= 8) ||
+            el.op[0] === 34 ||
+            el.op[0] === 10 ||
+            el.op[0] === 11 ||
+            el.op[0] === 13 ||
+            el.op[0] === 14 ||
+            el.op[0] === 16
+        );
+      }
       const activityRows = await Promise.all(history.map(formActivityRow));
       _setActivitiesTable(activityRows);
       setLoading(false);
@@ -336,11 +358,13 @@ export function useActivityTable(userName?: string): UseActivityTable {
     getAccountHistoryById,
     _setActivitiesTable,
     getAccountByName,
+    isWalletActivityTable,
+    userName,
   ]);
 
   useEffect(() => {
     setActivitiesTable();
-  }, [id]);
+  }, [id, userName]);
 
   return { activitiesTable, loading };
 }
