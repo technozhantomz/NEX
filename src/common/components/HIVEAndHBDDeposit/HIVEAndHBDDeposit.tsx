@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { FormDisclamer } from "..";
-import { CardFormButton } from "../../../ui/src";
 import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import { useUserContext } from "../../providers";
 
@@ -34,7 +32,7 @@ export const HIVEAndHBDDeposit = ({
         </Styled.Container>
       ) : (
         <Styled.LoginContainer>
-          <CardFormButton
+          <Styled.Button
             type="primary"
             htmlType="button"
             onClick={() => {
@@ -42,15 +40,14 @@ export const HIVEAndHBDDeposit = ({
             }}
           >
             {`Log in & Deposit ${assetSymbol}`}
-          </CardFormButton>
-          <Styled.FormDisclaimerContainer>
-            <FormDisclamer>
-              <span>Don't have a Peerplays account? </span>
-              <Link href="/signup">
-                <a>Create account</a>
-              </Link>
-            </FormDisclamer>
-          </Styled.FormDisclaimerContainer>
+          </Styled.Button>
+
+          <Styled.FormDisclamer>
+            <span>Don't have a Peerplays account? </span>
+            <Link href="/signup">
+              <a>Create account</a>
+            </Link>
+          </Styled.FormDisclamer>
         </Styled.LoginContainer>
       )}
     </>

@@ -1,5 +1,6 @@
 import { styled, Card as UiCard } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const AssetCard = styled(UiCard)`
   .ant-card-body {
@@ -10,7 +11,7 @@ export const AssetCard = styled(UiCard)`
       padding: 33px 28px 10px;
     }
     .ant-tabs-top > .ant-tabs-nav::before {
-      border-bottom: 2pt solid #f0f0f0;
+      ${mixIns.inActiveTab}
       max-width: 566px;
     }
     .ant-tabs > .ant-tabs-nav,

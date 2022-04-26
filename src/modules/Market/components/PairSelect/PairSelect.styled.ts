@@ -1,4 +1,5 @@
 import { Button, Row, styled } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 
 export const PairSelectContainer = styled.div`
   padding: 30px 30px 0 30px;
@@ -13,7 +14,17 @@ export const PairButton = styled(Button)`
   font-size: 20px;
   font-weight: 700;
   border: none;
+  box-shadow: none;
   padding: 4px 0;
+  &.ant-btn:hover,
+  &.ant-btn:focus,
+  &.ant-btn:active {
+    box-shadow: none;
+    outline: none;
+    border: none;
+    color: ${colors.textColor};
+    background: #fff;
+  }
 `;
 
 export const PairInfoLabel = styled.span`

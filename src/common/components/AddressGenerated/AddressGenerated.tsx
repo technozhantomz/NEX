@@ -1,7 +1,9 @@
 import { InfoCircleOutlined } from "../../../ui/src";
+import { breakpoints } from "../../../ui/src/breakpoints";
 import { CopyIcon } from "../../../ui/src/icons";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import { useCopyText } from "../../hooks";
+import { useViewportContext } from "../../providers";
 import { SidechainAcccount } from "../../types";
 
 import * as Styled from "./AddressGenerated.styled";
@@ -15,13 +17,19 @@ export const AddressGenerated = ({
   bitcoinSidechainAccount,
   getSidechainAccounts,
 }: Props): JSX.Element => {
+  const { width } = useViewportContext();
   const { downloaded, downloadPrivateKeys } =
     useAddressGenerated(getSidechainAccounts);
 
   return (
     <>
       <Styled.AddressContainer>
-        <BitcoinIcon height="30" width="30" />
+        <Styled.IconDiv>
+          <BitcoinIcon
+            height={width > breakpoints.sm ? "30" : "18"}
+            width={width > breakpoints.sm ? "30" : "18"}
+          />
+        </Styled.IconDiv>
         <Styled.DepositHeader>Copy your Bitcoin address</Styled.DepositHeader>
       </Styled.AddressContainer>
       <Styled.GeneratedBitcoinAddress

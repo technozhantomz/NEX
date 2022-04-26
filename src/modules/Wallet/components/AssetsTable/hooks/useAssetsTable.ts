@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { defaultQuote } from "../../../../../api/params/networkparams";
+import { defaultToken } from "../../../../../api/params/networkparams";
 import { useAsset, useMarketPairStats } from "../../../../../common/hooks";
 import {
   usePeerplaysApiContext,
@@ -24,17 +24,18 @@ export function useAssetsTable(): UseAssetsTabResult {
   }, [assets, localStorageAccount]);
 
   const formAssetRow = useCallback(
-    async (asset: Asset): Promise<IAssetRow> => {
-      const available = asset.amount as number;
-      const defaultBaseAsset = await getAssetBySymbol(defaultQuote as string);
-      if (asset.symbol !== defaultQuote) {
+    async (baseAsset: Asset): Promise<IAssetRow> => {
+      const available = baseAsset.amount as number;
+      const defaultQuoteAsset = await getAssetBySymbol(defaultToken as string);
+      if (baseAsset.symbol !== defaultQuoteAsset.symbol) {
         const marketPairStats = await getMarketPairStats(
-          defaultBaseAsset,
-          asset
+          baseAsset,
+          defaultQuoteAsset
         );
         return {
-          key: asset.id,
-          asset: asset.symbol,
+          key: baseAsset.id,
+          asset: baseAsset.symbol,
+          quoteAsset: defaultToken as string,
           available,
           price: marketPairStats.latest,
           change: `${marketPairStats.percentChange}%`,
@@ -42,8 +43,9 @@ export function useAssetsTable(): UseAssetsTabResult {
         };
       }
       return {
-        key: asset.id,
-        asset: asset.symbol,
+        key: baseAsset.id,
+        asset: baseAsset.symbol,
+        quoteAsset: defaultToken as string,
         available,
         price: 0,
         change: "0.0%",

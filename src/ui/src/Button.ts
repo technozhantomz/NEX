@@ -1,9 +1,18 @@
 import { Button as AntdButton } from "antd";
 import styled from "styled-components";
 
+import { breakpoint } from "./breakpoints";
+import { mixIns } from "./mixins";
+
 export const Button = styled(AntdButton)`
    {
-    height: 45px;
-    border-radius: 4px;
+    height: 35px;
+    ${mixIns.borderRadius}
+    &:after {
+      display: none;
+    }
+    ${breakpoint.xs} {
+      height: 45px;
+    }
   }
 `;
