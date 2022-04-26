@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
-import { Button, DownOutlined, Tabs, Menu } from "../../../../ui/src";
+import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import {
   AssetsTab,

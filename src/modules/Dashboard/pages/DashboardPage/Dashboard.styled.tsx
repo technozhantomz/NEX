@@ -1,3 +1,5 @@
+import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
 import {
   Button,
   styled,
@@ -49,7 +51,6 @@ export const Buttons = styled.div`
   font-size: 14px;
   height: 32px;
   cursor: pointer;
-
   &:hover,
   &:active,
   &:focus,
@@ -59,16 +60,14 @@ export const Buttons = styled.div`
 `;
 export const ButtonNames = styled.p`
   text-align: center;
-  letter-spacing: 0px;
-  color: #212121;
-  opacity: 1;
-  font-size: 14px;
+  font-weight: 500;
+  color: ${colors.textColor};
   align-items: center;
-  padding: 5px;
-
-  @media (max-width: 500px) {
-    font-size: 12px;
-    padding: 8px;
+  font-size: 12px;
+  padding: 8px;
+  ${breakpoint.xs} {
+    font-size: 14px;
+    padding: 5px;
   }
 `;
 

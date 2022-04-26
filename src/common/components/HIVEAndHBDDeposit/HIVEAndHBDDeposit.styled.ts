@@ -18,7 +18,7 @@ export const LogoContainer = styled.div`
 `;
 
 export const AccountContainer = styled.span`
-  color: #0a48be;
+  color: ${colors.linkColor};
   font-style: italic;
 `;
 export const DepositInstruction = styled.div`

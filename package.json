@@ -16,7 +16,7 @@
     "@babel/helper-validator-identifier": "^7.16.7",
     "@next/bundle-analyzer": "^12.1.0",
     "@svgr/webpack": "^6.2.1",
-    "antd": "^4.20.0-alpha.1",
+    "antd": "^4.20.0",
     "assert": "^2.0.0",
     "babel-preset-next": "^1.4.0",
     "bip32": "^3.0.1",
