@@ -4,7 +4,12 @@ export type Settings = {
   defaultAsset: string;
   language: string;
   nodeAutoselect: boolean;
-  notifications: boolean;
+  notifications: {
+    allow: boolean;
+    additional: {
+      transferToMe: boolean;
+    };
+  };
   walletLock: number;
   rememberMe: true;
 };

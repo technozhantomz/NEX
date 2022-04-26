@@ -1,39 +1,38 @@
-import { Col as col, Row as row, styled } from "../../../../ui/src";
+import { styled, Col as UiCol, Row as UiRow } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const MarketContainer = styled.div`
-  background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
   background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 4px;
-  opacity: 1;
+  ${mixIns.borderRadius}
   color: white;
-  font-size: 20px;
   width: 600px;
   margin: 10px;
   padding: 10px;
   text-align: center;
 `;
 
-export const Row = styled(row)`
-  margin-bottom: 20px;
-  @media (min-width: 500px) {
-    margin-left: 25px;
-    margin-top: 25px;
-    margin-right: auto;
+export const Row = styled(UiRow)``;
+
+export const Col = styled(UiCol)``;
+
+export const Heading = styled.p`
+  text-align: left;
+  color: ${colors.textColorSecondary};
+  font-size: 12px;
+  margin-left: 7px;
+  margin-top: 25px;
+  ${breakpoint.xs} {
+    font-size: 14px;
+    margin-left: 30px;
   }
 `;
-export const Col = styled(col)`
-  margin: 5px;
-`;
-export const HeadingPara = styled.p`
-  text-align: left;
-  font: normal normal normal 14px/17px Inter;
-  letter-spacing: 0px;
-  color: #6c6c6c;
-  opacity: 1;
-  margin-left: 30px;
-  margin-top: 30px;
-  @media (max-width: 500px) {
-    font-size: 12px;
-    margin-left: 7px;
+
+export const Div = styled.div`
+  margin: 10px;
+
+  ${breakpoint.sm} {
+    margin: 25px;
   }
 `;

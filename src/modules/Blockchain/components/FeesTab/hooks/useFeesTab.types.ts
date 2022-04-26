@@ -1,4 +1,4 @@
-import { FeeParameter } from "../../../../../common/hooks/fees/useFees.types";
+import { FeeParameter } from "../../../../../common/types";
 
 export type UseFeesTabResult = {
   loading: boolean;

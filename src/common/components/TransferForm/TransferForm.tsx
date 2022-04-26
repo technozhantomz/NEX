@@ -1,7 +1,7 @@
 import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
+import { useUserContext } from "../../providers";
 import { PasswordModal } from "../PasswordModal";
-import { useUserContext } from "../UserProvider";
 
 import * as Styled from "./TransferForm.styled";
 import { useTransferForm } from "./hooks";
@@ -14,14 +14,15 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
-    visible,
+    isPasswordModalVisible,
     feeAmount,
     transferForm,
     formValdation,
-    onCancel,
+    handlePasswordModalCancel,
     confirm,
     onFormFinish,
     handleValuesChange,
+    submittingPassword,
   } = useTransferForm();
   const { defaultAsset } = useAsset();
 
@@ -86,7 +87,11 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           </Styled.TransferFormButton>
         </Form.Item>
       </Styled.TransferForm>
-      <PasswordModal visible={visible} onCancel={onCancel} />
+      <PasswordModal
+        visible={isPasswordModalVisible}
+        onCancel={handlePasswordModalCancel}
+        submitting={submittingPassword}
+      />
     </Form.Provider>
   );
 };
