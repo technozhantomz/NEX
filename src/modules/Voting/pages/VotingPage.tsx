@@ -6,7 +6,7 @@ import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
 import { Button, DownOutlined, Menu, Tabs } from "../../../ui/src";
 import { breakpoints } from "../../../ui/src/breakpoints";
-import { GPOSTab } from "../components";
+import { GPOSTab, ProxyTab } from "../components";
 
 import * as Styled from "./VotingPage.styled";
 import { useVotingPage } from "./hooks";
@@ -77,7 +77,7 @@ const VotingPage: NextPage = () => {
             <p>advisors</p>
           </TabPane>
           <TabPane tab="Proxy" key="proxy">
-            <p>proxy</p>
+            <ProxyTab /> 
           </TabPane>
         </Tabs>
       </Styled.VotingCard>

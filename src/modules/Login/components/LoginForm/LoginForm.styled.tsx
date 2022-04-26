@@ -1,7 +1,7 @@
-import { CardFormButton, CardFrom, styled } from "../../../../ui/src";
+import { CardFormButton, CardForm, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 
-export const LoginForm = styled(CardFrom)`
+export const LoginForm = styled(CardForm)`
   ${breakpoint.xs} {
     padding-top: 16px;
   }

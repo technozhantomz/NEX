@@ -19,7 +19,7 @@ export const CardFormButton = styled(Button)`
     width: 70%;
   }
 `;
-export const CardFrom = styled(AntdForm)`
+export const CardForm = styled(AntdForm)`
   .ant-input,
   .ant-input-affix-wrapper {
     ${mixIns.borderRadius}

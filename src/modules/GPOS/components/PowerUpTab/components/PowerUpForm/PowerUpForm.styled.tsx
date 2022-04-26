@@ -1,8 +1,8 @@
-import { CardFormButton, CardFrom, styled } from "../../../../../../ui/src";
+import { CardFormButton, CardForm, styled } from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
 
-export const PowerUpForm = styled(CardFrom)`
+export const PowerUpForm = styled(CardForm)`
   .ant-input {
     text-align: right;
     height: 65px;

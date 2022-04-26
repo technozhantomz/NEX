@@ -1,13 +1,13 @@
 import {
   CardFormButton,
-  CardFrom,
+  CardForm,
   Modal,
   styled,
 } from "../../../../../../ui/src";
 import { colors } from "../../../../../../ui/src/colors";
 
 export const MembershipModal = styled(Modal)``;
-export const MembershipModalForm = styled(CardFrom)``;
+export const MembershipModalForm = styled(CardForm)``;
 export const MembershipModalFormButton = styled(CardFormButton)``;
 
 export const DetailContainer = styled.div`
