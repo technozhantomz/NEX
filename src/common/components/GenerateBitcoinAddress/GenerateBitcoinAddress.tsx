@@ -2,8 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
-import { CardFormButton, Form } from "../../../ui/src";
-import { FormDisclamer } from "../FormDisclamer";
+import { Form } from "../../../ui/src";
 import { PasswordModal } from "../PasswordModal";
 
 import * as Styled from "./GenerateBitcoinAddress.styled";
@@ -32,13 +31,13 @@ export const GenerateBitcoinAddress = ({
     <>
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.DepositForm name="generateAddressForm" onFinish={confirm}>
-          <Form.Item>
+          <Styled.FormItem>
             {isLoggedIn ? (
-              <CardFormButton type="primary" htmlType="submit">
+              <Styled.Button type="primary" htmlType="submit">
                 Generate Bitcoin Address
-              </CardFormButton>
+              </Styled.Button>
             ) : (
-              <CardFormButton
+              <Styled.Button
                 type="primary"
                 htmlType="button"
                 onClick={() => {
@@ -46,26 +45,26 @@ export const GenerateBitcoinAddress = ({
                 }}
               >
                 Log in & Generate Bitcoin Address
-              </CardFormButton>
+              </Styled.Button>
             )}
-          </Form.Item>
+          </Styled.FormItem>
         </Styled.DepositForm>
         {status === "" ? (
           ""
         ) : (
-          <FormDisclamer>
+          <Styled.FormDisclamer>
             <Styled.SonError>{status}</Styled.SonError>
-          </FormDisclamer>
+          </Styled.FormDisclamer>
         )}
         {isLoggedIn ? (
           ""
         ) : (
-          <FormDisclamer>
+          <Styled.FormDisclamer>
             <span>Don't have a Peerplays account? </span>
             <Link href="/signup">
               <a>Create account</a>
             </Link>
-          </FormDisclamer>
+          </Styled.FormDisclamer>
         )}
         <PasswordModal
           visible={isPasswordModalVisible}

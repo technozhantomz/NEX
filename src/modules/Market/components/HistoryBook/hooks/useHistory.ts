@@ -1,67 +1,67 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { roundNum, useAsset, useFormDate } from "../../../../../common/hooks";
-import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
-import { usePairSelect } from "../../PairSelect/hooks/usePairSelect";
+import { OrderHistoryColumn } from "../../../types";
 
-import {
-  OrderHistory,
-  OrderHistoryRow,
-  UseHistoryResult,
-} from "./useHistory.types";
+import { UseHistoryResult } from "./useHistory.types";
 
-export function useHistory(): UseHistoryResult {
-  const { historyApi } = usePeerplaysApiContext();
-  const { currentBase, currentQuote } = usePairSelect();
-  const [orderHistoryRow, setOrderHistoryRow] = useState<OrderHistoryRow[]>([]);
-  const { setPrecision } = useAsset();
+type Args = {
+  currentBase: Asset | undefined;
+  currentQuote: Asset | undefined;
+  loadingSelectedPair: boolean;
+  getHistory: (base: Asset, quote: Asset) => Promise<void>;
+  getUserHistory: (base: Asset, quote: Asset) => Promise<void>;
+};
 
-  const getHistory = useCallback(
-    async (base: Asset, quote: Asset) => {
-      const history: OrderHistory[] = await historyApi(
-        "get_fill_order_history",
-        [base.id, quote.id, 100]
-      );
-      setOrderHistoryRow(
-        history.map((h) => {
-          const time = useFormDate(h.time, ["date", "month", "year", "time"]);
-          const { pays, receives } = h.op;
-          let baseAmount = 0,
-            quoteAmount = 0,
-            isBuyOrder = false;
-          // this is sell orders
-          if (pays.asset_id === base.id) {
-            baseAmount = setPrecision(false, pays.amount, base.precision);
-            quoteAmount = setPrecision(false, receives.amount, quote.precision);
-            isBuyOrder = false;
-            //this is buy orders
-          } else {
-            baseAmount = setPrecision(false, receives.amount, base.precision);
-            quoteAmount = setPrecision(false, pays.amount, quote.precision);
-            isBuyOrder = true;
-          }
-
-          return {
-            baseAmount,
-            quoteAmount,
-            price: roundNum(baseAmount / quoteAmount),
-            isBuyOrder,
-            time,
-          };
-        })
-      );
-    },
-    [historyApi]
-  );
+export function useHistory({
+  currentBase,
+  currentQuote,
+  loadingSelectedPair,
+  getHistory,
+  getUserHistory,
+}: Args): UseHistoryResult {
+  const [columns, setColumns] = useState<OrderHistoryColumn[]>([]);
 
   useEffect(() => {
-    if (currentBase !== undefined && currentQuote !== undefined) {
+    if (
+      !loadingSelectedPair &&
+      currentBase !== undefined &&
+      currentQuote !== undefined
+    ) {
+      setColumns([
+        {
+          title: currentBase.symbol,
+          dataIndex: "base",
+          key: "base",
+        },
+        {
+          title: currentQuote.symbol,
+          dataIndex: "quote",
+          key: "quote",
+        },
+        {
+          title: "Price",
+          dataIndex: "price",
+          key: "price",
+        },
+        {
+          title: "Date",
+          dataIndex: "date",
+          key: "date",
+        },
+      ]);
       getHistory(currentBase, currentQuote);
+      getUserHistory(currentBase, currentQuote);
     }
-  }, [currentBase, currentQuote, getHistory]);
+  }, [
+    loadingSelectedPair,
+    currentBase,
+    currentQuote,
+    getHistory,
+    getUserHistory,
+  ]);
 
   return {
-    orderHistoryRow,
+    columns,
   };
 }

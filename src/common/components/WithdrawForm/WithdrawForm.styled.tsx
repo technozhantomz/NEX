@@ -1,7 +1,15 @@
-import { CardFormButton, CardFrom, styled } from "../../../ui/src";
+import { FormDisclamer as UiFormDisclamer } from "..";
+import { CardFormButton, CardFrom, Form, styled } from "../../../ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const WithdrawForm = styled(CardFrom)`
   margin: 0 20px;
+  .form-input {
+    font-size: 12px;
+    ${breakpoint.sm} {
+      font-size: 20px;
+    }
+  }
 `;
 
 export const WithdrawFormAssetAmount = styled(CardFrom.Item)`
@@ -14,6 +22,10 @@ export const WithdrawFormAssetAmount = styled(CardFrom.Item)`
     .ant-input {
       text-align: right;
       padding-right: 30px;
+      font-size: 16px;
+      ${breakpoint.sm} {
+        font-size: 20px;
+      }
     }
   }
 `;
@@ -29,4 +41,31 @@ export const WithdrawFormAsset = styled(CardFrom.Item)`
   }
 `;
 
-export const WithdrawFormButton = styled(CardFormButton)``;
+export const Fee = styled.p`
+  font-size: 12px;
+  ${breakpoint.xs} {
+    font-size: 14px;
+  }
+`;
+
+export const WithdrawFormButton = styled(CardFormButton)`
+  width: 100%;
+`;
+
+export const FormItem = styled(Form.Item)`
+  width: 255px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 35px;
+  ${breakpoint.sm} {
+    width: 399px;
+    height: 44px;
+  }
+`;
+
+export const FormDisclamer = styled(UiFormDisclamer)`
+  margin-bottom: 15px;
+  ${breakpoint.xs} {
+    margin-bottom: 25px;
+  }
+`;

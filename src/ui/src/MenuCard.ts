@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { breakpoint } from "./breakpoints";
 import { colors } from "./colors";
+import { mixIns } from "./mixins";
 
 export const MenuCard = styled(AntdCard)`
    {
@@ -13,7 +14,7 @@ export const MenuCard = styled(AntdCard)`
       margin: 0;
       padding: 0;
       li {
-        border-bottom: 1px solid ${colors.borderColorBase};
+        ${mixIns.hairline}
         padding: 0 0 10px 0;
         margin: 10px 0 0 0;
       }

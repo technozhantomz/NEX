@@ -1,14 +1,17 @@
-import { styled } from "../../../../../../ui/src";
-import { breakpoint } from "../../../../../../ui/src/breakpoints";
-import { colors } from "../../../../../../ui/src/colors";
+import { styled } from "../../../ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
+import { colors } from "../../../ui/src/colors";
+import { mixIns } from "../../../ui/src/mixins";
 
 export const Card = styled.div`
-  height: 100px;
+  height: 65px;
+  ${breakpoint.xs} {
+    height: 100px;
+  }
   /* UI Properties */
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
-  border-radius: 4px;
-  opacity: 1;
+  ${mixIns.borderRadius}
   cursor: pointer;
   transition: all 0.3s ease-out;
 
@@ -24,31 +27,29 @@ export const Card = styled.div`
         ${colors.white} 100%
       )
       0% 0% no-repeat padding-box;
-    border-radius: 4px;
-    opacity: 1;
+    ${mixIns.borderRadius}
   }
 `;
 export const ContentHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  @media (max-width: 500px) {
+    height: 25px;
+  }
 `;
 export const TradingPair = styled.p`
-  text-align: left;
-  font: normal normal medium 14px/17px Inter;
-  letter-spacing: 0px;
   color: ${colors.textColorSecondary};
-  opacity: 1;
-  font-size: 14px;
+  font-size: 12px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
   margin: 10px;
 `;
 export const PercentChange = styled.p`
-  font: normal normal medium 14px/17px Inter;
-  letter-spacing: 0px;
   color: ${(props) =>
     props.theme
       ? props.theme.percentChangeColor
       : props.theme.percentChangeColor};
-  opacity: 1;
   font-size: 12px;
   margin: 10px;
   ${breakpoint.xs} {
@@ -57,24 +58,23 @@ export const PercentChange = styled.p`
 `;
 export const Price = styled.p`
   text-align: left;
-  font: normal normal medium 28px/34px Inter;
-  letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  font-size: 28px;
+  font-size: 16px;
   margin-left: 10px;
   display: ${(props) =>
     props.theme ? props.theme.display : props.theme.display};
+  ${breakpoint.sm} {
+    font-size: 28px;
+  }
 `;
 export const Volume = styled.p`
   text-align: left;
-  font: normal normal medium 28px/34px Inter;
-  letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  font-size: 26px;
+  font-size: 16px;
   margin-left: 10px;
-  ${breakpoint.sm} {
+  ${breakpoint.xs} {
     font-size: 28px;
   }
 `;

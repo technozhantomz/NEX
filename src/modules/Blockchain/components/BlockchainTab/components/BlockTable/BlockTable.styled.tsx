@@ -1,6 +1,6 @@
 import {
   styled,
-  List as UiList,
+  ListItem as UiListItem,
   Table as UiTable,
 } from "../../../../../../ui/src";
 import { colors } from "../../../../../../ui/src/colors";
@@ -28,7 +28,7 @@ export const BlockTable = styled(UiTable)`
   }
 `;
 
-export const BlockListItem = styled(UiList.Item)``;
+export const BlockListItem = styled(UiListItem)``;
 
 export const BlockItemContent = styled.div`
   margin: 18px 0 25px;

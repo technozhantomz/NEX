@@ -9,6 +9,8 @@ export { Avatar } from "./Avatar";
 export { Typography, Text, Paragraph } from "./Typography";
 export { StatsCardsDeck } from "./StatsCardDeck";
 export { Tag } from "./Tag";
+export { TableSearch } from "./TableSearch";
+export { ListItem } from "./ListItem";
 
 export {
   Row,
@@ -25,6 +27,7 @@ export {
   Space,
   Switch,
   List,
+  Carousel,
 } from "antd";
 
 export {
