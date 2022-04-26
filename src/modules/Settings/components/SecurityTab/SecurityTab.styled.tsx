@@ -14,6 +14,7 @@ export const SecuritySettingsCard = styled.div`
     text-align: left;
     color: ${colors.textColor};
     height: 500px;
+    margin: 20px;
     ${breakpoint.xs} {
       margin-left: 30px;
     }
@@ -25,8 +26,10 @@ export const SecurityTabForm = styled(UiForm)`
 `;
 
 export const LockWalletFormItem = styled(UiForm.Item)`
-  width: 90%;
+  width: 100%;
   margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
   border-radius: 4px;
@@ -41,6 +44,7 @@ export const LockWalletFormItem = styled(UiForm.Item)`
   }
   ${breakpoint.xs} {
     width: 350px;
+    margin: 15px 0;
   }
 `;
 
