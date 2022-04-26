@@ -2,12 +2,17 @@ export interface ActivityRow {
   key: string;
   time: string;
   type: string;
-  info: JSX.Element;
+  info: string;
   id: string;
   fee: string;
 }
 
-export type UseActivityTable = {
+export type UseActivityTableResult = {
   activitiesTable: ActivityRow[];
   loading: boolean;
+};
+
+export type UseActivityTableArgs = {
+  userName?: string;
+  isWalletActivityTable?: boolean;
 };
