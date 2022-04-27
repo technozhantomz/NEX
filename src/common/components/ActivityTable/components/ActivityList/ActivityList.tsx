@@ -3,11 +3,23 @@ import { List } from "antd";
 import { useActivityTable } from "../../hooks";
 import { ActivityColumns as columns } from "../ActivityColumns/";
 import { ActivityTag } from "../ActivityTag";
+import { AvtivityInfo } from "../AvtivityInfo";
 
 import * as Styled from "./ActivityList.styled";
 
-export const ActivityList = (): JSX.Element => {
-  const { activitiesTable, loading } = useActivityTable();
+type Props = {
+  userName?: string;
+  isWalletActivityTable?: boolean;
+};
+
+export const ActivityList = ({
+  userName,
+  isWalletActivityTable = false,
+}: Props): JSX.Element => {
+  const { activitiesTable, loading } = useActivityTable({
+    userName,
+    isWalletActivityTable,
+  });
 
   return (
     <List
@@ -23,7 +35,9 @@ export const ActivityList = (): JSX.Element => {
             </div>
             <div className="activity-info">
               <span className="activity-info-title">{columns[2].title}</span>
-              <span className="activity-info-value">{item.info}</span>
+              <span className="activity-info-value">
+                <AvtivityInfo infoString={item.info} />
+              </span>
             </div>
             <div className="activity-info">
               <span className="activity-info-title">{columns[3].title}</span>

@@ -14,4 +14,6 @@ export const colors = {
   successTag: `#B8F4C9`,
   assetTag: `#FDBA86`,
   missedColor: `#D01721`,
+  inactiveColor: `#f0f0f0`,
+  activeColor: ``,
 };
