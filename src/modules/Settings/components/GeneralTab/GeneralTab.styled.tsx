@@ -84,9 +84,7 @@ export const SaveButton = styled(CardFormButton)`
   }
 `;
 
-export const TransferCheckbox = styled(UiCheckbox)`
-  padding-left: 10px;
-`;
+export const TransferCheckbox = styled(UiCheckbox)``;
 
 export const Checkbox = styled(UiCheckbox)``;
 
