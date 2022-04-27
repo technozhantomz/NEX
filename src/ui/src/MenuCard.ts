@@ -1,8 +1,10 @@
-import { Card as AntdCard } from "antd";
-import styled from "styled-components";
+/** @format */
 
-import { breakpoint } from "./breakpoints";
-import { colors } from "./colors";
+import { Card as AntdCard } from 'antd';
+import styled from 'styled-components';
+
+import { breakpoint } from './breakpoints';
+import { colors } from './colors';
 
 export const MenuCard = styled(AntdCard)`
    {
@@ -49,6 +51,16 @@ export const MenuCard = styled(AntdCard)`
       margin-top: 25px;
       border: none;
     }
+    .close {
+      color: ${colors.textColor};
+      position: relative;
+      text-align: left;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: flex-end;
+      // margin: 30px 20px 0 0;
+    }
   }
   ${breakpoint.xs} {
     height: inherit;
@@ -72,6 +84,9 @@ export const MenuCard = styled(AntdCard)`
     }
     .link {
       margin-top: 0;
+    }
+    .close {
+      // display: none;
     }
   }
 `;

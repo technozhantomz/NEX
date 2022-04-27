@@ -6,6 +6,9 @@ export const NotificationMenu = (): JSX.Element => {
 
   return (
     <MenuCard bordered={false}>
+      <a className="close" >
+        X
+      </a>
       <div>FPO</div>
     </MenuCard>
   );

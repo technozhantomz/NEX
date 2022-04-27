@@ -21,6 +21,9 @@ export const MainNav = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   return (
     <MenuCard bordered={false}>
+      <a className="close" >
+        X
+      </a>
       <ul>
         {localStorageAccount ? (
           ""
