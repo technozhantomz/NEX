@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { UseToggleMenuResult } from "./useToggleMenu.types";
 
@@ -36,6 +36,13 @@ export function useToggleMenu(): UseToggleMenuResult {
     setProfileMenuOpen(false);
     setMainMenuOpen(false);
   }, [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]);
+
+  useEffect(() => {
+    document.addEventListener("click", closeMenu);
+    return () => {
+      document.removeEventListener("click", closeMenu);
+    };
+  }, []);
 
   return {
     toggleMenu,

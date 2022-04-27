@@ -1,5 +1,6 @@
 import { Card, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const SignUpFormCard = styled(Card)`
   .ant-card-body {
@@ -8,7 +9,7 @@ export const SignUpFormCard = styled(Card)`
       padding: 35px 30px;
     }
   }
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   height: auto;
   max-width: 600px;
   ${breakpoint.sm} {

@@ -8,3 +8,4 @@ export * from "./TransferForm";
 export * from "./WithdrawForm";
 export * from "./HIVEAndHBDDeposit";
 export * from "./ActivityTable";
+export * from "./TradingPairCard";
