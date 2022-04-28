@@ -1,14 +1,12 @@
 import {
-  Input,
   styled,
-  List as UiList,
+  ListItem as UiListItem,
   StatsCardsDeck as UIStatsCardsDeck,
   Table as UiTable,
+  TableSearch as UiTableSearch,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
-
-const { Search } = Input;
 
 export const AssetsTabWrapper = styled.div`
   margin: 0 15px;
@@ -19,21 +17,10 @@ export const AssetsTabWrapper = styled.div`
 
 export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
 
-export const AssetsSearch = styled(Search)`
-  max-width: 520px;
-  margin-bottom: 35px;
-  .ant-input {
-    border-radius: 4px;
-  }
-  > .ant-input-group
-    > .ant-input-group-addon:last-child
-    .ant-input-search-button {
-    border-radius: 0 4px 4px 0;
-    border-left: none;
-  }
-`;
+export const AssetsSearch = styled(UiTableSearch)``;
 
 export const AssetsTable = styled(UiTable)`
+  max-width: 886px;
   .ant-table-thead > tr > th {
     color: ${colors.textColorSecondary};
     background: ${colors.white};
@@ -55,7 +42,7 @@ export const AssetsTable = styled(UiTable)`
   }
 `;
 
-export const AssetListItem = styled(UiList.Item)``;
+export const AssetListItem = styled(UiListItem)``;
 
 export const AssetItemContent = styled.div`
   margin: 18px 0 25px;

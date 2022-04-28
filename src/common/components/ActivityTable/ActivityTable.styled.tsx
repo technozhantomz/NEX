@@ -16,4 +16,7 @@ export const ActivityTable = styled(UiTable)`
     border: none;
     font-weight: 500;
  }
+ .ant-table-tbody > tr > td a{
+    font-style: italic;
+ }
 `;

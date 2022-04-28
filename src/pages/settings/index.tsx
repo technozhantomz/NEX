@@ -1,1 +1,1 @@
-export { default } from "../../modules/settings";
+export { default } from "../../modules/Settings";

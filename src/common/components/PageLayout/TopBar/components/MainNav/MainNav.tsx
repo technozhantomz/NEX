@@ -11,14 +11,15 @@ import {
   Market,
   Vote,
 } from "../../../../../../ui/src/icons";
-import { useUserContext } from "../../../../UserProvider";
+import { useSettingsContext, useUserContext } from "../../../../../providers";
 import { MenuItem } from "../MenuItem";
 
-import { useAdvancedMode } from "./hooks/useAdvancedMode";
+import { useAdvancedMode } from "./hooks";
 
 export const MainNav = (): JSX.Element => {
   const { advancedMode, handleAdvancedModeChange } = useAdvancedMode();
   const { localStorageAccount } = useUserContext();
+  const { exchanges } = useSettingsContext();
   return (
     <MenuCard bordered={false}>
       <ul>
@@ -43,7 +44,7 @@ export const MainNav = (): JSX.Element => {
         </li>
         <li>
           <MenuItem
-            Href="/market"
+            Href={`/market/${exchanges.active}`}
             Icon={<Market className={"menu-icon"} />}
             Label="Market"
           />

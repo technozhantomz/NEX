@@ -5,6 +5,7 @@ export type ILoginForm = {
   handleLogin: () => void;
   formValdation: IFormValidation;
   loginForm: FormInstance;
+  submitting: boolean;
 };
 
 export type IFormField = {

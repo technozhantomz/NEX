@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../api/params";
-import { usePeerplaysApiContext } from "../components/PeerplaysApiProvider";
-import { useSettingsContext } from "../components/SettingsProvider";
-import { Asset, Cache } from "../types";
+import { usePeerplaysApiContext, useSettingsContext } from "../providers";
+import { Asset, Cache, GlobalProperties } from "../types";
 
 import { UseAssetResult } from "./useAsset.types";
 import { roundNum } from "./useRoundNum";
@@ -29,7 +28,21 @@ export function useAsset(): UseAssetResult {
           (e: Asset[]) => e[0]
         );
         const assets =
-          cache.assets.length > 0 ? [...cache.assets, asset] : [asset];
+          cache.assets.length > 0
+            ? [
+                ...cache.assets,
+                {
+                  dynamic_asset_data_id: asset.dynamic_asset_data_id
+                    ? asset.dynamic_asset_data_id
+                    : undefined,
+                  id: asset.id,
+                  issuer: asset.issuer,
+                  options: asset.options,
+                  precision: asset.precision,
+                  symbol: asset.symbol,
+                } as Asset,
+              ]
+            : [asset];
         setCache({ created: cache.created, assets: assets } as Cache);
 
         return asset;
@@ -55,7 +68,21 @@ export function useAsset(): UseAssetResult {
           [symbol],
         ]).then((e: Asset[]) => e[0]);
         const assets =
-          cache.assets.length > 0 ? [...cache.assets, asset] : [asset];
+          cache.assets.length > 0
+            ? [
+                ...cache.assets,
+                {
+                  dynamic_asset_data_id: asset.dynamic_asset_data_id
+                    ? asset.dynamic_asset_data_id
+                    : undefined,
+                  id: asset.id,
+                  issuer: asset.issuer,
+                  options: asset.options,
+                  precision: asset.precision,
+                  symbol: asset.symbol,
+                } as Asset,
+              ]
+            : [asset];
         setCache({ created: cache.created, assets: assets } as Cache);
         return asset;
       } catch (e) {
@@ -77,8 +104,10 @@ export function useAsset(): UseAssetResult {
   const formAssetBalanceById = useCallback(
     async (id: string, amount: number) => {
       const asset = await getAssetById(id);
-      asset.amount = setPrecision(false, amount, asset.precision);
-      return asset;
+      return {
+        ...asset,
+        amount: setPrecision(false, amount, asset.precision),
+      } as Asset;
     },
     [getAssetById, setPrecision]
   );
@@ -91,7 +120,9 @@ export function useAsset(): UseAssetResult {
   const getSidechainAssets = useCallback(async () => {
     try {
       setLoadingSidechainAssets(true);
-      const globalProperties = await dbApi("get_global_properties");
+      const globalProperties: GlobalProperties = await dbApi(
+        "get_global_properties"
+      );
 
       const btcAssetId = globalProperties.parameters.extensions
         .btc_asset as string;

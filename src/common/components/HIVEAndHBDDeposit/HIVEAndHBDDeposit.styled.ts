@@ -1,10 +1,16 @@
-import { styled } from "../../../ui/src";
+import { FormDisclamer as UiFormDisclamer } from "..";
+import { CardFormButton, styled } from "../../../ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 
 export const Container = styled.div`
   display: flex;
   padding-left: 8px;
   align-items: center;
+  margin: 25px 20px;
+  ${breakpoint.sm} {
+    margin: 35px 30px;
+  }
 `;
 
 export const LogoContainer = styled.div`
@@ -12,13 +18,27 @@ export const LogoContainer = styled.div`
 `;
 
 export const AccountContainer = styled.span`
-  color: #0a48be;
+  color: ${colors.linkColor};
   font-style: italic;
 `;
 export const DepositInstruction = styled.div`
   color: ${colors.textColor};
   text-align: left;
-  font: normal normal normal 14px/20px Inter;
-  letter-spacing: 0px;
-  opacity: 1;
+  font-size: 14px;
+`;
+
+export const LoginContainer = styled.div``;
+
+export const Button = styled(CardFormButton)`
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
+  }
+`;
+
+export const FormDisclamer = styled(UiFormDisclamer)`
+  margin-bottom: 15px;
+  ${breakpoint.xs} {
+    margin-bottom: 25px;
+  }
 `;

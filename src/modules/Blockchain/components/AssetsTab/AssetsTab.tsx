@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { useViewportContext } from "../../../../common/components";
+import { useViewportContext } from "../../../../common/providers";
 import { InfoCircleOutlined, List, Tag, Tooltip } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import { StatsCard } from "../StatsCard";

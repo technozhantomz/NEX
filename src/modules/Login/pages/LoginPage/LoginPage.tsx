@@ -2,25 +2,23 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 
-import { FormDisclamer } from "../../../../common/components/FormDisclamer";
-import { Layout } from "../../../../common/components/PageLayout";
-import { Card } from "../../../../ui/src";
-import { LoginForm } from "../../components/LoginForm";
+import { Layout } from "../../../../common/components";
+import { LoginForm } from "../../components";
 
-//import * as Styled from "./LoginPage.styled";
+import * as Styled from "./LoginPage.styled";
 
 const LoginPage: NextPage = () => {
   return (
     <Layout title="Login" type="card" heading="Log into your account">
-      <Card>
+      <Styled.LoginFormCard>
         <LoginForm />
-        <FormDisclamer>
+        <Styled.FormDisclamer>
           <span>Don't have a Peerplays account? </span>
           <Link href="/signup">
             <a>Create account</a>
           </Link>
-        </FormDisclamer>
-      </Card>
+        </Styled.FormDisclamer>
+      </Styled.LoginFormCard>
     </Layout>
   );
 };

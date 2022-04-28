@@ -6,9 +6,11 @@ export { DownOutlined } from "./DownOutlined";
 export { CardForm, CardFormButton } from "./CardForm";
 export { MenuCard } from "./MenuCard";
 export { Avatar } from "./Avatar";
+export { Typography, Text, Paragraph } from "./Typography";
 export { StatsCardsDeck } from "./StatsCardDeck";
 export { Tag } from "./Tag";
-export { Typography, Text, Paragraph } from "./Typography";
+export { TableSearch } from "./TableSearch";
+export { ListItem } from "./ListItem";
 
 export {
   Row,
@@ -22,9 +24,10 @@ export {
   Tooltip,
   Card,
   Checkbox,
+  Space,
   Switch,
   List,
-  Space,
+  Carousel,
 } from "antd";
 
 export {

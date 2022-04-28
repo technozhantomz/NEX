@@ -1,8 +1,8 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
-import { CardFormButton, Form } from "../../../ui/src";
-import { FormDisclamer } from "../FormDisclamer";
+import { Form } from "../../../ui/src";
 import { PasswordModal } from "../PasswordModal";
 
 import * as Styled from "./GenerateBitcoinAddress.styled";
@@ -17,39 +17,60 @@ export const GenerateBitcoinAddress = ({
   isLoggedIn = false,
   getSidechainAccounts,
 }: Props): JSX.Element => {
-  const { visible, onCancel, onFormFinish, confirm, status } =
-    useGenerateBitcoinAddress(getSidechainAccounts);
+  const router = useRouter();
+  const {
+    isPasswordModalVisible,
+    handlePasswordModalCancel,
+    onFormFinish,
+    confirm,
+    status,
+    submittingPassword,
+  } = useGenerateBitcoinAddress(getSidechainAccounts);
 
   return (
     <>
       <Form.Provider onFormFinish={onFormFinish}>
         <Styled.DepositForm name="generateAddressForm" onFinish={confirm}>
-          <Form.Item>
-            <CardFormButton type="primary" htmlType="submit">
-              {isLoggedIn
-                ? "Generate Bitcoin Address"
-                : "Log in & Generate Bitcoin Address"}
-            </CardFormButton>
-          </Form.Item>
+          <Styled.FormItem>
+            {isLoggedIn ? (
+              <Styled.Button type="primary" htmlType="submit">
+                Generate Bitcoin Address
+              </Styled.Button>
+            ) : (
+              <Styled.Button
+                type="primary"
+                htmlType="button"
+                onClick={() => {
+                  router.push("/login");
+                }}
+              >
+                Log in & Generate Bitcoin Address
+              </Styled.Button>
+            )}
+          </Styled.FormItem>
         </Styled.DepositForm>
         {status === "" ? (
           ""
         ) : (
-          <FormDisclamer>
+          <Styled.FormDisclamer>
             <Styled.SonError>{status}</Styled.SonError>
-          </FormDisclamer>
+          </Styled.FormDisclamer>
         )}
         {isLoggedIn ? (
           ""
         ) : (
-          <FormDisclamer>
+          <Styled.FormDisclamer>
             <span>Don't have a Peerplays account? </span>
             <Link href="/signup">
               <a>Create account</a>
             </Link>
-          </FormDisclamer>
+          </Styled.FormDisclamer>
         )}
-        <PasswordModal visible={visible} onCancel={onCancel} />
+        <PasswordModal
+          visible={isPasswordModalVisible}
+          onCancel={handlePasswordModalCancel}
+          submitting={submittingPassword}
+        />
       </Form.Provider>
     </>
   );
