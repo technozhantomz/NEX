@@ -46,14 +46,14 @@ export const GeneralTab = (): JSX.Element => {
             Enable notifications
           </Styled.Checkbox>
         </Styled.FormItem>
-        <Styled.FormItem
+        {/* <Styled.FormItem
           valuePropName="checked"
           name="allowTransferToMeNotifications"
         >
           <Styled.TransferCheckbox>
             Notify about transfers to my account
           </Styled.TransferCheckbox>
-        </Styled.FormItem>
+        </Styled.FormItem> */}
         <Styled.FaucetSpace>
           <Styled.LabelText>Faucet</Styled.LabelText>
           <Row gutter={[1, 20]}>
