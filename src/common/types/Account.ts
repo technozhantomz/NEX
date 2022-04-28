@@ -1,3 +1,5 @@
+import { Vote } from ".";
+
 export type FullAccount = {
   account: Account;
   lifetime_referrer_name: string;
@@ -6,6 +8,7 @@ export type FullAccount = {
   registrar_name: string;
   balances: Balance[];
   statistics: AccountStatistics;
+  votes: Vote[];
 };
 
 export type Account = {

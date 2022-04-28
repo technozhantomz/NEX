@@ -1,1 +1,1 @@
-export { VoteActionButton } from "./VoteActionButton";
+export * from "./VoteActionButton";

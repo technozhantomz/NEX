@@ -1,4 +1,4 @@
-import { Asset, Vote } from "../../types";
+import { Asset } from "../../types";
 
 export type UserContextType = {
   localStorageAccount: string;
@@ -6,15 +6,8 @@ export type UserContextType = {
   id: string;
   name: string;
   assets: Asset[];
-  votes: Vote[];
   isAccountLocked: boolean;
-  updateAccount: (
-    id: string,
-    name: string,
-    assets: Asset[],
-    votes: Vote[]
-  ) => void;
+  updateAccount: (id: string, name: string, assets: Asset[]) => void;
   setAssets: (assets: Asset[]) => void;
-  setVotes: (votes: Vote[]) => void;
   setIsAccountLocked: (isAccountLocked: boolean) => void;
 };

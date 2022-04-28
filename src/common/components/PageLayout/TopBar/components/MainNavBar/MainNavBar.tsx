@@ -1,7 +1,6 @@
-import { Dropdown } from "antd";
-
 import {
   BellOutlined,
+  Dropdown,
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";

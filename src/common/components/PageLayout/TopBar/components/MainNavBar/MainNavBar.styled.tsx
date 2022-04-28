@@ -3,25 +3,23 @@ import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
 
 export const MainNavBar = styled.div`
-   {
-    .ant-avatar {
-      background: ${colors.successTag};
-    }
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    color: ${colors.white};
-    .hambuger {
-      font-size: 3em;
-      font-weight: bold;
-      margin-left: 10px;
-    }
-    .bell {
-      font-size: 1.2em;
-      font-weight: bold;
-      margin-right: 20px;
-    }
+  .ant-avatar {
+    background: ${colors.successTag};
+  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  color: ${colors.white};
+  .hambuger {
+    font-size: 3em;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+  .bell {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-right: 20px;
   }
 `;
 

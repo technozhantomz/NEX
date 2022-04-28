@@ -17,7 +17,7 @@ export type Vote = {
   deposit?: string;
   statistics?: string;
   status?: string;
-  sidechain_public_keys?: string[];
+  sidechain_public_keys?: [string, string];
   committee_member_account?: string;
 };
 

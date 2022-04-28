@@ -19,7 +19,7 @@ import { UseMembershipTabResult } from "./useMembershipTab.types";
 export function useMembershipTab(): UseMembershipTabResult {
   const { defaultAsset, setPrecision } = useAsset();
   const { name, id, assets } = useUserContext();
-  const { trxBuilder } = useTransactionBuilder();
+  const { buildTrx } = useTransactionBuilder();
   const { getPrivateKey, getFullAccount } = useAccount();
   const { dbApi } = usePeerplaysApiContext();
   const { calculateAccountUpgradeFee } = useFees();
@@ -162,7 +162,7 @@ export function useMembershipTab(): UseMembershipTabResult {
 
       try {
         setLoadingTransaction(true);
-        trxResult = await trxBuilder([trx], [activeKey]);
+        trxResult = await buildTrx([trx], [activeKey]);
         setLoadingTransaction(false);
       } catch (error) {
         console.log(error);
@@ -189,7 +189,7 @@ export function useMembershipTab(): UseMembershipTabResult {
       setIsMembershipModalVisible,
       getPrivateKey,
       setLoadingTransaction,
-      trxBuilder,
+      buildTrx,
       setTransactionErrorMessage,
       setTransactionSuccessMessage,
       setIsLifetimeMember,

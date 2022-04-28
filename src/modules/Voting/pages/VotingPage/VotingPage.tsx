@@ -19,20 +19,20 @@ const VotingPage: NextPage = () => {
       dexLayout={true}
     >
       <Styled.VotingPageCard>
-        <Tabs defaultActiveKey="1">
-          <TabPane tab="GPOS" key="1">
+        <Tabs defaultActiveKey="gpos">
+          <TabPane tab="GPOS" key="gpos">
             <Styled.Text>GPOS Tab</Styled.Text>
           </TabPane>
-          <TabPane tab="Witnesses" key="2">
+          <TabPane votes={} tab="Witnesses" key="witnesses">
             <VoteTab tab="Witnesses" />
           </TabPane>
-          <TabPane tab="SONs" key="3">
+          <TabPane tab="SONs" key="sons">
             <VoteTab tab="SONs" />
           </TabPane>
-          <TabPane tab="Advisors" key="4">
+          <TabPane tab="Advisors" key="advisors">
             <VoteTab tab="Advisors" />
           </TabPane>
-          <TabPane tab="Proxy" key="5">
+          <TabPane tab="Proxy" key="proxy">
             <Styled.Text>Proxy Tab</Styled.Text>
           </TabPane>
         </Tabs>

@@ -81,7 +81,8 @@ export const VoteTable = ({
             {totalVotesDisplay.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
-            })} {"PPY"}
+            })}{" "}
+            {"PPY"}
           </>
         );
       },

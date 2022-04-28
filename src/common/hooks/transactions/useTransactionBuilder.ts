@@ -7,7 +7,7 @@ import { ITransactionBuilder } from "./useTransactionBuilder.types";
 
 export function useTransactionBuilder(): ITransactionBuilder {
   const { defaultAsset, setPrecision } = useAsset();
-  const trxBuilder = useCallback(async (trx, keys) => {
+  const buildTrx = useCallback(async (trx, keys) => {
     const tr = new TransactionBuilder();
 
     await trx.forEach((elem: any) =>
@@ -21,23 +21,25 @@ export function useTransactionBuilder(): ITransactionBuilder {
 
   const getTrxFee = useCallback(
     async (trx) => {
-      const tr = new TransactionBuilder();
-      await trx.forEach((elem: any) =>
-        tr.add_type_operation(elem.type, elem.params)
-      );
-      await tr.set_required_fees();
-      const amtArr = tr.operations.map((x) => {
-        return x[1].fee.amount;
-      });
-      let amt = 0;
-      amtArr.forEach((e) => {
-        amt += e;
-      });
-      const fee = setPrecision(true, amt, defaultAsset?.precision);
-      return fee;
+      if (defaultAsset !== undefined) {
+        const tr = new TransactionBuilder();
+        await trx.forEach((elem: any) =>
+          tr.add_type_operation(elem.type, elem.params)
+        );
+        await tr.set_required_fees();
+        const feeAmounts: number[] = tr.operations.map((operation: any) => {
+          return operation[1].fee.amount;
+        });
+        let feeAmount = 0;
+        feeAmounts.forEach((amount) => {
+          feeAmount += amount;
+        });
+        const fee = setPrecision(true, feeAmount, defaultAsset?.precision);
+        return fee;
+      }
     },
     [defaultAsset, setPrecision]
   );
 
-  return { trxBuilder, getTrxFee };
+  return { buildTrx, getTrxFee };
 }

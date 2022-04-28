@@ -7,7 +7,7 @@ import React, {
 } from "react";
 
 import { useAsset, useLocalStorage } from "../../hooks";
-import { Asset, FullAccount, Vote } from "../../types";
+import { Asset, FullAccount } from "../../types";
 import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
 import { UserContextType } from "./UserProvider.types";
@@ -21,23 +21,12 @@ const defaultUserState: UserContextType = {
   id: "",
   name: "",
   assets: [],
-  votes: [],
   isAccountLocked: true,
-  updateAccount: function (
-    id: string,
-    name: string,
-    assets: Asset[],
-    votes: Vote[]
-  ): void {
-    throw new Error(
-      `Function not implemented. ${id},${name}, ${assets}, ${votes}`
-    );
+  updateAccount: function (id: string, name: string, assets: Asset[]): void {
+    throw new Error(`Function not implemented. ${id},${name}, ${assets}`);
   },
   setAssets: function (assets: Asset[]): void {
     throw new Error(`Function not implemented. ${assets}`);
-  },
-  setVotes: function (votes: Vote[]): void {
-    throw new Error(`Function not implemented. ${votes}`);
   },
   setIsAccountLocked: function (isAccountLocked: boolean) {
     throw new Error(`Function not implemented. ${isAccountLocked}`);
@@ -59,17 +48,15 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const [id, setId] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [assets, _setAssets] = useState<Asset[]>([]);
-  const [votes, _setVotes] = useState<Vote[]>([]);
   const [isAccountLocked, _setIsAccountLocked] = useState<boolean>(true);
 
   const updateAccount = useCallback(
-    (id: string, name: string, assets: Asset[], votes: Vote[]) => {
+    (id: string, name: string, assets: Asset[]) => {
       setId(id);
       setName(name);
       _setAssets(assets);
-      _setVotes(votes);
     },
-    [setId, setName, _setAssets, _setVotes]
+    [setId, setName, _setAssets]
   );
 
   const setAssets = useCallback(
@@ -77,13 +64,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
       _setAssets(assets);
     },
     [_setAssets]
-  );
-
-  const setVotes = useCallback(
-    (votes: Vote[]) => {
-      _setVotes(votes);
-    },
-    [_setVotes]
   );
 
   const setIsAccountLocked = useCallback(
@@ -101,28 +81,22 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
           true,
         ]).then((e: any) => (e.length ? e[0][1] : undefined));
         if (fullAccount) {
+          console.log("this is full account", fullAccount);
+          const votes: Vote[] = await dbApi("lookup_vote_ids", [
+            fullAccount.account.options.votes,
+            false,
+          ]);
+          console.log(votes);
           const assets: Asset[] = await Promise.all(
             fullAccount.balances.map((balance) => {
               return formAssetBalanceById(balance.asset_type, balance.balance);
             })
           );
 
-          const votes: Vote[] = await dbApi("lookup_vote_ids", [
-            fullAccount.account.options.votes,
-            false,
-          ]).then((e: any) =>
-            e.length
-              ? e.map((v: Vote) => {
-                  return v;
-                })
-              : []
-          );
-
           updateAccount(
             fullAccount.account.id,
             fullAccount.account.name,
-            assets,
-            votes
+            assets
           );
         }
       } catch (e) {
@@ -144,13 +118,11 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         id,
         name,
         assets,
-        votes,
         localStorageAccount,
         setLocalStorageAccount,
         isAccountLocked,
         updateAccount,
         setAssets,
-        setVotes,
         setIsAccountLocked,
       }}
     >

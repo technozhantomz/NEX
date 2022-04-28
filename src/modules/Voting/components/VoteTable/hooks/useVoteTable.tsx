@@ -31,7 +31,7 @@ export function useVoteTable(tab: string): UseVoteTabResult {
   const { dbApi } = usePeerplaysApiContext();
   const { findOperationFee } = useFees();
   const { defaultAsset, setPrecision } = useAsset();
-  const { trxBuilder, getTrxFee } = useTransactionBuilder();
+  const { buildTrx, getTrxFee } = useTransactionBuilder();
   const { localStorageAccount, votes, name, id, assets, updateAccount } =
     useUserContext();
   const { getPrivateKey, getFullAccount } = useAccount();
@@ -184,9 +184,9 @@ export function useVoteTable(tab: string): UseVoteTabResult {
             account = x;
           });
 
-          let newOptions = account?.account.options;
+          const newOptions = account?.account.options;
 
-          let proxy = "No Proxy";
+          const proxy = "No Proxy";
 
           switch (tab) {
             case "Advisors": {
@@ -299,7 +299,7 @@ export function useVoteTable(tab: string): UseVoteTabResult {
     async (password: string) => {
       const activeKey = getPrivateKey(password, "active");
       try {
-        const trxRes = await trxBuilder([pendingTrx], [activeKey]);
+        const trxRes = await buildTrx([pendingTrx], [activeKey]);
         setTrxResult(trxRes);
       } catch (e) {
         console.log(e);

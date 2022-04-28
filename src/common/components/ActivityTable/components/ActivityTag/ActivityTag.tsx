@@ -1,12 +1,15 @@
-import { Tag } from "../../../../../ui/src";
+import counterpart from "counterpart";
 
-import { useActivityTag } from "./hooks";
+import { Tag } from "../../../../../ui/src";
 
 type Props = {
   type: string;
 };
 
 export const ActivityTag = ({ type }: Props): JSX.Element => {
-  const { getActivityType } = useActivityTag();
-  return <Tag key={type}>{getActivityType(type)}</Tag>;
+  return (
+    <Tag key={type}>
+      {counterpart.translate(`transaction.trxTypes.${type}`)}
+    </Tag>
+  );
 };

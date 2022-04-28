@@ -1,10 +1,8 @@
-import { CardFormButton, CardForm, styled } from "../../../ui/src";
+import { CardForm, CardFormButton, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const TransferForm = styled(CardForm)`
-   {
-    margin: 0 20px;
-  }
+  margin: 0 20px;
   ${breakpoint.sm} {
     .two-input-row {
       display: flex;
