@@ -304,7 +304,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       { validator: validateWithdrawAddress },
     ],
     withdrawPublicKey: [
-      { required: true, message: "Withdraw address is required" },
+      { required: true, message: "Withdraw public key is required" },
       { validator: validateWithdrawPublicKey },
     ],
   };
