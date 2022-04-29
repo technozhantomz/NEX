@@ -3,9 +3,9 @@ import { Avatar, MenuCard, styled } from "../../../../../../ui/src";
 export const ProfileMenu = styled(MenuCard)`
   .ant-card-meta {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-    margin-bottom: 10%;
+    margin: 0 0 10% 25px;
     .ant-card-meta-detail {
       .ant-card-meta-title {
         margin: 0;

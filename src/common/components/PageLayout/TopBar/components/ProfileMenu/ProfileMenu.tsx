@@ -34,16 +34,16 @@ export const ProfileMenu = (): JSX.Element => {
           <>
             <li>
               <MenuItem
-                Href="/voting"
-                Icon={<Vote className={"menu-icon"} />}
-                Label="Voting"
+                href="/voting"
+                icon={<Vote className={"menu-icon"} />}
+                label="Voting"
               />
             </li>
             <li>
               <MenuItem
-                Href="/contacts"
-                Icon={<Contacts className={"menu-icon"} />}
-                Label="Contacts"
+                href="/contacts"
+                icon={<Contacts className={"menu-icon"} />}
+                label="Contacts"
               />
             </li>
           </>
@@ -57,9 +57,9 @@ export const ProfileMenu = (): JSX.Element => {
 
         <li>
           <MenuItem
-            Href="/settings"
-            Icon={<SettingOutlined className={"menu-icon"} />}
-            Label="Settings"
+            href="/settings"
+            icon={<SettingOutlined className={"menu-icon"} />}
+            label="Settings"
           />
         </li>
         {width < breakpoints.xs ? (
@@ -73,9 +73,9 @@ export const ProfileMenu = (): JSX.Element => {
         )}
         <li className={"logout"}>
           <MenuItem
-            Href="/logout"
-            Icon={<PoweroffOutlined className={"menu-icon"} />}
-            Label="Logout"
+            href="/logout"
+            icon={<PoweroffOutlined className={"menu-icon"} />}
+            label="Logout"
           />
         </li>
       </ul>

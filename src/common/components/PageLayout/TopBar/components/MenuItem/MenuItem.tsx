@@ -5,27 +5,36 @@ import { RightOutlined } from "../../../../../../ui/src";
 import { useBrowserHistoryContext } from "../../../../../providers";
 
 interface MenuItemProps {
-  Href: string;
-  Icon: React.ReactElement;
-  Label: string;
+  href?: string;
+  icon: React.ReactElement;
+  label: string;
+  onClick?: React.MouseEventHandler;
 }
 
-export const MenuItem = ({ Href, Icon, Label }: MenuItemProps): JSX.Element => {
+export const MenuItem = ({
+  href = "#",
+  icon,
+  label,
+  onClick,
+}: MenuItemProps): JSX.Element => {
   const { pathname } = useBrowserHistoryContext();
   return (
-    <Link href={Href}>
-      <a className={`menu-item ${pathname === Href ? "active" : " "}`}>
+    <Link href={href}>
+      <a
+        className={`menu-item ${pathname === href ? "active" : " "}`}
+        onClick={onClick}
+      >
         <div>
-          {Icon}
-          <span>{Label}</span>
+          {icon}
+          <span>{label}</span>
         </div>
-        <div>
-          {Href == "/logout" ? (
-            " "
-          ) : (
+        {href == "/logout" ? (
+          " "
+        ) : (
+          <div>
             <RightOutlined className={"menu-item-arrow"} />
-          )}
-        </div>
+          </div>
+        )}
       </a>
     </Link>
   );

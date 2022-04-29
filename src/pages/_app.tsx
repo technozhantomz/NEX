@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import {
   BrowserHistoryProvider,
   ConnectionManager,
+  MenuProvider,
   PeerplaysApiProvider,
   SettingsProvider,
   UserProvider,
@@ -18,7 +19,9 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
           <ConnectionManager>
             <UserProvider>
               <BrowserHistoryProvider>
-                <Component {...pageProps} />
+                <MenuProvider>
+                  <Component {...pageProps} />
+                </MenuProvider>
               </BrowserHistoryProvider>
             </UserProvider>
           </ConnectionManager>

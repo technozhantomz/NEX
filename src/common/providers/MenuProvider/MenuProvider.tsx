@@ -1,8 +1,27 @@
-import { useCallback, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 
-import { UseToggleMenuResult } from "./useToggleMenu.types";
+import { MenuProviderContextType } from "./MenuProvider.types";
 
-export function useToggleMenu(): UseToggleMenuResult {
+interface Props {
+  children: React.ReactNode;
+}
+
+const DefaultMenuState: MenuProviderContextType = {
+  toggleMenu: function (): void {
+    throw new Error(`Function not implemented.`);
+  },
+  closeMenu: function (): void {
+    throw new Error(`Function not implemented.`);
+  },
+  notificationMenuOpen: false,
+  profileMenuOpen: false,
+  mainMenuOpen: false,
+};
+
+const MenuProviderContext =
+  createContext<MenuProviderContextType>(DefaultMenuState);
+
+export const MenuProvider = ({ children }: Props): JSX.Element => {
   const [notificationMenuOpen, setNotificationMenuOpen] =
     useState<boolean>(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
@@ -43,12 +62,21 @@ export function useToggleMenu(): UseToggleMenuResult {
     setProfileMenuOpen(false);
     setMainMenuOpen(false);
   }, [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]);
+  return (
+    <MenuProviderContext.Provider
+      value={{
+        notificationMenuOpen,
+        profileMenuOpen,
+        mainMenuOpen,
+        toggleMenu,
+        closeMenu,
+      }}
+    >
+      {children}
+    </MenuProviderContext.Provider>
+  );
+};
 
-  return {
-    toggleMenu,
-    closeMenu,
-    notificationMenuOpen,
-    profileMenuOpen,
-    mainMenuOpen,
-  };
-}
+export const useMenuContext = (): MenuProviderContextType => {
+  return useContext<MenuProviderContextType>(MenuProviderContext);
+};

@@ -4,14 +4,21 @@ import {
   PoweroffOutlined,
   SettingOutlined,
   Switch,
+  UserOutlined,
 } from "../../../../../../ui/src";
+import { breakpoints } from "../../../../../../ui/src/breakpoints";
 import {
   Blockchain,
   Dashboard,
   Market,
   Vote,
 } from "../../../../../../ui/src/icons";
-import { useSettingsContext, useUserContext } from "../../../../../providers";
+import {
+  useMenuContext,
+  useSettingsContext,
+  useUserContext,
+  useViewportContext,
+} from "../../../../../providers";
 import { MenuItem } from "../MenuItem";
 
 import { useAdvancedMode } from "./hooks";
@@ -20,6 +27,8 @@ export const MainNav = (): JSX.Element => {
   const { advancedMode, handleAdvancedModeChange } = useAdvancedMode();
   const { localStorageAccount } = useUserContext();
   const { exchanges } = useSettingsContext();
+  const { width } = useViewportContext();
+  const { toggleMenu } = useMenuContext();
   return (
     <MenuCard bordered={false}>
       <ul>
@@ -28,32 +37,32 @@ export const MainNav = (): JSX.Element => {
         ) : (
           <li>
             <MenuItem
-              Href="/login"
-              Icon={<PoweroffOutlined className={"menu-icon"} />}
-              Label="Login"
+              href="/login"
+              icon={<PoweroffOutlined className={"menu-icon"} />}
+              label="Login"
             />
           </li>
         )}
 
         <li>
           <MenuItem
-            Href="/dashboard"
-            Icon={<Dashboard className={"menu-icon"} />}
-            Label="Dashboard"
+            href="/dashboard"
+            icon={<Dashboard className={"menu-icon"} />}
+            label="Dashboard"
           />
         </li>
         <li>
           <MenuItem
-            Href={`/market/${exchanges.active}`}
-            Icon={<Market className={"menu-icon"} />}
-            Label="Market"
+            href={`/market/${exchanges.active}`}
+            icon={<Market className={"menu-icon"} />}
+            label="Market"
           />
         </li>
         <li>
           <MenuItem
-            Href="/blockchain"
-            Icon={<Blockchain className={"menu-icon"} />}
-            Label="Blocks"
+            href="/blockchain"
+            icon={<Blockchain className={"menu-icon"} />}
+            label="Blocks"
           />
         </li>
         {!localStorageAccount ? (
@@ -62,16 +71,27 @@ export const MainNav = (): JSX.Element => {
           <>
             <li>
               <MenuItem
-                Href="/wallet"
-                Icon={<DollarOutlined className={"menu-icon"} />}
-                Label="Wallet"
+                href="/wallet"
+                icon={<DollarOutlined className={"menu-icon"} />}
+                label="Wallet"
               />
             </li>
+            {width < breakpoints.xs ? (
+              <li>
+                <MenuItem
+                  onClick={() => toggleMenu("profile")}
+                  icon={<UserOutlined className={"menu-icon avitar"} />}
+                  label="Profile"
+                />
+              </li>
+            ) : (
+              ""
+            )}
             <li>
               <MenuItem
-                Href="/settings"
-                Icon={<SettingOutlined className={"menu-icon"} />}
-                Label="Settings"
+                href="/settings"
+                icon={<SettingOutlined className={"menu-icon"} />}
+                label="Settings"
               />
             </li>
             <li className={"advanced"}>
@@ -89,9 +109,9 @@ export const MainNav = (): JSX.Element => {
           <>
             <li>
               <MenuItem
-                Href="/voting"
-                Icon={<Vote className={"menu-icon"} />}
-                Label="Voting"
+                href="/voting"
+                icon={<Vote className={"menu-icon"} />}
+                label="Voting"
               />
             </li>
           </>
@@ -104,9 +124,9 @@ export const MainNav = (): JSX.Element => {
         ) : (
           <li className={"logout"}>
             <MenuItem
-              Href="/logout"
-              Icon={<PoweroffOutlined className={"menu-icon"} />}
-              Label="Logout"
+              href="/logout"
+              icon={<PoweroffOutlined className={"menu-icon"} />}
+              label="Logout"
             />
           </li>
         )}

@@ -1,25 +1,42 @@
 import {
   BellOutlined,
+  MenuOutlined,
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
-import { useUserContext } from "../../../../../providers";
+import { breakpoints } from "../../../../../../ui/src/breakpoints";
+import {
+  useMenuContext,
+  useUserContext,
+  useViewportContext,
+} from "../../../../../providers";
 import { MainNav } from "../MainNav";
 import { NotificationMenu } from "../NotificationMenu";
 import { ProfileMenu } from "../ProfileMenu";
 
 import * as Styled from "./MainNavBar.styled";
-import { useToggleMenu } from "./hooks";
 
 export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
+  const { width } = useViewportContext();
   const {
     toggleMenu,
     closeMenu,
     notificationMenuOpen,
     profileMenuOpen,
     mainMenuOpen,
-  } = useToggleMenu();
+  } = useMenuContext();
+  const CloseButton = (
+    <>
+      {width < breakpoints.xs ? (
+        <Styled.CloseButton type="text" className="close" onClick={closeMenu}>
+          X
+        </Styled.CloseButton>
+      ) : (
+        ""
+      )}
+    </>
+  );
   return (
     <>
       <Styled.MainNavBar>
@@ -30,50 +47,56 @@ export const MainNavBar = (): JSX.Element => {
               onMouseOver={() => toggleMenu("notify")}
               onClick={() => toggleMenu("notify")}
             />
-            <div
-              onMouseOver={() => toggleMenu("profile")}
-              onClick={() => toggleMenu("profile")}
-            >
-              <Styled.MainNavBarAvitar
-                icon={localStorageAccount ? "" : <UserOutlined />}
+            {width > breakpoints.xs ? (
+              <div
+                onMouseOver={() => toggleMenu("profile")}
+                onClick={() => toggleMenu("profile")}
               >
-                {localStorageAccount ? localStorageAccount.charAt(0) : ""}
-              </Styled.MainNavBarAvitar>
-            </div>
+                <Styled.MainNavBarAvitar
+                  icon={localStorageAccount ? "" : <UserOutlined />}
+                >
+                  {localStorageAccount ? localStorageAccount.charAt(0) : ""}
+                </Styled.MainNavBarAvitar>
+              </div>
+            ) : (
+              ""
+            )}
           </>
         ) : (
           ""
         )}
-        <MoreOutlined
-          className={"hambuger"}
-          onMouseOver={() => toggleMenu("main")}
-          onClick={() => toggleMenu("main")}
-        />
+        {width > breakpoints.xs ? (
+          <MoreOutlined
+            className={"hambuger"}
+            onMouseOver={() => toggleMenu("main")}
+            onClick={() => toggleMenu("main")}
+          />
+        ) : (
+          <MenuOutlined
+            className={"hambuger"}
+            onMouseOver={() => toggleMenu("main")}
+            onClick={() => toggleMenu("main")}
+          />
+        )}
       </Styled.MainNavBar>
       <Styled.MenuWrapper
         className={`notification-menu-wrapper${
           notificationMenuOpen ? " open" : ""
         }`}
       >
-        <a className="close" onClick={closeMenu}>
-          X
-        </a>
+        {CloseButton}
         <NotificationMenu />
       </Styled.MenuWrapper>
       <Styled.MenuWrapper
         className={`profile-wrapper${profileMenuOpen ? " open" : ""}`}
       >
-        <a className="close" onClick={closeMenu}>
-          X
-        </a>
+        {CloseButton}
         <ProfileMenu />
       </Styled.MenuWrapper>
       <Styled.MenuWrapper
         className={`main-menu-wrapper${mainMenuOpen ? " open" : ""}`}
       >
-        <a className="close" onClick={closeMenu}>
-          X
-        </a>
+        {CloseButton}
         <MainNav />
       </Styled.MenuWrapper>
     </>

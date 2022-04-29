@@ -7,22 +7,20 @@ import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
 
 export const MainNavBar = styled.div`
-   {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    color: ${colors.white};
-    .hambuger {
-      font-size: 2em;
-      font-weight: bold;
-      margin-left: 10px;
-    }
-    .bell {
-      font-size: 1.2em;
-      font-weight: bold;
-      margin-right: 20px;
-    }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  color: ${colors.white};
+  .hambuger {
+    font-size: 2em;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+  .bell {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-right: 10px;
   }
 `;
 
@@ -36,6 +34,7 @@ export const MenuWrapper = styled.div`{
   background: ${colors.white};
   color: ${colors.textColor};
   z-index: 2;
+  padding-top: 95px;
   &.open{
     display: block;
     flex-direction: column;
@@ -46,6 +45,7 @@ export const MenuWrapper = styled.div`{
       height: inherit;
       width: 210px;
       background: transparent;
+      padding-top: 0;
       &.main-menu-wrapper{
           right:32px;
       }
@@ -60,9 +60,12 @@ export const MenuWrapper = styled.div`{
 
 export const CloseButton = styled(UiButton)`
   color: ${colors.textColor};
-  position: relative;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9999;
   text-align: center;
-  margin: 20px 20px 0 20px;
+  margin: 50px 25px 0 20px;
   ${breakpoint.xs} {
     display: none;
   }
