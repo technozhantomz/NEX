@@ -2,14 +2,20 @@ export type UseVotingResult = {
   isModalVisible: boolean;
   isPassModalVisible: boolean;
   loading: boolean;
+  serverApprovedVotes: VoteRow[];
+  localApprovedVotes: VoteRow[];
+  allMembersVotes: VoteRow[];
+  isVotesChanged: boolean;
+  approveVote: (voteId: string) => void;
+  removeVote: (voteId: string) => void;
+  resetChanges: () => void;
 };
 
 export interface VoteRow {
-  key: string;
-  approved: boolean;
-  type: "witness" | "son" | "committee";
+  id: string;
+  type: "witnesses" | "sons" | "committees";
   name: string;
   webpage: string;
-  votes: number;
-  action: "add" | "remove";
+  votes: string;
+  action: "add" | "remove" | "";
 }

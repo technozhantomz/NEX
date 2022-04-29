@@ -60,7 +60,7 @@ export const VoteTab = ({ tab }: Props): JSX.Element => {
   return (
     <Styled.Container>
       <Styled.VoteTabCard>
-        <VoteForm
+        {/* <VoteForm
           isChangeTableEmpty={isChangeTableEmpty.current}
           tab={tab}
           doAction={doAction}
@@ -71,8 +71,8 @@ export const VoteTab = ({ tab }: Props): JSX.Element => {
           isPassModalVisible={isPassModalVisible}
           setIsPassModalVisible={setIsPassModalVisible}
           sendVotes={sendVotes}
-        />
-        {localChanges.length ? (
+        /> */}
+        {/* {localChanges.length ? (
           <VoteTable
             table={localChanges}
             tab={tab}
@@ -84,7 +84,7 @@ export const VoteTab = ({ tab }: Props): JSX.Element => {
           />
         ) : (
           ""
-        )}
+        )} */}
         <VoteTable
           table={localVotes}
           tab={tab}

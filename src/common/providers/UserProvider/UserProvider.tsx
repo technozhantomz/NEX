@@ -81,12 +81,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
           true,
         ]).then((e: any) => (e.length ? e[0][1] : undefined));
         if (fullAccount) {
-          console.log("this is full account", fullAccount);
-          const votes: Vote[] = await dbApi("lookup_vote_ids", [
-            fullAccount.account.options.votes,
-            false,
-          ]);
-          console.log(votes);
           const assets: Asset[] = await Promise.all(
             fullAccount.balances.map((balance) => {
               return formAssetBalanceById(balance.asset_type, balance.balance);

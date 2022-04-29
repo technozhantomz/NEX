@@ -3,13 +3,17 @@ import type { NextPage } from "next";
 import React from "react";
 
 import { Layout } from "../../../../common/components";
-import { VoteTab } from "../../components/VoteTab";
+//import { VoteTab } from "../../components/VoteTab";
 
 import * as Styled from "./VotingPage.styled";
+import { useVoting } from "./hooks";
 
 const { TabPane } = Tabs;
 
 const VotingPage: NextPage = () => {
+  const { allMembersVotes, serverApprovedVotes } = useVoting();
+  // console.log(serverApprovedVotes, "approved votes");
+  // console.log(allMembersVotes, "all member votes");
   return (
     <Layout
       title="Voting"
@@ -23,14 +27,14 @@ const VotingPage: NextPage = () => {
           <TabPane tab="GPOS" key="gpos">
             <Styled.Text>GPOS Tab</Styled.Text>
           </TabPane>
-          <TabPane votes={} tab="Witnesses" key="witnesses">
-            <VoteTab tab="Witnesses" />
+          <TabPane tab="Witnesses" key="witnesses">
+            {/* <VoteTab tab="Witnesses" /> */}
           </TabPane>
           <TabPane tab="SONs" key="sons">
-            <VoteTab tab="SONs" />
+            {/* <VoteTab tab="SONs" /> */}
           </TabPane>
           <TabPane tab="Advisors" key="advisors">
-            <VoteTab tab="Advisors" />
+            {/* <VoteTab tab="Advisors" /> */}
           </TabPane>
           <TabPane tab="Proxy" key="proxy">
             <Styled.Text>Proxy Tab</Styled.Text>
