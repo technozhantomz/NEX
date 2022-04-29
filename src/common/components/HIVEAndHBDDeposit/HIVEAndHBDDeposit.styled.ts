@@ -1,4 +1,5 @@
-import { styled } from "../../../ui/src";
+import { FormDisclamer as UiFormDisclamer } from "..";
+import { CardFormButton, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 
@@ -17,7 +18,7 @@ export const LogoContainer = styled.div`
 `;
 
 export const AccountContainer = styled.span`
-  color: #0a48be;
+  color: ${colors.linkColor};
   font-style: italic;
 `;
 export const DepositInstruction = styled.div`
@@ -26,10 +27,18 @@ export const DepositInstruction = styled.div`
   font-size: 14px;
 `;
 
-export const LoginContainer = styled.div`
-  padding-top: 10px;
+export const LoginContainer = styled.div``;
+
+export const Button = styled(CardFormButton)`
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
+  }
 `;
 
-export const FormDisclaimerContainer = styled.div`
-  margin-top: 24px;
+export const FormDisclamer = styled(UiFormDisclamer)`
+  margin-bottom: 15px;
+  ${breakpoint.xs} {
+    margin-bottom: 25px;
+  }
 `;

@@ -1,7 +1,16 @@
-import { styled, Form as UiForm, Input as UiInput } from "../../../../ui/src";
+import {
+  styled,
+  CardFormButton as UiButton,
+  Form as UiForm,
+  Input as UiInput,
+} from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const FormContainer = styled.div`
-  padding: 10px;
+  ${breakpoint.md} {
+    padding: 40px 20px 60px 20px;
+  }
 `;
 
 export const Form = styled(UiForm)``;
@@ -13,7 +22,7 @@ export const InputNumber = styled(UiInput)`
   width: 100%;
   font-size: 20px;
   margin-bottom: 10px;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   padding: 16px 20px;
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -37,3 +46,11 @@ export const FormTitle = styled.h2`
   margin: 0;
   text-align: center;
 `;
+
+export const OrderInfo = styled.div``;
+export const OderInfoItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const FormButton = styled(UiButton)``;

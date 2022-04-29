@@ -5,19 +5,29 @@ import * as ecc from "tiny-secp256k1";
 
 import {
   useAccount,
+  useSessionStorage,
   useSidechainTransactionBuilder,
   useSonNetwork,
   useTransactionBuilder,
 } from "../../../hooks";
 import { useUserContext } from "../../../providers";
 
-import { GenerateBitcoinAddressResult } from "./useGenerateBitcoinAddress.types";
+import {
+  BitcoinAccount,
+  BitcoinSidechainAccounts,
+  UseGenerateBitcoinAddressResult,
+} from "./useGenerateBitcoinAddress.types";
 
 export function useGenerateBitcoinAddress(
   getSidechainAccounts: (accountId: string) => Promise<void>
-): GenerateBitcoinAddressResult {
+): UseGenerateBitcoinAddressResult {
   const [submittingPassword, setSubmittingPassword] = useState(false);
   const [status, setStatus] = useState<string>("");
+  const [bitcoinSidechainAccounts, setBitcoinSidechainAccounts] =
+    useSessionStorage("bitcoinSidechainAccounts") as [
+      BitcoinSidechainAccounts,
+      (value: BitcoinSidechainAccounts) => void
+    ];
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
     useState<boolean>(false);
   const { trxBuilder } = useTransactionBuilder();
@@ -52,6 +62,17 @@ export function useGenerateBitcoinAddress(
     }
   };
 
+  const generateNewAddress = (): BitcoinAccount => {
+    const ECPair = ECPairFactory(ecc);
+    const keyPair = ECPair.makeRandom();
+    const address = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey });
+    return {
+      address: address.address as string,
+      pubKey: toHex(address.pubkey),
+      privateKey: keyPair.toWIF(),
+    };
+  };
+
   const generateBitcoinAddresses = useCallback(
     async (password: string) => {
       setSubmittingPassword(true);
@@ -62,24 +83,18 @@ export function useGenerateBitcoinAddress(
         setStatus("SONs network is not available now. Please try again later!");
         return;
       }
+      const deposit = generateNewAddress();
+      const withdraw = generateNewAddress();
 
-      const ECPair = ECPairFactory(ecc);
-      const generatedAddress = [];
-
-      for (let i = 0; i <= 1; i++) {
-        const keyPair = ECPair.makeRandom();
-
-        const address = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey });
-        generatedAddress.push(address);
-      }
+      setBitcoinSidechainAccounts({ deposit, withdraw });
 
       const activeKey = getPrivateKey(password, "active");
       const trx = buildAddingBitcoinSidechainTransaction(
         id,
         id,
-        toHex(generatedAddress[0].pubkey),
-        toHex(generatedAddress[1].pubkey),
-        generatedAddress[1].address as string
+        deposit.pubKey,
+        withdraw.pubKey,
+        withdraw.address
       );
 
       let trxResult;
@@ -105,15 +120,19 @@ export function useGenerateBitcoinAddress(
       trxBuilder,
       setIsPasswordModalVisible,
       getSidechainAccounts,
+      setBitcoinSidechainAccounts,
+      setSubmittingPassword,
     ]
   );
 
   return {
     isPasswordModalVisible,
+    bitcoinSidechainAccounts,
+    status,
+    submittingPassword,
+    setBitcoinSidechainAccounts,
     handlePasswordModalCancel,
     onFormFinish,
     confirm,
-    status,
-    submittingPassword,
   };
 }

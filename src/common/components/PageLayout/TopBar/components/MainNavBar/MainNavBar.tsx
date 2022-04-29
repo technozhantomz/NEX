@@ -55,31 +55,25 @@ export const MainNavBar = (): JSX.Element => {
           notificationMenuOpen ? " open" : ""
         }`}
       >
-        <Styled.TopBar>
-          <Styled.CloseButton type="text" shape="circle" onClick={closeMenu}>
-            X
-          </Styled.CloseButton>
-        </Styled.TopBar>
+        <a className="close" onClick={closeMenu}>
+          X
+        </a>
         <NotificationMenu />
       </Styled.MenuWrapper>
       <Styled.MenuWrapper
         className={`profile-wrapper${profileMenuOpen ? " open" : ""}`}
       >
-        <Styled.TopBar>
-          <Styled.CloseButton type="text" shape="circle" onClick={closeMenu}>
-            X
-          </Styled.CloseButton>
-        </Styled.TopBar>
+        <a className="close" onClick={closeMenu}>
+          X
+        </a>
         <ProfileMenu />
       </Styled.MenuWrapper>
       <Styled.MenuWrapper
         className={`main-menu-wrapper${mainMenuOpen ? " open" : ""}`}
       >
-        <Styled.TopBar>
-          <Styled.CloseButton type="text" shape="circle" onClick={closeMenu}>
-            X
-          </Styled.CloseButton>
-        </Styled.TopBar>
+        <a className="close" onClick={closeMenu}>
+          X
+        </a>
         <MainNav />
       </Styled.MenuWrapper>
     </>

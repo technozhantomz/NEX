@@ -1,6 +1,7 @@
 import { styled, Card as UiCard } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const BlockCard = styled(UiCard)`
   .ant-card-body {
@@ -11,7 +12,7 @@ export const BlockCard = styled(UiCard)`
       padding: 33px 28px 10px;
     }
     .ant-tabs-top > .ant-tabs-nav::before {
-      border-bottom: 2pt solid #f0f0f0;
+      ${mixIns.inActiveTab}
     }
     .ant-tabs > .ant-tabs-nav .ant-tabs-nav-list {
       justify-content: space-between;

@@ -37,6 +37,7 @@ export const DepositTab = (): JSX.Element => {
             <Styled.AddressGeneratedContainer>
               <AddressGenerated
                 bitcoinSidechainAccount={bitcoinSidechainAccount}
+                getSidechainAccounts={getSidechainAccounts}
               />
             </Styled.AddressGeneratedContainer>
           ) : (

@@ -9,5 +9,5 @@ export const MissedBlocks = styled.p`
 `;
 
 export const urlIcon = styled(LinkOutlined)`
-  color: ${colors.additionalBlue};
+  color: ${colors.linkColor};
 `;

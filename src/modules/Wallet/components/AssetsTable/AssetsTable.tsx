@@ -31,8 +31,9 @@ export const AssetsTable = ({
       dataIndex: "available",
       key: "available",
     },
+    { title: "Quote asset", dataIndex: "quoteAsset", key: "quoteAsset" },
     {
-      title: "Price (BTC)",
+      title: "Price",
       dataIndex: "price",
       key: "price",
     },
@@ -160,14 +161,18 @@ export const AssetsTable = ({
                 </div>
                 <div className="asset-info">
                   <span className="asset-info-title">{columns[2].title}</span>
-                  <span className="asset-info-value">{item.price}</span>
+                  <span className="asset-info-value">{item.quoteAsset}</span>
                 </div>
                 <div className="asset-info">
                   <span className="asset-info-title">{columns[3].title}</span>
-                  <span className="asset-info-value">{item.change}</span>
+                  <span className="asset-info-value">{item.price}</span>
                 </div>
                 <div className="asset-info">
                   <span className="asset-info-title">{columns[4].title}</span>
+                  <span className="asset-info-value">{item.change}</span>
+                </div>
+                <div className="asset-info">
+                  <span className="asset-info-title">{columns[5].title}</span>
                   <span className="asset-info-value">{item.volume}</span>
                 </div>
               </Styled.AssetsItemContent>

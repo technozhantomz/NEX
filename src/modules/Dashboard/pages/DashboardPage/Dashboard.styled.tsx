@@ -1,9 +1,12 @@
+import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
 import {
   Button,
   styled,
   Col as UiCol,
   Row as UiRow,
 } from "../../../../ui/src/index";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const HeaderContainer = styled.div`
   display: flex;
@@ -15,7 +18,7 @@ export const HeaderContainer = styled.div`
 
 export const HeaderContainerItem = styled.div`
   background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   opacity: 1;
   color: white;
   font-size: 25px;
@@ -37,36 +40,34 @@ export const BodyContainer = styled.div`
 export const Btn = styled(Button)`
   height: 32px;
   background: #e3ebf8 0% 0% no-repeat padding-box;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   opacity: 1;
 `;
 
 export const Buttons = styled.div`
   background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   opacity: 1;
   font-size: 14px;
   height: 32px;
   cursor: pointer;
-
   &:hover,
   &:active,
-  &:focus {
+  &:focus,
+  &.active {
     background: #e3ebf8 0% 0% no-repeat padding-box;
   }
 `;
 export const ButtonNames = styled.p`
   text-align: center;
-  letter-spacing: 0px;
-  color: #212121;
-  opacity: 1;
-  font-size: 14px;
+  font-weight: 500;
+  color: ${colors.textColor};
   align-items: center;
-  padding: 5px;
-
-  @media (max-width: 500px) {
-    font-size: 12px;
-    padding: 8px;
+  font-size: 12px;
+  padding: 8px;
+  ${breakpoint.xs} {
+    font-size: 14px;
+    padding: 5px;
   }
 `;
 
