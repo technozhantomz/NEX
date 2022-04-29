@@ -1,3 +1,5 @@
+import { VoteRow } from "../types";
+
 export type UseVotingResult = {
   isModalVisible: boolean;
   isPassModalVisible: boolean;
@@ -10,12 +12,3 @@ export type UseVotingResult = {
   removeVote: (voteId: string) => void;
   resetChanges: () => void;
 };
-
-export interface VoteRow {
-  id: string;
-  type: "witnesses" | "sons" | "committees";
-  name: string;
-  webpage: string;
-  votes: string;
-  action: "add" | "remove" | "";
-}

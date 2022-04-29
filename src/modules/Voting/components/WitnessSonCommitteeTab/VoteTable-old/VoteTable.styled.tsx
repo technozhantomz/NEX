@@ -5,13 +5,13 @@ import {
   Button as UiButton,
   List as UiList,
   Table as UiTable,
-} from "../../../../ui/src";
-import { colors } from "../../../../ui/src/colors";
+} from "../../../../../ui/src";
+import { colors } from "../../../../../ui/src/colors";
 import {
   Check as check,
   Exclamation as exmark,
   Xmark as xmark,
-} from "../../../../ui/src/icons";
+} from "../../../../../ui/src/icons";
 
 export const VoteTable = styled(UiTable)`
 max-width: 100% !important;

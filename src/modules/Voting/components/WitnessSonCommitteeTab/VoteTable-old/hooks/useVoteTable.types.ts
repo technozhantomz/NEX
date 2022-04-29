@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { VoteModalData } from "../../../../../common/types";
+import { VoteModalData } from "../../../../../../common/types";
 
 export interface IVoteRow {
   key: string;

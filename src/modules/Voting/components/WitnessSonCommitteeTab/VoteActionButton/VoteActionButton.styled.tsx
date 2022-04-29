@@ -1,5 +1,5 @@
-import { styled, Button as UiButton } from "../../../../ui/src";
-import { colors } from "../../../../ui/src/colors";
+import { styled, Button as UiButton } from "../../../../../ui/src";
+import { colors } from "../../../../../ui/src/colors";
 
 export const VoteActionButton = styled(UiButton)`
    {

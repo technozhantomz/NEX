@@ -1,8 +1,8 @@
 import React, { SetStateAction, useEffect, useRef, useState } from "react";
 
-import { PasswordModal } from "../../../../common/components/PasswordModal";
-import { VoteModalData } from "../../../../common/types";
-import { Modal } from "../../../../ui/src";
+import { PasswordModal } from "../../../../../common/components/PasswordModal";
+import { VoteModalData } from "../../../../../common/types";
+import { Modal } from "../../../../../ui/src";
 import * as StyledTable from "../VoteTable/VoteTable.styled";
 import { IVoteRow } from "../VoteTable/hooks/useVoteTable.types";
 

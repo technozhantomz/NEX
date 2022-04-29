@@ -1,8 +1,8 @@
 import React, { CSSProperties, ReactNode, useEffect, useState } from "react";
 
 import { useViewportContext } from "../../../../common/components/ViewportProvider/ViewportProvider";
-import { List } from "../../../../ui/src";
-import { breakpoints } from "../../../../ui/src/breakpoints";
+import { List } from "../../../../../ui/src";
+import { breakpoints } from "../../../../../ui/src/breakpoints";
 
 import * as Styled from "./VoteTable.styled";
 import { IVoteRow } from "./hooks/useVoteTable.types";

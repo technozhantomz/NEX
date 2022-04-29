@@ -3,15 +3,15 @@ import type { NextPage } from "next";
 import React from "react";
 
 import { Layout } from "../../../../common/components";
-//import { VoteTab } from "../../components/VoteTab";
+import { VoteTab } from "../../components";
+import { useVoting } from "../../hooks";
 
 import * as Styled from "./VotingPage.styled";
-import { useVoting } from "./hooks";
 
 const { TabPane } = Tabs;
 
 const VotingPage: NextPage = () => {
-  const { allMembersVotes, serverApprovedVotes } = useVoting();
+  const { allMembersVotes, localApprovedVotes, loading } = useVoting();
   // console.log(serverApprovedVotes, "approved votes");
   // console.log(allMembersVotes, "all member votes");
   return (
@@ -28,13 +28,52 @@ const VotingPage: NextPage = () => {
             <Styled.Text>GPOS Tab</Styled.Text>
           </TabPane>
           <TabPane tab="Witnesses" key="witnesses">
-            {/* <VoteTab tab="Witnesses" /> */}
+            <VoteTab
+              localApprovedVotes={localApprovedVotes.filter(
+                (vote) => vote.type === "witnesses"
+              )}
+              localNotApprovedVotes={allMembersVotes
+                .filter((vote) => vote.type === "witnesses")
+                .filter(
+                  (vote) =>
+                    !localApprovedVotes
+                      .map((approvedVote) => approvedVote.id)
+                      .includes(vote.id)
+                )}
+              loading={loading}
+            />
           </TabPane>
           <TabPane tab="SONs" key="sons">
-            {/* <VoteTab tab="SONs" /> */}
+            <VoteTab
+              localApprovedVotes={localApprovedVotes.filter(
+                (vote) => vote.type === "sons"
+              )}
+              localNotApprovedVotes={allMembersVotes
+                .filter((vote) => vote.type === "sons")
+                .filter(
+                  (vote) =>
+                    !localApprovedVotes
+                      .map((approvedVote) => approvedVote.id)
+                      .includes(vote.id)
+                )}
+              loading={loading}
+            />
           </TabPane>
-          <TabPane tab="Advisors" key="advisors">
-            {/* <VoteTab tab="Advisors" /> */}
+          <TabPane tab="Committeee" key="committee">
+            <VoteTab
+              localApprovedVotes={localApprovedVotes.filter(
+                (vote) => vote.type === "committees"
+              )}
+              localNotApprovedVotes={allMembersVotes
+                .filter((vote) => vote.type === "committees")
+                .filter(
+                  (vote) =>
+                    !localApprovedVotes
+                      .map((approvedVote) => approvedVote.id)
+                      .includes(vote.id)
+                )}
+              loading={loading}
+            />
           </TabPane>
           <TabPane tab="Proxy" key="proxy">
             <Styled.Text>Proxy Tab</Styled.Text>

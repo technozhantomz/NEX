@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { isArrayEqual } from "../../../../../api/utils";
 
-import { useAccount, useAsset, useMembers } from "../../../../../common/hooks";
-import { useUserContext } from "../../../../../common/providers";
-import { Asset, FullAccount, Vote } from "../../../../../common/types";
+import { isArrayEqual } from "../../../api/utils";
+import { useAccount, useAsset, useMembers } from "../../../common/hooks";
+import { useUserContext } from "../../../common/providers";
+import { Asset, FullAccount, Vote } from "../../../common/types";
+import { VoteRow } from "../types";
 
-import { UseVotingResult, VoteRow } from "./useVoting.types";
+import { UseVotingResult } from "./useVoting.types";
 
 // should add tab: string for the arg, to use in publish function
 export function useVoting(): UseVotingResult {
@@ -23,8 +24,14 @@ export function useVoting(): UseVotingResult {
   const { getCommittees, getSons, getWitnesses } = useMembers();
   const { defaultAsset, formAssetBalanceById } = useAsset();
 
+  //const sortVoteRow =
+
   const formVoteRow = useCallback(
-    async (vote: Vote, votesIds: [string, string][]): Promise<VoteRow> => {
+    async (
+      vote: Vote,
+      votesIds: [string, string][],
+      action: "add" | "remove" | ""
+    ): Promise<VoteRow> => {
       let voteType: "committees" | "witnesses" | "sons";
       switch (parseInt(vote.vote_id.charAt(0))) {
         case 0:
@@ -48,11 +55,12 @@ export function useVoting(): UseVotingResult {
 
       return {
         id: vote.vote_id,
+        key: vote.vote_id,
         type: voteType,
         name: name,
         webpage: vote.url,
         votes: `${votesAsset.amount} ${votesAsset.symbol}`,
-        action: "",
+        action: action,
       } as VoteRow;
     },
     [formAssetBalanceById, defaultAsset]
@@ -74,7 +82,7 @@ export function useVoting(): UseVotingResult {
 
       const allMembersVotes = await Promise.all(
         allMembers.map((member) => {
-          return formVoteRow(member, allMembersIds);
+          return formVoteRow(member, allMembersIds, "add");
         })
       );
       setAllMemebersVotes(allMembersVotes);
@@ -83,10 +91,10 @@ export function useVoting(): UseVotingResult {
         const votes = fullAccount.votes;
         const serverApprovedVotes = await Promise.all(
           votes.map((vote) => {
-            return formVoteRow(vote, allMembersIds);
+            return formVoteRow(vote, allMembersIds, "remove");
           })
         );
-        setServerApprovedVotes([...serverApprovedVotes, {} as VoteRow]);
+        setServerApprovedVotes([...serverApprovedVotes]);
         setLocalApprovedVotes([...serverApprovedVotes]);
       }
       setLoading(false);
@@ -120,7 +128,10 @@ export function useVoting(): UseVotingResult {
       if (localApprovedVotes.find((vote) => vote.id === voteId) === undefined) {
         const selectedVote = allMembersVotes.find((vote) => vote.id === voteId);
         if (selectedVote !== undefined) {
-          setLocalApprovedVotes([selectedVote, ...localApprovedVotes]);
+          setLocalApprovedVotes([
+            { ...selectedVote, action: "remove" },
+            ...localApprovedVotes,
+          ]);
           checkVotesChanged();
         }
       }

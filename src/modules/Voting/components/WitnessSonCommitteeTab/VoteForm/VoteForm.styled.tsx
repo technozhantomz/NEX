@@ -5,14 +5,14 @@ import {
   Row as row,
   styled,
   Text as text,
-} from "../../../../ui/src";
-import { colors } from "../../../../ui/src/colors";
+} from "../../../../../ui/src";
+import { colors } from "../../../../../ui/src/colors";
 import {
   Info as info,
   Reset as reset,
   Search as search,
   Xmark as xmark,
-} from "../../../../ui/src/icons";
+} from "../../../../../ui/src/icons";
 
 export const FormContainer = styled.div`
   margin-top: 25px;

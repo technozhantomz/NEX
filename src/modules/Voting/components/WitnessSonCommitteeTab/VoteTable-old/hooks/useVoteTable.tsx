@@ -7,13 +7,13 @@ import {
   useAsset,
   useFees,
   useTransactionBuilder,
-} from "../../../../../common/hooks";
+} from "../../../../../../common/hooks";
 import {
   Candidate,
   FullAccount,
   Vote,
   VoteModalData,
-} from "../../../../../common/types";
+} from "../../../../../../common/types";
 
 import { IVoteRow, UseVoteTabResult } from "./useVoteTable.types";
 

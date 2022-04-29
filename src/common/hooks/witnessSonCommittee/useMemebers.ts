@@ -9,13 +9,14 @@ export function useMembers(): UseMembersResult {
   const { dbApi } = usePeerplaysApiContext();
   const getWitnesses = useCallback(async () => {
     try {
-      const witnessesIds: [string, string][] = await dbApi(
-        "lookup_witness_accounts",
-        ["", 100]
-      );
-      const witnesses: WitnessAccount[] = await dbApi("get_witnesses", [
-        witnessesIds.map((witnessId) => witnessId[1]),
-      ]);
+      let witnessesIds: [string, string][] = [];
+      let witnesses: WitnessAccount[] = [];
+      witnessesIds = await dbApi("lookup_witness_accounts", ["", 100]);
+      if (witnessesIds !== undefined && witnessesIds.length > 0) {
+        witnesses = await dbApi("get_witnesses", [
+          witnessesIds.map((witnessId) => witnessId[1]),
+        ]);
+      }
 
       return { witnesses, witnessesIds };
     } catch (e) {
@@ -26,14 +27,17 @@ export function useMembers(): UseMembersResult {
 
   const getCommittees = useCallback(async () => {
     try {
-      const committeesIds: [string, string][] = await dbApi(
-        "lookup_committee_member_accounts",
-        ["", 100]
-      );
-      const committees: CommitteeMember[] = await dbApi(
-        "get_committee_members",
-        [committeesIds.map((committeeId) => committeeId[1])]
-      );
+      let committeesIds: [string, string][] = [];
+      let committees: CommitteeMember[] = [];
+      committeesIds = await dbApi("lookup_committee_member_accounts", [
+        "",
+        100,
+      ]);
+      if (committeesIds !== undefined && committeesIds.length > 0) {
+        committees = await dbApi("get_committee_members", [
+          committeesIds.map((committeeId) => committeeId[1]),
+        ]);
+      }
       return { committees, committeesIds };
     } catch (e) {
       console.log(e);
@@ -43,13 +47,12 @@ export function useMembers(): UseMembersResult {
 
   const getSons = useCallback(async () => {
     try {
-      const sonsIds: [string, string][] = await dbApi("lookup_son_accounts", [
-        "",
-        100,
-      ]);
-      const sons: SonAccount[] = await dbApi("get_sons", [
-        sonsIds.map((sonIds) => sonIds[1]),
-      ]);
+      let sonsIds: [string, string][] = [];
+      let sons: SonAccount[] = [];
+      sonsIds = await dbApi("lookup_son_accounts", ["", 100]);
+      if (sonsIds !== undefined && sonsIds.length > 0) {
+        sons = await dbApi("get_sons", [sonsIds.map((sonIds) => sonIds[1])]);
+      }
       return { sons, sonsIds };
     } catch (e) {
       console.log(e);
