@@ -19,12 +19,19 @@ export const Label = styled.p`
     margin-bottom: 24px;
   }
 `;
-export const GeneratedPassordInput = styled(UIInput.Password)`
+export const GeneratedPassordInput = styled(UIInput)`
   .ant-input-password-icon {
     color: #b9b9b9;
     display: flex;
     justify-content: space-between;
     width: 38px;
+  }
+  .anticon {
+    color: #b9b9b9;
+    margin-right: 10px;
+    ${breakpoint.xs} {
+      margin-right: 15px;
+    }
   }
 `;
 

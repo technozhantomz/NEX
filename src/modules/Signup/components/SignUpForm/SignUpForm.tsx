@@ -21,6 +21,8 @@ export const SignUpForm: React.FC = () => {
     signUpForm,
     submitting,
     generatedPassword,
+    isInputTypePassword,
+    handleInputType,
   } = useSignUpForm();
 
   return (
@@ -48,18 +50,22 @@ export const SignUpForm: React.FC = () => {
         validateFirst={true}
         validateTrigger="onBlur"
       >
-        {/* <GeneratedPassordInput /> */}
         <Styled.GeneratedPassordInput
-          iconRender={(visible) => (
+          type={isInputTypePassword ? "password" : "text"}
+          suffix={
             <div>
               <CopyIcon
                 onClick={() =>
                   useCopyPassword(signUpForm.getFieldValue("password"))
                 }
               />
-              {visible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+              {isInputTypePassword ? (
+                <EyeInvisibleOutlined onClick={handleInputType} />
+              ) : (
+                <EyeOutlined onClick={handleInputType} />
+              )}
             </div>
-          )}
+          }
         />
       </Styled.PasswordFormItem>
       <Styled.PasswordCheckFormItem
