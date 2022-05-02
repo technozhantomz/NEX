@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
 import { Button, DownOutlined, Menu, Tabs } from "../../../ui/src";
-import { breakpoints } from "../../../ui/src/breakpoints";
 import { GPOSTab, ProxyTab } from "../components";
 
 import * as Styled from "./VotingPage.styled";
@@ -17,13 +16,11 @@ const VotingPage: NextPage = () => {
   const router = useRouter();
   const { tab } = router.query;
   const { pageMeta } = useVotingPage(tab as string);
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const [visible, setVisible] = useState<boolean>(false);
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
-      {width > breakpoints.sm ? (
-        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
-      ) : (
+      {sm ? (
         <Styled.MobileDropdownWrapper>
           <Styled.MobileDropdown
             visible={visible}
@@ -44,6 +41,8 @@ const VotingPage: NextPage = () => {
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
+      ) : (
+        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
       )}
     </>
   );
@@ -61,7 +60,7 @@ const VotingPage: NextPage = () => {
           activeKey={`${tab ? tab : "gpos"}`}
           onTabClick={(key) => {
             router.push(`/voting?tab=${key}`);
-            if (width < breakpoints.sm) setVisible(false);
+            if (sm) setVisible(false);
           }}
         >
           <TabPane tab="GPOS" key="gpos">
@@ -77,7 +76,7 @@ const VotingPage: NextPage = () => {
             <p>advisors</p>
           </TabPane>
           <TabPane tab="Proxy" key="proxy">
-            <ProxyTab /> 
+            <ProxyTab />
           </TabPane>
         </Tabs>
       </Styled.VotingCard>

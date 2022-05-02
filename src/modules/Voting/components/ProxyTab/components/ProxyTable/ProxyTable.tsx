@@ -1,10 +1,9 @@
 import { useViewportContext } from "../../../../../../common/providers";
-import { breakpoints } from "../../../../../../ui/src/breakpoints";
 
 import * as Styled from "./ProxyTable.styled";
 
 export const ProxyTable = (): JSX.Element => {
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const columns = [
     {
       title: "Name",
@@ -22,9 +21,7 @@ export const ProxyTable = (): JSX.Element => {
   ];
   return (
     <>
-      {width > breakpoints.sm ? (
-        <Styled.ProxyTable columns={columns} size="small" />
-      ) : (
+      {sm ? (
         <Styled.ProxyList
           renderItem={(item) => (
             <Styled.ProxyListItem>
@@ -43,6 +40,8 @@ export const ProxyTable = (): JSX.Element => {
             </Styled.ProxyListItem>
           )}
         />
+      ) : (
+        <Styled.ProxyTable columns={columns} size="small" />
       )}
     </>
   );

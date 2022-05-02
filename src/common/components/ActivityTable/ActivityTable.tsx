@@ -1,4 +1,3 @@
-import { breakpoints } from "../../../ui/src/breakpoints";
 import { useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityTable.styled";
@@ -19,11 +18,16 @@ export const ActivityTable = ({
     userName,
     isWalletActivityTable,
   });
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
 
   return (
     <>
-      {width > breakpoints.sm ? (
+      {sm ? (
+        <ActivityList
+          userName={userName}
+          isWalletActivityTable={isWalletActivityTable}
+        />
+      ) : (
         <Styled.ActivityTable
           columns={columns}
           dataSource={activitiesTable}
@@ -31,11 +35,6 @@ export const ActivityTable = ({
           pagination={false}
           size="small"
           className="activity-table"
-        />
-      ) : (
-        <ActivityList
-          userName={userName}
-          isWalletActivityTable={isWalletActivityTable}
         />
       )}
     </>

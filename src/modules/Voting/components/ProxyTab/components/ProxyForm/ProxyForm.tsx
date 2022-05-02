@@ -1,5 +1,6 @@
 import { PasswordModal } from "../../../../../../common/components";
-import { Form, Input, RedoOutlined } from "../../../../../../ui/src";
+import { useViewportContext } from "../../../../../../common/providers";
+import { Form, RedoOutlined } from "../../../../../../ui/src";
 
 import * as Styled from "./ProxyForm.styled";
 import { useProxyForm } from "./hooks";
@@ -15,6 +16,7 @@ export const ProxyForm = (): JSX.Element => {
     handleSearch,
     handlePasswordModalCancel,
   } = useProxyForm();
+  const { sm } = useViewportContext();
 
   return (
     <Form.Provider onFormFinish={onFormFinish}>
@@ -23,6 +25,7 @@ export const ProxyForm = (): JSX.Element => {
         name="proxyForm"
         onFinish={confirm}
         size="large"
+        layout={sm ? "horizontal" : "inline"}
       >
         {/* <Form.Item>
           <Input />
@@ -39,9 +42,7 @@ export const ProxyForm = (): JSX.Element => {
           />
         </Form.Item>
         <Form.Item>
-          <Styled.ProxyFormButton type="primary">
-            Add
-          </Styled.ProxyFormButton>
+          <Styled.ProxyFormButton type="primary">Add</Styled.ProxyFormButton>
         </Form.Item>
         <Form.Item>
           <Styled.ProxyFormButton type="primary" htmlType="submit">

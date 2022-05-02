@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { useViewportContext } from "../../../../common/providers";
-import { breakpoints } from "../../../../ui/src/breakpoints";
 
 import * as Styled from "./GPOSTab.styled";
 import { useGPOSTab } from "./hooks";
@@ -11,7 +10,7 @@ export const GPOSTab = (): JSX.Element => {
   const router = useRouter();
   const [readMore, setReadMore] = useState<boolean>(false);
   const { GPOSInfo } = useGPOSTab();
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const ReadMoreBlock = (
     <>
       <p>
@@ -43,9 +42,7 @@ export const GPOSTab = (): JSX.Element => {
           Proposals, and SONs. Share the exciting news and DApps available on
           Peerplays with others.
         </p>
-        {width > breakpoints.sm ? (
-          <>{ReadMoreBlock}</>
-        ) : (
+        {sm ? (
           <>
             {readMore ? <>{ReadMoreBlock}</> : ""}
             {readMore ? (
@@ -54,6 +51,8 @@ export const GPOSTab = (): JSX.Element => {
               <a onClick={() => setReadMore(!readMore)}>Read More</a>
             )}
           </>
+        ) : (
+          <>{ReadMoreBlock}</>
         )}
       </Styled.GPOSIntro>
       <Styled.GPOSContentWrapper>

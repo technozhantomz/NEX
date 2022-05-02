@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { useViewportContext } from "../../../../common/providers";
 import { List } from "../../../../ui/src";
-import { breakpoints } from "../../../../ui/src/breakpoints";
 import { StatsCard } from "../StatsCard";
 
 import { CommitteeColumns } from "./CommitteeColumns";
@@ -19,7 +18,7 @@ export const CommitteeTab = (): JSX.Element => {
     searchValue,
     handleSearch,
   } = useCommitteeTab();
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   return (
     <Styled.CommitteeTabWrapper>
       <Styled.StatsCardsDeck>
@@ -36,23 +35,7 @@ export const CommitteeTab = (): JSX.Element => {
         onSearch={handleSearch}
         loading={loading}
       />
-      {width > breakpoints.sm ? (
-        <Styled.CommitteeTable
-          bordered={false}
-          dataSource={
-            searchValue === ""
-              ? committeeTableRows
-              : committeeTableRows.filter((committeeRow) =>
-                  committeeRow.name
-                    .toLowerCase()
-                    .startsWith(searchValue.toLowerCase())
-                )
-          }
-          columns={CommitteeColumns}
-          loading={loading}
-          pagination={false}
-        />
-      ) : (
+      {sm ? (
         <List
           itemLayout="vertical"
           dataSource={
@@ -101,6 +84,22 @@ export const CommitteeTab = (): JSX.Element => {
               </Styled.CommiteeItemContent>
             </Styled.CommiteeListItem>
           )}
+        />
+      ) : (
+        <Styled.CommitteeTable
+          bordered={false}
+          dataSource={
+            searchValue === ""
+              ? committeeTableRows
+              : committeeTableRows.filter((committeeRow) =>
+                  committeeRow.name
+                    .toLowerCase()
+                    .startsWith(searchValue.toLowerCase())
+                )
+          }
+          columns={CommitteeColumns}
+          loading={loading}
+          pagination={false}
         />
       )}
     </Styled.CommitteeTabWrapper>

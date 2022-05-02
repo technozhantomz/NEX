@@ -5,7 +5,6 @@ import React from "react";
 import { Layout, TradingPairCard } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { Col, Row } from "../../../../ui/src";
-import { breakpoints } from "../../../../ui/src/breakpoints";
 import {
   LimitOrderForm,
   OrderTabs,
@@ -20,7 +19,7 @@ import { useMarketPage } from "./hooks";
 
 const MarketPage: NextPage = () => {
   const router = useRouter();
-  const { width } = useViewportContext();
+  const { md } = useViewportContext();
   const { pair } = router.query;
   const {
     tradingPairsStats,
@@ -59,7 +58,69 @@ const MarketPage: NextPage = () => {
       description={`Market Page | ${pair}`}
       dexLayout={true}
     >
-      {width > breakpoints.md ? (
+      {md ? (
+        // <>
+        //   <Styled.Container>
+        //     <Styled.StatsCardsDeck>
+        //       {tradingPairsStats.map((pairStats, _index) => (
+        //         <TradingPairCard
+        //           tradingPair={pairStats.tradingPair}
+        //           price={`${pairStats.marketPairStats.latest}`}
+        //           percentChange={`${pairStats.marketPairStats.percentChange}%`}
+        //           volume={`${pairStats.marketPairStats.volume}`}
+        //         />
+        //       ))}
+        //     </Styled.StatsCardsDeck>
+        //   </Styled.Container>
+        //   <Styled.Container>
+        //     <PairSelect
+        //       currentPair={pair as string}
+        //       currentBase={currentBase}
+        //       currentQuote={currentQuote}
+        //       loadingSelectedPair={loadingSelectedPair}
+        //       showStats={false}
+        //     />
+        //     <OrderTabs
+        //       currentBase={currentBase}
+        //       currentQuote={currentQuote}
+        //       loadingSelectedPair={loadingSelectedPair}
+        //     />
+        //   </Styled.Container>
+        //   <Styled.Container>
+        //     <OrderTabs
+        //       currentBase={currentBase}
+        //       currentQuote={currentQuote}
+        //       loadingSelectedPair={loadingSelectedPair}
+        //       forUser={true}
+        //     />
+        //   </Styled.Container>
+        //   <Styled.Container>
+        //     <Styled.Tabs>
+        //       <TabPane tab="Buy" key="buy">
+        //         <LimitOrderForm
+        //           activePair={pair as string}
+        //           currentBase={currentBase}
+        //           currentQuote={currentQuote}
+        //           loadingSelectedPair={loadingSelectedPair}
+        //           isBuyOrder={true}
+        //           showTitle={false}
+        //         />
+        //       </TabPane>
+        //       <TabPane tab="Sell" key="sell">
+        //         <LimitOrderForm
+        //           activePair={pair as string}
+        //           currentBase={currentBase}
+        //           currentQuote={currentQuote}
+        //           loadingSelectedPair={loadingSelectedPair}
+        //           isBuyOrder={false}
+        //           showTitle={false}
+        //         />
+        //       </TabPane>
+        //     </Styled.Tabs>
+        //   </Styled.Container>
+        // </>
+        ""
+      ) : (
         <Styled.Container>
           <Row>
             <Col span={7}>
@@ -163,68 +224,6 @@ const MarketPage: NextPage = () => {
             exchanges={exchanges}
           />
         </Styled.Container>
-      ) : (
-        ""
-        // <>
-        //   <Styled.Container>
-        //     <Styled.StatsCardsDeck>
-        //       {tradingPairsStats.map((pairStats, _index) => (
-        //         <TradingPairCard
-        //           tradingPair={pairStats.tradingPair}
-        //           price={`${pairStats.marketPairStats.latest}`}
-        //           percentChange={`${pairStats.marketPairStats.percentChange}%`}
-        //           volume={`${pairStats.marketPairStats.volume}`}
-        //         />
-        //       ))}
-        //     </Styled.StatsCardsDeck>
-        //   </Styled.Container>
-        //   <Styled.Container>
-        //     <PairSelect
-        //       currentPair={pair as string}
-        //       currentBase={currentBase}
-        //       currentQuote={currentQuote}
-        //       loadingSelectedPair={loadingSelectedPair}
-        //       showStats={false}
-        //     />
-        //     <OrderTabs
-        //       currentBase={currentBase}
-        //       currentQuote={currentQuote}
-        //       loadingSelectedPair={loadingSelectedPair}
-        //     />
-        //   </Styled.Container>
-        //   <Styled.Container>
-        //     <OrderTabs
-        //       currentBase={currentBase}
-        //       currentQuote={currentQuote}
-        //       loadingSelectedPair={loadingSelectedPair}
-        //       forUser={true}
-        //     />
-        //   </Styled.Container>
-        //   <Styled.Container>
-        //     <Styled.Tabs>
-        //       <TabPane tab="Buy" key="buy">
-        //         <LimitOrderForm
-        //           activePair={pair as string}
-        //           currentBase={currentBase}
-        //           currentQuote={currentQuote}
-        //           loadingSelectedPair={loadingSelectedPair}
-        //           isBuyOrder={true}
-        //           showTitle={false}
-        //         />
-        //       </TabPane>
-        //       <TabPane tab="Sell" key="sell">
-        //         <LimitOrderForm
-        //           activePair={pair as string}
-        //           currentBase={currentBase}
-        //           currentQuote={currentQuote}
-        //           loadingSelectedPair={loadingSelectedPair}
-        //           isBuyOrder={false}
-        //           showTitle={false}
-        //         />
-        //       </TabPane>
-        //     </Styled.Tabs>
-        //   </Styled.Container>
-        // </>
       )}
     </Layout>
   );

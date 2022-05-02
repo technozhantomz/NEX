@@ -2,7 +2,6 @@ import { ChainTypes } from "peerplaysjs-lib";
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
-import { breakpoints } from "../../../../ui/src/breakpoints";
 import { useAccount, useAccountHistory, useAsset } from "../../../hooks";
 import {
   usePeerplaysApiContext,
@@ -25,7 +24,7 @@ export function useActivityTable({
   const [loading, setLoading] = useState<boolean>(true);
   const { dbApi } = usePeerplaysApiContext();
   const { id } = useUserContext();
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const { formAssetBalanceById, defaultAsset, getAssetById, setPrecision } =
     useAsset();
   const { getUserNameById, getAccountByName } = useAccount();
@@ -46,14 +45,16 @@ export function useActivityTable({
         year: newDate[3],
         time: newDate[4],
       };
-      if (width > breakpoints.sm) return String(date).replace("T", " ");
-      return (
-        pattern.map((el: string) => dateObj[el]).join(" ") +
-        " | " +
-        dateObj.time
-      );
+      if (sm) {
+        return (
+          pattern.map((el: string) => dateObj[el]).join(" ") +
+          " | " +
+          dateObj.time
+        );
+      }
+      return String(date).replace("T", " ");
     },
-    [width]
+    [sm]
   );
 
   const formActivityDescription: {

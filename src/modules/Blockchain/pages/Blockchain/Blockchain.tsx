@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
-import { breakpoints } from "../../../../ui/src/breakpoints";
 import {
   AssetsTab,
   BlockchainTab,
@@ -25,12 +24,10 @@ const Blockchain: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { blockNumber, tab } = router.query;
   const { pageMeta } = useBlockchainPage(tab as string);
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
-      {width > breakpoints.sm ? (
-        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
-      ) : (
+      {sm ? (
         <Styled.MobileDropdownWrapper>
           <Styled.MobileDropdown
             visible={visible}
@@ -51,6 +48,8 @@ const Blockchain: NextPage = () => {
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
+      ) : (
+        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
       )}
     </>
   );
@@ -68,7 +67,7 @@ const Blockchain: NextPage = () => {
           activeKey={`${tab ? tab : "blockchain"}`}
           onTabClick={(key) => {
             router.push(`/blockchain?tab=${key}`);
-            if (width < breakpoints.sm) setVisible(false);
+            if (sm) setVisible(false);
           }}
         >
           <TabPane tab="Blockchain" key="blockchain">
