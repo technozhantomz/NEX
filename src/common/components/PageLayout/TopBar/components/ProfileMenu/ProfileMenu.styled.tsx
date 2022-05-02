@@ -1,4 +1,5 @@
 import { Avatar, MenuCard, styled } from "../../../../../../ui/src";
+import { breakpoint } from "../../../../../../ui/src/breakpoints";
 
 export const ProfileMenu = styled(MenuCard)`
   .ant-card-meta {
@@ -14,6 +15,11 @@ export const ProfileMenu = styled(MenuCard)`
       .ant-card-meta-description {
         font-size: 0.7em;
       }
+    }
+  }
+  ${breakpoint.xs} {
+    .ant-card-meta {
+      margin: 0 0 10% 0;
     }
   }
 `;
