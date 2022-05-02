@@ -30,12 +30,35 @@ export const StatsCardsDeck = styled(UIStatsCardsDeck)`
 `;
 
 export const Container = styled(UiCard)`
+  .ant-form {
+    padding: 0 20px;
+
+    .ant-input-affix-wrapper {
+      margin-bottom: 0px;
+      height: 50px;
+    }
+    .ant-form-item {
+      margin-bottom: 15px;
+    }
+  }
   ${mixIns.borderRadius}
-  margin: 15px 0;
+  margin: 0 0 15px 0;
   .ant-card-body {
     padding: 0;
   }
   ${breakpoint.sm} {
+    margin: 15px 0;
+    .ant-form {
+      padding: 0;
+
+      .ant-input-affix-wrapper {
+        margin-bottom: 0px;
+        height: 65px;
+      }
+      .ant-form-item {
+        margin-bottom: 10px;
+      }
+    }
   }
 `;
 
