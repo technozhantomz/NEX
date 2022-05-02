@@ -7,7 +7,11 @@ import {
 } from "../../../../../../ui/src";
 import { breakpoints } from "../../../../../../ui/src/breakpoints";
 import { Contacts, Vote } from "../../../../../../ui/src/icons";
-import { useUserContext, useViewportContext } from "../../../../../providers";
+import {
+  useMenuContext,
+  useUserContext,
+  useViewportContext,
+} from "../../../../../providers";
 import { MenuItem } from "../MenuItem";
 
 import * as Styled from "./ProfileMenu.styled";
@@ -17,6 +21,7 @@ const { Meta } = Card;
 export const ProfileMenu = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { width } = useViewportContext();
+  const { closeMenu } = useMenuContext();
 
   return (
     <Styled.ProfileMenu bordered={false}>
@@ -37,6 +42,7 @@ export const ProfileMenu = (): JSX.Element => {
                 href="/voting"
                 icon={<Vote className={"menu-icon"} />}
                 label="Voting"
+                onClick={closeMenu}
               />
             </li>
             <li>
@@ -44,13 +50,14 @@ export const ProfileMenu = (): JSX.Element => {
                 href="/contacts"
                 icon={<Contacts className={"menu-icon"} />}
                 label="Contacts"
+                onClick={closeMenu}
               />
             </li>
           </>
         ) : (
           <li className={"link"}>
-            <Link href={`/user/${localStorageAccount}`}>
-              <a>See all account activity</a>
+            <Link href={`/user/${localStorageAccount}`} onClick={closeMenu}>
+              See all account activity
             </Link>
           </li>
         )}
@@ -60,11 +67,12 @@ export const ProfileMenu = (): JSX.Element => {
             href="/settings"
             icon={<SettingOutlined className={"menu-icon"} />}
             label="Settings"
+            onClick={closeMenu}
           />
         </li>
         {width < breakpoints.xs ? (
           <li className={"link"}>
-            <Link href={`/user/${localStorageAccount}`}>
+            <Link href={`/user/${localStorageAccount}`} onClick={closeMenu}>
               <a>See all account activity</a>
             </Link>
           </li>
@@ -76,6 +84,7 @@ export const ProfileMenu = (): JSX.Element => {
             href="/logout"
             icon={<PoweroffOutlined className={"menu-icon"} />}
             label="Logout"
+            onClick={closeMenu}
           />
         </li>
       </ul>

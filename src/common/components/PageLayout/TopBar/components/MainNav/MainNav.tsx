@@ -28,7 +28,7 @@ export const MainNav = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { exchanges } = useSettingsContext();
   const { width } = useViewportContext();
-  const { toggleMenu } = useMenuContext();
+  const { toggleMenu, closeMenu } = useMenuContext();
   return (
     <MenuCard bordered={false}>
       <ul>
@@ -40,6 +40,7 @@ export const MainNav = (): JSX.Element => {
               href="/login"
               icon={<PoweroffOutlined className={"menu-icon"} />}
               label="Login"
+              onClick={closeMenu}
             />
           </li>
         )}
@@ -49,6 +50,7 @@ export const MainNav = (): JSX.Element => {
             href="/dashboard"
             icon={<Dashboard className={"menu-icon"} />}
             label="Dashboard"
+            onClick={closeMenu}
           />
         </li>
         <li>
@@ -56,6 +58,7 @@ export const MainNav = (): JSX.Element => {
             href={`/market/${exchanges.active}`}
             icon={<Market className={"menu-icon"} />}
             label="Market"
+            onClick={closeMenu}
           />
         </li>
         <li>
@@ -63,6 +66,7 @@ export const MainNav = (): JSX.Element => {
             href="/blockchain"
             icon={<Blockchain className={"menu-icon"} />}
             label="Blocks"
+            onClick={closeMenu}
           />
         </li>
         {!localStorageAccount ? (
@@ -74,6 +78,7 @@ export const MainNav = (): JSX.Element => {
                 href="/wallet"
                 icon={<DollarOutlined className={"menu-icon"} />}
                 label="Wallet"
+                onClick={closeMenu}
               />
             </li>
             {width < breakpoints.xs ? (
@@ -92,6 +97,7 @@ export const MainNav = (): JSX.Element => {
                 href="/settings"
                 icon={<SettingOutlined className={"menu-icon"} />}
                 label="Settings"
+                onClick={closeMenu}
               />
             </li>
             <li className={"advanced"}>
@@ -112,6 +118,7 @@ export const MainNav = (): JSX.Element => {
                 href="/voting"
                 icon={<Vote className={"menu-icon"} />}
                 label="Voting"
+                onClick={closeMenu}
               />
             </li>
           </>
@@ -127,6 +134,7 @@ export const MainNav = (): JSX.Element => {
               href="/logout"
               icon={<PoweroffOutlined className={"menu-icon"} />}
               label="Logout"
+              onClick={closeMenu}
             />
           </li>
         )}
