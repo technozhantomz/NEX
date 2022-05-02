@@ -167,19 +167,23 @@ const MarketPage: NextPage = () => {
         <>
           <Row>
             <Col className="gutter-row" span={24}>
-              <Styled.Container>
-                <Styled.StatsCardsDeck>
-                  {tradingPairsStats.map((pairStats, _index) => (
-                    <TradingPairCard
-                      tradingPair={pairStats.tradingPair}
-                      price={`${pairStats.marketPairStats.latest}`}
-                      percentChange={`${pairStats.marketPairStats.percentChange}%`}
-                      volume={`${pairStats.marketPairStats.volume}`}
-                      key={`tradingPair_${_index}`}
-                    />
-                  ))}
-                </Styled.StatsCardsDeck>
-              </Styled.Container>
+              <Styled.MarketContainer>
+                <Styled.Div>
+                  <Row gutter={[16, 16]}>
+                    {tradingPairsStats.map((pairStats, _index) => (
+                      <Col span={12} key={_index}>
+                        <TradingPairCard
+                          tradingPair={pairStats.tradingPair}
+                          price={`${pairStats.marketPairStats.latest}`}
+                          percentChange={`${pairStats.marketPairStats.percentChange}%`}
+                          volume={`${pairStats.marketPairStats.volume}`}
+                          key={`tradingPair_${_index}`}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                </Styled.Div>
+              </Styled.MarketContainer>
             </Col>
 
             <Col className="gutter-row" span={24}>

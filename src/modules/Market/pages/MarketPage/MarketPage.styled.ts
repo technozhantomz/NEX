@@ -9,13 +9,10 @@ import { mixIns } from "../../../../ui/src/mixins";
 
 export const StatsCardsDeck = styled(UIStatsCardsDeck)`
   justify-content: space-around;
-  margin: 25px 20px;
   flex-wrap: wrap;
   height: auto;
   .trading-card {
     min-width: 140px;
-    width: 40%;
-    margin: 10px;
   }
   ${breakpoint.sm} {
     display: flex;
@@ -77,5 +74,24 @@ export const Tabs = styled(UiTabs)`
     width: 50%;
     display: flex;
     justify-content: center;
+  }
+`;
+
+export const MarketContainer = styled.div`
+  background: #ffffff 0% 0% no-repeat padding-box;
+  ${mixIns.borderRadius}
+  color: white;
+  width: 100%;
+  // margin: 10px;
+  margin-bottom: 15px;
+  padding: 10px;
+  text-align: center;
+`;
+
+export const Div = styled.div`
+  margin: 10px;
+
+  ${breakpoint.sm} {
+    margin: 25px;
   }
 `;
