@@ -3,7 +3,7 @@ export type VoteRow = {
   key: string;
   type: "witnesses" | "sons" | "committees";
   name: string;
-  webpage: string;
+  website: string;
   votes: string;
   action: "add" | "remove" | "";
 };

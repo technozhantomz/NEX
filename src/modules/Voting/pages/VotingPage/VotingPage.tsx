@@ -1,8 +1,10 @@
-import { Tabs } from "antd";
+import { capitalize } from "lodash";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import React from "react";
 
 import { Layout } from "../../../../common/components";
+import { Tabs } from "../../../../ui/src";
 import { VoteTab } from "../../components";
 import { useVoting } from "../../hooks";
 
@@ -11,9 +13,27 @@ import * as Styled from "./VotingPage.styled";
 const { TabPane } = Tabs;
 
 const VotingPage: NextPage = () => {
-  const { allMembersVotes, localApprovedVotes, loading } = useVoting();
-  // console.log(serverApprovedVotes, "approved votes");
-  // console.log(allMembersVotes, "all member votes");
+  const {
+    allMembersVotes,
+    localApprovedVotes,
+    loading,
+    approveVote,
+    removeVote,
+    voteSearchValue,
+    handleVoteSearch,
+    handlePasswordModalCancel,
+    isPassModalVisible,
+    isVotesChanged,
+    resetChanges,
+  } = useVoting();
+  const router = useRouter();
+  const { tab } = router.query;
+  const voteTabs: ("witnesses" | "sons" | "committees")[] = [
+    "witnesses",
+    "sons",
+    "committees",
+  ];
+
   return (
     <Layout
       title="Voting"
@@ -23,58 +43,67 @@ const VotingPage: NextPage = () => {
       dexLayout={true}
     >
       <Styled.VotingPageCard>
-        <Tabs defaultActiveKey="gpos">
+        <Tabs
+          defaultActiveKey={`${tab ? tab : "gpos"}`}
+          onTabClick={(key) => {
+            handleVoteSearch("");
+            router.push(`/voting?tab=${key}`);
+          }}
+        >
           <TabPane tab="GPOS" key="gpos">
             <Styled.Text>GPOS Tab</Styled.Text>
           </TabPane>
-          <TabPane tab="Witnesses" key="witnesses">
-            <VoteTab
-              localApprovedVotes={localApprovedVotes.filter(
-                (vote) => vote.type === "witnesses"
-              )}
-              localNotApprovedVotes={allMembersVotes
-                .filter((vote) => vote.type === "witnesses")
-                .filter(
-                  (vote) =>
-                    !localApprovedVotes
-                      .map((approvedVote) => approvedVote.id)
-                      .includes(vote.id)
-                )}
-              loading={loading}
-            />
-          </TabPane>
-          <TabPane tab="SONs" key="sons">
-            <VoteTab
-              localApprovedVotes={localApprovedVotes.filter(
-                (vote) => vote.type === "sons"
-              )}
-              localNotApprovedVotes={allMembersVotes
-                .filter((vote) => vote.type === "sons")
-                .filter(
-                  (vote) =>
-                    !localApprovedVotes
-                      .map((approvedVote) => approvedVote.id)
-                      .includes(vote.id)
-                )}
-              loading={loading}
-            />
-          </TabPane>
-          <TabPane tab="Committeee" key="committee">
-            <VoteTab
-              localApprovedVotes={localApprovedVotes.filter(
-                (vote) => vote.type === "committees"
-              )}
-              localNotApprovedVotes={allMembersVotes
-                .filter((vote) => vote.type === "committees")
-                .filter(
-                  (vote) =>
-                    !localApprovedVotes
-                      .map((approvedVote) => approvedVote.id)
-                      .includes(vote.id)
-                )}
-              loading={loading}
-            />
-          </TabPane>
+          {voteTabs.map((voteTab) => (
+            <TabPane tab={capitalize(voteTab)} key={voteTab}>
+              <VoteTab
+                tab={voteTab}
+                localApprovedVotes={
+                  voteSearchValue === ""
+                    ? localApprovedVotes.filter((vote) => vote.type === voteTab)
+                    : localApprovedVotes
+                        .filter((vote) => vote.type === voteTab)
+                        .filter((approvedVote) =>
+                          approvedVote.name
+                            .toLowerCase()
+                            .startsWith(voteSearchValue.toLowerCase())
+                        )
+                }
+                localNotApprovedVotes={
+                  voteSearchValue === ""
+                    ? allMembersVotes
+                        .filter((vote) => vote.type === voteTab)
+                        .filter(
+                          (vote) =>
+                            !localApprovedVotes
+                              .map((approvedVote) => approvedVote.id)
+                              .includes(vote.id)
+                        )
+                    : allMembersVotes
+                        .filter((vote) => vote.type === voteTab)
+                        .filter(
+                          (vote) =>
+                            !localApprovedVotes
+                              .map((approvedVote) => approvedVote.id)
+                              .includes(vote.id)
+                        )
+                        .filter((notApprovedVote) =>
+                          notApprovedVote.name
+                            .toLowerCase()
+                            .startsWith(voteSearchValue.toLowerCase())
+                        )
+                }
+                loading={loading}
+                approveVote={approveVote}
+                removeVote={removeVote}
+                handleVoteSearch={handleVoteSearch}
+                handlePasswordModalCancel={handlePasswordModalCancel}
+                isPassModalVisible={isPassModalVisible}
+                isVotesChanged={isVotesChanged}
+                resetChanges={resetChanges}
+              />
+            </TabPane>
+          ))}
+
           <TabPane tab="Proxy" key="proxy">
             <Styled.Text>Proxy Tab</Styled.Text>
           </TabPane>

@@ -18,13 +18,31 @@ export function useVoting(): UseVotingResult {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [isPassModalVisible, setIsPassModalVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [voteSearchValue, setVoteSearchValue] = useState<string>("");
 
   const { localStorageAccount } = useUserContext();
   const { getFullAccount } = useAccount();
   const { getCommittees, getSons, getWitnesses } = useMembers();
   const { defaultAsset, formAssetBalanceById } = useAsset();
 
-  //const sortVoteRow =
+  const handlePasswordModalCancel = useCallback(() => {
+    setIsPassModalVisible(false);
+  }, [setIsPassModalVisible]);
+
+  const handleVoteSearch = useCallback(
+    (name: string) => {
+      setLoading(true);
+      setVoteSearchValue(name);
+      setLoading(false);
+    },
+    [setVoteSearchValue, setLoading]
+  );
+
+  const sortVotesRows = useCallback((votes: VoteRow[]) => {
+    return votes.sort(
+      (a, b) => Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0])
+    );
+  }, []);
 
   const formVoteRow = useCallback(
     async (
@@ -52,13 +70,12 @@ export function useVoting(): UseVotingResult {
         (defaultAsset as Asset).id,
         Number(vote.total_votes)
       );
-
       return {
         id: vote.vote_id,
         key: vote.vote_id,
         type: voteType,
         name: name,
-        webpage: vote.url,
+        website: vote.url,
         votes: `${votesAsset.amount} ${votesAsset.symbol}`,
         action: action,
       } as VoteRow;
@@ -85,7 +102,7 @@ export function useVoting(): UseVotingResult {
           return formVoteRow(member, allMembersIds, "add");
         })
       );
-      setAllMemebersVotes(allMembersVotes);
+      setAllMemebersVotes(sortVotesRows(allMembersVotes));
 
       if (fullAccount !== undefined) {
         const votes = fullAccount.votes;
@@ -94,8 +111,8 @@ export function useVoting(): UseVotingResult {
             return formVoteRow(vote, allMembersIds, "remove");
           })
         );
-        setServerApprovedVotes([...serverApprovedVotes]);
-        setLocalApprovedVotes([...serverApprovedVotes]);
+        setServerApprovedVotes(sortVotesRows([...serverApprovedVotes]));
+        setLocalApprovedVotes(sortVotesRows([...serverApprovedVotes]));
       }
       setLoading(false);
     } catch (e) {
@@ -115,24 +132,32 @@ export function useVoting(): UseVotingResult {
     setLocalApprovedVotes,
   ]);
 
-  const checkVotesChanged = useCallback(() => {
-    const isVotesChanged = !isArrayEqual(
-      serverApprovedVotes,
-      localApprovedVotes
-    );
-    setIsVotesChanged(isVotesChanged);
-  }, [setIsVotesChanged, serverApprovedVotes, localApprovedVotes]);
+  const checkVotesChanged = useCallback(
+    (serverApprovedVotes: VoteRow[], localApprovedVotes: VoteRow[]) => {
+      const isVotesChanged = !isArrayEqual(
+        serverApprovedVotes,
+        localApprovedVotes
+      );
+      setIsVotesChanged(isVotesChanged);
+    },
+    [setIsVotesChanged]
+  );
 
   const approveVote = useCallback(
     (voteId: string) => {
       if (localApprovedVotes.find((vote) => vote.id === voteId) === undefined) {
         const selectedVote = allMembersVotes.find((vote) => vote.id === voteId);
         if (selectedVote !== undefined) {
-          setLocalApprovedVotes([
+          setLocalApprovedVotes(
+            sortVotesRows([
+              { ...selectedVote, action: "remove" },
+              ...localApprovedVotes,
+            ])
+          );
+          checkVotesChanged(serverApprovedVotes, [
             { ...selectedVote, action: "remove" },
             ...localApprovedVotes,
           ]);
-          checkVotesChanged();
         }
       }
     },
@@ -148,9 +173,12 @@ export function useVoting(): UseVotingResult {
     (voteId: string) => {
       if (localApprovedVotes.find((vote) => vote.id === voteId) !== undefined) {
         setLocalApprovedVotes(
+          sortVotesRows(localApprovedVotes.filter((vote) => vote.id !== voteId))
+        );
+        checkVotesChanged(
+          serverApprovedVotes,
           localApprovedVotes.filter((vote) => vote.id !== voteId)
         );
-        checkVotesChanged();
       }
     },
     [localApprovedVotes, setLocalApprovedVotes, checkVotesChanged]
@@ -176,5 +204,8 @@ export function useVoting(): UseVotingResult {
     approveVote,
     removeVote,
     resetChanges,
+    voteSearchValue,
+    handleVoteSearch,
+    handlePasswordModalCancel,
   };
 }

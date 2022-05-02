@@ -1,97 +1,146 @@
-import React, { SetStateAction, useEffect, useRef, useState } from "react";
+import { capitalize } from "lodash";
 
-import { PasswordModal } from "../../../../../common/components/PasswordModal";
-import { VoteModalData } from "../../../../../common/types";
-import { Modal } from "../../../../../ui/src";
-import * as StyledTable from "../VoteTable/VoteTable.styled";
-import { IVoteRow } from "../VoteTable/hooks/useVoteTable.types";
+import { PasswordModal } from "../../../../../common/components";
 
 import * as Styled from "./VoteForm.styled";
 
 type Props = {
-  isChangeTableEmpty: boolean;
   tab: string;
-  doAction: (txt: string, tableRow?: IVoteRow, tab?: string) => Promise<void>;
-  doSearch: (searchInput: string) => void;
-  modalData: VoteModalData;
-  isModalVisible: boolean;
-  setIsModalVisible: (value: SetStateAction<boolean>) => void;
+  handleVoteSearch: (name: string) => void;
+  loading: boolean;
+  handlePasswordModalCancel: () => void;
   isPassModalVisible: boolean;
-  setIsPassModalVisible: (value: SetStateAction<boolean>) => void;
-  sendVotes: (password: string) => Promise<void>;
+  isVotesChanged: boolean;
+  resetChanges: () => void;
+  // isChangeTableEmpty: boolean;
+  // doAction: (txt: string, tableRow?: IVoteRow, tab?: string) => Promise<void>;
+  // doSearch: (searchInput: string) => void;
+  // modalData: VoteModalData;
+  // isModalVisible: boolean;
+  // setIsModalVisible: (value: SetStateAction<boolean>) => void;
+  // isPassModalVisible: boolean;
+  // setIsPassModalVisible: (value: SetStateAction<boolean>) => void;
+  // sendVotes: (password: string) => Promise<void>;
 };
 
 export const VoteForm = ({
-  isChangeTableEmpty,
   tab,
-  doAction,
-  doSearch,
-  modalData,
-  isModalVisible,
-  setIsModalVisible,
+  handleVoteSearch,
+  loading,
+  handlePasswordModalCancel,
   isPassModalVisible,
-  setIsPassModalVisible,
-  sendVotes,
-}: Props): JSX.Element => {
-  const [searchValue, setSearchValue] = useState<string>("");
-  //const [, updateState] = useState();
-  //const forceUpdate = useCallback(() => updateState({}), []);
-  const modalDataSource = useRef<any[]>([]);
-  useEffect(() => {
-    doSearch(searchValue);
-  }, [searchValue]);
-  useEffect(() => {
-    if (tab === "Proxy") {
-      modalDataSource.current = [
-        {
-          key: "1",
-          colName: "Account Name",
-          colData: modalData.account,
-        },
-        {
-          key: "2",
-          colName: "Proxy Voting Account",
-          colData: modalData.proxy,
-        },
-        {
-          key: "3",
-          colName: `Desired # of ${tab}`,
-          colData: modalData.candidateCount,
-        },
-        {
-          key: "4",
-          colName: "Fee",
-          colData: `${modalData.fee} PPY`,
-        },
-      ];
-    } else {
-      modalDataSource.current = [
-        {
-          key: "1",
-          colName: "Account Name",
-          colData: modalData.account,
-        },
-        {
-          key: "2",
-          colName: `Desired # of ${tab}`,
-          colData: modalData.candidateCount,
-        },
-        {
-          key: "3",
-          colName: "Fee",
-          colData: `${modalData.fee} PPY`,
-        },
-      ];
-    }
-  }, [modalData]);
+  isVotesChanged,
+  resetChanges,
+}: // isChangeTableEmpty,
+Props): JSX.Element => {
+  // const [searchValue, setSearchValue] = useState<string>("");
+  // //const [, updateState] = useState();
+  // //const forceUpdate = useCallback(() => updateState({}), []);
+  // const modalDataSource = useRef<any[]>([]);
+  // useEffect(() => {
+  //   doSearch(searchValue);
+  // }, [searchValue]);
+  // useEffect(() => {
+  //   if (tab === "Proxy") {
+  //     modalDataSource.current = [
+  //       {
+  //         key: "1",
+  //         colName: "Account Name",
+  //         colData: modalData.account,
+  //       },
+  //       {
+  //         key: "2",
+  //         colName: "Proxy Voting Account",
+  //         colData: modalData.proxy,
+  //       },
+  //       {
+  //         key: "3",
+  //         colName: `Desired # of ${tab}`,
+  //         colData: modalData.candidateCount,
+  //       },
+  //       {
+  //         key: "4",
+  //         colName: "Fee",
+  //         colData: `${modalData.fee} PPY`,
+  //       },
+  //     ];
+  //   } else {
+  //     modalDataSource.current = [
+  //       {
+  //         key: "1",
+  //         colName: "Account Name",
+  //         colData: modalData.account,
+  //       },
+  //       {
+  //         key: "2",
+  //         colName: `Desired # of ${tab}`,
+  //         colData: modalData.candidateCount,
+  //       },
+  //       {
+  //         key: "3",
+  //         colName: "Fee",
+  //         colData: `${modalData.fee} PPY`,
+  //       },
+  //     ];
+  //   }
+  // }, [modalData]);
   return (
     <>
-      <Styled.Title>Vote for {tab}</Styled.Title>
-      <a href="#">
-        <Styled.Info />
-        <Styled.DetailsLink>See details here</Styled.DetailsLink>
-      </a>
-      <Styled.FormContainer>
+      <Styled.Title>Vote for {capitalize(tab)}</Styled.Title>
+      <Styled.VoteSearch
+        size="large"
+        placeholder="Search account"
+        onSearch={handleVoteSearch}
+        loading={loading}
+      />
+      <Styled.VoteForm.Provider onFormFinish={() => {}}>
+        <Styled.VoteForm
+          //form={membershipForm}
+          name="voteForm"
+          //onFinish={confirm}
+        >
+          {/* <MembershipModal
+            visible={isMembershipModalVisible}
+            onCancel={handleMembershipModalCancel}
+            handleOk={handleMembershipModalConfirm}
+            transactionErrorMessage={transactionErrorMessage}
+            transactionSuccessMessage={transactionSuccessMessage}
+            loadingTransaction={loadingTransaction}
+            account={name}
+            fee={membershipPrice}
+          /> */}
+          <Styled.ActionsContainer>
+            {!isVotesChanged ? (
+              <Styled.CardFormLinkButtonDisabled>
+                <Styled.Reset />
+                Reset Changes
+              </Styled.CardFormLinkButtonDisabled>
+            ) : (
+              <Styled.CardFormLinkButton
+                onClick={() => {
+                  resetChanges();
+                }}
+              >
+                <Styled.Reset />
+                Reset Changes
+              </Styled.CardFormLinkButton>
+            )}
+            <Styled.Publish
+              type="primary"
+              htmlType="submit"
+              disabled={!isVotesChanged}
+            >
+              Publish Changes
+            </Styled.Publish>
+          </Styled.ActionsContainer>
+          <PasswordModal
+            visible={isPassModalVisible}
+            onCancel={handlePasswordModalCancel}
+            submitting={false}
+          />
+        </Styled.VoteForm>
+      </Styled.VoteForm.Provider>
+      {/* <Styled.FormContainer>
         <Styled.Form>
           <Styled.Row>
             <Styled.FormItemRow1 name="search">
@@ -185,7 +234,7 @@ export const VoteForm = ({
             setIsPassModalVisible(false);
           }}
         />
-      </Styled.Form.Provider>
+      </Styled.Form.Provider> */}
     </>
   );
 };

@@ -197,6 +197,7 @@ export const MembershipTab = (): JSX.Element => {
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={handlePasswordModalCancel}
+            submitting={loadingTransaction}
           />
         </Styled.MembershipForm>
       </Styled.MembershipForm.Provider>

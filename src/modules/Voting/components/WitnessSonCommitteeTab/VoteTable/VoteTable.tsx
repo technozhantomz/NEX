@@ -4,39 +4,31 @@ import {
   useUserContext,
   useViewportContext,
 } from "../../../../../common/providers";
-import { List } from "../../../../../ui/src";
+// import { List } from "../../../../../ui/src";
 import { breakpoints } from "../../../../../ui/src/breakpoints";
 import { VoteRow } from "../../../types";
 
-import { columns } from "./VoteColumns";
+import { showVotesColumns } from "./VoteColumns";
 import * as Styled from "./VoteTable.styled";
 
 type Props = {
-  //   table: IVoteRow[];
-  //   tab: string;
-  //   tableType: string;
-  //   account: string;
-  //   filterVote: string;
   votes: VoteRow[];
   type: "approved" | "notApproved";
   loading: boolean;
-  //doAction: (txt: string, tableRow?: IVoteRow) => Promise<void>;
+  approveVote: (voteId: string) => void;
+  removeVote: (voteId: string) => void;
 };
 
 export const VoteTable = ({
-  //   table,
-  //   tab,
-  //   tableType,
-  //   account,
-  //   filterVote,
   votes,
   type,
   loading,
-}: //doAction,
-Props): JSX.Element => {
+  approveVote,
+  removeVote,
+}: Props): JSX.Element => {
   const { width } = useViewportContext();
   const { localStorageAccount } = useUserContext();
-
+  const columns = showVotesColumns(approveVote, removeVote);
   return (
     <>
       <Styled.Title>

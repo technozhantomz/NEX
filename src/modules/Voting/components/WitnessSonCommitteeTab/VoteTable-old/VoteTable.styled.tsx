@@ -14,16 +14,16 @@ import {
 } from "../../../../../ui/src/icons";
 
 export const VoteTable = styled(UiTable)`
-max-width: 100% !important;
-.ant-table-thead > tr > th {
-        background: transparent;
-        color: ${colors.textColorSecondary};
-        font-weight: 300;
-        border: none;
-        &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
-            display:none;
-        }
+  max-width: 100%;
+  .ant-table-thead > tr > th {
+    background: transparent;
+    color: ${colors.textColorSecondary};
+    font-weight: 300;
+    border: none;
+    &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
+        display:none;
     }
+  }
 }
 .ant-table-tbody > tr > td {
     border: none;

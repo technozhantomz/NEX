@@ -6,30 +6,26 @@ import {
   List as UiList,
   Table as UiTable,
 } from "../../../../../ui/src";
+import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
-import {
-  Check as check,
-  Exclamation as exmark,
-  Xmark as xmark,
-} from "../../../../../ui/src/icons";
+import { Check as check, Xmark as xmark } from "../../../../../ui/src/icons";
 
 export const VoteTable = styled(UiTable)`
-  max-width: 100% !important;
+  max-width: 100%;
   .ant-table-thead > tr > th {
-          background: transparent;
-          color: ${colors.textColorSecondary};
-          font-weight: 300;
-          border: none;
-          &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
-              display:none;
-          }
-      }
+    background: transparent;
+    color: ${colors.textColorSecondary};
+    font-weight: 300;
+    border: none;
+    &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+      display: none;
+    }
   }
   .ant-table-tbody > tr > td {
-      border: none;
-      font-weight: 500;
-   }
-  `;
+    border: none;
+    font-weight: 500;
+  }
+`;
 
 export const VoteListItem = styled(UiList.Item)`
    {
@@ -48,9 +44,7 @@ export const VoteListItem = styled(UiList.Item)`
 `;
 
 export const VoteItemContent = styled.div`
-   {
-    margin: 18px 0 25px;
-  }
+  margin: 18px 0 25px;
   .asset-info {
     margin: 5px 0;
     display: flex;
@@ -67,17 +61,16 @@ export const VoteItemContent = styled.div`
 
 export const VoteActionButton = styled(UiButton)`
    {
-    width: unset !important;
     margin: 0px;
-    font-size: 16px;
-    background: none;
     border: none;
+    background: none;
+    boxshadow: none;
     padding: 0;
     color: ${colors.additionalBlue};
     text-align: right;
     vertical-align: middle;
     &:hover {
-      color: #2369cc;
+      background: #fafafa;
     }
   }
 `;
@@ -86,7 +79,11 @@ export const Container = styled.div`
   margin-bottom: 25px;
 `;
 
-export const Title = styled.h3``;
+export const Title = styled.h3`
+  ${breakpoint.xs} {
+    margin-bottom: 25px;
+  }
+`;
 
 export const ColHeader = styled(col)`
   width: 25%;
@@ -119,10 +116,5 @@ export const Check = styled(check)`
 
 export const Xmark = styled(xmark)`
   color: #d01721;
-  margin-left: 15px;
-`;
-
-export const Exmark = styled(exmark)`
-  color: #d4af37;
   margin-left: 15px;
 `;

@@ -6,121 +6,74 @@
 // import { useVoteTable } from "../VoteTable/hooks";
 // import { IVoteRow } from "../VoteTable/hooks/useVoteTable.types";
 
-import { VoteTable } from "..";
-import { VoteRow } from "../../../hooks";
+import { VoteForm, VoteTable } from "..";
+import { VoteRow } from "../../../types";
 
 import * as Styled from "./VoteTab.styled";
 
 type Props = {
+  tab: string;
   localApprovedVotes: VoteRow[];
   localNotApprovedVotes: VoteRow[];
   loading: boolean;
+  approveVote: (voteId: string) => void;
+  removeVote: (voteId: string) => void;
+  handleVoteSearch: (name: string) => void;
+  handlePasswordModalCancel: () => void;
+  isPassModalVisible: boolean;
+  isVotesChanged: boolean;
+  resetChanges: () => void;
 };
 
 export const VoteTab = ({
   localApprovedVotes,
   localNotApprovedVotes,
   loading,
+  approveVote,
+  removeVote,
+  tab,
+  handleVoteSearch,
+  handlePasswordModalCancel,
+  isPassModalVisible,
+  isVotesChanged,
+  resetChanges,
 }: Props): JSX.Element => {
-  console.log(localApprovedVotes, "this is loca");
-  console.log(localNotApprovedVotes, "this not appr");
-  // const { localStorageAccount } = useUserContext();
-  // const {
-  //   tableVotes,
-  //   tableNotVotes,
-  //   tableChanges,
-  //   loading,
-  //   doAction,
-  //   modalData,
-  //   isModalVisible,
-  //   setIsModalVisible,
-  //   isPassModalVisible,
-  //   setIsPassModalVisible,
-  //   sendVotes,
-  // } = useVoteTable(tab);
-  // const [localVotes, setLocalVotes] = useState<IVoteRow[]>(tableVotes);
-  // const [localNotVotes, setLocalNotVotes] = useState<IVoteRow[]>(tableNotVotes);
-  // const [localChanges, setLocalChanges] = useState<IVoteRow[]>(tableChanges);
-  // const [filterVote, setFilterVote] = useState<string>("");
-  // const isChangeTableEmpty = useRef<boolean>(true);
-  // const [, updateState] = useState();
-  // const forceUpdate = useCallback(() => updateState({}), []);
-  // useEffect(() => {
-  //   const t = tableVotes.map((x) => {
-  //     return x;
-  //   });
-  //   setLocalVotes(t);
-  // }, [tableVotes]);
-  // useEffect(() => {
-  //   const t = tableNotVotes.map((x) => {
-  //     return x;
-  //   });
-  //   setLocalNotVotes(t);
-  // }, [tableNotVotes, filterVote]);
-  // useEffect(() => {
-  //   const t = tableChanges.map((x) => {
-  //     return x;
-  //   });
-  //   setLocalChanges(t);
-  //   isChangeTableEmpty.current = t.length <= 0;
-  // }, [tableChanges]);
-  // useEffect(() => {
-  //   forceUpdate();
-  // }, [filterVote]);
-  // function doSearch(searchInput: string) {
-  //   setFilterVote(searchInput);
-  // }
+  console.log("isVotedchanged", isVotesChanged);
   return (
     <Styled.Container>
       <Styled.VoteTabCard>
+        <VoteForm
+          tab={tab}
+          handleVoteSearch={handleVoteSearch}
+          loading={loading}
+          handlePasswordModalCancel={handlePasswordModalCancel}
+          isPassModalVisible={isPassModalVisible}
+          isVotesChanged={isVotesChanged}
+          resetChanges={resetChanges}
+          //isChangeTableEmpty={isChangeTableEmpty.current}
+          // doAction={doAction}
+          // doSearch={doSearch}
+          // modalData={modalData}
+          // isModalVisible={isModalVisible}
+          // setIsModalVisible={setIsModalVisible}
+          // isPassModalVisible={isPassModalVisible}
+          // setIsPassModalVisible={setIsPassModalVisible}
+          // sendVotes={sendVotes}
+        />
         <VoteTable
           type="approved"
           loading={loading}
           votes={localApprovedVotes}
-        />
-        {/* <VoteForm
-          isChangeTableEmpty={isChangeTableEmpty.current}
-          tab={tab}
-          doAction={doAction}
-          doSearch={doSearch}
-          modalData={modalData}
-          isModalVisible={isModalVisible}
-          setIsModalVisible={setIsModalVisible}
-          isPassModalVisible={isPassModalVisible}
-          setIsPassModalVisible={setIsPassModalVisible}
-          sendVotes={sendVotes}
-        /> */}
-        {/* {localChanges.length ? (
-          <VoteTable
-            table={localChanges}
-            tab={tab}
-            tableType="changes"
-            account={localStorageAccount}
-            filterVote={filterVote}
-            loading={loading}
-            doAction={doAction}
-          />
-        ) : (
-          ""
-        )} */}
-        {/* <VoteTable
-          table={localVotes}
-          tab={tab}
-          tableType="approved"
-          account={localStorageAccount}
-          filterVote={filterVote}
-          loading={loading}
-          doAction={doAction}
+          approveVote={approveVote}
+          removeVote={removeVote}
         />
         <VoteTable
-          table={localNotVotes}
-          tab={tab}
-          tableType="notapproved"
-          account={localStorageAccount}
-          filterVote={filterVote}
+          type="notApproved"
           loading={loading}
-          doAction={doAction}
-        /> */}
+          votes={localNotApprovedVotes}
+          approveVote={approveVote}
+          removeVote={removeVote}
+        />
       </Styled.VoteTabCard>
     </Styled.Container>
   );

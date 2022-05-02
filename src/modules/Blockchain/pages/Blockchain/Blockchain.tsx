@@ -86,7 +86,7 @@ const Blockchain: NextPage = () => {
           <TabPane tab="Witnesses" key="witnesses">
             <WitnessesTab />
           </TabPane>
-          <TabPane tab="Committee" key="committee">
+          <TabPane tab="Committees" key="committees">
             <CommitteeTab />
           </TabPane>
           <TabPane tab="Fees" key="fees">

@@ -16,10 +16,6 @@ export const VotingPageCard = styled(UiCard)`
       .ant-tabs-nav-operations {
         display: flex;
       }
-      .ant-table-wrapper {
-        margin: 0 20px 39px;
-        max-width: 566px;
-      }
     }
   }
 `;

@@ -34,11 +34,11 @@ export function useBlockchainPage(tab?: string): BlockchainPage {
           description: "PeerPlays Witnesses",
         });
         break;
-      case "committee":
+      case "committees":
         setPageMeta({
-          title: "PeerPlays Committee",
-          heading: "PeerPlays Committee",
-          description: "PeerPlays Committee",
+          title: "PeerPlays Committees",
+          heading: "PeerPlays Committees",
+          description: "PeerPlays Committees",
         });
         break;
       case "fees":

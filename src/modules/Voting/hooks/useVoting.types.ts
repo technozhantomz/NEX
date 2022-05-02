@@ -11,4 +11,7 @@ export type UseVotingResult = {
   approveVote: (voteId: string) => void;
   removeVote: (voteId: string) => void;
   resetChanges: () => void;
+  voteSearchValue: string;
+  handleVoteSearch: (name: string) => void;
+  handlePasswordModalCancel: () => void;
 };
