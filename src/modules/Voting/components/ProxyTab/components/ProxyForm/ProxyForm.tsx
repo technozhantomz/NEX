@@ -25,35 +25,39 @@ export const ProxyForm = (): JSX.Element => {
         name="proxyForm"
         onFinish={confirm}
         size="large"
-        layout={sm ? "horizontal" : "inline"}
+        //layout={sm ? "horizontal" : "inline"}
       >
         {/* <Form.Item>
           <Input />
         </Form.Item> */}
-        <Form.Item
-          name="proxyUsername"
-          rules={formValidator.proxyUsername}
-          validateFirst={true}
-          validateTrigger="onBlur"
-        >
-          <Styled.ProxyFormSearch
-            placeholder="Search Accounts"
-            onSearch={handleSearch}
-          />
-        </Form.Item>
-        <Form.Item>
-          <Styled.ProxyFormButton type="primary">Add</Styled.ProxyFormButton>
-        </Form.Item>
-        <Form.Item>
-          <Styled.ProxyFormButton type="primary" htmlType="submit">
-            Publish changes
-          </Styled.ProxyFormButton>
-        </Form.Item>
-        <Form.Item>
-          <Styled.ProxyFormButton type="link">
-            <RedoOutlined rotate={-90} /> Reset changes
-          </Styled.ProxyFormButton>
-        </Form.Item>
+        <Styled.ProxyFormActionGroup>
+          <Form.Item
+            name="proxyUsername"
+            rules={formValidator.proxyUsername}
+            validateFirst={true}
+            validateTrigger="onBlur"
+          >
+            <Styled.ProxyFormSearch
+              placeholder="Search Accounts"
+              onSearch={handleSearch}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Styled.ProxyFormButton type="primary">Add</Styled.ProxyFormButton>
+          </Form.Item>
+        </Styled.ProxyFormActionGroup>
+        <Styled.ProxyFormSubmitGroup>
+          <Form.Item>
+            <Styled.ProxyFormButton type="primary" htmlType="submit">
+              Publish changes
+            </Styled.ProxyFormButton>
+          </Form.Item>
+          <Form.Item>
+            <Styled.ProxyFormButton type="link">
+              <RedoOutlined rotate={-90} /> Reset changes
+            </Styled.ProxyFormButton>
+          </Form.Item>
+        </Styled.ProxyFormSubmitGroup>
       </Styled.ProxyForm>
       <PasswordModal
         visible={isPasswordModalVisible}
