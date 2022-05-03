@@ -6,7 +6,7 @@ export const StatsCardsDeck = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
   display: flex;
-  margin: 20px 0;
+  margin: 20px;
   .stats-card {
     margin-right: 15px;
   }

@@ -63,7 +63,6 @@ export const MembershipTab = (): JSX.Element => {
             account={name}
             fee={membershipPrice}
           />
-
           <Styled.Space direction="vertical">
             {!isLifetimeMember ? (
               <Styled.Space direction="vertical">
@@ -140,13 +139,11 @@ export const MembershipTab = (): JSX.Element => {
                 <Styled.PercentageText>{expirationDate}</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
-
             <Styled.Heading>Fee statistics</Styled.Heading>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
                 <Styled.Label>Total fees paid</Styled.Label> <br />
               </Styled.LabelContainer>
-
               <Styled.PercentageContainer>
                 <Styled.PercentageText>
                   {`${paidFees} ${defaultToken}`}
@@ -155,7 +152,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.Heading>Pending fees</Styled.Heading>
             <Styled.Paragraph>
-              {`Fees paid by {name} are divided among the network, referrers, and registrars 
+              {`Fees paid by ${name} are divided among the network, referrers, and registrars 
               once every maintenance interval (${maintenanceInterval} seconds). 
               The next maintenance time is ${nextMaintenanceTime}.`}
             </Styled.Paragraph>
