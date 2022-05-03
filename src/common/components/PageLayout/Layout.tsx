@@ -1,9 +1,22 @@
 import { ConfigProvider } from "antd";
+import { Locale } from "antd/lib/locale-provider";
+import enUS from "antd/lib/locale/en_US";
+import ruRU from "antd/lib/locale/ru_RU";
+import moment from "moment";
 import Head from "next/head";
-import React, { FunctionComponent, ReactNode, useEffect } from "react";
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
+
+import { useSettingsContext } from "../../providers";
 
 import * as Styled from "./Layout.styled";
 import { TopBar } from "./TopBar";
+
+moment.locale("en");
 
 type Props = {
   children: ReactNode;
@@ -22,6 +35,9 @@ export const Layout: FunctionComponent<Props> = ({
   heading,
   dexLayout = false,
 }: Props) => {
+  const { settings } = useSettingsContext();
+  const [locale, _setLocale] = useState<Locale>(enUS);
+
   useEffect(() => {
     ConfigProvider.config({
       theme: {
@@ -32,7 +48,25 @@ export const Layout: FunctionComponent<Props> = ({
         infoColor: "#1890ff",
       },
     });
-  }, []);
+    setLocale(settings.language);
+  }, [settings]);
+
+  const setLocale = (language: string) => {
+    switch (true) {
+      case language === "en":
+        _setLocale(enUS);
+        moment.locale("en");
+        break;
+      case language === "ru":
+        _setLocale(ruRU);
+        moment.locale("ru");
+        break;
+      default:
+        _setLocale(enUS);
+        moment.locale("en");
+        break;
+    }
+  };
 
   const getStyles = () => {
     switch (true) {
@@ -56,8 +90,11 @@ export const Layout: FunctionComponent<Props> = ({
       </Head>
       <Styled.Page className={dexLayout ? "dex-layout" : ""}>
         <TopBar />
-        <ConfigProvider>
-          <Styled.Layout className={getStyles()}>
+        <ConfigProvider locale={locale}>
+          <Styled.Layout
+            className={`${locale.locale} ${getStyles()}`}
+            key={locale.locale}
+          >
             {heading != undefined ? (
               <Styled.PageHeading className={"page-heading"}>
                 {heading}
