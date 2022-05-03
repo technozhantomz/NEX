@@ -155,7 +155,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.Heading>Pending fees</Styled.Heading>
             <Styled.Paragraph>
-              {`Fees paid by {name} are divided among the network, referrers, and registrars 
+              {`Fees paid by ${name} are divided among the network, referrers, and registrars 
               once every maintenance interval (${maintenanceInterval} seconds). 
               The next maintenance time is ${nextMaintenanceTime}.`}
             </Styled.Paragraph>
