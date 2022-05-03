@@ -1,13 +1,21 @@
 import { Button, Row, styled } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
 export const PairSelectContainer = styled.div`
-  padding: 30px 30px 0 30px;
-  margin-bottom: 26px;
+  padding: 25px 30px 0 30px;
+  margin-bottom: 0;
+  ${breakpoint.sm} {
+    margin-bottom: 26px;
+    padding: 30px 30px 0 30px;
+  }
 `;
 
 export const PairButtonRow = styled(Row)`
-  margin-bottom: 20px;
+  margin-bottom: 0;
+  ${breakpoint.sm} {
+    margin-bottom: 20px;
+  }
 `;
 
 export const PairButton = styled(Button)`
