@@ -4,7 +4,7 @@ import {
   useAccount,
   useAsset,
   useFees,
-  useMaintenace,
+  useMaintenance,
   useTransactionBuilder,
 } from "../../../../../common/hooks";
 import {
@@ -23,16 +23,11 @@ export function useMembershipTab(): UseMembershipTabResult {
   const { getPrivateKey, getFullAccount } = useAccount();
   const { dbApi } = usePeerplaysApiContext();
   const { calculateAccountUpgradeFee } = useFees();
-  const { maintenanceInterval, nextMaintenanceTime } = useMaintenace();
+  const { maintenanceInterval, nextMaintenanceTime } = useMaintenance();
 
   const [membershipForm] = Form.useForm();
-  const [password, setPassword] = useState<string>("");
   const [loadingAccountMembership, setLoadingAccountMembership] =
     useState<boolean>(true);
-  const [isPasswordModalVisible, setIsPasswordModalVisible] =
-    useState<boolean>(false);
-  const [isMembershipModalVisible, setIsMembershipModalVisible] =
-    useState<boolean>(false);
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
@@ -141,84 +136,57 @@ export function useMembershipTab(): UseMembershipTabResult {
     setLoadingAccountMembership,
   ]);
 
-  const onFormFinish = (name: string, info: any) => {
-    const { values, forms } = info;
-    const { passwordModal, transactionModal } = forms;
-
-    if (name === "passwordModal") {
-      passwordModal.validateFields().then(() => {
-        // should go to user context
-        setPassword(values.password);
-        setIsPasswordModalVisible(false);
-        setIsMembershipModalVisible(true);
-      });
-    }
-    if (name === "transactionModal") {
-      transactionModal.validateFields().then(() => {
-        setPassword(values.password);
-      });
-    }
-  };
-
-  const confirm = () => {
-    setIsPasswordModalVisible(true);
-  };
-
-  const handlePasswordModalCancel = () => {
-    setIsPasswordModalVisible(false);
-  };
-
-  const handleMembershipModalCancel = () => {
-    setIsMembershipModalVisible(false);
-    setTransactionSuccessMessage("");
-    setTransactionErrorMessage("");
-  };
-
   const handleMembershipUpgrade = useCallback(
     async (password: string) => {
-      setIsPasswordModalVisible(false);
-      setIsMembershipModalVisible(true);
-
-      const fee = { amount: 0, asset_id: defaultAsset?.id };
-      const activeKey = getPrivateKey(password, "active");
-
-      const trx = {
-        type: "account_upgrade",
-        params: {
-          fee: fee,
-          account_to_upgrade: id,
-          upgrade_to_lifetime_member: true,
-        },
-      };
-      let trxResult;
-
-      try {
-        setLoadingTransaction(true);
-        trxResult = await buildTrx([trx], [activeKey]);
-        setLoadingTransaction(false);
-      } catch (error) {
-        console.log(error);
-        setTransactionErrorMessage("Unable to process the transaction!");
-        setLoadingTransaction(false);
-      }
-
-      if (trxResult) {
-        setIsLifetimeMember(true);
+      if (
+        !defaultAsset ||
+        !assets ||
+        assets.length === 0 ||
+        assets.filter((asset) => asset.id === defaultAsset.id).length === 0 ||
+        (assets.filter((asset) => asset.id === defaultAsset.id)[0]
+          .amount as number) < membershipPrice
+      ) {
+        setTransactionErrorMessage("Balance is not enough.");
+        return;
+      } else {
         setTransactionErrorMessage("");
-        setTransactionSuccessMessage(
-          "Your account successfuly upgraded to lifetime membership account"
-        );
-        setTimeout(() => {
-          setIsMembershipModalVisible(false);
-          setTransactionSuccessMessage("");
-        }, 2000);
+        const fee = { amount: 0, asset_id: defaultAsset?.id };
+        const activeKey = getPrivateKey(password, "active");
+
+        const trx = {
+          type: "account_upgrade",
+          params: {
+            fee: fee,
+            account_to_upgrade: id,
+            upgrade_to_lifetime_member: true,
+          },
+        };
+        let trxResult;
+
+        try {
+          setLoadingTransaction(true);
+          trxResult = await buildTrx([trx], [activeKey]);
+          setLoadingTransaction(false);
+        } catch (error) {
+          console.log(error);
+          setTransactionErrorMessage("Unable to process the transaction!");
+          setLoadingTransaction(false);
+        }
+
+        if (trxResult) {
+          setIsLifetimeMember(true);
+          setTransactionErrorMessage("");
+          setTransactionSuccessMessage(
+            "Your account successfully upgraded to lifetime membership account"
+          );
+        }
       }
     },
     [
+      assets,
       defaultAsset,
+      membershipPrice,
       id,
-      setIsPasswordModalVisible,
-      setIsMembershipModalVisible,
       getPrivateKey,
       setLoadingTransaction,
       buildTrx,
@@ -228,40 +196,18 @@ export function useMembershipTab(): UseMembershipTabResult {
     ]
   );
 
-  const handleMembershipModalConfirm = () => {
-    if (
-      !defaultAsset ||
-      !assets ||
-      assets.length === 0 ||
-      assets.filter((asset) => asset.id === defaultAsset.id).length === 0 ||
-      (assets.filter((asset) => asset.id === defaultAsset.id)[0]
-        .amount as number) < membershipPrice
-    ) {
-      setTransactionErrorMessage("Balance is not enough.");
-    } else {
-      setIsMembershipModalVisible(false);
-      setTransactionErrorMessage("");
-      setIsPasswordModalVisible(true);
-    }
-  };
-
   useEffect(() => {
     getAccountMembership();
   }, [getAccountMembership]);
 
   return {
-    isMembershipModalVisible,
     handleMembershipUpgrade,
-    handleMembershipModalCancel,
-    handleMembershipModalConfirm,
-    isPasswordModalVisible,
-    handlePasswordModalCancel,
-    onFormFinish,
     membershipForm,
-    confirm,
     loadingTransaction,
     transactionErrorMessage,
     transactionSuccessMessage,
+    setTransactionSuccessMessage,
+    setTransactionErrorMessage,
     name,
     feesCashback,
     membershipPrice,

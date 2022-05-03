@@ -10,7 +10,7 @@ export const SecurityTab = (): JSX.Element => {
     useSettings();
   const { settings } = useSettingsContext();
 
-  const walletLockInMintues = ["0", "30", "60", "90", "180", "210"];
+  const walletLockInMinutes = ["0", "30", "60", "90", "180", "210"];
 
   return (
     <Styled.SecuritySettingsCard>
@@ -18,12 +18,12 @@ export const SecurityTab = (): JSX.Element => {
         form={generalSettingsForm}
         name="generalSettingForm"
         onFinish={updateSettings}
-        initialValues={{ walletLockInMintues: settings.walletLock }}
+        initialValues={{ walletLockInMinutes: settings.walletLock }}
       >
         <Styled.LabelText>Lock Wallet</Styled.LabelText>
-        <Styled.LockWalletFormItem name="walletLockInMintues">
+        <Styled.LockWalletFormItem name="walletLockInMinutes">
           <Styled.Select>
-            {walletLockInMintues.map((e, i) => (
+            {walletLockInMinutes.map((e, i) => (
               <Styled.Option value={e} key={i}>
                 {e} minutes{" "}
               </Styled.Option>

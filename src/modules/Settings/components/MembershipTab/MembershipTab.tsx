@@ -2,25 +2,26 @@ import Link from "next/link";
 import React from "react";
 
 import { defaultToken } from "../../../../api/params";
-import { PasswordModal } from "../../../../common/components";
+import { PasswordModal, TransactionModal } from "../../../../common/components";
+import { useHandleTransactionForm } from "../../../../common/hooks";
 
 import * as Styled from "./MembershipTab.styled";
-import { MembershipModal } from "./components/MembershipModal";
+// import { MembershipModal } from "./components/MembershipModal";
 import { useMembershipTab } from "./hooks/useMembershipTab";
 
 export const MembershipTab = (): JSX.Element => {
   const {
-    handleMembershipModalCancel,
-    handleMembershipModalConfirm,
+    //handleMembershipModalCancel,
+    //handleMembershipModalConfirm,
     transactionErrorMessage,
     transactionSuccessMessage,
     loadingTransaction,
-    isMembershipModalVisible,
-    isPasswordModalVisible,
-    handlePasswordModalCancel,
-    onFormFinish,
+    //isMembershipModalVisible,
+    //isPasswordModalVisible,
+    //handlePasswordModalCancel,
+    //onFormFinish,
     membershipForm,
-    confirm,
+    //confirm,
     name,
     feesCashback,
     membershipPrice,
@@ -40,30 +41,34 @@ export const MembershipTab = (): JSX.Element => {
     paidFees,
     expirationDate,
     loadingAccountMembership,
+    handleMembershipUpgrade,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
   } = useMembershipTab();
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleMembershipUpgrade,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
 
   const { origin } = window.location;
   const link = origin;
 
   return (
     <Styled.MembershipCard>
-      <Styled.MembershipForm.Provider onFormFinish={onFormFinish}>
+      <Styled.MembershipForm.Provider onFormFinish={handleFormFinish}>
         <Styled.MembershipForm
           form={membershipForm}
           name="membershipForm"
-          onFinish={confirm}
+          onFinish={showPasswordModal}
         >
-          <MembershipModal
-            visible={isMembershipModalVisible}
-            onCancel={handleMembershipModalCancel}
-            handleOk={handleMembershipModalConfirm}
-            transactionErrorMessage={transactionErrorMessage}
-            transactionSuccessMessage={transactionSuccessMessage}
-            loadingTransaction={loadingTransaction}
-            account={name}
-            fee={membershipPrice}
-          />
-
           <Styled.Space direction="vertical">
             {!isLifetimeMember ? (
               <Styled.Space direction="vertical">
@@ -201,8 +206,18 @@ export const MembershipTab = (): JSX.Element => {
           </Styled.Space>
           <PasswordModal
             visible={isPasswordModalVisible}
-            onCancel={handlePasswordModalCancel}
+            onCancel={hidePasswordModal}
             submitting={loadingTransaction}
+          />
+          <TransactionModal
+            visible={isTransactionModalVisible}
+            onCancel={hideTransactionModal}
+            // handleOk={handleMembershipModalConfirm}
+            transactionErrorMessage={transactionErrorMessage}
+            transactionSuccessMessage={transactionSuccessMessage}
+            loadingTransaction={loadingTransaction}
+            account={name}
+            fee={membershipPrice}
           />
         </Styled.MembershipForm>
       </Styled.MembershipForm.Provider>
