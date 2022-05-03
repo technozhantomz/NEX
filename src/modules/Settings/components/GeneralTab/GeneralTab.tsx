@@ -1,12 +1,9 @@
 import { Col, Row } from "antd";
 
 import { defaultLocales, faucetUrl } from "../../../../api/params";
-import { useSettingsContext } from "../../../../common/providers";
 import { useSettings } from "../../hooks";
 
 import * as Styled from "./GeneralTab.styled";
-
-const style = { background: "#0092ff" };
 
 export const GeneralTab = (): JSX.Element => {
   const {
@@ -15,18 +12,11 @@ export const GeneralTab = (): JSX.Element => {
     handleAllowNotifications,
     showSuccessMessage,
   } = useSettings();
-  const { settings } = useSettingsContext();
   return (
     <Styled.GeneralSettingsCard>
       <Styled.GeneralTabForm
         form={generalSettingsForm}
         name="generalSettingsForm"
-        initialValues={{
-          selectedLanguage: settings.language,
-          allowNotifications: settings.notifications.allow,
-          allowTransferToMeNotifications:
-            settings.notifications.additional.transferToMe,
-        }}
         onFinish={updateSettings}
       >
         <Styled.LabelText>Select language</Styled.LabelText>
