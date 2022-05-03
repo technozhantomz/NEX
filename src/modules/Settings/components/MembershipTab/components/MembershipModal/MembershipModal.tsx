@@ -81,9 +81,9 @@ export const MembershipModal = ({
           ""
         )}
         {transactionSuccessMessage !== "" ? (
-          <Styled.TransactionError>
+          <Styled.TransactionSuccess>
             {transactionSuccessMessage}
-          </Styled.TransactionError>
+          </Styled.TransactionSuccess>
         ) : (
           ""
         )}

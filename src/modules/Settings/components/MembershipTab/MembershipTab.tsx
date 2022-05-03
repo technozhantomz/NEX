@@ -39,6 +39,7 @@ export const MembershipTab = (): JSX.Element => {
     registrarName,
     paidFees,
     expirationDate,
+    loadingAccountMembership,
   } = useMembershipTab();
 
   const { origin } = window.location;
@@ -82,7 +83,11 @@ export const MembershipTab = (): JSX.Element => {
                   it is only {`${membershipPrice} ${defaultToken}`} .
                 </Styled.Paragraph>
                 <Styled.ButtonContainer>
-                  <Styled.Button type="primary" htmlType="submit">
+                  <Styled.Button
+                    type="primary"
+                    htmlType="submit"
+                    disabled={loadingAccountMembership}
+                  >
                     Buy lifetime subscription
                   </Styled.Button>
                 </Styled.ButtonContainer>

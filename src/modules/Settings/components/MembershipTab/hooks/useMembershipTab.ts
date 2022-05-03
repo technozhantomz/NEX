@@ -26,6 +26,9 @@ export function useMembershipTab(): UseMembershipTabResult {
   const { maintenanceInterval, nextMaintenanceTime } = useMaintenace();
 
   const [membershipForm] = Form.useForm();
+  const [password, setPassword] = useState<string>("");
+  const [loadingAccountMembership, setLoadingAccountMembership] =
+    useState<boolean>(true);
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
     useState<boolean>(false);
   const [isMembershipModalVisible, setIsMembershipModalVisible] =
@@ -43,7 +46,6 @@ export function useMembershipTab(): UseMembershipTabResult {
   const [referrerTotalFee, setReferrerTotalFee] = useState<number>(0);
   const [referrerFee, setReferrerFee] = useState<number>(0);
   const [registrarFee, setRegistrarFee] = useState<number>(0);
-
   const [vestingThreshold, setVestingThreshold] = useState<number>(0);
   const [vestingPeriod, setVestingPeriod] = useState<number>(0);
   const [isLifetimeMember, setIsLifetimeMember] = useState<boolean>(false);
@@ -54,60 +56,67 @@ export function useMembershipTab(): UseMembershipTabResult {
   const [expirationDate, setExpirationDate] = useState<string>("");
 
   const getAccountMembership = useCallback(async () => {
-    const fullAccount = await getFullAccount(name, false);
-    const gpo: GlobalProperties = await dbApi("get_global_properties");
-    if (fullAccount && defaultAsset) {
-      let expirationDate = fullAccount.account.membership_expiration_date;
-      if (expirationDate === "1970-01-01T00:00:00") {
-        expirationDate = "N/A";
-      } else if (expirationDate === "1969-12-31T23:59:59") {
-        expirationDate = "Never";
-      }
-      const lifetimeReferrerName = fullAccount.lifetime_referrer_name;
-      const referrerName = fullAccount.referrer_name;
-      const registrarName = fullAccount.registrar_name;
-      const statistics = fullAccount.statistics;
-      const paidFees = setPrecision(
-        false,
-        statistics.lifetime_fees_paid,
-        defaultAsset.precision
-      );
-      const isLifetimeMember =
-        fullAccount.lifetime_referrer_name === fullAccount.account.name;
-      const networkFee = fullAccount.account.network_fee_percentage / 100;
-      const lifeTimeFee =
-        fullAccount.account.lifetime_referrer_fee_percentage / 100;
-      const referrerTotalFee = 100 - networkFee - lifeTimeFee;
-      const referrerFee =
-        (referrerTotalFee * fullAccount.account.referrer_rewards_percentage) /
-        10000;
-      const registrarFee = 100 - referrerFee - lifeTimeFee - networkFee;
-      const memberShipPrice = calculateAccountUpgradeFee();
-      if (memberShipPrice) {
-        setMembershipPrice(memberShipPrice);
-      }
-      setExpirationDate(expirationDate);
-      setLifetimeReferrerName(lifetimeReferrerName);
-      setReferrerName(referrerName);
-      setRegistrarName(registrarName);
-      setPaidFees(paidFees);
-      setIsLifetimeMember(isLifetimeMember);
-      setFeesCashback(100 - networkFee);
-      setNetworkFee(networkFee);
-      setLifetimeFee(lifeTimeFee);
-      setReferrerTotalFee(referrerTotalFee);
-      setReferrerFee(referrerFee);
-      setRegistrarFee(registrarFee);
-      setVestingThreshold(
-        setPrecision(
+    try {
+      setLoadingAccountMembership(true);
+      const fullAccount = await getFullAccount(name, false);
+      const gpo: GlobalProperties = await dbApi("get_global_properties");
+      if (fullAccount && defaultAsset) {
+        let expirationDate = fullAccount.account.membership_expiration_date;
+        if (expirationDate === "1970-01-01T00:00:00") {
+          expirationDate = "N/A";
+        } else if (expirationDate === "1969-12-31T23:59:59") {
+          expirationDate = "Never";
+        }
+        const lifetimeReferrerName = fullAccount.lifetime_referrer_name;
+        const referrerName = fullAccount.referrer_name;
+        const registrarName = fullAccount.registrar_name;
+        const statistics = fullAccount.statistics;
+        const paidFees = setPrecision(
           false,
-          gpo.parameters.cashback_vesting_threshold,
+          statistics.lifetime_fees_paid,
           defaultAsset.precision
-        )
-      );
-      setVestingPeriod(
-        gpo.parameters.cashback_vesting_period_seconds / (60 * 60 * 24)
-      );
+        );
+        const isLifetimeMember =
+          fullAccount.lifetime_referrer_name === fullAccount.account.name;
+        const networkFee = fullAccount.account.network_fee_percentage / 100;
+        const lifeTimeFee =
+          fullAccount.account.lifetime_referrer_fee_percentage / 100;
+        const referrerTotalFee = 100 - networkFee - lifeTimeFee;
+        const referrerFee =
+          (referrerTotalFee * fullAccount.account.referrer_rewards_percentage) /
+          10000;
+        const registrarFee = 100 - referrerFee - lifeTimeFee - networkFee;
+        const memberShipPrice = calculateAccountUpgradeFee();
+        if (memberShipPrice) {
+          setMembershipPrice(memberShipPrice);
+        }
+        setExpirationDate(expirationDate);
+        setLifetimeReferrerName(lifetimeReferrerName);
+        setReferrerName(referrerName);
+        setRegistrarName(registrarName);
+        setPaidFees(paidFees);
+        setIsLifetimeMember(isLifetimeMember);
+        setFeesCashback(100 - networkFee);
+        setNetworkFee(networkFee);
+        setLifetimeFee(lifeTimeFee);
+        setReferrerTotalFee(referrerTotalFee);
+        setReferrerFee(referrerFee);
+        setRegistrarFee(registrarFee);
+        setVestingThreshold(
+          setPrecision(
+            false,
+            gpo.parameters.cashback_vesting_threshold,
+            defaultAsset.precision
+          )
+        );
+        setVestingPeriod(
+          gpo.parameters.cashback_vesting_period_seconds / (60 * 60 * 24)
+        );
+        setLoadingAccountMembership(false);
+      }
+    } catch (e) {
+      console.log(e);
+      setLoadingAccountMembership(false);
     }
   }, [
     calculateAccountUpgradeFee,
@@ -129,17 +138,40 @@ export function useMembershipTab(): UseMembershipTabResult {
     setRegistrarName,
     setVestingThreshold,
     setVestingPeriod,
+    setLoadingAccountMembership,
   ]);
 
   const onFormFinish = (name: string, info: any) => {
     const { values, forms } = info;
-    const { passwordModal } = forms;
+    const { passwordModal, transactionModal } = forms;
 
     if (name === "passwordModal") {
       passwordModal.validateFields().then(() => {
-        handleMembershipUpgrade(values.password);
+        // should go to user context
+        setPassword(values.password);
+        setIsPasswordModalVisible(false);
+        setIsMembershipModalVisible(true);
       });
     }
+    if (name === "transactionModal") {
+      transactionModal.validateFields().then(() => {
+        setPassword(values.password);
+      });
+    }
+  };
+
+  const confirm = () => {
+    setIsPasswordModalVisible(true);
+  };
+
+  const handlePasswordModalCancel = () => {
+    setIsPasswordModalVisible(false);
+  };
+
+  const handleMembershipModalCancel = () => {
+    setIsMembershipModalVisible(false);
+    setTransactionSuccessMessage("");
+    setTransactionErrorMessage("");
   };
 
   const handleMembershipUpgrade = useCallback(
@@ -196,18 +228,6 @@ export function useMembershipTab(): UseMembershipTabResult {
     ]
   );
 
-  const confirm = () => {
-    if (membershipPrice > 0) {
-      setIsMembershipModalVisible(true);
-    }
-  };
-
-  const handleMembershipModalCancel = () => {
-    setIsMembershipModalVisible(false);
-    setTransactionSuccessMessage("");
-    setTransactionErrorMessage("");
-  };
-
   const handleMembershipModalConfirm = () => {
     if (
       !defaultAsset ||
@@ -223,10 +243,6 @@ export function useMembershipTab(): UseMembershipTabResult {
       setTransactionErrorMessage("");
       setIsPasswordModalVisible(true);
     }
-  };
-
-  const handlePasswordModalCancel = () => {
-    setIsPasswordModalVisible(false);
   };
 
   useEffect(() => {
@@ -264,5 +280,6 @@ export function useMembershipTab(): UseMembershipTabResult {
     registrarName,
     paidFees,
     expirationDate,
+    loadingAccountMembership,
   };
 }

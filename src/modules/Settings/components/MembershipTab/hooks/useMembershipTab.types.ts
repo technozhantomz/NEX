@@ -31,6 +31,7 @@ export type UseMembershipTabResult = {
   registrarName: string;
   paidFees: number;
   expirationDate: string;
+  loadingAccountMembership: boolean;
 };
 
 export type MembershipForm = {
