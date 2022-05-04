@@ -14,15 +14,20 @@ const { TabPane } = Tabs;
 
 const VotingPage: NextPage = () => {
   const {
+    loading,
+    isVotesChanged,
+    voteSearchValue,
     allMembersVotes,
     localApprovedVotes,
-    loading,
+    isPassModalVisible,
+    submittingPassword,
     approveVote,
     removeVote,
-    voteSearchValue,
     handleVoteSearch,
-    isVotesChanged,
     resetChanges,
+    confirm,
+    publishChanges,
+    setIsPassModalVisible,
   } = useVoting();
   const router = useRouter();
   const { tab } = router.query;
@@ -91,11 +96,16 @@ const VotingPage: NextPage = () => {
                         )
                 }
                 loading={loading}
+                isVotesChanged={isVotesChanged}
+                isPassModalVisible={isPassModalVisible}
+                submittingPassword={submittingPassword}
                 approveVote={approveVote}
                 removeVote={removeVote}
                 handleVoteSearch={handleVoteSearch}
-                isVotesChanged={isVotesChanged}
                 resetChanges={resetChanges}
+                confirm={confirm}
+                publishChanges={publishChanges}
+                setIsPassModalVisible={setIsPassModalVisible}
               />
             </TabPane>
           ))}

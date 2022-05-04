@@ -17,11 +17,30 @@ export function useVoting(): UseVotingResult {
   const [isVotesChanged, setIsVotesChanged] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [voteSearchValue, setVoteSearchValue] = useState<string>("");
+  const [isPassModalVisible, setIsPassModalVisible] = useState<boolean>(false);
+  const [submittingPassword, setSubmittingPassword] = useState<boolean>(false);
 
   const { localStorageAccount } = useUserContext();
   const { getFullAccount } = useAccount();
   const { getCommittees, getSons, getWitnesses } = useMembers();
   const { defaultAsset, formAssetBalanceById } = useAsset();
+
+  const confirm = () => {
+    console.log("confirm");
+    setIsPassModalVisible(true);
+  };
+
+  const publishChanges = (name: string, info: { values: any; forms: any }) => {
+    const { values, forms } = info;
+    const { passwordModal } = forms;
+    if (name === "passwordModal") {
+      passwordModal.validateFields().then(() => {
+        setSubmittingPassword(true);
+        console.log(values.password);
+        setSubmittingPassword(false);
+      });
+    }
+  };
 
   const handleVoteSearch = useCallback(
     (name: string) => {
@@ -193,10 +212,15 @@ export function useVoting(): UseVotingResult {
     localApprovedVotes,
     isVotesChanged,
     allMembersVotes,
+    voteSearchValue,
+    isPassModalVisible,
+    submittingPassword,
+    confirm,
+    publishChanges,
     approveVote,
     removeVote,
     resetChanges,
-    voteSearchValue,
     handleVoteSearch,
+    setIsPassModalVisible,
   };
 }

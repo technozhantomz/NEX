@@ -1,32 +1,41 @@
 import { capitalize } from "lodash";
+import { SetStateAction } from "react";
 
-//import { PasswordModal } from "../../../../../common/components";
+import { PasswordModal } from "../../../../../common/components";
 
 import * as Styled from "./VoteForm.styled";
 
 type Props = {
   tab: string;
-  handleVoteSearch: (name: string) => void;
   loading: boolean;
   isVotesChanged: boolean;
+  isPassModalVisible: boolean;
+  submittingPassword: boolean;
   resetChanges: () => void;
+  confirm: () => void;
+  publishChanges: (name: string, info: { values: any; forms: any }) => void;
+  handleVoteSearch: (name: string) => void;
+  setIsPassModalVisible: (value: SetStateAction<boolean>) => void;
   // isChangeTableEmpty: boolean;
   // doAction: (txt: string, tableRow?: IVoteRow, tab?: string) => Promise<void>;
   // doSearch: (searchInput: string) => void;
   // modalData: VoteModalData;
   // isModalVisible: boolean;
   // setIsModalVisible: (value: SetStateAction<boolean>) => void;
-  // isPassModalVisible: boolean;
-  // setIsPassModalVisible: (value: SetStateAction<boolean>) => void;
   // sendVotes: (password: string) => Promise<void>;
 };
 
 export const VoteForm = ({
   tab,
-  handleVoteSearch,
   loading,
   isVotesChanged,
+  isPassModalVisible,
+  submittingPassword,
   resetChanges,
+  confirm,
+  publishChanges,
+  handleVoteSearch,
+  setIsPassModalVisible,
 }: // isChangeTableEmpty,
 Props): JSX.Element => {
   // const [searchValue, setSearchValue] = useState<string>("");
@@ -89,11 +98,11 @@ Props): JSX.Element => {
         onSearch={handleVoteSearch}
         loading={loading}
       />
-      <Styled.VoteForm.Provider>
+      <Styled.VoteForm.Provider onFormFinish={publishChanges}>
         <Styled.VoteForm
           //form={membershipForm}
           name="voteForm"
-          //onFinish={confirm}
+          onFinish={confirm}
         >
           {/* <MembershipModal
             visible={isMembershipModalVisible}
@@ -223,14 +232,15 @@ Props): JSX.Element => {
             });
           }
         }}
-      >
-        <PasswordModal
-          visible={isPassModalVisible}
-          onCancel={() => {
-            setIsPassModalVisible(false);
-          }}
-        />
-      </Styled.Form.Provider> */}
+      > */}
+      <PasswordModal
+        visible={isPassModalVisible}
+        onCancel={() => {
+          setIsPassModalVisible(false);
+        }}
+        submitting={submittingPassword}
+      />
+      {/* </Styled.Form.Provider> */}
     </>
   );
 };
