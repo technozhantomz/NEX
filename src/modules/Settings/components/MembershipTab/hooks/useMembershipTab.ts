@@ -33,7 +33,6 @@ export function useMembershipTab(): UseMembershipTabResult {
     useState<string>("");
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
-  useState<boolean>(false);
   const [feesCashback, setFeesCashback] = useState<number>(0);
   const [membershipPrice, setMembershipPrice] = useState<number>(0);
   const [networkFee, setNetworkFee] = useState<number>(0);

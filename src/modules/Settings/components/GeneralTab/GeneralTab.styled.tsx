@@ -18,10 +18,10 @@ export const GeneralSettingsCard = styled.div`
     text-align: left;
     letter-spacing: 0px;
     color: ${colors.textColor};
-    margin-left: 30px;
     height: 500px;
+    margin: 20px;
     ${breakpoint.xs} {
-      position: relative;
+      margin-left: 30px;
     }
   }
 `;
@@ -31,7 +31,7 @@ export const GeneralTabForm = styled(UiForm)`
 `;
 
 export const LanguageFormItem = styled(UiForm.Item)`
-  width: 90%;
+  width: 100%;
   margin-top: 15px;
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
@@ -39,12 +39,15 @@ export const LanguageFormItem = styled(UiForm.Item)`
   opacity: 1;
   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
     width: 100%;
-    height: 50px;
+    height: 40px;
     padding: 0 11px;
     align-items: center;
+    ${breakpoint.xs} {
+      height: 50px;
+    }
   }
   ${breakpoint.xs} {
-    width: 40%;
+    width: 350px;
   }
 `;
 export const LabelText = styled(Text)`
@@ -64,24 +67,24 @@ export const FaucetURL = styled(Text)`
   opacity: 1;
 `;
 
-export const FaucetSpace = styled(UiSpace)`
+export const FaucetSpace = styled.div`
   margin-top: 30px;
-  gap: 15px;
 `;
 
 export const SaveButton = styled(CardFormButton)`
-  margin-top: 50px;
+  margin-top: 40px;
+  width: 255px;
+  height: 35px;
   ${breakpoint.xs} {
     position: absolute;
     right: 30px;
     bottom: 50px;
-    width: 25%;
+    width: 290px;
+    height: 45px;
   }
 `;
 
-export const TransferCheckbox = styled(UiCheckbox)`
-  padding-left: 10px;
-`;
+export const TransferCheckbox = styled(UiCheckbox)``;
 
 export const Checkbox = styled(UiCheckbox)``;
 

@@ -1,6 +1,6 @@
 import { capitalize } from "lodash";
 
-import { PasswordModal } from "../../../../../common/components";
+//import { PasswordModal } from "../../../../../common/components";
 
 import * as Styled from "./VoteForm.styled";
 
@@ -89,7 +89,7 @@ Props): JSX.Element => {
         onSearch={handleVoteSearch}
         loading={loading}
       />
-      <Styled.VoteForm.Provider onFormFinish={() => {}}>
+      <Styled.VoteForm.Provider>
         <Styled.VoteForm
           //form={membershipForm}
           name="voteForm"
