@@ -17,6 +17,7 @@ export const MembershipTab = (): JSX.Element => {
     loadingTransaction,
     isMembershipModalVisible,
     isPasswordModalVisible,
+    submittingPassword,
     handlePasswordModalCancel,
     onFormFinish,
     membershipForm,
@@ -62,24 +63,17 @@ export const MembershipTab = (): JSX.Element => {
             account={name}
             fee={membershipPrice}
           />
-
           <Styled.Space direction="vertical">
             {!isLifetimeMember ? (
               <Styled.Space direction="vertical">
                 <Styled.Heading>
-                  {`Upgrade for ${feesCashback} Cashback`}
+                  {`Upgrade for ${feesCashback}% Cashback`}
                 </Styled.Heading>
                 <Styled.Paragraph>
-                  Every transaction on the Peerplays network is divided between
-                  the network and referrers. By registering to a Lifetime
-                  Membership the account will receive {`${feesCashback} `}
-                  cashback on every transaction fee paid. As a bonus it will
-                  also qualify to earn referral income from users registered
-                  with or refered to the network.
-                </Styled.Paragraph>
-                <Styled.Paragraph>
-                  A Lifetime Membership price will change over time, right now
-                  it is only {`${membershipPrice} ${defaultToken}`} .
+                  {`Lifetime Members get ${feesCashback}% cashback on every
+                  transaction fee they pay and qualify to earn referral income
+                  from users they register with or refer to the network. A
+                  Lifetime Membership is just ${membershipPrice} ${defaultToken}.`}
                 </Styled.Paragraph>
                 <Styled.ButtonContainer>
                   <Styled.Button type="primary" htmlType="submit">
@@ -91,32 +85,21 @@ export const MembershipTab = (): JSX.Element => {
               <Styled.Space direction="vertical">
                 <Styled.Label>Your referral link</Styled.Label>
                 <Styled.Paragraph>
-                  Give this to link to people you want to refer to Peerplays:{" "}
-                  {`${link}/signup/?r=${name}`}
+                  {`Give this to link to people you want to refer to Peerplays: ${link}/signup/?r=${name}`}
                 </Styled.Paragraph>
               </Styled.Space>
             )}
             <Styled.Heading>Fee Allocation</Styled.Heading>
             <Styled.Paragraph>
               Every time {name} pays a transaction fee, that fee is divided
-              among several different accounts. The network takes a {networkFee}
-              % cut, and the Lifetime Member who referred {name} gets a{" "}
-              {lifetimeFee}% cut. The registrar is the account that paid the
-              transaction fee to register {name} with the network. The registrar
-              gets to decide how to divide the remaining {referrerTotalFee}%
-              between themselves and their own Affiliate Referrer program.{" "}
-              {name}'s registrar chose to share {referrerFee}% of the total fee
-              with the Affiliate Referrer and keep {registrarFee}% of the total
-              fee for themselves.
+              among several different accounts.
             </Styled.Paragraph>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
                 <Styled.Label>Network</Styled.Label> <br />
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
-                <Styled.PercentageText>
-                  {`${networkFee}%`}
-                </Styled.PercentageText>
+                <Styled.PercentageText>{networkFee}%</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
@@ -127,9 +110,7 @@ export const MembershipTab = (): JSX.Element => {
                 </Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
-                <Styled.PercentageText>
-                  {`${lifetimeFee}%`}
-                </Styled.PercentageText>
+                <Styled.PercentageText>{lifetimeFee}%</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
@@ -138,9 +119,7 @@ export const MembershipTab = (): JSX.Element => {
                 <Link href={`/user/${registrarName}`}>{registrarName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
-                <Styled.PercentageText>
-                  {`${registrarFee}%`}
-                </Styled.PercentageText>
+                <Styled.PercentageText>{registrarFee}%</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
@@ -149,9 +128,7 @@ export const MembershipTab = (): JSX.Element => {
                 <Link href={`/user/${referrerName}`}>{referrerName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
-                <Styled.PercentageText>
-                  {`${referrerFee}%`}
-                </Styled.PercentageText>
+                <Styled.PercentageText>{referrerFee}%</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
@@ -159,18 +136,14 @@ export const MembershipTab = (): JSX.Element => {
                 <Styled.Label>Membership expiration</Styled.Label> <br />
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
-                <Styled.PercentageText>
-                  {`${expirationDate}`}
-                </Styled.PercentageText>
+                <Styled.PercentageText>{expirationDate}</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
-
             <Styled.Heading>Fee statistics</Styled.Heading>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
                 <Styled.Label>Total fees paid</Styled.Label> <br />
               </Styled.LabelContainer>
-
               <Styled.PercentageContainer>
                 <Styled.PercentageText>
                   {`${paidFees} ${defaultToken}`}
@@ -179,24 +152,22 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.Heading>Pending fees</Styled.Heading>
             <Styled.Paragraph>
-              Fees paid by {`< ${name} >`} are divided among the network,
-              referrers, and registrars once every maintenance interval (
-              {`${maintenanceInterval} `}
-              seconds). The next maintenance time is {` ${nextMaintenanceTime}`}
-              .
+              {`Fees paid by ${name} are divided among the network, referrers, and registrars 
+              once every maintenance interval (${maintenanceInterval} seconds). 
+              The next maintenance time is ${nextMaintenanceTime}.`}
             </Styled.Paragraph>
             <Styled.Heading>Vesting fees</Styled.Heading>
             <Styled.Paragraph>
-              Most fees are made available immediately, but fees over{" "}
-              {` ${vestingThreshold} ${defaultToken} `}
-              (such as those paid to upgrade your membership or register a
-              premium account name) must vest for a total of{" "}
-              {` ${vestingPeriod} `} days.
+              {`Most fees are made available immediately, 
+              but fees over ${vestingThreshold} ${defaultToken} 
+              (such as those paid to upgrade your membership or register a premium account name) 
+              must vest for a total of ${vestingPeriod} days.`}
             </Styled.Paragraph>
           </Styled.Space>
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={handlePasswordModalCancel}
+            submitting={submittingPassword}
           />
         </Styled.MembershipForm>
       </Styled.MembershipForm.Provider>

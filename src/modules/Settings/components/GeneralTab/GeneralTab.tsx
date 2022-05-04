@@ -1,5 +1,6 @@
+import { Col, Row } from "antd";
+
 import { defaultLocales, faucetUrl } from "../../../../api/params";
-import { useSettingsContext } from "../../../../common/providers";
 import { useSettings } from "../../hooks";
 
 import * as Styled from "./GeneralTab.styled";
@@ -11,18 +12,11 @@ export const GeneralTab = (): JSX.Element => {
     handleAllowNotifications,
     showSuccessMessage,
   } = useSettings();
-  const { settings } = useSettingsContext();
   return (
     <Styled.GeneralSettingsCard>
       <Styled.GeneralTabForm
         form={generalSettingsForm}
         name="generalSettingsForm"
-        initialValues={{
-          selectedLanguage: settings.language,
-          allowNotifications: settings.notifications.allow,
-          allowTransferToMeNotifications:
-            settings.notifications.additional.transferToMe,
-        }}
         onFinish={updateSettings}
       >
         <Styled.LabelText>Select language</Styled.LabelText>
@@ -42,22 +36,26 @@ export const GeneralTab = (): JSX.Element => {
             Enable notifications
           </Styled.Checkbox>
         </Styled.FormItem>
-        <Styled.FormItem
+        {/* <Styled.FormItem
           valuePropName="checked"
           name="allowTransferToMeNotifications"
         >
           <Styled.TransferCheckbox>
             Notify about transfers to my account
           </Styled.TransferCheckbox>
-        </Styled.FormItem>
-        <Styled.FaucetSpace direction="vertical">
+        </Styled.FormItem> */}
+        <Styled.FaucetSpace>
           <Styled.LabelText>Faucet</Styled.LabelText>
-          <Styled.Space direction="horizontal">
-            <Styled.FaucetURL>{`Faucet URL: ${faucetUrl}`}</Styled.FaucetURL>
-            <Styled.Typography.Link copyable={{ text: faucetUrl }}>
-              Copy URL
-            </Styled.Typography.Link>
-          </Styled.Space>
+          <Row gutter={[1, 20]}>
+            <Col className="gutter-row" md={10} xs={24}>
+              <Styled.FaucetURL>{`Faucet URL: ${faucetUrl}`}</Styled.FaucetURL>
+            </Col>
+            <Col className="gutter-row" md={6} xs={24}>
+              <Styled.Typography.Link copyable={{ text: faucetUrl }}>
+                Copy URL
+              </Styled.Typography.Link>
+            </Col>
+          </Row>
           {showSuccessMessage && (
             <Styled.LabelText type="success">Setting saved!</Styled.LabelText>
           )}

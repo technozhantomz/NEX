@@ -60,7 +60,7 @@ export function useOrderBook({
       case "total":
         selectedOrders = [
           ...asks.filter((ask) => Number(ask.price) >= threshold).reverse(),
-          ...bids.filter((bid) => Number(bid.price) >= threshold),
+          ...bids.filter((bid) => Number(bid.price) >= threshold).reverse(),
         ];
         break;
       case "sell":
@@ -70,7 +70,7 @@ export function useOrderBook({
         break;
       case "buy":
         selectedOrders = [
-          ...bids.filter((bid) => Number(bid.price) >= threshold),
+          ...bids.filter((bid) => Number(bid.price) >= threshold).reverse(),
         ];
         break;
       default:
@@ -84,9 +84,12 @@ export function useOrderBook({
       const orders: OrderRow[] = selectedOrders.map((order, index) => {
         return {
           key: String(index),
-          quote: roundNum(Number(order.quote), currentQuote.precision),
-          base: roundNum(Number(order.base), currentBase.precision),
-          price: roundNum(Number(order.price), currentBase.precision),
+          quote: roundNum(Number(order.base), currentQuote.precision),
+          base: roundNum(Number(order.quote), currentBase.precision),
+          price: roundNum(
+            Number(order.quote) / Number(order.base),
+            currentBase.precision
+          ),
           isBuyOrder: order.isBuyOrder,
         };
       });

@@ -273,8 +273,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   };
 
   // we need bitcoin pub key validation
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const validateWithdrawPublicKey = async (_: unknown, value: string) => {
+  const validateWithdrawPublicKey = async (_: unknown, _value: string) => {
     const sonNetworkStatus = await getSonNetworkStatus();
     if (!sonNetworkStatus.isSonNetworkOk) {
       return Promise.reject(new Error("SONs network is not available now"));
@@ -316,7 +315,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     withdrawForm,
     formValdation,
     confirm,
-    //loggedIn: localStorageAccount !== null && localStorageAccount !== "",
     handlePasswordModalCancel,
     onFormFinish,
     handleValuesChange,
