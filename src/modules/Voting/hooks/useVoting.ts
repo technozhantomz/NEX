@@ -27,7 +27,7 @@ export function useVoting(): UseVotingResult {
 
   const confirm = () => {
     console.log("confirm");
-    setIsPassModalVisible(true);
+    if (isVotesChanged) setIsPassModalVisible(true);
   };
 
   const publishChanges = (name: string, info: { values: any; forms: any }) => {
