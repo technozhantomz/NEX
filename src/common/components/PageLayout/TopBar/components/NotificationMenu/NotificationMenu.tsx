@@ -1,12 +1,16 @@
-// import { useUser } from "../../context";
 import { MenuCard } from "../../../../../../ui/src";
+import { useUserContext } from "../../../../../providers";
+import { NotificationList } from "../../../../Notifications/components/NotificationList";
 
 export const NotificationMenu = (): JSX.Element => {
-  //const { accountData } = useUser();
+  const { localStorageAccount } = useUserContext();
 
   return (
     <MenuCard bordered={false}>
-      <div>FPO</div>
+      <NotificationList
+        userName={localStorageAccount}
+        isWalletActivityTable={false}
+      />
     </MenuCard>
   );
 };
