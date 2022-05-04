@@ -19,8 +19,6 @@ type Props = {
   approveVote: (voteId: string) => void;
   removeVote: (voteId: string) => void;
   handleVoteSearch: (name: string) => void;
-  handlePasswordModalCancel: () => void;
-  isPassModalVisible: boolean;
   isVotesChanged: boolean;
   resetChanges: () => void;
 };
@@ -33,8 +31,6 @@ export const VoteTab = ({
   removeVote,
   tab,
   handleVoteSearch,
-  handlePasswordModalCancel,
-  isPassModalVisible,
   isVotesChanged,
   resetChanges,
 }: Props): JSX.Element => {
@@ -46,8 +42,6 @@ export const VoteTab = ({
           tab={tab}
           handleVoteSearch={handleVoteSearch}
           loading={loading}
-          handlePasswordModalCancel={handlePasswordModalCancel}
-          isPassModalVisible={isPassModalVisible}
           isVotesChanged={isVotesChanged}
           resetChanges={resetChanges}
           //isChangeTableEmpty={isChangeTableEmpty.current}

@@ -21,8 +21,6 @@ const VotingPage: NextPage = () => {
     removeVote,
     voteSearchValue,
     handleVoteSearch,
-    handlePasswordModalCancel,
-    isPassModalVisible,
     isVotesChanged,
     resetChanges,
   } = useVoting();
@@ -96,8 +94,6 @@ const VotingPage: NextPage = () => {
                 approveVote={approveVote}
                 removeVote={removeVote}
                 handleVoteSearch={handleVoteSearch}
-                handlePasswordModalCancel={handlePasswordModalCancel}
-                isPassModalVisible={isPassModalVisible}
                 isVotesChanged={isVotesChanged}
                 resetChanges={resetChanges}
               />

@@ -1,33 +1,40 @@
-import Link from "next/link";
-import React from "react";
+import counterpart from "counterpart";
 
-import { defaultToken } from "../../../api/params";
 import { Button } from "../../../ui/src";
 
 import * as Styled from "./TransactionModal.styled";
+import { AccountUpgrade } from "./components";
 import { useTransactionModal } from "./hooks";
 
 type Props = {
   visible: boolean;
   onCancel: () => void;
-  //handleOk: () => void;
+  transactionType: string;
   transactionErrorMessage: string;
   transactionSuccessMessage: string;
   loadingTransaction: boolean;
-  account: string;
-  fee: number;
+  account?: string;
+  fee?: number;
 };
 
 export const TransactionModal = ({
   visible,
   onCancel,
-  //handleOk,
+  transactionType,
   transactionErrorMessage,
   transactionSuccessMessage,
   loadingTransaction,
   account,
   fee,
 }: Props): JSX.Element => {
+  const transactionDetails: {
+    [transactionType: string]: JSX.Element;
+  } = {
+    account_upgrade: (
+      <AccountUpgrade account={account as string} fee={fee as number} />
+    ),
+  };
+
   const { useResetFormOnCloseModal, transactionModalForm } =
     useTransactionModal();
 
@@ -81,17 +88,13 @@ export const TransactionModal = ({
           size="large"
         ></Styled.TransactionModalForm>
         <Styled.DetailContainer>
-          <p>Account to upgrade</p>
-          <Link href={`/user/${account}`}>{account}</Link>
+          <Styled.TransactionType>
+            {counterpart.translate(`transaction.trxTypes.${transactionType}`)}
+          </Styled.TransactionType>
         </Styled.DetailContainer>
-        <Styled.DetailContainer>
-          <p>Upgrade to lifetime member true</p>
-          <p>true</p>
-        </Styled.DetailContainer>
-        <Styled.DetailContainer>
-          <p>Fee</p>
-          <p>{`${fee} ${defaultToken}`}</p>
-        </Styled.DetailContainer>
+        {transactionDetails[transactionType] !== undefined
+          ? transactionDetails[transactionType]
+          : ""}
         {transactionErrorMessage !== "" ? (
           <Styled.TransactionError>
             {transactionErrorMessage}

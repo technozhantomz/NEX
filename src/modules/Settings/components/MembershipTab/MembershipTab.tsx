@@ -6,22 +6,14 @@ import { PasswordModal, TransactionModal } from "../../../../common/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
 
 import * as Styled from "./MembershipTab.styled";
-// import { MembershipModal } from "./components/MembershipModal";
 import { useMembershipTab } from "./hooks/useMembershipTab";
 
 export const MembershipTab = (): JSX.Element => {
   const {
-    //handleMembershipModalCancel,
-    //handleMembershipModalConfirm,
     transactionErrorMessage,
     transactionSuccessMessage,
     loadingTransaction,
-    //isMembershipModalVisible,
-    //isPasswordModalVisible,
-    //handlePasswordModalCancel,
-    //onFormFinish,
     membershipForm,
-    //confirm,
     name,
     feesCashback,
     membershipPrice,
@@ -45,6 +37,7 @@ export const MembershipTab = (): JSX.Element => {
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
   } = useMembershipTab();
+
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
@@ -212,12 +205,12 @@ export const MembershipTab = (): JSX.Element => {
           <TransactionModal
             visible={isTransactionModalVisible}
             onCancel={hideTransactionModal}
-            // handleOk={handleMembershipModalConfirm}
             transactionErrorMessage={transactionErrorMessage}
             transactionSuccessMessage={transactionSuccessMessage}
             loadingTransaction={loadingTransaction}
             account={name}
             fee={membershipPrice}
+            transactionType="account_upgrade"
           />
         </Styled.MembershipForm>
       </Styled.MembershipForm.Provider>

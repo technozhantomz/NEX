@@ -13,10 +13,8 @@ export function useVoting(): UseVotingResult {
   const [fullAccount, setFullAccount] = useState<FullAccount>();
   const [serverApprovedVotes, setServerApprovedVotes] = useState<VoteRow[]>([]);
   const [localApprovedVotes, setLocalApprovedVotes] = useState<VoteRow[]>([]);
-  const [allMembersVotes, setAllMemebersVotes] = useState<VoteRow[]>([]);
+  const [allMembersVotes, setAllMembersVotes] = useState<VoteRow[]>([]);
   const [isVotesChanged, setIsVotesChanged] = useState<boolean>(false);
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [isPassModalVisible, setIsPassModalVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [voteSearchValue, setVoteSearchValue] = useState<string>("");
 
@@ -24,10 +22,6 @@ export function useVoting(): UseVotingResult {
   const { getFullAccount } = useAccount();
   const { getCommittees, getSons, getWitnesses } = useMembers();
   const { defaultAsset, formAssetBalanceById } = useAsset();
-
-  const handlePasswordModalCancel = useCallback(() => {
-    setIsPassModalVisible(false);
-  }, [setIsPassModalVisible]);
 
   const handleVoteSearch = useCallback(
     (name: string) => {
@@ -102,7 +96,7 @@ export function useVoting(): UseVotingResult {
           return formVoteRow(member, allMembersIds, "add");
         })
       );
-      setAllMemebersVotes(sortVotesRows(allMembersVotes));
+      setAllMembersVotes(sortVotesRows(allMembersVotes));
 
       if (fullAccount !== undefined) {
         const votes = fullAccount.votes;
@@ -127,7 +121,7 @@ export function useVoting(): UseVotingResult {
     getSons,
     getWitnesses,
     formVoteRow,
-    setAllMemebersVotes,
+    setAllMembersVotes,
     setServerApprovedVotes,
     setLocalApprovedVotes,
   ]);
@@ -194,8 +188,6 @@ export function useVoting(): UseVotingResult {
   }, [getVotes]);
 
   return {
-    isModalVisible,
-    isPassModalVisible,
     loading,
     serverApprovedVotes,
     localApprovedVotes,
@@ -206,6 +198,5 @@ export function useVoting(): UseVotingResult {
     resetChanges,
     voteSearchValue,
     handleVoteSearch,
-    handlePasswordModalCancel,
   };
 }

@@ -13,6 +13,11 @@ export const TransactionSuccess = styled.span`
   color: ${colors.successColor};
 `;
 
+export const TransactionType = styled.span`
+  margin-bottom: 15px;
+  font-weight: 500;
+`;
+
 export const DetailContainer = styled.div`
   display: flex;
   justify-content: space-between;

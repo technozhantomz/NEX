@@ -8,8 +8,6 @@ type Props = {
   tab: string;
   handleVoteSearch: (name: string) => void;
   loading: boolean;
-  handlePasswordModalCancel: () => void;
-  isPassModalVisible: boolean;
   isVotesChanged: boolean;
   resetChanges: () => void;
   // isChangeTableEmpty: boolean;
@@ -27,8 +25,6 @@ export const VoteForm = ({
   tab,
   handleVoteSearch,
   loading,
-  handlePasswordModalCancel,
-  isPassModalVisible,
   isVotesChanged,
   resetChanges,
 }: // isChangeTableEmpty,
@@ -133,11 +129,11 @@ Props): JSX.Element => {
               Publish Changes
             </Styled.Publish>
           </Styled.ActionsContainer>
-          <PasswordModal
+          {/* <PasswordModal
             visible={isPassModalVisible}
             onCancel={handlePasswordModalCancel}
             submitting={false}
-          />
+          /> */}
         </Styled.VoteForm>
       </Styled.VoteForm.Provider>
       {/* <Styled.FormContainer>

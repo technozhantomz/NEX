@@ -1,1 +1,0 @@
-export { useVoteTable } from "./useVoteTable";

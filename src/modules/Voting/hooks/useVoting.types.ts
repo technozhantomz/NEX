@@ -1,8 +1,6 @@
 import { VoteRow } from "../types";
 
 export type UseVotingResult = {
-  isModalVisible: boolean;
-  isPassModalVisible: boolean;
   loading: boolean;
   serverApprovedVotes: VoteRow[];
   localApprovedVotes: VoteRow[];
@@ -13,5 +11,4 @@ export type UseVotingResult = {
   resetChanges: () => void;
   voteSearchValue: string;
   handleVoteSearch: (name: string) => void;
-  handlePasswordModalCancel: () => void;
 };
