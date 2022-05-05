@@ -1,5 +1,5 @@
 import { FormDisclamer as UiFormDisclamer } from "..";
-import { CardFormButton, CardForm, Form, styled } from "../../../ui/src";
+import { CardForm, CardFormButton, Form, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const WithdrawForm = styled(CardForm)`
@@ -30,14 +30,12 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)`
   }
 `;
 export const WithdrawFormAsset = styled(CardForm.Item)`
-   {
-    width: 100%;
-    margin-bottom: 0;
-    &.ant-form-item-has-error
-      .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
-      .ant-select-selector {
-      border-color: none !important;
-    }
+  width: 100%;
+  margin-bottom: 0;
+  &.ant-form-item-has-error
+    .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
+    .ant-select-selector {
+    border-color: none !important;
   }
 `;
 

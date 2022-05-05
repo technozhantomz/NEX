@@ -2,26 +2,18 @@ import Link from "next/link";
 import React from "react";
 
 import { defaultToken } from "../../../../api/params";
-import { PasswordModal } from "../../../../common/components";
+import { PasswordModal, TransactionModal } from "../../../../common/components";
+import { useHandleTransactionForm } from "../../../../common/hooks";
 
 import * as Styled from "./MembershipTab.styled";
-import { MembershipModal } from "./components/MembershipModal";
 import { useMembershipTab } from "./hooks/useMembershipTab";
 
 export const MembershipTab = (): JSX.Element => {
   const {
-    handleMembershipModalCancel,
-    handleMembershipModalConfirm,
     transactionErrorMessage,
     transactionSuccessMessage,
     loadingTransaction,
-    isMembershipModalVisible,
-    isPasswordModalVisible,
-    submittingPassword,
-    handlePasswordModalCancel,
-    onFormFinish,
     membershipForm,
-    confirm,
     name,
     feesCashback,
     membershipPrice,
@@ -40,29 +32,36 @@ export const MembershipTab = (): JSX.Element => {
     registrarName,
     paidFees,
     expirationDate,
+    loadingAccountMembership,
+    handleMembershipUpgrade,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
   } = useMembershipTab();
+
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleMembershipUpgrade,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
 
   const { origin } = window.location;
   const link = origin;
 
   return (
     <Styled.MembershipCard>
-      <Styled.MembershipForm.Provider onFormFinish={onFormFinish}>
+      <Styled.MembershipForm.Provider onFormFinish={handleFormFinish}>
         <Styled.MembershipForm
           form={membershipForm}
           name="membershipForm"
-          onFinish={confirm}
+          onFinish={showPasswordModal}
         >
-          <MembershipModal
-            visible={isMembershipModalVisible}
-            onCancel={handleMembershipModalCancel}
-            handleOk={handleMembershipModalConfirm}
-            transactionErrorMessage={transactionErrorMessage}
-            transactionSuccessMessage={transactionSuccessMessage}
-            loadingTransaction={loadingTransaction}
-            account={name}
-            fee={membershipPrice}
-          />
           <Styled.Space direction="vertical">
             {!isLifetimeMember ? (
               <Styled.Space direction="vertical">
@@ -70,13 +69,23 @@ export const MembershipTab = (): JSX.Element => {
                   {`Upgrade for ${feesCashback}% Cashback`}
                 </Styled.Heading>
                 <Styled.Paragraph>
-                  {`Lifetime Members get ${feesCashback}% cashback on every
-                  transaction fee they pay and qualify to earn referral income
-                  from users they register with or refer to the network. A
-                  Lifetime Membership is just ${membershipPrice} ${defaultToken}.`}
+                  Every transaction on the Peerplays network is divided between
+                  the network and referrers. By registering to a Lifetime
+                  Membership the account will receive {`${feesCashback} `}
+                  cashback on every transaction fee paid. As a bonus it will
+                  also qualify to earn referral income from users registered
+                  with or refered to the network.
+                </Styled.Paragraph>
+                <Styled.Paragraph>
+                  A Lifetime Membership price will change over time, right now
+                  it is only {`${membershipPrice} ${defaultToken}`} .
                 </Styled.Paragraph>
                 <Styled.ButtonContainer>
-                  <Styled.Button type="primary" htmlType="submit">
+                  <Styled.Button
+                    type="primary"
+                    htmlType="submit"
+                    disabled={loadingAccountMembership}
+                  >
                     Buy lifetime subscription
                   </Styled.Button>
                 </Styled.ButtonContainer>
@@ -92,7 +101,15 @@ export const MembershipTab = (): JSX.Element => {
             <Styled.Heading>Fee Allocation</Styled.Heading>
             <Styled.Paragraph>
               Every time {name} pays a transaction fee, that fee is divided
-              among several different accounts.
+              among several different accounts. The network takes a {networkFee}
+              % cut, and the Lifetime Member who referred {name} gets a{" "}
+              {lifetimeFee}% cut. The registrar is the account that paid the
+              transaction fee to register {name} with the network. The registrar
+              gets to decide how to divide the remaining {referrerTotalFee}%
+              between themselves and their own Affiliate Referrer program.{" "}
+              {name}'s registrar chose to share {referrerFee}% of the total fee
+              with the Affiliate Referrer and keep {registrarFee}% of the total
+              fee for themselves.
             </Styled.Paragraph>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
@@ -166,8 +183,18 @@ export const MembershipTab = (): JSX.Element => {
           </Styled.Space>
           <PasswordModal
             visible={isPasswordModalVisible}
-            onCancel={handlePasswordModalCancel}
-            submitting={submittingPassword}
+            onCancel={hidePasswordModal}
+            submitting={loadingTransaction}
+          />
+          <TransactionModal
+            visible={isTransactionModalVisible}
+            onCancel={hideTransactionModal}
+            transactionErrorMessage={transactionErrorMessage}
+            transactionSuccessMessage={transactionSuccessMessage}
+            loadingTransaction={loadingTransaction}
+            account={name}
+            fee={membershipPrice}
+            transactionType="account_upgrade"
           />
         </Styled.MembershipForm>
       </Styled.MembershipForm.Provider>

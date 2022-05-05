@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useArrayLimiter, useAsset } from "../../../../../common/hooks";
+import {
+  useArrayLimiter,
+  useAsset,
+  useMembers,
+} from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
-import { CommitteeMember } from "../../../../../common/types";
 
 import {
   CommitteeTableRow,
@@ -20,48 +23,40 @@ export function useCommitteeTab(): UseCommitteeTabResult {
   const { dbApi } = usePeerplaysApiContext();
   const { defaultAsset, formAssetBalanceById } = useAsset();
   const { updateArrayWithLimit } = useArrayLimiter();
+  const { getCommittees } = useMembers();
 
-  const getCommittees = useCallback(async () => {
+  const getCommitteesTableRows = useCallback(async () => {
     if (defaultAsset) {
       try {
-        const committeeIds: [string, string][] = await dbApi(
-          "lookup_committee_member_accounts",
-          ["", 100]
-        );
-        if (committeeIds && committeeIds.length > 0) {
-          const committees: CommitteeMember[] = await dbApi(
-            "get_committee_members",
-            [committeeIds.map((committeeId) => committeeId[1])]
-          );
+        const { committees, committeesIds } = await getCommittees();
 
-          if (committees && committees.length > 0) {
-            committees.sort((a, b) => b.total_votes - a.total_votes);
-            const committeeRows: CommitteeTableRow[] = [];
-            let index = 0;
-            for (const committee of committees) {
+        if (committees && committees.length > 0) {
+          committees.sort((a, b) => b.total_votes - a.total_votes);
+
+          const committeeRows = await Promise.all(
+            committees.map(async (committee, index) => {
               const votesAsset = await formAssetBalanceById(
                 defaultAsset.id,
                 Number(committee.total_votes)
               );
-              committeeRows.push({
+              return {
                 key: index,
                 rank: index + 1,
-                name: committeeIds.filter(
+                name: committeesIds.filter(
                   (committeeId) => committeeId[1] === committee.id
                 )[0][0],
                 totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
                 url: committee.url,
-              } as CommitteeTableRow);
-              index = index + 1;
-            }
+              } as CommitteeTableRow;
+            })
+          );
 
-            setCommitteeTableRows(committeeRows);
-            setActiveCommittee(committees.length);
-            setCommitteeStats(
-              updateArrayWithLimit(committeeStats, committees.length, 99)
-            );
-            setLoading(false);
-          }
+          setCommitteeTableRows(committeeRows);
+          setActiveCommittee(committees.length);
+          setCommitteeStats(
+            updateArrayWithLimit(committeeStats, committees.length, 99)
+          );
+          setLoading(false);
         }
       } catch (e) {
         setLoading(false);
@@ -89,7 +84,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
   );
 
   useEffect(() => {
-    setInterval(() => getCommittees(), 3000);
+    setInterval(() => getCommitteesTableRows(), 3000);
   }, [defaultAsset]);
 
   return {
