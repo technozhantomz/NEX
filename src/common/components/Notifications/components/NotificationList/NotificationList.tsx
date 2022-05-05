@@ -1,7 +1,7 @@
 import { List } from "antd";
 
 import { AvtivityInfo } from "../../../ActivityTable/components";
-import { useActivityTable } from "../../../ActivityTable/hooks";
+import { useNotification } from "../../hooks";
 
 import * as Styled from "./NotificationList.styled";
 
@@ -14,7 +14,7 @@ export const NotificationList = ({
   userName,
   isWalletActivityTable = false,
 }: Props): JSX.Element => {
-  const { activitiesTable, loading } = useActivityTable({
+  const { activitiesTable, loading } = useNotification({
     userName,
     isWalletActivityTable,
   });
@@ -23,7 +23,6 @@ export const NotificationList = ({
     <List
       itemLayout="vertical"
       dataSource={activitiesTable}
-      loading={loading}
       renderItem={(item) => (
         <Styled.ActivityListItem key={item.key}>
           <Styled.ActivitysItemContent>
