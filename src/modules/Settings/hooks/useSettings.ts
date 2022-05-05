@@ -45,8 +45,8 @@ export function useSettings(): UseSettingsResult {
               },
             }
           : settings.notifications,
-      walletLock: values.walletLockInMintues
-        ? values.walletLockInMintues
+      walletLock: values.walletLockInMinutes
+        ? values.walletLockInMinutes
         : settings.walletLock,
     };
     if (values.selectedLanguage) {

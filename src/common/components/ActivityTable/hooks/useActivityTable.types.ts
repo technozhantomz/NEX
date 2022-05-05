@@ -8,7 +8,7 @@ export interface ActivityRow {
 }
 
 export type UseActivityTableResult = {
-  activitiesTable: ActivityRow[];
+  activitiesRows: ActivityRow[];
   loading: boolean;
 };
 

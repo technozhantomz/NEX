@@ -6,8 +6,8 @@ export type UserContextType = {
   id: string;
   name: string;
   assets: Asset[];
-  isAccountLocked: boolean;
+  password: string;
   updateAccount: (id: string, name: string, assets: Asset[]) => void;
   setAssets: (assets: Asset[]) => void;
-  setIsAccountLocked: (isAccountLocked: boolean) => void;
+  setPassword: (password: string) => void;
 };

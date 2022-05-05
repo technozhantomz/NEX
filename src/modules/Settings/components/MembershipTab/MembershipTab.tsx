@@ -2,26 +2,18 @@ import Link from "next/link";
 import React from "react";
 
 import { defaultToken } from "../../../../api/params";
-import { PasswordModal } from "../../../../common/components";
+import { PasswordModal, TransactionModal } from "../../../../common/components";
+import { useHandleTransactionForm } from "../../../../common/hooks";
 
 import * as Styled from "./MembershipTab.styled";
-import { MembershipModal } from "./components/MembershipModal";
 import { useMembershipTab } from "./hooks/useMembershipTab";
 
 export const MembershipTab = (): JSX.Element => {
   const {
-    handleMembershipModalCancel,
-    handleMembershipModalConfirm,
     transactionErrorMessage,
     transactionSuccessMessage,
     loadingTransaction,
-    isMembershipModalVisible,
-    isPasswordModalVisible,
-    submittingPassword,
-    handlePasswordModalCancel,
-    onFormFinish,
     membershipForm,
-    confirm,
     name,
     feesCashback,
     membershipPrice,
@@ -40,29 +32,36 @@ export const MembershipTab = (): JSX.Element => {
     registrarName,
     paidFees,
     expirationDate,
+    loadingAccountMembership,
+    handleMembershipUpgrade,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
   } = useMembershipTab();
+
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleMembershipUpgrade,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
 
   const { origin } = window.location;
   const link = origin;
 
   return (
     <Styled.MembershipCard>
-      <Styled.MembershipForm.Provider onFormFinish={onFormFinish}>
+      <Styled.MembershipForm.Provider onFormFinish={handleFormFinish}>
         <Styled.MembershipForm
           form={membershipForm}
           name="membershipForm"
-          onFinish={confirm}
+          onFinish={showPasswordModal}
         >
-          <MembershipModal
-            visible={isMembershipModalVisible}
-            onCancel={handleMembershipModalCancel}
-            handleOk={handleMembershipModalConfirm}
-            transactionErrorMessage={transactionErrorMessage}
-            transactionSuccessMessage={transactionSuccessMessage}
-            loadingTransaction={loadingTransaction}
-            account={name}
-            fee={membershipPrice}
-          />
           <Styled.Space direction="vertical">
             {!isLifetimeMember ? (
               <Styled.Space direction="vertical">
@@ -76,7 +75,11 @@ export const MembershipTab = (): JSX.Element => {
                   Lifetime Membership is just ${membershipPrice} ${defaultToken}.`}
                 </Styled.Paragraph>
                 <Styled.ButtonContainer>
-                  <Styled.Button type="primary" htmlType="submit">
+                  <Styled.Button
+                    type="primary"
+                    htmlType="submit"
+                    disabled={loadingAccountMembership}
+                  >
                     Buy lifetime subscription
                   </Styled.Button>
                 </Styled.ButtonContainer>
@@ -166,8 +169,18 @@ export const MembershipTab = (): JSX.Element => {
           </Styled.Space>
           <PasswordModal
             visible={isPasswordModalVisible}
-            onCancel={handlePasswordModalCancel}
-            submitting={submittingPassword}
+            onCancel={hidePasswordModal}
+            submitting={loadingTransaction}
+          />
+          <TransactionModal
+            visible={isTransactionModalVisible}
+            onCancel={hideTransactionModal}
+            transactionErrorMessage={transactionErrorMessage}
+            transactionSuccessMessage={transactionSuccessMessage}
+            loadingTransaction={loadingTransaction}
+            account={name}
+            fee={membershipPrice}
+            transactionType="account_upgrade"
           />
         </Styled.MembershipForm>
       </Styled.MembershipForm.Provider>

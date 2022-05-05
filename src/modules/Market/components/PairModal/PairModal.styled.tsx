@@ -1,7 +1,7 @@
 import {
   styled,
   CardFormButton as UIButton,
-  CardFrom as UIForm,
+  CardForm as UIForm,
   Modal as UIModal,
 } from "../../../../ui/src";
 
