@@ -29,7 +29,6 @@ export function useVoting(voteType: string): UseVotingResult {
   const { defaultAsset, formAssetBalanceById } = useAsset();
 
   const confirm = () => {
-    console.log("confirm");
     if (isVotesChanged) setIsPassModalVisible(true);
   };
 
@@ -38,36 +37,40 @@ export function useVoting(voteType: string): UseVotingResult {
     const { passwordModal } = forms;
     if (name === "passwordModal") {
       passwordModal.validateFields().then(() => {
-        setSubmittingPassword(true);
-        console.log(values.password);
-        setSubmittingPassword(false);
+        handlePublishChanges(values.password);
       });
     }
+  };
+
+  const handlePublishChanges = (password: string) => {
+    setSubmittingPassword(true);
+    console.log(password);
+    console.log(serverApprovedVotes);
+    console.log(localApprovedVotes);
+    setSubmittingPassword(false);
   };
 
   const handleVoteSearch = useCallback(
     (name: string) => {
       setLoading(true);
       setVoteSearchValue(name);
-      // setLocalApprovedVotes(filterLocalVotes(localApprovedVotes, name));
-      // setLocalNotApprovedVotes(filterLocalVotes(localNotApprovedVotes, name));
       setLoading(false);
     },
     [setVoteSearchValue, setLoading]
   );
 
-  const filterLocalVotes = (
-    voteRows: VoteRow[],
-    searchValue: string
-  ): VoteRow[] => {
-    return searchValue === ""
-      ? voteRows.filter((vote) => vote.type === voteType)
-      : voteRows
-          .filter((vote) => vote.type === voteType)
-          .filter((vote) =>
-            vote.name.toLowerCase().startsWith(searchValue.toLowerCase())
-          );
-  };
+  const filterLocalVotes = useCallback(
+    (voteRows: VoteRow[], searchValue: string): VoteRow[] => {
+      return searchValue === ""
+        ? voteRows.filter((vote) => vote.type === voteType)
+        : voteRows
+            .filter((vote) => vote.type === voteType)
+            .filter((vote) =>
+              vote.name.toLowerCase().startsWith(searchValue.toLowerCase())
+            );
+    },
+    [setVoteSearchValue, setLoading]
+  );
 
   const sortVotesRows = useCallback((votes: VoteRow[]) => {
     return votes.sort(
@@ -158,16 +161,6 @@ export function useVoting(voteType: string): UseVotingResult {
         );
         setServerApprovedVotes(sortVotesRows([...serverApprovedVotes]));
         setLocalApprovedVotes(sortVotesRows([...serverApprovedVotes]));
-        setLocalNotApprovedVotes(
-          allMembersVotes
-            .filter((vote) => vote.type === voteType)
-            .filter(
-              (vote) =>
-                !localApprovedVotes
-                  .map((approvedVote) => approvedVote.id)
-                  .includes(vote.id)
-            )
-        );
       }
       setLoading(false);
     } catch (e) {
@@ -245,6 +238,19 @@ export function useVoting(voteType: string): UseVotingResult {
   }, [serverApprovedVotes, setLocalApprovedVotes, setLocalApprovedVotes]);
 
   useEffect(() => {
+    setLocalNotApprovedVotes(
+      allMembersVotes
+        .filter((vote) => vote.type === voteType)
+        .filter(
+          (vote) =>
+            !localApprovedVotes
+              .map((approvedVote) => approvedVote.id)
+              .includes(vote.id)
+        )
+    );
+  }, [localApprovedVotes, setLocalApprovedVotes, checkVotesChanged]);
+
+  useEffect(() => {
     getVotes();
   }, [getVotes]);
 
@@ -265,5 +271,6 @@ export function useVoting(voteType: string): UseVotingResult {
     resetChanges,
     handleVoteSearch,
     setIsPassModalVisible,
+    filterLocalVotes,
   };
 }

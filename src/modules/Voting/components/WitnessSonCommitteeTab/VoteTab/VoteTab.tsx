@@ -55,6 +55,7 @@ Props): JSX.Element => {
     isPassModalVisible,
     submittingPassword,
     localApprovedVotes,
+    localNotApprovedVotes,
     allMembersVotes,
     voteSearchValue,
     approveVote,
@@ -64,6 +65,7 @@ Props): JSX.Element => {
     confirm,
     publishChanges,
     setIsPassModalVisible,
+    filterLocalVotes,
   } = useVoting(voteType);
   return (
     <Styled.Container>
@@ -96,47 +98,37 @@ Props): JSX.Element => {
         <VoteTable
           type="approved"
           loading={loading}
-          votes={
-            voteSearchValue === ""
-              ? localApprovedVotes.filter((vote) => vote.type === voteType)
-              : localApprovedVotes
-                  .filter((vote) => vote.type === voteType)
-                  .filter((approvedVote) =>
-                    approvedVote.name
-                      .toLowerCase()
-                      .startsWith(voteSearchValue.toLowerCase())
-                  )
-          }
+          votes={filterLocalVotes(localApprovedVotes, voteSearchValue)}
           approveVote={approveVote}
           removeVote={removeVote}
         />
         <VoteTable
           type="notApproved"
           loading={loading}
-          votes={
-            voteSearchValue === ""
-              ? allMembersVotes
-                  .filter((vote) => vote.type === voteType)
-                  .filter(
-                    (vote) =>
-                      !localApprovedVotes
-                        .map((approvedVote) => approvedVote.id)
-                        .includes(vote.id)
-                  )
-              : allMembersVotes
-                  .filter((vote) => vote.type === voteType)
-                  .filter(
-                    (vote) =>
-                      !localApprovedVotes
-                        .map((approvedVote) => approvedVote.id)
-                        .includes(vote.id)
-                  )
-                  .filter((notApprovedVote) =>
-                    notApprovedVote.name
-                      .toLowerCase()
-                      .startsWith(voteSearchValue.toLowerCase())
-                  )
-          }
+          votes={filterLocalVotes(localNotApprovedVotes, voteSearchValue)}
+          //   voteSearchValue === ""
+          //     ? allMembersVotes
+          //         .filter((vote) => vote.type === voteType)
+          //         .filter(
+          //           (vote) =>
+          //             !localApprovedVotes
+          //               .map((approvedVote) => approvedVote.id)
+          //               .includes(vote.id)
+          //         )
+          //     : allMembersVotes
+          //         .filter((vote) => vote.type === voteType)
+          //         .filter(
+          //           (vote) =>
+          //             !localApprovedVotes
+          //               .map((approvedVote) => approvedVote.id)
+          //               .includes(vote.id)
+          //         )
+          //         .filter((notApprovedVote) =>
+          //           notApprovedVote.name
+          //             .toLowerCase()
+          //             .startsWith(voteSearchValue.toLowerCase())
+          //         )
+          // }
           approveVote={approveVote}
           removeVote={removeVote}
         />

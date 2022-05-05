@@ -26,11 +26,10 @@ export const VoteTable = styled(UiTable)`
     font-weight: 500;
   }
 `;
+export const VoteList = styled(UiList)``;
 
 export const VoteListItem = styled(UiList.Item)`
-   {
-    padding: 15px 20px;
-  }
+  padding: 15px 20px;
   .ant-list-item-action {
     display: flex;
     justify-content: space-between;

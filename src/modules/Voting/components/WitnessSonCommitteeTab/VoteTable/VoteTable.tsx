@@ -37,7 +37,7 @@ export const VoteTable = ({
       </Styled.Title>
       <Styled.Container>
         {xs ? (
-          // <List
+          // <Styled.VoteList
           //   itemLayout="vertical"
           //   dataSource={votes}
           //   loading={loading}

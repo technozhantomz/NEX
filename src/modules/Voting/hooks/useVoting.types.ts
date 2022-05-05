@@ -19,4 +19,5 @@ export type UseVotingResult = {
   resetChanges: () => void;
   handleVoteSearch: (name: string) => void;
   setIsPassModalVisible: (value: SetStateAction<boolean>) => void;
+  filterLocalVotes: (voteRows: VoteRow[], searchValue: string) => VoteRow[];
 };
