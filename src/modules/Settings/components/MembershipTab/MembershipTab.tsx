@@ -69,10 +69,16 @@ export const MembershipTab = (): JSX.Element => {
                   {`Upgrade for ${feesCashback}% Cashback`}
                 </Styled.Heading>
                 <Styled.Paragraph>
-                  {`Lifetime Members get ${feesCashback}% cashback on every
-                  transaction fee they pay and qualify to earn referral income
-                  from users they register with or refer to the network. A
-                  Lifetime Membership is just ${membershipPrice} ${defaultToken}.`}
+                  Every transaction on the Peerplays network is divided between
+                  the network and referrers. By registering to a Lifetime
+                  Membership the account will receive {`${feesCashback} `}
+                  cashback on every transaction fee paid. As a bonus it will
+                  also qualify to earn referral income from users registered
+                  with or refered to the network.
+                </Styled.Paragraph>
+                <Styled.Paragraph>
+                  A Lifetime Membership price will change over time, right now
+                  it is only {`${membershipPrice} ${defaultToken}`} .
                 </Styled.Paragraph>
                 <Styled.ButtonContainer>
                   <Styled.Button
@@ -95,7 +101,15 @@ export const MembershipTab = (): JSX.Element => {
             <Styled.Heading>Fee Allocation</Styled.Heading>
             <Styled.Paragraph>
               Every time {name} pays a transaction fee, that fee is divided
-              among several different accounts.
+              among several different accounts. The network takes a {networkFee}
+              % cut, and the Lifetime Member who referred {name} gets a{" "}
+              {lifetimeFee}% cut. The registrar is the account that paid the
+              transaction fee to register {name} with the network. The registrar
+              gets to decide how to divide the remaining {referrerTotalFee}%
+              between themselves and their own Affiliate Referrer program.{" "}
+              {name}'s registrar chose to share {referrerFee}% of the total fee
+              with the Affiliate Referrer and keep {registrarFee}% of the total
+              fee for themselves.
             </Styled.Paragraph>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
