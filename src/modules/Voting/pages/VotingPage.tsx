@@ -2,30 +2,23 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { Layout } from "../../../../common/components";
-import { useViewportContext } from "../../../../common/providers";
-import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
-import { breakpoints } from "../../../../ui/src/breakpoints";
-import {
-  AssetsTab,
-  BlockchainTab,
-  BlockDetails,
-  CommitteeTab,
-  FeesTab,
-  WitnessesTab,
-} from "../../components";
+import { Layout } from "../../../common/components";
+import { useViewportContext } from "../../../common/providers";
+import { Button, DownOutlined, Menu, Tabs } from "../../../ui/src";
+import { breakpoints } from "../../../ui/src/breakpoints";
+import { GPOSTab } from "../components";
 
-import * as Styled from "./Blockchain.styled";
-import { useBlockchainPage } from "./hooks";
+import * as Styled from "./VotingPage.styled";
+import { useVotingPage } from "./hooks";
 
 const { TabPane } = Tabs;
 
-const Blockchain: NextPage = () => {
+const VotingPage: NextPage = () => {
   const router = useRouter();
-  const [visible, setVisible] = useState<boolean>(false);
-  const { blockNumber, tab } = router.query;
-  const { pageMeta } = useBlockchainPage(tab as string);
+  const { tab } = router.query;
+  const { pageMeta } = useVotingPage(tab as string);
   const { width } = useViewportContext();
+  const [visible, setVisible] = useState<boolean>(false);
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
       {width > breakpoints.sm ? (
@@ -47,7 +40,7 @@ const Blockchain: NextPage = () => {
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab ? tab : "blockchain"} <DownOutlined />
+              {tab ? tab : "gpos"} <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -62,38 +55,34 @@ const Blockchain: NextPage = () => {
       description={`${pageMeta.description}`}
       dexLayout={true}
     >
-      <Styled.BlockchainCard>
+      <Styled.VotingCard>
         <Tabs
           renderTabBar={renderTabBar}
-          activeKey={`${tab ? tab : "blockchain"}`}
+          activeKey={`${tab ? tab : "gpos"}`}
           onTabClick={(key) => {
-            router.push(`/blockchain?tab=${key}`);
+            router.push(`/voting?tab=${key}`);
             if (width < breakpoints.sm) setVisible(false);
           }}
         >
-          <TabPane tab="Blockchain" key="blockchain">
-            {blockNumber ? (
-              <BlockDetails block={blockNumber as string} />
-            ) : (
-              <BlockchainTab routerQuery={router.query} />
-            )}
+          <TabPane tab="GPOS" key="gpos">
+            <GPOSTab />
           </TabPane>
-          <TabPane tab="Assets" key="assets">
-            <AssetsTab />
+          <TabPane tab="Witness" key="witness">
+            <p>witness</p>
           </TabPane>
-          <TabPane tab="Witnesses" key="witnesses">
-            <WitnessesTab />
+          <TabPane tab="SONs" key="sons">
+            <p>sons</p>
           </TabPane>
-          <TabPane tab="Committees" key="committees">
-            <CommitteeTab />
+          <TabPane tab="Advisors" key="advisors">
+            <p>advisors</p>
           </TabPane>
-          <TabPane tab="Fees" key="fees">
-            <FeesTab />
+          <TabPane tab="Proxy" key="proxy">
+            <p>proxy</p>
           </TabPane>
         </Tabs>
-      </Styled.BlockchainCard>
+      </Styled.VotingCard>
     </Layout>
   );
 };
 
-export default Blockchain;
+export default VotingPage;

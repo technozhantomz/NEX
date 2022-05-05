@@ -9,10 +9,13 @@ import { VoteRow } from "../types";
 import { UseVotingResult } from "./useVoting.types";
 
 // should add tab: string for the arg, to use in publish function
-export function useVoting(): UseVotingResult {
+export function useVoting(voteType: string): UseVotingResult {
   const [fullAccount, setFullAccount] = useState<FullAccount>();
   const [serverApprovedVotes, setServerApprovedVotes] = useState<VoteRow[]>([]);
   const [localApprovedVotes, setLocalApprovedVotes] = useState<VoteRow[]>([]);
+  const [localNotApprovedVotes, setLocalNotApprovedVotes] = useState<VoteRow[]>(
+    []
+  );
   const [allMembersVotes, setAllMembersVotes] = useState<VoteRow[]>([]);
   const [isVotesChanged, setIsVotesChanged] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -46,10 +49,25 @@ export function useVoting(): UseVotingResult {
     (name: string) => {
       setLoading(true);
       setVoteSearchValue(name);
+      // setLocalApprovedVotes(filterLocalVotes(localApprovedVotes, name));
+      // setLocalNotApprovedVotes(filterLocalVotes(localNotApprovedVotes, name));
       setLoading(false);
     },
     [setVoteSearchValue, setLoading]
   );
+
+  const filterLocalVotes = (
+    voteRows: VoteRow[],
+    searchValue: string
+  ): VoteRow[] => {
+    return searchValue === ""
+      ? voteRows.filter((vote) => vote.type === voteType)
+      : voteRows
+          .filter((vote) => vote.type === voteType)
+          .filter((vote) =>
+            vote.name.toLowerCase().startsWith(searchValue.toLowerCase())
+          );
+  };
 
   const sortVotesRows = useCallback((votes: VoteRow[]) => {
     return votes.sort(
@@ -63,22 +81,21 @@ export function useVoting(): UseVotingResult {
       votesIds: [string, string][],
       action: "add" | "remove" | ""
     ): Promise<VoteRow> => {
-      let voteType: "committees" | "witnesses" | "sons";
+      let _voteType;
       switch (parseInt(vote.vote_id.charAt(0))) {
         case 0:
-          voteType = "committees";
+          _voteType = "committees";
           break;
         case 1:
-          voteType = "witnesses";
+          _voteType = "witnesses";
           break;
         case 3:
-          voteType = "sons";
+          _voteType = "sons";
           break;
         default:
-          voteType = "witnesses";
+          _voteType = "witnesses";
       }
       const name = votesIds.filter((voteId) => voteId[1] === vote.id)[0][0];
-
       const votesAsset = await formAssetBalanceById(
         (defaultAsset as Asset).id,
         Number(vote.total_votes)
@@ -86,7 +103,7 @@ export function useVoting(): UseVotingResult {
       return {
         id: vote.vote_id,
         key: vote.vote_id,
-        type: voteType,
+        type: _voteType,
         name: name,
         website: vote.url,
         votes: `${votesAsset.amount} ${votesAsset.symbol}`,
@@ -107,8 +124,23 @@ export function useVoting(): UseVotingResult {
       const { committees, committeesIds } = await getCommittees();
       const { sons, sonsIds } = await getSons();
       const { witnesses, witnessesIds } = await getWitnesses();
-      allMembers = [...committees, ...sons, ...witnesses];
-      allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
+      switch (true) {
+        case voteType === "committees":
+          allMembers = [...committees];
+          allMembersIds = [...committeesIds];
+          break;
+        case voteType === "sons":
+          allMembers = [...sons];
+          allMembersIds = [...sonsIds];
+          break;
+        case voteType === "witnessess":
+          allMembers = [...witnesses];
+          allMembersIds = [...witnessesIds];
+          break;
+        default:
+          allMembers = [...committees, ...sons, ...witnesses];
+          allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
+      }
 
       const allMembersVotes = await Promise.all(
         allMembers.map((member) => {
@@ -126,6 +158,16 @@ export function useVoting(): UseVotingResult {
         );
         setServerApprovedVotes(sortVotesRows([...serverApprovedVotes]));
         setLocalApprovedVotes(sortVotesRows([...serverApprovedVotes]));
+        setLocalNotApprovedVotes(
+          allMembersVotes
+            .filter((vote) => vote.type === voteType)
+            .filter(
+              (vote) =>
+                !localApprovedVotes
+                  .map((approvedVote) => approvedVote.id)
+                  .includes(vote.id)
+            )
+        );
       }
       setLoading(false);
     } catch (e) {
@@ -210,6 +252,7 @@ export function useVoting(): UseVotingResult {
     loading,
     serverApprovedVotes,
     localApprovedVotes,
+    localNotApprovedVotes,
     isVotesChanged,
     allMembersVotes,
     voteSearchValue,

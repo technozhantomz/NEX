@@ -13,22 +13,22 @@ import * as Styled from "./VotingPage.styled";
 const { TabPane } = Tabs;
 
 const VotingPage: NextPage = () => {
-  const {
-    loading,
-    isVotesChanged,
-    voteSearchValue,
-    allMembersVotes,
-    localApprovedVotes,
-    isPassModalVisible,
-    submittingPassword,
-    approveVote,
-    removeVote,
-    handleVoteSearch,
-    resetChanges,
-    confirm,
-    publishChanges,
-    setIsPassModalVisible,
-  } = useVoting();
+  // const {
+  //   loading,
+  //   isVotesChanged,
+  //   voteSearchValue,
+  //   allMembersVotes,
+  //   localApprovedVotes,
+  //   isPassModalVisible,
+  //   submittingPassword,
+  //   approveVote,
+  //   removeVote,
+  //   handleVoteSearch,
+  //   resetChanges,
+  //   confirm,
+  //   publishChanges,
+  //   setIsPassModalVisible,
+  // } = useVoting();
   const router = useRouter();
   const { tab } = router.query;
   const voteTabs: ("witnesses" | "sons" | "committees")[] = [
@@ -49,7 +49,7 @@ const VotingPage: NextPage = () => {
         <Tabs
           defaultActiveKey={`${tab ? tab : "gpos"}`}
           onTabClick={(key) => {
-            handleVoteSearch("");
+            // handleVoteSearch("");
             router.push(`/voting?tab=${key}`);
           }}
         >
@@ -59,53 +59,53 @@ const VotingPage: NextPage = () => {
           {voteTabs.map((voteTab) => (
             <TabPane tab={capitalize(voteTab)} key={voteTab}>
               <VoteTab
-                tab={voteTab}
-                localApprovedVotes={
-                  voteSearchValue === ""
-                    ? localApprovedVotes.filter((vote) => vote.type === voteTab)
-                    : localApprovedVotes
-                        .filter((vote) => vote.type === voteTab)
-                        .filter((approvedVote) =>
-                          approvedVote.name
-                            .toLowerCase()
-                            .startsWith(voteSearchValue.toLowerCase())
-                        )
-                }
-                localNotApprovedVotes={
-                  voteSearchValue === ""
-                    ? allMembersVotes
-                        .filter((vote) => vote.type === voteTab)
-                        .filter(
-                          (vote) =>
-                            !localApprovedVotes
-                              .map((approvedVote) => approvedVote.id)
-                              .includes(vote.id)
-                        )
-                    : allMembersVotes
-                        .filter((vote) => vote.type === voteTab)
-                        .filter(
-                          (vote) =>
-                            !localApprovedVotes
-                              .map((approvedVote) => approvedVote.id)
-                              .includes(vote.id)
-                        )
-                        .filter((notApprovedVote) =>
-                          notApprovedVote.name
-                            .toLowerCase()
-                            .startsWith(voteSearchValue.toLowerCase())
-                        )
-                }
-                loading={loading}
-                isVotesChanged={isVotesChanged}
-                isPassModalVisible={isPassModalVisible}
-                submittingPassword={submittingPassword}
-                approveVote={approveVote}
-                removeVote={removeVote}
-                handleVoteSearch={handleVoteSearch}
-                resetChanges={resetChanges}
-                confirm={confirm}
-                publishChanges={publishChanges}
-                setIsPassModalVisible={setIsPassModalVisible}
+                voteType={voteTab}
+                // localApprovedVotes={
+                //   voteSearchValue === ""
+                //     ? localApprovedVotes.filter((vote) => vote.type === voteTab)
+                //     : localApprovedVotes
+                //         .filter((vote) => vote.type === voteTab)
+                //         .filter((approvedVote) =>
+                //           approvedVote.name
+                //             .toLowerCase()
+                //             .startsWith(voteSearchValue.toLowerCase())
+                //         )
+                // }
+                // localNotApprovedVotes={
+                //   voteSearchValue === ""
+                //     ? allMembersVotes
+                //         .filter((vote) => vote.type === voteTab)
+                //         .filter(
+                //           (vote) =>
+                //             !localApprovedVotes
+                //               .map((approvedVote) => approvedVote.id)
+                //               .includes(vote.id)
+                //         )
+                //     : allMembersVotes
+                //         .filter((vote) => vote.type === voteTab)
+                //         .filter(
+                //           (vote) =>
+                //             !localApprovedVotes
+                //               .map((approvedVote) => approvedVote.id)
+                //               .includes(vote.id)
+                //         )
+                //         .filter((notApprovedVote) =>
+                //           notApprovedVote.name
+                //             .toLowerCase()
+                //             .startsWith(voteSearchValue.toLowerCase())
+                //         )
+                // }
+                // loading={loading}
+                // isVotesChanged={isVotesChanged}
+                // isPassModalVisible={isPassModalVisible}
+                // submittingPassword={submittingPassword}
+                // approveVote={approveVote}
+                // removeVote={removeVote}
+                // handleVoteSearch={handleVoteSearch}
+                // resetChanges={resetChanges}
+                // confirm={confirm}
+                // publishChanges={publishChanges}
+                // setIsPassModalVisible={setIsPassModalVisible}
               />
             </TabPane>
           ))}

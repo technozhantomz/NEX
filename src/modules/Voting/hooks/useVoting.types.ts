@@ -6,6 +6,7 @@ export type UseVotingResult = {
   loading: boolean;
   serverApprovedVotes: VoteRow[];
   localApprovedVotes: VoteRow[];
+  localNotApprovedVotes: VoteRow[];
   allMembersVotes: VoteRow[];
   isVotesChanged: boolean;
   voteSearchValue: string;

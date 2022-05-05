@@ -1,4 +1,3 @@
-import { capitalize } from "lodash";
 import { SetStateAction } from "react";
 
 import { PasswordModal } from "../../../../../common/components";
@@ -6,7 +5,7 @@ import { PasswordModal } from "../../../../../common/components";
 import * as Styled from "./VoteForm.styled";
 
 type Props = {
-  tab: string;
+  voteType: string;
   loading: boolean;
   isVotesChanged: boolean;
   isPassModalVisible: boolean;
@@ -14,7 +13,6 @@ type Props = {
   resetChanges: () => void;
   confirm: () => void;
   publishChanges: (name: string, info: { values: any; forms: any }) => void;
-  handleVoteSearch: (name: string) => void;
   setIsPassModalVisible: (value: SetStateAction<boolean>) => void;
   // isChangeTableEmpty: boolean;
   // doAction: (txt: string, tableRow?: IVoteRow, tab?: string) => Promise<void>;
@@ -26,7 +24,7 @@ type Props = {
 };
 
 export const VoteForm = ({
-  tab,
+  voteType,
   loading,
   isVotesChanged,
   isPassModalVisible,
@@ -34,7 +32,6 @@ export const VoteForm = ({
   resetChanges,
   confirm,
   publishChanges,
-  handleVoteSearch,
   setIsPassModalVisible,
 }: // isChangeTableEmpty,
 Props): JSX.Element => {
@@ -91,13 +88,6 @@ Props): JSX.Element => {
   // }, [modalData]);
   return (
     <>
-      <Styled.Title>Vote for {capitalize(tab)}</Styled.Title>
-      <Styled.VoteSearch
-        size="large"
-        placeholder="Search account"
-        onSearch={handleVoteSearch}
-        loading={loading}
-      />
       <Styled.VoteForm.Provider onFormFinish={publishChanges}>
         <Styled.VoteForm
           //form={membershipForm}
