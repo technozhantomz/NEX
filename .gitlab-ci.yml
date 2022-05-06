@@ -13,12 +13,13 @@ cypress:
   image: cypress/browsers:latest
   stage: test
   script:
+    - npm i -g npm@latest
     - npm ci
     - npx cypress run --browser firefox 
 
-sast:
-  stage: test
+# sast:
+#   stage: test
 
-include:
-- template: Security/SAST.gitlab-ci.yml
-- template: Security/Dependency-Scanning.gitlab-ci.yml
+# include:
+# - template: Security/SAST.gitlab-ci.yml
+# - template: Security/Dependency-Scanning.gitlab-ci.yml
