@@ -12,11 +12,16 @@ default:
   tags:
     - q7r
 
+# https://github.com/cypress-io/cypress-docker-images/blob/master/browsers/node16.14.0-chrome99-ff97/Dockerfile
+# https://github.com/cypress-io/cypress-docker-images/blob/master/base/16.14.0-slim/Dockerfile
+
 cypress:
   image: cypress/browsers:node16.14.0-chrome99-ff97
   stage: test
   script:
-    #- npm i -g npm@latest
+    - apt-get update && apt-get install -y git
+    # - git --version
+    # npm package installation requires git from package.json
     - npm install
     - npx cypress run --browser firefox 
 
