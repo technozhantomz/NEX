@@ -9,9 +9,9 @@ stages:
   # - qqqq
   - test
 
-default:
-  tags:
-    - q7r33
+# default:
+#   tags:
+#     - q7r
 
 
 # before_script:
