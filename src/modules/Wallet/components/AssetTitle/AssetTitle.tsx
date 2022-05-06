@@ -12,11 +12,11 @@ export const AssetTitle = ({ symbol }: Props): JSX.Element => {
   const icons: {
     [symbol: string]: JSX.Element;
   } = {
-    BTC: <BitcoinIcon height="30" width="30" />,
-    TEST: <PPYIcon height="30" width="30" />,
-    PPY: <PPYIcon height="30" width="30" />,
-    HIVE: <HIVEIcon height="30" width="30" />,
-    HBD: <HIVEIcon height="30" width="30" />,
+    BTC: <BitcoinIcon height="30" width="30" style={{display: "flex"}} />,
+    TEST: <PPYIcon height="30" width="30" style={{display: "flex"}} />,
+    PPY: <PPYIcon height="30" width="30" style={{display: "flex"}} />,
+    HIVE: <HIVEIcon height="30" width="30" style={{display: "flex"}} />,
+    HBD: <HIVEIcon height="30" width="30" style={{display: "flex"}} />,
   };
   const AssetNames: {
     [symbol: string]: string;
