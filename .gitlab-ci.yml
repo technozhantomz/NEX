@@ -8,8 +8,9 @@
 stages:
 - test
 
-tags:
-  - q7r
+default:
+  tags:
+    - q7r
 
 cypress:
   image: cypress/browsers:node16.14.0-chrome99-ff97
