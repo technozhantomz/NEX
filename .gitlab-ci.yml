@@ -76,14 +76,14 @@ cypress:
     artifacts: true       # true by default, grabs `node_modules`
   script:
 
-    # - git --version
+    - git --version
     # npm package installation requires git from package.json
     # - npm install
     # - npx cypress run --browser firefox 
 
     # - du -sh node_modules
     # - ls node_modules/
-    - ls .npm
+    # - ls .npm
 
 # sast:
 #   stage: test
