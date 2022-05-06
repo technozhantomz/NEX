@@ -72,6 +72,7 @@ export type AccountOptions = {
   memo_key: string;
   num_committee: number;
   num_witness: number;
+  num_son: number;
   votes: string[];
   voting_account: string;
 };

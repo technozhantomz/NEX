@@ -56,7 +56,6 @@ Props): JSX.Element => {
     submittingPassword,
     localApprovedVotes,
     localNotApprovedVotes,
-    allMembersVotes,
     voteSearchValue,
     approveVote,
     removeVote,

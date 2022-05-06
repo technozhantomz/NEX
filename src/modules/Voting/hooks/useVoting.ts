@@ -1,15 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { isArrayEqual } from "../../../api/utils";
-import { useAccount, useAsset, useMembers } from "../../../common/hooks";
+import {
+  useAccount,
+  useAsset,
+  useMembers,
+  useTransactionBuilder,
+  useVoteTransactionBuilder,
+} from "../../../common/hooks";
 import { useUserContext } from "../../../common/providers";
-import { Asset, FullAccount, Vote } from "../../../common/types";
+import { Account, Asset, FullAccount, Vote } from "../../../common/types";
 import { VoteRow } from "../types";
 
 import { UseVotingResult } from "./useVoting.types";
 
 // should add tab: string for the arg, to use in publish function
 export function useVoting(voteType: string): UseVotingResult {
+  const [account, setAccount] = useState<Account>();
   const [fullAccount, setFullAccount] = useState<FullAccount>();
   const [serverApprovedVotes, setServerApprovedVotes] = useState<VoteRow[]>([]);
   const [localApprovedVotes, setLocalApprovedVotes] = useState<VoteRow[]>([]);
@@ -23,10 +30,12 @@ export function useVoting(voteType: string): UseVotingResult {
   const [isPassModalVisible, setIsPassModalVisible] = useState<boolean>(false);
   const [submittingPassword, setSubmittingPassword] = useState<boolean>(false);
 
-  const { localStorageAccount } = useUserContext();
-  const { getFullAccount } = useAccount();
+  const { localStorageAccount, id } = useUserContext();
+  const { getPrivateKey, getAccountByName, getFullAccount } = useAccount();
   const { getCommittees, getSons, getWitnesses } = useMembers();
   const { defaultAsset, formAssetBalanceById } = useAsset();
+  const { buildVoteTransaction } = useVoteTransactionBuilder();
+  const { buildTrx } = useTransactionBuilder();
 
   const confirm = () => {
     if (isVotesChanged) setIsPassModalVisible(true);
@@ -42,12 +51,54 @@ export function useVoting(voteType: string): UseVotingResult {
     }
   };
 
-  const handlePublishChanges = (password: string) => {
+  const handlePublishChanges = async (password: string) => {
     setSubmittingPassword(true);
-    console.log(password);
-    console.log(serverApprovedVotes);
-    console.log(localApprovedVotes);
-    setSubmittingPassword(false);
+    const currentVotes: string[] = [
+      ...localApprovedVotes.map((vote) => vote.id),
+      ...serverApprovedVotes
+        .filter((serverVote) =>
+          localNotApprovedVotes.forEach(
+            (removeVote) => serverVote.id !== removeVote.id
+          )
+        )
+        .map((vote) => vote.id),
+    ];
+    const newVoteOptions = (account as Account).options;
+    newVoteOptions.votes = (currentVotes as string[])
+      .filter((vote, index) => currentVotes.indexOf(vote) === index)
+      .sort((a, b) => {
+        const aSplit = a.split(":");
+        const bSplit = b.split(":");
+
+        return parseInt(aSplit[1], 10) - parseInt(bSplit[1], 10);
+      });
+    newVoteOptions.num_witness = currentVotes.filter(
+      (vote) => parseInt(vote.split(":")[0]) === 1
+    ).length;
+    newVoteOptions.num_committee = currentVotes.filter(
+      (vote) => parseInt(vote.split(":")[0]) === 0
+    ).length;
+    newVoteOptions.num_son = currentVotes.filter(
+      (vote) => parseInt(vote.split(":")[0]) === 3
+    ).length;
+
+    const trx = buildVoteTransaction(
+      { value: { update_last_voting_time: true } },
+      newVoteOptions,
+      id
+    );
+    const activeKey = getPrivateKey(password, "active");
+    let trxResult;
+    try {
+      trxResult = await buildTrx([trx], [activeKey]);
+    } catch (error) {
+      console.log(error);
+    }
+    if (trxResult) {
+      getVotes();
+      setSubmittingPassword(false);
+      setIsPassModalVisible(false);
+    }
   };
 
   const handleVoteSearch = useCallback(
@@ -119,31 +170,17 @@ export function useVoting(voteType: string): UseVotingResult {
   const getVotes = useCallback(async () => {
     try {
       setLoading(true);
+      const account = await getAccountByName(localStorageAccount);
       const fullAccount = await getFullAccount(localStorageAccount, false);
+      setAccount(account);
       setFullAccount(fullAccount);
-
       let allMembers: Vote[] = [];
       let allMembersIds: [string, string][] = [];
       const { committees, committeesIds } = await getCommittees();
       const { sons, sonsIds } = await getSons();
       const { witnesses, witnessesIds } = await getWitnesses();
-      switch (true) {
-        case voteType === "committees":
-          allMembers = [...committees];
-          allMembersIds = [...committeesIds];
-          break;
-        case voteType === "sons":
-          allMembers = [...sons];
-          allMembersIds = [...sonsIds];
-          break;
-        case voteType === "witnessess":
-          allMembers = [...witnesses];
-          allMembersIds = [...witnessesIds];
-          break;
-        default:
-          allMembers = [...committees, ...sons, ...witnesses];
-          allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
-      }
+      allMembers = [...committees, ...sons, ...witnesses];
+      allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
 
       const allMembersVotes = await Promise.all(
         allMembers.map((member) => {
@@ -170,6 +207,7 @@ export function useVoting(voteType: string): UseVotingResult {
   }, [
     setLoading,
     localStorageAccount,
+    setAccount,
     setFullAccount,
     getCommittees,
     getSons,
