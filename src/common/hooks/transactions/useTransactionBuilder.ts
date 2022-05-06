@@ -34,7 +34,7 @@ export function useTransactionBuilder(): ITransactionBuilder {
         feeAmounts.forEach((amount) => {
           feeAmount += amount;
         });
-        const fee = setPrecision(true, feeAmount, defaultAsset?.precision);
+        const fee = setPrecision(true, feeAmount, defaultAsset.precision);
         return fee;
       }
     },

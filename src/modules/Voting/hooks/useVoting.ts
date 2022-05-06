@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { isArrayEqual } from "../../../api/utils";
-import { useAccount, useAsset, useMembers } from "../../../common/hooks";
+import {
+  useAccount,
+  useAsset,
+  useMembers,
+  useUpdateAccountTransactionBuilder,
+} from "../../../common/hooks";
 import { useUserContext } from "../../../common/providers";
 import { Asset, FullAccount, Vote } from "../../../common/types";
 import { VoteRow } from "../types";
@@ -14,33 +19,80 @@ export function useVoting(): UseVotingResult {
   const [serverApprovedVotes, setServerApprovedVotes] = useState<VoteRow[]>([]);
   const [localApprovedVotes, setLocalApprovedVotes] = useState<VoteRow[]>([]);
   const [allMembersVotes, setAllMembersVotes] = useState<VoteRow[]>([]);
+  const [allMembers, setAllMembers] = useState<Vote[]>([]);
   const [isVotesChanged, setIsVotesChanged] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [voteSearchValue, setVoteSearchValue] = useState<string>("");
-  const [isPassModalVisible, setIsPassModalVisible] = useState<boolean>(false);
-  const [submittingPassword, setSubmittingPassword] = useState<boolean>(false);
+  const [sonsFee, setSonsFee] = useState<number>(0);
 
-  const { localStorageAccount } = useUserContext();
+  const { localStorageAccount, id } = useUserContext();
   const { getFullAccount } = useAccount();
   const { getCommittees, getSons, getWitnesses } = useMembers();
   const { defaultAsset, formAssetBalanceById } = useAsset();
+  const { buildUpdateAccountTransaction } =
+    useUpdateAccountTransactionBuilder();
 
-  const confirm = () => {
-    console.log("confirm");
-    if (isVotesChanged) setIsPassModalVisible(true);
-  };
+  const getSelectedTabUpdateAccountTrx = useCallback(
+    (memberIdentifier: 1 | 0 | 3) => {
+      if (fullAccount !== undefined) {
+        const new_options = fullAccount.account.options;
 
-  const publishChanges = (name: string, info: { values: any; forms: any }) => {
-    const { values, forms } = info;
-    const { passwordModal } = forms;
-    if (name === "passwordModal") {
-      passwordModal.validateFields().then(() => {
-        setSubmittingPassword(true);
-        console.log(values.password);
-        setSubmittingPassword(false);
-      });
-    }
-  };
+        const serverApprovedMembers = allMembers.filter((member) =>
+          serverApprovedVotes.map((vote) => vote.id).includes(member.vote_id)
+        );
+
+        const localApprovedMembers = allMembers.filter((member) =>
+          localApprovedVotes.map((vote) => vote.id).includes(member.vote_id)
+        );
+
+        const selectedTabLocalApprovedMembersIds = localApprovedMembers
+          .filter(
+            (approvedMember) =>
+              parseInt(approvedMember.vote_id.split(":")[0]) ===
+              memberIdentifier
+          )
+          .map((selectedMember) => selectedMember.vote_id);
+
+        const otherTabsServerApprovedMembersIds = serverApprovedMembers
+          .filter(
+            (approvedMember) =>
+              parseInt(approvedMember.vote_id.split(":")[0]) !==
+              memberIdentifier
+          )
+          .map((otherMember) => otherMember.vote_id);
+        new_options.votes = otherTabsServerApprovedMembersIds
+          .concat(selectedTabLocalApprovedMembersIds)
+          .sort((a, b) => {
+            const aSplit = a.split(":");
+            const bSplit = b.split(":");
+
+            return parseInt(aSplit[1], 10) - parseInt(bSplit[1], 10);
+          });
+        const trx = buildUpdateAccountTransaction(
+          {
+            new_options,
+            extensions: { value: { update_last_voting_time: true } },
+          },
+          id
+        );
+        return trx;
+      }
+    },
+    [
+      fullAccount,
+      allMembers,
+      serverApprovedVotes,
+      localApprovedVotes,
+      buildUpdateAccountTransaction,
+      id,
+    ]
+  );
+
+  // const getSelectedTabUpdateAccountFee = useCallback((memberIdentifier: 1 | 0 | 3) => {
+  //   const trx =
+  // }, [
+  //   getSelectedTabUpdateAccountTrx,
+  // ]);
 
   const handleVoteSearch = useCallback(
     (name: string) => {
@@ -110,6 +162,7 @@ export function useVoting(): UseVotingResult {
       allMembers = [...committees, ...sons, ...witnesses];
       allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
 
+      setAllMembers(allMembers);
       const allMembersVotes = await Promise.all(
         allMembers.map((member) => {
           return formVoteRow(member, allMembersIds, "add");
@@ -140,6 +193,7 @@ export function useVoting(): UseVotingResult {
     getSons,
     getWitnesses,
     formVoteRow,
+    setAllMembers,
     setAllMembersVotes,
     setServerApprovedVotes,
     setLocalApprovedVotes,
@@ -213,14 +267,9 @@ export function useVoting(): UseVotingResult {
     isVotesChanged,
     allMembersVotes,
     voteSearchValue,
-    isPassModalVisible,
-    submittingPassword,
-    confirm,
-    publishChanges,
     approveVote,
     removeVote,
     resetChanges,
     handleVoteSearch,
-    setIsPassModalVisible,
   };
 }

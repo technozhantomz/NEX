@@ -1,7 +1,4 @@
 import { capitalize } from "lodash";
-import { SetStateAction } from "react";
-
-import { PasswordModal } from "../../../../../common/components";
 
 import * as Styled from "./VoteForm.styled";
 
@@ -9,86 +6,17 @@ type Props = {
   tab: string;
   loading: boolean;
   isVotesChanged: boolean;
-  isPassModalVisible: boolean;
-  submittingPassword: boolean;
   resetChanges: () => void;
-  confirm: () => void;
-  publishChanges: (name: string, info: { values: any; forms: any }) => void;
   handleVoteSearch: (name: string) => void;
-  setIsPassModalVisible: (value: SetStateAction<boolean>) => void;
-  // isChangeTableEmpty: boolean;
-  // doAction: (txt: string, tableRow?: IVoteRow, tab?: string) => Promise<void>;
-  // doSearch: (searchInput: string) => void;
-  // modalData: VoteModalData;
-  // isModalVisible: boolean;
-  // setIsModalVisible: (value: SetStateAction<boolean>) => void;
-  // sendVotes: (password: string) => Promise<void>;
 };
 
 export const VoteForm = ({
   tab,
   loading,
   isVotesChanged,
-  isPassModalVisible,
-  submittingPassword,
   resetChanges,
-  confirm,
-  publishChanges,
   handleVoteSearch,
-  setIsPassModalVisible,
-}: // isChangeTableEmpty,
-Props): JSX.Element => {
-  // const [searchValue, setSearchValue] = useState<string>("");
-  // //const [, updateState] = useState();
-  // //const forceUpdate = useCallback(() => updateState({}), []);
-  // const modalDataSource = useRef<any[]>([]);
-  // useEffect(() => {
-  //   doSearch(searchValue);
-  // }, [searchValue]);
-  // useEffect(() => {
-  //   if (tab === "Proxy") {
-  //     modalDataSource.current = [
-  //       {
-  //         key: "1",
-  //         colName: "Account Name",
-  //         colData: modalData.account,
-  //       },
-  //       {
-  //         key: "2",
-  //         colName: "Proxy Voting Account",
-  //         colData: modalData.proxy,
-  //       },
-  //       {
-  //         key: "3",
-  //         colName: `Desired # of ${tab}`,
-  //         colData: modalData.candidateCount,
-  //       },
-  //       {
-  //         key: "4",
-  //         colName: "Fee",
-  //         colData: `${modalData.fee} PPY`,
-  //       },
-  //     ];
-  //   } else {
-  //     modalDataSource.current = [
-  //       {
-  //         key: "1",
-  //         colName: "Account Name",
-  //         colData: modalData.account,
-  //       },
-  //       {
-  //         key: "2",
-  //         colName: `Desired # of ${tab}`,
-  //         colData: modalData.candidateCount,
-  //       },
-  //       {
-  //         key: "3",
-  //         colName: "Fee",
-  //         colData: `${modalData.fee} PPY`,
-  //       },
-  //     ];
-  //   }
-  // }, [modalData]);
+}: Props): JSX.Element => {
   return (
     <>
       <Styled.Title>Vote for {capitalize(tab)}</Styled.Title>
@@ -98,11 +26,10 @@ Props): JSX.Element => {
         onSearch={handleVoteSearch}
         loading={loading}
       />
-      <Styled.VoteForm.Provider onFormFinish={publishChanges}>
+      <Styled.VoteForm.Provider>
         <Styled.VoteForm
           //form={membershipForm}
           name="voteForm"
-          onFinish={confirm}
         >
           {/* <MembershipModal
             visible={isMembershipModalVisible}
@@ -233,13 +160,13 @@ Props): JSX.Element => {
           }
         }}
       > */}
-      <PasswordModal
+      {/* <PasswordModal
         visible={isPassModalVisible}
         onCancel={() => {
           setIsPassModalVisible(false);
         }}
         submitting={submittingPassword}
-      />
+      /> */}
       {/* </Styled.Form.Provider> */}
     </>
   );

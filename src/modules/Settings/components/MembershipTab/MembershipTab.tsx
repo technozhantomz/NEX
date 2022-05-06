@@ -184,7 +184,6 @@ export const MembershipTab = (): JSX.Element => {
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={hidePasswordModal}
-            submitting={loadingTransaction}
           />
           <TransactionModal
             visible={isTransactionModalVisible}
