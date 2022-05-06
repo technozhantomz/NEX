@@ -2,25 +2,18 @@ import Link from "next/link";
 import React from "react";
 
 import { defaultToken } from "../../../../api/params";
-import { PasswordModal } from "../../../../common/components";
+import { PasswordModal, TransactionModal } from "../../../../common/components";
+import { useHandleTransactionForm } from "../../../../common/hooks";
 
 import * as Styled from "./MembershipTab.styled";
-import { MembershipModal } from "./components/MembershipModal";
 import { useMembershipTab } from "./hooks/useMembershipTab";
 
 export const MembershipTab = (): JSX.Element => {
   const {
-    handleMembershipModalCancel,
-    handleMembershipModalConfirm,
     transactionErrorMessage,
     transactionSuccessMessage,
     loadingTransaction,
-    isMembershipModalVisible,
-    isPasswordModalVisible,
-    handlePasswordModalCancel,
-    onFormFinish,
     membershipForm,
-    confirm,
     name,
     feesCashback,
     membershipPrice,
@@ -39,35 +32,41 @@ export const MembershipTab = (): JSX.Element => {
     registrarName,
     paidFees,
     expirationDate,
+    loadingAccountMembership,
+    handleMembershipUpgrade,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
   } = useMembershipTab();
+
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleMembershipUpgrade,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
 
   const { origin } = window.location;
   const link = origin;
 
   return (
     <Styled.MembershipCard>
-      <Styled.MembershipForm.Provider onFormFinish={onFormFinish}>
+      <Styled.MembershipForm.Provider onFormFinish={handleFormFinish}>
         <Styled.MembershipForm
           form={membershipForm}
           name="membershipForm"
-          onFinish={confirm}
+          onFinish={showPasswordModal}
         >
-          <MembershipModal
-            visible={isMembershipModalVisible}
-            onCancel={handleMembershipModalCancel}
-            handleOk={handleMembershipModalConfirm}
-            transactionErrorMessage={transactionErrorMessage}
-            transactionSuccessMessage={transactionSuccessMessage}
-            loadingTransaction={loadingTransaction}
-            account={name}
-            fee={membershipPrice}
-          />
-
           <Styled.Space direction="vertical">
             {!isLifetimeMember ? (
               <Styled.Space direction="vertical">
                 <Styled.Heading>
-                  {`Upgrade for ${feesCashback} Cashback`}
+                  {`Upgrade for ${feesCashback}% Cashback`}
                 </Styled.Heading>
                 <Styled.Paragraph>
                   Every transaction on the Peerplays network is divided between
@@ -82,7 +81,11 @@ export const MembershipTab = (): JSX.Element => {
                   it is only {`${membershipPrice} ${defaultToken}`} .
                 </Styled.Paragraph>
                 <Styled.ButtonContainer>
-                  <Styled.Button type="primary" htmlType="submit">
+                  <Styled.Button
+                    type="primary"
+                    htmlType="submit"
+                    disabled={loadingAccountMembership}
+                  >
                     Buy lifetime subscription
                   </Styled.Button>
                 </Styled.ButtonContainer>
@@ -91,8 +94,7 @@ export const MembershipTab = (): JSX.Element => {
               <Styled.Space direction="vertical">
                 <Styled.Label>Your referral link</Styled.Label>
                 <Styled.Paragraph>
-                  Give this to link to people you want to refer to Peerplays:{" "}
-                  {`${link}/signup/?r=${name}`}
+                  {`Give this to link to people you want to refer to Peerplays: ${link}/signup/?r=${name}`}
                 </Styled.Paragraph>
               </Styled.Space>
             )}
@@ -114,9 +116,7 @@ export const MembershipTab = (): JSX.Element => {
                 <Styled.Label>Network</Styled.Label> <br />
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
-                <Styled.PercentageText>
-                  {`${networkFee}%`}
-                </Styled.PercentageText>
+                <Styled.PercentageText>{networkFee}%</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
@@ -127,9 +127,7 @@ export const MembershipTab = (): JSX.Element => {
                 </Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
-                <Styled.PercentageText>
-                  {`${lifetimeFee}%`}
-                </Styled.PercentageText>
+                <Styled.PercentageText>{lifetimeFee}%</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
@@ -138,9 +136,7 @@ export const MembershipTab = (): JSX.Element => {
                 <Link href={`/user/${registrarName}`}>{registrarName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
-                <Styled.PercentageText>
-                  {`${registrarFee}%`}
-                </Styled.PercentageText>
+                <Styled.PercentageText>{registrarFee}%</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
@@ -149,9 +145,7 @@ export const MembershipTab = (): JSX.Element => {
                 <Link href={`/user/${referrerName}`}>{referrerName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
-                <Styled.PercentageText>
-                  {`${referrerFee}%`}
-                </Styled.PercentageText>
+                <Styled.PercentageText>{referrerFee}%</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
@@ -159,18 +153,14 @@ export const MembershipTab = (): JSX.Element => {
                 <Styled.Label>Membership expiration</Styled.Label> <br />
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
-                <Styled.PercentageText>
-                  {`${expirationDate}`}
-                </Styled.PercentageText>
+                <Styled.PercentageText>{expirationDate}</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
-
             <Styled.Heading>Fee statistics</Styled.Heading>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
                 <Styled.Label>Total fees paid</Styled.Label> <br />
               </Styled.LabelContainer>
-
               <Styled.PercentageContainer>
                 <Styled.PercentageText>
                   {`${paidFees} ${defaultToken}`}
@@ -179,24 +169,32 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.Heading>Pending fees</Styled.Heading>
             <Styled.Paragraph>
-              Fees paid by {`< ${name} >`} are divided among the network,
-              referrers, and registrars once every maintenance interval (
-              {`${maintenanceInterval} `}
-              seconds). The next maintenance time is {` ${nextMaintenanceTime}`}
-              .
+              {`Fees paid by ${name} are divided among the network, referrers, and registrars 
+              once every maintenance interval (${maintenanceInterval} seconds). 
+              The next maintenance time is ${nextMaintenanceTime}.`}
             </Styled.Paragraph>
             <Styled.Heading>Vesting fees</Styled.Heading>
             <Styled.Paragraph>
-              Most fees are made available immediately, but fees over{" "}
-              {` ${vestingThreshold} ${defaultToken} `}
-              (such as those paid to upgrade your membership or register a
-              premium account name) must vest for a total of{" "}
-              {` ${vestingPeriod} `} days.
+              {`Most fees are made available immediately, 
+              but fees over ${vestingThreshold} ${defaultToken} 
+              (such as those paid to upgrade your membership or register a premium account name) 
+              must vest for a total of ${vestingPeriod} days.`}
             </Styled.Paragraph>
           </Styled.Space>
           <PasswordModal
             visible={isPasswordModalVisible}
-            onCancel={handlePasswordModalCancel}
+            onCancel={hidePasswordModal}
+            submitting={loadingTransaction}
+          />
+          <TransactionModal
+            visible={isTransactionModalVisible}
+            onCancel={hideTransactionModal}
+            transactionErrorMessage={transactionErrorMessage}
+            transactionSuccessMessage={transactionSuccessMessage}
+            loadingTransaction={loadingTransaction}
+            account={name}
+            fee={membershipPrice}
+            transactionType="account_upgrade"
           />
         </Styled.MembershipForm>
       </Styled.MembershipForm.Provider>

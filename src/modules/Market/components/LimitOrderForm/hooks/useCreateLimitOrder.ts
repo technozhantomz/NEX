@@ -36,7 +36,7 @@ export function useCreateLimitOrder({
   const { getPrivateKey, formAccountBalancesByName } = useAccount();
   const { calculateCreateLimitOrderFee } = useFees();
   const { localStorageAccount, assets, id } = useUserContext();
-  const { trxBuilder } = useTransactionBuilder();
+  const { buildTrx } = useTransactionBuilder();
 
   const { buildCreateLimitOrderTransaction } =
     useLimitOrderTransactionBuilder();
@@ -205,7 +205,7 @@ export function useCreateLimitOrder({
     let trxResult;
 
     try {
-      trxResult = await trxBuilder([trx], [activeKey]);
+      trxResult = await buildTrx([trx], [activeKey]);
     } catch (e) {
       console.log(e);
     }
