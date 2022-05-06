@@ -26,8 +26,9 @@ export const WalletCard = styled(UiCard)`
   .ant-table-wrapper {
     margin-left: 35px;
   }
+  border-radius: 4pt;
   .ant-card-body {
-    padding: 0;
+    padding: 0 0 68px 0;
     .ant-tabs-nav-list {
       justify-content: space-between;
       width: 100%;
@@ -35,6 +36,9 @@ export const WalletCard = styled(UiCard)`
     .ant-tabs-tab {
       justify-content: center;
       width: 100%;
+    }
+    .ant-tabs-nav {
+      margin-bottom: 0px;
     }
     .ant-tabs-nav-operations {
       display: none;
@@ -44,6 +48,9 @@ export const WalletCard = styled(UiCard)`
     }
     .ant-tabs-ink-bar {
       height: 2pt;
+    }
+    .ant-list-item {
+      border-bottom: 1px solid #f0f0f0;
     }
   }
   ${breakpoint.xs} {
