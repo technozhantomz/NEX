@@ -6,7 +6,6 @@ import * as Styled from "./VoteForm.styled";
 
 type Props = {
   voteType: string;
-  loading: boolean;
   isVotesChanged: boolean;
   isPassModalVisible: boolean;
   submittingPassword: boolean;
@@ -18,7 +17,6 @@ type Props = {
 
 export const VoteForm = ({
   voteType,
-  loading,
   isVotesChanged,
   isPassModalVisible,
   submittingPassword,
@@ -26,26 +24,11 @@ export const VoteForm = ({
   confirm,
   publishChanges,
   setIsPassModalVisible,
-}:
-Props): JSX.Element => {
+}: Props): JSX.Element => {
   return (
     <>
       <Styled.VoteForm.Provider onFormFinish={publishChanges}>
-        <Styled.VoteForm
-          //form={membershipForm}
-          name={`${voteType}VoteForm`}
-          onFinish={confirm}
-        >
-          {/* <MembershipModal
-            visible={isMembershipModalVisible}
-            onCancel={handleMembershipModalCancel}
-            handleOk={handleMembershipModalConfirm}
-            transactionErrorMessage={transactionErrorMessage}
-            transactionSuccessMessage={transactionSuccessMessage}
-            loadingTransaction={loadingTransaction}
-            account={name}
-            fee={membershipPrice}
-          /> */}
+        <Styled.VoteForm name={`${voteType}VoteForm`} onFinish={confirm}>
           <Styled.ActionsContainer>
             {!isVotesChanged ? (
               <Styled.CardFormLinkButtonDisabled>

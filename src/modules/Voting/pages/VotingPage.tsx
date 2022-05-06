@@ -1,3 +1,4 @@
+import { capitalize } from "lodash";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -5,7 +6,7 @@ import { useState } from "react";
 import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
 import { Button, DownOutlined, Menu, Tabs } from "../../../ui/src";
-import { GPOSTab, ProxyTab } from "../components";
+import { GPOSTab, ProxyTab, VoteTab } from "../components";
 
 import * as Styled from "./VotingPage.styled";
 import { useVotingPage } from "./hooks";
@@ -18,6 +19,12 @@ const VotingPage: NextPage = () => {
   const { pageMeta } = useVotingPage(tab as string);
   const { sm } = useViewportContext();
   const [visible, setVisible] = useState<boolean>(false);
+  const voteTabs: ("witnesses" | "sons" | "committees")[] = [
+    "witnesses",
+    "sons",
+    "committees",
+  ];
+
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
       {sm ? (
@@ -66,15 +73,11 @@ const VotingPage: NextPage = () => {
           <TabPane tab="GPOS" key="gpos">
             <GPOSTab />
           </TabPane>
-          <TabPane tab="Witness" key="witness">
-            <p>witness</p>
-          </TabPane>
-          <TabPane tab="SONs" key="sons">
-            <p>sons</p>
-          </TabPane>
-          <TabPane tab="Advisors" key="advisors">
-            <p>advisors</p>
-          </TabPane>
+          {voteTabs.map((voteType) => (
+            <TabPane tab={capitalize(voteType)} key={voteType}>
+              <VoteTab voteType={""} />
+            </TabPane>
+          ))}
           <TabPane tab="Proxy" key="proxy">
             <ProxyTab />
           </TabPane>

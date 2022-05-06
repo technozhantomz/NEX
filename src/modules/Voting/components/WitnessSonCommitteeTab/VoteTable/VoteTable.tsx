@@ -37,68 +37,54 @@ export const VoteTable = ({
       </Styled.Title>
       <Styled.Container>
         {xs ? (
-          // <Styled.VoteList
-          //   itemLayout="vertical"
-          //   dataSource={votes}
-          //   loading={loading}
-          //   pagination={{ position: "bottom", size: "small", pageSize: 20 }}
-          //   renderItem={(item) => (
-          //     <Styled.VoteListItem
-          //       key={item.key}
-          //       actions={
-          //         tableType == "approved"
-          //           ? [
-          //               <Styled.VoteActionButton
-          //                 onClick={() => doAction("REMOVE", item)}
-          //               >
-          //                 {"REMOVE VOTE"}
-          //               </Styled.VoteActionButton>,
-          //             ]
-          //           : tableType == "notapproved"
-          //           ? [
-          //               <Styled.VoteActionButton
-          //                 onClick={() => doAction("ADD", item)}
-          //               >
-          //                 {"ADD VOTE"}
-          //               </Styled.VoteActionButton>,
-          //             ]
-          //           : [
-          //               <Styled.VoteActionButton
-          //                 onClick={() => doAction("UNDO", item)}
-          //               >
-          //                 {"UNDO"}
-          //               </Styled.VoteActionButton>,
-          //             ]
-          //       }
-          //     >
-          //       <Styled.VoteItemContent>
-          //         <div className="asset-info">
-          //           <span className="asset-info-title">{columns[0].title}</span>
-          //           <span className="asset-info-value">{item.name}</span>
-          //         </div>
-          //         <div className="asset-info">
-          //           <span className="asset-info-title">{columns[1].title}</span>
-          //           <span className="asset-info-value">{item.webpage}</span>
-          //         </div>
-          //         <div className="asset-info">
-          //           <span className="asset-info-title">{columns[2].title}</span>
-          //           <span className="asset-info-value">{item.votes}</span>
-          //         </div>
-          //         {tableType === "changes" ? (
-          //           <div className="asset-info">
-          //             <span className="asset-info-title">
-          //               {columnsWithPending[4].title}
-          //             </span>
-          //             <span className="asset-info-value">{item.action}</span>
-          //           </div>
-          //         ) : (
-          //           ""
-          //         )}
-          //       </Styled.VoteItemContent>
-          //     </Styled.VoteListItem>
-          //   )}
-          // />
-          ""
+          <Styled.VoteList
+            itemLayout="vertical"
+            dataSource={votes}
+            loading={loading}
+            pagination={{ position: "bottom", size: "small", pageSize: 20 }}
+            renderItem={(item) => (
+              <Styled.VoteListItem key={(item as VoteRow).key}>
+                <Styled.VoteItemContent>
+                  <div className="asset-info">
+                    <span className="asset-info-title">{columns[0].title}</span>
+                    <span className="asset-info-value">
+                      {(item as VoteRow).name}
+                    </span>
+                  </div>
+                  <div className="asset-info">
+                    <span className="asset-info-title">{columns[1].title}</span>
+                    <span className="asset-info-value">
+                      {(item as VoteRow).website}
+                    </span>
+                  </div>
+                  <div className="asset-info">
+                    <span className="asset-info-title">{columns[2].title}</span>
+                    <span className="asset-info-value">
+                      {(item as VoteRow).votes}
+                    </span>
+                  </div>
+                  <div className="asset-info">
+                    <span className="asset-info-title">{columns[3].title}</span>
+                    <span className="asset-info-value">
+                      {type === "approved" ? (
+                        <Styled.VoteActionButton
+                          onClick={() => removeVote((item as VoteRow).id)}
+                        >
+                          REMOVE
+                        </Styled.VoteActionButton>
+                      ) : (
+                        <Styled.VoteActionButton
+                          onClick={() => approveVote((item as VoteRow).id)}
+                        >
+                          ADD
+                        </Styled.VoteActionButton>
+                      )}
+                    </span>
+                  </div>
+                </Styled.VoteItemContent>
+              </Styled.VoteListItem>
+            )}
+          />
         ) : (
           <Styled.VoteTable
             columns={columns}
