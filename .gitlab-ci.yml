@@ -13,8 +13,8 @@ cypress:
   image: cypress/browsers:node16.14.0-chrome99-ff97
   stage: test
   script:
-    - npm i -g npm@latest
-    - npm clean-install
+    #- npm i -g npm@latest
+    - npm install
     - npx cypress run --browser firefox 
 
 # sast:
