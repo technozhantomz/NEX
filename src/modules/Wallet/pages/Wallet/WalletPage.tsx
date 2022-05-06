@@ -6,7 +6,7 @@ import { ActivityTable, Layout } from "../../../../common/components";
 import { AssetsTable } from "../../components/AssetsTable";
 
 import * as Styled from "./WalletPage.styled";
-d
+
 const { TabPane } = Styled.Tabs;
 
 const WalletPage: NextPage = () => {
