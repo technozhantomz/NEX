@@ -14,7 +14,7 @@ cypress:
   stage: test
   script:
     - npm i -g npm@latest
-    - npm install
+    - npm clean-install
     - npx cypress run --browser firefox 
 
 # sast:
