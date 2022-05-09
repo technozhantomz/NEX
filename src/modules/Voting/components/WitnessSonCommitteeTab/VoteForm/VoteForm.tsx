@@ -1,34 +1,80 @@
-import { SetStateAction } from "react";
+import { capitalize } from "lodash";
+import { Dispatch, SetStateAction } from "react";
 
-import { PasswordModal } from "../../../../../common/components";
+import {
+  PasswordModal,
+  TransactionModal,
+} from "../../../../../common/components";
+import { useHandleTransactionForm } from "../../../../../common/hooks";
+import { Proxy } from "../../../../../common/types";
 
 import * as Styled from "./VoteForm.styled";
+import { useVoteForm } from "./hooks";
 
 type Props = {
-  voteType: string;
+  tab: string;
+  loading: boolean;
   isVotesChanged: boolean;
-  isPassModalVisible: boolean;
-  submittingPassword: boolean;
   resetChanges: () => void;
-  confirm: () => void;
-  publishChanges: (name: string, info: { values: any; forms: any }) => void;
-  setIsPassModalVisible: (value: SetStateAction<boolean>) => void;
+  handleVoteSearch: (name: string) => void;
+  handlePublishChanges: (password: string) => Promise<void>;
+  loadingTransaction: boolean;
+  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
+  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  transactionErrorMessage: string;
+  transactionSuccessMessage: string;
+  name: string;
+  updateAccountFee: number;
+  proxy: Proxy;
+  desiredMembers: number;
 };
 
 export const VoteForm = ({
-  voteType,
+  tab,
+  loading,
   isVotesChanged,
-  isPassModalVisible,
-  submittingPassword,
   resetChanges,
-  confirm,
-  publishChanges,
-  setIsPassModalVisible,
+  handleVoteSearch,
+  setTransactionErrorMessage,
+  setTransactionSuccessMessage,
+  handlePublishChanges,
+  transactionErrorMessage,
+  transactionSuccessMessage,
+  loadingTransaction,
+  name,
+  updateAccountFee,
+  proxy,
+  desiredMembers,
 }: Props): JSX.Element => {
+  const { voteForm } = useVoteForm();
+
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handlePublishChanges,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
   return (
     <>
-      <Styled.VoteForm.Provider onFormFinish={publishChanges}>
-        <Styled.VoteForm name={`${voteType}VoteForm`} onFinish={confirm}>
+      <Styled.Title>Vote for {capitalize(tab)}</Styled.Title>
+      <Styled.VoteSearch
+        size="large"
+        placeholder="Search account"
+        onSearch={handleVoteSearch}
+        loading={loading}
+      />
+      <Styled.VoteForm.Provider onFormFinish={handleFormFinish}>
+        <Styled.VoteForm
+          form={voteForm}
+          name="voteForm"
+          onFinish={showPasswordModal}
+        >
           <Styled.ActionsContainer>
             {!isVotesChanged ? (
               <Styled.CardFormLinkButtonDisabled>
@@ -53,14 +99,24 @@ export const VoteForm = ({
               Publish Changes
             </Styled.Publish>
           </Styled.ActionsContainer>
+          <PasswordModal
+            visible={isPasswordModalVisible}
+            onCancel={hidePasswordModal}
+          />
+          <TransactionModal
+            visible={isTransactionModalVisible}
+            onCancel={hideTransactionModal}
+            transactionErrorMessage={transactionErrorMessage}
+            transactionSuccessMessage={transactionSuccessMessage}
+            loadingTransaction={loadingTransaction}
+            account={name}
+            fee={updateAccountFee}
+            transactionType="account_update"
+            proxy={proxy}
+            desiredMembers={desiredMembers}
+            memberType={tab}
+          />
         </Styled.VoteForm>
-        <PasswordModal
-          visible={isPassModalVisible}
-          onCancel={() => {
-            setIsPassModalVisible(false);
-          }}
-          submitting={submittingPassword}
-        />
       </Styled.VoteForm.Provider>
     </>
   );

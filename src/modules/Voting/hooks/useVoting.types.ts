@@ -1,23 +1,12 @@
-import { SetStateAction } from "react";
-
-import { VoteRow } from "../types";
+import { FullAccount, Proxy, Vote } from "../../../common/types";
 
 export type UseVotingResult = {
   loading: boolean;
-  serverApprovedVotes: VoteRow[];
-  localApprovedVotes: VoteRow[];
-  localNotApprovedVotes: VoteRow[];
-  allMembersVotes: VoteRow[];
-  isVotesChanged: boolean;
-  voteSearchValue: string;
-  isPassModalVisible: boolean;
-  submittingPassword: boolean;
-  confirm: () => void;
-  publishChanges: (name: string, info: { values: any; forms: any }) => void;
-  approveVote: (voteId: string) => void;
-  removeVote: (voteId: string) => void;
-  resetChanges: () => void;
-  handleVoteSearch: (name: string) => void;
-  setIsPassModalVisible: (value: SetStateAction<boolean>) => void;
-  filterLocalVotes: (voteRows: VoteRow[], searchValue: string) => VoteRow[];
+  serverApprovedVotes: Vote[];
+  allMembers: Vote[];
+  fullAccount: FullAccount | undefined;
+  getVotes: () => Promise<void>;
+  allMembersIds: [string, string][];
+  totalGpos: number;
+  proxy: Proxy;
 };

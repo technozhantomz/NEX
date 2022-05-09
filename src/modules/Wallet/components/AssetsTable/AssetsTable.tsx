@@ -42,7 +42,7 @@ export const AssetsTable = ({
       key: "change",
     },
     {
-      title: "Volume",
+      title: "Value (BTC)",
       dataIndex: "volume",
       key: "volume",
     },

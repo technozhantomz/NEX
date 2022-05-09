@@ -18,3 +18,4 @@ export * from "./GlobalProperties";
 export * from "./SonAccount";
 export * from "./WitnessAccount";
 export * from "./GPOS";
+export * from "./Proxy";

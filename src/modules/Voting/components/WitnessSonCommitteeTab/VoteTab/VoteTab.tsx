@@ -1,63 +1,126 @@
-import { capitalize } from "lodash";
-
 import { VoteForm, VoteTable } from "..";
-import { useVoting } from "../../../hooks";
+import { FullAccount, Vote } from "../../../../../common/types";
+import { Proxy } from "../../../types";
 
 import * as Styled from "./VoteTab.styled";
+import { useVoteTab } from "./hooks";
 
 type Props = {
-  voteType: string;
+  tab: string;
+  votesLoading: boolean;
+  serverApprovedVotes: Vote[];
+  allMembers: Vote[];
+  fullAccount: FullAccount | undefined;
+  getVotes: () => Promise<void>;
+  allMembersIds: [string, string][];
+  totalGpos: number;
+  proxy: Proxy;
 };
 
-export const VoteTab = ({ voteType }: Props): JSX.Element => {
+export const VoteTab = ({
+  tab,
+  votesLoading,
+  serverApprovedVotes,
+  allMembers,
+  fullAccount,
+  getVotes,
+  allMembersIds,
+  totalGpos,
+  proxy,
+}: Props): JSX.Element => {
   const {
     loading,
+    allMembersRows,
+    localApprovedRows,
     isVotesChanged,
-    isPassModalVisible,
-    submittingPassword,
-    localApprovedVotes,
-    localNotApprovedVotes,
+    handleVoteSearch,
     voteSearchValue,
     approveVote,
     removeVote,
-    handleVoteSearch,
     resetChanges,
-    confirm,
-    publishChanges,
-    setIsPassModalVisible,
-    filterLocalVotes,
-  } = useVoting(voteType);
+    handlePublishChanges,
+    loadingTransaction,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    transactionErrorMessage,
+    transactionSuccessMessage,
+    name,
+    updateAccountFee,
+  } = useVoteTab({
+    tab,
+    votesLoading,
+    serverApprovedVotes,
+    allMembers,
+    fullAccount,
+    getVotes,
+    allMembersIds,
+    totalGpos,
+  });
   return (
     <Styled.Container>
       <Styled.VoteTabCard>
-        <Styled.Title>Vote for {capitalize(voteType)}</Styled.Title>
+        {/* <Styled.Title>Vote for {capitalize(tab)}</Styled.Title>
         <Styled.VoteSearch
           size="large"
           placeholder="Search account"
           onSearch={handleVoteSearch}
-        />
+        /> */}
         <VoteForm
-          voteType={voteType}
+          tab={tab}
           loading={loading}
           isVotesChanged={isVotesChanged}
-          isPassModalVisible={isPassModalVisible}
-          submittingPassword={submittingPassword}
+          handleVoteSearch={handleVoteSearch}
           resetChanges={resetChanges}
-          confirm={confirm}
-          publishChanges={publishChanges}
-          setIsPassModalVisible={setIsPassModalVisible}
+          name={name}
+          handlePublishChanges={handlePublishChanges}
+          loadingTransaction={loadingTransaction}
+          setTransactionErrorMessage={setTransactionErrorMessage}
+          setTransactionSuccessMessage={setTransactionSuccessMessage}
+          transactionErrorMessage={transactionErrorMessage}
+          transactionSuccessMessage={transactionSuccessMessage}
+          updateAccountFee={updateAccountFee}
+          proxy={proxy}
+          desiredMembers={localApprovedRows.length}
         />
         <VoteTable
           type="approved"
-          loading={loading}
-          votes={filterLocalVotes(localApprovedVotes, voteSearchValue)}
+          loading={votesLoading || loading}
+          votes={
+            voteSearchValue === ""
+              ? localApprovedRows
+              : localApprovedRows.filter((approvedVote) =>
+                  approvedVote.name
+                    .toLowerCase()
+                    .startsWith(voteSearchValue.toLowerCase())
+                )
+          }
           approveVote={approveVote}
           removeVote={removeVote}
         />
         <VoteTable
           type="notApproved"
-          loading={loading}
-          votes={filterLocalVotes(localNotApprovedVotes, voteSearchValue)}
+          loading={votesLoading || loading}
+          votes={
+            voteSearchValue === ""
+              ? allMembersRows.filter(
+                  (vote) =>
+                    !localApprovedRows
+                      .map((approvedVote) => approvedVote.id)
+                      .includes(vote.id)
+                )
+              : allMembersRows
+                  .filter(
+                    (vote) =>
+                      !localApprovedRows
+                        .map((approvedVote) => approvedVote.id)
+                        .includes(vote.id)
+                  )
+                  .filter((notApprovedVote) =>
+                    notApprovedVote.name
+                      .toLowerCase()
+                      .startsWith(voteSearchValue.toLowerCase())
+                  )
+          }
           approveVote={approveVote}
           removeVote={removeVote}
         />
