@@ -1,4 +1,5 @@
 import { List } from "antd";
+import { useState } from "react";
 
 import { AvtivityInfo } from "../../../ActivityTable/components";
 import { useNotification } from "../../hooks";
@@ -14,15 +15,21 @@ export const NotificationList = ({
   userName,
   isWalletActivityTable = false,
 }: Props): JSX.Element => {
-  const { activitiesTable, loading } = useNotification({
+  const { activitiesTable, loading, recentActivitiesTable } = useNotification({
     userName,
     isWalletActivityTable,
   });
 
+  // localStorage.setItem("activityList", JSON.stringify(activitiesTable));
+  // // console.log(JSON.parse(localStorage.getItem("lastname")));
+  // // const arr = JSON.parse(localStorage.getItem("activityList"));
+  // const arrr = localStorage.getItem("activityList");
+  // console.log(JSON.parse(arrr));
+  console.log(recentActivitiesTable);
   return (
     <List
       itemLayout="vertical"
-      dataSource={activitiesTable}
+      dataSource={recentActivitiesTable}
       renderItem={(item) => (
         <Styled.ActivityListItem key={item.key}>
           <Styled.ActivitysItemContent>

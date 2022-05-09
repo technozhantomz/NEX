@@ -1,5 +1,5 @@
 import { ChainTypes } from "peerplaysjs-lib";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import { breakpoints } from "../../../../ui/src/breakpoints";
@@ -22,6 +22,7 @@ export function useNotification({
   isWalletActivityTable = false,
 }: UseActivityTableArgs): UseActivityTableResult {
   const [activitiesTable, _setActivitiesTable] = useState<ActivityRow[]>([]);
+  const [recentActivitiesTable, _setRecentActivitiesTable] = useState<ActivityRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { dbApi } = usePeerplaysApiContext();
   const { id } = useUserContext();
@@ -30,7 +31,11 @@ export function useNotification({
     useAsset();
   const { getUserNameById, getAccountByName } = useAccount();
   const { getAccountHistoryById } = useAccountHistory();
-  console.log(activitiesTable);
+  const ref = useRef()
+
+  
+  
+
   const formDate = useCallback(
     (
       date: string | number | Date,
@@ -346,6 +351,9 @@ export function useNotification({
       }
       const activityRows = await Promise.all(history.map(formActivityRow));
       _setActivitiesTable(activityRows);
+      // _setRecentActivitiesTable(activityRows.slice(0,5))
+      const arrr = localStorage.getItem("activityList");
+      _setRecentActivitiesTable(JSON.parse(arrr));
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -364,7 +372,19 @@ export function useNotification({
 
   useEffect(() => {
     setActivitiesTable();
+    localStorage.setItem("activityList", JSON.stringify(activitiesTable));
+    
+    const previous = usePrevious(activitiesTable);
+    console.log(previous)
+
   }, [id, userName, activitiesTable]);
 
-  return { activitiesTable, loading };
+  const usePrevious = (value: any) => {
+    // useEffect(() => {
+      ref.current = value
+    // })
+    return ref.current
+  }
+
+  return { activitiesTable, loading, recentActivitiesTable };
 }

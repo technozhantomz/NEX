@@ -10,6 +10,7 @@ export interface ActivityRow {
 export type UseActivityTableResult = {
   activitiesTable: ActivityRow[];
   loading: boolean;
+  recentActivitiesTable: ActivityRow[];
 };
 
 export type UseActivityTableArgs = {
