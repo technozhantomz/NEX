@@ -21,13 +21,4 @@ export type UseVoteTabResult = {
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   handlePublishChanges: (password: string) => Promise<void>;
   loadingTransaction: boolean;
-  //   serverApprovedVotes: VoteRow[];
-  //   localApprovedVotes: VoteRow[];
-  //   allMembersVotes: VoteRow[];
-  //   isVotesChanged: boolean;
-  //   voteSearchValue: string;
-  //   approveVote: (voteId: string) => void;
-  //   removeVote: (voteId: string) => void;
-  //   resetChanges: () => void;
-  //   handleVoteSearch: (name: string) => void;
 };

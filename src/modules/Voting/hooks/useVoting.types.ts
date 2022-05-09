@@ -1,4 +1,4 @@
-import { FullAccount, Vote } from "../../../common/types";
+import { FullAccount, Proxy, Vote } from "../../../common/types";
 
 export type UseVotingResult = {
   loading: boolean;
@@ -8,16 +8,5 @@ export type UseVotingResult = {
   getVotes: () => Promise<void>;
   allMembersIds: [string, string][];
   totalGpos: number;
-  //localApprovedVotes: VoteRow[];
-  //isVotesChanged: boolean;
-  //voteSearchValue: string;
-  //approveVote: (voteId: string) => void;
-  //removeVote: (voteId: string) => void;
-  //resetChanges: () => void;
-  //handleVoteSearch: (name: string) => void;
-};
-
-export type Proxy = {
-  name: string;
-  id: string;
+  proxy: Proxy;
 };

@@ -1,9 +1,9 @@
 import { VoteForm, VoteTable } from "..";
 import { FullAccount, Vote } from "../../../../../common/types";
+import { Proxy } from "../../../types";
 
 import * as Styled from "./VoteTab.styled";
 import { useVoteTab } from "./hooks";
-//import { VoteRow } from "../../../types";
 
 type Props = {
   tab: string;
@@ -14,14 +14,7 @@ type Props = {
   getVotes: () => Promise<void>;
   allMembersIds: [string, string][];
   totalGpos: number;
-  // loading: boolean;
-  // isVotesChanged: boolean;
-  // localApprovedVotes: VoteRow[];
-  // localNotApprovedVotes: VoteRow[];
-  // approveVote: (voteId: string) => void;
-  // removeVote: (voteId: string) => void;
-  // handleVoteSearch: (name: string) => void;
-  // resetChanges: () => void;
+  proxy: Proxy;
 };
 
 export const VoteTab = ({
@@ -33,11 +26,11 @@ export const VoteTab = ({
   getVotes,
   allMembersIds,
   totalGpos,
+  proxy,
 }: Props): JSX.Element => {
   const {
     loading,
     allMembersRows,
-    //serverApprovedRows,
     localApprovedRows,
     isVotesChanged,
     handleVoteSearch,
@@ -80,6 +73,8 @@ export const VoteTab = ({
           transactionErrorMessage={transactionErrorMessage}
           transactionSuccessMessage={transactionSuccessMessage}
           updateAccountFee={updateAccountFee}
+          proxy={proxy}
+          desiredMembers={localApprovedRows.length}
         />
         <VoteTable
           type="approved"

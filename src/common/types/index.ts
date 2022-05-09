@@ -17,3 +17,4 @@ export * from "./CommitteeMember";
 export * from "./GlobalProperties";
 export * from "./SonAccount";
 export * from "./WitnessAccount";
+export * from "./Proxy";

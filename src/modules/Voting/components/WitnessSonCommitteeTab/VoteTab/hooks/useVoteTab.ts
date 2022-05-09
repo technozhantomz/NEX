@@ -5,7 +5,6 @@ import { isArrayEqual } from "../../../../../../api/utils";
 import {
   useAccount,
   useAsset,
-  //   useMembers,
   useTransactionBuilder,
   useUpdateAccountTransactionBuilder,
 } from "../../../../../../common/hooks";
@@ -32,7 +31,6 @@ type Args = {
   totalGpos: number;
 };
 
-// should add tab: string for the arg, to use in publish function
 export function useVoteTab({
   tab,
   serverApprovedVotes,
@@ -41,8 +39,7 @@ export function useVoteTab({
   fullAccount,
   getVotes,
   totalGpos,
-}: //votesLoading,
-Args): UseVoteTabResult {
+}: Args): UseVoteTabResult {
   const [loading, setLoading] = useState<boolean>(true);
   const [allMembersRows, setAllMembersRows] = useState<VoteRow[]>([]);
   const [serverApprovedRows, setServerApprovedRows] = useState<VoteRow[]>([]);
@@ -78,7 +75,7 @@ Args): UseVoteTabResult {
         : membersIdentifiers["witnesses"];
 
     if (fullAccount !== undefined && id) {
-      const new_options = fullAccount.account.options;
+      const new_options = { ...fullAccount.account.options };
 
       const allTabsServerApprovedVotes = fullAccount.votes;
 
@@ -90,12 +87,20 @@ Args): UseVoteTabResult {
         (selectedMember) => selectedMember.vote_id
       );
 
+      const otherTabsServerApprovedVotes = allTabsServerApprovedVotes.filter(
+        (approvedVote) =>
+          parseInt(approvedVote.vote_id.split(":")[0]) !== memberIdentifier
+      );
       const otherTabsServerApprovedVotesIds = allTabsServerApprovedVotes
         .filter(
           (approvedVote) =>
             parseInt(approvedVote.vote_id.split(":")[0]) !== memberIdentifier
         )
         .map((otherMember) => otherMember.vote_id);
+      const allApprovedVotes = [
+        ...localApprovedVotes,
+        ...otherTabsServerApprovedVotes,
+      ];
 
       new_options.votes = otherTabsServerApprovedVotesIds
         .concat(localApprovedVotesIds)
@@ -105,6 +110,17 @@ Args): UseVoteTabResult {
 
           return parseInt(aSplit[1], 10) - parseInt(bSplit[1], 10);
         });
+
+      new_options.num_witness = allApprovedVotes.filter(
+        (vote) => parseInt(vote.vote_id.split(":")[0]) === 1
+      ).length;
+      new_options.num_committee = allApprovedVotes.filter(
+        (vote) => parseInt(vote.vote_id.split(":")[0]) === 0
+      ).length;
+      new_options.num_son = allApprovedVotes.filter(
+        (vote) => parseInt(vote.vote_id.split(":")[0]) === 3
+      ).length;
+
       const trx = buildUpdateAccountTransaction(
         {
           new_options,
@@ -112,6 +128,7 @@ Args): UseVoteTabResult {
         },
         id
       );
+
       setPendingTransaction(trx);
       return trx;
     }
@@ -162,11 +179,13 @@ Args): UseVoteTabResult {
           setLoadingTransaction(false);
         }
         if (trxResult) {
-          await getVotes();
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
             "You have successfully published your votes"
           );
+          setLoadingTransaction(false);
+          setIsVotesChanged(false);
+          await getVotes();
         }
       }
     },
@@ -349,10 +368,8 @@ Args): UseVoteTabResult {
   }, [formTableRows]);
 
   useEffect(() => {
-    console.log("update account fee", updateAccountFee, tab);
-
     getUpdateAccountFee();
-  }, [getUpdateAccountFee]);
+  }, [tab, localApprovedRows, allMembers, fullAccount]);
 
   return {
     name,

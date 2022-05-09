@@ -6,6 +6,7 @@ import {
   TransactionModal,
 } from "../../../../../common/components";
 import { useHandleTransactionForm } from "../../../../../common/hooks";
+import { Proxy } from "../../../../../common/types";
 
 import * as Styled from "./VoteForm.styled";
 import { useVoteForm } from "./hooks";
@@ -24,6 +25,8 @@ type Props = {
   transactionSuccessMessage: string;
   name: string;
   updateAccountFee: number;
+  proxy: Proxy;
+  desiredMembers: number;
 };
 
 export const VoteForm = ({
@@ -40,6 +43,8 @@ export const VoteForm = ({
   loadingTransaction,
   name,
   updateAccountFee,
+  proxy,
+  desiredMembers,
 }: Props): JSX.Element => {
   const { voteForm } = useVoteForm();
 
@@ -106,7 +111,10 @@ export const VoteForm = ({
             loadingTransaction={loadingTransaction}
             account={name}
             fee={updateAccountFee}
-            transactionType="account_upgrade"
+            transactionType="account_update"
+            proxy={proxy}
+            desiredMembers={desiredMembers}
+            memberType={tab}
           />
         </Styled.VoteForm>
       </Styled.VoteForm.Provider>
