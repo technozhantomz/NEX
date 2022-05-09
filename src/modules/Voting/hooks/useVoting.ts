@@ -1,107 +1,77 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { isArrayEqual } from "../../../api/utils";
+import { DEFAULT_PROXY_ID } from "../../../api/params";
 import { useAccount, useAsset, useMembers } from "../../../common/hooks";
-import { useUserContext } from "../../../common/providers";
-import { Asset, FullAccount, Vote } from "../../../common/types";
-import { VoteRow } from "../types";
+import {
+  usePeerplaysApiContext,
+  useUserContext,
+} from "../../../common/providers";
+import { FullAccount, Proxy, Vote } from "../../../common/types";
+import { GposInfo } from "../types";
 
 import { UseVotingResult } from "./useVoting.types";
 
-// should add tab: string for the arg, to use in publish function
 export function useVoting(): UseVotingResult {
   const [fullAccount, setFullAccount] = useState<FullAccount>();
-  const [serverApprovedVotes, setServerApprovedVotes] = useState<VoteRow[]>([]);
-  const [localApprovedVotes, setLocalApprovedVotes] = useState<VoteRow[]>([]);
-  const [allMembersVotes, setAllMembersVotes] = useState<VoteRow[]>([]);
-  const [isVotesChanged, setIsVotesChanged] = useState<boolean>(false);
+  const [serverApprovedVotes, setServerApprovedVotes] = useState<Vote[]>([]);
+  const [allMembers, setAllMembers] = useState<Vote[]>([]);
+  const [allMembersIds, setAllMembersIds] = useState<[string, string][]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [voteSearchValue, setVoteSearchValue] = useState<string>("");
-  const [isPassModalVisible, setIsPassModalVisible] = useState<boolean>(false);
-  const [submittingPassword, setSubmittingPassword] = useState<boolean>(false);
+  const [totalGpos, setTotalGpos] = useState<number>(0);
+  const [proxy, setProxy] = useState<Proxy>({
+    name: "",
+    id: DEFAULT_PROXY_ID,
+  });
 
-  const { localStorageAccount } = useUserContext();
+  const { localStorageAccount, id } = useUserContext();
   const { getFullAccount } = useAccount();
   const { getCommittees, getSons, getWitnesses } = useMembers();
-  const { defaultAsset, formAssetBalanceById } = useAsset();
+  const { dbApi } = usePeerplaysApiContext();
+  const { getAssetById, setPrecision } = useAsset();
 
-  const confirm = () => {
-    console.log("confirm");
-    if (isVotesChanged) setIsPassModalVisible(true);
-  };
+  const getProxyAccount = useCallback(
+    async (fullAccount: FullAccount) => {
+      const proxyId = fullAccount.account.options.voting_account;
+      const proxy = (await getFullAccount(proxyId, false)) as FullAccount;
 
-  const publishChanges = (name: string, info: { values: any; forms: any }) => {
-    const { values, forms } = info;
-    const { passwordModal } = forms;
-    if (name === "passwordModal") {
-      passwordModal.validateFields().then(() => {
-        setSubmittingPassword(true);
-        console.log(values.password);
-        setSubmittingPassword(false);
-      });
-    }
-  };
-
-  const handleVoteSearch = useCallback(
-    (name: string) => {
-      setLoading(true);
-      setVoteSearchValue(name);
-      setLoading(false);
+      setProxy({
+        name: proxyId !== DEFAULT_PROXY_ID ? proxy.account.name : "",
+        id: proxyId,
+      } as Proxy);
     },
-    [setVoteSearchValue, setLoading]
+    [getFullAccount, setProxy]
   );
 
-  const sortVotesRows = useCallback((votes: VoteRow[]) => {
-    return votes.sort(
-      (a, b) => Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0])
-    );
-  }, []);
-
-  const formVoteRow = useCallback(
-    async (
-      vote: Vote,
-      votesIds: [string, string][],
-      action: "add" | "remove" | ""
-    ): Promise<VoteRow> => {
-      let voteType: "committees" | "witnesses" | "sons";
-      switch (parseInt(vote.vote_id.charAt(0))) {
-        case 0:
-          voteType = "committees";
-          break;
-        case 1:
-          voteType = "witnesses";
-          break;
-        case 3:
-          voteType = "sons";
-          break;
-        default:
-          voteType = "witnesses";
+  const getUserTotalGpos = useCallback(async () => {
+    if (id) {
+      try {
+        const gposInfo: GposInfo = await dbApi("get_gpos_info", [id]);
+        if (gposInfo !== undefined) {
+          const asset = await getAssetById(gposInfo.award.asset_id);
+          if (asset !== undefined) {
+            setTotalGpos(
+              setPrecision(
+                true,
+                gposInfo.account_vested_balance,
+                asset.precision
+              )
+            );
+          }
+        }
+      } catch (e) {
+        console.log(e);
       }
-      const name = votesIds.filter((voteId) => voteId[1] === vote.id)[0][0];
-
-      const votesAsset = await formAssetBalanceById(
-        (defaultAsset as Asset).id,
-        Number(vote.total_votes)
-      );
-      return {
-        id: vote.vote_id,
-        key: vote.vote_id,
-        type: voteType,
-        name: name,
-        website: vote.url,
-        votes: `${votesAsset.amount} ${votesAsset.symbol}`,
-        action: action,
-      } as VoteRow;
-    },
-    [formAssetBalanceById, defaultAsset]
-  );
+    }
+  }, [dbApi, id, getAssetById, setTotalGpos, setPrecision]);
 
   const getVotes = useCallback(async () => {
     try {
       setLoading(true);
       const fullAccount = await getFullAccount(localStorageAccount, false);
       setFullAccount(fullAccount);
-
+      if (fullAccount !== undefined) {
+        await getProxyAccount(fullAccount);
+      }
       let allMembers: Vote[] = [];
       let allMembersIds: [string, string][] = [];
       const { committees, committeesIds } = await getCommittees();
@@ -110,22 +80,13 @@ export function useVoting(): UseVotingResult {
       allMembers = [...committees, ...sons, ...witnesses];
       allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
 
-      const allMembersVotes = await Promise.all(
-        allMembers.map((member) => {
-          return formVoteRow(member, allMembersIds, "add");
-        })
-      );
-      setAllMembersVotes(sortVotesRows(allMembersVotes));
+      setAllMembers(allMembers);
+      setAllMembersIds(allMembersIds);
 
       if (fullAccount !== undefined) {
         const votes = fullAccount.votes;
-        const serverApprovedVotes = await Promise.all(
-          votes.map((vote) => {
-            return formVoteRow(vote, allMembersIds, "remove");
-          })
-        );
-        setServerApprovedVotes(sortVotesRows([...serverApprovedVotes]));
-        setLocalApprovedVotes(sortVotesRows([...serverApprovedVotes]));
+
+        setServerApprovedVotes(votes);
       }
       setLoading(false);
     } catch (e) {
@@ -139,88 +100,27 @@ export function useVoting(): UseVotingResult {
     getCommittees,
     getSons,
     getWitnesses,
-    formVoteRow,
-    setAllMembersVotes,
+    setAllMembers,
+    setAllMembersIds,
     setServerApprovedVotes,
-    setLocalApprovedVotes,
   ]);
-
-  const checkVotesChanged = useCallback(
-    (serverApprovedVotes: VoteRow[], localApprovedVotes: VoteRow[]) => {
-      const isVotesChanged = !isArrayEqual(
-        serverApprovedVotes,
-        localApprovedVotes
-      );
-      setIsVotesChanged(isVotesChanged);
-    },
-    [setIsVotesChanged]
-  );
-
-  const approveVote = useCallback(
-    (voteId: string) => {
-      if (localApprovedVotes.find((vote) => vote.id === voteId) === undefined) {
-        const selectedVote = allMembersVotes.find((vote) => vote.id === voteId);
-        if (selectedVote !== undefined) {
-          setLocalApprovedVotes(
-            sortVotesRows([
-              { ...selectedVote, action: "remove" },
-              ...localApprovedVotes,
-            ])
-          );
-          checkVotesChanged(serverApprovedVotes, [
-            { ...selectedVote, action: "remove" },
-            ...localApprovedVotes,
-          ]);
-        }
-      }
-    },
-    [
-      localApprovedVotes,
-      allMembersVotes,
-      setLocalApprovedVotes,
-      checkVotesChanged,
-    ]
-  );
-
-  const removeVote = useCallback(
-    (voteId: string) => {
-      if (localApprovedVotes.find((vote) => vote.id === voteId) !== undefined) {
-        setLocalApprovedVotes(
-          sortVotesRows(localApprovedVotes.filter((vote) => vote.id !== voteId))
-        );
-        checkVotesChanged(
-          serverApprovedVotes,
-          localApprovedVotes.filter((vote) => vote.id !== voteId)
-        );
-      }
-    },
-    [localApprovedVotes, setLocalApprovedVotes, checkVotesChanged]
-  );
-
-  const resetChanges = useCallback(() => {
-    setLocalApprovedVotes(serverApprovedVotes);
-    setIsVotesChanged(false);
-  }, [serverApprovedVotes, setLocalApprovedVotes, setLocalApprovedVotes]);
 
   useEffect(() => {
     getVotes();
   }, [getVotes]);
 
+  useEffect(() => {
+    getUserTotalGpos();
+  }, [getUserTotalGpos]);
+
   return {
     loading,
     serverApprovedVotes,
-    localApprovedVotes,
-    isVotesChanged,
-    allMembersVotes,
-    voteSearchValue,
-    isPassModalVisible,
-    submittingPassword,
-    confirm,
-    publishChanges,
-    approveVote,
-    removeVote,
-    resetChanges,
-    handleVoteSearch,
-    setIsPassModalVisible,
+    allMembers,
+    fullAccount,
+    getVotes,
+    allMembersIds,
+    totalGpos,
+    proxy,
   };
 }

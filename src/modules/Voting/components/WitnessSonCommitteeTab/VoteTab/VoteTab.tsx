@@ -1,52 +1,61 @@
-// import React, { useCallback, useEffect, useRef, useState } from "react";
-
-// import { useUserContext } from "../../../../common/components/UserProvider/UserProvider";
-// import { VoteForm } from "../VoteForm";
-//import { VoteTable } from "../VoteTable";
-// import { useVoteTable } from "../VoteTable/hooks";
-// import { IVoteRow } from "../VoteTable/hooks/useVoteTable.types";
-
-import { SetStateAction } from "react";
-
 import { VoteForm, VoteTable } from "..";
-import { VoteRow } from "../../../types";
+import { FullAccount, Vote } from "../../../../../common/types";
+import { Proxy } from "../../../types";
 
 import * as Styled from "./VoteTab.styled";
+import { useVoteTab } from "./hooks";
 
 type Props = {
   tab: string;
-  loading: boolean;
-  isVotesChanged: boolean;
-  localApprovedVotes: VoteRow[];
-  localNotApprovedVotes: VoteRow[];
-  isPassModalVisible: boolean;
-  submittingPassword: boolean;
-  approveVote: (voteId: string) => void;
-  removeVote: (voteId: string) => void;
-  handleVoteSearch: (name: string) => void;
-  resetChanges: () => void;
-  confirm: () => void;
-  publishChanges: (name: string, info: { values: any; forms: any }) => void;
-  setIsPassModalVisible: (value: SetStateAction<boolean>) => void;
+  votesLoading: boolean;
+  serverApprovedVotes: Vote[];
+  allMembers: Vote[];
+  fullAccount: FullAccount | undefined;
+  getVotes: () => Promise<void>;
+  allMembersIds: [string, string][];
+  totalGpos: number;
+  proxy: Proxy;
 };
 
 export const VoteTab = ({
   tab,
-  loading,
-  isVotesChanged,
-  isPassModalVisible,
-  submittingPassword,
-  localApprovedVotes,
-  localNotApprovedVotes,
-  approveVote,
-  removeVote,
-  handleVoteSearch,
-  resetChanges,
-  confirm,
-  publishChanges,
-  setIsPassModalVisible,
+  votesLoading,
+  serverApprovedVotes,
+  allMembers,
+  fullAccount,
+  getVotes,
+  allMembersIds,
+  totalGpos,
+  proxy,
 }: Props): JSX.Element => {
-  console.log("isVotedchanged", isVotesChanged);
+  const {
+    loading,
+    allMembersRows,
+    localApprovedRows,
+    isVotesChanged,
+    handleVoteSearch,
+    voteSearchValue,
+    approveVote,
+    removeVote,
+    resetChanges,
+    handlePublishChanges,
+    loadingTransaction,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    transactionErrorMessage,
+    transactionSuccessMessage,
+    name,
+    updateAccountFee,
+  } = useVoteTab({
+    tab,
+    votesLoading,
+    serverApprovedVotes,
+    allMembers,
+    fullAccount,
+    getVotes,
+    allMembersIds,
+    totalGpos,
+  });
   return (
     <Styled.Container>
       <Styled.VoteTabCard>
@@ -54,32 +63,58 @@ export const VoteTab = ({
           tab={tab}
           loading={loading}
           isVotesChanged={isVotesChanged}
-          isPassModalVisible={isPassModalVisible}
-          submittingPassword={submittingPassword}
           handleVoteSearch={handleVoteSearch}
           resetChanges={resetChanges}
-          confirm={confirm}
-          publishChanges={publishChanges}
-          setIsPassModalVisible={setIsPassModalVisible}
-          //isChangeTableEmpty={isChangeTableEmpty.current}
-          // doAction={doAction}
-          // doSearch={doSearch}
-          // modalData={modalData}
-          // isModalVisible={isModalVisible}
-          // setIsModalVisible={setIsModalVisible}
-          // sendVotes={sendVotes}
+          name={name}
+          handlePublishChanges={handlePublishChanges}
+          loadingTransaction={loadingTransaction}
+          setTransactionErrorMessage={setTransactionErrorMessage}
+          setTransactionSuccessMessage={setTransactionSuccessMessage}
+          transactionErrorMessage={transactionErrorMessage}
+          transactionSuccessMessage={transactionSuccessMessage}
+          updateAccountFee={updateAccountFee}
+          proxy={proxy}
+          desiredMembers={localApprovedRows.length}
         />
         <VoteTable
           type="approved"
-          loading={loading}
-          votes={localApprovedVotes}
+          loading={votesLoading || loading}
+          votes={
+            voteSearchValue === ""
+              ? localApprovedRows
+              : localApprovedRows.filter((approvedVote) =>
+                  approvedVote.name
+                    .toLowerCase()
+                    .startsWith(voteSearchValue.toLowerCase())
+                )
+          }
           approveVote={approveVote}
           removeVote={removeVote}
         />
         <VoteTable
           type="notApproved"
-          loading={loading}
-          votes={localNotApprovedVotes}
+          loading={votesLoading || loading}
+          votes={
+            voteSearchValue === ""
+              ? allMembersRows.filter(
+                  (vote) =>
+                    !localApprovedRows
+                      .map((approvedVote) => approvedVote.id)
+                      .includes(vote.id)
+                )
+              : allMembersRows
+                  .filter(
+                    (vote) =>
+                      !localApprovedRows
+                        .map((approvedVote) => approvedVote.id)
+                        .includes(vote.id)
+                  )
+                  .filter((notApprovedVote) =>
+                    notApprovedVote.name
+                      .toLowerCase()
+                      .startsWith(voteSearchValue.toLowerCase())
+                  )
+          }
           approveVote={approveVote}
           removeVote={removeVote}
         />

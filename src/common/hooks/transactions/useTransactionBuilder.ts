@@ -22,20 +22,25 @@ export function useTransactionBuilder(): ITransactionBuilder {
   const getTrxFee = useCallback(
     async (trx) => {
       if (defaultAsset !== undefined) {
-        const tr = new TransactionBuilder();
-        await trx.forEach((elem: any) =>
-          tr.add_type_operation(elem.type, elem.params)
-        );
-        await tr.set_required_fees();
-        const feeAmounts: number[] = tr.operations.map((operation: any) => {
-          return operation[1].fee.amount;
-        });
-        let feeAmount = 0;
-        feeAmounts.forEach((amount) => {
-          feeAmount += amount;
-        });
-        const fee = setPrecision(true, feeAmount, defaultAsset?.precision);
-        return fee;
+        try {
+          const tr = new TransactionBuilder();
+          await trx.forEach((elem: any) =>
+            tr.add_type_operation(elem.type, elem.params)
+          );
+          await tr.set_required_fees();
+          const feeAmounts: number[] = tr.operations.map((operation: any) => {
+            return operation[1].fee.amount;
+          });
+          let feeAmount = 0;
+          feeAmounts.forEach((amount) => {
+            feeAmount += amount;
+          });
+          const fee = setPrecision(true, feeAmount, defaultAsset.precision);
+          return fee;
+        } catch (e) {
+          console.log(e);
+          return 0;
+        }
       }
     },
     [defaultAsset, setPrecision]
