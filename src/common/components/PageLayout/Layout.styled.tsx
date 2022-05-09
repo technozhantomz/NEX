@@ -31,6 +31,9 @@ export const Page = styled.section`
       }
       .page-heading {
         color: ${colors.textColor};
+        letter-spacing: 0px;
+        font-size: 24px;
+        font: normal normal medium 24px/29px Inter;
       }
     }
   }
