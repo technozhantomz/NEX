@@ -33,7 +33,7 @@ export const AssetCard = styled(UiCard)`
   }
   ${breakpoint.sm} {
     .ant-form {
-      margin: 39px 35px;
+      margin: 20px 35px;
       min-width: 566px;
     }
     .ant-card-body {
@@ -60,4 +60,11 @@ export const AssetCard = styled(UiCard)`
 export const AssetFormWapper = styled.div`
   margin: 0 20px 39px;
   max-width: 566px;
+`;
+
+export const WithdrawFormWrapper = styled.div`
+  max-width: 566px;
+  button {
+    max-width: 290px;
+  }
 `;

@@ -62,7 +62,9 @@ const AssetPage: NextPage = () => {
               <>
                 <TabPane tab="Withdraw" key="withdraw">
                   <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-                  <WithdrawForm asset={`${asset}`} />
+                  <Styled.WithdrawFormWrapper>
+                    <WithdrawForm asset={`${asset}`} />
+                  </Styled.WithdrawFormWrapper>
                 </TabPane>
                 <TabPane tab="Deposit" key="deposit">
                   <AssetsTable showActions={false} fillterAsset={`${asset}`} />
