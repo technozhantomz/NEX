@@ -83,6 +83,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
           true,
         ]).then((e: any) => (e.length ? e[0][1] : undefined));
         if (fullAccount) {
+          console.log("full account", fullAccount);
           const assets: Asset[] = await Promise.all(
             fullAccount.balances.map((balance) => {
               return formAssetBalanceById(balance.asset_type, balance.balance);
