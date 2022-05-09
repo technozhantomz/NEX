@@ -49,7 +49,6 @@ const VotingPage: NextPage = () => {
             <Styled.Text>GPOS Tab</Styled.Text>
           </TabPane>
           {voteTabs.map((voteTab, index) => {
-            console.log("inja", index, voteTab);
             return (
               <TabPane tab={capitalize(voteTab)} key={voteTab}>
                 <VoteTab
