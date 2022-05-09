@@ -1,15 +1,13 @@
 import {
+  CardForm,
   CardFormButton,
-  CardFrom,
   styled,
   Form as UIForm,
 } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 
-export const TransferForm = styled(CardFrom)`
-   {
-    margin: 0 20px;
-  }
+export const TransferForm = styled(CardForm)`
+  margin: 0 20px;
   ${breakpoint.sm} {
     .two-input-row {
       display: flex;
@@ -21,7 +19,6 @@ export const TransferForm = styled(CardFrom)`
       }
     }
     .ant-input {
-      //     border-radius: 4px;
       height: 100%;
       padding: 15px 30px;
     }

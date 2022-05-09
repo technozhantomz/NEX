@@ -1,31 +1,18 @@
-import {
-  CardFormButton,
-  CardFrom,
-  styled,
-  Form as UIForm,
-} from "../../../ui/src";
+import { FormDisclamer as UiFormDisclamer } from "..";
+import { CardForm, CardFormButton, Form, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 
-export const WithdrawForm = styled(CardFrom)`
-   {
-    margin: 0 20px;
-    .ant-form-item-control-input-content {
-      max-width: 520px;
-      height: 50px;
-    }
-    .amt-div {
-      height: 60px;
-    }
+export const WithdrawForm = styled(CardForm)`
+  margin: 0 20px;
+  .form-input {
+    font-size: 12px;
     ${breakpoint.sm} {
-      .ant-input {
-        height: 100%;
-        padding: 15px 30px;
-      }
+      font-size: 20px;
     }
   }
 `;
 
-export const WithdrawFormAssetAmount = styled(CardFrom.Item)`
+export const WithdrawFormAssetAmount = styled(CardForm.Item)`
   .ant-input-affix-wrapper {
     padding: 0;
     .ant-input-prefix {
@@ -35,10 +22,14 @@ export const WithdrawFormAssetAmount = styled(CardFrom.Item)`
     .ant-input {
       text-align: right;
       padding-right: 30px;
+      font-size: 16px;
+      ${breakpoint.sm} {
+        font-size: 20px;
+      }
     }
   }
 `;
-export const WithdrawFormAsset = styled(CardFrom.Item)`
+export const WithdrawFormAsset = styled(CardForm.Item)`
    {
     width: 100%;
     margin-bottom: 0;
@@ -50,32 +41,31 @@ export const WithdrawFormAsset = styled(CardFrom.Item)`
   }
 `;
 
-export const WithdrawFormButton = styled(CardFormButton)`
-  width: 100%;
-  height: 100%;
+export const Fee = styled.p`
+  font-size: 12px;
+  ${breakpoint.xs} {
+    font-size: 14px;
+  }
 `;
 
-export const FormItem = styled(UIForm.Item)`
-  .ant-btn-lg {
-    padding: 0px;
-  }
-  .ant-form-item-control-input-content {
-    height: 35px;
-  }
+export const WithdrawFormButton = styled(CardFormButton)`
+  width: 100%;
+`;
+
+export const FormItem = styled(Form.Item)`
   width: 255px;
   margin-left: auto;
   margin-right: auto;
+  height: 35px;
   ${breakpoint.sm} {
-    margin-left: 150px;
-    width: 290px;
-    height: 45px;
-    margin-top: 33px;
-    .ant-form-item-control-input-content {
-      height: 45px;
-    }
+    width: 399px;
+    height: 44px;
   }
 `;
 
-export const FeeLabel = styled.p`
-  margin-top: 10px;
+export const FormDisclamer = styled(UiFormDisclamer)`
+  margin-bottom: 15px;
+  ${breakpoint.xs} {
+    margin-bottom: 25px;
+  }
 `;

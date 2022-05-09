@@ -1,3 +1,5 @@
+import { Vote } from ".";
+
 export type FullAccount = {
   account: Account;
   lifetime_referrer_name: string;
@@ -5,6 +7,8 @@ export type FullAccount = {
   referrer_name: string;
   registrar_name: string;
   balances: Balance[];
+  statistics: AccountStatistics;
+  votes: Vote[];
 };
 
 export type Account = {
@@ -64,10 +68,11 @@ export type UserKeys = {
 };
 
 export type AccountOptions = {
-  extensions: unknown[];
+  extensions: any[];
   memo_key: string;
   num_committee: number;
   num_witness: number;
+  num_son: number;
   votes: string[];
   voting_account: string;
 };
@@ -94,17 +99,19 @@ export type SidechainAcccount = {
   withdraw_public_key: string;
 };
 
-export type WitnessAccount = {
+export type AccountStatistics = {
+  core_in_balance: number;
+  has_cashback_vb: boolean;
   id: string;
-  witness_account: string;
-  last_aslot: number;
-  signing_key: string;
-  next_secret_hash: string;
-  previous_secret: string;
-  vote_id: string;
-  total_votes: number;
-  url: string;
-  total_missed: number;
-  last_confirmed_block_num: number;
-  pay_vb: string;
+  is_voting: false;
+  last_vote_time: string;
+  lifetime_fees_paid: number;
+  most_recent_op: string;
+  name: string;
+  owner: string;
+  pending_fees: number;
+  pending_vested_fees: number;
+  removed_ops: number;
+  total_core_in_orders: number;
+  total_ops: number;
 };

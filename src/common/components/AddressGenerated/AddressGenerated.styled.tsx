@@ -1,76 +1,76 @@
 import { Input, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
+import { mixIns } from "../../../ui/src/mixins";
 
 export const DepositHeader = styled.p`
   margin-left: 10px;
-  margin-top: 3px;
+  margin-bottom: 0;
   color: ${colors.textColor};
-  text-align: center;
-  font: normal normal medium 16px/20px Inter;
-  letter-spacing: 0px;
-  opacity: 1;
   font-size: 16px;
 `;
 
 export const AddressDownloadLink = styled.a`
   color: ${colors.primaryColor};
-  text-align: center;
-  font: normal normal normal 16px/40px Inter;
-  letter-spacing: 0px;
-  opacity: 1;
+  font-size: 14px;
+  ${breakpoint.xs} {
+    font-size: 16px;
+  }
 `;
 
 export const DisclaimerFooter = styled.p`
   color: ${colors.textColor};
   text-align: left;
-  font: normal normal normal 14px/20px Inter;
-  letter-spacing: 0px;
-  opacity: 1;
+  font-size: 12px;
+  max-width: 100%;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
 `;
 
 export const GeneratedBitcoinAddress = styled(Input)`
   height: 50px;
-  background: ${colors.textColor} 0% 0% no-repeat padding-box;
-  background: #ffffff 0% 0% no-repeat padding-box;
+  background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
-  border-radius: 4px;
-  opacity: 1;
-  text-align: left;
+  ${mixIns.borderRadius}
   padding: 10px;
-
+  margin-bottom: 15px;
   ${breakpoint.sm} {
+    margin-bottom: 25px;
     width: 100%;
   }
-`;
-
-export const InfoBox = styled.div`
-   {
-    display: flex;
-    margin: 10px;
-  }
-  .anticon {
-    color: var(--ant-warning-color);
-    margin-right: 20px;
-    margin-left: 20px;
-
+  .ant-input.ant-input-disabled.ant-input-sm {
+    font-size: 12px;
     ${breakpoint.sm} {
-      margin-right: 5px;
-      margin-left: 5px;
+      font-size: 14px;
     }
   }
 `;
 
-export const AddressLinkContainer = styled.div`
-  margin-top: 15px;
-  text-align: center;
+export const InfoBox = styled.div`
+  display: flex;
+  .anticon svg {
+    height: 15px;
+    margin-right: 10px;
+    color: ${colors.warningColor};
+    ${breakpoint.sm} {
+      margin-right: 15px;
+    }
+  }
 `;
 
+export const AddressLinkContainer = styled.div``;
+
 export const AddressContainer = styled.div`
-   {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+  ${breakpoint.xs} {
+    margin-bottom: 35px;
   }
+`;
+
+export const IconDiv = styled.div`
+  display: flex;
 `;

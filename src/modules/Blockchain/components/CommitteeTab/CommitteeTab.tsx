@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { useViewportContext } from "../../../../common/components";
+import { useViewportContext } from "../../../../common/providers";
 import { List } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import { StatsCard } from "../StatsCard";
@@ -25,14 +25,14 @@ export const CommitteeTab = (): JSX.Element => {
       <Styled.StatsCardsDeck>
         <StatsCard
           noData={activeCommittee === 0}
-          title="Active Committee"
+          title="Active Committees"
           data={`${activeCommittee}`}
           statsData={committeeStats}
         />
       </Styled.StatsCardsDeck>
       <Styled.CommitteeSearch
         size="large"
-        placeholder="Search Committee"
+        placeholder="Search Committees"
         onSearch={handleSearch}
         loading={loading}
       />

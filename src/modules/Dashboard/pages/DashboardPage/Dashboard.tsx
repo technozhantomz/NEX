@@ -32,7 +32,14 @@ const Dashboard: React.FC = () => {
           <Styled.Row gutter={4}>
             {Tabs.map((e, i) => (
               <Styled.Col key={i} className="gutter-row" span={6}>
-                <Styled.Buttons onClick={() => changeTab(e.tabName)}>
+                <Styled.Buttons
+                  className={
+                    activeTab.toLowerCase() === e.tabName.toLowerCase()
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() => changeTab(e.tabName)}
+                >
                   <Styled.ButtonNames>{e.tabName}</Styled.ButtonNames>
                 </Styled.Buttons>
               </Styled.Col>

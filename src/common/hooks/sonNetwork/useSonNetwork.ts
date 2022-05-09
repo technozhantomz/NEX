@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
-import { Account } from "../../types";
+import { usePeerplaysApiContext } from "../../providers";
+import { Account, GlobalProperties } from "../../types";
 
 import { SonNetworkStatus, UseSonNetworkResult } from "./useSonNetwork.types";
 
@@ -11,7 +11,7 @@ export function useSonNetwork(): UseSonNetworkResult {
 
   const getSonAccount = useCallback(async () => {
     try {
-      const gpo = await dbApi("get_global_properties");
+      const gpo: GlobalProperties = await dbApi("get_global_properties");
       const son_id = gpo.parameters.extensions.son_account;
       const son_account: Account = (await dbApi("get_accounts", [[son_id]]))[0];
       if (son_account) {
@@ -26,7 +26,7 @@ export function useSonNetwork(): UseSonNetworkResult {
     const result = { status: [], isSonNetworkOk: false } as SonNetworkStatus;
     let activeSons = 0;
     try {
-      const gpo = await dbApi("get_global_properties");
+      const gpo: GlobalProperties = await dbApi("get_global_properties");
       if (!gpo.active_sons || gpo.active_sons.length == 0) {
         return result;
       }

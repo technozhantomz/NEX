@@ -1,13 +1,13 @@
 import { ChainStore } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
-import { usePeerplaysApiContext } from "../components/PeerplaysApiProvider";
+import { usePeerplaysApiContext } from "../providers";
 import {
   Account,
   Block,
   BlockData,
-  Chain,
   Dynamic,
+  GlobalProperties,
   WitnessAccount,
 } from "../types";
 
@@ -18,9 +18,9 @@ export function useBlockchain(): UseBlockchainResult {
 
   const getChain = useCallback(async () => {
     try {
-      const chainsData = await dbApi("get_objects", [["2.0.0"]]);
-      if (chainsData && chainsData.length) {
-        return chainsData[0] as Chain;
+      const gpo = await dbApi("get_objects", [["2.0.0"]]);
+      if (gpo && gpo.length) {
+        return gpo[0] as GlobalProperties;
       }
     } catch (e) {
       console.log(e);

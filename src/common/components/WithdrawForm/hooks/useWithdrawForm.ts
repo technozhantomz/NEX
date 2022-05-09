@@ -12,14 +12,16 @@ import {
   useTransactionBuilder,
   useTransferTransactionBuilder,
 } from "../../../hooks";
+import { useUserContext } from "../../../providers";
 import { Account } from "../../../types";
-import { useUserContext } from "../../UserProvider";
 
 import { UseWithdrawFormResult } from "./useWithdrawForm.types";
 
 export function useWithdrawForm(asset: string): UseWithdrawFormResult {
+  const [submittingPassword, setSubmittingPassword] = useState(false);
   const [status, setStatus] = useState<string>("");
-  const [visible, setVisible] = useState<boolean>(false);
+  const [isPasswordModalVisible, setIsPasswordModalVisible] =
+    useState<boolean>(false);
   const [selectedAsset, setSelectedAsset] = useState<string>(asset);
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const { getSonNetworkStatus, sonAccount } = useSonNetwork();
@@ -33,7 +35,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
     useAccount();
   const { localStorageAccount, assets, id } = useUserContext();
-  const { trxBuilder } = useTransactionBuilder();
+  const { buildTrx } = useTransactionBuilder();
   const { calculteTransferFee } = useFees();
   const { buildTransferTransaction } = useTransferTransactionBuilder();
   const {
@@ -72,13 +74,13 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     selectedAsset,
   ]);
 
-  const onCancel = () => {
-    setVisible(false);
+  const handlePasswordModalCancel = () => {
+    setIsPasswordModalVisible(false);
   };
 
   const confirm = () => {
     withdrawForm.validateFields().then(() => {
-      setVisible(true);
+      setIsPasswordModalVisible(true);
     });
   };
 
@@ -122,6 +124,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   );
 
   const handleWithdraw = async (password: string) => {
+    setSubmittingPassword(true);
     const values = withdrawForm.getFieldsValue();
     const from = (await getAccountByName(localStorageAccount)) as Account;
     const to = sonAccount
@@ -141,7 +144,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
           id
         );
         try {
-          const deleteTrxResult = await trxBuilder([deleteTrx], [activeKey]);
+          const deleteTrxResult = await buildTrx([deleteTrx], [activeKey]);
           if (deleteTrxResult) {
             const addTrx = buildAddingBitcoinSidechainTransaction(
               id,
@@ -151,29 +154,33 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
               values.withdrawAddress
             );
             try {
-              const addTrxResult = await trxBuilder([addTrx], [activeKey]);
+              const addTrxResult = await buildTrx([addTrx], [activeKey]);
               await getSidechainAccounts(id);
               if (!addTrxResult) {
-                setVisible(false);
+                setIsPasswordModalVisible(false);
                 setStatus("Server error, please try again later.");
+                setSubmittingPassword(false);
                 return;
               }
             } catch (e) {
               await getSidechainAccounts(id);
-              setVisible(false);
+              setIsPasswordModalVisible(false);
               setStatus("Server error, please try again later.");
+              setSubmittingPassword(false);
               console.log(e);
               return;
             }
           } else {
-            setVisible(false);
+            setIsPasswordModalVisible(false);
             setStatus("Server error, please try again later.");
+            setSubmittingPassword(false);
             return;
           }
         } catch (e) {
           console.log(e);
-          setVisible(false);
+          setIsPasswordModalVisible(false);
           setStatus("Server error, please try again later.");
+          setSubmittingPassword(false);
           return;
         }
       }
@@ -192,18 +199,21 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     let trxResult;
 
     try {
-      trxResult = await trxBuilder([trx], [activeKey]);
+      trxResult = await buildTrx([trx], [activeKey]);
     } catch (e) {
       console.log(e);
+      setSubmittingPassword(false);
     }
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
-      setVisible(false);
+      setIsPasswordModalVisible(false);
       setStatus(`Successfully withdrew ${values.amount}`);
+      setSubmittingPassword(false);
       withdrawForm.resetFields();
     } else {
-      setVisible(false);
+      setIsPasswordModalVisible(false);
       setStatus("Server error, please try again later.");
+      setSubmittingPassword(false);
     }
   };
 
@@ -294,23 +304,23 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       { validator: validateWithdrawAddress },
     ],
     withdrawPublicKey: [
-      { required: true, message: "Withdraw address is required" },
+      { required: true, message: "Withdraw public key is required" },
       { validator: validateWithdrawPublicKey },
     ],
   };
 
   return {
     status,
-    visible,
+    isPasswordModalVisible,
     feeAmount,
     withdrawForm,
     formValdation,
     confirm,
-    //loggedIn: localStorageAccount !== null && localStorageAccount !== "",
-    onCancel,
+    handlePasswordModalCancel,
     onFormFinish,
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
+    submittingPassword,
   };
 }

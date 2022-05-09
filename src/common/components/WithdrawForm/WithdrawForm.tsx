@@ -1,6 +1,10 @@
-import { LogoSelectOption, PasswordModal, useUserContext } from "..";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
+import { LogoSelectOption, PasswordModal } from "..";
 import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
+import { useUserContext } from "../../providers";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -14,20 +18,22 @@ export const WithdrawForm = ({
   asset,
   withAssetSelector,
 }: Props): JSX.Element => {
+  const router = useRouter();
   const { localStorageAccount } = useUserContext();
   const { defaultAsset, sidechainAssets } = useAsset();
   const {
     status,
-    visible,
+    isPasswordModalVisible,
     feeAmount,
     withdrawForm,
     formValdation,
-    onCancel,
+    handlePasswordModalCancel,
     confirm,
     onFormFinish,
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
+    submittingPassword,
   } = useWithdrawForm(asset);
 
   return (
@@ -86,7 +92,7 @@ export const WithdrawForm = ({
             validateFirst={true}
             rules={formValdation.withdrawPublicKey}
           >
-            <Input placeholder="Withdraw public key" />
+            <Input placeholder="Withdraw public key" className="form-input" />
           </Form.Item>
         ) : (
           ""
@@ -102,33 +108,64 @@ export const WithdrawForm = ({
                 ? "Withdraw address"
                 : "Hive blockchain account"
             }
+            className="form-input"
           />
         </Form.Item>
         {!withAssetSelector ? (
-          <div className="amt-div">
-            <Form.Item
-              name="amount"
-              validateFirst={true}
-              rules={formValdation.amount}
-              validateTrigger="onBlur"
-            >
-              <Input placeholder="amount" type="number" />
-            </Form.Item>
-          </div>
+          <Form.Item
+            name="amount"
+            validateFirst={true}
+            rules={formValdation.amount}
+            validateTrigger="onBlur"
+          >
+            <Input placeholder="amount" type="number" />
+          </Form.Item>
         ) : (
           ""
         )}
-        <Styled.FeeLabel>
+        <Styled.Fee>
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
-        </Styled.FeeLabel>
+        </Styled.Fee>
         {status === "" ? "" : <p>{status}</p>}
+
         <Styled.FormItem>
-          <Styled.WithdrawFormButton type="primary" htmlType="submit">
-            Withdraw
-          </Styled.WithdrawFormButton>
+          {localStorageAccount && localStorageAccount !== "" ? (
+            <>
+              <Styled.WithdrawFormButton type="primary" htmlType="submit">
+                Withdraw
+              </Styled.WithdrawFormButton>
+            </>
+          ) : (
+            <>
+              <Styled.WithdrawFormButton
+                type="primary"
+                htmlType="button"
+                onClick={() => {
+                  router.push("/login");
+                }}
+              >
+                Log in & Withdraw
+              </Styled.WithdrawFormButton>
+            </>
+          )}
         </Styled.FormItem>
       </Styled.WithdrawForm>
-      <PasswordModal visible={visible} onCancel={onCancel} />
+      {localStorageAccount && localStorageAccount !== "" ? (
+        ""
+      ) : (
+        <Styled.FormDisclamer>
+          <span>Don't have a Peerplays account? </span>
+          <Link href="/signup">
+            <a>Create account</a>
+          </Link>
+        </Styled.FormDisclamer>
+      )}
+
+      <PasswordModal
+        visible={isPasswordModalVisible}
+        onCancel={handlePasswordModalCancel}
+        submitting={submittingPassword}
+      />
     </Form.Provider>
   );
 };

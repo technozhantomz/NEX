@@ -5,6 +5,7 @@ import { Cache, Exchanges, Settings } from "../types";
 
 type Value =
   | string
+  | string[]
   | number
   | boolean
   | JSON

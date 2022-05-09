@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   Card,
   PoweroffOutlined,
@@ -5,8 +7,7 @@ import {
 } from "../../../../../../ui/src";
 import { breakpoints } from "../../../../../../ui/src/breakpoints";
 import { Contacts, Vote } from "../../../../../../ui/src/icons";
-import { useUserContext } from "../../../../UserProvider/UserProvider";
-import { useViewportContext } from "../../../../ViewportProvider";
+import { useUserContext, useViewportContext } from "../../../../../providers";
 import { MenuItem } from "../MenuItem";
 
 import * as Styled from "./ProfileMenu.styled";
@@ -22,7 +23,7 @@ export const ProfileMenu = (): JSX.Element => {
       <Meta
         avatar={
           <Styled.ProfileAvitar>
-            {localStorageAccount?.charAt(0)}
+            {localStorageAccount?.charAt(0).toUpperCase()}
           </Styled.ProfileAvitar>
         }
         title={`Hello ${localStorageAccount}!`}
@@ -48,7 +49,9 @@ export const ProfileMenu = (): JSX.Element => {
           </>
         ) : (
           <li className={"link"}>
-            <a>See all account activity</a>
+            <Link href={`/user/${localStorageAccount}`}>
+              <a>See all account activity</a>
+            </Link>
           </li>
         )}
 
@@ -61,7 +64,9 @@ export const ProfileMenu = (): JSX.Element => {
         </li>
         {width < breakpoints.xs ? (
           <li className={"link"}>
-            <a>See all account activity</a>
+            <Link href={`/user/${localStorageAccount}`}>
+              <a>See all account activity</a>
+            </Link>
           </li>
         ) : (
           " "
