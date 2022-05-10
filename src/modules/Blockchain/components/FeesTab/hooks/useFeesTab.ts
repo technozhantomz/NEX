@@ -53,49 +53,60 @@ export function useFeesTab(): UseFeesTabResult {
           feeParameter: feeParameters[index],
         })
       );
-
-      let generalOperations = operations.filter((operation) =>
-        feeGrouping.general.includes(operation.feeParameter[0])
+      let generalOperations = operations.filter(
+        (operation) =>
+          operation.feeParameter &&
+          feeGrouping.general.includes(operation.feeParameter[0])
       );
       generalOperations = generalOperations.filter(
         (generalOperation) =>
           Object.keys(generalOperation.feeParameter[1]).length > 0
       );
 
-      let assetOperations = operations.filter((operation) =>
-        feeGrouping.asset.includes(operation.feeParameter[0])
+      let assetOperations = operations.filter(
+        (operation) =>
+          operation.feeParameter &&
+          feeGrouping.asset.includes(operation.feeParameter[0])
       );
       assetOperations = assetOperations.filter(
         (assetOperation) =>
           Object.keys(assetOperation.feeParameter[1]).length > 0
       );
 
-      let marketOperations = operations.filter((operation) =>
-        feeGrouping.market.includes(operation.feeParameter[0])
+      let marketOperations = operations.filter(
+        (operation) =>
+          operation.feeParameter &&
+          feeGrouping.market.includes(operation.feeParameter[0])
       );
       marketOperations = marketOperations.filter(
         (marketOperation) =>
           Object.keys(marketOperation.feeParameter[1]).length > 0
       );
 
-      let accountOperations = operations.filter((operation) =>
-        feeGrouping.account.includes(operation.feeParameter[0])
+      let accountOperations = operations.filter(
+        (operation) =>
+          operation.feeParameter &&
+          feeGrouping.account.includes(operation.feeParameter[0])
       );
       accountOperations = accountOperations.filter(
         (accountOperation) =>
           Object.keys(accountOperation.feeParameter[1]).length > 0
       );
 
-      let businessOperations = operations.filter((operation) =>
-        feeGrouping.business.includes(operation.feeParameter[0])
+      let businessOperations = operations.filter(
+        (operation) =>
+          operation.feeParameter &&
+          feeGrouping.business.includes(operation.feeParameter[0])
       );
       businessOperations = businessOperations.filter(
         (businessOperation) =>
           Object.keys(businessOperation.feeParameter[1]).length > 0
       );
 
-      let gameOperations = operations.filter((operation) =>
-        feeGrouping.game.includes(operation.feeParameter[0])
+      let gameOperations = operations.filter(
+        (operation) =>
+          operation.feeParameter &&
+          feeGrouping.game.includes(operation.feeParameter[0])
       );
       gameOperations = gameOperations.filter(
         (gameOperation) => Object.keys(gameOperation.feeParameter[1]).length > 0
