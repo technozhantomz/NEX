@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { useFees } from "../../../../../common/hooks";
 
+import { useFees } from "../../../../../common/hooks";
 import { CheckboxValueType, Form } from "../../../../../ui/src";
 
 import {
