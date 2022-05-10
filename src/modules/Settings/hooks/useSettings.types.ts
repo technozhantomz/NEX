@@ -11,5 +11,5 @@ export type GeneralSettingsForm = {
   selectedLanguage: string;
   allowNotifications: boolean;
   allowTransferToMeNotifications: boolean;
-  walletLockInMintues: number;
+  walletLockInMinutes: number;
 };

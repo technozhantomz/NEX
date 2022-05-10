@@ -4,9 +4,9 @@ import {
   useArrayLimiter,
   useAsset,
   useBlockchain,
+  useMembers,
 } from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
-import { WitnessAccount } from "../../../../../common/types";
 
 import {
   UseWitnessesTabResult,
@@ -29,6 +29,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const [reward, setReward] = useState<number>(0);
   const [earnings, setEarnings] = useState<number>(0);
 
+  const { getWitnesses } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { dbApi } = usePeerplaysApiContext();
   const { defaultAsset, formAssetBalanceById, setPrecision } = useAsset();
@@ -49,66 +50,59 @@ export function useWitnessesTab(): UseWitnessesTabResult {
             chain.parameters.witness_pay_per_block,
             defaultAsset.precision
           );
-          const witnessesIds: [string, string][] = await dbApi(
-            "lookup_witness_accounts",
-            ["", 100]
-          );
-          if (witnessesIds && witnessesIds.length > 0) {
-            const witnesses: WitnessAccount[] = await dbApi("get_witnesses", [
-              witnessesIds.map((witnessId) => witnessId[1]),
-            ]);
-            if (witnesses && witnesses.length > 0) {
-              witnesses.sort((a, b) => b.total_votes - a.total_votes);
-              const witnessesRows: WitnessTableRow[] = [];
-              let index = 0;
-              for (const witness of witnesses) {
-                const votesAsset = await formAssetBalanceById(
-                  defaultAsset.id,
-                  Number(witness.total_votes)
-                );
-                witnessesRows.push({
-                  key: index,
-                  rank: index + 1,
-                  name: witnessesIds.filter(
-                    (witnessId) => witnessId[1] === witness.id
-                  )[0][0],
-                  totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
-                  lastBlock: witness.last_confirmed_block_num,
-                  missedBlocks: witness.total_missed,
-                  url: witness.url,
-                } as WitnessTableRow);
-                index = index + 1;
-              }
+          const { witnesses, witnessesIds } = await getWitnesses();
 
-              const blocksPerMonth =
-                (60 / getAvgBlockTime()) * 60 * 24 * getDaysInThisMonth();
-              const earnings = (
-                (blocksPerMonth / witnessesRows.length) *
-                rewardAmount
-              ).toFixed(defaultAsset.precision);
-              setWitnessTableRows(witnessesRows);
-              setActiveWitnesses(witnessesRows.length);
-              setReward(rewardAmount);
-              setEarnings(Number(earnings));
-              setWitnessStats({
-                active: updateArrayWithLimit(
-                  witnessStats.active,
-                  witnessesRows.length,
-                  99
-                ),
-                reward: updateArrayWithLimit(
-                  witnessStats.reward,
-                  rewardAmount,
-                  99
-                ),
-                earnings: updateArrayWithLimit(
-                  witnessStats.earnings,
-                  Number(earnings),
-                  99
-                ),
-              });
-              setLoading(false);
+          if (witnesses && witnesses.length > 0) {
+            witnesses.sort((a, b) => b.total_votes - a.total_votes);
+            const witnessesRows: WitnessTableRow[] = [];
+            let index = 0;
+            for (const witness of witnesses) {
+              const votesAsset = await formAssetBalanceById(
+                defaultAsset.id,
+                Number(witness.total_votes)
+              );
+              witnessesRows.push({
+                key: index,
+                rank: index + 1,
+                name: witnessesIds.filter(
+                  (witnessId) => witnessId[1] === witness.id
+                )[0][0],
+                totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+                lastBlock: witness.last_confirmed_block_num,
+                missedBlocks: witness.total_missed,
+                url: witness.url,
+              } as WitnessTableRow);
+              index = index + 1;
             }
+
+            const blocksPerMonth =
+              (60 / getAvgBlockTime()) * 60 * 24 * getDaysInThisMonth();
+            const earnings = (
+              (blocksPerMonth / witnessesRows.length) *
+              rewardAmount
+            ).toFixed(defaultAsset.precision);
+            setWitnessTableRows(witnessesRows);
+            setActiveWitnesses(witnessesRows.length);
+            setReward(rewardAmount);
+            setEarnings(Number(earnings));
+            setWitnessStats({
+              active: updateArrayWithLimit(
+                witnessStats.active,
+                witnessesRows.length,
+                99
+              ),
+              reward: updateArrayWithLimit(
+                witnessStats.reward,
+                rewardAmount,
+                99
+              ),
+              earnings: updateArrayWithLimit(
+                witnessStats.earnings,
+                Number(earnings),
+                99
+              ),
+            });
+            setLoading(false);
           }
         }
       } catch (e) {
