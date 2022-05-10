@@ -1,14 +1,17 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../../../../../common/components/UserProvider/UserProvider";
 import { useAccount } from "../../../../../common/hooks";
+import {
+  useBrowserHistoryContext,
+  useUserContext,
+} from "../../../../../common/providers";
 import { FullAccount } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 
 import { ILoginForm } from "./useLoginForm.types";
 
 export function useLoginForm(): ILoginForm {
+  const [submitting, setSubmitting] = useState(false);
   const [validUser, setValidUser] = useState(false);
   const [temporaryFullAccount, setTemporaryFullAccount] = useState<
     FullAccount | undefined
@@ -19,21 +22,23 @@ export function useLoginForm(): ILoginForm {
     validateAccountPassword,
   } = useAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
+  const { handleLoginRedirect } = useBrowserHistoryContext();
   const [loginForm] = Form.useForm();
-  const router = useRouter();
 
   useEffect(() => {
     if (localStorageAccount) {
-      router.push("/dashboard");
+      handleLoginRedirect();
     }
   }, [localStorageAccount]);
 
   const handleLogin = async () => {
+    setSubmitting(true);
     loginForm.validateFields().then(async () => {
       if (temporaryFullAccount) {
         await formAccountAfterConfirmation(temporaryFullAccount);
         setLocalStorageAccount(temporaryFullAccount.account.name);
       }
+      setSubmitting(false);
     });
   };
 
@@ -78,5 +83,6 @@ export function useLoginForm(): ILoginForm {
     loginForm,
     handleLogin,
     formValdation,
+    submitting,
   };
 }

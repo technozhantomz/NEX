@@ -1,13 +1,13 @@
-import { Form, Input } from "antd";
 import React from "react";
 
-import { CheckOutlined } from "../../../../ui/src";
+import { CheckOutlined, Form, Input } from "../../../../ui/src";
 
 import * as Styled from "./LoginForm.styled";
 import { useLoginForm } from "./hooks";
 
 export const LoginForm: React.FC = () => {
-  const { validUser, loginForm, handleLogin, formValdation } = useLoginForm();
+  const { validUser, loginForm, handleLogin, formValdation, submitting } =
+    useLoginForm();
   return (
     <Styled.LoginForm
       form={loginForm}
@@ -34,11 +34,16 @@ export const LoginForm: React.FC = () => {
       >
         <Input.Password placeholder="Enter password" />
       </Form.Item>
-      <Form.Item>
-        <Styled.LoginFormButton type="primary" htmlType="submit">
+
+      <Styled.LoginButtonContainer className="form-button">
+        <Styled.LoginButton
+          type="primary"
+          htmlType="submit"
+          loading={submitting}
+        >
           Log in
-        </Styled.LoginFormButton>
-      </Form.Item>
+        </Styled.LoginButton>
+      </Styled.LoginButtonContainer>
     </Styled.LoginForm>
   );
 };

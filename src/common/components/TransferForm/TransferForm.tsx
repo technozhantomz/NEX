@@ -1,7 +1,7 @@
 import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
+import { useUserContext } from "../../providers";
 import { PasswordModal } from "../PasswordModal";
-import { useUserContext } from "../UserProvider";
 
 import * as Styled from "./TransferForm.styled";
 import { useTransferForm } from "./hooks";
@@ -14,14 +14,15 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
-    visible,
+    isPasswordModalVisible,
     feeAmount,
     transferForm,
     formValdation,
-    onCancel,
+    handlePasswordModalCancel,
     confirm,
     onFormFinish,
     handleValuesChange,
+    submittingPassword,
   } = useTransferForm();
   const { defaultAsset } = useAsset();
 
@@ -45,22 +46,22 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             <Input disabled={true} placeholder="From" />
           </Form.Item>
           <Form.Item
+            name="amount"
+            validateFirst={true}
+            rules={formValdation.amount}
+            validateTrigger="onBlur"
+          >
+            <Input placeholder="Quantity" type="number" />
+          </Form.Item>
+        </div>
+        <div className="two-input-row">
+          <Form.Item
             name="to"
             validateFirst={true}
             rules={formValdation.to}
             validateTrigger="onBlur"
           >
             <Input placeholder="To" />
-          </Form.Item>
-        </div>
-        <div className="two-input-row">
-          <Form.Item
-            name="amount"
-            validateFirst={true}
-            rules={formValdation.amount}
-            validateTrigger="onBlur"
-          >
-            <Input placeholder="Amount" type="number" />
           </Form.Item>
           <Form.Item
             name="asset"
@@ -80,13 +81,17 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
         </p>
         {status === "" ? "" : <p>{status}</p>}
-        <Form.Item>
+        <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">
             Send
           </Styled.TransferFormButton>
-        </Form.Item>
+        </Styled.FormItem>
       </Styled.TransferForm>
-      <PasswordModal visible={visible} onCancel={onCancel} />
+      <PasswordModal
+        visible={isPasswordModalVisible}
+        onCancel={handlePasswordModalCancel}
+        submitting={submittingPassword}
+      />
     </Form.Provider>
   );
 };

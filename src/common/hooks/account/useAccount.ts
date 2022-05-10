@@ -3,8 +3,7 @@ import { useCallback, useState } from "react";
 
 import { useAsset } from "..";
 import { defaultToken } from "../../../api/params";
-import { usePeerplaysApiContext } from "../../components/PeerplaysApiProvider";
-import { useUserContext } from "../../components/UserProvider";
+import { usePeerplaysApiContext, useUserContext } from "../../providers";
 import {
   Account,
   Asset,
@@ -20,7 +19,7 @@ export function useAccount(): UseAccountResult {
     localStorageAccount,
     updateAccount,
     setAssets,
-    setIsAccountLocked,
+    setPassword,
     setLocalStorageAccount,
   } = useUserContext();
   const [loading, setLoading] = useState<boolean>(true);
@@ -56,9 +55,9 @@ export function useAccount(): UseAccountResult {
 
   const removeAccount = useCallback(() => {
     updateAccount("", "", []);
-    setIsAccountLocked(true);
+    setPassword("");
     setLocalStorageAccount("");
-  }, [updateAccount, setIsAccountLocked, setLocalStorageAccount]);
+  }, [updateAccount, setPassword, setLocalStorageAccount]);
 
   const formAccountAfterConfirmation = useCallback(
     async (fullAccount: FullAccount) => {
@@ -70,14 +69,13 @@ export function useAccount(): UseAccountResult {
           })
         );
         updateAccount(fullAccount.account.id, fullAccount.account.name, assets);
-        setIsAccountLocked(false);
         setLoading(false);
       } catch (e) {
         console.log(e);
         setLoading(false);
       }
     },
-    [updateAccount, setIsAccountLocked, formAssetBalanceById, setLoading]
+    [updateAccount, formAssetBalanceById, setLoading]
   );
 
   const formAccountByName = useCallback(

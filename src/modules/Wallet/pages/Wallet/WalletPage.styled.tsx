@@ -1,5 +1,6 @@
 import { styled, Card as UiCard, Tabs as UiTabs } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const Tabs = styled(UiTabs)`
   ${breakpoint.xs} {
@@ -15,6 +16,16 @@ export const Tabs = styled(UiTabs)`
 `;
 
 export const WalletCard = styled(UiCard)`
+  .ant-tabs {
+    min-height: 856px;
+    padding: 35px 0 0 0;
+    border-radius: 4px;
+    opacity: 1;
+    max-width: 1070px;
+  }
+  .ant-table-wrapper {
+    margin-left: 35px;
+  }
   .ant-card-body {
     padding: 0;
     .ant-tabs-nav-list {
@@ -29,7 +40,7 @@ export const WalletCard = styled(UiCard)`
       display: none;
     }
     .ant-tabs-top > .ant-tabs-nav::before {
-      border-bottom: 2pt solid #f0f0f0;
+      ${mixIns.inActiveTab}
     }
     .ant-tabs-ink-bar {
       height: 2pt;

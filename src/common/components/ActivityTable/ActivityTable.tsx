@@ -1,13 +1,24 @@
 import { breakpoints } from "../../../ui/src/breakpoints";
-import { useViewportContext } from "../ViewportProvider";
+import { useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityTable.styled";
 import { ActivityColumns as columns } from "./components";
 import { ActivityList } from "./components/ActivityList";
 import { useActivityTable } from "./hooks";
 
-export const ActivityTable = (): JSX.Element => {
-  const { activitiesTable, loading } = useActivityTable();
+type Props = {
+  userName?: string;
+  isWalletActivityTable?: boolean;
+};
+
+export const ActivityTable = ({
+  userName,
+  isWalletActivityTable = false,
+}: Props): JSX.Element => {
+  const { activitiesRows, loading } = useActivityTable({
+    userName,
+    isWalletActivityTable,
+  });
   const { width } = useViewportContext();
 
   return (
@@ -15,14 +26,17 @@ export const ActivityTable = (): JSX.Element => {
       {width > breakpoints.sm ? (
         <Styled.ActivityTable
           columns={columns}
-          dataSource={activitiesTable}
+          dataSource={activitiesRows}
           loading={loading}
           pagination={false}
           size="small"
           className="activity-table"
         />
       ) : (
-        <ActivityList />
+        <ActivityList
+          userName={userName}
+          isWalletActivityTable={isWalletActivityTable}
+        />
       )}
     </>
   );

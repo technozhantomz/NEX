@@ -4,6 +4,7 @@ export const colors = {
   warningColor: `#f2c222`,
   infoColor: `#1890ff`,
   additionalBlue: `#1084FF`,
+  linkColor: `#0A48BE`, // link color
   successColor: `#10AF77`,
   headingColor: `#212121`,
   textColor: `#212121`,
@@ -13,4 +14,6 @@ export const colors = {
   successTag: `#B8F4C9`,
   assetTag: `#FDBA86`,
   missedColor: `#D01721`,
+  inactiveColor: `#f0f0f0`,
+  activeColor: ``,
 };

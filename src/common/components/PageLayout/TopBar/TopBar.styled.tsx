@@ -30,8 +30,6 @@ export const TopBar = styled.nav`
     flex-direction: row;
   }
   ${breakpoint.xs} {
-     {
-      border: none;
-    }
+    border: none;
   }
 `;

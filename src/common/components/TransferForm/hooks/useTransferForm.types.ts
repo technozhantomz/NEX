@@ -2,14 +2,15 @@ import { FormInstance, Rule } from "../../../../ui/src";
 
 export type UseTransferFormResult = {
   status: string;
-  visible: boolean;
+  isPasswordModalVisible: boolean;
   feeAmount: number;
   formValdation: FormValidation;
   transferForm: FormInstance<TransferForm>;
   onFormFinish: (name: string, info: { values: any; forms: any }) => void;
-  onCancel: () => void;
+  handlePasswordModalCancel: () => void;
   confirm: () => void;
   handleValuesChange: (changedValues: any) => void;
+  submittingPassword: boolean;
 };
 
 export type FormField = {
