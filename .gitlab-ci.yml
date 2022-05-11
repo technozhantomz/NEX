@@ -28,6 +28,7 @@ build_base_cypress:
     - REGISTRY_FINAL_IMAGE=$CI_REGISTRY_IMAGE:$FINAL_TAG
     - echo $REGISTRY_FINAL_IMAGE
 
+    - DOCKER_CLI_EXPERIMENTAL=enabled
     - docker manifest inspect $REGISTRY_FINAL_IMAGE ; echo $?
 
     #
