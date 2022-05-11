@@ -1,6 +1,34 @@
 stages:
-  - build_test
-  - test
+  - build_base
+  # - build_test
+  # - test
+
+variables:
+  CYPRESS_BASE_IMAGE: cypress/browsers:node16.14.0-chrome99-ff97
+
+
+build_base_cypress:
+  stage: build_base
+  image: docker:19.03.12
+  services:
+    - docker:19.03.12-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  variables:
+  script:
+
+    - echo $CYPRESS_BASE_IMAGE
+    - export OK=feroifjero
+    - echo $OK
+
+    # Dockerfile.cypress-node16.14.0-chrome99-ff97
+    # tag it as cypress-node16.14.0-chrome99-ff97-PACKAGES-SHA1SUM
+    # this way everything ignores the branch
+    #
+    - pwd
+    - ls -alF
+    - docker info
+
 
 cypress_build:
   stage: build_test
@@ -11,6 +39,11 @@ cypress_build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   variables:
   script:
+
+    # Dockerfile.cypress-node16.14.0-chrome99-ff97
+    # tag it as cypress-node16.14.0-chrome99-ff97-PACKAGES-SHA1SUM
+    # this way everything ignores the branch
+    #
     - pwd
     - ls -alF
     - docker info
