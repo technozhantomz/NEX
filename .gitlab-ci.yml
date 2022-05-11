@@ -65,8 +65,17 @@ herewego:
   before_script:
     - echo "${REGISTRY_FINAL_IMAGE}"
   script:
+    - ORIGIN_BUILD=$(pwd)
     - pwd
     - ls -alF
+    - cd /app
+    - ls -alF
+    - cd "$ORIGIN_BUILD"
+    - pwd
+    - cp -av . /app/
+    - cd /app
+    - ls -alF
+
 
     
 
