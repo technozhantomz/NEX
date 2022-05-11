@@ -41,4 +41,6 @@ cypress_test2:
 
 # need artifacts with expiry
 
+# sha1 on both package files, tag as combined sha1
+
 # run again ###
