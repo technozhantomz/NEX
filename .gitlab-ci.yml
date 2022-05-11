@@ -1,5 +1,6 @@
 stages:
   - build_base
+  - round
   # - build_test
   # - test
 
@@ -28,6 +29,9 @@ build_base_cypress:
     - REGISTRY_FINAL_IMAGE=$CI_REGISTRY_IMAGE:$FINAL_TAG
     - echo $REGISTRY_FINAL_IMAGE
 
+    - echo "REGISTRY_FINAL_IMAGE=${REGISTRY_FINAL_IMAGE}" > passdown.env
+    - cat passdown.env
+
     #
     # instead of pulling base image, just check if its there, if it is, dont pull and build and push
     #
@@ -48,6 +52,23 @@ build_base_cypress:
     - pwd
     - ls -alF
     # - docker info
+  artifacts:
+    reports:
+      dotenv: passdown.env
+
+
+herewego:
+  stage: round
+  needs:
+    - build_base
+  image: ${REGISTRY_FINAL_IMAGE}
+  before_script:
+    - echo "${REGISTRY_FINAL_IMAGE}"
+  script:
+    - pwd
+    - ls -alF
+
+    
 
 #again
 
