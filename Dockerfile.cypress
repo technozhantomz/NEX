@@ -1,0 +1,14 @@
+
+FROM cypress/browsers:node16.14.0-chrome99-ff97
+
+RUN apt-get update && apt-get install -y \
+    git
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci && npm cache clean --force
+
+COPY ./ /app/
+
+
