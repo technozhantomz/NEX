@@ -35,6 +35,8 @@ cypress_test:
     #- ./node_modules/.bin/cypress run
     - pwd
     - ls -alF
+    - cd /app
+    - ./node_modules/.bin/cypress run
 
 # cypress_test2:
   # stage: test
