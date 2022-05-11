@@ -60,7 +60,7 @@ build_base_cypress:
 herewego:
   stage: round
   needs:
-    - build_base
+    - build_base_cypress
   image: ${REGISTRY_FINAL_IMAGE}
   before_script:
     - echo "${REGISTRY_FINAL_IMAGE}"
