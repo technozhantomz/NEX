@@ -18,8 +18,8 @@ build_base_cypress:
   script:
 
     - echo $CYPRESS_BASE_IMAGE
-    - export OK=feroifjero
-    - echo $OK
+    - VV=feroifjeroVVVVVok
+    - echo $VV
 
     # Dockerfile.cypress-node16.14.0-chrome99-ff97
     # tag it as cypress-node16.14.0-chrome99-ff97-PACKAGES-SHA1SUM
