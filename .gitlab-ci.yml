@@ -27,16 +27,22 @@ cypress_build:
     #- docker push $BASE_SLUG_IMAGE:$CI_COMMIT_SHA
     #- docker push $BASE_SLUG_IMAGE:latest
 
-cypress_test:
+cypress_test_chrome:
   stage: test
   image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  variables:
+    # Don't clone the repo
+    GIT_STRATEGY: none
   script:
-    #- npx cypress run
-    #- ./node_modules/.bin/cypress run
     - pwd
     - ls -alF
     - cd /app
-    - ./node_modules/.bin/cypress run
+    - ls -alF
+    - ./node_modules/.bin/cypress run --browser chrome
+
+
+
+
 
 # cypress_test2:
   # stage: test
