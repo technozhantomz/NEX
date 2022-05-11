@@ -24,4 +24,4 @@ cypress_build:
     #- docker push $BASE_SLUG_IMAGE:$CI_COMMIT_SHA
     #- docker push $BASE_SLUG_IMAGE:latest
 
-# run again #
+# run again ##
