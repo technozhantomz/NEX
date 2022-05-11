@@ -29,7 +29,16 @@ cypress_test:
   stage: test
   image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
   script:
-    - npx cypress run
+    #- npx cypress run
+    - ./node_modules/.bin/cypress run
 
+cypress_test2:
+  stage: test
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  script:
+    #- npx cypress run
+    - ./node_modules/.bin/cypress run --browser firefox
+
+# need artifacts with expiry
 
 # run again ###
