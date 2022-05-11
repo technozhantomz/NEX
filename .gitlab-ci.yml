@@ -16,12 +16,28 @@ build_base_cypress:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   variables:
   script:
-    - echo $SHELL
-    - echo $BASH_VERSION
+    # - echo $SHELL
+    # - echo $BASH_VERSION
     - PACKAGES_SHA1=$(cat package*.json | sha1sum | awk '{print $1}')
+    - BASE_IMAGE=$CYPRESS_IMAGE
     - FINAL_TAG=cypress-${CYPRESS_BROWSER_TAG}-packages-${PACKAGES_SHA1}
+
     - echo $PACKAGES_SHA1
     - echo $FINAL_TAG
+
+    - REGISTRY_FINAL_IMAGE=$CI_REGISTRY_IMAGE:$FINAL_TAG
+    - echo $REGISTRY_FINAL_IMAGE
+
+    #
+    # instead of pulling base image, just check if its there, if it is, dont pull and build and push
+    #
+    - docker pull $REGISTRY_FINAL_IMAGE || true
+    - docker build -f Dockerfile.base --build-arg BASE_IMAGE=$BASE_IMAGE --cache-from $REGISTRY_FINAL_IMAGE -t $REGISTRY_FINAL_IMAGE .
+    - docker push $REGISTRY_FINAL_IMAGE
+    
+#     - docker build -f Dockerfile.cypress --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+#     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+#     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
 
 
