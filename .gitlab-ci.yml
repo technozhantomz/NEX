@@ -17,6 +17,7 @@ build_base_cypress:
   variables:
   script:
     - echo $SHELL
+    - echo $BASH_VERSION
     - PACKAGES_SHA1=$(cat package*.json | sha1sum | awk '{print $1}')
     - FINAL_TAG=cypress-${CYPRESS_BROWSER_TAG}-packages-${PACKAGES_SHA1}
     - echo $PACKAGES_SHA1
