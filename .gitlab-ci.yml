@@ -58,14 +58,11 @@ build_base_cypress:
       dotenv: passdown.env
 
 
-herewego:
-  stage: round
+.herewego:
   needs:
     - build_base_cypress
-  image: ${REGISTRY_FINAL_IMAGE}
   before_script:
     - echo "${REGISTRY_FINAL_IMAGE}"
-  script:
     - ORIGIN_BUILD=$(pwd)
     - pwd
     - ls -alF
@@ -76,9 +73,25 @@ herewego:
     - cp -av . /app/
     - cd /app
     - ls -alF
+
+herewego_chrome:
+  stage: round
+  extends: .herewego
+  image: ${REGISTRY_FINAL_IMAGE}
+  needs:
+    - build_base_cypress
+  script:  
     - ./node_modules/.bin/cypress run --browser chrome
 
-    
+herewego_firefox:
+  stage: round
+  extends: .herewego
+  image: ${REGISTRY_FINAL_IMAGE}
+  needs:
+    - build_base_cypress
+  script:  
+    - ./node_modules/.bin/cypress run --browser firefox
+
 
 #again
 
