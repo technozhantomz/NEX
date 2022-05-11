@@ -1,10 +1,11 @@
 stages:
+  - build_test
   - test
 
 
 
 cypress_build:
-  stage: test
+  stage: build_test
   image: docker:19.03.12
   services:
     - docker:19.03.12-dind
@@ -23,5 +24,12 @@ cypress_build:
     #- docker build --cache-from $BASE_SLUG_IMAGE:latest --tag $BASE_SLUG_IMAGE:$CI_COMMIT_SHA --tag $BASE_SLUG_IMAGE:latest .
     #- docker push $BASE_SLUG_IMAGE:$CI_COMMIT_SHA
     #- docker push $BASE_SLUG_IMAGE:latest
+
+cypress_test:
+  stage: test
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  script:
+    - npx cypress run
+
 
 # run again ###
