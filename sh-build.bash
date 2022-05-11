@@ -3,7 +3,7 @@
 CYPRESS_BROWSER_TAG=node16.14.0-chrome99-ff97
 CYPRESS_IMAGE=cypress/browsers:${CYPRESS_BROWSER_TAG}
 
-PACKAGES_SHA1=$(cat package*.json | sha1sum | awk '{print $1}')
+PACKAGES_SHA1=$(cat package-lock.json package.json | sha1sum | awk '{print $1}')
 
 FINAL_TAG=cypress-${CYPRESS_BROWSER_TAG}-packages-${PACKAGES_SHA1}
 
@@ -12,3 +12,9 @@ echo $PACKAGES_SHA1
 docker build -f Dockerfile.base --build-arg \
   BASE_IMAGE=$CYPRESS_IMAGE -t lolbase:${FINAL_TAG} . && \
   docker run --rm -it lolbase:${FINAL_TAG} /bin/bash
+
+
+# here would need to mount local . folder and copy to app
+# in a new container with tag latest
+#
+# then run that new image with tag latest
