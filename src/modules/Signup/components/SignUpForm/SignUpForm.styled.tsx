@@ -1,13 +1,13 @@
 import {
+  CardForm,
   CardFormButton,
-  CardFrom,
   styled,
   Checkbox as UICheckbox,
   Input as UIInput,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 
-export const UsernameFormItem = styled(CardFrom.Item)`
+export const UsernameFormItem = styled(CardForm.Item)`
   margin-bottom: 15px;
   ${breakpoint.xs} {
     margin-bottom: 24px;
@@ -19,33 +19,40 @@ export const Label = styled.p`
     margin-bottom: 24px;
   }
 `;
-export const GeneratedPassordInput = styled(UIInput.Password)`
+export const GeneratedPassordInput = styled(UIInput)`
   .ant-input-password-icon {
     color: #b9b9b9;
     display: flex;
     justify-content: space-between;
     width: 38px;
   }
+  .anticon {
+    color: #b9b9b9;
+    margin-right: 10px;
+    ${breakpoint.xs} {
+      margin-right: 15px;
+    }
+  }
 `;
 
-export const PasswordFormItem = styled(CardFrom.Item)`
+export const PasswordFormItem = styled(CardForm.Item)`
   margin-bottom: 15px;
   ${breakpoint.xs} {
     margin-bottom: 20px;
   }
 `;
 
-export const PasswordCheckFormItem = styled(CardFrom.Item)`
+export const PasswordCheckFormItem = styled(CardForm.Item)`
   margin-bottom: 23px;
   ${breakpoint.xs} {
     margin-bottom: 35px;
   }
 `;
-export const ConfirmFormItem = styled(CardFrom.Item)`
+export const ConfirmFormItem = styled(CardForm.Item)`
   margin-bottom: 12px;
 `;
 
-export const SavedFormItem = styled(CardFrom.Item)`
+export const SavedFormItem = styled(CardForm.Item)`
   margin-bottom: 35px;
 `;
 
@@ -80,7 +87,7 @@ export const Checkbox = styled(UICheckbox)`
   }
 `;
 
-export const SignupForm = styled(CardFrom)`
+export const SignupForm = styled(CardForm)`
   .ant-input,
   .ant-input-affix-wrapper {
     height: 100%;
@@ -117,4 +124,4 @@ export const SignupFormButton = styled(CardFormButton)`
   }
 `;
 
-export const FormItem = styled(CardFrom.Item)``;
+export const FormItem = styled(CardForm.Item)``;

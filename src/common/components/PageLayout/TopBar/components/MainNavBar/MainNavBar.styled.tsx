@@ -17,6 +17,9 @@ export const MainNavBar = styled.div`
     font-weight: bold;
     margin-left: 10px;
   }
+  .ant-avatar {
+    background: ${colors.successTag};
+  }
   .bell {
     font-size: 1.2em;
     font-weight: bold;

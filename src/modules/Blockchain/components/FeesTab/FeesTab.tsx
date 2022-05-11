@@ -43,7 +43,9 @@ export const FeesTab = (): JSX.Element => {
               loading={loading}
               pagination={false}
             />
-            {generalFull ? (
+            {loading ? (
+              ""
+            ) : generalFull ? (
               <a onClick={() => setGeneralFull(false)}>Show Less</a>
             ) : (
               <a onClick={() => setGeneralFull(true)}>Show More</a>
@@ -110,7 +112,9 @@ export const FeesTab = (): JSX.Element => {
                 </Styled.FeeListItem>
               )}
             />
-            {generalFull ? (
+            {loading ? (
+              ""
+            ) : generalFull ? (
               <a onClick={() => setGeneralFull(false)}>Show Less</a>
             ) : (
               <a onClick={() => setGeneralFull(true)}>Show More</a>
@@ -135,7 +139,9 @@ export const FeesTab = (): JSX.Element => {
               loading={loading}
               pagination={false}
             />
-            {assetFull ? (
+            {loading ? (
+              ""
+            ) : assetFull ? (
               <a onClick={() => setAssetFull(false)}>Show Less</a>
             ) : (
               <a onClick={() => setAssetFull(true)}>Show More</a>
@@ -202,7 +208,9 @@ export const FeesTab = (): JSX.Element => {
                 </Styled.FeeListItem>
               )}
             />
-            {assetFull ? (
+            {loading ? (
+              ""
+            ) : assetFull ? (
               <a onClick={() => setAssetFull(false)}>Show Less</a>
             ) : (
               <a onClick={() => setAssetFull(true)}>Show More</a>
@@ -227,7 +235,9 @@ export const FeesTab = (): JSX.Element => {
               loading={loading}
               pagination={false}
             />
-            {accountFull ? (
+            {loading ? (
+              ""
+            ) : accountFull ? (
               <a onClick={() => setAccountFull(false)}>Show Less</a>
             ) : (
               <a onClick={() => setAccountFull(true)}>Show More</a>
@@ -294,7 +304,9 @@ export const FeesTab = (): JSX.Element => {
                 </Styled.FeeListItem>
               )}
             />
-            {accountFull ? (
+            {loading ? (
+              ""
+            ) : accountFull ? (
               <a onClick={() => setAccountFull(false)}>Show Less</a>
             ) : (
               <a onClick={() => setAccountFull(true)}>Show More</a>
@@ -387,7 +399,9 @@ export const FeesTab = (): JSX.Element => {
               loading={loading}
               pagination={false}
             />
-            {businessFull ? (
+            {loading ? (
+              ""
+            ) : businessFull ? (
               <a onClick={() => setBusinessFull(false)}>Show Less</a>
             ) : (
               <a onClick={() => setBusinessFull(true)}>Show More</a>
@@ -454,7 +468,9 @@ export const FeesTab = (): JSX.Element => {
                 </Styled.FeeListItem>
               )}
             />
-            {businessFull ? (
+            {loading ? (
+              ""
+            ) : businessFull ? (
               <a onClick={() => setBusinessFull(false)}>Show Less</a>
             ) : (
               <a onClick={() => setBusinessFull(true)}>Show More</a>
@@ -479,7 +495,9 @@ export const FeesTab = (): JSX.Element => {
               loading={loading}
               pagination={false}
             />
-            {gameFull ? (
+            {loading ? (
+              ""
+            ) : gameFull ? (
               <a onClick={() => setGameFull(false)}>Show Less</a>
             ) : (
               <a onClick={() => setGameFull(true)}>Show More</a>
@@ -546,7 +564,9 @@ export const FeesTab = (): JSX.Element => {
                 </Styled.FeeListItem>
               )}
             />
-            {gameFull ? (
+            {loading ? (
+              ""
+            ) : gameFull ? (
               <a onClick={() => setGameFull(false)}>Show Less</a>
             ) : (
               <a onClick={() => setGameFull(true)}>Show More</a>

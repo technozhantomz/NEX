@@ -15,7 +15,7 @@ export const ActivityTable = ({
   userName,
   isWalletActivityTable = false,
 }: Props): JSX.Element => {
-  const { activitiesTable, loading } = useActivityTable({
+  const { activitiesRows, loading } = useActivityTable({
     userName,
     isWalletActivityTable,
   });
@@ -26,7 +26,7 @@ export const ActivityTable = ({
       {width > breakpoints.sm ? (
         <Styled.ActivityTable
           columns={columns}
-          dataSource={activitiesTable}
+          dataSource={activitiesRows}
           loading={loading}
           pagination={false}
           size="small"

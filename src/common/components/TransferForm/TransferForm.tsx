@@ -46,22 +46,22 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             <Input disabled={true} placeholder="From" />
           </Form.Item>
           <Form.Item
+            name="amount"
+            validateFirst={true}
+            rules={formValdation.amount}
+            validateTrigger="onBlur"
+          >
+            <Input placeholder="Quantity" type="number" />
+          </Form.Item>
+        </div>
+        <div className="two-input-row">
+          <Form.Item
             name="to"
             validateFirst={true}
             rules={formValdation.to}
             validateTrigger="onBlur"
           >
             <Input placeholder="To" />
-          </Form.Item>
-        </div>
-        <div className="two-input-row">
-          <Form.Item
-            name="amount"
-            validateFirst={true}
-            rules={formValdation.amount}
-            validateTrigger="onBlur"
-          >
-            <Input placeholder="Amount" type="number" />
           </Form.Item>
           <Form.Item
             name="asset"
@@ -81,11 +81,11 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
         </p>
         {status === "" ? "" : <p>{status}</p>}
-        <Form.Item>
+        <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">
             Send
           </Styled.TransferFormButton>
-        </Form.Item>
+        </Styled.FormItem>
       </Styled.TransferForm>
       <PasswordModal
         visible={isPasswordModalVisible}

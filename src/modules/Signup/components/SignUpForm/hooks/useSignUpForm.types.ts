@@ -13,6 +13,8 @@ export type ISignUpForm = {
   signUpForm: FormInstance;
   submitting: boolean;
   generatedPassword: string;
+  isInputTypePassword: boolean;
+  handleInputType: () => void;
 };
 
 export type IFormField = {

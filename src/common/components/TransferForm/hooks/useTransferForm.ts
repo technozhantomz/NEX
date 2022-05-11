@@ -26,7 +26,7 @@ export function useTransferForm(): UseTransferFormResult {
   const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
     useAccount();
   const { localStorageAccount, assets } = useUserContext();
-  const { trxBuilder } = useTransactionBuilder();
+  const { buildTrx } = useTransactionBuilder();
   const { calculteTransferFee } = useFees();
   const { buildTransferTransaction } = useTransferTransactionBuilder();
   const { sonAccount, getSonNetworkStatus } = useSonNetwork();
@@ -104,7 +104,7 @@ export function useTransferForm(): UseTransferFormResult {
     );
     let trxResult;
     try {
-      trxResult = await trxBuilder([trx], [activeKey]);
+      trxResult = await buildTrx([trx], [activeKey]);
     } catch (e) {
       console.log(e);
       setSubmittingPassword(false);

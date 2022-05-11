@@ -12,6 +12,7 @@ import { useGeneratePassword } from "./useGeneratePassword";
 import { IFormValidation, ISignUpForm } from "./useSignUpForm.types";
 
 export function useSignUpForm(): ISignUpForm {
+  const [isInputTypePassword, setIsInputTypePassword] = useState(true);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [generatedPassword, setGeneratedPassword] = useState<string>("");
   const { formAccountAfterConfirmation, getFullAccount } = useAccount();
@@ -41,6 +42,10 @@ export function useSignUpForm(): ISignUpForm {
       setLocalStorageAccount(fullAccount.account.name);
       setSubmitting(false);
     }
+  };
+
+  const handleInputType = () => {
+    setIsInputTypePassword(!isInputTypePassword);
   };
 
   const setCheckboxVlaue = (e: CheckboxChangeEvent) => {
@@ -110,5 +115,7 @@ export function useSignUpForm(): ISignUpForm {
     signUpForm,
     submitting,
     generatedPassword,
+    isInputTypePassword,
+    handleInputType,
   };
 }

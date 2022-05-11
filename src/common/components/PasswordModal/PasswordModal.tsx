@@ -6,7 +6,7 @@ import { usePasswordForm } from "./hooks";
 type Props = {
   visible: boolean;
   onCancel: () => void;
-  submitting: boolean;
+  submitting?: boolean;
 };
 
 export const PasswordModal = ({
@@ -47,7 +47,7 @@ export const PasswordModal = ({
           <Styled.PasswordModalFormButton
             type="primary"
             htmlType="submit"
-            loading={submitting}
+            loading={submitting !== undefined ? submitting : false}
           >
             Send
           </Styled.PasswordModalFormButton>
