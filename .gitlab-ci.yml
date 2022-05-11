@@ -14,12 +14,15 @@ cypress_build:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   variables:
-    BASE_SLUG_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
+    BASE_SLUG_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
   script:
     - docker info
     - echo $IMAGE
-    - docker pull $BASE_SLUG_IMAGE:latest || true
-    - docker build --cache-from $BASE_SLUG_IMAGE:latest --tag $BASE_SLUG_IMAGE:$CI_COMMIT_SHA --tag $BASE_SLUG_IMAGE:latest .
-    - docker push $BASE_SLUG_IMAGE:$CI_COMMIT_SHA
-    - docker push $BASE_SLUG_IMAGE:latest
+    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    #- docker build --cache-from $BASE_SLUG_IMAGE:latest --tag $BASE_SLUG_IMAGE:$CI_COMMIT_SHA --tag $BASE_SLUG_IMAGE:latest .
+    #- docker push $BASE_SLUG_IMAGE:$CI_COMMIT_SHA
+    #- docker push $BASE_SLUG_IMAGE:latest
