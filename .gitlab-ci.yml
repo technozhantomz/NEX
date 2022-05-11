@@ -1,9 +1,6 @@
 stages:
   - test
 
-before_script:
-  - echo "BEFORE"
-
 
 
 cypress_build:
@@ -20,7 +17,7 @@ cypress_build:
     - docker info
     - echo $IMAGE
     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker build -f Dockerfile.cypress --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     #- docker build --cache-from $BASE_SLUG_IMAGE:latest --tag $BASE_SLUG_IMAGE:$CI_COMMIT_SHA --tag $BASE_SLUG_IMAGE:latest .
