@@ -1,0 +1,19 @@
+stages:
+  - test
+
+before_script:
+  - echo "BEFORE"
+
+
+
+cypress_build:
+  stage: test
+  image: docker:19.03.12
+  services:
+  - docker:19.03.12-dind
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+  script:
+    - docker info
+    - echo $IMAGE
+    
