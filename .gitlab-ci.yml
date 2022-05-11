@@ -28,9 +28,6 @@ build_base_cypress:
     - REGISTRY_FINAL_IMAGE=$CI_REGISTRY_IMAGE:$FINAL_TAG
     - echo $REGISTRY_FINAL_IMAGE
 
-    - DOCKER_CLI_EXPERIMENTAL=enabled
-    - docker manifest inspect $REGISTRY_FINAL_IMAGE ; echo $?
-
     #
     # instead of pulling base image, just check if its there, if it is, dont pull and build and push
     #
@@ -52,6 +49,7 @@ build_base_cypress:
     - ls -alF
     # - docker info
 
+#again
 
 # cypress_build:
 #   stage: build_test
