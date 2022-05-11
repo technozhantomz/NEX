@@ -76,7 +76,7 @@ herewego:
     - cp -av . /app/
     - cd /app
     - ls -alF
-
+    - ./node_modules/.bin/cypress run --browser chrome
 
     
 
