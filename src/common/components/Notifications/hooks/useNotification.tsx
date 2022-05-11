@@ -2,6 +2,7 @@ import { ChainTypes } from "peerplaysjs-lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
+import { isArrayEqual } from "../../../../api/utils";
 import { breakpoints } from "../../../../ui/src/breakpoints";
 import { useAccount, useAccountHistory, useAsset } from "../../../hooks";
 import {
@@ -21,8 +22,13 @@ export function useNotification({
   userName,
   isWalletActivityTable = false,
 }: UseActivityTableArgs): UseActivityTableResult {
+  const [unread, setUnread] = useState<ActivityRow[]>([]);
+  const [showUnread, setShowUnread] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState<ActivityRow[]>([]);
   const [activitiesTable, _setActivitiesTable] = useState<ActivityRow[]>([]);
-  const [recentActivitiesTable, _setRecentActivitiesTable] = useState<ActivityRow[]>([]);
+  const [recentActivitiesTable, _setRecentActivitiesTable] = useState<
+    ActivityRow[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { dbApi } = usePeerplaysApiContext();
   const { id } = useUserContext();
@@ -31,10 +37,6 @@ export function useNotification({
     useAsset();
   const { getUserNameById, getAccountByName } = useAccount();
   const { getAccountHistoryById } = useAccountHistory();
-  const ref = useRef()
-
-  
-  
 
   const formDate = useCallback(
     (
@@ -351,9 +353,8 @@ export function useNotification({
       }
       const activityRows = await Promise.all(history.map(formActivityRow));
       _setActivitiesTable(activityRows);
-      // _setRecentActivitiesTable(activityRows.slice(0,5))
-      const arrr = localStorage.getItem("activityList");
-      _setRecentActivitiesTable(JSON.parse(arrr));
+      _setRecentActivitiesTable(activityRows.slice(0, 5));
+
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -370,21 +371,42 @@ export function useNotification({
     userName,
   ]);
 
+  const handleShowUnread = () => {
+    setShowUnread(!showUnread);
+  };
+
+  const handleNotifications = useCallback(async () => {
+    const activityList = localStorage.getItem("activityList");
+
+    if (isArrayEqual(activityList, activitiesTable)) {
+      localStorage.setItem("activityList", JSON.stringify(activitiesTable));
+    } else {
+      setUnread(
+        activitiesTable.filter(
+          (activity) => activityList?.indexOf(activity) === -1
+        )
+      );
+    }
+
+    setUnreadMessages(
+      activitiesTable.filter(
+        (obj) => !JSON.parse(activityList).some(({ id }) => obj.id === id)
+      )
+    );
+  }, [unread, activitiesTable]);
+
   useEffect(() => {
     setActivitiesTable();
-    localStorage.setItem("activityList", JSON.stringify(activitiesTable));
-    
-    const previous = usePrevious(activitiesTable);
-    console.log(previous)
+    handleNotifications();
+  }, [id, userName, activitiesTable, showUnread]);
 
-  }, [id, userName, activitiesTable]);
-
-  const usePrevious = (value: any) => {
-    // useEffect(() => {
-      ref.current = value
-    // })
-    return ref.current
-  }
-
-  return { activitiesTable, loading, recentActivitiesTable };
+  return {
+    activitiesTable,
+    loading,
+    recentActivitiesTable,
+    unread,
+    showUnread,
+    handleShowUnread,
+    unreadMessages,
+  };
 }

@@ -11,6 +11,10 @@ export type UseActivityTableResult = {
   activitiesTable: ActivityRow[];
   loading: boolean;
   recentActivitiesTable: ActivityRow[];
+  unread: ActivityRow[];
+  showUnread: boolean;
+  handleShowUnread: () => void;
+  unreadMessages: ActivityRow[];
 };
 
 export type UseActivityTableArgs = {

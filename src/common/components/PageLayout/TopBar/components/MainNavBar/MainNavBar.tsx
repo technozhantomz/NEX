@@ -1,10 +1,14 @@
+import { Badge } from "antd";
+
 import {
+  Avatar,
   BellOutlined,
   Dropdown,
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
 import { useUserContext } from "../../../../../providers";
+import { useNotification } from "../../../../Notifications/hooks";
 import { MainNav } from "../MainNav";
 import { NotificationMenu } from "../NotificationMenu";
 import { ProfileMenu } from "../ProfileMenu";
@@ -13,14 +17,23 @@ import * as Styled from "./MainNavBar.styled";
 
 export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
-
+  const { unreadMessages } = useNotification({
+    userName: localStorageAccount,
+    isWalletActivityTable: false,
+  });
   return (
     <>
       <Styled.MainNavBar>
         {localStorageAccount ? (
           <>
             <Dropdown overlay={<NotificationMenu />}>
-              <BellOutlined className={"bell"} />
+              {unreadMessages.length ? (
+                <Badge dot>
+                  <Avatar icon={<BellOutlined className={"bell"} />} />
+                </Badge>
+              ) : (
+                <BellOutlined className={"bell"} />
+              )}
             </Dropdown>
 
             <Dropdown overlay={<ProfileMenu />}>
