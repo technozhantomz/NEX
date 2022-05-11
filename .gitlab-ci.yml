@@ -30,54 +30,54 @@ build_base_cypress:
     - docker info
 
 
-cypress_build:
-  stage: build_test
-  image: docker:19.03.12
-  services:
-    - docker:19.03.12-dind
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  variables:
-  script:
+# cypress_build:
+#   stage: build_test
+#   image: docker:19.03.12
+#   services:
+#     - docker:19.03.12-dind
+#   before_script:
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#   variables:
+#   script:
 
-    # Dockerfile.cypress-node16.14.0-chrome99-ff97
-    # tag it as cypress-node16.14.0-chrome99-ff97-PACKAGES-SHA1SUM
-    # this way everything ignores the branch
-    #
-    - pwd
-    - ls -alF
-    - docker info
-    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG || true
-    - docker build -f Dockerfile.cypress --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+#     # Dockerfile.cypress-node16.14.0-chrome99-ff97
+#     # tag it as cypress-node16.14.0-chrome99-ff97-PACKAGES-SHA1SUM
+#     # this way everything ignores the branch
+#     #
+#     - pwd
+#     - ls -alF
+#     - docker info
+#     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG || true
+#     - docker build -f Dockerfile.cypress --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+#     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+#     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
-cypress_test_chrome:
-  stage: test
-  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - pwd && ls -alF && cd /app && ls -alF
-    - ./node_modules/.bin/cypress run --browser chrome
+# cypress_test_chrome:
+#   stage: test
+#   image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+#   variables:
+#     GIT_STRATEGY: none
+#   script:
+#     - pwd && ls -alF && cd /app && ls -alF
+#     - ./node_modules/.bin/cypress run --browser chrome
 
-cypress_test_firefox:
-  stage: test
-  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - pwd && ls -alF && cd /app && ls -alF
-    - ./node_modules/.bin/cypress run --browser firefox
+# cypress_test_firefox:
+#   stage: test
+#   image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+#   variables:
+#     GIT_STRATEGY: none
+#   script:
+#     - pwd && ls -alF && cd /app && ls -alF
+#     - ./node_modules/.bin/cypress run --browser firefox
 
-cypress_test_electron:
-  stage: test
-  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - pwd && ls -alF && cd /app && ls -alF
-    - ./node_modules/.bin/cypress run --browser electron
+# cypress_test_electron:
+#   stage: test
+#   image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+#   variables:
+#     GIT_STRATEGY: none
+#   script:
+#     - pwd && ls -alF && cd /app && ls -alF
+#     - ./node_modules/.bin/cypress run --browser electron
 
 
 # need artifacts with expiry
