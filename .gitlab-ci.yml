@@ -35,11 +35,9 @@ build_base_cypress:
     #
     # instead of pulling base image, just check if its there, if it is, dont pull and build and push
     #
-    - docker pull $REGISTRY_FINAL_IMAGE || 
-      (
-        docker build -f Dockerfile.base --build-arg BASE_IMAGE=$BASE_IMAGE --cache-from $REGISTRY_FINAL_IMAGE -t $REGISTRY_FINAL_IMAGE . &&
-        docker push $REGISTRY_FINAL_IMAGE
-      )
+    - docker pull $REGISTRY_FINAL_IMAGE || true
+    - docker build -f Dockerfile.base --build-arg BASE_IMAGE=$BASE_IMAGE --cache-from $REGISTRY_FINAL_IMAGE -t $REGISTRY_FINAL_IMAGE .
+    - docker push $REGISTRY_FINAL_IMAGE
 
 
 #     - docker build -f Dockerfile.cypress --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
