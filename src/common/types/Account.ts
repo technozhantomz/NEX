@@ -54,17 +54,17 @@ export type LimitOrder = {
   seller: string;
 };
 
-export type UserKey = {
-  account_auths: unknown[];
-  address_auths: unknown[];
+export type Permissions = {
+  account_auths: [string, number][];
+  address_auths: [string, number][];
   key_auths: [string, number][];
   weight_threshold: number;
 };
 
-export type UserKeys = {
-  active: UserKey | string;
-  memo: UserKey | string;
-  owner: UserKey | string;
+export type UserPermissions = {
+  active: Permissions | string;
+  memo: Permissions | string;
+  owner: Permissions | string;
 };
 
 export type AccountOptions = {

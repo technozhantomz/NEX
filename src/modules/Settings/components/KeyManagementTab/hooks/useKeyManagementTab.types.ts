@@ -2,13 +2,13 @@ import { CheckboxValueType, FormInstance, Rule } from "../../../../../ui/src";
 
 export type UseKeyManagementTabResult = {
   keyManagementForm: FormInstance<KeyManagementForm>;
-  formValdation: FormValidation;
+  formValidation: FormValidation;
   generatedKeys: GeneratedKey[];
   handleCheckboxChange: (checkedValues: CheckboxValueType[]) => void;
   memoWarning: string;
-  passwordModalVisible: boolean;
-  handlePassowrdCancel: () => void;
   fee: number;
+  selectedKeys: CheckboxValueType[];
+  handleValuesChange: () => void;
 };
 
 export type FormValidation = {
@@ -23,3 +23,19 @@ export type KeyManagementForm = {
 };
 
 export type GeneratedKey = { label: string; key: string };
+
+export type ModifiedPermissions = {
+  [key: string]:
+    | number
+    | string[]
+    | {
+        [key: string]: number;
+      };
+  threshold: number;
+  accounts: string[];
+  keys: string[];
+  addresses: string[];
+  weights: {
+    [key: string]: number;
+  };
+};

@@ -14,13 +14,13 @@ import { useKeyManagementTab } from "./hooks";
 
 export const KeyManagementTab = (): JSX.Element => {
   const {
-    formValdation,
+    formValidation,
     keyManagementForm,
     generatedKeys,
     handleCheckboxChange,
     memoWarning,
-    passwordModalVisible,
-    handlePassowrdCancel,
+    selectedKeys,
+    handleValuesChange,
   } = useKeyManagementTab();
 
   return (
@@ -29,11 +29,12 @@ export const KeyManagementTab = (): JSX.Element => {
         <Styled.KeyManagementForm
           form={keyManagementForm}
           name="KeyManagementForm"
+          onValuesChange={handleValuesChange}
           //onFinish={confirm}
         >
           <Styled.PasswordFormItem
             name="password"
-            rules={formValdation.password}
+            rules={formValidation.password}
             validateFirst={true}
             validateTrigger="onBlur"
           >
@@ -42,7 +43,7 @@ export const KeyManagementTab = (): JSX.Element => {
 
           <Styled.PasswordFormItem
             name="passwordCheck"
-            rules={formValdation.passwordCheck}
+            rules={formValidation.passwordCheck}
             validateFirst={true}
             validateTrigger="onBlur"
           >
@@ -53,15 +54,15 @@ export const KeyManagementTab = (): JSX.Element => {
           </Styled.LabelWrapper>
           <Styled.CheckBoxGroup
             name="roles"
-            rules={formValdation.roles}
+            rules={formValidation.roles}
             validateFirst={true}
             validateTrigger="onChange"
           >
-            <Checkbox.Group onChange={handleCheckboxChange}>
-              <Checkbox value="active">Active</Checkbox>
-              <Checkbox value="owner">Owner</Checkbox>
-              <Checkbox value="memo">Memo</Checkbox>
-            </Checkbox.Group>
+            <Checkbox.Group
+              options={["active", "owner", "memo"]}
+              onChange={handleCheckboxChange}
+              value={selectedKeys}
+            ></Checkbox.Group>
             <Styled.MemoWarning>{memoWarning}</Styled.MemoWarning>
           </Styled.CheckBoxGroup>
 
@@ -102,10 +103,10 @@ export const KeyManagementTab = (): JSX.Element => {
               })
             : ""}
         </Styled.KeyManagementForm>
-        <PasswordModal
+        {/* <PasswordModal
           visible={passwordModalVisible}
           onCancel={handlePassowrdCancel}
-        />
+        /> */}
       </Styled.KeyManagementForm.Provider>
     </Styled.KeyManagementCard>
   );

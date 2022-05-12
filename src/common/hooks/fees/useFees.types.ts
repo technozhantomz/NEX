@@ -6,9 +6,8 @@ export type ChainOperations = {
 
 export type UseFeesResult = {
   findOperationFee: (operationType: string) => FeeParameter | undefined;
-  calculteTransferFee: (memo: string) => number | undefined;
+  calculateTransferFee: (memo: string) => number | undefined;
   calculateAccountUpgradeFee: () => number | undefined;
-  calculateUpdateAccountFee: () => number | undefined;
   calculateCreateLimitOrderFee: (
     base: Asset,
     quote: Asset

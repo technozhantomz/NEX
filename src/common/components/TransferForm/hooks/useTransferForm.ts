@@ -27,18 +27,20 @@ export function useTransferForm(): UseTransferFormResult {
     useAccount();
   const { localStorageAccount, assets } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
-  const { calculteTransferFee } = useFees();
+  const { calculateTransferFee } = useFees();
   const { buildTransferTransaction } = useTransferTransactionBuilder();
   const { sonAccount, getSonNetworkStatus } = useSonNetwork();
   const [transferForm] = Form.useForm();
 
   useEffect(() => {
-    const transferFee = calculteTransferFee(transferForm.getFieldValue("memo"));
+    const transferFee = calculateTransferFee(
+      transferForm.getFieldValue("memo")
+    );
     if (transferFee) {
       setFeeAmount(transferFee);
     }
     transferForm.setFieldsValue({ from: localStorageAccount });
-  }, [localStorageAccount, calculteTransferFee, assets]);
+  }, [localStorageAccount, calculateTransferFee, assets]);
 
   const handlePasswordModalCancel = () => {
     setIsPasswordModalVisible(false);
@@ -193,7 +195,7 @@ export function useTransferForm(): UseTransferFormResult {
   };
 
   const validateMemo = async (_: unknown, value: string) => {
-    const updatedFee = calculteTransferFee(value);
+    const updatedFee = calculateTransferFee(value);
     if (updatedFee) {
       setFeeAmount(updatedFee);
     }
