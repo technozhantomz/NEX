@@ -70,6 +70,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
         mainMenuOpen,
         toggleMenu,
         closeMenu,
+        notifications,
       }}
     >
       {children}

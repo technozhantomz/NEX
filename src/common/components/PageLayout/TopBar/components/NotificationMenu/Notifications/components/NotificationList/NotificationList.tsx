@@ -1,6 +1,6 @@
 import { List, Switch } from "antd";
 
-import { AvtivityInfo } from "../../../ActivityTable/components";
+import { AvtivityInfo } from "../../../../../../../ActivityTable/components";
 import { useNotification } from "../../hooks";
 
 import * as Styled from "./NotificationList.styled";

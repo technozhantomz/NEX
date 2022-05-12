@@ -1,42 +1,28 @@
 import { ChainTypes } from "peerplaysjs-lib";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback } from "react";
 
-import { defaultToken } from "../../../../api/params";
-import { isArrayEqual } from "../../../../api/utils";
-import { breakpoints } from "../../../../ui/src/breakpoints";
-import { useAccount, useAccountHistory, useAsset } from "../../../hooks";
+import { useAccountHistory, useAsset } from "..";
+import { defaultToken } from "../../../api/params";
+import { breakpoints } from "../../../ui/src/breakpoints";
+import { ActivityRow } from "../../components/PageLayout/TopBar/components/NotificationMenu/Notifications/hooks/useNotification.types";
 import {
   usePeerplaysApiContext,
   useUserContext,
   useViewportContext,
-} from "../../../providers";
-import { Amount, BlockHeader, Fee, History } from "../../../types";
+} from "../../providers";
+import { Amount, BlockHeader, Fee, History } from "../../types";
 
-import {
-  ActivityRow,
-  UseActivityTableArgs,
-  UseActivityTableResult,
-} from "./useNotification.types";
+import { useAccount } from "./useAccount";
+import { UseActivityResult } from "./useActivity.types";
 
-export function useNotification({
-  userName,
-  isWalletActivityTable = false,
-}: UseActivityTableArgs): UseActivityTableResult {
-  const [unread, setUnread] = useState<ActivityRow[]>([]);
-  const [showUnread, setShowUnread] = useState(false);
-  const [unreadMessages, setUnreadMessages] = useState<ActivityRow[]>([]);
-  const [activitiesTable, _setActivitiesTable] = useState<ActivityRow[]>([]);
-  const [recentActivitiesTable, _setRecentActivitiesTable] = useState<
-    ActivityRow[]
-  >([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const { dbApi } = usePeerplaysApiContext();
-  const { id } = useUserContext();
-  const { width } = useViewportContext();
-  const { formAssetBalanceById, defaultAsset, getAssetById, setPrecision } =
-    useAsset();
+export function useActivity(): UseActivityResult {
   const { getUserNameById, getAccountByName } = useAccount();
+  const { formAssetBalanceById, getAssetById, setPrecision, defaultAsset } =
+    useAsset();
+  const { dbApi } = usePeerplaysApiContext();
+  const { width } = useViewportContext();
   const { getAccountHistoryById } = useAccountHistory();
+  const { id } = useUserContext();
 
   const formDate = useCallback(
     (
@@ -313,9 +299,9 @@ export function useNotification({
     [dbApi, defaultAsset, getAssetById, formDate, formActivityDescription]
   );
 
-  const setActivitiesTable = useCallback(async () => {
-    try {
-      setLoading(true);
+  const getActivitiesRows = useCallback(
+    async (userName: string) => {
+      //   try {
       let history: History[];
       if (userName) {
         const user = await getAccountByName(userName);
@@ -327,85 +313,27 @@ export function useNotification({
       } else {
         history = await getAccountHistoryById(id);
       }
-      // this should change based on designer decision
-      if (isWalletActivityTable) {
-        history = history.filter(
-          (el: { op: number[] }) =>
-            (el.op[0] >= 0 && el.op[0] <= 8) ||
-            el.op[0] === 34 ||
-            el.op[0] === 10 ||
-            el.op[0] === 11 ||
-            el.op[0] === 13 ||
-            el.op[0] === 14 ||
-            el.op[0] === 16
-        );
-      } else {
-        history = history.filter(
-          (el: { op: number[] }) =>
-            (el.op[0] >= 0 && el.op[0] <= 8) ||
-            el.op[0] === 34 ||
-            el.op[0] === 10 ||
-            el.op[0] === 11 ||
-            el.op[0] === 13 ||
-            el.op[0] === 14 ||
-            el.op[0] === 16
-        );
-      }
-      const activityRows = await Promise.all(history.map(formActivityRow));
-      _setActivitiesTable(activityRows);
-      _setRecentActivitiesTable(activityRows.slice(0, 5));
 
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-      console.log(e);
-    }
-  }, [
-    formActivityRow,
-    setLoading,
-    id,
-    getAccountHistoryById,
-    _setActivitiesTable,
-    getAccountByName,
-    isWalletActivityTable,
-    userName,
-  ]);
-
-  const handleShowUnread = () => {
-    setShowUnread(!showUnread);
-  };
-
-  const handleNotifications = useCallback(async () => {
-    const activityList = JSON.parse(localStorage.getItem("activityList"));
-
-    if (isArrayEqual(activityList, activitiesTable)) {
-      localStorage.setItem("activityList", JSON.stringify(activitiesTable));
-    } else {
-      setUnread(
-        activitiesTable.filter(
-          (activity) => activityList?.indexOf(activity) === -1
-        )
+      history = history.filter(
+        (el: { op: number[] }) =>
+          (el.op[0] >= 0 && el.op[0] <= 8) ||
+          el.op[0] === 34 ||
+          el.op[0] === 10 ||
+          el.op[0] === 11 ||
+          el.op[0] === 13 ||
+          el.op[0] === 14 ||
+          el.op[0] === 16
       );
-    }
-    setUnreadMessages(
-      activitiesTable.filter((obj) =>
-        activityList.some(({ id }) => obj.id === id)
-      )
-    );
-  }, [unread, activitiesTable]);
 
-  useEffect(() => {
-    setActivitiesTable();
-    handleNotifications();
-  }, [id, userName, activitiesTable, showUnread]);
+      const activityRows = await Promise.all(history.map(formActivityRow));
+      return activityRows;
+      //   } catch (e) {
+      // console.log(e);
+      // return undefined;
+      //   }
+    },
+    [formActivityRow, id, getAccountHistoryById, getAccountByName]
+  );
 
-  return {
-    activitiesTable,
-    loading,
-    recentActivitiesTable,
-    unread,
-    showUnread,
-    handleShowUnread,
-    unreadMessages,
-  };
+  return { getActivitiesRows };
 }

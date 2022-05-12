@@ -1,5 +1,5 @@
-import { styled, List as UiList } from "../../../../../ui/src";
-import { colors } from "../../../../../ui/src/colors";
+import { styled, List as UiList } from "../../../../../../../../../ui/src";
+import { colors } from "../../../../../../../../../ui/src/colors";
 
 export const ActivityListItem = styled(UiList.Item)`
   padding: 15px 20px;

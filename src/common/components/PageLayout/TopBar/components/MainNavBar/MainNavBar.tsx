@@ -13,9 +13,9 @@ import {
   useUserContext,
   useViewportContext,
 } from "../../../../../providers";
-import { useNotification } from "../../../../Notifications/hooks";
 import { MainNav } from "../MainNav";
 import { NotificationMenu } from "../NotificationMenu";
+import { useNotification } from "../NotificationMenu/Notifications/hooks";
 import { ProfileMenu } from "../ProfileMenu";
 
 import * as Styled from "./MainNavBar.styled";
