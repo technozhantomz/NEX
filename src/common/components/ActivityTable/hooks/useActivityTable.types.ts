@@ -1,11 +1,4 @@
-export interface ActivityRow {
-  key: string;
-  time: string;
-  type: string;
-  info: string;
-  id: string;
-  fee: string;
-}
+import { ActivityRow } from "../../../types";
 
 export type UseActivityTableResult = {
   activitiesRows: ActivityRow[];

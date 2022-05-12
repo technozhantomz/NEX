@@ -2,15 +2,14 @@ import { List, Switch } from "antd";
 import { useState } from "react";
 
 import { MenuCard } from "../../../../../../ui/src";
-import { useUserContext } from "../../../../../providers";
+import { useMenuContext } from "../../../../../providers";
 import { AvtivityInfo } from "../../../../ActivityTable/components";
 
 import * as Styled from "./NotificationMenu.styled";
-import { NotificationList } from "./Notifications/components/NotificationList";
 
 export const NotificationMenu = (): JSX.Element => {
-  const { localStorageAccount } = useUserContext();
   const [showUnreadOnly, setShowUnreadOnly] = useState<boolean>(false);
+  const { notifications } = useMenuContext();
 
   return (
     <MenuCard bordered={false}>
@@ -31,12 +30,12 @@ export const NotificationMenu = (): JSX.Element => {
             : notifications
         }
         renderItem={(item) => (
-          <Styled.ActivityListItem key={item.key}>
+          <Styled.ActivityListItem key={item.notificationRow.key}>
             <Styled.ActivitysItemContent>
               <div className="activity-info">
                 {/* <span className="activity-info-title">{columns[2].title}</span> */}
                 <span className="activity-info-value">
-                  <AvtivityInfo infoString={item.info} />
+                  <AvtivityInfo infoString={item.notificationRow.info} />
                 </span>
               </div>
             </Styled.ActivitysItemContent>

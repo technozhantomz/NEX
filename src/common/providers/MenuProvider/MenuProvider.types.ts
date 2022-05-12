@@ -1,4 +1,4 @@
-import { ActivityRow } from "../../components/PageLayout/TopBar/components/NotificationMenu/Notifications/hooks/useNotification.types";
+import { ActivityRow } from "../../types";
 
 export type MenuProviderContextType = {
   toggleMenu: (menuName: string) => void;
@@ -6,6 +6,7 @@ export type MenuProviderContextType = {
   notificationMenuOpen: boolean;
   profileMenuOpen: boolean;
   mainMenuOpen: boolean;
+  unreadMessages: boolean;
   notifications: Notification[];
 };
 

@@ -4,13 +4,12 @@ import { useCallback } from "react";
 import { useAccountHistory, useAsset } from "..";
 import { defaultToken } from "../../../api/params";
 import { breakpoints } from "../../../ui/src/breakpoints";
-import { ActivityRow } from "../../components/PageLayout/TopBar/components/NotificationMenu/Notifications/hooks/useNotification.types";
 import {
   usePeerplaysApiContext,
   useUserContext,
   useViewportContext,
 } from "../../providers";
-import { Amount, BlockHeader, Fee, History } from "../../types";
+import { ActivityRow, Amount, BlockHeader, Fee, History } from "../../types";
 
 import { useAccount } from "./useAccount";
 import { UseActivityResult } from "./useActivity.types";

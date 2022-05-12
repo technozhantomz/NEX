@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { Logo } from "../../../../ui/src/icons";
-import { MenuProvider } from "../../../providers";
 
 import * as Styled from "./TopBar.styled";
 import { MainNavBar } from "./components/MainNavBar";
@@ -18,9 +17,7 @@ export const TopBar = (): JSX.Element => {
         <p className="dex-logo">DEX</p>
       </div>
       <div className={"topbar-right"}>
-        <MenuProvider>
-          <MainNavBar />
-        </MenuProvider>
+        <MainNavBar />
       </div>
     </Styled.TopBar>
   );

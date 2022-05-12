@@ -15,24 +15,20 @@ import {
 } from "../../../../../providers";
 import { MainNav } from "../MainNav";
 import { NotificationMenu } from "../NotificationMenu";
-import { useNotification } from "../NotificationMenu/Notifications/hooks";
 import { ProfileMenu } from "../ProfileMenu";
 
 import * as Styled from "./MainNavBar.styled";
 
 export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
-  const { unreadMessages } = useNotification({
-    userName: localStorageAccount,
-    isWalletActivityTable: false,
-  });
   const { width } = useViewportContext();
   const {
+    mainMenuOpen,
+    profileMenuOpen,
+    notificationMenuOpen,
+    unreadMessages,
     toggleMenu,
     closeMenu,
-    notificationMenuOpen,
-    profileMenuOpen,
-    mainMenuOpen,
   } = useMenuContext();
   const CloseButton = (
     <>

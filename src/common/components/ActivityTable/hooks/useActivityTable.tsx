@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useAccount, useAccountHistory, useActivity } from "../../../hooks";
 import { useUserContext } from "../../../providers";
+import { ActivityRow } from "../../../types";
 
 import {
-  ActivityRow,
   UseActivityTableArgs,
   UseActivityTableResult,
 } from "./useActivityTable.types";

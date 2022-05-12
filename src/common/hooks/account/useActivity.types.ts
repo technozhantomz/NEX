@@ -1,4 +1,4 @@
-import { ActivityRow } from "../../components/PageLayout/TopBar/components/NotificationMenu/Notifications/hooks/useNotification.types";
+import { ActivityRow } from "../../types";
 
 export type UseActivityResult = {
   getActivitiesRows: (userName: string) => Promise<ActivityRow[]>;
