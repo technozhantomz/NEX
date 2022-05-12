@@ -3,11 +3,16 @@ import { Badge } from "antd";
 import {
   Avatar,
   BellOutlined,
-  Dropdown,
+  MenuOutlined,
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
-import { useUserContext } from "../../../../../providers";
+import { breakpoints } from "../../../../../../ui/src/breakpoints";
+import {
+  useMenuContext,
+  useUserContext,
+  useViewportContext,
+} from "../../../../../providers";
 import { useNotification } from "../../../../Notifications/hooks";
 import { MainNav } from "../MainNav";
 import { NotificationMenu } from "../NotificationMenu";
@@ -21,39 +26,101 @@ export const MainNavBar = (): JSX.Element => {
     userName: localStorageAccount,
     isWalletActivityTable: false,
   });
+  const { width } = useViewportContext();
+  const {
+    toggleMenu,
+    closeMenu,
+    notificationMenuOpen,
+    profileMenuOpen,
+    mainMenuOpen,
+  } = useMenuContext();
+  const CloseButton = (
+    <>
+      {width < breakpoints.xs ? (
+        <Styled.CloseButton type="text" className="close" onClick={closeMenu}>
+          X
+        </Styled.CloseButton>
+      ) : (
+        ""
+      )}
+    </>
+  );
   return (
     <>
       <Styled.MainNavBar>
         {localStorageAccount ? (
           <>
-            <Dropdown overlay={<NotificationMenu />}>
-              {unreadMessages.length ? (
-                <Badge dot>
-                  <Avatar icon={<BellOutlined className={"bell"} />} />
-                </Badge>
-              ) : (
-                <BellOutlined className={"bell"} />
-              )}
-            </Dropdown>
-
-            <Dropdown overlay={<ProfileMenu />}>
-              <Styled.MainNavBarAvitar
-                icon={localStorageAccount ? "" : <UserOutlined />}
+            {unreadMessages.length ? (
+              <Badge dot>
+                <Avatar
+                  icon={
+                    <BellOutlined
+                      className={"bell"}
+                      onMouseOver={() => toggleMenu("notify")}
+                      onClick={() => toggleMenu("notify")}
+                    />
+                  }
+                />
+              </Badge>
+            ) : (
+              <BellOutlined
+                className={"bell"}
+                onMouseOver={() => toggleMenu("notify")}
+                onClick={() => toggleMenu("notify")}
+              />
+            )}
+            {width > breakpoints.xs ? (
+              <div
+                onMouseOver={() => toggleMenu("profile")}
+                onClick={() => toggleMenu("profile")}
               >
-                {localStorageAccount
-                  ? localStorageAccount.charAt(0).toUpperCase()
-                  : ""}
-              </Styled.MainNavBarAvitar>
-            </Dropdown>
+                <Styled.MainNavBarAvitar
+                  icon={localStorageAccount ? "" : <UserOutlined />}
+                >
+                  {localStorageAccount ? localStorageAccount.charAt(0) : ""}
+                </Styled.MainNavBarAvitar>
+              </div>
+            ) : (
+              ""
+            )}
           </>
         ) : (
           ""
         )}
-
-        <Dropdown overlay={<MainNav />}>
-          <MoreOutlined className={"hambuger"} />
-        </Dropdown>
+        {width > breakpoints.xs ? (
+          <MoreOutlined
+            className={"hambuger"}
+            onMouseOver={() => toggleMenu("main")}
+            onClick={() => toggleMenu("main")}
+          />
+        ) : (
+          <MenuOutlined
+            className={"hambuger"}
+            onMouseOver={() => toggleMenu("main")}
+            onClick={() => toggleMenu("main")}
+          />
+        )}
       </Styled.MainNavBar>
+      <Styled.MenuWrapper
+        className={`notification-menu-wrapper${
+          notificationMenuOpen ? " open" : ""
+        }`}
+      >
+        {CloseButton}
+        <NotificationMenu />
+      </Styled.MenuWrapper>
+      <Styled.MenuWrapper
+        className={`profile-wrapper${profileMenuOpen ? " open" : ""}`}
+      >
+        {CloseButton}
+        <ProfileMenu />
+      </Styled.MenuWrapper>
+      <Styled.MenuWrapper
+        className={`main-menu-wrapper${mainMenuOpen ? " open" : ""}`}
+      >
+        {CloseButton}
+        <MainNav />
+      </Styled.MenuWrapper>
     </>
   );
 };

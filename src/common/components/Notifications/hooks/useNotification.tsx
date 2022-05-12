@@ -376,7 +376,7 @@ export function useNotification({
   };
 
   const handleNotifications = useCallback(async () => {
-    const activityList = localStorage.getItem("activityList");
+    const activityList = JSON.parse(localStorage.getItem("activityList"));
 
     if (isArrayEqual(activityList, activitiesTable)) {
       localStorage.setItem("activityList", JSON.stringify(activitiesTable));
@@ -387,10 +387,9 @@ export function useNotification({
         )
       );
     }
-
     setUnreadMessages(
-      activitiesTable.filter(
-        (obj) => !JSON.parse(activityList).some(({ id }) => obj.id === id)
+      activitiesTable.filter((obj) =>
+        activityList.some(({ id }) => obj.id === id)
       )
     );
   }, [unread, activitiesTable]);

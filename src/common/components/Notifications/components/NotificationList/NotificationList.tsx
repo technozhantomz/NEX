@@ -18,6 +18,7 @@ export const NotificationList = ({
     recentActivitiesTable,
     showUnread,
     unreadMessages,
+    activitiesTable,
     handleShowUnread,
   } = useNotification({
     userName,
@@ -37,7 +38,7 @@ export const NotificationList = ({
       {showUnread ? (
         <List
           itemLayout="vertical"
-          dataSource={unreadMessages}
+          dataSource={showUnread ? unreadMessages : activitiesTable}
           renderItem={(item) => (
             <Styled.ActivityListItem key={item.key}>
               <Styled.ActivitysItemContent>

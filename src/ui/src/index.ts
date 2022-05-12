@@ -37,6 +37,7 @@ export {
   SettingOutlined,
   BellOutlined,
   MoreOutlined,
+  MenuOutlined,
   UserOutlined,
   RightOutlined,
   InfoCircleOutlined,
