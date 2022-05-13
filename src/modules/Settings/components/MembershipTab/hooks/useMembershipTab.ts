@@ -18,9 +18,10 @@ import { UseMembershipTabResult } from "./useMembershipTab.types";
 
 export function useMembershipTab(): UseMembershipTabResult {
   const { defaultAsset, setPrecision } = useAsset();
-  const { name, id, assets } = useUserContext();
+  const { name, id, assets, localStorageAccount } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
-  const { getPrivateKey, getFullAccount } = useAccount();
+  const { getPrivateKey, getFullAccount, formAccountBalancesByName } =
+    useAccount();
   const { dbApi } = usePeerplaysApiContext();
   const { calculateAccountUpgradeFee } = useFees();
   const { maintenanceInterval, nextMaintenanceTime } = useMaintenance();
@@ -173,6 +174,7 @@ export function useMembershipTab(): UseMembershipTabResult {
         }
 
         if (trxResult) {
+          formAccountBalancesByName(localStorageAccount);
           setIsLifetimeMember(true);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
@@ -192,6 +194,8 @@ export function useMembershipTab(): UseMembershipTabResult {
       setTransactionErrorMessage,
       setTransactionSuccessMessage,
       setIsLifetimeMember,
+      formAccountBalancesByName,
+      localStorageAccount,
     ]
   );
 

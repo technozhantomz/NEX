@@ -6,9 +6,16 @@ export type UseKeyManagementTabResult = {
   generatedKeys: GeneratedKey[];
   handleCheckboxChange: (checkedValues: CheckboxValueType[]) => void;
   memoWarning: string;
-  fee: number;
+  updateAccountFee: number;
   selectedKeys: CheckboxValueType[];
   handleValuesChange: () => void;
+  serverUserActivePermissions: ModifiedPermissions | undefined;
+  localUserActivePermissions: ModifiedPermissions | undefined;
+  serverUserOwnerPermissions: ModifiedPermissions | undefined;
+  localUserOwnerPermissions: ModifiedPermissions | undefined;
+  serverUserMemoKey: string;
+  localUserMemoKey: string;
+  loading: boolean;
 };
 
 export type FormValidation = {

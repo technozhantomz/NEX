@@ -55,8 +55,8 @@ export function useVoteTab({
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
 
   const { defaultAsset, formAssetBalanceById } = useAsset();
-  const { getPrivateKey } = useAccount();
-  const { id, assets, name } = useUserContext();
+  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { id, assets, name, localStorageAccount } = useUserContext();
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
   const { getTrxFee, buildTrx } = useTransactionBuilder();
@@ -179,6 +179,7 @@ export function useVoteTab({
           setLoadingTransaction(false);
         }
         if (trxResult) {
+          formAccountBalancesByName(localStorageAccount);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
             "You have successfully published your votes"
@@ -198,6 +199,9 @@ export function useVoteTab({
       setLoadingTransaction,
       buildTrx,
       pendingTransaction,
+      formAccountBalancesByName,
+      localStorageAccount,
+      getVotes,
     ]
   );
 

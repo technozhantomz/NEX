@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { defaultToken } from "../../../../../api/params";
 import { isArrayEqual, utils } from "../../../../../api/utils";
 import {
   useAccount,
   useFormKeys,
   useTransactionBuilder,
+  useUpdateAccountTransactionBuilder,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
 import {
   FullAccount,
   Permissions,
-  UserPermissions,
+  Transaction,
 } from "../../../../../common/types";
 import { CheckboxValueType, Form } from "../../../../../ui/src";
 
@@ -22,42 +24,41 @@ import {
 } from "./useKeyManagementTab.types";
 
 export function useKeyManagementTab(): UseKeyManagementTabResult {
-  // should go to upper hook
+  // These states should go to upper hook
   const [fullAccount, setFullAccount] = useState<FullAccount | undefined>();
-  // should go to upper hook
   const [serverUserActivePermissions, setServerUserActivePermissions] =
     useState<ModifiedPermissions>();
-  // should go to upper hook
   const [localUserActivePermissions, setLocalUserActivePermissions] =
     useState<ModifiedPermissions>();
-  // should go to upper hook
   const [serverUserOwnerPermissions, setServerUserOwnerPermissions] =
     useState<ModifiedPermissions>();
-  // should go to upper hook
   const [localUserOwnerPermissions, setLocalUserOwnerPermissions] =
     useState<ModifiedPermissions>();
-  // should go to upper hook
   const [serverUserMemoKey, setServerUserMemoKey] = useState<string>("");
-  // should go to upper hook
   const [localUserMemoKey, setLocalUserMemoKey] = useState<string>("");
-  // should go to upper hook
   const [loading, setLoading] = useState<boolean>(true);
-  // should go to upper hook
   const [generatedKeys, setGeneratedKeys] = useState<GeneratedKey[]>([]);
-  // should go to upper hook
   const [transactionConfirmed, setTransactionConfirmed] =
     useState<boolean>(false);
-  // should go to upper hook
-  const [isPublishAble, setIsPublishable] = useState<boolean>(false);
+  const [isPublishable, setIsPublishable] = useState<boolean>(false);
+  const [updateAccountFee, setUpdateAccountFee] = useState<number>(0);
+  const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
+  const [transactionErrorMessage, setTransactionErrorMessage] =
+    useState<string>("");
+  const [transactionSuccessMessage, setTransactionSuccessMessage] =
+    useState<string>("");
+  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
 
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [memoWarning, setMemoWarning] = useState<string>("");
-  const [fee, setFee] = useState<number>(0);
   const [keyManagementForm] = Form.useForm();
 
-  const { getFullAccount } = useAccount();
-  const { localStorageAccount, id } = useUserContext();
-  const { getTrxFee } = useTransactionBuilder();
+  const { getFullAccount, formAccountBalancesByName, getPrivateKey } =
+    useAccount();
+  const { localStorageAccount, id, assets } = useUserContext();
+  const { buildUpdateAccountTransaction } =
+    useUpdateAccountTransactionBuilder();
+  const { getTrxFee, buildTrx } = useTransactionBuilder();
 
   // should go to upper hook
   const handleAddItem = useCallback(
@@ -142,7 +143,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     ]
   );
 
-  // should go to upper hokk
+  // should go to upper hook
   const resetChanges = useCallback(() => {
     if (
       serverUserActivePermissions !== undefined &&
@@ -162,11 +163,6 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     setLocalUserMemoKey,
     setIsPublishable,
   ]);
-
-  // should go to upper hook
-  const checkIsPublishAble = useCallback(() => {
-    
-  }, []);
 
   // should go to upper hook
   const checkPermissionsChanged = useCallback(
@@ -215,6 +211,36 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       isArrayEqual,
     ]
   );
+
+  // should go to upper hook
+  const checkIsPublishable = useCallback(() => {
+    if (
+      serverUserActivePermissions &&
+      serverUserOwnerPermissions &&
+      localUserActivePermissions &&
+      localUserOwnerPermissions &&
+      serverUserMemoKey &&
+      localUserMemoKey
+    ) {
+      let isMemoChanged = false;
+      let isActiveChanged = false;
+      let isOwnerChanged = false;
+      isMemoChanged = checkPermissionsChanged("memo");
+      isActiveChanged = checkPermissionsChanged("active");
+      isOwnerChanged = checkPermissionsChanged("owner");
+
+      setIsPublishable(isMemoChanged || isActiveChanged || isOwnerChanged);
+    }
+  }, [
+    serverUserActivePermissions,
+    serverUserOwnerPermissions,
+    localUserActivePermissions,
+    localUserOwnerPermissions,
+    serverUserMemoKey,
+    localUserMemoKey,
+    checkPermissionsChanged,
+    setIsPublishable,
+  ]);
 
   // should go to upper hook
   const permissionsFromImmutableObj = useCallback(
@@ -310,12 +336,15 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     localStorageAccount,
     permissionsFromImmutableObj,
     setServerUserActivePermissions,
+    setLocalUserActivePermissions,
     setServerUserOwnerPermissions,
+    setLocalUserOwnerPermissions,
     setServerUserMemoKey,
+    setLocalUserMemoKey,
     setLoading,
   ]);
 
-  // should go to upper hook and get separated
+  // should go to upper hook
   const getUpdateAccountTrx = useCallback(() => {
     if (
       fullAccount !== undefined &&
@@ -342,6 +371,12 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           localUserOwnerPermissions.weights
         );
       }
+      if (checkPermissionsChanged("memo")) {
+        updateObject.new_options = { ...fullAccount.account.options };
+        updateObject.new_options.memo_key = localUserMemoKey;
+      }
+      const trx = buildUpdateAccountTransaction(updateObject, id);
+      return trx;
     }
   }, [
     id,
@@ -350,7 +385,74 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     localUserActivePermissions,
     localUserOwnerPermissions,
     permissionsToJson,
+    buildUpdateAccountTransaction,
   ]);
+
+  // should go to upper hook
+  const getUpdateAccountFee = useCallback(async () => {
+    const trx = getUpdateAccountTrx();
+    setPendingTransaction(trx);
+    if (trx !== undefined) {
+      const fee = await getTrxFee([trx]);
+      setUpdateAccountFee(fee);
+    }
+  }, [
+    getUpdateAccountTrx,
+    getTrxFee,
+    setUpdateAccountFee,
+    setPendingTransaction,
+  ]);
+
+  const handleSaveChanges = useCallback(
+    async (password: string) => {
+      const userDefaultAsset = assets.find(
+        (asset) => asset.symbol === defaultToken
+      );
+      if (
+        userDefaultAsset === undefined ||
+        (userDefaultAsset.amount as number) < updateAccountFee
+      ) {
+        setTransactionErrorMessage("Insufficient balance to pay the fee.");
+        return;
+      } else {
+        setTransactionErrorMessage("");
+        const activeKey = getPrivateKey(password, "active");
+        let trxResult;
+        try {
+          setLoadingTransaction(true);
+          trxResult = await buildTrx([pendingTransaction], [activeKey]);
+          setLoadingTransaction(false);
+        } catch (error) {
+          console.log(error);
+          setTransactionErrorMessage("Unable to process the transaction!");
+          setLoadingTransaction(false);
+        }
+        if (trxResult) {
+          formAccountBalancesByName(localStorageAccount);
+          setTransactionErrorMessage("");
+          setTransactionSuccessMessage(
+            "You have successfully saved your changes"
+          );
+          await getAccountWithPermissions();
+          setIsPublishable(false);
+          setLoadingTransaction(false);
+        }
+      }
+    },
+    [
+      assets,
+      updateAccountFee,
+      setTransactionErrorMessage,
+      getPrivateKey,
+      setLoadingTransaction,
+      buildTrx,
+      pendingTransaction,
+      getAccountWithPermissions,
+      setIsPublishable,
+      localStorageAccount,
+      formAccountBalancesByName,
+    ]
+  );
 
   // this is remove function in bts in cloud tab, now I'm using it differently. It should change in general form
   const reomvePasswordKeys = useCallback(() => {
@@ -416,7 +518,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           localStorageAccount,
           keyManagementForm.getFieldValue("password")
         );
-
+        const generatedKeys: GeneratedKey[];
         if (selectedKeys.includes("active")) {
           handleAddItem(
             "active",
@@ -424,6 +526,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
             localUserActivePermissions.threshold,
             "key"
           );
+          //generatedKeys.push({})
         }
 
         if (selectedKeys.includes("owner")) {
@@ -440,6 +543,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       });
     }
   }, [
+    localStorageAccount,
     keyManagementForm,
     useFormKeys,
     selectedKeys,
@@ -522,8 +626,11 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     generatedKeys,
     handleCheckboxChange,
     memoWarning,
-    fee,
+    updateAccountFee,
     selectedKeys,
     handleValuesChange,
+    serverUserActivePermissions,
+    localUserActivePermissions,
+    serverUserOwnerPermissions,
   };
 }
