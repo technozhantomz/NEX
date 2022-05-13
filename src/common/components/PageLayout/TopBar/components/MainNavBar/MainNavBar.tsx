@@ -97,20 +97,26 @@ export const MainNavBar = (): JSX.Element => {
           />
         )}
       </Styled.MainNavBar>
-      <Styled.MenuWrapper
-        className={`notification-menu-wrapper${
-          notificationMenuOpen ? " open" : ""
-        }`}
-      >
-        {CloseButton}
-        <NotificationMenu />
-      </Styled.MenuWrapper>
-      <Styled.MenuWrapper
-        className={`profile-wrapper${profileMenuOpen ? " open" : ""}`}
-      >
-        {CloseButton}
-        <ProfileMenu />
-      </Styled.MenuWrapper>
+      {localStorageAccount ? (
+        <>
+          <Styled.MenuWrapper
+            className={`notification-menu-wrapper${
+              notificationMenuOpen ? " open" : ""
+            }`}
+          >
+            {CloseButton}
+            <NotificationMenu />
+          </Styled.MenuWrapper>
+          <Styled.MenuWrapper
+            className={`profile-wrapper${profileMenuOpen ? " open" : ""}`}
+          >
+            {CloseButton}
+            <ProfileMenu />
+          </Styled.MenuWrapper>
+        </>
+      ) : (
+        ""
+      )}
       <Styled.MenuWrapper
         className={`main-menu-wrapper${mainMenuOpen ? " open" : ""}`}
       >

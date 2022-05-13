@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { MenuCard } from "../../../../../../ui/src";
 import { useMenuContext } from "../../../../../providers";
-import { NotificationRow } from "../../../../../providers/MenuProvider/MenuProvider.types";
+import { NotificationRow } from "../../../../../types";
 import { AvtivityInfo } from "../../../../ActivityTable/components";
 
 import * as Styled from "./NotificationMenu.styled";
@@ -33,12 +33,12 @@ export const NotificationMenu = (): JSX.Element => {
             : notifications.notificationRows
         }
         renderItem={(item: NotificationRow) => (
-          <Styled.ActivityListItem key={item.key}>
+          <Styled.ActivityListItem key={item.notificationRow.key}>
             <Styled.ActivitysItemContent>
               <div className="activity-info">
                 {/* <span className="activity-info-title">{columns[2].title}</span> */}
                 <span className="activity-info-value">
-                  <AvtivityInfo infoString={item.info} />
+                  <AvtivityInfo infoString={item.notificationRow.info} />
                 </span>
               </div>
             </Styled.ActivitysItemContent>

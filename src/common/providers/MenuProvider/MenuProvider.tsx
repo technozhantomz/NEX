@@ -6,8 +6,10 @@ import React, {
   useState,
 } from "react";
 
+import { defaultNotifications } from "../../../api/params";
 import { isArrayEqual } from "../../../api/utils";
 import { useActivity, useLocalStorage } from "../../hooks";
+import { Notifications } from "../../types";
 import { useUserContext } from "../UserProvider";
 
 import { MenuProviderContextType } from "./MenuProvider.types";
@@ -27,9 +29,7 @@ const DefaultMenuState: MenuProviderContextType = {
   profileMenuOpen: false,
   mainMenuOpen: false,
   unreadMessages: false,
-  notifications: {
-    notificationRows: [],
-  },
+  notifications: defaultNotifications,
 };
 
 const MenuProviderContext =
@@ -43,7 +43,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   const [unreadMessages, setUnreadMessages] = useState<boolean>(false);
   const [notifications, _setNotifications] = useLocalStorage(
     "notifications"
-  ) as [Notifications, (value: Notification) => void];
+  ) as [Notifications, (value: Notifications) => void];
   const { localStorageAccount } = useUserContext();
   const { getActivitiesRows } = useActivity();
 
@@ -83,35 +83,38 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
     setMainMenuOpen(false);
   }, [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]);
 
-  const initNotifications = useCallback(() => {
-    if (!notifications) _setNotifications(DefaultMenuState.notifications);
-  }, [notifications, _setNotifications]);
-
   const setNotifications = useCallback(async () => {
-    const activityRows = await getActivitiesRows(localStorageAccount);
-    const serverNotifications = activityRows.map((activity) => {
-      return {
-        notificationRow: activity,
-        unread: false,
-      };
-    });
-    if (!isArrayEqual(notifications.notificationRows, serverNotifications)) {
-      const unread = serverNotifications.filter(
-        (notification) => serverNotifications.indexOf(notification) === -1
-      );
-      notifications.notificationRows.concat(unread);
-      _setNotifications(notifications);
-      setUnreadMessages(true);
+    if (localStorageAccount) {
+      const activityRows = await getActivitiesRows(localStorageAccount);
+      const serverNotifications = activityRows.map((activity) => {
+        return {
+          notificationRow: activity,
+          unread: false,
+        };
+      });
+      if (!isArrayEqual(notifications.notificationRows, serverNotifications)) {
+        const unread = serverNotifications.filter((notification) => {
+          if (notifications.notificationRows.indexOf(notification) === -1) {
+            notification.unread = true;
+            return notification;
+          }
+          return notification;
+        });
+        const updatedNotifications =
+          notifications.notificationRows.concat(unread);
+        _setNotifications({ notificationRows: updatedNotifications });
+        setUnreadMessages(true);
+      } else {
+        _setNotifications({ notificationRows: serverNotifications });
+      }
+    } else {
+      _setNotifications(defaultNotifications);
     }
   }, [localStorageAccount]);
 
   useEffect(() => {
     setNotifications();
-  }, [localStorageAccount, notifications, _setNotifications]);
-
-  useEffect(() => {
-    initNotifications();
-  }, []);
+  }, [localStorageAccount, notifications]);
 
   return (
     <MenuProviderContext.Provider
