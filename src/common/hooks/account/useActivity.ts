@@ -300,7 +300,6 @@ export function useActivity(): UseActivityResult {
 
   const getActivitiesRows = useCallback(
     async (userName: string) => {
-      //   try {
       let history: History[];
       if (userName) {
         const user = await getAccountByName(userName);
@@ -326,10 +325,6 @@ export function useActivity(): UseActivityResult {
 
       const activityRows = await Promise.all(history.map(formActivityRow));
       return activityRows;
-      //   } catch (e) {
-      // console.log(e);
-      // return undefined;
-      //   }
     },
     [formActivityRow, id, getAccountHistoryById, getAccountByName]
   );

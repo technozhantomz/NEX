@@ -27,7 +27,9 @@ const DefaultMenuState: MenuProviderContextType = {
   profileMenuOpen: false,
   mainMenuOpen: false,
   unreadMessages: false,
-  notifications: [],
+  notifications: {
+    notificationRows: [],
+  },
 };
 
 const MenuProviderContext =
@@ -40,8 +42,8 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   const [mainMenuOpen, setMainMenuOpen] = useState<boolean>(false);
   const [unreadMessages, setUnreadMessages] = useState<boolean>(false);
   const [notifications, _setNotifications] = useLocalStorage(
-    "Notifications"
-  ) as unknown as [Notification[], (value: Notification[]) => void];
+    "notifications"
+  ) as [Notifications, (value: Notification) => void];
   const { localStorageAccount } = useUserContext();
   const { getActivitiesRows } = useActivity();
 
@@ -81,31 +83,35 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
     setMainMenuOpen(false);
   }, [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]);
 
+  const initNotifications = useCallback(() => {
+    if (!notifications) _setNotifications(DefaultMenuState.notifications);
+  }, [notifications, _setNotifications]);
+
   const setNotifications = useCallback(async () => {
-    if (localStorageAccount) {
-      const activityRows = await getActivitiesRows(localStorageAccount);
-      const serverNotifications = activityRows.map((activity) => {
-        return {
-          notificationRow: activity,
-          unread: false,
-        } as unknown as Notification;
-      });
-      if (!isArrayEqual(notifications, serverNotifications)) {
-        const unread: Notification[] = serverNotifications.filter(
-          (notification) => serverNotifications.indexOf(notification) === -1
-        );
-        notifications.concat(unread);
-        _setNotifications(notifications);
-        setUnreadMessages(true);
-      }
-    } else {
-      _setNotifications([]);
+    const activityRows = await getActivitiesRows(localStorageAccount);
+    const serverNotifications = activityRows.map((activity) => {
+      return {
+        notificationRow: activity,
+        unread: false,
+      };
+    });
+    if (!isArrayEqual(notifications.notificationRows, serverNotifications)) {
+      const unread = serverNotifications.filter(
+        (notification) => serverNotifications.indexOf(notification) === -1
+      );
+      notifications.notificationRows.concat(unread);
+      _setNotifications(notifications);
+      setUnreadMessages(true);
     }
   }, [localStorageAccount]);
 
   useEffect(() => {
     setNotifications();
-  }, [localStorageAccount, _setNotifications]);
+  }, [localStorageAccount, notifications, _setNotifications]);
+
+  useEffect(() => {
+    initNotifications();
+  }, []);
 
   return (
     <MenuProviderContext.Provider

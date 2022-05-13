@@ -7,10 +7,14 @@ export type MenuProviderContextType = {
   profileMenuOpen: boolean;
   mainMenuOpen: boolean;
   unreadMessages: boolean;
-  notifications: Notification[];
+  notifications: Notifications;
 };
 
-export type Notification = {
+export type Notifications = {
+  notificationRows: NotificationRow[];
+};
+
+export type NotificationRow = {
   notificationRow: ActivityRow;
   unread: boolean;
 };
