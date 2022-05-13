@@ -8,7 +8,8 @@ import React, {
 
 import { defaultNotifications } from "../../../api/params";
 import { useActivity, useLocalStorage } from "../../hooks";
-import { NotificationRow, Notifications } from "../../types";
+import { NotificationRow, Notifications, Settings } from "../../types";
+import { useSettingsContext } from "../SettingsProvider";
 import { useUserContext } from "../UserProvider";
 
 import { MenuProviderContextType } from "./MenuProvider.types";
@@ -44,6 +45,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
     "notifications"
   ) as [Notifications, (value: Notifications) => void];
   const { localStorageAccount } = useUserContext();
+  const { settings } = useSettingsContext();
   const { getActivitiesRows } = useActivity();
 
   const toggleMenu = useCallback(
@@ -122,7 +124,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
         _setNotifications({
           notificationRows: serverNotifications.map(markUnreadNotification),
         });
-        setUnreadMessages(true);
+        if (settings.notifications.allow) setUnreadMessages(true);
       } else {
         _setNotifications(notifications);
       }
