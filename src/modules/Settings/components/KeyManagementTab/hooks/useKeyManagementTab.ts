@@ -44,16 +44,19 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
   const [loading, setLoading] = useState<boolean>(true);
   // should go to upper hook
   const [generatedKeys, setGeneratedKeys] = useState<GeneratedKey[]>([]);
+  // should go to upper hook
+  const [transactionConfirmed, setTransactionConfirmed] =
+    useState<boolean>(false);
+  // should go to upper hook
+  const [isPublishAble, setIsPublishable] = useState<boolean>(false);
 
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [memoWarning, setMemoWarning] = useState<string>("");
   const [fee, setFee] = useState<number>(0);
-  const [transactionConfirmed, setTransactionConfirmed] =
-    useState<boolean>(false);
   const [keyManagementForm] = Form.useForm();
 
   const { getFullAccount } = useAccount();
-  const { localStorageAccount } = useUserContext();
+  const { localStorageAccount, id } = useUserContext();
   const { getTrxFee } = useTransactionBuilder();
 
   // should go to upper hook
@@ -139,6 +142,32 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     ]
   );
 
+  // should go to upper hokk
+  const resetChanges = useCallback(() => {
+    if (
+      serverUserActivePermissions !== undefined &&
+      serverUserOwnerPermissions !== undefined
+    ) {
+      setLocalUserActivePermissions({ ...serverUserActivePermissions });
+      setLocalUserOwnerPermissions({ ...serverUserOwnerPermissions });
+      setLocalUserMemoKey(serverUserMemoKey);
+      setIsPublishable(false);
+    }
+  }, [
+    serverUserActivePermissions,
+    serverUserOwnerPermissions,
+    serverUserMemoKey,
+    setLocalUserActivePermissions,
+    setLocalUserOwnerPermissions,
+    setLocalUserMemoKey,
+    setIsPublishable,
+  ]);
+
+  // should go to upper hook
+  const checkIsPublishAble = useCallback(() => {
+    
+  }, []);
+
   // should go to upper hook
   const checkPermissionsChanged = useCallback(
     (permissionsType: "active" | "owner" | "memo") => {
@@ -189,11 +218,11 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
 
   // should go to upper hook
   const permissionsFromImmutableObj = useCallback(
-    (userKey: Permissions): ModifiedPermissions => {
-      const threshold = userKey.weight_threshold;
-      const account_auths = userKey.account_auths;
-      const key_auths = userKey.key_auths;
-      const address_auths = userKey.address_auths;
+    (permissions: Permissions): ModifiedPermissions => {
+      const threshold = permissions.weight_threshold;
+      const account_auths = permissions.account_auths;
+      const key_auths = permissions.key_auths;
+      const address_auths = permissions.address_auths;
 
       const accounts = account_auths.map((account_auth) => account_auth[0]);
       const keys = key_auths.map((key_auth) => key_auth[0]);
@@ -250,29 +279,6 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     []
   );
 
-  // should go to upper hook and get separated
-  // const getUpdateAccountTrx = useCallback(() => {
-  //   const keys = useFormKeys(
-  //     localStorageAccount,
-  //     keyManagementForm.getFieldValue("password")
-  //   );
-
-  //   if (selectedKeys.includes("active")) {
-  //   }
-
-  //   if (selectedKeys.includes("owner")) {
-  //   }
-
-  //   if (selectedKeys.includes("memo")) {
-  //   }
-  //   // setGeneratedKeys([
-  //   //   { label: "active", key: keys.active as string },
-  //   //   { label: "owner", key: keys.owner as string },
-  //   //   { label: "memo", key: keys.memo as string },
-  //   // ]);
-  //   let updateObject: UserKeys;
-  // }, [useFormKeys, keyManagementForm, setGeneratedKeys]);
-
   // should go to upper hook
   const getAccountWithPermissions = useCallback(async () => {
     try {
@@ -309,23 +315,140 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     setLoading,
   ]);
 
-  const handlePasswordChange = useCallback(() => {
-    keyManagementForm.validateFields().then(() => {
+  // should go to upper hook and get separated
+  const getUpdateAccountTrx = useCallback(() => {
+    if (
+      fullAccount !== undefined &&
+      id &&
+      localUserActivePermissions !== undefined &&
+      localUserOwnerPermissions !== undefined
+    ) {
+      let updateObject: any;
+      if (checkPermissionsChanged("active")) {
+        updateObject.active = permissionsToJson(
+          localUserActivePermissions.threshold,
+          localUserActivePermissions.accounts,
+          localUserActivePermissions.keys,
+          localUserActivePermissions.addresses,
+          localUserActivePermissions.weights
+        );
+      }
+      if (checkPermissionsChanged("owner")) {
+        updateObject.owner = permissionsToJson(
+          localUserOwnerPermissions.threshold,
+          localUserOwnerPermissions.accounts,
+          localUserOwnerPermissions.keys,
+          localUserOwnerPermissions.addresses,
+          localUserOwnerPermissions.weights
+        );
+      }
+    }
+  }, [
+    id,
+    fullAccount,
+    checkPermissionsChanged,
+    localUserActivePermissions,
+    localUserOwnerPermissions,
+    permissionsToJson,
+  ]);
+
+  // this is remove function in bts in cloud tab, now I'm using it differently. It should change in general form
+  const reomvePasswordKeys = useCallback(() => {
+    if (
+      localUserOwnerPermissions &&
+      localUserActivePermissions &&
+      serverUserActivePermissions &&
+      serverUserOwnerPermissions
+    ) {
       const keys = useFormKeys(
         localStorageAccount,
         keyManagementForm.getFieldValue("password")
       );
-
       if (selectedKeys.includes("active")) {
+        if (
+          !isArrayEqual(
+            serverUserActivePermissions.keys,
+            localUserActivePermissions.keys
+          )
+        ) {
+          handleRemoveItem("active", keys.active as string, "key");
+        }
       }
 
       if (selectedKeys.includes("owner")) {
+        if (
+          !isArrayEqual(
+            serverUserOwnerPermissions.keys,
+            localUserOwnerPermissions.keys
+          )
+        ) {
+          handleRemoveItem("owner", keys.owner as string, "key");
+        }
       }
-
       if (selectedKeys.includes("memo")) {
+        if (serverUserMemoKey !== localUserMemoKey) {
+          setLocalUserMemoKey(serverUserMemoKey);
+        }
       }
-    });
-  }, [keyManagementForm, useFormKeys, selectedKeys, selectedKeys.length]);
+    }
+  }, [
+    localUserOwnerPermissions,
+    localUserActivePermissions,
+    localUserMemoKey,
+    serverUserActivePermissions,
+    serverUserOwnerPermissions,
+    serverUserMemoKey,
+    useFormKeys,
+    localStorageAccount,
+    keyManagementForm,
+    selectedKeys,
+    selectedKeys.length,
+    isArrayEqual,
+    handleRemoveItem,
+    setLocalUserMemoKey,
+  ]);
+
+  // this is use function in bts in cloud tab, now I'm using it differently. It should change in general form
+  const handleSetPassword = useCallback(() => {
+    if (localUserOwnerPermissions && localUserActivePermissions) {
+      keyManagementForm.validateFields().then(() => {
+        const keys = useFormKeys(
+          localStorageAccount,
+          keyManagementForm.getFieldValue("password")
+        );
+
+        if (selectedKeys.includes("active")) {
+          handleAddItem(
+            "active",
+            keys.active as string,
+            localUserActivePermissions.threshold,
+            "key"
+          );
+        }
+
+        if (selectedKeys.includes("owner")) {
+          handleAddItem(
+            "owner",
+            keys.owner as string,
+            localUserOwnerPermissions.threshold,
+            "key"
+          );
+        }
+        if (selectedKeys.includes("memo")) {
+          setLocalUserMemoKey(keys.memo as string);
+        }
+      });
+    }
+  }, [
+    keyManagementForm,
+    useFormKeys,
+    selectedKeys,
+    selectedKeys.length,
+    handleAddItem,
+    localUserOwnerPermissions,
+    localUserActivePermissions,
+    setLocalUserMemoKey,
+  ]);
 
   const handleValuesChange = useCallback(() => {
     if (transactionConfirmed) {
@@ -354,10 +477,24 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     return Promise.reject(new Error("Please at least select one role"));
   };
 
-  const checkPasswordMatch = (_: unknown, value: { passwordCheck: string }) => {
-    if (value === keyManagementForm.getFieldValue("password"))
-      return Promise.resolve();
-    return Promise.reject(new Error("Password do not match"));
+  const checkPasswordMatch = (_: unknown, value: string) => {
+    if (
+      serverUserOwnerPermissions === undefined ||
+      serverUserActivePermissions == undefined
+    ) {
+      return Promise.reject(new Error("Please wait for loading user keys"));
+    }
+    if (value !== keyManagementForm.getFieldValue("password"))
+      return Promise.reject(new Error("Password do not match"));
+    const keys = useFormKeys(localStorageAccount, value);
+    if (
+      serverUserActivePermissions.keys.includes(keys.active as string) ||
+      serverUserOwnerPermissions.keys.includes(keys.owner as string) ||
+      serverUserMemoKey === (keys.memo as string)
+    ) {
+      return Promise.reject(new Error("These keys are already in used"));
+    }
+    return Promise.resolve();
   };
 
   const formValidation: FormValidation = {

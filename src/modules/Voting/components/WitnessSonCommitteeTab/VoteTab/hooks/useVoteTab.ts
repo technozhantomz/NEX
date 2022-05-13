@@ -183,9 +183,9 @@ export function useVoteTab({
           setTransactionSuccessMessage(
             "You have successfully published your votes"
           );
-          setLoadingTransaction(false);
-          setIsVotesChanged(false);
           await getVotes();
+          setIsVotesChanged(false);
+          setLoadingTransaction(false);
         }
       }
     },
