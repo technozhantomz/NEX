@@ -11,13 +11,12 @@ import * as Styled from "./NotificationMenu.styled";
 export const NotificationMenu = (): JSX.Element => {
   const [showUnreadOnly, setShowUnreadOnly] = useState<boolean>(false);
   const { notifications } = useMenuContext();
-  console.log(notifications);
   return (
     <MenuCard bordered={false}>
       <div className={"advanced"}>
         <Switch
           size="small"
-          onChange={() => setShowUnreadOnly(true)}
+          onChange={() => setShowUnreadOnly(!showUnreadOnly)}
           defaultChecked={showUnreadOnly}
         />
         <span> Show only unread</span>

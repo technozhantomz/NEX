@@ -7,9 +7,8 @@ import React, {
 } from "react";
 
 import { defaultNotifications } from "../../../api/params";
-import { isArrayEqual } from "../../../api/utils";
 import { useActivity, useLocalStorage } from "../../hooks";
-import { Notifications } from "../../types";
+import { NotificationRow, Notifications } from "../../types";
 import { useUserContext } from "../UserProvider";
 
 import { MenuProviderContextType } from "./MenuProvider.types";
@@ -54,6 +53,12 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
           setProfileMenuOpen(false);
           setMainMenuOpen(false);
           setNotificationMenuOpen(!notificationMenuOpen);
+          setUnreadMessages(false);
+          _setNotifications({
+            notificationRows: notifications.notificationRows.map(
+              markNotificationsRead
+            ),
+          });
           break;
         case menuName === "profile":
           setNotificationMenuOpen(false);
@@ -83,29 +88,43 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
     setMainMenuOpen(false);
   }, [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]);
 
-  const setNotifications = useCallback(async () => {
-    if (localStorageAccount) {
-      const activityRows = await getActivitiesRows(localStorageAccount);
-      const serverNotifications = activityRows.map((activity) => {
+  const markNotificationsRead = (value: NotificationRow) => {
+    if (value.unread) value.unread = false;
+    return value;
+  };
+
+  const markUnreadNotification = (value: NotificationRow) => {
+    if (notifications.notificationRows.indexOf(value) === -1) {
+      value.unread = true;
+      return value;
+    }
+    return value;
+  };
+
+  const getServerNotifications = async () => {
+    const activityRows = await getActivitiesRows(localStorageAccount);
+    const serverNotifications: NotificationRow[] = activityRows.map(
+      (activity) => {
         return {
           notificationRow: activity,
-          unread: false,
+          unread: true,
         };
-      });
-      if (!isArrayEqual(notifications.notificationRows, serverNotifications)) {
-        const unread = serverNotifications.filter((notification) => {
-          if (notifications.notificationRows.indexOf(notification) === -1) {
-            notification.unread = true;
-            return notification;
-          }
-          return notification;
+      }
+    );
+    return serverNotifications;
+  };
+
+  const setNotifications = useCallback(async () => {
+    if (localStorageAccount) {
+      const serverNotifications = await getServerNotifications();
+      const cachedNotifications = notifications.notificationRows;
+      if (!(cachedNotifications.length === serverNotifications.length)) {
+        _setNotifications({
+          notificationRows: serverNotifications.map(markUnreadNotification),
         });
-        const updatedNotifications =
-          notifications.notificationRows.concat(unread);
-        _setNotifications({ notificationRows: updatedNotifications });
         setUnreadMessages(true);
       } else {
-        _setNotifications({ notificationRows: serverNotifications });
+        _setNotifications(notifications);
       }
     } else {
       _setNotifications(defaultNotifications);
@@ -114,7 +133,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
 
   useEffect(() => {
     setNotifications();
-  }, [localStorageAccount, notifications]);
+  }, [localStorageAccount, notifications, _setNotifications]);
 
   return (
     <MenuProviderContext.Provider
