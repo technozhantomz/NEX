@@ -1,7 +1,11 @@
 import React from "react";
 
-import { PasswordModal } from "../../../../common/components";
-import { useCopyText } from "../../../../common/hooks";
+import { PasswordModal, TransactionModal } from "../../../../common/components";
+import {
+  useCopyText,
+  useHandleTransactionForm,
+} from "../../../../common/hooks";
+import { useUserContext } from "../../../../common/providers";
 import {
   Checkbox,
   EyeInvisibleOutlined,
@@ -13,6 +17,7 @@ import * as Styled from "./KeyManagementTab.styled";
 import { useKeyManagementTab } from "./hooks";
 
 export const KeyManagementTab = (): JSX.Element => {
+  const { localStorageAccount } = useUserContext();
   const {
     formValidation,
     keyManagementForm,
@@ -21,16 +26,42 @@ export const KeyManagementTab = (): JSX.Element => {
     memoWarning,
     selectedKeys,
     handleValuesChange,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    transactionErrorMessage,
+    transactionSuccessMessage,
+    loadingTransaction,
+    updateAccountFee,
+    handleSaveChanges,
+    transactionConfirmed,
+    handleSetPassword,
+    removePasswordKeys,
   } = useKeyManagementTab();
+
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleSaveChanges,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
 
   return (
     <Styled.KeyManagementCard>
-      <Styled.KeyManagementForm.Provider>
+      <Styled.KeyManagementForm.Provider onFormFinish={handleFormFinish}>
         <Styled.KeyManagementForm
           form={keyManagementForm}
           name="KeyManagementForm"
           onValuesChange={handleValuesChange}
-          //onFinish={confirm}
+          onFinish={() => {
+            handleSetPassword();
+            showPasswordModal();
+          }}
         >
           <Styled.PasswordFormItem
             name="password"
@@ -72,16 +103,16 @@ export const KeyManagementTab = (): JSX.Element => {
             </Styled.SubmitButton>
           </Styled.ButtonFormItem>
 
-          {generatedKeys && generatedKeys.length > 0
+          {transactionConfirmed && generatedKeys && generatedKeys.length > 0
             ? generatedKeys.map((generatedKey) => {
-                if (!generatedKey.key && generatedKey.key !== "") {
+                if (generatedKey.key && generatedKey.key !== "") {
                   return (
                     <>
                       <Styled.Label>{`The ${generatedKey.label} key you requested is as follows:`}</Styled.Label>
                       <div>
                         <Styled.GeneratedKeyInput
                           value={generatedKey.key}
-                          iconRender={(visible) => (
+                          iconRender={(visible = true) => (
                             <div>
                               <CopyIcon
                                 onClick={() => useCopyText(generatedKey.key)}
@@ -103,10 +134,27 @@ export const KeyManagementTab = (): JSX.Element => {
               })
             : ""}
         </Styled.KeyManagementForm>
-        {/* <PasswordModal
-          visible={passwordModalVisible}
-          onCancel={handlePassowrdCancel}
-        /> */}
+        <PasswordModal
+          visible={isPasswordModalVisible}
+          onCancel={() => {
+            removePasswordKeys();
+            hidePasswordModal();
+          }}
+        />
+        <TransactionModal
+          visible={isTransactionModalVisible}
+          onCancel={() => {
+            removePasswordKeys();
+            hideTransactionModal();
+          }}
+          transactionErrorMessage={transactionErrorMessage}
+          transactionSuccessMessage={transactionSuccessMessage}
+          loadingTransaction={loadingTransaction}
+          account={localStorageAccount}
+          fee={updateAccountFee}
+          transactionType="account_update"
+          generatedKeys={generatedKeys}
+        />
       </Styled.KeyManagementForm.Provider>
     </Styled.KeyManagementCard>
   );

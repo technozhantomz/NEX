@@ -10,7 +10,9 @@ import {
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
 import {
+  AccountOptions,
   FullAccount,
+  GeneratedKey,
   Permissions,
   Transaction,
 } from "../../../../../common/types";
@@ -18,7 +20,6 @@ import { CheckboxValueType, Form } from "../../../../../ui/src";
 
 import {
   FormValidation,
-  GeneratedKey,
   ModifiedPermissions,
   UseKeyManagementTabResult,
 } from "./useKeyManagementTab.types";
@@ -74,10 +75,21 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       ) {
         const isActivePermissions = permissionsType === "active";
 
-        let newLocalPermissions = {} as ModifiedPermissions;
-        isActivePermissions
-          ? (newLocalPermissions = { ...localUserActivePermissions })
-          : (newLocalPermissions = { ...localUserOwnerPermissions });
+        const newLocalPermissions = isActivePermissions
+          ? ({
+              threshold: localUserActivePermissions.threshold,
+              accounts: [...localUserActivePermissions.accounts],
+              keys: [...localUserActivePermissions.keys],
+              addresses: [...localUserActivePermissions.addresses],
+              weights: { ...localUserActivePermissions.weights },
+            } as ModifiedPermissions)
+          : ({
+              threshold: localUserOwnerPermissions.threshold,
+              accounts: [...localUserOwnerPermissions.accounts],
+              keys: [...localUserOwnerPermissions.keys],
+              addresses: [...localUserOwnerPermissions.addresses],
+              weights: { ...localUserOwnerPermissions.weights },
+            } as ModifiedPermissions);
 
         authType === "account"
           ? newLocalPermissions.accounts.push(itemValue)
@@ -85,9 +97,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           ? newLocalPermissions.keys.push(itemValue)
           : newLocalPermissions.addresses.push(itemValue);
 
-        Object.assign({}, newLocalPermissions.weights, {
-          itemValue: weight,
-        });
+        newLocalPermissions.weights[itemValue] = weight;
 
         isActivePermissions
           ? setLocalUserActivePermissions(newLocalPermissions)
@@ -115,21 +125,34 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       ) {
         const isActivePermissions = permissionsType === "active";
 
-        let newLocalPermissions = {} as ModifiedPermissions;
-        isActivePermissions
-          ? (newLocalPermissions = { ...localUserActivePermissions })
-          : (newLocalPermissions = { ...localUserOwnerPermissions });
+        const newLocalPermissions = isActivePermissions
+          ? ({
+              threshold: localUserActivePermissions.threshold,
+              accounts: [...localUserActivePermissions.accounts],
+              keys: [...localUserActivePermissions.keys],
+              addresses: [...localUserActivePermissions.addresses],
+              weights: { ...localUserActivePermissions.weights },
+            } as ModifiedPermissions)
+          : ({
+              threshold: localUserOwnerPermissions.threshold,
+              accounts: [...localUserOwnerPermissions.accounts],
+              keys: [...localUserOwnerPermissions.keys],
+              addresses: [...localUserOwnerPermissions.addresses],
+              weights: { ...localUserOwnerPermissions.weights },
+            } as ModifiedPermissions);
 
         authType === "account"
-          ? newLocalPermissions.accounts.filter(
+          ? (newLocalPermissions.accounts = newLocalPermissions.accounts.filter(
               (account) => account !== itemValue
-            )
+            ))
           : authType === "key"
-          ? newLocalPermissions.keys.filter((key) => key !== itemValue)
-          : newLocalPermissions.addresses.filter(
-              (address) => address !== itemValue
-            );
-
+          ? (newLocalPermissions.keys = newLocalPermissions.keys.filter(
+              (key) => key !== itemValue
+            ))
+          : (newLocalPermissions.addresses =
+              newLocalPermissions.addresses.filter(
+                (address) => address !== itemValue
+              ));
         isActivePermissions
           ? setLocalUserActivePermissions(newLocalPermissions)
           : setLocalUserOwnerPermissions(newLocalPermissions);
@@ -149,8 +172,20 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       serverUserActivePermissions !== undefined &&
       serverUserOwnerPermissions !== undefined
     ) {
-      setLocalUserActivePermissions({ ...serverUserActivePermissions });
-      setLocalUserOwnerPermissions({ ...serverUserOwnerPermissions });
+      setLocalUserActivePermissions({
+        threshold: serverUserActivePermissions.threshold,
+        accounts: [...serverUserActivePermissions.accounts],
+        keys: [...serverUserActivePermissions.keys],
+        addresses: [...serverUserActivePermissions.addresses],
+        weights: { ...serverUserActivePermissions.weights },
+      } as ModifiedPermissions);
+      setLocalUserOwnerPermissions({
+        threshold: serverUserOwnerPermissions.threshold,
+        accounts: [...serverUserOwnerPermissions.accounts],
+        keys: [...serverUserOwnerPermissions.keys],
+        addresses: [...serverUserOwnerPermissions.addresses],
+        weights: { ...serverUserOwnerPermissions.weights },
+      } as ModifiedPermissions);
       setLocalUserMemoKey(serverUserMemoKey);
       setIsPublishable(false);
     }
@@ -190,7 +225,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       const permissionsObjectKeys = ["accounts", "keys", "addresses"];
       permissionsObjectKeys.forEach((key) => {
         if (
-          isArrayEqual(
+          !isArrayEqual(
             serverUserPermissions[key] as string[],
             localUserPermissions[key] as string[]
           )
@@ -208,7 +243,6 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       serverUserOwnerPermissions,
       localUserActivePermissions,
       localUserOwnerPermissions,
-      isArrayEqual,
     ]
   );
 
@@ -319,9 +353,21 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           fullAccount.account.owner
         );
         setServerUserActivePermissions(userActivePermissions);
-        setLocalUserActivePermissions(userActivePermissions);
+        setLocalUserActivePermissions({
+          threshold: userActivePermissions.threshold,
+          accounts: [...userActivePermissions.accounts],
+          keys: [...userActivePermissions.keys],
+          addresses: [...userActivePermissions.addresses],
+          weights: { ...userActivePermissions.weights },
+        } as ModifiedPermissions);
         setServerUserOwnerPermissions(userOwnerPermissions);
-        setLocalUserOwnerPermissions(userOwnerPermissions);
+        setLocalUserOwnerPermissions({
+          threshold: userOwnerPermissions.threshold,
+          accounts: [...userOwnerPermissions.accounts],
+          keys: [...userOwnerPermissions.keys],
+          addresses: [...userOwnerPermissions.addresses],
+          weights: { ...userOwnerPermissions.weights },
+        } as ModifiedPermissions);
         setServerUserMemoKey(fullAccount.account.options.memo_key);
         setLocalUserMemoKey(fullAccount.account.options.memo_key);
         setLoading(false);
@@ -350,9 +396,29 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       fullAccount !== undefined &&
       id &&
       localUserActivePermissions !== undefined &&
-      localUserOwnerPermissions !== undefined
+      localUserOwnerPermissions !== undefined &&
+      serverUserActivePermissions !== undefined
     ) {
-      let updateObject: any;
+      const updateObject: any = {};
+      if (checkPermissionsChanged("owner")) {
+        updateObject.owner = permissionsToJson(
+          localUserOwnerPermissions.threshold,
+          localUserOwnerPermissions.accounts,
+          localUserOwnerPermissions.keys,
+          localUserOwnerPermissions.addresses,
+          localUserOwnerPermissions.weights
+        );
+        if (!checkPermissionsChanged("active")) {
+          updateObject.active = permissionsToJson(
+            serverUserActivePermissions.threshold,
+            serverUserActivePermissions.accounts,
+            serverUserActivePermissions.keys,
+            serverUserActivePermissions.addresses,
+            serverUserActivePermissions.weights
+          );
+        }
+      }
+
       if (checkPermissionsChanged("active")) {
         updateObject.active = permissionsToJson(
           localUserActivePermissions.threshold,
@@ -362,17 +428,17 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           localUserActivePermissions.weights
         );
       }
-      if (checkPermissionsChanged("owner")) {
-        updateObject.owner = permissionsToJson(
-          localUserOwnerPermissions.threshold,
-          localUserOwnerPermissions.accounts,
-          localUserOwnerPermissions.keys,
-          localUserOwnerPermissions.addresses,
-          localUserOwnerPermissions.weights
-        );
-      }
+
       if (checkPermissionsChanged("memo")) {
-        updateObject.new_options = { ...fullAccount.account.options };
+        updateObject.new_options = {
+          extensions: [...fullAccount.account.options.extensions],
+          memo_key: fullAccount.account.options.memo_key,
+          num_committee: fullAccount.account.options.num_committee,
+          num_witness: fullAccount.account.options.num_witness,
+          num_son: fullAccount.account.options.num_son,
+          votes: [...fullAccount.account.options.votes],
+          voting_account: fullAccount.account.options.voting_account,
+        } as AccountOptions;
         updateObject.new_options.memo_key = localUserMemoKey;
       }
       const trx = buildUpdateAccountTransaction(updateObject, id);
@@ -384,6 +450,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     checkPermissionsChanged,
     localUserActivePermissions,
     localUserOwnerPermissions,
+    serverUserActivePermissions,
     permissionsToJson,
     buildUpdateAccountTransaction,
   ]);
@@ -416,12 +483,15 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
         return;
       } else {
         setTransactionErrorMessage("");
-        const activeKey = getPrivateKey(password, "active");
+        const activePrivateKey = getPrivateKey(password, "active");
+        const ownerPrivateKey = getPrivateKey(password, "owner");
+
         let trxResult;
         try {
           setLoadingTransaction(true);
-          trxResult = await buildTrx([pendingTransaction], [activeKey]);
-          setLoadingTransaction(false);
+          trxResult = !selectedKeys.includes("owner")
+            ? await buildTrx([pendingTransaction], [activePrivateKey])
+            : await buildTrx([pendingTransaction], [ownerPrivateKey]);
         } catch (error) {
           console.log(error);
           setTransactionErrorMessage("Unable to process the transaction!");
@@ -435,6 +505,10 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           );
           await getAccountWithPermissions();
           setIsPublishable(false);
+          setLoadingTransaction(false);
+          setTransactionConfirmed(true);
+        } else {
+          setTransactionErrorMessage("Unable to process the transaction!");
           setLoadingTransaction(false);
         }
       }
@@ -451,21 +525,18 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       setIsPublishable,
       localStorageAccount,
       formAccountBalancesByName,
+      setTransactionConfirmed,
     ]
   );
 
   // this is remove function in bts in cloud tab, now I'm using it differently. It should change in general form
-  const reomvePasswordKeys = useCallback(() => {
+  const removePasswordKeys = useCallback(() => {
     if (
       localUserOwnerPermissions &&
       localUserActivePermissions &&
       serverUserActivePermissions &&
       serverUserOwnerPermissions
     ) {
-      const keys = useFormKeys(
-        localStorageAccount,
-        keyManagementForm.getFieldValue("password")
-      );
       if (selectedKeys.includes("active")) {
         if (
           !isArrayEqual(
@@ -473,7 +544,11 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
             localUserActivePermissions.keys
           )
         ) {
-          handleRemoveItem("active", keys.active as string, "key");
+          handleRemoveItem(
+            "active",
+            generatedKeys.find((key) => key.label === "active")?.key as string,
+            "key"
+          );
         }
       }
 
@@ -484,13 +559,20 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
             localUserOwnerPermissions.keys
           )
         ) {
-          handleRemoveItem("owner", keys.owner as string, "key");
+          handleRemoveItem(
+            "owner",
+            generatedKeys.find((key) => key.label === "owner")?.key as string,
+            "key"
+          );
         }
       }
       if (selectedKeys.includes("memo")) {
         if (serverUserMemoKey !== localUserMemoKey) {
           setLocalUserMemoKey(serverUserMemoKey);
         }
+      }
+      if (!transactionConfirmed) {
+        setGeneratedKeys([]);
       }
     }
   }, [
@@ -508,6 +590,9 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     isArrayEqual,
     handleRemoveItem,
     setLocalUserMemoKey,
+    setGeneratedKeys,
+    generatedKeys,
+    transactionConfirmed,
   ]);
 
   // this is use function in bts in cloud tab, now I'm using it differently. It should change in general form
@@ -518,7 +603,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           localStorageAccount,
           keyManagementForm.getFieldValue("password")
         );
-        const generatedKeys: GeneratedKey[];
+        const generatedKeys: GeneratedKey[] = [];
         if (selectedKeys.includes("active")) {
           handleAddItem(
             "active",
@@ -526,7 +611,10 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
             localUserActivePermissions.threshold,
             "key"
           );
-          //generatedKeys.push({})
+          generatedKeys.push({
+            label: "active",
+            key: keys.active as string,
+          });
         }
 
         if (selectedKeys.includes("owner")) {
@@ -536,10 +624,19 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
             localUserOwnerPermissions.threshold,
             "key"
           );
+          generatedKeys.push({
+            label: "owner",
+            key: keys.owner as string,
+          });
         }
         if (selectedKeys.includes("memo")) {
           setLocalUserMemoKey(keys.memo as string);
+          generatedKeys.push({
+            label: "memo",
+            key: keys.memo as string,
+          });
         }
+        setGeneratedKeys(generatedKeys);
       });
     }
   }, [
@@ -552,6 +649,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     localUserOwnerPermissions,
     localUserActivePermissions,
     setLocalUserMemoKey,
+    setGeneratedKeys,
   ]);
 
   const handleValuesChange = useCallback(() => {
@@ -592,12 +690,30 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       return Promise.reject(new Error("Password do not match"));
     const keys = useFormKeys(localStorageAccount, value);
     if (
-      serverUserActivePermissions.keys.includes(keys.active as string) ||
-      serverUserOwnerPermissions.keys.includes(keys.owner as string) ||
+      selectedKeys.includes("active") &&
+      serverUserActivePermissions.keys.includes(keys.active as string)
+    ) {
+      return Promise.reject(
+        new Error("These keys are already in used for active permissions")
+      );
+    }
+    if (
+      selectedKeys.includes("owner") &&
+      serverUserOwnerPermissions.keys.includes(keys.owner as string)
+    ) {
+      return Promise.reject(
+        new Error("These keys are already in used for owner permissions")
+      );
+    }
+    if (
+      selectedKeys.includes("memo") &&
       serverUserMemoKey === (keys.memo as string)
     ) {
-      return Promise.reject(new Error("These keys are already in used"));
+      return Promise.reject(
+        new Error("These keys are already in used for memo permissions")
+      );
     }
+
     return Promise.resolve();
   };
 
@@ -620,6 +736,16 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     getAccountWithPermissions();
   }, [getAccountWithPermissions]);
 
+  useEffect(() => {
+    getUpdateAccountFee();
+    checkIsPublishable();
+  }, [
+    fullAccount,
+    localUserActivePermissions,
+    localUserOwnerPermissions,
+    localUserMemoKey,
+  ]);
+
   return {
     formValidation,
     keyManagementForm,
@@ -632,5 +758,22 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     serverUserActivePermissions,
     localUserActivePermissions,
     serverUserOwnerPermissions,
+    localUserOwnerPermissions,
+    serverUserMemoKey,
+    localUserMemoKey,
+    loading,
+    transactionConfirmed,
+    isPublishable,
+    transactionErrorMessage,
+    transactionSuccessMessage,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    loadingTransaction,
+    handleAddItem,
+    handleRemoveItem,
+    resetChanges,
+    handleSaveChanges,
+    handleSetPassword,
+    removePasswordKeys,
   };
 }

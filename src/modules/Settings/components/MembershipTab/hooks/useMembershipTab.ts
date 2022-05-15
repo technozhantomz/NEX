@@ -166,7 +166,6 @@ export function useMembershipTab(): UseMembershipTabResult {
         try {
           setLoadingTransaction(true);
           trxResult = await buildTrx([trx], [activeKey]);
-          setLoadingTransaction(false);
         } catch (error) {
           console.log(error);
           setTransactionErrorMessage("Unable to process the transaction!");
@@ -180,6 +179,10 @@ export function useMembershipTab(): UseMembershipTabResult {
           setTransactionSuccessMessage(
             "Your account successfully upgraded to lifetime membership account"
           );
+          setLoadingTransaction(false);
+        } else {
+          setTransactionErrorMessage("Unable to process the transaction!");
+          setLoadingTransaction(false);
         }
       }
     },

@@ -14,6 +14,7 @@ export const KeyManagementCard = styled.div`
     height: 856px;
     ${breakpoint} {
       margin-left: 30px;
+      margin-right: 30px;
       text-align: left;
     }
   }
@@ -26,11 +27,10 @@ export const KeyManagementForm = styled(Form)`
 export const PasswordFormItem = styled(Form.Item)`
   width: 90%;
   margin-top: 20px;
+  margin-bottom: 20px;
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border-radius: 4px;
   align-items: center;
-  margin-left: auto;
-  margin-right: auto;
   ${breakpoint.xs} {
     width: 50%;
     align-items: center;

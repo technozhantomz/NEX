@@ -26,7 +26,7 @@ const SettingPage: NextPage = () => {
   const { width } = useViewportContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
-      {width > breakpoints.sm ? (
+      {width > breakpoints.md ? (
         <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
       ) : (
         <Styled.MobileDropdownWrapper>

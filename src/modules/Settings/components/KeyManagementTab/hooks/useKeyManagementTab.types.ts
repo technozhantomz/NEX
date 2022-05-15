@@ -1,3 +1,6 @@
+import { Dispatch, SetStateAction } from "react";
+
+import { GeneratedKey } from "../../../../../common/types";
 import { CheckboxValueType, FormInstance, Rule } from "../../../../../ui/src";
 
 export type UseKeyManagementTabResult = {
@@ -16,6 +19,28 @@ export type UseKeyManagementTabResult = {
   serverUserMemoKey: string;
   localUserMemoKey: string;
   loading: boolean;
+  transactionConfirmed: boolean;
+  isPublishable: boolean;
+  transactionErrorMessage: string;
+  transactionSuccessMessage: string;
+  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
+  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  loadingTransaction: boolean;
+  handleAddItem: (
+    permissionsType: "active" | "owner",
+    itemValue: string,
+    weight: number,
+    authType: "account" | "address" | "key"
+  ) => void;
+  handleRemoveItem: (
+    permissionsType: "active" | "owner",
+    itemValue: string,
+    authType: "account" | "address" | "key"
+  ) => void;
+  resetChanges: () => void;
+  handleSaveChanges: (password: string) => Promise<void>;
+  handleSetPassword: () => void;
+  removePasswordKeys: () => void;
 };
 
 export type FormValidation = {
@@ -28,8 +53,6 @@ export type KeyManagementForm = {
   password: string;
   passwordCheck: string;
 };
-
-export type GeneratedKey = { label: string; key: string };
 
 export type ModifiedPermissions = {
   [key: string]:
