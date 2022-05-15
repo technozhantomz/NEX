@@ -1,25 +1,29 @@
-import { styled, Avatar as UiAvatar } from "../../../../../../ui/src";
+import {
+  styled,
+  Avatar as UiAvatar,
+  Button as UiButton,
+} from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
 
 export const MainNavBar = styled.div`
-  .ant-avatar {
-    background: ${colors.successTag};
-  }
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
   color: ${colors.white};
   .hambuger {
-    font-size: 3em;
+    font-size: 2em;
     font-weight: bold;
     margin-left: 10px;
+  }
+  .ant-avatar {
+    background: ${colors.successTag};
   }
   .bell {
     font-size: 1.2em;
     font-weight: bold;
-    margin-right: 20px;
+    margin-right: 10px;
   }
 `;
 
@@ -33,44 +37,49 @@ export const MenuWrapper = styled.div`{
   background: ${colors.white};
   color: ${colors.textColor};
   z-index: 2;
+  padding-top: 95px;
   &.open{
-      display: block;
-  }
-  .close{
-      color: ${colors.textColor};
-      position: relative;
-      text-align: left;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-end;
-      justify-content: flex-end;
-      margin: 30px 20px 0 0;
+    display: block;
+    flex-direction: column;
   }
   ${breakpoint.xs} {
-      .close{
-          display: none;
-      }
+      position: absolute;
+      top:75px;
+      height: inherit;
+      width: 210px;
+      background: transparent;
+      padding-top: 0;
       &.main-menu-wrapper{
-          position: absolute;
-          top:75px;
           right:32px;
-          height: inherit;
-          width: 210px;
       }
       &.profile-wrapper{
-          position: absolute;
-          top:75px;
           right:60px;
-          height: inherit;
-          width: 210px;
       }
       &.notification-menu-wrapper{
-          position: absolute;
-          top:75px;
           right:110px;
-          height: inherit;
-          width: 210px;
       }
+  }
+`;
+
+export const CloseButton = styled(UiButton)`
+  color: ${colors.textColor};
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+  text-align: center;
+  margin: 50px 25px 0 20px;
+  ${breakpoint.xs} {
+    display: none;
+  }
+`;
+
+export const TopBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  ${breakpoint.xs} {
+    display: none;
   }
 `;
 
