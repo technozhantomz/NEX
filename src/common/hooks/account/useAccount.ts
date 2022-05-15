@@ -8,7 +8,7 @@ import {
   Account,
   Asset,
   FullAccount,
-  UserKey,
+  Permissions,
   WitnessAccount,
 } from "../../types";
 
@@ -117,24 +117,21 @@ export function useAccount(): UseAccountResult {
     [dbApi, setAssets, formAssetBalanceById]
   );
 
-  const getPrivateKey = useCallback(
-    (password: string, role: string): string => {
-      let fromWif = "";
+  const getPrivateKey = useCallback((password: string, role: string): any => {
+    let fromWif = "";
 
-      try {
-        fromWif = PrivateKey.fromWif(password);
-      } catch (e) {
-        console.error(e);
-      }
+    try {
+      fromWif = PrivateKey.fromWif(password);
+    } catch (e) {
+      console.error(e);
+    }
 
-      return fromWif
-        ? fromWif
-        : Login.generateKeys(localStorageAccount, password, [role]).privKeys[
-            role
-          ];
-    },
-    []
-  );
+    return fromWif
+      ? fromWif
+      : Login.generateKeys(localStorageAccount, password, [role]).privKeys[
+          role
+        ];
+  }, []);
 
   const validateAccountPassword = useCallback(
     (password: string, account: Account) => {
@@ -153,15 +150,15 @@ export function useAccount(): UseAccountResult {
       for (const role of roles) {
         const privKey = fromWif ? fromWif : keys.privKeys[role];
         const pubKey = privKey.toPublicKey().toString(defaultToken);
-        let key = "";
+        let userKeys: string[] = [];
 
         if (role !== "memo") {
-          const permission = account[role as keyof Account] as UserKey;
-          key = permission.key_auths[0][0];
+          const permission = account[role as keyof Account] as Permissions;
+          userKeys = permission.key_auths.map((key_auth) => key_auth[0]);
         } else {
-          key = account.options.memo_key;
+          userKeys = [account.options.memo_key];
         }
-        if (key === pubKey) {
+        if (userKeys.includes(pubKey)) {
           checkPassword = true;
           break;
         }

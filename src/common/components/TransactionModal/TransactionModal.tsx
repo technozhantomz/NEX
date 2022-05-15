@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 
 import { Button } from "../../../ui/src";
-import { Proxy } from "../../types";
+import { GeneratedKey, Proxy } from "../../types";
 
 import * as Styled from "./TransactionModal.styled";
 import { AccountUpdate, AccountUpgrade } from "./components";
@@ -19,6 +19,7 @@ type Props = {
   proxy?: Proxy;
   desiredMembers?: number;
   memberType?: string;
+  generatedKeys?: GeneratedKey[];
 };
 
 export const TransactionModal = ({
@@ -33,6 +34,7 @@ export const TransactionModal = ({
   proxy,
   desiredMembers,
   memberType,
+  generatedKeys,
 }: Props): JSX.Element => {
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
@@ -47,6 +49,7 @@ export const TransactionModal = ({
         proxy={proxy}
         desiredMembers={desiredMembers}
         memberType={memberType}
+        generatedKeys={generatedKeys}
       />
     ),
   };

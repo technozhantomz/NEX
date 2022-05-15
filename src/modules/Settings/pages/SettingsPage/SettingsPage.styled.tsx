@@ -55,9 +55,6 @@ export const SettingsCard = styled(UiCard)`
         margin: 0 20px 39px;
         max-width: 566px;
       }
-      .ant-tabs-nav {
-        width: 500px;
-      }
     }
   }
 `;

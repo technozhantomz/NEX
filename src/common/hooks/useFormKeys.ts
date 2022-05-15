@@ -1,10 +1,10 @@
 import { Login } from "peerplaysjs-lib";
 
 import { defaultToken } from "../../api/params";
-import { UserKeys } from "../types";
+import { UserPermissions } from "../types";
 
-export function useFormKeys(name: string, password: string): UserKeys {
-  const keys: UserKeys = {
+export function useFormKeys(name: string, password: string): UserPermissions {
+  const keys: UserPermissions = {
     active: "",
     memo: "",
     owner: "",
@@ -14,7 +14,8 @@ export function useFormKeys(name: string, password: string): UserKeys {
   const generatedKeys = Login.generateKeys(name, password, roles, defaultToken);
 
   for (const role of roles) {
-    keys[role as keyof UserKeys] = generatedKeys.pubKeys[role].toString();
+    keys[role as keyof UserPermissions] =
+      generatedKeys.pubKeys[role].toString();
   }
 
   return keys;

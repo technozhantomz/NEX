@@ -12,7 +12,7 @@ export type FullAccount = {
 };
 
 export type Account = {
-  active: UserKey;
+  active: Permissions;
   id: string;
   lifetime_referrer: string;
   lifetime_referrer_fee_percentage: number;
@@ -20,7 +20,7 @@ export type Account = {
   name: string;
   network_fee_percentage: number;
   options: AccountOptions;
-  owner: UserKey;
+  owner: Permissions;
   referrer: string;
   referrer_rewards_percentage: number;
   registrar: string;
@@ -54,17 +54,19 @@ export type LimitOrder = {
   seller: string;
 };
 
-export type UserKey = {
-  account_auths: unknown[];
-  address_auths: unknown[];
+export type GeneratedKey = { label: string; key: string };
+
+export type Permissions = {
+  account_auths: [string, number][];
+  address_auths: [string, number][];
   key_auths: [string, number][];
   weight_threshold: number;
 };
 
-export type UserKeys = {
-  active: UserKey | string;
-  memo: UserKey | string;
-  owner: UserKey | string;
+export type UserPermissions = {
+  active: Permissions | string;
+  memo: Permissions | string;
+  owner: Permissions | string;
 };
 
 export type AccountOptions = {
