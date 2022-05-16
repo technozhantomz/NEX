@@ -46,7 +46,7 @@ export function usePairModal({
     });
   }, [setIsVisible, currentPair, pairModalForm]);
 
-  const useResetFormOnCloseModal = (
+  const useResetFormOnOpenModal = (
     form: FormInstance<PairForm>,
     visible: boolean
   ) => {
@@ -57,7 +57,7 @@ export function usePairModal({
     const prevVisible = prevVisibleRef.current;
 
     useEffect(() => {
-      if (!visible && prevVisible) {
+      if (visible && !prevVisible) {
         form.resetFields();
       }
     }, [visible]);
@@ -104,7 +104,7 @@ export function usePairModal({
     return Promise.resolve();
   };
 
-  const formValdation = {
+  const formValidation = {
     quote: [{ validator: validateQuote }],
     base: [{ validator: validateBase }],
   };
@@ -115,9 +115,9 @@ export function usePairModal({
 
   return {
     pairModalForm,
-    formValdation,
+    formValidation,
     allAssetsSymbols,
-    useResetFormOnCloseModal,
+    useResetFormOnOpenModal,
     handleCancel,
     handleSelectPair,
     handleSelectRecent,

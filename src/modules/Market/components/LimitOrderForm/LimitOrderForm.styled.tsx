@@ -36,6 +36,7 @@ export const InputNumber = styled(UiInput)`
   &.ant-input-affix-wrapper > input.ant-input {
     height: 100%;
     text-align: right;
+    direction: ltr;
     font-size: 20px;
   }
 `;

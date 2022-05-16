@@ -26,24 +26,6 @@ export function useLimitOrderTransactionBuilder(): UseLimitOrderTransactionBuild
         const buyAsset = currentQuote;
         amount_to_sell = {
           amount: roundNum(
-            quantity * 10 ** sellAsset.precision,
-            sellAsset.precision
-          ),
-          asset_id: sellAsset.id,
-        };
-
-        min_to_receive = {
-          amount: roundNum(
-            total * 10 ** buyAsset.precision,
-            buyAsset.precision
-          ),
-          asset_id: buyAsset.id,
-        };
-      } else {
-        const sellAsset = currentQuote as Asset;
-        const buyAsset = currentBase as Asset;
-        amount_to_sell = {
-          amount: roundNum(
             total * 10 ** sellAsset.precision,
             sellAsset.precision
           ),
@@ -53,6 +35,24 @@ export function useLimitOrderTransactionBuilder(): UseLimitOrderTransactionBuild
         min_to_receive = {
           amount: roundNum(
             quantity * 10 ** buyAsset.precision,
+            buyAsset.precision
+          ),
+          asset_id: buyAsset.id,
+        };
+      } else {
+        const sellAsset = currentQuote as Asset;
+        const buyAsset = currentBase as Asset;
+        amount_to_sell = {
+          amount: roundNum(
+            quantity * 10 ** sellAsset.precision,
+            sellAsset.precision
+          ),
+          asset_id: sellAsset.id,
+        };
+
+        min_to_receive = {
+          amount: roundNum(
+            total * 10 ** buyAsset.precision,
             buyAsset.precision
           ),
           asset_id: buyAsset.id,

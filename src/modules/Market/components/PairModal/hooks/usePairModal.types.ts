@@ -3,8 +3,8 @@ import { FormInstance, Rule } from "../../../../../ui/src";
 export type UsePairModalResult = {
   pairModalForm: FormInstance<PairForm>;
   allAssetsSymbols: string[];
-  formValdation: FormValidation;
-  useResetFormOnCloseModal: (
+  formValidation: FormValidation;
+  useResetFormOnOpenModal: (
     form: FormInstance<PairForm>,
     visible: boolean
   ) => void;

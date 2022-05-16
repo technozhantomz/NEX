@@ -54,43 +54,82 @@ export function useOrderBook({
     [setThreshold]
   );
 
+  const reduceOrdersByPrice = useCallback(
+    (orders: Order[], currentBase: Asset, currentQuote: Asset) => {
+      const reducedOrders = orders.reduce((previousOrders, currentOrder) => {
+        const repeatedPriceIndex = previousOrders.findIndex(
+          (previousOrder) =>
+            roundNum(Number(previousOrder.price), currentBase.precision) ===
+            roundNum(Number(currentOrder.price), currentBase.precision)
+        );
+        if (repeatedPriceIndex === -1) {
+          previousOrders.push(currentOrder);
+        } else {
+          const orderWithRepeatedPrice = previousOrders[repeatedPriceIndex];
+          previousOrders[repeatedPriceIndex] = {
+            quote: String(
+              roundNum(
+                Number(orderWithRepeatedPrice.quote),
+                currentQuote.precision
+              ) + roundNum(Number(currentOrder.quote), currentQuote.precision)
+            ),
+            base: String(
+              roundNum(
+                Number(orderWithRepeatedPrice.base),
+                currentBase.precision
+              ) + roundNum(Number(currentOrder.base), currentBase.precision)
+            ),
+            price: String(
+              roundNum(
+                Number(orderWithRepeatedPrice.price),
+                currentBase.precision
+              )
+            ),
+            isBuyOrder: orderWithRepeatedPrice.isBuyOrder,
+          };
+        }
+        return previousOrders;
+      }, [] as Order[]);
+      return reducedOrders;
+    },
+    [roundNum]
+  );
+
   const selectOrdersForThresholdAndFilter = useCallback(() => {
-    let selectedOrders: Order[] = [];
-    switch (orderType) {
-      case "total":
-        selectedOrders = [
-          ...asks.filter((ask) => Number(ask.price) >= threshold).reverse(),
-          ...bids.filter((bid) => Number(bid.price) >= threshold).reverse(),
-        ];
-        break;
-      case "sell":
-        selectedOrders = [
-          ...asks.filter((ask) => Number(ask.price) >= threshold).reverse(),
-        ];
-        break;
-      case "buy":
-        selectedOrders = [
-          ...bids.filter((bid) => Number(bid.price) >= threshold).reverse(),
-        ];
-        break;
-      default:
-        break;
-    }
     if (
       !loadingSelectedPair &&
       currentBase !== undefined &&
       currentQuote !== undefined
     ) {
-      console.log("selected Order", selectedOrders);
+      let selectedOrders: Order[] = [];
+      const reducedAsks = reduceOrdersByPrice(asks, currentBase, currentQuote);
+      const reducedBids = reduceOrdersByPrice(bids, currentBase, currentQuote);
+      switch (orderType) {
+        case "total":
+          selectedOrders = [
+            ...reducedAsks.filter((ask) => Number(ask.price) >= threshold),
+            ...reducedBids.filter((bid) => Number(bid.price) >= threshold),
+          ];
+          break;
+        case "sell":
+          selectedOrders = [
+            ...reducedAsks.filter((ask) => Number(ask.price) >= threshold),
+          ];
+          break;
+        case "buy":
+          selectedOrders = [
+            ...reducedBids.filter((bid) => Number(bid.price) >= threshold),
+          ];
+          break;
+        default:
+          break;
+      }
       const orders: OrderRow[] = selectedOrders.map((order, index) => {
         return {
           key: String(index),
-          quote: roundNum(Number(order.base), currentQuote.precision),
-          base: roundNum(Number(order.quote), currentBase.precision),
-          price: roundNum(
-            Number(order.quote) / Number(order.base),
-            currentBase.precision
-          ),
+          quote: roundNum(Number(order.quote), currentQuote.precision),
+          base: roundNum(Number(order.base), currentBase.precision),
+          price: roundNum(Number(order.price), currentBase.precision),
           isBuyOrder: order.isBuyOrder,
         };
       });

@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 import { Asset } from "../../../../../common/types";
 import { FormInstance, Rule } from "../../../../../ui/src";
 
@@ -15,13 +17,14 @@ export type UseCreateLimitOrderResult = {
   marketFeePercent: number;
   balance: number;
   orderForm: FormInstance<OrderForm>;
-  formValdation: FormValidation;
+  formValidation: FormValidation;
   handleValuesChange: (changedValues: any, allValues: any) => void;
-  isPasswordModalVisible: boolean;
-  handleCancelPasswordModal: () => void;
-  onFormFinish: (name: string, info: { values: any; forms: any }) => void;
-  confirm: () => void;
-  submittingPassword: boolean;
+  handleCreateLimitOrder: (password: string) => Promise<void>;
+  transactionErrorMessage: string;
+  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
+  transactionSuccessMessage: string;
+  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  loadingTransaction: boolean;
 };
 
 export type FormField = {

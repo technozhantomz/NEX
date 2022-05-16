@@ -23,15 +23,15 @@ export const PairModal = ({
 }: Props): JSX.Element => {
   const {
     pairModalForm,
-    formValdation,
+    formValidation,
     allAssetsSymbols,
-    useResetFormOnCloseModal,
+    useResetFormOnOpenModal,
     handleCancel,
     handleSelectPair,
     handleSelectRecent,
   } = usePairModal({ setIsVisible, currentPair });
 
-  useResetFormOnCloseModal(pairModalForm, isVisible);
+  useResetFormOnOpenModal(pairModalForm, isVisible);
   return (
     <Styled.PairModal
       title="Selet Pair"
@@ -50,11 +50,12 @@ export const PairModal = ({
         }}
         name="pairModal"
         size="large"
+        validateTrigger="onChange"
       >
         <Form.Item
           name="quote"
           validateFirst={true}
-          rules={formValdation.quote}
+          rules={formValidation.quote}
         >
           <Select>
             {allAssetsSymbols.map((asset) => (
@@ -64,7 +65,7 @@ export const PairModal = ({
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="base" validateFirst={true} rules={formValdation.base}>
+        <Form.Item name="base" validateFirst={true} rules={formValidation.base}>
           <Select>
             {allAssetsSymbols.map((asset) => (
               <Option value={asset} key={`${asset}_base`}>
