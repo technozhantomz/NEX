@@ -6,8 +6,10 @@ import React, {
   useState,
 } from "react";
 
-import { isArrayEqual } from "../../../api/utils";
+import { defaultNotifications } from "../../../api/params";
 import { useActivity, useLocalStorage } from "../../hooks";
+import { NotificationRow, Notifications, Settings } from "../../types";
+import { useSettingsContext } from "../SettingsProvider";
 import { useUserContext } from "../UserProvider";
 
 import { MenuProviderContextType } from "./MenuProvider.types";
@@ -27,9 +29,7 @@ const DefaultMenuState: MenuProviderContextType = {
   profileMenuOpen: false,
   mainMenuOpen: false,
   unreadMessages: false,
-  notifications: {
-    notificationRows: [],
-  },
+  notifications: defaultNotifications,
 };
 
 const MenuProviderContext =
@@ -43,8 +43,9 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   const [unreadMessages, setUnreadMessages] = useState<boolean>(false);
   const [notifications, _setNotifications] = useLocalStorage(
     "notifications"
-  ) as [Notifications, (value: Notification) => void];
+  ) as [Notifications, (value: Notifications) => void];
   const { localStorageAccount } = useUserContext();
+  const { settings } = useSettingsContext();
   const { getActivitiesRows } = useActivity();
 
   const toggleMenu = useCallback(
@@ -54,6 +55,12 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
           setProfileMenuOpen(false);
           setMainMenuOpen(false);
           setNotificationMenuOpen(!notificationMenuOpen);
+          setUnreadMessages(false);
+          _setNotifications({
+            notificationRows: notifications.notificationRows.map(
+              markNotificationsRead
+            ),
+          });
           break;
         case menuName === "profile":
           setNotificationMenuOpen(false);
@@ -83,35 +90,52 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
     setMainMenuOpen(false);
   }, [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]);
 
-  const initNotifications = useCallback(() => {
-    if (!notifications) _setNotifications(DefaultMenuState.notifications);
-  }, [notifications, _setNotifications]);
+  const markNotificationsRead = (value: NotificationRow) => {
+    if (value.unread) value.unread = false;
+    return value;
+  };
+
+  const markUnreadNotification = (value: NotificationRow) => {
+    if (notifications.notificationRows.indexOf(value) === -1) {
+      value.unread = true;
+      return value;
+    }
+    return value;
+  };
+
+  const getServerNotifications = async () => {
+    const activityRows = await getActivitiesRows(localStorageAccount);
+    const serverNotifications: NotificationRow[] = activityRows.map(
+      (activity) => {
+        return {
+          notificationRow: activity,
+          unread: true,
+        };
+      }
+    );
+    return serverNotifications;
+  };
 
   const setNotifications = useCallback(async () => {
-    const activityRows = await getActivitiesRows(localStorageAccount);
-    const serverNotifications = activityRows.map((activity) => {
-      return {
-        notificationRow: activity,
-        unread: false,
-      };
-    });
-    if (!isArrayEqual(notifications.notificationRows, serverNotifications)) {
-      const unread = serverNotifications.filter(
-        (notification) => serverNotifications.indexOf(notification) === -1
-      );
-      notifications.notificationRows.concat(unread);
-      _setNotifications(notifications);
-      setUnreadMessages(true);
+    if (localStorageAccount) {
+      const serverNotifications = await getServerNotifications();
+      const cachedNotifications = notifications.notificationRows;
+      if (!(cachedNotifications.length === serverNotifications.length)) {
+        _setNotifications({
+          notificationRows: serverNotifications.map(markUnreadNotification),
+        });
+        if (settings.notifications.allow) setUnreadMessages(true);
+      } else {
+        _setNotifications(notifications);
+      }
+    } else {
+      _setNotifications(defaultNotifications);
     }
   }, [localStorageAccount]);
 
   useEffect(() => {
     setNotifications();
   }, [localStorageAccount, notifications, _setNotifications]);
-
-  useEffect(() => {
-    initNotifications();
-  }, []);
 
   return (
     <MenuProviderContext.Provider

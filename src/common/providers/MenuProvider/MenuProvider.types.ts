@@ -1,4 +1,4 @@
-import { ActivityRow } from "../../types";
+import { Notifications } from "../../types";
 
 export type MenuProviderContextType = {
   toggleMenu: (menuName: string) => void;
@@ -8,13 +8,4 @@ export type MenuProviderContextType = {
   mainMenuOpen: boolean;
   unreadMessages: boolean;
   notifications: Notifications;
-};
-
-export type Notifications = {
-  notificationRows: NotificationRow[];
-};
-
-export type NotificationRow = {
-  notificationRow: ActivityRow;
-  unread: boolean;
 };
