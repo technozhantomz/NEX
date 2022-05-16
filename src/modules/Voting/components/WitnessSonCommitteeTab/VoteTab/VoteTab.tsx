@@ -1,6 +1,5 @@
 import { VoteForm, VoteTable } from "..";
-import { FullAccount, Vote } from "../../../../../common/types";
-import { Proxy } from "../../../types";
+import { FullAccount, Proxy, Vote } from "../../../../../common/types";
 
 import * as Styled from "./VoteTab.styled";
 import { useVoteTab } from "./hooks";

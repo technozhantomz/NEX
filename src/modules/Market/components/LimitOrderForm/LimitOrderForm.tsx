@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { FormDisclamer, PasswordModal } from "../../../../common/components";
-import { useAsset } from "../../../../common/hooks";
+import {
+  FormDisclamer,
+  PasswordModal,
+  TransactionModal,
+} from "../../../../common/components";
+import { useAsset, useHandleTransactionForm } from "../../../../common/hooks";
 import { useUserContext } from "../../../../common/providers";
 import { Asset } from "../../../../common/types";
 import { Form } from "../../../../ui/src";
@@ -40,13 +44,14 @@ export const LimitOrderForm = ({
     marketFeePercent,
     balance,
     orderForm,
-    formValdation,
-    isPasswordModalVisible,
-    handleCancelPasswordModal,
-    confirm,
+    formValidation,
+    handleCreateLimitOrder,
     handleValuesChange,
-    onFormFinish,
-    submittingPassword,
+    setTransactionErrorMessage,
+    transactionErrorMessage,
+    setTransactionSuccessMessage,
+    transactionSuccessMessage,
+    loadingTransaction,
   } = useCreateLimitOrder({
     currentBase,
     currentQuote,
@@ -56,10 +61,23 @@ export const LimitOrderForm = ({
     refreshOrderBook,
   });
 
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleCreateLimitOrder,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
+
   return (
     <>
       <Styled.FormContainer>
-        <Form.Provider onFormFinish={onFormFinish}>
+        <Form.Provider onFormFinish={handleFormFinish}>
           {showTitle ? (
             <Styled.FormTitle>{isBuyOrder ? "BUY" : "SELL"}</Styled.FormTitle>
           ) : (
@@ -68,14 +86,14 @@ export const LimitOrderForm = ({
           <Styled.Form
             form={orderForm}
             name="orderForm"
-            onFinish={confirm}
+            onFinish={showPasswordModal}
             size="large"
             initialValues={{ price: 0.0, quantity: 0.0, total: 0.0 }}
             onValuesChange={handleValuesChange}
           >
             <Styled.FormItem
               name="price"
-              rules={formValdation.price}
+              rules={formValidation.price}
               validateFirst={true}
               validateTrigger="onBlur"
             >
@@ -89,11 +107,14 @@ export const LimitOrderForm = ({
                   />
                 }
                 type="number"
+                onFocus={(e) => {
+                  e.target.select();
+                }}
               />
             </Styled.FormItem>
             <Styled.FormItem
               name="quantity"
-              rules={formValdation.quantity}
+              rules={formValidation.quantity}
               validateFirst={true}
               validateTrigger="onBlur"
             >
@@ -106,11 +127,14 @@ export const LimitOrderForm = ({
                   />
                 }
                 type="number"
+                onFocus={(e) => {
+                  e.target.select();
+                }}
               />
             </Styled.FormItem>
             <Styled.FormItem
               name="total"
-              rules={formValdation.total}
+              rules={formValidation.total}
               validateFirst={true}
               validateTrigger="onBlur"
             >
@@ -123,6 +147,9 @@ export const LimitOrderForm = ({
                   />
                 }
                 type="number"
+                onFocus={(e) => {
+                  e.target.select();
+                }}
               />
             </Styled.FormItem>
             <Styled.FormItem>
@@ -179,11 +206,48 @@ export const LimitOrderForm = ({
               </Link>
             </FormDisclamer>
           )}
-
+          <TransactionModal
+            visible={isTransactionModalVisible}
+            onCancel={hideTransactionModal}
+            transactionErrorMessage={transactionErrorMessage}
+            transactionSuccessMessage={transactionSuccessMessage}
+            loadingTransaction={loadingTransaction}
+            account={localStorageAccount}
+            fee={feeAmount}
+            transactionType="limit_order_create"
+            price={
+              orderForm.__INTERNAL__.name
+                ? `${orderForm.getFieldValue("price")} ${
+                    activePair.split("_")[1]
+                  } / ${activePair.split("_")[0]}`
+                : ""
+            }
+            buy={
+              orderForm.__INTERNAL__.name
+                ? isBuyOrder
+                  ? `${orderForm.getFieldValue("quantity")} ${
+                      activePair.split("_")[0]
+                    }`
+                  : `${orderForm.getFieldValue("total")} ${
+                      activePair.split("_")[1]
+                    }`
+                : ""
+            }
+            sell={
+              orderForm.__INTERNAL__.name
+                ? isBuyOrder
+                  ? `${orderForm.getFieldValue("total")} ${
+                      activePair.split("_")[1]
+                    }`
+                  : `${orderForm.getFieldValue("quantity")} ${
+                      activePair.split("_")[0]
+                    }`
+                : ""
+            }
+          />
           <PasswordModal
             visible={isPasswordModalVisible}
-            onCancel={handleCancelPasswordModal}
-            submitting={submittingPassword}
+            onCancel={hidePasswordModal}
           />
         </Form.Provider>
       </Styled.FormContainer>
