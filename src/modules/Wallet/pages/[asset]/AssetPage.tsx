@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 import {
   AddressGenerated,
@@ -14,8 +15,11 @@ import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
 import {
   //useBrowserHistoryContext,
   useUserContext,
+  useViewportContext,
 } from "../../../../common/providers";
-import { Tabs } from "../../../../ui/src";
+import { SidechainAcccount } from "../../../../common/types";
+import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
+import { breakpoints } from "../../../../ui/src/breakpoints";
 import { AssetsTable } from "../../components";
 
 import * as Styled from "./AssetPage.styled";
@@ -34,6 +38,36 @@ const AssetPage: NextPage = () => {
   } = useSidechainAccounts();
   const { localStorageAccount } = useUserContext();
   //const { pageLoading } = useBrowserHistoryContext();
+  const [visible, setVisible] = useState<boolean>(false);
+  const { width } = useViewportContext();
+  const renderTabBar = (props: any, DefaultTabBar: any) => (
+    <>
+      {width > breakpoints.md ? (
+        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
+      ) : (
+        <Styled.MobileDropdownWrapper>
+          <Styled.MobileDropdown
+            visible={visible}
+            overlay={
+              <Styled.MobileTabsWrapper>
+                <Menu>
+                  <DefaultTabBar {...props}>
+                    {(node: any) => (
+                      <Menu.Item key={node.key}>{node}</Menu.Item>
+                    )}
+                  </DefaultTabBar>
+                </Menu>
+              </Styled.MobileTabsWrapper>
+            }
+          >
+            <Button type="text" onClick={() => setVisible(!visible)}>
+              {tab ? tab : "transfer"} <DownOutlined />
+            </Button>
+          </Styled.MobileDropdown>
+        </Styled.MobileDropdownWrapper>
+      )}
+    </>
+  );
 
   return (
     <Layout
@@ -46,10 +80,12 @@ const AssetPage: NextPage = () => {
       {!loadingSidechainAssets && (
         <Styled.AssetCard>
           <Tabs
-            defaultActiveKey={`${tab ? tab : "transfer"}`}
+            renderTabBar={renderTabBar}
+            activeKey={`${tab ? tab : "transfer"}`}
             tabBarExtraContent={<Link href="/wallet">Back to Assets</Link>}
             onTabClick={(key) => {
               router.push(`/wallet/${asset}?tab=${key}`);
+              if (width < breakpoints.sm) setVisible(false);
             }}
           >
             <TabPane tab="Transfer" key="transfer">
@@ -73,7 +109,9 @@ const AssetPage: NextPage = () => {
                       {asset === "BTC" ? (
                         hasBTCDepositAddress ? (
                           <AddressGenerated
-                            bitcoinSidechainAccount={bitcoinSidechainAccount}
+                            bitcoinSidechainAccount={
+                              bitcoinSidechainAccount as SidechainAcccount
+                            }
                             getSidechainAccounts={getSidechainAccounts}
                           />
                         ) : (

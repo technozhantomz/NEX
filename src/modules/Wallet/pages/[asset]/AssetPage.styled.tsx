@@ -1,5 +1,10 @@
-import { styled, Card as UiCard } from "../../../../ui/src";
+import {
+  styled,
+  Card as UiCard,
+  Dropdown as UiDropdown,
+} from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
 import { mixIns } from "../../../../ui/src/mixins";
 
 export const AssetCard = styled(UiCard)`
@@ -66,5 +71,30 @@ export const WithdrawFormWrapper = styled.div`
   max-width: 566px;
   button {
     max-width: 290px;
+  }
+`;
+
+export const MobileDropdownWrapper = styled.div`
+  ${mixIns.inActiveTab}
+`;
+export const MobileDropdown = styled(UiDropdown)`
+  &.ant-btn-text,
+  &.ant-btn-text:hover,
+  &.ant-btn-text:focus {
+    width: 50%;
+    text-transform: capitalize;
+    height: 50px;
+    padding: 15px 28px 10px;
+    background: ${colors.white};
+    border-bottom: 2pt solid ${colors.linkColor};
+    border-radius: 0px;
+    position: relative;
+    top: 2px;
+  }
+`;
+
+export const MobileTabsWrapper = styled.div`
+  .ant-tabs-tab {
+    color: ${colors.textColor};
   }
 `;
