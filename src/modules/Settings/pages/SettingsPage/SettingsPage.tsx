@@ -7,7 +7,12 @@ import { useViewportContext } from "../../../../common/providers";
 //import { useBrowserHistoryContext } from "../../../../common/providers";
 import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
 import { breakpoints } from "../../../../ui/src/breakpoints";
-import { GeneralTab, MembershipTab, SecurityTab } from "../../components";
+import {
+  GeneralTab,
+  KeyManagementTab,
+  MembershipTab,
+  SecurityTab,
+} from "../../components";
 
 import * as Styled from "./SettingsPage.styled";
 
@@ -21,7 +26,7 @@ const SettingPage: NextPage = () => {
   const { width } = useViewportContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
-      {width > breakpoints.sm ? (
+      {width > breakpoints.md ? (
         <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
       ) : (
         <Styled.MobileDropdownWrapper>
@@ -71,9 +76,9 @@ const SettingPage: NextPage = () => {
           <TabPane tab="Security" key="security">
             <SecurityTab />
           </TabPane>
-          {/* <TabPane tab="Key management" key="4">
+          <TabPane tab="Key management" key="key-management">
             <KeyManagementTab />
-          </TabPane> */}
+          </TabPane>
           <TabPane tab="Membership" key="membership">
             <MembershipTab />
           </TabPane>

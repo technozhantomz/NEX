@@ -56,3 +56,5 @@ export type { Rule } from "antd/lib/form";
 export type { CheckboxChangeEvent } from "antd/lib/checkbox";
 
 export type { BaseOptionType, DefaultOptionType } from "antd/lib/select";
+
+export type { CheckboxValueType } from "antd/lib/checkbox/Group";

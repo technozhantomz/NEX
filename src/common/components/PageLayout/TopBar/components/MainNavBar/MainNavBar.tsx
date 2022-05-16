@@ -1,7 +1,6 @@
 import { Badge } from "antd";
 
 import {
-  Avatar,
   BellOutlined,
   MenuOutlined,
   MoreOutlined,

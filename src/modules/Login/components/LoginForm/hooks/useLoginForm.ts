@@ -33,13 +33,18 @@ export function useLoginForm(): ILoginForm {
 
   const handleLogin = async () => {
     setSubmitting(true);
-    loginForm.validateFields().then(async () => {
-      if (temporaryFullAccount) {
-        await formAccountAfterConfirmation(temporaryFullAccount);
-        setLocalStorageAccount(temporaryFullAccount.account.name);
-      }
-      setSubmitting(false);
-    });
+    loginForm
+      .validateFields()
+      .then(async () => {
+        if (temporaryFullAccount) {
+          await formAccountAfterConfirmation(temporaryFullAccount);
+          setLocalStorageAccount(temporaryFullAccount.account.name);
+        }
+        setSubmitting(false);
+      })
+      .catch(() => {
+        setSubmitting(false);
+      });
   };
 
   const validateUsername = async (_: unknown, value: string) => {

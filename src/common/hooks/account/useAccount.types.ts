@@ -9,7 +9,7 @@ export type UseAccountResult = {
     subscription: boolean
   ) => Promise<FullAccount | undefined>;
   getAccountByName: (name: string) => Promise<Account | undefined>;
-  getPrivateKey: (password: string, role: string) => string;
+  getPrivateKey: (password: string, role: string) => any;
   formAccountAfterConfirmation: (fullAccount: FullAccount) => Promise<void>;
   removeAccount: () => void;
   validateAccountPassword: (password: string, account: Account) => boolean;

@@ -10,6 +10,7 @@ import {
 } from "../../../../../../common/hooks";
 import { useUserContext } from "../../../../../../common/providers";
 import {
+  AccountOptions,
   Asset,
   FullAccount,
   Transaction,
@@ -55,8 +56,8 @@ export function useVoteTab({
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
 
   const { defaultAsset, formAssetBalanceById } = useAsset();
-  const { getPrivateKey } = useAccount();
-  const { id, assets, name } = useUserContext();
+  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { id, assets, name, localStorageAccount } = useUserContext();
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
   const { getTrxFee, buildTrx } = useTransactionBuilder();
@@ -75,7 +76,15 @@ export function useVoteTab({
         : membersIdentifiers["witnesses"];
 
     if (fullAccount !== undefined && id) {
-      const new_options = { ...fullAccount.account.options };
+      const new_options = {
+        extensions: [...fullAccount.account.options.extensions],
+        memo_key: fullAccount.account.options.memo_key,
+        num_committee: fullAccount.account.options.num_committee,
+        num_witness: fullAccount.account.options.num_witness,
+        num_son: fullAccount.account.options.num_son,
+        votes: [...fullAccount.account.options.votes],
+        voting_account: fullAccount.account.options.voting_account,
+      } as AccountOptions;
 
       const allTabsServerApprovedVotes = fullAccount.votes;
 
@@ -165,6 +174,7 @@ export function useVoteTab({
       }
       if (totalGpos <= 0) {
         setTransactionErrorMessage("You need to Vest some GPOS balance first");
+        return;
       } else {
         setTransactionErrorMessage("");
         const activeKey = getPrivateKey(password, "active");
@@ -172,20 +182,23 @@ export function useVoteTab({
         try {
           setLoadingTransaction(true);
           trxResult = await buildTrx([pendingTransaction], [activeKey]);
-          setLoadingTransaction(false);
         } catch (error) {
           console.log(error);
           setTransactionErrorMessage("Unable to process the transaction!");
           setLoadingTransaction(false);
         }
         if (trxResult) {
+          formAccountBalancesByName(localStorageAccount);
+          await getVotes();
+          setIsVotesChanged(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
             "You have successfully published your votes"
           );
           setLoadingTransaction(false);
-          setIsVotesChanged(false);
-          await getVotes();
+        } else {
+          setTransactionErrorMessage("Unable to process the transaction!");
+          setLoadingTransaction(false);
         }
       }
     },
@@ -198,6 +211,9 @@ export function useVoteTab({
       setLoadingTransaction,
       buildTrx,
       pendingTransaction,
+      formAccountBalancesByName,
+      localStorageAccount,
+      getVotes,
     ]
   );
 

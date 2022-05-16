@@ -55,7 +55,7 @@ export function useFees(): UseFeesResult {
     [feeParameters]
   );
 
-  const calculteTransferFee = useCallback(
+  const calculateTransferFee = useCallback(
     (memo: string) => {
       if (account && feeParameters.length && defaultAsset) {
         const transferFeeParameter = findOperationFee(
@@ -128,7 +128,7 @@ export function useFees(): UseFeesResult {
   return {
     feeParameters,
     findOperationFee,
-    calculteTransferFee,
+    calculateTransferFee,
     calculateAccountUpgradeFee,
     calculateCreateLimitOrderFee,
   };

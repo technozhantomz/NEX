@@ -18,9 +18,10 @@ import { UseMembershipTabResult } from "./useMembershipTab.types";
 
 export function useMembershipTab(): UseMembershipTabResult {
   const { defaultAsset, setPrecision } = useAsset();
-  const { name, id, assets } = useUserContext();
+  const { name, id, assets, localStorageAccount } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
-  const { getPrivateKey, getFullAccount } = useAccount();
+  const { getPrivateKey, getFullAccount, formAccountBalancesByName } =
+    useAccount();
   const { dbApi } = usePeerplaysApiContext();
   const { calculateAccountUpgradeFee } = useFees();
   const { maintenanceInterval, nextMaintenanceTime } = useMaintenance();
@@ -165,7 +166,6 @@ export function useMembershipTab(): UseMembershipTabResult {
         try {
           setLoadingTransaction(true);
           trxResult = await buildTrx([trx], [activeKey]);
-          setLoadingTransaction(false);
         } catch (error) {
           console.log(error);
           setTransactionErrorMessage("Unable to process the transaction!");
@@ -173,11 +173,16 @@ export function useMembershipTab(): UseMembershipTabResult {
         }
 
         if (trxResult) {
+          formAccountBalancesByName(localStorageAccount);
           setIsLifetimeMember(true);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
             "Your account successfully upgraded to lifetime membership account"
           );
+          setLoadingTransaction(false);
+        } else {
+          setTransactionErrorMessage("Unable to process the transaction!");
+          setLoadingTransaction(false);
         }
       }
     },
@@ -192,6 +197,8 @@ export function useMembershipTab(): UseMembershipTabResult {
       setTransactionErrorMessage,
       setTransactionSuccessMessage,
       setIsLifetimeMember,
+      formAccountBalancesByName,
+      localStorageAccount,
     ]
   );
 
