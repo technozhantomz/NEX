@@ -82,7 +82,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
         document.removeEventListener("click", closeMenu);
       };
     }
-  }, []);
+  }, [width]);
 
   return (
     <MenuProviderContext.Provider

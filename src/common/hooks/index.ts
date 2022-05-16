@@ -7,7 +7,7 @@ export * from "./useRoundNum";
 export * from "./fees";
 export * from "./transactions";
 export * from "./useFormKeys";
-export * from "./useMarketPairStats";
+export * from "./market";
 export * from "./sonNetwork";
 export * from "./useBlockChain";
 export * from "./useCopyText";

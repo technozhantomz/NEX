@@ -81,6 +81,7 @@ export function useOrderBook({
       currentBase !== undefined &&
       currentQuote !== undefined
     ) {
+      console.log("selected Order", selectedOrders);
       const orders: OrderRow[] = selectedOrders.map((order, index) => {
         return {
           key: String(index),
