@@ -36,7 +36,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     useAccount();
   const { localStorageAccount, assets, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
-  const { calculteTransferFee } = useFees();
+  const { calculateTransferFee } = useFees();
   const { buildTransferTransaction } = useTransferTransactionBuilder();
   const {
     buildAddingBitcoinSidechainTransaction,
@@ -45,11 +45,11 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [withdrawForm] = Form.useForm();
 
   useEffect(() => {
-    const withdrawFee = calculteTransferFee("");
+    const withdrawFee = calculateTransferFee("");
     if (withdrawFee) {
       setFeeAmount(withdrawFee);
     }
-  }, [assets, calculteTransferFee]);
+  }, [assets, calculateTransferFee]);
 
   useEffect(() => {
     if (
@@ -264,7 +264,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       }
       return Promise.reject(new Error(""));
     } else {
-      const updatedFee = calculteTransferFee(value);
+      const updatedFee = calculateTransferFee(value);
       if (updatedFee) {
         setFeeAmount(updatedFee);
       }

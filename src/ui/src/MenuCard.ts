@@ -25,6 +25,11 @@ export const MenuCard = styled(AntdCard)`
     &.active {
       .menu-icon {
         color: ${colors.primaryColor};
+        fill: ${colors.primaryColor};
+      }
+      .menu-icon g {
+        color: ${colors.primaryColor};
+        fill: ${colors.primaryColor};
       }
     }
   }

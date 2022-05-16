@@ -21,7 +21,9 @@ export const MenuItem = ({
   return (
     <Link href={href}>
       <a
-        className={`menu-item ${pathname === href ? "active" : " "}`}
+        className={`menu-item ${
+          pathname.split("/")[1] === href.split("/")[1] ? "active" : " "
+        }`}
         onClick={onClick}
       >
         <div>

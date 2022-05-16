@@ -6,9 +6,11 @@ import React, {
   useState,
 } from "react";
 
+import { useViewportContext } from "..";
 import { defaultNotifications } from "../../../api/params";
+import { breakpoints } from "../../../ui/src/breakpoints";
 import { useActivity, useLocalStorage } from "../../hooks";
-import { NotificationRow, Notifications, Settings } from "../../types";
+import { NotificationRow, Notifications } from "../../types";
 import { useSettingsContext } from "../SettingsProvider";
 import { useUserContext } from "../UserProvider";
 
@@ -47,6 +49,8 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { settings } = useSettingsContext();
   const { getActivitiesRows } = useActivity();
+
+  const { width } = useViewportContext();
 
   const toggleMenu = useCallback(
     (menuName: string) => {
@@ -136,6 +140,15 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   useEffect(() => {
     setNotifications();
   }, [localStorageAccount, notifications, _setNotifications]);
+  useEffect(() => {
+    // This should fixed with mobile menu
+    if (width > breakpoints.xs) {
+      document.addEventListener("click", closeMenu);
+      return () => {
+        document.removeEventListener("click", closeMenu);
+      };
+    }
+  }, []);
 
   return (
     <MenuProviderContext.Provider
