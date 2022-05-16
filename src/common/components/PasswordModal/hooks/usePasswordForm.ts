@@ -38,9 +38,16 @@ export function usePasswordForm(): IUsePasswordForm {
     return Promise.resolve();
   };
 
+  const formValdation = {
+    password: [
+      { required: true, message: "Password is required" },
+      { validator: validatePassword },
+    ],
+  };
+
   return {
-    validatePassword,
-    useResetFormOnCloseModal,
     passwordModalForm,
+    formValdation,
+    useResetFormOnCloseModal,
   };
 }

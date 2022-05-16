@@ -14,7 +14,7 @@ export const PasswordModal = ({
   onCancel,
   submitting,
 }: Props): JSX.Element => {
-  const { validatePassword, useResetFormOnCloseModal, passwordModalForm } =
+  const { passwordModalForm, formValdation, useResetFormOnCloseModal } =
     usePasswordForm();
 
   useResetFormOnCloseModal(passwordModalForm, visible);
@@ -37,7 +37,7 @@ export const PasswordModal = ({
       >
         <Form.Item
           name="password"
-          rules={[{ validator: validatePassword }]}
+          rules={formValdation.password}
           validateFirst={true}
           validateTrigger="onBlur"
         >
