@@ -45,14 +45,20 @@ export const MainNavBar = (): JSX.Element => {
       <Styled.MainNavBar>
         {localStorageAccount ? (
           <>
+            
             {unreadMessages ? (
+              // <Badge dot>
+              //   <BellOutlined
+              //     className={"bell"}
+              //     onMouseOver={() => toggleMenu("notify")}
+              //     onClick={() => toggleMenu("notify")}
+              //   />
+              // </Badge>
               <Badge dot>
-                <BellOutlined
-                  className={"bell"}
-                  onMouseOver={() => toggleMenu("notify")}
-                  onClick={() => toggleMenu("notify")}
-                />
+                <Avatar icon={<BellOutlined className={"bell"} onMouseOver={() => toggleMenu("notify")}
+                  onClick={() => toggleMenu("notify")} />} />
               </Badge>
+
             ) : (
               <BellOutlined
                 className={"bell"}

@@ -20,6 +20,22 @@ export const MainNavBar = styled.div`
   .ant-avatar {
     background: ${colors.successTag};
   }
+  .ant-badge-dot {
+    width: 8px;
+    min-width: 6px;
+    height: 8px;
+    box-shadow: none;
+    transform: translate(-80%, 70%);
+  }
+
+  .ant-avatar.ant-avatar-circle.ant-avatar-icon {
+    background: bottom;
+  }
+
+  .ant-avatar.ant-avatar-icon {
+    font-size: unset;
+  }
+  
   .bell {
     font-size: 1.2em;
     font-weight: bold;
