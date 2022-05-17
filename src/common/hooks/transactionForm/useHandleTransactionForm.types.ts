@@ -6,4 +6,5 @@ export type UseHandleTransactionFormResult = {
   showTransactionModal: () => void;
   hideTransactionModal: () => void;
   handleFormFinish: (name: string, info: any) => void;
+  handleFormSubmit: () => void;
 };

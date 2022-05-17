@@ -1,7 +1,8 @@
 import { Form, Input } from "../../../ui/src";
-import { useAsset } from "../../hooks";
+import { useAsset, useHandleTransactionForm } from "../../hooks";
 import { useUserContext } from "../../providers";
 import { PasswordModal } from "../PasswordModal";
+import { TransactionModal } from "../TransactionModal";
 
 import * as Styled from "./TransferForm.styled";
 import { useTransferForm } from "./hooks";
@@ -13,25 +14,43 @@ type Props = {
 export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
-    status,
-    isPasswordModalVisible,
+    // status,
+    //isPasswordModalVisible,
     feeAmount,
     transferForm,
     formValdation,
-    handlePasswordModalCancel,
-    confirm,
-    onFormFinish,
-    handleValuesChange,
+    //handlePasswordModalCancel,
+    //confirm,
+    //onFormFinish,
     submittingPassword,
+    loadingTransaction,
+    transactionErrorMessage,
+    transactionSuccessMessage,
+    transfer,
+    handleValuesChange,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
   } = useTransferForm();
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+    handleFormSubmit,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: transfer,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
   const { defaultAsset } = useAsset();
 
   return (
-    <Form.Provider onFormFinish={onFormFinish}>
+    <Form.Provider onFormFinish={handleFormFinish}>
       <Styled.TransferForm
         form={transferForm}
         name="transferForm"
-        onFinish={confirm}
+        onFinish={handleFormSubmit}
         size="large"
         onValuesChange={handleValuesChange}
       >
@@ -80,7 +99,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
         <p>
           Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
         </p>
-        {status === "" ? "" : <p>{status}</p>}
+        {/* {status === "" ? "" : <p>{status}</p>} */}
         <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">
             Send
@@ -89,8 +108,18 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
       </Styled.TransferForm>
       <PasswordModal
         visible={isPasswordModalVisible}
-        onCancel={handlePasswordModalCancel}
+        onCancel={hidePasswordModal}
         submitting={submittingPassword}
+      />
+      <TransactionModal
+        visible={isTransactionModalVisible}
+        onCancel={hideTransactionModal}
+        transactionErrorMessage={transactionErrorMessage}
+        transactionSuccessMessage={transactionSuccessMessage}
+        loadingTransaction={loadingTransaction}
+        account={localStorageAccount}
+        fee={feeAmount}
+        transactionType="transfer"
       />
     </Form.Provider>
   );

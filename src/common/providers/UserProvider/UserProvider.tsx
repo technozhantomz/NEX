@@ -6,9 +6,10 @@ import React, {
   useState,
 } from "react";
 
-import { useAsset, useLocalStorage } from "../../hooks";
+import { useAsset, useLocalStorage, useSessionStorage } from "../../hooks";
 import { Asset, FullAccount } from "../../types";
 import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
+import { useSettingsContext } from "../SettingsProvider";
 
 import { UserContextType } from "./UserProvider.types";
 
@@ -22,6 +23,7 @@ const defaultUserState: UserContextType = {
   name: "",
   assets: [],
   password: "",
+  walletLockExp: 0,
   updateAccount: function (id: string, name: string, assets: Asset[]): void {
     throw new Error(`Function not implemented. ${id},${name}, ${assets}`);
   },
@@ -34,6 +36,9 @@ const defaultUserState: UserContextType = {
   setLocalStorageAccount: function (value: string): void {
     throw new Error(`Function not implemented. ${value}`);
   },
+  setWalletLockExp: function (value: number): void {
+    throw new Error(`Function not implemented. ${value}`);
+  },
 };
 
 const UserContext = createContext<UserContextType>(defaultUserState);
@@ -42,6 +47,10 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const [localStorageAccount, setLocalStorageAccount] = useLocalStorage(
     "currentAccount"
   ) as [string, (value: string) => void];
+  const [walletLockExp, setWalletLockExp] = useSessionStorage("walletLock") as [
+    number,
+    (value: number) => void
+  ];
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
 
@@ -50,6 +59,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const [assets, _setAssets] = useState<Asset[]>([]);
   // should add lock time functionality
   const [password, _setPassword] = useState<string>("");
+  const { settings } = useSettingsContext();
 
   const updateAccount = useCallback(
     (id: string, name: string, assets: Asset[]) => {
@@ -71,6 +81,15 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const setPassword = useCallback(
     (password: string) => {
       _setPassword(password);
+      if (settings.walletLock > 0) {
+        const now = Date.now();
+        const lockTimeInMilli = settings.walletLock * 60000;
+        const _walletLockExp = now + lockTimeInMilli;
+        setWalletLockExp(_walletLockExp);
+        setTimeout(() => {
+          setWalletLockExp(0);
+        }, lockTimeInMilli);
+      }
     },
     [_setPassword]
   );
@@ -108,15 +127,18 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     }
   }, []);
 
+  // useEffect(() => {}, [setWalletLockExp])
   return (
     <UserContext.Provider
       value={{
         id,
         name,
         assets,
+        password,
+        walletLockExp,
         localStorageAccount,
         setLocalStorageAccount,
-        password,
+        setWalletLockExp,
         updateAccount,
         setAssets,
         setPassword,

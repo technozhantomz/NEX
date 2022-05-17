@@ -20,7 +20,7 @@ export function useHandleTransactionForm({
   const [isTransactionModalVisible, setIsTransactionModalVisible] =
     useState<boolean>(false);
 
-  const { password, setPassword } = useUserContext();
+  const { password, walletLockExp, setPassword } = useUserContext();
 
   const showTransactionModal = useCallback(() => {
     setIsTransactionModalVisible(true);
@@ -52,10 +52,18 @@ export function useHandleTransactionForm({
     }
     if (name === "transactionModal") {
       transactionModal.validateFields().then(() => {
-        handleTransactionConfirmation(password);
+        if (password !== "") handleTransactionConfirmation(password);
+        else showPasswordModal();
       });
     }
   };
+
+  const handleFormSubmit = () => {
+    const now = Date.now();
+    if (now < walletLockExp && walletLockExp !== 0) showTransactionModal();
+    else showPasswordModal();
+  };
+
   return {
     isPasswordModalVisible,
     isTransactionModalVisible,
@@ -64,5 +72,6 @@ export function useHandleTransactionForm({
     showTransactionModal,
     hideTransactionModal,
     handleFormFinish,
+    handleFormSubmit,
   };
 }

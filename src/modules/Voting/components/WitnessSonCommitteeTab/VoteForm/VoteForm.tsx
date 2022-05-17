@@ -51,10 +51,10 @@ export const VoteForm = ({
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
+    handleFormSubmit,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: handlePublishChanges,
     setTransactionErrorMessage,
@@ -73,7 +73,7 @@ export const VoteForm = ({
         <Styled.VoteForm
           form={voteForm}
           name="voteForm"
-          onFinish={showPasswordModal}
+          onFinish={handleFormSubmit}
         >
           <Styled.ActionsContainer>
             {!isVotesChanged ? (

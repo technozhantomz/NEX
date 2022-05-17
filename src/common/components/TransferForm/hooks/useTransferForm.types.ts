@@ -1,16 +1,24 @@
+import { Dispatch, SetStateAction } from "react";
+
 import { FormInstance, Rule } from "../../../../ui/src";
 
 export type UseTransferFormResult = {
-  status: string;
-  isPasswordModalVisible: boolean;
+  // status: string;
+  // isPasswordModalVisible: boolean;
   feeAmount: number;
   formValdation: FormValidation;
   transferForm: FormInstance<TransferForm>;
-  onFormFinish: (name: string, info: { values: any; forms: any }) => void;
-  handlePasswordModalCancel: () => void;
-  confirm: () => void;
-  handleValuesChange: (changedValues: any) => void;
   submittingPassword: boolean;
+  loadingTransaction: boolean;
+  transactionErrorMessage: string;
+  transactionSuccessMessage: string;
+  // onFormFinish: (name: string, info: { values: any; forms: any }) => void;
+  // handlePasswordModalCancel: () => void;
+  // confirm: () => void;
+  transfer: (password: string) => Promise<void>;
+  handleValuesChange: (changedValues: any) => void;
+  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
+  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
 };
 
 export type FormField = {
