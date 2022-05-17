@@ -10,7 +10,6 @@ export * from "./useFormKeys";
 export * from "./market";
 export * from "./sonNetwork";
 export * from "./useBlockChain";
-export * from "./useCopyText";
 export * from "./useArrayLimiter";
 export * from "./maintenance";
 export * from "./useUpdateExchanges";

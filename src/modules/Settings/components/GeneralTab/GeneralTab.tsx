@@ -1,6 +1,5 @@
-import { Col, Row } from "antd";
-
 import { defaultLocales, faucetUrl } from "../../../../api/params";
+import { copyText } from "../../../../api/utils";
 import { useSettings } from "../../hooks";
 
 import * as Styled from "./GeneralTab.styled";
@@ -46,16 +45,15 @@ export const GeneralTab = (): JSX.Element => {
         </Styled.FormItem> */}
         <Styled.FaucetSpace>
           <Styled.LabelText>Faucet</Styled.LabelText>
-          <Row gutter={[1, 20]}>
-            <Col className="gutter-row" md={10} xs={24}>
-              <Styled.FaucetURL>{`Faucet URL: ${faucetUrl}`}</Styled.FaucetURL>
-            </Col>
-            <Col className="gutter-row" md={6} xs={24}>
-              <Styled.Typography.Link copyable={{ text: faucetUrl }}>
-                Copy URL
-              </Styled.Typography.Link>
-            </Col>
-          </Row>
+          <Styled.FaucetURLWrapper>
+            <Styled.FaucetURL>{`Faucet URL: ${faucetUrl}`}</Styled.FaucetURL>
+            <Styled.CopyButton
+              type="link"
+              onClick={() => copyText(faucetUrl as string)}
+            >
+              Copy URL <Styled.CopyIcon />
+            </Styled.CopyButton>
+          </Styled.FaucetURLWrapper>
           {showSuccessMessage && (
             <Styled.LabelText type="success">Setting saved!</Styled.LabelText>
           )}
