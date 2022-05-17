@@ -103,10 +103,13 @@ export const MainNav = (): JSX.Element => {
             <li className={"advanced"}>
               <Switch
                 size="small"
-                onChange={handleAdvancedModeChange}
+                onChange={(checked, e) => {
+                  e.stopPropagation();
+                  handleAdvancedModeChange(checked);
+                }}
                 defaultChecked={advancedMode}
               />
-              <span> Advanced Settings</span>
+              <span>Advanced Settings</span>
             </li>
           </>
         )}
