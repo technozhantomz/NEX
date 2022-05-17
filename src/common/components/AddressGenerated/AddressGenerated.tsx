@@ -1,8 +1,8 @@
+import { copyText } from "../../../api/utils";
 import { InfoCircleOutlined } from "../../../ui/src";
 import { breakpoints } from "../../../ui/src/breakpoints";
 import { CopyIcon } from "../../../ui/src/icons";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
-import { useCopyText } from "../../hooks";
 import { useViewportContext } from "../../providers";
 import { SidechainAcccount } from "../../types";
 
@@ -36,7 +36,7 @@ export const AddressGenerated = ({
         size="small"
         suffix={
           <CopyIcon
-            onClick={() => useCopyText(bitcoinSidechainAccount.deposit_address)}
+            onClick={() => copyText(bitcoinSidechainAccount.deposit_address)}
           />
         }
         value={bitcoinSidechainAccount.deposit_address}
