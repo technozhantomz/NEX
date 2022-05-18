@@ -17,10 +17,7 @@ import { UseTransferFormResult } from "./useTransferForm.types";
 
 export function useTransferForm(): UseTransferFormResult {
   const [submittingPassword, setSubmittingPassword] = useState(false);
-  // const [status, setStatus] = useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  // const [isPasswordModalVisible, setIsPasswordModalVisible] =
-  //   useState<boolean>(false);
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
@@ -47,28 +44,7 @@ export function useTransferForm(): UseTransferFormResult {
     transferForm.setFieldsValue({ from: localStorageAccount });
   }, [localStorageAccount, calculateTransferFee, assets]);
 
-  // const handlePasswordModalCancel = () => {
-  //   setIsPasswordModalVisible(false);
-  // };
-
-  // const confirm = () => {
-  //   transferForm.validateFields().then(() => {
-  //     setIsPasswordModalVisible(true);
-  //   });
-  // };
-
-  // const onFormFinish = (name: string, info: { values: any; forms: any }) => {
-  //   const { values, forms } = info;
-  //   const { passwordModal } = forms;
-  //   if (name === "passwordModal") {
-  //     passwordModal.validateFields().then(() => {
-  //       transfer(values.password);
-  //     });
-  //   }
-  // };
-
   const handleValuesChange = (changedValues: any) => {
-    //setStatus("");
     if (changedValues.amount) {
       if (changedValues.amount < 0) {
         transferForm.setFieldsValue({ amount: 0 });
@@ -120,20 +96,13 @@ export function useTransferForm(): UseTransferFormResult {
     }
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
-      //setIsPasswordModalVisible(false);
-      // setStatus(
-      //   `Successfully Transfered ${values.amount} ${values.asset} to ${values.to}`
-      // );
       setTransactionErrorMessage("");
       setTransactionSuccessMessage(
         `Successfully Transfered ${values.amount} ${values.asset} to ${values.to}`
       );
       setLoadingTransaction(false);
       setSubmittingPassword(false);
-      transferForm.resetFields();
     } else {
-      // setIsPasswordModalVisible(false);
-      // setStatus("Server error, please try again later.");
       setTransactionSuccessMessage("");
       setTransactionErrorMessage("Server error, please try again later.");
       setLoadingTransaction(false);
@@ -235,8 +204,6 @@ export function useTransferForm(): UseTransferFormResult {
   };
 
   return {
-    // status,
-    // isPasswordModalVisible,
     feeAmount,
     transferForm,
     formValdation,
@@ -244,10 +211,7 @@ export function useTransferForm(): UseTransferFormResult {
     transactionErrorMessage,
     transactionSuccessMessage,
     submittingPassword,
-    // confirm,
-    // handlePasswordModalCancel,
     transfer,
-    // onFormFinish,
     handleValuesChange,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,

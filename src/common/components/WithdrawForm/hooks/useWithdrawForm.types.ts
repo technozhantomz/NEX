@@ -1,20 +1,21 @@
+import { Dispatch, SetStateAction } from "react";
+
 import { FormInstance, Rule } from "../../../../ui/src";
 
 export type UseWithdrawFormResult = {
-  status: string;
-  //loggedIn: boolean;
-  isPasswordModalVisible: boolean;
   feeAmount: number;
   formValdation: FormValidation;
   withdrawForm: FormInstance<WithdrawForm>;
-  onFormFinish: (name: string, info: { values: any; forms: any }) => void;
-  handlePasswordModalCancel: () => void;
-  confirm: () => void;
-  handleValuesChange: (changedValues: any) => void;
-  // change unknown
-  handleAssetChange: (value: unknown) => void;
   selectedAsset: string;
   submittingPassword: boolean;
+  loadingTransaction: boolean;
+  transactionErrorMessage: string;
+  transactionSuccessMessage: string;
+  withdraw: (password: string) => Promise<void>;
+  handleValuesChange: (changedValues: any) => void;
+  handleAssetChange: (value: unknown) => void;
+  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
+  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
 };
 
 export type FormField = {
@@ -32,7 +33,6 @@ export type FormValidation = {
 };
 
 export type WithdrawForm = {
-  //asset: string;
   from: string;
   amount: number;
   withdrawAddress: string;

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { LogoSelectOption, PasswordModal } from "..";
+import { LogoSelectOption, PasswordModal, TransactionModal } from "..";
 import { Form, Input } from "../../../ui/src";
-import { useAsset } from "../../hooks";
+import { useAsset, useHandleTransactionForm } from "../../hooks";
 import { useUserContext } from "../../providers";
 
 import * as Styled from "./WithdrawForm.styled";
@@ -22,26 +22,39 @@ export const WithdrawForm = ({
   const { localStorageAccount } = useUserContext();
   const { defaultAsset, sidechainAssets } = useAsset();
   const {
-    status,
-    isPasswordModalVisible,
     feeAmount,
     withdrawForm,
     formValdation,
-    handlePasswordModalCancel,
-    confirm,
-    onFormFinish,
-    handleValuesChange,
     selectedAsset,
-    handleAssetChange,
     submittingPassword,
+    loadingTransaction,
+    transactionErrorMessage,
+    transactionSuccessMessage,
+    withdraw,
+    handleValuesChange,
+    handleAssetChange,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
   } = useWithdrawForm(asset);
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+    handleFormSubmit,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: withdraw,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
 
   return (
-    <Form.Provider onFormFinish={onFormFinish}>
+    <Form.Provider onFormFinish={handleFormFinish}>
       <Styled.WithdrawForm
         form={withdrawForm}
         name="withdrawForm"
-        onFinish={confirm}
+        onFinish={handleFormSubmit}
         onValuesChange={handleValuesChange}
         size="large"
       >
@@ -163,8 +176,35 @@ export const WithdrawForm = ({
 
       <PasswordModal
         visible={isPasswordModalVisible}
-        onCancel={handlePasswordModalCancel}
+        onCancel={hidePasswordModal}
         submitting={submittingPassword}
+      />
+      <TransactionModal
+        visible={isTransactionModalVisible}
+        onCancel={
+          transactionSuccessMessage
+            ? () => {
+                hideTransactionModal();
+                withdrawForm.setFieldsValue({ amount: 0 });
+              }
+            : hideTransactionModal
+        }
+        transactionErrorMessage={transactionErrorMessage}
+        transactionSuccessMessage={transactionSuccessMessage}
+        loadingTransaction={loadingTransaction}
+        account={localStorageAccount}
+        fee={feeAmount}
+        transactionType="withdraw"
+        amount={`${
+          withdrawForm.getFieldValue("amount")
+            ? withdrawForm.getFieldValue("amount")
+            : "0"
+        } ${selectedAsset}`}
+        address={
+          withdrawForm.getFieldValue("withdrawAddress")
+            ? withdrawForm.getFieldValue("withdrawAddress")
+            : undefined
+        }
       />
     </Form.Provider>
   );

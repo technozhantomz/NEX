@@ -19,9 +19,11 @@ import { UseWithdrawFormResult } from "./useWithdrawForm.types";
 
 export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [submittingPassword, setSubmittingPassword] = useState(false);
-  const [status, setStatus] = useState<string>("");
-  const [isPasswordModalVisible, setIsPasswordModalVisible] =
-    useState<boolean>(false);
+  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const [transactionErrorMessage, setTransactionErrorMessage] =
+    useState<string>("");
+  const [transactionSuccessMessage, setTransactionSuccessMessage] =
+    useState<string>("");
   const [selectedAsset, setSelectedAsset] = useState<string>(asset);
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const { getSonNetworkStatus, sonAccount } = useSonNetwork();
@@ -74,28 +76,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     selectedAsset,
   ]);
 
-  const handlePasswordModalCancel = () => {
-    setIsPasswordModalVisible(false);
-  };
-
-  const confirm = () => {
-    withdrawForm.validateFields().then(() => {
-      setIsPasswordModalVisible(true);
-    });
-  };
-
-  const onFormFinish = (name: string, info: { values: any; forms: any }) => {
-    const { values, forms } = info;
-    const { passwordModal } = forms;
-    if (name === "passwordModal") {
-      passwordModal.validateFields().then(() => {
-        handleWithdraw(values.password);
-      });
-    }
-  };
-
   const handleValuesChange = (changedValues: any) => {
-    setStatus("");
     if (changedValues.amount) {
       if (changedValues.amount < 0) {
         withdrawForm.setFieldsValue({ amount: 0 });
@@ -123,7 +104,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     [setSelectedAsset]
   );
 
-  const handleWithdraw = async (password: string) => {
+  const withdraw = async (password: string) => {
     setSubmittingPassword(true);
     const values = withdrawForm.getFieldsValue();
     const from = (await getAccountByName(localStorageAccount)) as Account;
@@ -154,33 +135,26 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
               values.withdrawAddress
             );
             try {
+              setLoadingTransaction(true);
               const addTrxResult = await buildTrx([addTrx], [activeKey]);
               await getSidechainAccounts(id);
               if (!addTrxResult) {
-                setIsPasswordModalVisible(false);
-                setStatus("Server error, please try again later.");
-                setSubmittingPassword(false);
+                faildWithdraw();
                 return;
               }
             } catch (e) {
               await getSidechainAccounts(id);
-              setIsPasswordModalVisible(false);
-              setStatus("Server error, please try again later.");
-              setSubmittingPassword(false);
+              faildWithdraw();
               console.log(e);
               return;
             }
           } else {
-            setIsPasswordModalVisible(false);
-            setStatus("Server error, please try again later.");
-            setSubmittingPassword(false);
+            faildWithdraw();
             return;
           }
         } catch (e) {
           console.log(e);
-          setIsPasswordModalVisible(false);
-          setStatus("Server error, please try again later.");
-          setSubmittingPassword(false);
+          faildWithdraw();
           return;
         }
       }
@@ -206,15 +180,21 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     }
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
-      setIsPasswordModalVisible(false);
-      setStatus(`Successfully withdrew ${values.amount}`);
+      setTransactionErrorMessage("");
+      setTransactionSuccessMessage(`Successfully withdrew ${values.amount}`);
       setSubmittingPassword(false);
-      withdrawForm.resetFields();
+      setLoadingTransaction(false);
     } else {
-      setIsPasswordModalVisible(false);
-      setStatus("Server error, please try again later.");
-      setSubmittingPassword(false);
+      faildWithdraw();
     }
+  };
+
+  const faildWithdraw = (errorMsg?: string) => {
+    const defaultErrorMsg = "Server error, please try again later.";
+    setTransactionSuccessMessage("");
+    setTransactionErrorMessage(errorMsg ? errorMsg : defaultErrorMsg);
+    setSubmittingPassword(false);
+    setLoadingTransaction(false);
   };
 
   const validateAmount = async (_: unknown, value: number) => {
@@ -310,17 +290,18 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   };
 
   return {
-    status,
-    isPasswordModalVisible,
     feeAmount,
     withdrawForm,
     formValdation,
-    confirm,
-    handlePasswordModalCancel,
-    onFormFinish,
-    handleValuesChange,
     selectedAsset,
-    handleAssetChange,
     submittingPassword,
+    loadingTransaction,
+    transactionErrorMessage,
+    transactionSuccessMessage,
+    withdraw,
+    handleValuesChange,
+    handleAssetChange,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
   };
 }

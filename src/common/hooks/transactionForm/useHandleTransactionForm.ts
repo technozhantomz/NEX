@@ -60,7 +60,8 @@ export function useHandleTransactionForm({
 
   const handleFormSubmit = () => {
     const now = Date.now();
-    if (now < walletLockExp && walletLockExp !== 0) showTransactionModal();
+    if (now < walletLockExp && walletLockExp !== 0 && password !== "")
+      showTransactionModal();
     else showPasswordModal();
   };
 

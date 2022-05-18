@@ -4,7 +4,13 @@ import { Button } from "../../../ui/src";
 import { GeneratedKey, Proxy } from "../../types";
 
 import * as Styled from "./TransactionModal.styled";
-import { AccountUpdate, AccountUpgrade, CreateLimitOrder } from "./components";
+import {
+  AccountUpdate,
+  AccountUpgrade,
+  CreateLimitOrder,
+  Transfer,
+  Withdraw,
+} from "./components";
 import { useTransactionModal } from "./hooks";
 
 type Props = {
@@ -24,6 +30,9 @@ type Props = {
   sell?: string;
   buy?: string;
   expiration?: string;
+  receiver?: string;
+  amount?: string;
+  address?: string;
 };
 
 export const TransactionModal = ({
@@ -43,6 +52,9 @@ export const TransactionModal = ({
   sell,
   buy,
   expiration,
+  receiver,
+  amount,
+  address,
 }: Props): JSX.Element => {
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
@@ -68,6 +80,22 @@ export const TransactionModal = ({
         sell={sell as string}
         buy={buy as string}
         expiration={expiration as string}
+      />
+    ),
+    transfer: (
+      <Transfer
+        fee={fee as number}
+        account={account as string}
+        receiver={receiver as string}
+        amount={amount as string}
+      />
+    ),
+    withdraw: (
+      <Withdraw
+        fee={fee as number}
+        account={account as string}
+        amount={amount as string}
+        address={address as string}
       />
     ),
   };
@@ -126,7 +154,11 @@ export const TransactionModal = ({
         ></Styled.TransactionModalForm>
         <Styled.DetailContainer>
           <Styled.TransactionType>
-            {counterpart.translate(`transaction.trxTypes.${transactionType}`)}
+            {transactionType === "withdraw"
+              ? "Withdraw"
+              : counterpart.translate(
+                  `transaction.trxTypes.${transactionType}`
+                )}
           </Styled.TransactionType>
         </Styled.DetailContainer>
         {transactionDetails[transactionType] !== undefined

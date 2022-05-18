@@ -77,7 +77,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     [_setAssets]
   );
 
-  // should implement lock time functionality
   const setPassword = useCallback(
     (password: string) => {
       _setPassword(password);
