@@ -33,9 +33,9 @@ export const MainNavBar = styled.div`
   }
 
   .ant-avatar.ant-avatar-icon {
-    font-size: unset;
-  }
-  
+    font-size: 1.2em;
+    margin-top: 1.5px;
+}
   .bell {
     font-size: 1.2em;
     font-weight: bold;
@@ -73,6 +73,10 @@ export const MenuWrapper = styled.div`{
       }
       &.notification-menu-wrapper{
           right:110px;
+          width:325px;
+          min-height:311px;
+          border-radius: 4px;
+          opacity: 1;
       }
   }
 `;

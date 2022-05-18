@@ -11,9 +11,10 @@ import * as Styled from "./NotificationMenu.styled";
 export const NotificationMenu = (): JSX.Element => {
   const [showUnreadOnly, setShowUnreadOnly] = useState<boolean>(false);
   const { notifications } = useMenuContext();
+ 
   return (
     <MenuCard bordered={false}>
-      <div className={"advanced"}>
+      <div className={"unread-switch"}>
         <Switch
           size="small"
           onChange={() => setShowUnreadOnly(!showUnreadOnly)}
@@ -29,7 +30,7 @@ export const NotificationMenu = (): JSX.Element => {
             ? notifications.notificationRows.filter(
                 (row) => (row as NotificationRow).unread
               )
-            : notifications.notificationRows
+            : notifications.notificationRows.slice(0, 5)
         }
         renderItem={(item: NotificationRow) => (
           <Styled.ActivityListItem key={item.notificationRow.key}>

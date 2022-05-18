@@ -1,6 +1,7 @@
 import { Badge } from "antd";
 
 import {
+  Avatar,
   BellOutlined,
   MenuOutlined,
   MoreOutlined,
@@ -45,26 +46,19 @@ export const MainNavBar = (): JSX.Element => {
       <Styled.MainNavBar>
         {localStorageAccount ? (
           <>
-            
             {unreadMessages ? (
-              // <Badge dot>
-              //   <BellOutlined
-              //     className={"bell"}
-              //     onMouseOver={() => toggleMenu("notify")}
-              //     onClick={() => toggleMenu("notify")}
-              //   />
-              // </Badge>
-              <Badge dot>
-                <Avatar icon={<BellOutlined className={"bell"} onMouseOver={() => toggleMenu("notify")}
-                  onClick={() => toggleMenu("notify")} />} />
-              </Badge>
-
+              <>
+                <Badge dot >
+                  <Avatar icon={<BellOutlined onMouseOver={() => toggleMenu("notify")}
+                    onClick={() => toggleMenu("notify")} />} />
+                </Badge>
+              </>
             ) : (
-              <BellOutlined
-                className={"bell"}
-                onMouseOver={() => toggleMenu("notify")}
-                onClick={() => toggleMenu("notify")}
-              />
+              <>
+                  <Avatar icon={<BellOutlined onMouseOver={() => toggleMenu("notify")}
+                    onClick={() => toggleMenu("notify")} />}
+                  />
+              </>
             )}
             {width > breakpoints.xs ? (
               <div
@@ -101,9 +95,8 @@ export const MainNavBar = (): JSX.Element => {
       {localStorageAccount ? (
         <>
           <Styled.MenuWrapper
-            className={`notification-menu-wrapper${
-              notificationMenuOpen ? " open" : ""
-            }`}
+            className={`notification-menu-wrapper${notificationMenuOpen ? " open" : ""
+              }`}
           >
             {CloseButton}
             <NotificationMenu />
