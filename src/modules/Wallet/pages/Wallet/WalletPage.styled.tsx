@@ -3,9 +3,9 @@ import { breakpoint } from "../../../../ui/src/breakpoints";
 import { mixIns } from "../../../../ui/src/mixins";
 
 export const Tabs = styled(UiTabs)`
-  {
+   {
     font-weight: 500;
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
       &.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
         width: 100%;
@@ -50,7 +50,7 @@ export const WalletCard = styled(UiCard)`
       height: 2pt;
     }
   }
-  
+
   ${breakpoint.sm} {
     .ant-card-body {
       .ant-tabs-nav {
