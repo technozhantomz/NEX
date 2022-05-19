@@ -29,7 +29,7 @@ export const MainNavBar = styled.div`
 
 export const MenuWrapper = styled.div`{
   display: none;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   width: 100%;
