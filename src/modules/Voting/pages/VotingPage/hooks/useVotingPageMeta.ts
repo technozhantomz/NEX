@@ -20,7 +20,7 @@ export function useVotingPageMeta(tab?: string): VotingPageMeta {
           description: "PeerPlays (GPOS)",
         });
         break;
-      case "witness":
+      case "witnesses":
         setPageMeta({
           title: "PeerPlays Voting",
           heading: "PeerPlays Voting",
@@ -34,7 +34,7 @@ export function useVotingPageMeta(tab?: string): VotingPageMeta {
           description: "PeerPlays Voting | SONs",
         });
         break;
-      case "committee":
+      case "committees":
         setPageMeta({
           title: "PeerPlays Voting",
           heading: "PeerPlays Voting",
