@@ -38,7 +38,7 @@ export const Button = styled(CardFormButton)`
 
 export const FormDisclamer = styled(UiFormDisclamer)`
   margin-bottom: 15px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin-bottom: 25px;
   }
 `;

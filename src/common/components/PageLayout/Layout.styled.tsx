@@ -65,7 +65,7 @@ export const PageHeading = styled.h1`
   font-weight: 500;
   margin: 20px 0 15px;
 
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin: 45px 0 45px;
     font-size: 24px;
   }

@@ -8,7 +8,7 @@ export const LoginFormCard = styled(Card)`
   min-height: 245px;
   padding-top: 10px;
   ${mixIns.borderRadius}
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     max-width: 600px;
     min-height: 345px;
   }

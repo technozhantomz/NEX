@@ -15,7 +15,7 @@ export const LoginForm = styled(CardForm)`
   .ant-form-large .ant-form-item-control-input {
     width: 539px;
   }
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     padding-top: 16px;
     .ant-form-item-control-input-content {
       height: 50px;
@@ -31,7 +31,7 @@ export const LoginButton = styled(CardFormButton)`
   height: 100%;
   width: 100%;
   font-size: 12px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font-size: 16px;
   }
 `;
@@ -40,7 +40,7 @@ export const LoginButtonContainer = styled.div`
   width: 90%;
   height: 35px;
   margin: 25px auto;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     width: 399px;
     height: 45px;
     margin: 35px auto;

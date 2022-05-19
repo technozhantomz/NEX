@@ -41,7 +41,7 @@ export const WithdrawFormAsset = styled(CardForm.Item)`
 
 export const Fee = styled.p`
   font-size: 12px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font-size: 14px;
   }
 `;
@@ -63,7 +63,7 @@ export const FormItem = styled(Form.Item)`
 
 export const FormDisclamer = styled(UiFormDisclamer)`
   margin-bottom: 15px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin-bottom: 25px;
   }
 `;

@@ -16,7 +16,7 @@ export const MembershipCard = styled.div`
     color: ${colors.textColor};
     min-height: 856px;
     margin: 20px;
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       margin-left: 30px;
       position: relative;
       min-height: 950px;
@@ -25,7 +25,7 @@ export const MembershipCard = styled.div`
   a {
     font: normal normal normal 12px/20px Inter;
     letter-spacing: 0px;
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       font: normal normal normal 14px/20px Inter;
     }
   }
@@ -41,7 +41,7 @@ export const Heading = styled(UiText)`
   color: ${colors.textColor};
   opacity: 1;
   font: normal normal medium 12px/17px Inter;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font: normal normal medium 14px/17px Inter;
   }
 `;
@@ -52,7 +52,7 @@ export const Label = styled(UiText)`
     letter-spacing: 0px;
     color: ${colors.textColor};
     opacity: 1;
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       font: normal normal normal 14px/17px Inter;
     }
   }
@@ -65,7 +65,7 @@ export const Paragraph = styled(UiParagraph)`
   letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     width: 70%;
     font: normal normal normal 14px/17px Inter;
   }
@@ -76,7 +76,7 @@ export const Space = styled(UiSpace)``;
 export const ButtonContainer = styled.div`
   margin: 20px auto;
   width: 255px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     width: 295px;
   }
 `;
@@ -84,7 +84,7 @@ export const ButtonContainer = styled.div`
 export const Button = styled(CardFormButton)`
   width: 100%;
   heigth: 35px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     heigth: 45px;
   }
 `;
@@ -100,7 +100,7 @@ export const FeeCategoryContainer = styled.div`
 
 export const LabelContainer = styled.div`
   width: 53%;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     width: 15%;
   }
 `;
@@ -112,7 +112,7 @@ export const PercentageContainer = styled.div`
   color: ${colors.textColor};
   opacity: 1;
   width: 50%;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     width: 20%;
     font: normal normal normal 14px/17px Inter;
   }

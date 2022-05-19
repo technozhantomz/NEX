@@ -17,7 +17,7 @@ export const ProfileMenu = styled(MenuCard)`
       }
     }
   }
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     .ant-card-meta {
       margin: 0 0 10% 0;
     }

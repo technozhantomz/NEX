@@ -27,7 +27,7 @@ export const ActivitysItemContent = styled.div`
       font-weight: 500;
     }
   }
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin: 18px 0 25px;
   }
 `;

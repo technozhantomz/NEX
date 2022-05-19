@@ -5,7 +5,7 @@ export const SelectContainer = styled(Select)``;
 
 export const SelectOptionContainer = styled(Option)`
   font-size: 16px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font-size: 20px;
   }
 `;
@@ -14,7 +14,7 @@ export const OptionDiv = styled.div`
   display: flex;
   justify-content: flex-start;
   font-size: 16px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font-size: 20px;
   }
 }

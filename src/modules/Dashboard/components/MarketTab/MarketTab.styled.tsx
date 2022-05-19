@@ -23,7 +23,7 @@ export const Heading = styled.p`
   font-size: 12px;
   margin-left: 7px;
   margin-top: 25px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font-size: 14px;
     margin-left: 30px;
   }

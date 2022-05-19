@@ -32,14 +32,14 @@ export const PasswordFormItem = styled(Form.Item)`
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border-radius: 4px;
   align-items: center;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     width: 50%;
     align-items: center;
     margin-left: 0;
   }
   .ant-input-affix-wrapper > input.ant-input {
     font-size: 12px;
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       font-size: 14px;
     }
   }
@@ -63,7 +63,7 @@ export const MemoWarning = styled.div`
 
 export const ButtonFormItem = styled.div`
   margin-bottom: 20px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     width: 50%;
   }
 `;
@@ -85,12 +85,12 @@ export const GeneratedKeyInput = styled(UiInput.Password)`
     justify-content: space-between;
     width: 38px;
   }
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     width: 50%;
   }
   .ant-input {
     font-size: 10px;
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       font-size: 14px;
     }
   }

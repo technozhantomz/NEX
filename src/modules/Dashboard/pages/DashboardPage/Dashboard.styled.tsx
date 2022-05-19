@@ -65,7 +65,7 @@ export const ButtonNames = styled.p`
   align-items: center;
   font-size: 12px;
   padding: 8px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font-size: 14px;
     padding: 5px;
   }
