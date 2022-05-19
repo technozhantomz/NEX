@@ -30,8 +30,7 @@ export function useVoting(): UseVotingResult {
   const { getAssetById, setPrecision } = useAsset();
 
   const getProxyAccount = useCallback(
-    async (fullAccount: FullAccount) => {
-      const proxyId = fullAccount.account.options.voting_account;
+    async (proxyId: string) => {
       const proxy = (await getFullAccount(proxyId, false)) as FullAccount;
 
       setProxy({
@@ -70,7 +69,7 @@ export function useVoting(): UseVotingResult {
       const fullAccount = await getFullAccount(localStorageAccount, false);
       setFullAccount(fullAccount);
       if (fullAccount !== undefined) {
-        await getProxyAccount(fullAccount);
+        await getProxyAccount(fullAccount.account.options.voting_account);
       }
       let allMembers: Vote[] = [];
       let allMembersIds: [string, string][] = [];
@@ -118,9 +117,10 @@ export function useVoting(): UseVotingResult {
     serverApprovedVotes,
     allMembers,
     fullAccount,
-    getVotes,
     allMembersIds,
     totalGpos,
     proxy,
+    getVotes,
+    getProxyAccount,
   };
 }

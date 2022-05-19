@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { useViewportContext } from "../../../../common/providers";
 import { List } from "../../../../ui/src";
-import { breakpoints } from "../../../../ui/src/breakpoints";
 import { StatsCard } from "../StatsCard";
 
 import { WitnessesColumns } from "./WitnessesColumns";
@@ -21,7 +20,7 @@ export const WitnessesTab = (): JSX.Element => {
     searchValue,
     handleSearch,
   } = useWitnessesTab();
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
 
   return (
     <Styled.WitnessesTabWrapper>
@@ -53,23 +52,7 @@ export const WitnessesTab = (): JSX.Element => {
         onSearch={handleSearch}
         loading={loading}
       />
-      {width > breakpoints.sm ? (
-        <Styled.WitnessesTable
-          bordered={false}
-          dataSource={
-            searchValue === ""
-              ? witnessTableRows
-              : witnessTableRows.filter((witnessRow) =>
-                  witnessRow.name
-                    .toLowerCase()
-                    .startsWith(searchValue.toLowerCase())
-                )
-          }
-          columns={WitnessesColumns}
-          loading={loading}
-          pagination={false}
-        />
-      ) : (
+      {sm ? (
         <List
           itemLayout="vertical"
           dataSource={
@@ -138,6 +121,22 @@ export const WitnessesTab = (): JSX.Element => {
               </Styled.WitnessItemContent>
             </Styled.WitnessListItem>
           )}
+        />
+      ) : (
+        <Styled.WitnessesTable
+          bordered={false}
+          dataSource={
+            searchValue === ""
+              ? witnessTableRows
+              : witnessTableRows.filter((witnessRow) =>
+                  witnessRow.name
+                    .toLowerCase()
+                    .startsWith(searchValue.toLowerCase())
+                )
+          }
+          columns={WitnessesColumns}
+          loading={loading}
+          pagination={false}
         />
       )}
     </Styled.WitnessesTabWrapper>

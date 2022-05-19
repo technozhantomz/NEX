@@ -18,3 +18,5 @@ export * from "./GlobalProperties";
 export * from "./SonAccount";
 export * from "./WitnessAccount";
 export * from "./Proxy";
+export * from "./GPOS";
+export * from "./VestingBalance";

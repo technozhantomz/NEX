@@ -38,7 +38,7 @@ export function usePasswordForm(): IUsePasswordForm {
     return Promise.resolve();
   };
 
-  const formValdation = {
+  const formValidation = {
     password: [
       { required: true, message: "Password is required" },
       { validator: validatePassword },
@@ -47,7 +47,7 @@ export function usePasswordForm(): IUsePasswordForm {
 
   return {
     passwordModalForm,
-    formValdation,
+    formValidation,
     useResetFormOnCloseModal,
   };
 }

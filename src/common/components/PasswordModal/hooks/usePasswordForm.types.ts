@@ -2,7 +2,7 @@ import { FormInstance, Rule } from "../../../../ui/src";
 
 export type IUsePasswordForm = {
   passwordModalForm: FormInstance<IPasswordForm>;
-  formValdation: FormValidation;
+  formValidation: FormValidation;
   useResetFormOnCloseModal: (
     form: FormInstance<IPasswordForm>,
     visible: boolean

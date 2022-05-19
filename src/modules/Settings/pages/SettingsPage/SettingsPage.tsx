@@ -6,7 +6,6 @@ import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 //import { useBrowserHistoryContext } from "../../../../common/providers";
 import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
-import { breakpoints } from "../../../../ui/src/breakpoints";
 import {
   GeneralTab,
   KeyManagementTab,
@@ -23,12 +22,10 @@ const SettingPage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { tab } = router.query;
   //const { pageLoading } = useBrowserHistoryContext();
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
-      {width > breakpoints.md ? (
-        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
-      ) : (
+      {sm ? (
         <Styled.MobileDropdownWrapper>
           <Styled.MobileDropdown
             visible={visible}
@@ -49,6 +46,8 @@ const SettingPage: NextPage = () => {
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
+      ) : (
+        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
       )}
     </>
   );
@@ -67,7 +66,7 @@ const SettingPage: NextPage = () => {
           activeKey={`${tab ? tab : "general"}`}
           onTabClick={(key) => {
             router.push(`/settings?tab=${key}`);
-            if (width < breakpoints.sm) setVisible(false);
+            if (sm) setVisible(false);
           }}
         >
           <TabPane tab="General" key="general">
