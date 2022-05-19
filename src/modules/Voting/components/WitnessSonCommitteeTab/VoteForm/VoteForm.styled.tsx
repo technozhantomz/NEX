@@ -4,7 +4,10 @@ import { colors } from "../../../../../ui/src/colors";
 import { Reset as UiReset } from "../../../../../ui/src/icons";
 
 export const Title = styled.h2`
-  font-size: 20px;
+  font-size: 14px;
+  ${breakpoint.sm} {
+    font-size: 20px;
+  }
   margin-bottom: 25px;
 `;
 

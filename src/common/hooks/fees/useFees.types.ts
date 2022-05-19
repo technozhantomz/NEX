@@ -8,6 +8,8 @@ export type UseFeesResult = {
   findOperationFee: (operationType: string) => FeeParameter | undefined;
   calculateTransferFee: (memo: string) => number | undefined;
   calculateAccountUpgradeFee: () => number | undefined;
+  calculateGposVestingFee: () => number | undefined;
+  calculateGposWithdrawFee: () => number | undefined;
   calculateCreateLimitOrderFee: (
     base: Asset,
     quote: Asset

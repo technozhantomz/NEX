@@ -13,4 +13,17 @@ export const utils = {
     const match = id_regex.exec(obj_id);
     return match !== null && obj_id.split(".").length === 3;
   },
+  trimNum: (num: number, digits: number): number => {
+    // Early return if NaN
+    if (isNaN(num)) {
+      return 0;
+    }
+    const numString = num.toString();
+    const decimalIndex = numString.indexOf(".");
+    const subString =
+      decimalIndex > 0
+        ? numString.substring(0, decimalIndex + (digits + 1))
+        : num;
+    return parseFloat(subString as string);
+  },
 };
