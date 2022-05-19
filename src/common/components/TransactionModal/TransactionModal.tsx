@@ -4,7 +4,13 @@ import { Button } from "../../../ui/src";
 import { GeneratedKey, Proxy } from "../../types";
 
 import * as Styled from "./TransactionModal.styled";
-import { AccountUpdate, AccountUpgrade } from "./components";
+import {
+  AccountUpdate,
+  AccountUpgrade,
+  CreateLimitOrder,
+  CreateVestingBalance,
+  WithdrawVestingBalance,
+} from "./components";
 import { useTransactionModal } from "./hooks";
 
 type Props = {
@@ -15,11 +21,17 @@ type Props = {
   transactionSuccessMessage: string;
   loadingTransaction: boolean;
   account?: string;
-  fee?: number;
+  fee: number;
   proxy?: Proxy;
   desiredMembers?: number;
   memberType?: string;
   generatedKeys?: GeneratedKey[];
+  price?: string;
+  sell?: string;
+  buy?: string;
+  expiration?: string;
+  vestingAmount?: number;
+  withdrawalAmount?: number;
 };
 
 export const TransactionModal = ({
@@ -35,6 +47,12 @@ export const TransactionModal = ({
   desiredMembers,
   memberType,
   generatedKeys,
+  price,
+  sell,
+  buy,
+  expiration,
+  vestingAmount,
+  withdrawalAmount,
 }: Props): JSX.Element => {
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
@@ -50,6 +68,30 @@ export const TransactionModal = ({
         desiredMembers={desiredMembers}
         memberType={memberType}
         generatedKeys={generatedKeys}
+      />
+    ),
+    limit_order_create: (
+      <CreateLimitOrder
+        account={account as string}
+        fee={fee as number}
+        price={price as string}
+        sell={sell as string}
+        buy={buy as string}
+        expiration={expiration as string}
+      />
+    ),
+    vesting_balance_create: (
+      <CreateVestingBalance
+        vestingAmount={vestingAmount}
+        fee={fee}
+        account={account}
+      />
+    ),
+    vesting_balance_withdraw: (
+      <WithdrawVestingBalance
+        withdrawalAmount={withdrawalAmount}
+        fee={fee}
+        account={account}
       />
     ),
   };

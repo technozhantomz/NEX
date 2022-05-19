@@ -30,20 +30,18 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)`
   }
 `;
 export const WithdrawFormAsset = styled(CardForm.Item)`
-   {
-    width: 100%;
-    margin-bottom: 0;
-    &.ant-form-item-has-error
-      .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
-      .ant-select-selector {
-      border-color: none !important;
-    }
+  width: 100%;
+  margin-bottom: 0;
+  &.ant-form-item-has-error
+    .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
+    .ant-select-selector {
+    border-color: none !important;
   }
 `;
 
 export const Fee = styled.p`
   font-size: 12px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font-size: 14px;
   }
 `;
@@ -65,7 +63,7 @@ export const FormItem = styled(Form.Item)`
 
 export const FormDisclamer = styled(UiFormDisclamer)`
   margin-bottom: 15px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin-bottom: 25px;
   }
 `;

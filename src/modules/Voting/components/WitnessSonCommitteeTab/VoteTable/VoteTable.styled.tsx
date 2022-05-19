@@ -27,51 +27,39 @@ export const VoteTable = styled(UiTable)`
   }
 `;
 
+export const VoteList = styled(UiList)``;
+
 export const VoteListItem = styled(UiList.Item)`
-   {
-    padding: 15px 20px;
-  }
-  .ant-list-item-action {
-    display: flex;
-    justify-content: space-between;
-    li {
-      padding: 0;
-      .ant-list-item-action-split {
-        display: none;
-      }
-    }
-  }
+  padding: 15px 20px;
 `;
 
 export const VoteItemContent = styled.div`
   margin: 18px 0 25px;
-  .asset-info {
+  .vote-info {
     margin: 5px 0;
     display: flex;
     justify-content: space-between;
-    .asset-info-title {
+    .vote-info-title {
       font-weight: 300;
       color: ${colors.textColorSecondary};
     }
-    .asset-info-value {
+    .vote-info-value {
       font-weight: 500;
     }
   }
 `;
 
 export const VoteActionButton = styled(UiButton)`
-   {
-    margin: 0px;
-    border: none;
-    background: none;
-    boxshadow: none;
-    padding: 0;
-    color: ${colors.additionalBlue};
-    text-align: right;
-    vertical-align: middle;
-    &:hover {
-      background: #fafafa;
-    }
+  margin: 0px;
+  border: none;
+  background: none;
+  boxshadow: none;
+  padding: 0;
+  color: ${colors.additionalBlue};
+  text-align: right;
+  vertical-align: middle;
+  &:hover {
+    background: #fafafa;
   }
 `;
 
@@ -80,7 +68,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h3`
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin-bottom: 25px;
   }
 `;

@@ -1,8 +1,7 @@
+import { copyText } from "../../../api/utils";
 import { InfoCircleOutlined } from "../../../ui/src";
-import { breakpoints } from "../../../ui/src/breakpoints";
 import { CopyIcon } from "../../../ui/src/icons";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
-import { useCopyText } from "../../hooks";
 import { useViewportContext } from "../../providers";
 import { SidechainAcccount } from "../../types";
 
@@ -17,7 +16,7 @@ export const AddressGenerated = ({
   bitcoinSidechainAccount,
   getSidechainAccounts,
 }: Props): JSX.Element => {
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const { downloaded, downloadPrivateKeys } =
     useAddressGenerated(getSidechainAccounts);
 
@@ -25,10 +24,7 @@ export const AddressGenerated = ({
     <>
       <Styled.AddressContainer>
         <Styled.IconDiv>
-          <BitcoinIcon
-            height={width > breakpoints.sm ? "30" : "18"}
-            width={width > breakpoints.sm ? "30" : "18"}
-          />
+          <BitcoinIcon height={sm ? "18" : "30"} width={sm ? "18" : "30"} />
         </Styled.IconDiv>
         <Styled.DepositHeader>Copy your Bitcoin address</Styled.DepositHeader>
       </Styled.AddressContainer>
@@ -36,7 +32,7 @@ export const AddressGenerated = ({
         size="small"
         suffix={
           <CopyIcon
-            onClick={() => useCopyText(bitcoinSidechainAccount.deposit_address)}
+            onClick={() => copyText(bitcoinSidechainAccount.deposit_address)}
           />
         }
         value={bitcoinSidechainAccount.deposit_address}

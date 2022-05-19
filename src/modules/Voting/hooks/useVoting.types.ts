@@ -5,8 +5,9 @@ export type UseVotingResult = {
   serverApprovedVotes: Vote[];
   allMembers: Vote[];
   fullAccount: FullAccount | undefined;
-  getVotes: () => Promise<void>;
   allMembersIds: [string, string][];
   totalGpos: number;
   proxy: Proxy;
+  getVotes: () => Promise<void>;
+  getProxyAccount: (proxyId: string) => Promise<void>;
 };

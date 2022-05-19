@@ -25,12 +25,14 @@ export function useCreateLimitOrder({
   refreshHistory,
   refreshOrderBook,
 }: UseCreateLimitOrderArgs): UseCreateLimitOrderResult {
-  const [isPasswordModalVisible, setIsPasswordModalVisible] =
-    useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [marketFeePercent, setMarketFeePercent] = useState<number>(0);
   const [balance, _setBalance] = useState<number>(0);
-  const [submittingPassword, setSubmittingPassword] = useState<boolean>(false);
+  const [transactionErrorMessage, setTransactionErrorMessage] =
+    useState<string>("");
+  const [transactionSuccessMessage, setTransactionSuccessMessage] =
+    useState<string>("");
+  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
 
   const [orderForm] = Form.useForm();
   const { getPrivateKey, formAccountBalancesByName } = useAccount();
@@ -128,16 +130,6 @@ export function useCreateLimitOrder({
     [handleNegativeValuesAndAssetPrecission, handleRelationsBetweenInputs]
   );
 
-  const handleCancelPasswordModal = useCallback(() => {
-    setIsPasswordModalVisible(false);
-  }, [setIsPasswordModalVisible]);
-
-  const confirm = useCallback(() => {
-    orderForm.validateFields().then(() => {
-      setIsPasswordModalVisible(true);
-    });
-  }, [orderForm, setIsPasswordModalVisible]);
-
   const setBalance = useCallback(() => {
     if (
       !loadingSelectedPair &&
@@ -165,16 +157,6 @@ export function useCreateLimitOrder({
     isBuyOrder,
   ]);
 
-  const onFormFinish = (name: string, info: { values: any; forms: any }) => {
-    const { values, forms } = info;
-    const { passwordModal } = forms;
-    if (name === "passwordModal") {
-      passwordModal.validateFields().then(() => {
-        handleCreateLimitOrder(values.password);
-      });
-    }
-  };
-
   const resetForm = useCallback(() => {
     orderForm.setFieldsValue({
       price: 0,
@@ -183,48 +165,71 @@ export function useCreateLimitOrder({
     });
   }, [orderForm]);
 
-  const handleCreateLimitOrder = async (password: string) => {
-    setSubmittingPassword(true);
-    const values = orderForm.getFieldsValue();
-    const expiration = new Date(
-      new Date().getTime() + 1000 * 60 * 60 * 24 * 365
-    ).toISOString();
+  const handleCreateLimitOrder = useCallback(
+    async (password: string) => {
+      setTransactionErrorMessage("");
+      const values = orderForm.getFieldsValue();
+      const expiration = new Date(
+        new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+      ).toISOString();
+      const activeKey = getPrivateKey(password, "active");
+      const trx = buildCreateLimitOrderTransaction(
+        id,
+        values.quantity,
+        values.total,
+        currentBase as Asset,
+        currentQuote as Asset,
+        expiration,
+        false,
+        [],
+        isBuyOrder
+      );
+      let trxResult;
 
-    const activeKey = getPrivateKey(password, "active");
-    const trx = buildCreateLimitOrderTransaction(
+      try {
+        setLoadingTransaction(true);
+        trxResult = await buildTrx([trx], [activeKey]);
+      } catch (e) {
+        console.log(e);
+        setTransactionErrorMessage("Unable to process the transaction!");
+        setLoadingTransaction(false);
+      }
+      if (trxResult) {
+        formAccountBalancesByName(localStorageAccount);
+        resetForm();
+        refreshOrderBook();
+        refreshHistory();
+        setTransactionErrorMessage("");
+        setTransactionSuccessMessage(
+          "You have successfully created a limit order"
+        );
+        setLoadingTransaction(false);
+      } else {
+        refreshOrderBook();
+        refreshHistory();
+        setTransactionErrorMessage("Unable to process the transaction!");
+        setLoadingTransaction(false);
+      }
+    },
+    [
+      setTransactionErrorMessage,
+      orderForm,
+      getPrivateKey,
+      buildCreateLimitOrderTransaction,
       id,
-      values.quantity,
-      values.total,
-      currentBase as Asset,
-      currentQuote as Asset,
-      expiration,
-      false,
-      [],
-      isBuyOrder
-    );
-    let trxResult;
-
-    try {
-      trxResult = await buildTrx([trx], [activeKey]);
-    } catch (e) {
-      console.log(e);
-    }
-    if (trxResult) {
-      formAccountBalancesByName(localStorageAccount);
-      setIsPasswordModalVisible(false);
-      setSubmittingPassword(false);
-      resetForm();
-      refreshOrderBook();
-      refreshHistory();
-      //setStatus();
-    } else {
-      setIsPasswordModalVisible(false);
-      setSubmittingPassword(false);
-      refreshOrderBook();
-      refreshHistory();
-      //setStatus();
-    }
-  };
+      currentBase,
+      currentQuote,
+      isBuyOrder,
+      buildTrx,
+      setLoadingTransaction,
+      localStorageAccount,
+      formAccountBalancesByName,
+      resetForm,
+      refreshOrderBook,
+      refreshHistory,
+      setTransactionSuccessMessage,
+    ]
+  );
 
   const validatePrice = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
@@ -297,7 +302,7 @@ export function useCreateLimitOrder({
     return Promise.resolve();
   };
 
-  const formValdation = {
+  const formValidation = {
     price: [
       { required: true, message: "This field is required" },
       { validator: validatePrice },
@@ -346,12 +351,13 @@ export function useCreateLimitOrder({
     marketFeePercent,
     balance,
     orderForm,
-    formValdation,
-    isPasswordModalVisible,
-    handleCancelPasswordModal,
-    confirm,
-    onFormFinish,
+    formValidation,
     handleValuesChange,
-    submittingPassword,
+    handleCreateLimitOrder,
+    transactionErrorMessage,
+    setTransactionErrorMessage,
+    transactionSuccessMessage,
+    setTransactionSuccessMessage,
+    loadingTransaction,
   };
 }

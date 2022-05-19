@@ -9,7 +9,3 @@ export const useGeneratePassword = (): string => {
   }
   return password;
 };
-
-export const useCopyPassword = (value: string): void => {
-  navigator.clipboard.writeText(value);
-};

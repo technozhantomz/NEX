@@ -5,8 +5,7 @@ import {
   PoweroffOutlined,
   SettingOutlined,
 } from "../../../../../../ui/src";
-import { breakpoints } from "../../../../../../ui/src/breakpoints";
-import { Contacts, Vote } from "../../../../../../ui/src/icons";
+import { Vote } from "../../../../../../ui/src/icons";
 import {
   useMenuContext,
   useUserContext,
@@ -20,22 +19,22 @@ const { Meta } = Card;
 
 export const ProfileMenu = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
-  const { width } = useViewportContext();
+  const { xs } = useViewportContext();
   const { closeMenu } = useMenuContext();
 
   return (
     <Styled.ProfileMenu bordered={false}>
       <Meta
         avatar={
-          <Styled.ProfileAvitar>
+          <Styled.ProfileAvatar>
             {localStorageAccount?.charAt(0)}
-          </Styled.ProfileAvitar>
+          </Styled.ProfileAvatar>
         }
         title={`Hello ${localStorageAccount}!`}
         description={`@${localStorageAccount}`}
       />
       <ul>
-        {width < breakpoints.xs ? (
+        {xs ? (
           <>
             <li>
               <MenuItem
@@ -45,14 +44,14 @@ export const ProfileMenu = (): JSX.Element => {
                 onClick={closeMenu}
               />
             </li>
-            <li>
+            {/* <li>
               <MenuItem
                 href="/contacts"
                 icon={<Contacts className={"menu-icon"} />}
                 label="Contacts"
                 onClick={closeMenu}
               />
-            </li>
+            </li> */}
           </>
         ) : (
           <li className={"link"}>
@@ -70,7 +69,7 @@ export const ProfileMenu = (): JSX.Element => {
             onClick={closeMenu}
           />
         </li>
-        {width < breakpoints.xs ? (
+        {xs ? (
           <li className={"link"}>
             <Link href={`/user/${localStorageAccount}`} onClick={closeMenu}>
               <a>See all account activity</a>

@@ -1,5 +1,6 @@
 import React from "react";
 
+import { copyText } from "../../../../api/utils";
 import {
   CheckOutlined,
   EyeInvisibleOutlined,
@@ -10,7 +11,7 @@ import { CopyIcon } from "../../../../ui/src/icons";
 import { InfoBar } from "../InfoBar";
 
 import * as Styled from "./SignUpForm.styled";
-import { useCopyPassword, useSignUpForm } from "./hooks";
+import { useSignUpForm } from "./hooks";
 
 export const SignUpForm: React.FC = () => {
   const {
@@ -55,9 +56,7 @@ export const SignUpForm: React.FC = () => {
           suffix={
             <div>
               <CopyIcon
-                onClick={() =>
-                  useCopyPassword(signUpForm.getFieldValue("password"))
-                }
+                onClick={() => copyText(signUpForm.getFieldValue("password"))}
               />
               {isInputTypePassword ? (
                 <EyeInvisibleOutlined onClick={handleInputType} />

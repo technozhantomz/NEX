@@ -66,7 +66,7 @@ export const MenuCard = styled(AntdCard)`
     border: none;
   }
 
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     height: inherit;
     .ant-card-body {
       padding: 20px;

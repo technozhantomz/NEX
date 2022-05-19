@@ -13,7 +13,7 @@ export const DepositHeader = styled.p`
 export const AddressDownloadLink = styled.a`
   color: ${colors.primaryColor};
   font-size: 14px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font-size: 16px;
   }
 `;
@@ -66,7 +66,7 @@ export const AddressContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 25px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin-bottom: 35px;
   }
 `;

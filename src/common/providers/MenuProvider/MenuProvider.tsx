@@ -76,13 +76,13 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
 
   useEffect(() => {
     // This should fixed with mobile menu
-    if (width > breakpoints.xs) {
+    if (width > breakpoints.sm) {
       document.addEventListener("click", closeMenu);
       return () => {
         document.removeEventListener("click", closeMenu);
       };
     }
-  }, []);
+  }, [width]);
 
   return (
     <MenuProviderContext.Provider

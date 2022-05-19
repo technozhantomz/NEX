@@ -1,17 +1,14 @@
 import React from "react";
 
+import { copyText } from "../../../../api/utils";
 import { PasswordModal, TransactionModal } from "../../../../common/components";
-import {
-  useCopyText,
-  useHandleTransactionForm,
-} from "../../../../common/hooks";
+import { useHandleTransactionForm } from "../../../../common/hooks";
 import { useUserContext } from "../../../../common/providers";
 import {
   Checkbox,
   EyeInvisibleOutlined,
   EyeOutlined,
 } from "../../../../ui/src";
-import { CopyIcon } from "../../../../ui/src/icons";
 
 import * as Styled from "./KeyManagementTab.styled";
 import { useKeyManagementTab } from "./hooks";
@@ -114,8 +111,8 @@ export const KeyManagementTab = (): JSX.Element => {
                           value={generatedKey.key}
                           iconRender={(visible = true) => (
                             <div>
-                              <CopyIcon
-                                onClick={() => useCopyText(generatedKey.key)}
+                              <Styled.CopyIcon
+                                onClick={() => copyText(generatedKey.key)}
                               />
                               {visible ? (
                                 <EyeOutlined />

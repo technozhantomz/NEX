@@ -47,7 +47,7 @@ export const ActivityList = ({
               <span className="activity-info-value">{item.fee}</span>
             </div>
             <div className="activity-info">
-              <span className="activity-info-title">{columns[1].key}</span>
+              <span className="activity-info-title">{columns[1].title}</span>
               <span className="activity-info-value">
                 <ActivityTag type={item.type} />
               </span>

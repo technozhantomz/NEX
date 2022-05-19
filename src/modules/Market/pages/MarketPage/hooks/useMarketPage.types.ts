@@ -1,6 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { Asset, Exchanges, MarketPairStats } from "../../../../../common/types";
+import {
+  Asset,
+  Exchanges,
+  PairNameAndMarketStats,
+} from "../../../../../common/types";
 import { Order, OrderHistoryRow, OrderRow } from "../../../types";
 
 export type UseMarketPageResult = {
@@ -30,9 +34,4 @@ export type UseMarketPageResult = {
   userOrderHistoryRows: OrderHistoryRow[];
   loadingUserHistoryRows: boolean;
   refreshHistory: () => void;
-};
-
-export type PairNameAndMarketStats = {
-  tradingPair: string;
-  marketPairStats: MarketPairStats;
 };

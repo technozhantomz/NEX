@@ -81,7 +81,7 @@ export const MainNav = (): JSX.Element => {
                 onClick={closeMenu}
               />
             </li>
-            {width < breakpoints.xs ? (
+            {width < breakpoints.sm ? (
               <li>
                 <MenuItem
                   onClick={() => toggleMenu("profile")}
@@ -103,10 +103,13 @@ export const MainNav = (): JSX.Element => {
             <li className={"advanced"}>
               <Switch
                 size="small"
-                onChange={handleAdvancedModeChange}
+                onChange={(checked, e) => {
+                  e.stopPropagation();
+                  handleAdvancedModeChange(checked);
+                }}
                 defaultChecked={advancedMode}
               />
-              <span> Advanced Settings</span>
+              <span>Advanced Settings</span>
             </li>
           </>
         )}

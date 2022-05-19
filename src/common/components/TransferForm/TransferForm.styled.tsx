@@ -1,9 +1,4 @@
-import {
-  CardForm,
-  CardFormButton,
-  styled,
-  Form as UIForm,
-} from "../../../ui/src";
+import { CardForm, CardFormButton, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const TransferForm = styled(CardForm)`
@@ -35,15 +30,15 @@ export const TransferFormButton = styled(CardFormButton)`
   height: 100%;
 `;
 
-export const FormItem = styled(UIForm.Item)`
-  .ant-btn-lg {
-    padding: 0px;
-  }
+export const FormItem = styled(CardForm.Item)`
   width: 255px;
   margin-left: auto;
   margin-right: auto;
   .ant-form-item-control-input-content {
     height: 35px;
+  }
+  .ant-btn-lg {
+    padding: 0px;
   }
   ${breakpoint.sm} {
     margin-left: 245px;

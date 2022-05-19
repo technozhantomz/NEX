@@ -12,32 +12,32 @@ import {
 import {
   usePeerplaysApiContext,
   useUserContext,
+  useViewportContext,
 } from "../../../../../common/providers";
 import {
   Asset,
   BlockHeader,
   History,
   LimitOrder,
+  PairNameAndMarketStats,
 } from "../../../../../common/types";
 import { Order, OrderHistory, OrderHistoryRow, OrderRow } from "../../../types";
 
-import {
-  PairNameAndMarketStats,
-  UseMarketPageResult,
-} from "./useMarketPage.types";
+import { UseMarketPageResult } from "./useMarketPage.types";
 
 type Props = {
   currentPair: string;
 };
 
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
+  const { md } = useViewportContext();
   const { historyApi, dbApi } = usePeerplaysApiContext();
   const { exchanges, updateExchanges } = useUpdateExchanges();
-  const { getMarketPairStats } = useMarketPairStats();
-  const { getAssetBySymbol, defaultAsset, setPrecision } = useAsset();
+  const { setPrecision } = useAsset();
   const { getFullAccount } = useAccount();
   const { id, localStorageAccount } = useUserContext();
   const { getAccountHistoryById } = useAccountHistory();
+  const { getDefaultPairs, formPairStats } = useMarketPairStats();
 
   const [tradingPairsStats, setTradingPairsStats] = useState<
     PairNameAndMarketStats[]
@@ -62,7 +62,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const [userOrderHistoryRows, setUserOrderHistoryRows] = useState<
     OrderHistoryRow[]
   >([]);
-
   const [loadingUserHistoryRows, setLoadingUserHistoryRows] =
     useState<boolean>(true);
 
@@ -86,45 +85,16 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     [dbApi, setCurrentBase, setCurrentQuote, setLoadingSelectedPair]
   );
 
-  const formPairStats = useCallback(
-    async (pair: string): Promise<PairNameAndMarketStats> => {
-      const quoteSymbol = pair.split("/")[0].trim();
-      const baseSymbol = pair.split("/")[1].trim();
-      const quote = await getAssetBySymbol(quoteSymbol);
-      const base = await getAssetBySymbol(baseSymbol);
-      if (base && quote) {
-        const marketPairStats = await getMarketPairStats(base, quote);
-        return {
-          tradingPair: pair,
-          marketPairStats,
-        } as PairNameAndMarketStats;
-      } else {
-        return {
-          tradingPair: pair,
-          marketPairStats: {
-            volume: 0,
-            latest: 0,
-            percentChange: 0,
-          },
-        } as PairNameAndMarketStats;
-      }
-    },
-    [getAssetBySymbol, getMarketPairStats]
-  );
-
   const getTradingPairsStats = useCallback(
-    async (defaultAsset, exchanges) => {
+    async (exchanges) => {
       try {
         setLoadingTradingPairs(true);
         const initPairs: string[] =
           exchanges.list.length > 0
-            ? exchanges.list
-            : [
-                `BTC/${defaultAsset.symbol}`,
-                `HIVE/${defaultAsset.symbol}`,
-                `HBD/${defaultAsset.symbol}`,
-                `LARNYX/${defaultAsset.symbol}`,
-              ];
+            ? md
+              ? exchanges.list.splice(0, 4)
+              : exchanges.list
+            : await getDefaultPairs();
         const tradingPairsStats = await Promise.all(
           initPairs.map(formPairStats)
         );
@@ -462,10 +432,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   }, [currentPair, getPairAssets, updateExchanges]);
 
   useEffect(() => {
-    if (defaultAsset && exchanges) {
-      getTradingPairsStats(defaultAsset, exchanges);
+    if (exchanges) {
+      getTradingPairsStats(exchanges);
     }
-  }, [defaultAsset, exchanges.list]);
+  }, [exchanges.list]);
 
   return {
     tradingPairsStats,

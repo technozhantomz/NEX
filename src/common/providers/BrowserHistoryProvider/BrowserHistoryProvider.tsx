@@ -21,7 +21,7 @@ const BROWSER_HISTORY_LENGTH = 20;
 const DefaultBrowserHistoryState: BrowserHistoryContextType = {
   browserHistory: [],
   pathname: "",
-  privatePaths: ["/wallet", "/wallet/[asset]", "/settings", "/voting"],
+  privatePaths: ["/wallet", "/wallet/[asset]", "/settings", "/voting", "/gpos"],
   pageLoading: true,
   handleLoginRedirect: function (): void {
     throw new Error(`Function not implemented.`);

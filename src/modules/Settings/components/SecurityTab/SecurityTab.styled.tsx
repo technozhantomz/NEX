@@ -16,7 +16,7 @@ export const SecuritySettingsCard = styled.div`
     color: ${colors.textColor};
     height: 500px;
     margin: 20px;
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       margin-left: 30px;
     }
   }
@@ -39,11 +39,11 @@ export const LockWalletFormItem = styled(UiForm.Item)`
     height: 40px;
     padding: 0 11px;
     align-items: center;
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       height: 50px;
     }
   }
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     width: 350px;
     margin: 15px 0;
   }
@@ -61,7 +61,7 @@ export const SaveButton = styled(CardFormButton)`
  margin-top: 40px;
   width: 255px;
   height: 35px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     position: absolute;
     right: 30px;
     bottom: 50px;

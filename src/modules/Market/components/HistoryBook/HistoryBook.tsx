@@ -1,6 +1,5 @@
 import { useViewportContext } from "../../../../common/providers";
 import { Asset } from "../../../../common/types";
-import { breakpoints } from "../../../../ui/src/breakpoints";
 import { OrderHistoryRow } from "../../types";
 
 import * as Styled from "./HistoryBook.styled";
@@ -31,7 +30,7 @@ export const HistoryBook = ({
   userOrderHistoryRows,
   loadingUserHistoryRows,
 }: Props): JSX.Element => {
-  const { width } = useViewportContext();
+  const { md } = useViewportContext();
   const { columns } = useHistory({
     currentBase,
     currentQuote,
@@ -46,11 +45,11 @@ export const HistoryBook = ({
       <Styled.TableContainer>
         <Styled.Table
           scroll={
-            width > breakpoints.md
-              ? dataSource.length > 24
-                ? { scrollToFirstRowOnChange: false, y: 540 }
-                : { scrollToFirstRowOnChange: false }
-              : {}
+            md
+              ? {}
+              : dataSource.length > 24
+              ? { scrollToFirstRowOnChange: false, y: 540 }
+              : { scrollToFirstRowOnChange: false }
           }
           loading={forUser ? loadingUserHistoryRows : loadingOrderHistoryRows}
           pagination={false}
