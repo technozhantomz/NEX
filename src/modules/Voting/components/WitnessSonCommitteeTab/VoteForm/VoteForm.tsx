@@ -1,12 +1,14 @@
 import { capitalize } from "lodash";
 import { Dispatch, SetStateAction } from "react";
 
+import { DEFAULT_PROXY_ID } from "../../../../../api/params";
 import {
   PasswordModal,
   TransactionModal,
 } from "../../../../../common/components";
 import { useHandleTransactionForm } from "../../../../../common/hooks";
 import { Proxy } from "../../../../../common/types";
+import { Tooltip } from "../../../../../ui/src";
 
 import * as Styled from "./VoteForm.styled";
 import { useVoteForm } from "./hooks";
@@ -91,13 +93,28 @@ export const VoteForm = ({
                 Reset Changes
               </Styled.CardFormLinkButton>
             )}
-            <Styled.Publish
-              type="primary"
-              htmlType="submit"
-              disabled={!isVotesChanged}
-            >
-              Publish Changes
-            </Styled.Publish>
+            {proxy.id !== DEFAULT_PROXY_ID ? (
+              <Tooltip
+                placement="top"
+                title={"You have proxied your voting power"}
+              >
+                <Styled.Publish
+                  type="primary"
+                  htmlType="submit"
+                  disabled={true}
+                >
+                  Publish Changes
+                </Styled.Publish>
+              </Tooltip>
+            ) : (
+              <Styled.Publish
+                type="primary"
+                htmlType="submit"
+                disabled={!isVotesChanged}
+              >
+                Publish Changes
+              </Styled.Publish>
+            )}
           </Styled.ActionsContainer>
           <PasswordModal
             visible={isPasswordModalVisible}

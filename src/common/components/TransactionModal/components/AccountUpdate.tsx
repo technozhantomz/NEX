@@ -27,7 +27,7 @@ export const AccountUpdate = ({
         <p>Account name</p>
         <Link href={`/user/${account}`}>{account}</Link>
       </Styled.DetailContainer>
-      {generatedKeys && generatedKeys.length > 0
+      {generatedKeys
         ? generatedKeys.map((key) => (
             <Styled.DetailContainer>
               <p>{key.label}</p>

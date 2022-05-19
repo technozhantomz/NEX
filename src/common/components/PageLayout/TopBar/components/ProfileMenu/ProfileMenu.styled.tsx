@@ -24,4 +24,4 @@ export const ProfileMenu = styled(MenuCard)`
   }
 `;
 
-export const ProfileAvitar = styled(Avatar)``;
+export const ProfileAvatar = styled(Avatar)``;
