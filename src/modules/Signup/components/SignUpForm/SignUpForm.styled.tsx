@@ -9,13 +9,13 @@ import { breakpoint } from "../../../../ui/src/breakpoints";
 
 export const UsernameFormItem = styled(CardForm.Item)`
   margin-bottom: 15px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin-bottom: 24px;
   }
 `;
 export const Label = styled.p`
   margin-bottom: 15px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin-bottom: 24px;
   }
 `;
@@ -29,7 +29,7 @@ export const GeneratedPassordInput = styled(UIInput)`
   .anticon {
     color: #b9b9b9;
     margin-right: 10px;
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       margin-right: 15px;
     }
   }
@@ -37,14 +37,14 @@ export const GeneratedPassordInput = styled(UIInput)`
 
 export const PasswordFormItem = styled(CardForm.Item)`
   margin-bottom: 15px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin-bottom: 20px;
   }
 `;
 
 export const PasswordCheckFormItem = styled(CardForm.Item)`
   margin-bottom: 23px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin-bottom: 35px;
   }
 `;
@@ -68,7 +68,7 @@ export const Checkbox = styled(UICheckbox)`
   .checkbox-text {
     margin-bottom: 0;
   }
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     align-items: flex-start;
     .ant-checkbox-inner {
       width: 20px;

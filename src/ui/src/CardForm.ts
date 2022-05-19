@@ -14,7 +14,7 @@ export const CardFormButton = styled(Button)`
   .ant-btn-loading-icon {
     float: right;
   }
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font-size: 16px;
     width: 70%;
   }

@@ -5,7 +5,7 @@ import { mixIns } from "../../../ui/src/mixins";
 
 export const Card = styled.div`
   height: 65px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     height: 100px;
   }
   /* UI Properties */
@@ -53,7 +53,7 @@ export const PercentChange = styled.p`
       : props.theme.percentChangeColor};
   font-size: 12px;
   margin: 10px 10px 10px 0;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin: 10px;
     font-size: 14px;
   }
@@ -76,7 +76,7 @@ export const Volume = styled.p`
   opacity: 1;
   font-size: 16px;
   margin-left: 10px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     font-size: 28px;
   }
 `;

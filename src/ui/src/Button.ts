@@ -11,7 +11,7 @@ export const Button = styled(AntdButton)`
     &:after {
       display: none;
     }
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       height: 45px;
     }
   }

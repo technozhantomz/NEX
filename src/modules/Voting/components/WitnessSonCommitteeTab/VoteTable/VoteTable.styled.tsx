@@ -68,7 +68,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h3`
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     margin-bottom: 25px;
   }
 `;

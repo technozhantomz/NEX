@@ -29,7 +29,7 @@ export const TopBar = styled.nav`
     display: flex;
     flex-direction: row;
   }
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     border: none;
   }
 `;

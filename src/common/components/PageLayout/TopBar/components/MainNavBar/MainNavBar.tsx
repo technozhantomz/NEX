@@ -28,7 +28,7 @@ export const MainNavBar = (): JSX.Element => {
   } = useMenuContext();
   const CloseButton = (
     <>
-      {width < breakpoints.xs ? (
+      {width < breakpoints.sm ? (
         <Styled.CloseButton type="text" className="close" onClick={closeMenu}>
           X
         </Styled.CloseButton>
@@ -47,7 +47,7 @@ export const MainNavBar = (): JSX.Element => {
               onMouseOver={() => toggleMenu("notify")}
               onClick={() => toggleMenu("notify")}
             />
-            {width > breakpoints.xs ? (
+            {width > breakpoints.sm ? (
               <div
                 onMouseOver={() => toggleMenu("profile")}
                 onClick={() => toggleMenu("profile")}
@@ -65,7 +65,7 @@ export const MainNavBar = (): JSX.Element => {
         ) : (
           ""
         )}
-        {width > breakpoints.xs ? (
+        {width > breakpoints.sm ? (
           <MoreOutlined
             className={"hambuger"}
             onMouseOver={() => toggleMenu("main")}

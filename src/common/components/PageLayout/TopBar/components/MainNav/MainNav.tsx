@@ -81,7 +81,7 @@ export const MainNav = (): JSX.Element => {
                 onClick={closeMenu}
               />
             </li>
-            {width < breakpoints.xs ? (
+            {width < breakpoints.sm ? (
               <li>
                 <MenuItem
                   onClick={() => toggleMenu("profile")}
