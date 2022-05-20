@@ -19,7 +19,7 @@ export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { sm } = useViewportContext();
   const {
-    toggleMenu,
+    openMenu,
     closeMenu,
     notificationMenuOpen,
     profileMenuOpen,
@@ -43,15 +43,15 @@ export const MainNavBar = (): JSX.Element => {
           <>
             <BellOutlined
               className={"bell"}
-              onMouseOver={() => toggleMenu("notify")}
-              onClick={() => toggleMenu("notify")}
+              onMouseOver={() => openMenu("notify")}
+              onClick={() => openMenu("notify")}
             />
             {sm ? (
               ""
             ) : (
               <div
-                onMouseOver={() => toggleMenu("profile")}
-                onClick={() => toggleMenu("profile")}
+                onMouseOver={() => openMenu("profile")}
+                onClick={() => openMenu("profile")}
               >
                 <Styled.MainNavBarAvitar
                   icon={localStorageAccount ? "" : <UserOutlined />}
@@ -67,14 +67,14 @@ export const MainNavBar = (): JSX.Element => {
         {sm ? (
           <MenuOutlined
             className={"hambuger"}
-            onMouseOver={() => toggleMenu("main")}
-            onClick={() => toggleMenu("main")}
+            onMouseOver={() => openMenu("main")}
+            onClick={() => openMenu("main")}
           />
         ) : (
           <MoreOutlined
             className={"hambuger"}
-            onMouseOver={() => toggleMenu("main")}
-            onClick={() => toggleMenu("main")}
+            onMouseOver={() => openMenu("main")}
+            onClick={() => openMenu("main")}
           />
         )}
       </Styled.MainNavBar>

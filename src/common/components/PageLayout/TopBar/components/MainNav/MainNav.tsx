@@ -27,7 +27,7 @@ export const MainNav = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { exchanges } = useSettingsContext();
   const { sm } = useViewportContext();
-  const { toggleMenu, closeMenu } = useMenuContext();
+  const { openMenu, closeMenu } = useMenuContext();
   return (
     <MenuCard bordered={false}>
       <ul>
@@ -83,7 +83,7 @@ export const MainNav = (): JSX.Element => {
             {sm ? (
               <li>
                 <MenuItem
-                  onClick={() => toggleMenu("profile")}
+                  onClick={() => openMenu("profile")}
                   icon={<UserOutlined className={"menu-icon avitar"} />}
                   label="Profile"
                 />
