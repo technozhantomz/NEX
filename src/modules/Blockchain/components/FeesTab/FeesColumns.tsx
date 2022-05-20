@@ -1,4 +1,5 @@
 import { Tag } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 
 export const FeesColumns = [
   {
@@ -6,7 +7,15 @@ export const FeesColumns = [
     dataIndex: "operation",
     key: "operation",
     render: (operation: string): JSX.Element => (
-      <>{operation === "" ? "" : <Tag key={operation}>{operation}</Tag>}</>
+      <>
+        {operation === "" ? (
+          ""
+        ) : (
+          <Tag key={operation} bgColor={colors.assetTag}>
+            {operation}
+          </Tag>
+        )}
+      </>
     ),
   },
   {

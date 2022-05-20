@@ -21,7 +21,9 @@ export const OptionDiv = styled.div`
 `;
 
 export const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
   margin-right: 10px;
 `;
 
-export const AssetName = styled.p``;
+export const AssetName = styled.span``;

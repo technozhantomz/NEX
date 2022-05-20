@@ -1,5 +1,5 @@
 import { List } from "../../../../../ui/src";
-import { useActivityTable } from "../../hooks";
+import { ActivityRow } from "../../hooks/useActivityTable.types";
 import { ActivityColumns as columns } from "../ActivityColumns/";
 import { ActivityTag } from "../ActivityTag";
 import { AvtivityInfo } from "../AvtivityInfo";
@@ -7,19 +7,14 @@ import { AvtivityInfo } from "../AvtivityInfo";
 import * as Styled from "./ActivityList.styled";
 
 type Props = {
-  userName?: string;
-  isWalletActivityTable?: boolean;
+  activitiesRows: ActivityRow[];
+  loading: boolean;
 };
 
 export const ActivityList = ({
-  userName,
-  isWalletActivityTable = false,
+  activitiesRows,
+  loading,
 }: Props): JSX.Element => {
-  const { activitiesRows, loading } = useActivityTable({
-    userName,
-    isWalletActivityTable,
-  });
-
   return (
     <List
       itemLayout="vertical"

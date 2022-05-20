@@ -16,7 +16,7 @@ interface Props {
 }
 
 const DefaultMenuState: MenuProviderContextType = {
-  toggleMenu: function (): void {
+  openMenu: function (): void {
     throw new Error(`Function not implemented.`);
   },
   closeMenu: function (): void {
@@ -38,23 +38,23 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
 
   const { width } = useViewportContext();
 
-  const toggleMenu = useCallback(
+  const openMenu = useCallback(
     (menuName: string) => {
       switch (true) {
         case menuName === "notify":
           setProfileMenuOpen(false);
           setMainMenuOpen(false);
-          setNotificationMenuOpen(!notificationMenuOpen);
+          setNotificationMenuOpen(true);
           break;
         case menuName === "profile":
           setNotificationMenuOpen(false);
           setMainMenuOpen(false);
-          setProfileMenuOpen(!profileMenuOpen);
+          setProfileMenuOpen(true);
           break;
         case menuName === "main":
           setNotificationMenuOpen(false);
           setProfileMenuOpen(false);
-          setMainMenuOpen(!mainMenuOpen);
+          setMainMenuOpen(true);
           break;
       }
     },
@@ -75,7 +75,6 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   }, [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]);
 
   useEffect(() => {
-    // This should fixed with mobile menu
     if (width > breakpoints.sm) {
       document.addEventListener("click", closeMenu);
       return () => {
@@ -90,7 +89,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
         notificationMenuOpen,
         profileMenuOpen,
         mainMenuOpen,
-        toggleMenu,
+        openMenu,
         closeMenu,
       }}
     >

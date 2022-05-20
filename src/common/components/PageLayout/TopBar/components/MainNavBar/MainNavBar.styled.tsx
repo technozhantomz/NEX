@@ -28,8 +28,9 @@ export const MainNavBar = styled.div`
 `;
 
 export const MenuWrapper = styled.div`{
+  cursor: pointer;
   display: none;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   width: 100%;
