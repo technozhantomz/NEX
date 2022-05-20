@@ -35,6 +35,9 @@ export function useCreateLimitOrder({
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
 
   const [orderForm] = Form.useForm();
+  const price: number = Form.useWatch("price", orderForm);
+  const quantity: number = Form.useWatch("quantity", orderForm);
+  const total: number = Form.useWatch("total", orderForm);
   const { getPrivateKey, formAccountBalancesByName } = useAccount();
   const { calculateCreateLimitOrderFee } = useFees();
   const { localStorageAccount, assets, id } = useUserContext();
@@ -157,14 +160,6 @@ export function useCreateLimitOrder({
     isBuyOrder,
   ]);
 
-  const resetForm = useCallback(() => {
-    orderForm.setFieldsValue({
-      price: 0,
-      quantity: 0,
-      total: 0,
-    });
-  }, [orderForm]);
-
   const handleCreateLimitOrder = useCallback(
     async (password: string) => {
       setTransactionErrorMessage("");
@@ -196,7 +191,6 @@ export function useCreateLimitOrder({
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
-        resetForm();
         refreshOrderBook();
         refreshHistory();
         setTransactionErrorMessage("");
@@ -224,7 +218,6 @@ export function useCreateLimitOrder({
       setLoadingTransaction,
       localStorageAccount,
       formAccountBalancesByName,
-      resetForm,
       refreshOrderBook,
       refreshHistory,
       setTransactionSuccessMessage,
@@ -359,5 +352,8 @@ export function useCreateLimitOrder({
     transactionSuccessMessage,
     setTransactionSuccessMessage,
     loadingTransaction,
+    price,
+    total,
+    quantity,
   };
 }

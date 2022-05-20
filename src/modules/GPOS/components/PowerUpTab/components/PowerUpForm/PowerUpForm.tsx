@@ -39,6 +39,7 @@ export const PowerUpForm = ({
     handleVesting,
     loadingTransaction,
     feeAmount,
+    depositAmount,
   } = usePowerUpForm({
     gposBalances,
     loading,
@@ -119,7 +120,7 @@ export const PowerUpForm = ({
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
           fee={feeAmount}
-          vestingAmount={powerUpForm.getFieldValue("depositAmount")}
+          vestingAmount={depositAmount}
           transactionType="vesting_balance_create"
         />
       </Form.Provider>

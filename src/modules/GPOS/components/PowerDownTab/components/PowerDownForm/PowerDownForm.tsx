@@ -39,6 +39,7 @@ export const PowerDownForm = ({
     loadingTransaction,
     handleWithdraw,
     feeAmount,
+    withdrawAmount,
   } = usePowerDownForm({
     gposBalances,
     loading,
@@ -125,7 +126,7 @@ export const PowerDownForm = ({
           loadingTransaction={loadingTransaction}
           fee={feeAmount}
           account={localStorageAccount}
-          withdrawalAmount={powerDownForm.getFieldValue("withdrawAmount")}
+          withdrawalAmount={withdrawAmount}
           transactionType="vesting_balance_withdraw"
         />
       </Form.Provider>
