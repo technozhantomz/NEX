@@ -5,7 +5,7 @@ import {
   PoweroffOutlined,
   SettingOutlined,
 } from "../../../../../../ui/src";
-import { Contacts, Vote } from "../../../../../../ui/src/icons";
+import { Vote } from "../../../../../../ui/src/icons";
 import {
   useMenuContext,
   useUserContext,
@@ -44,14 +44,14 @@ export const ProfileMenu = (): JSX.Element => {
                 onClick={closeMenu}
               />
             </li>
-            <li>
+            {/* <li>
               <MenuItem
                 href="/contacts"
                 icon={<Contacts className={"menu-icon"} />}
                 label="Contacts"
                 onClick={closeMenu}
               />
-            </li>
+            </li> */}
           </>
         ) : (
           <li className={"link"}>
