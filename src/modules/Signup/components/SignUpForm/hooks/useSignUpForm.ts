@@ -93,6 +93,10 @@ export function useSignUpForm(): ISignUpForm {
     password: [
       { required: true, message: "Password is required" },
       {
+        pattern: new RegExp(/^\S*$/),
+        message: "Password should not contain any white spaces",
+      },
+      {
         min: 12,
         message: "Password should be at least 12 characters long",
       },

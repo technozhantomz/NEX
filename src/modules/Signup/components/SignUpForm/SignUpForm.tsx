@@ -49,7 +49,7 @@ export const SignUpForm: React.FC = () => {
         name="password"
         rules={formValdation.password}
         validateFirst={true}
-        validateTrigger="onBlur"
+        validateTrigger="onChange"
       >
         <Styled.GeneratedPassordInput
           type={isInputTypePassword ? "password" : "text"}
@@ -71,7 +71,7 @@ export const SignUpForm: React.FC = () => {
         name="passwordCheck"
         rules={formValdation.passwordCheck}
         validateFirst={true}
-        validateTrigger="onBlur"
+        validateTrigger="onChange"
       >
         <Input.Password
           placeholder="Re-enter your auto-generated password"
