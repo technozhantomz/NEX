@@ -31,7 +31,7 @@ export function usePowerDownForm({
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
 
   const [powerDownForm] = Form.useForm();
-  const withdrawAmount = Form.useWatch("withdrawAmount", powerDownForm);
+  const withdrawAmount: number = Form.useWatch("withdrawAmount", powerDownForm);
   const { localStorageAccount, id, assets } = useUserContext();
   const { dbApi } = usePeerplaysApiContext();
   const { buildVestingWithdrawTransaction } = useGPOSTransactionBuilder();
@@ -190,5 +190,6 @@ export function usePowerDownForm({
     loadingTransaction,
     handleWithdraw,
     feeAmount,
+    withdrawAmount,
   };
 }
