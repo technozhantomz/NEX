@@ -67,4 +67,7 @@ export const WithdrawFormWrapper = styled.div`
   button {
     max-width: 290px;
   }
+  .ant-input {
+    font-size: 16px;
+  }
 `;

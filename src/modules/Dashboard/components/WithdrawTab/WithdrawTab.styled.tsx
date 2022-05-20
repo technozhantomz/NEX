@@ -20,7 +20,7 @@ export const WithdrawContainer = styled.div`
     color: #6c6c6c;
     opacity: 1;
     margin-top: 30px;
-    ${breakpoint.xs} {
+    ${breakpoint.sm} {
       font-size: 14px;
     }
   }

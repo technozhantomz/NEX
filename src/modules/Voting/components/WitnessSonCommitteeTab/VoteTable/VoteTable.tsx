@@ -4,7 +4,6 @@ import {
   useUserContext,
   useViewportContext,
 } from "../../../../../common/providers";
-import { breakpoints } from "../../../../../ui/src/breakpoints";
 import { VoteRow } from "../../../types";
 
 import { showVotesColumns } from "./VoteColumns";
@@ -25,11 +24,11 @@ export const VoteTable = ({
   approveVote,
   removeVote,
 }: Props): JSX.Element => {
-  const { width } = useViewportContext();
+  const { xs } = useViewportContext();
   const { localStorageAccount } = useUserContext();
   const columns = showVotesColumns(approveVote, removeVote);
   return (
-    <>
+    <Styled.VoteTableWrapper>
       <Styled.Title>
         {type === "approved"
           ? `Approved by ${localStorageAccount} `
@@ -37,7 +36,87 @@ export const VoteTable = ({
         {type === "approved" ? <Styled.Check /> : <Styled.Xmark />}
       </Styled.Title>
       <Styled.Container>
-        {width > breakpoints.xs ? (
+        {xs ? (
+          <Styled.VoteList
+            itemLayout="vertical"
+            dataSource={votes}
+            loading={loading}
+            pagination={{
+              position: "bottom",
+              size: "small",
+              pageSize: 2,
+              showLessItems: true,
+              itemRender: (
+                _page: number,
+                type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
+                element: ReactNode
+              ) => {
+                if (type === "prev") {
+                  return (
+                    <>
+                      {" "}
+                      {_page > 0 ? (
+                        <a style={{ marginRight: "8px" } as CSSProperties}>
+                          Previous
+                        </a>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  );
+                }
+                if (type === "next") {
+                  return (
+                    <a style={{ marginLeft: "8px" } as CSSProperties}>Next</a>
+                  );
+                }
+                return element;
+              },
+            }}
+            renderItem={(item) => (
+              <Styled.VoteListItem key={(item as VoteRow).key}>
+                <Styled.VoteItemContent>
+                  <div className="vote-info">
+                    <span className="vote-info-title">{columns[0].title}</span>
+                    <span className="vote-info-value">
+                      {(item as VoteRow).name}
+                    </span>
+                  </div>
+                  <div className="vote-info">
+                    <span className="vote-info-title">{columns[1].title}</span>
+                    <span className="vote-info-value">
+                      {(item as VoteRow).website}
+                    </span>
+                  </div>
+                  <div className="vote-info">
+                    <span className="vote-info-title">{columns[2].title}</span>
+                    <span className="vote-info-value">
+                      {(item as VoteRow).votes}
+                    </span>
+                  </div>
+                  <div className="vote-info">
+                    <span className="vote-info-title">{columns[3].title}</span>
+                    <span className="vote-info-value">
+                      {type === "approved" ? (
+                        <Styled.VoteActionButton
+                          onClick={() => removeVote((item as VoteRow).id)}
+                        >
+                          REMOVE
+                        </Styled.VoteActionButton>
+                      ) : (
+                        <Styled.VoteActionButton
+                          onClick={() => approveVote((item as VoteRow).id)}
+                        >
+                          ADD
+                        </Styled.VoteActionButton>
+                      )}
+                    </span>
+                  </div>
+                </Styled.VoteItemContent>
+              </Styled.VoteListItem>
+            )}
+          />
+        ) : (
           <Styled.VoteTable
             columns={columns}
             dataSource={votes}
@@ -68,10 +147,8 @@ export const VoteTable = ({
             }}
             size="small"
           />
-        ) : (
-          ""
         )}
       </Styled.Container>
-    </>
+    </Styled.VoteTableWrapper>
   );
 };

@@ -15,7 +15,8 @@ export const TransactionSuccess = styled.span`
 
 export const TransactionType = styled.span`
   margin-bottom: 15px;
-  font-weight: 500;
+  font-weight: bold;
+  font-size: 16px;
 `;
 
 export const DetailContainer = styled.div`

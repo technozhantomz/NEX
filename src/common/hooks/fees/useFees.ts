@@ -52,7 +52,7 @@ export function useFees(): UseFeesResult {
       );
       return selectedFeeParameter;
     },
-    [feeParameters]
+    [feeParameters, feeParameters.length]
   );
 
   const calculateTransferFee = useCallback(
@@ -77,7 +77,13 @@ export function useFees(): UseFeesResult {
         return setPrecision(true, feeAmount, defaultAsset.precision);
       }
     },
-    [feeParameters, findOperationFee, account, defaultAsset]
+    [
+      feeParameters,
+      feeParameters.length,
+      findOperationFee,
+      account,
+      defaultAsset,
+    ]
   );
 
   const calculateAccountUpgradeFee = useCallback(() => {
@@ -91,7 +97,13 @@ export function useFees(): UseFeesResult {
 
       return setPrecision(false, membershipLifetimeFee, defaultAsset.precision);
     }
-  }, [feeParameters, findOperationFee, defaultAsset, setPrecision]);
+  }, [
+    feeParameters,
+    feeParameters.length,
+    findOperationFee,
+    defaultAsset,
+    setPrecision,
+  ]);
 
   const calculateCreateLimitOrderFee = useCallback(
     (base: Asset, quote: Asset) => {
@@ -117,8 +129,48 @@ export function useFees(): UseFeesResult {
         } as CreateLimitOrderFee;
       }
     },
-    [setPrecision, defaultAsset, findOperationFee]
+    [
+      feeParameters,
+      feeParameters.length,
+      setPrecision,
+      defaultAsset,
+      findOperationFee,
+    ]
   );
+
+  const calculateGposVestingFee = useCallback(() => {
+    if (feeParameters.length && defaultAsset) {
+      const gposVestingFeeParameters = findOperationFee(
+        "vesting_balance_create"
+      ) as FeeParameter;
+      const gposVestingFee = gposVestingFeeParameters[1];
+      const feeAmount = gposVestingFee.fee as number;
+      return setPrecision(false, feeAmount, defaultAsset.precision);
+    }
+  }, [
+    feeParameters,
+    feeParameters.length,
+    defaultAsset,
+    findOperationFee,
+    setPrecision,
+  ]);
+
+  const calculateGposWithdrawFee = useCallback(() => {
+    if (feeParameters.length && defaultAsset) {
+      const gposWithdrawFeeParameters = findOperationFee(
+        "vesting_balance_withdraw"
+      ) as FeeParameter;
+      const gposWithdrawFeeFee = gposWithdrawFeeParameters[1];
+      const feeAmount = gposWithdrawFeeFee.fee as number;
+      return setPrecision(false, feeAmount, defaultAsset.precision);
+    }
+  }, [
+    feeParameters,
+    feeParameters.length,
+    defaultAsset,
+    findOperationFee,
+    setPrecision,
+  ]);
 
   useEffect(() => {
     getFeesFromGlobal();
@@ -131,5 +183,7 @@ export function useFees(): UseFeesResult {
     calculateTransferFee,
     calculateAccountUpgradeFee,
     calculateCreateLimitOrderFee,
+    calculateGposVestingFee,
+    calculateGposWithdrawFee,
   };
 }

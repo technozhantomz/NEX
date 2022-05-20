@@ -2,9 +2,23 @@ import { Button, Form, styled, TableSearch } from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 import { Reset as UiReset } from "../../../../../ui/src/icons";
+import { mixIns } from "../../../../../ui/src/mixins";
+
+export const VoteFormWrapper = styled.div`
+  margin-bottom: 25px;
+  padding: 0 25px 19px;
+  ${mixIns.hairline}
+  ${breakpoint.sm} {
+    border: none;
+    padding: 0 35px;
+  }
+`;
 
 export const Title = styled.h2`
-  font-size: 20px;
+  font-size: 14px;
+  ${breakpoint.sm} {
+    font-size: 20px;
+  }
   margin-bottom: 25px;
 `;
 

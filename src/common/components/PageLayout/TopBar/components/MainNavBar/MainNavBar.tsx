@@ -4,7 +4,6 @@ import {
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
-import { breakpoints } from "../../../../../../ui/src/breakpoints";
 import {
   useMenuContext,
   useUserContext,
@@ -18,7 +17,7 @@ import * as Styled from "./MainNavBar.styled";
 
 export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const {
     toggleMenu,
     closeMenu,
@@ -28,7 +27,7 @@ export const MainNavBar = (): JSX.Element => {
   } = useMenuContext();
   const CloseButton = (
     <>
-      {width < breakpoints.xs ? (
+      {sm ? (
         <Styled.CloseButton type="text" className="close" onClick={closeMenu}>
           X
         </Styled.CloseButton>
@@ -47,7 +46,9 @@ export const MainNavBar = (): JSX.Element => {
               onMouseOver={() => toggleMenu("notify")}
               onClick={() => toggleMenu("notify")}
             />
-            {width > breakpoints.xs ? (
+            {sm ? (
+              ""
+            ) : (
               <div
                 onMouseOver={() => toggleMenu("profile")}
                 onClick={() => toggleMenu("profile")}
@@ -58,21 +59,19 @@ export const MainNavBar = (): JSX.Element => {
                   {localStorageAccount ? localStorageAccount.charAt(0) : ""}
                 </Styled.MainNavBarAvitar>
               </div>
-            ) : (
-              ""
             )}
           </>
         ) : (
           ""
         )}
-        {width > breakpoints.xs ? (
-          <MoreOutlined
+        {sm ? (
+          <MenuOutlined
             className={"hambuger"}
             onMouseOver={() => toggleMenu("main")}
             onClick={() => toggleMenu("main")}
           />
         ) : (
-          <MenuOutlined
+          <MoreOutlined
             className={"hambuger"}
             onMouseOver={() => toggleMenu("main")}
             onClick={() => toggleMenu("main")}

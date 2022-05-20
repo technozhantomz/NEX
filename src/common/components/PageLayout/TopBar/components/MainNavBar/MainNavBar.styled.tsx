@@ -42,7 +42,7 @@ export const MenuWrapper = styled.div`{
     display: block;
     flex-direction: column;
   }
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
       position: absolute;
       top:75px;
       height: inherit;
@@ -69,7 +69,7 @@ export const CloseButton = styled(UiButton)`
   z-index: 9999;
   text-align: center;
   margin: 50px 25px 0 20px;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     display: none;
   }
 `;
@@ -78,7 +78,7 @@ export const TopBar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  ${breakpoint.xs} {
+  ${breakpoint.sm} {
     display: none;
   }
 `;

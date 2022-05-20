@@ -40,6 +40,7 @@ export {
   MenuOutlined,
   UserOutlined,
   RightOutlined,
+  RedoOutlined,
   InfoCircleOutlined,
   CheckOutlined,
   EyeInvisibleOutlined,

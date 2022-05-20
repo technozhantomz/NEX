@@ -6,7 +6,6 @@ import {
   Switch,
   UserOutlined,
 } from "../../../../../../ui/src";
-import { breakpoints } from "../../../../../../ui/src/breakpoints";
 import {
   Blockchain,
   Dashboard,
@@ -27,7 +26,7 @@ export const MainNav = (): JSX.Element => {
   const { advancedMode, handleAdvancedModeChange } = useAdvancedMode();
   const { localStorageAccount } = useUserContext();
   const { exchanges } = useSettingsContext();
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const { toggleMenu, closeMenu } = useMenuContext();
   return (
     <MenuCard bordered={false}>
@@ -81,7 +80,7 @@ export const MainNav = (): JSX.Element => {
                 onClick={closeMenu}
               />
             </li>
-            {width < breakpoints.xs ? (
+            {sm ? (
               <li>
                 <MenuItem
                   onClick={() => toggleMenu("profile")}
