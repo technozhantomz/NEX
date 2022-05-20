@@ -30,6 +30,12 @@ export const FeesTable = styled(UiTable)`
     &:before {
       display: none;
     }
+    ${breakpoint.sm} {
+      padding: 16px 0px;
+    }
+    ${breakpoint.md} {
+      padding: 16px 16px 16px 0;
+    }
   }
   .ant-table-tbody > tr > td {
     border: none;
@@ -44,7 +50,7 @@ export const FeesTable = styled(UiTable)`
       }
     }
     ${breakpoint.md} {
-      padding: 16px 16px;
+      padding: 16px 16px 16px 0;
       span {
         padding: 5px 21px;
       }
@@ -63,11 +69,11 @@ export const FeesTable = styled(UiTable)`
 `;
 
 export const FeeSpecificHeader = styled.h3`
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 25px;
+  margin-bottom: 25px;
   ${breakpoint.sm} {
     margin-top: 25px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
   }
 `;
 
