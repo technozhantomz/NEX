@@ -14,6 +14,7 @@ export type UsePowerUpFormResult = {
   handleVesting: (password: string) => Promise<void>;
   loadingTransaction: boolean;
   feeAmount: number;
+  depositAmount: number;
 };
 
 export type UsePowerUpFormArgs = {

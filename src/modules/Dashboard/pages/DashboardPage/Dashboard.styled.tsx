@@ -51,11 +51,15 @@ export const Buttons = styled.div`
   font-size: 14px;
   height: 32px;
   cursor: pointer;
-  &:hover,
   &:active,
   &:focus,
   &.active {
     background: #e3ebf8 0% 0% no-repeat padding-box;
+  }
+  ${breakpoint.sm} {
+    &:hover {
+      background: #e3ebf8 0% 0% no-repeat padding-box;
+    }
   }
 `;
 export const ButtonNames = styled.p`

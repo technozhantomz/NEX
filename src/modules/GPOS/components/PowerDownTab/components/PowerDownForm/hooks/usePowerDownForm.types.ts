@@ -14,6 +14,7 @@ export type UsePowerDownFormResult = {
   loadingTransaction: boolean;
   handleWithdraw: (password: string) => Promise<void>;
   feeAmount: number;
+  withdrawAmount: number;
 };
 
 export type UsePowerDownFormArgs = {

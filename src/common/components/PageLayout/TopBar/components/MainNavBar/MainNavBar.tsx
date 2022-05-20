@@ -4,7 +4,6 @@ import {
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
-import { breakpoints } from "../../../../../../ui/src/breakpoints";
 import {
   useMenuContext,
   useUserContext,
@@ -18,9 +17,9 @@ import * as Styled from "./MainNavBar.styled";
 
 export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const {
-    toggleMenu,
+    openMenu,
     closeMenu,
     notificationMenuOpen,
     profileMenuOpen,
@@ -28,7 +27,7 @@ export const MainNavBar = (): JSX.Element => {
   } = useMenuContext();
   const CloseButton = (
     <>
-      {width < breakpoints.sm ? (
+      {sm ? (
         <Styled.CloseButton type="text" className="close" onClick={closeMenu}>
           X
         </Styled.CloseButton>
@@ -44,13 +43,15 @@ export const MainNavBar = (): JSX.Element => {
           <>
             <BellOutlined
               className={"bell"}
-              onMouseOver={() => toggleMenu("notify")}
-              onClick={() => toggleMenu("notify")}
+              onMouseOver={() => openMenu("notify")}
+              onClick={() => openMenu("notify")}
             />
-            {width > breakpoints.sm ? (
+            {sm ? (
+              ""
+            ) : (
               <div
-                onMouseOver={() => toggleMenu("profile")}
-                onClick={() => toggleMenu("profile")}
+                onMouseOver={() => openMenu("profile")}
+                onClick={() => openMenu("profile")}
               >
                 <Styled.MainNavBarAvitar
                   icon={localStorageAccount ? "" : <UserOutlined />}
@@ -58,24 +59,22 @@ export const MainNavBar = (): JSX.Element => {
                   {localStorageAccount ? localStorageAccount.charAt(0) : ""}
                 </Styled.MainNavBarAvitar>
               </div>
-            ) : (
-              ""
             )}
           </>
         ) : (
           ""
         )}
-        {width > breakpoints.sm ? (
-          <MoreOutlined
-            className={"hambuger"}
-            onMouseOver={() => toggleMenu("main")}
-            onClick={() => toggleMenu("main")}
-          />
-        ) : (
+        {sm ? (
           <MenuOutlined
             className={"hambuger"}
-            onMouseOver={() => toggleMenu("main")}
-            onClick={() => toggleMenu("main")}
+            onMouseOver={() => openMenu("main")}
+            onClick={() => openMenu("main")}
+          />
+        ) : (
+          <MoreOutlined
+            className={"hambuger"}
+            onMouseOver={() => openMenu("main")}
+            onClick={() => openMenu("main")}
           />
         )}
       </Styled.MainNavBar>
