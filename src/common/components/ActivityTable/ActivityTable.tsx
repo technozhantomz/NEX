@@ -1,8 +1,7 @@
 import { useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityTable.styled";
-import { ActivityColumns as columns } from "./components";
-import { ActivityList } from "./components/ActivityList";
+import { ActivityList, ActivityColumns as columns } from "./components";
 import { useActivityTable } from "./hooks";
 
 type Props = {
@@ -23,10 +22,7 @@ export const ActivityTable = ({
   return (
     <>
       {sm ? (
-        <ActivityList
-          userName={userName}
-          isWalletActivityTable={isWalletActivityTable}
-        />
+        <ActivityList activitiesRows={activitiesRows} loading={loading} />
       ) : (
         <Styled.ActivityTable
           columns={columns}
