@@ -17,6 +17,9 @@ export const FeesTabWrapper = styled.div`
 export const Section = styled.section`
   padding: 0 15px 25px;
   ${mixIns.hairline}
+  h3, a {
+    padding-left: 16px;
+  }
 `;
 
 export const FeesTable = styled(UiTable)`
