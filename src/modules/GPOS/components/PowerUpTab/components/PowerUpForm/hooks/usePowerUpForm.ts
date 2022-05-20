@@ -28,7 +28,7 @@ export function usePowerUpForm({
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
 
   const [powerUpForm] = Form.useForm();
-  const depositAmount = Form.useWatch("depositAmount", powerUpForm);
+  const depositAmount: number = Form.useWatch("depositAmount", powerUpForm);
   const { id, assets, localStorageAccount } = useUserContext();
   const { buildVestingBalanceCreateTransaction } = useGPOSTransactionBuilder();
   const { buildTrx } = useTransactionBuilder();
@@ -164,5 +164,6 @@ export function usePowerUpForm({
     handleVesting,
     loadingTransaction,
     feeAmount,
+    depositAmount,
   };
 }
