@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { InfoCircleOutlined, Tag, Tooltip } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 
 export const AssetsColumns = [
   {
@@ -12,7 +13,11 @@ export const AssetsColumns = [
     title: "Symbol",
     dataIndex: "symbol",
     key: "symbol",
-    render: (symbol: string): JSX.Element => <Tag key={symbol}>{symbol}</Tag>,
+    render: (symbol: string): JSX.Element => (
+      <Tag key={symbol} bgColor={colors.assetTag}>
+        {symbol}
+      </Tag>
+    ),
   },
   {
     title: "Max Supply",

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { useViewportContext } from "../../../../common/providers";
 import { InfoCircleOutlined, List, Tag, Tooltip } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 import { StatsCard } from "../StatsCard";
 
 import { AssetsColumns } from "./AssetsColumns";
@@ -56,7 +57,9 @@ export const AssetsTab = (): JSX.Element => {
                     {AssetsColumns[1].title}
                   </span>
                   <span className="asset-info-value">
-                    <Tag key={item.symbol}>{item.symbol}</Tag>
+                    <Tag key={item.symbol} bgColor={colors.assetTag}>
+                      {item.symbol}
+                    </Tag>
                   </span>
                 </div>
                 <div className="asset-info">

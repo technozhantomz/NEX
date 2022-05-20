@@ -9,9 +9,14 @@ import {
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 import { Check as check, Xmark as xmark } from "../../../../../ui/src/icons";
+import { mixIns } from "../../../../../ui/src/mixins";
+
+export const VoteTableWrapper = styled.div``;
 
 export const VoteTable = styled(UiTable)`
+  margin: 0 35px;
   max-width: 100%;
+  ${mixIns.hairline}
   .ant-table-thead > tr > th {
     background: transparent;
     color: ${colors.textColorSecondary};
@@ -27,21 +32,45 @@ export const VoteTable = styled(UiTable)`
   }
 `;
 
-export const VoteList = styled(UiList)``;
+export const VoteList = styled(UiList)`
+  padding: 0 25px 25px;
+  ${mixIns.hairline}
+  &.ant-list-split.ant-list-something-after-last-item .ant-spin-container > .ant-list-items > .ant-list-item:last-child {
+    border-bottom: none;
+  }
+  .ant-list-pagination {
+    margin-top: 0;
+  }
+  .ant-pagination-item {
+    border: none;
+  }
+  .ant-pagination.mini .ant-pagination-item,
+  .ant-pagination-item-active {
+    border-right: 2px solid ${colors.borderColorBase};
+  }
+`;
 
 export const VoteListItem = styled(UiList.Item)`
-  padding: 15px 20px;
+  padding: 27px 0 0;
+  &.ant-list-item,
+  &.ant-list-item:last-child {
+    border-bottom: none;
+  }
 `;
 
 export const VoteItemContent = styled.div`
-  margin: 18px 0 25px;
+  padding: 0;
+  margin: 0;
   .vote-info {
     margin: 5px 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    align-items: center;
     .vote-info-title {
       font-weight: 300;
       color: ${colors.textColorSecondary};
+      width: 54px;
+      margin-right: 9px;
     }
     .vote-info-value {
       font-weight: 500;
@@ -68,8 +97,10 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h3`
+  padding: 0 25px;
   ${breakpoint.sm} {
     margin-bottom: 25px;
+    padding: 0 35px;
   }
 `;
 

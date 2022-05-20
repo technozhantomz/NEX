@@ -20,7 +20,7 @@ export const Section = styled.section`
 `;
 
 export const FeesTable = styled(UiTable)`
-  max-width: 592px;
+  max-width: 700px;
   .ant-table-thead > tr > th {
     color: ${colors.textColorSecondary};
     background: ${colors.white};
@@ -30,12 +30,30 @@ export const FeesTable = styled(UiTable)`
     &:before {
       display: none;
     }
+    ${breakpoint.sm} {
+      padding: 16px 0px;
+    }
+    ${breakpoint.md} {
+      padding: 16px 16px 16px 0;
+    }
   }
   .ant-table-tbody > tr > td {
     border: none;
     vertical-align: baseline;
     div:not(:last-child) {
       margin-bottom: 15px;
+    }
+    ${breakpoint.sm} {
+      padding: 16px 0px;
+      span {
+        padding: 5px 16px;
+      }
+    }
+    ${breakpoint.md} {
+      padding: 16px 16px 16px 0;
+      span {
+        padding: 5px 21px;
+      }
     }
   }
   .ant-tag {
@@ -51,11 +69,11 @@ export const FeesTable = styled(UiTable)`
 `;
 
 export const FeeSpecificHeader = styled.h3`
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 25px;
+  margin-bottom: 25px;
   ${breakpoint.sm} {
     margin-top: 25px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
   }
 `;
 
@@ -74,8 +92,8 @@ export const FeeItemContent = styled.div`
     }
     .fee-info-value {
       font-weight: 500;
-      .ant-tag {
-        padding: 5px 15px;
+      span {
+        padding: 5px 5px;
         background: ${colors.assetTag};
         border: none;
         color: ${colors.textColor};

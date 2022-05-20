@@ -28,7 +28,10 @@ export const WithdrawContainer = styled.div`
     width: 90%;
     margin: 0 auto;
     .ant-input {
-      height: 62px;
+      height: 50px;
+      ${breakpoint.sm} {
+        height: 65px;
+      }
     }
   }
 `;
