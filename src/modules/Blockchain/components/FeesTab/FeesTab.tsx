@@ -147,7 +147,9 @@ export const FeesTab = (): JSX.Element => {
                           {FeesColumns[0].title}
                         </span>
                         <span className="fee-info-value">
-                          <Tag key={item.operation}>{item.operation}</Tag>
+                          <Tag key={item.operation} bgColor={colors.assetTag}>
+                            {item.operation}
+                          </Tag>
                         </span>
                       </div>
                     )}
@@ -241,7 +243,9 @@ export const FeesTab = (): JSX.Element => {
                           {FeesColumns[0].title}
                         </span>
                         <span className="fee-info-value">
-                          <Tag key={item.operation}>{item.operation}</Tag>
+                          <Tag key={item.operation} bgColor={colors.assetTag}>
+                            {item.operation}
+                          </Tag>
                         </span>
                       </div>
                     )}
@@ -328,7 +332,9 @@ export const FeesTab = (): JSX.Element => {
                         {FeesColumns[0].title}
                       </span>
                       <span className="fee-info-value">
-                        <Tag key={item.operation}>{item.operation}</Tag>
+                        <Tag key={item.operation} bgColor={colors.assetTag}>
+                          {item.operation}
+                        </Tag>
                       </span>
                     </div>
                   )}
@@ -403,7 +409,9 @@ export const FeesTab = (): JSX.Element => {
                           {FeesColumns[0].title}
                         </span>
                         <span className="fee-info-value">
-                          <Tag key={item.operation}>{item.operation}</Tag>
+                          <Tag key={item.operation} bgColor={colors.assetTag}>
+                            {item.operation}
+                          </Tag>
                         </span>
                       </div>
                     )}
@@ -497,7 +505,9 @@ export const FeesTab = (): JSX.Element => {
                           {FeesColumns[0].title}
                         </span>
                         <span className="fee-info-value">
-                          <Tag key={item.operation}>{item.operation}</Tag>
+                          <Tag key={item.operation} bgColor={colors.assetTag}>
+                            {item.operation}
+                          </Tag>
                         </span>
                       </div>
                     )}
