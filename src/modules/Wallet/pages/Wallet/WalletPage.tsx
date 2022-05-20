@@ -5,7 +5,6 @@ import { useState } from "react";
 import { ActivityTable, Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { Button, DownOutlined, Menu } from "../../../../ui/src";
-import { breakpoints } from "../../../../ui/src/breakpoints";
 //import { useBrowserHistoryContext } from "../../../../common/providers";
 import { AssetsTable } from "../../components/AssetsTable";
 
@@ -18,24 +17,23 @@ const WalletPage: NextPage = () => {
   const router = useRouter();
   const { tab } = router.query;
   const [visible, setVisible] = useState<boolean>(false);
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
-      {width > breakpoints.md ? (
-        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
-      ) : (
+      {sm ? (
         <Styled.MobileDropdownWrapper>
           <Styled.MobileDropdown
             visible={visible}
             overlay={
               <Styled.MobileTabsWrapper>
-                <Menu>
-                  <DefaultTabBar {...props}>
-                    {(node: any) => (
-                      <Menu.Item key={node.key}>{node}</Menu.Item>
-                    )}
-                  </DefaultTabBar>
-                </Menu>
+                <Menu
+                  onSelect={(item: any) => {
+                    props.onTabClick(item.key);
+                  }}
+                  items={props.panes.map((pane: any) => {
+                    return { label: pane.props.tab, key: pane.key };
+                  })}
+                />
               </Styled.MobileTabsWrapper>
             }
           >
@@ -44,9 +42,12 @@ const WalletPage: NextPage = () => {
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
+      ) : (
+        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
       )}
     </>
   );
+
   return (
     <Layout
       title="Wallet"
@@ -61,7 +62,7 @@ const WalletPage: NextPage = () => {
           activeKey={`${tab ? tab : "assets"}`}
           onTabClick={(key) => {
             router.push(`/wallet?tab=${key}`);
-            if (width < breakpoints.sm) setVisible(false);
+            if (sm) setVisible(false);
           }}
         >
           <TabPane tab="Assets" key="assets">

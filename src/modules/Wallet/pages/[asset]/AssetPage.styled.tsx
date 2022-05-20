@@ -30,7 +30,7 @@ export const AssetCard = styled(UiCard)`
       height: 2pt;
     }
   }
-  .ant-tabs {
+  .ant-tabs-content-holder {
     min-height: 564px;
     border-radius: 4px;
     opacity: 1;
@@ -54,7 +54,6 @@ export const AssetCard = styled(UiCard)`
     }
     .ant-tabs {
       min-height: 856px;
-      padding: 35px 0 0 0;
       border-radius: 4px;
       opacity: 1;
       max-width: 1070px;
@@ -79,12 +78,19 @@ export const WithdrawFormWrapper = styled.div`
 
 export const MobileDropdownWrapper = styled.div`
   ${mixIns.inActiveTab}
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .back-link {
+    width: 100%;
+    text-align: center;
+  }
 `;
 export const MobileDropdown = styled(UiDropdown)`
   &.ant-btn-text,
   &.ant-btn-text:hover,
   &.ant-btn-text:focus {
-    width: 50%;
+    width: 100%;
     text-transform: capitalize;
     height: 50px;
     padding: 15px 28px 10px;

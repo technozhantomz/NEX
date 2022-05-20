@@ -33,13 +33,14 @@ const Blockchain: NextPage = () => {
             visible={visible}
             overlay={
               <Styled.MobileTabsWrapper>
-                <Menu>
-                  <DefaultTabBar {...props}>
-                    {(node: any) => (
-                      <Menu.Item key={node.key}>{node}</Menu.Item>
-                    )}
-                  </DefaultTabBar>
-                </Menu>
+                <Menu
+                  onSelect={(item: any) => {
+                    props.onTabClick(item.key);
+                  }}
+                  items={props.panes.map((pane: any) => {
+                    return { label: pane.props.tab, key: pane.key };
+                  })}
+                />
               </Styled.MobileTabsWrapper>
             }
           >
@@ -53,6 +54,7 @@ const Blockchain: NextPage = () => {
       )}
     </>
   );
+
   return (
     <Layout
       title={`${pageMeta.title}`}

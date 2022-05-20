@@ -19,7 +19,6 @@ import {
 } from "../../../../common/providers";
 import { SidechainAcccount } from "../../../../common/types";
 import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
-import { breakpoints } from "../../../../ui/src/breakpoints";
 import { AssetsTable } from "../../components";
 
 import * as Styled from "./AssetPage.styled";
@@ -39,24 +38,32 @@ const AssetPage: NextPage = () => {
   const { localStorageAccount } = useUserContext();
   //const { pageLoading } = useBrowserHistoryContext();
   const [visible, setVisible] = useState<boolean>(false);
-  const { width } = useViewportContext();
+  const { sm } = useViewportContext();
+  const dropdownItems = [
+    { label: "Transfer", key: "transfer" },
+    { label: "Withdraw", key: "withdraw" },
+    { label: "Deposit", key: "deposit" },
+  ];
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
-      {width > breakpoints.md ? (
-        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
-      ) : (
+      {sm ? (
         <Styled.MobileDropdownWrapper>
           <Styled.MobileDropdown
             visible={visible}
             overlay={
               <Styled.MobileTabsWrapper>
-                <Menu>
-                  <DefaultTabBar {...props}>
-                    {(node: any) => (
-                      <Menu.Item key={node.key}>{node}</Menu.Item>
-                    )}
-                  </DefaultTabBar>
-                </Menu>
+                <Menu
+                  onSelect={(item: any) => {
+                    props.onTabClick(item.key);
+                  }}
+                  items={
+                    sidechainAssets
+                      .map((sideAsset) => sideAsset.symbol)
+                      .includes(asset as string)
+                      ? dropdownItems
+                      : [{ label: "Transfer", key: "transfer" }]
+                  }
+                />
               </Styled.MobileTabsWrapper>
             }
           >
@@ -64,7 +71,22 @@ const AssetPage: NextPage = () => {
               {tab ? tab : "transfer"} <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
+          {props.extra}
         </Styled.MobileDropdownWrapper>
+      ) : (
+        <DefaultTabBar {...props}>
+          {(node: any) => (
+            <>
+              {sidechainAssets
+                .map((sideAsset) => sideAsset.symbol)
+                .includes(asset as string)
+                ? node
+                : node.key === "transfer"
+                ? node
+                : ""}
+            </>
+          )}
+        </DefaultTabBar>
       )}
     </>
   );
@@ -82,56 +104,52 @@ const AssetPage: NextPage = () => {
           <Tabs
             renderTabBar={renderTabBar}
             activeKey={`${tab ? tab : "transfer"}`}
-            tabBarExtraContent={<Link href="/wallet">Back to Assets</Link>}
+            tabBarExtraContent={
+              <span className="back-link">
+                <Link href="/wallet">Back to Assets</Link>
+              </span>
+            }
             onTabClick={(key) => {
               router.push(`/wallet/${asset}?tab=${key}`);
-              if (width < breakpoints.sm) setVisible(false);
+              if (sm) setVisible(false);
             }}
           >
             <TabPane tab="Transfer" key="transfer">
               <AssetsTable showActions={false} fillterAsset={`${asset}`} />
               <TransferForm asset={`${asset}`} />
             </TabPane>
-            {sidechainAssets
-              .map((sideAsset) => sideAsset.symbol)
-              .includes(asset as string) ? (
-              <>
-                <TabPane tab="Withdraw" key="withdraw">
-                  <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-                  <Styled.WithdrawFormWrapper>
-                    <WithdrawForm asset={`${asset}`} />
-                  </Styled.WithdrawFormWrapper>
-                </TabPane>
-                <TabPane tab="Deposit" key="deposit">
-                  <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-                  {!loadingSidechainAccounts ? (
-                    <Styled.AssetFormWapper>
-                      {asset === "BTC" ? (
-                        hasBTCDepositAddress ? (
-                          <AddressGenerated
-                            bitcoinSidechainAccount={
-                              bitcoinSidechainAccount as SidechainAcccount
-                            }
-                            getSidechainAccounts={getSidechainAccounts}
-                          />
-                        ) : (
-                          <GenerateBitcoinAddress
-                            isLoggedIn={!!localStorageAccount}
-                            getSidechainAccounts={getSidechainAccounts}
-                          />
-                        )
-                      ) : (
-                        <HIVEAndHBDDeposit assetSymbol={asset as string} />
-                      )}
-                    </Styled.AssetFormWapper>
+            <TabPane tab="Withdraw" key="withdraw">
+              <AssetsTable showActions={false} fillterAsset={`${asset}`} />
+              <Styled.WithdrawFormWrapper>
+                <WithdrawForm asset={`${asset}`} />
+              </Styled.WithdrawFormWrapper>
+            </TabPane>
+            <TabPane tab="Deposit" key="deposit">
+              <AssetsTable showActions={false} fillterAsset={`${asset}`} />
+              {!loadingSidechainAccounts ? (
+                <Styled.AssetFormWapper>
+                  {asset === "BTC" ? (
+                    hasBTCDepositAddress ? (
+                      <AddressGenerated
+                        bitcoinSidechainAccount={
+                          bitcoinSidechainAccount as SidechainAcccount
+                        }
+                        getSidechainAccounts={getSidechainAccounts}
+                      />
+                    ) : (
+                      <GenerateBitcoinAddress
+                        isLoggedIn={!!localStorageAccount}
+                        getSidechainAccounts={getSidechainAccounts}
+                      />
+                    )
                   ) : (
-                    ""
+                    <HIVEAndHBDDeposit assetSymbol={asset as string} />
                   )}
-                </TabPane>
-              </>
-            ) : (
-              ""
-            )}
+                </Styled.AssetFormWapper>
+              ) : (
+                ""
+              )}
+            </TabPane>
           </Tabs>
         </Styled.AssetCard>
       )}

@@ -34,17 +34,15 @@ export const MobileTabsWrapper = styled.div`
 `;
 
 export const Tabs = styled(UiTabs)`
-   {
-    font-weight: 500;
-    ${breakpoint.sm} {
-      &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
-      &.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
-        width: 100%;
-      }
-      .ant-tabs-tab {
-        flex: 1 1 50%;
-        justify-content: center;
-      }
+  font-weight: 500;
+  ${breakpoint.sm} {
+    &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
+    &.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
+      width: 100%;
+    }
+    .ant-tabs-tab {
+      flex: 1 1 50%;
+      justify-content: center;
     }
   }
 `;
@@ -52,7 +50,6 @@ export const Tabs = styled(UiTabs)`
 export const WalletCard = styled(UiCard)`
   .ant-tabs {
     min-height: 856px;
-    padding: 35px 0 0 0;
     border-radius: 4px;
     opacity: 1;
     max-width: 1070px;
