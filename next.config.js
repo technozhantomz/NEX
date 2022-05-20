@@ -33,6 +33,9 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  devIndicators: {
+    buildActivity: false,
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.ya?ml$/,
