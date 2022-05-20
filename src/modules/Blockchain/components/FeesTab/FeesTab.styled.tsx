@@ -20,6 +20,7 @@ export const Section = styled.section`
 `;
 
 export const FeesTable = styled(UiTable)`
+  max-width: 700px;
   .ant-table-thead > tr > th {
     color: ${colors.textColorSecondary};
     background: ${colors.white};
