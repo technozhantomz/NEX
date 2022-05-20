@@ -57,7 +57,9 @@ export const AssetsTab = (): JSX.Element => {
                     {AssetsColumns[1].title}
                   </span>
                   <span className="asset-info-value">
-                    <Tag key={item.symbol} bgColor={colors.assetTag}>{item.symbol}</Tag>
+                    <Tag key={item.symbol} bgColor={colors.assetTag}>
+                      {item.symbol}
+                    </Tag>
                   </span>
                 </div>
                 <div className="asset-info">
