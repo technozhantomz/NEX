@@ -81,6 +81,7 @@ export function useGenerateBitcoinAddress(
       if (!sonNetworkStatus.isSonNetworkOk) {
         setIsPasswordModalVisible(false);
         setStatus("SONs network is not available now. Please try again later!");
+        setSubmittingPassword(false);
         return;
       }
       const deposit = generateNewAddress();
