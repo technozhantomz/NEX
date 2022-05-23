@@ -63,7 +63,7 @@ export const VoteForm = ({
     setTransactionSuccessMessage,
   });
   return (
-    <>
+    <Styled.VoteFormWrapper>
       <Styled.Title>Vote for {capitalize(tab)}</Styled.Title>
       <Styled.VoteSearch
         size="large"
@@ -135,6 +135,6 @@ export const VoteForm = ({
           />
         </Styled.VoteForm>
       </Styled.VoteForm.Provider>
-    </>
+    </Styled.VoteFormWrapper>
   );
 };

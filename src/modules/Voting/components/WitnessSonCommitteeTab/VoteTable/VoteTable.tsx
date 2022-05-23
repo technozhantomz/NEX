@@ -28,7 +28,7 @@ export const VoteTable = ({
   const { localStorageAccount } = useUserContext();
   const columns = showVotesColumns(approveVote, removeVote);
   return (
-    <>
+    <Styled.VoteTableWrapper>
       <Styled.Title>
         {type === "approved"
           ? `Approved by ${localStorageAccount} `
@@ -41,7 +41,38 @@ export const VoteTable = ({
             itemLayout="vertical"
             dataSource={votes}
             loading={loading}
-            pagination={{ position: "bottom", size: "small", pageSize: 20 }}
+            pagination={{
+              position: "bottom",
+              size: "small",
+              pageSize: 2,
+              showLessItems: true,
+              itemRender: (
+                _page: number,
+                type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
+                element: ReactNode
+              ) => {
+                if (type === "prev") {
+                  return (
+                    <>
+                      {" "}
+                      {_page > 0 ? (
+                        <a style={{ marginRight: "8px" } as CSSProperties}>
+                          Previous
+                        </a>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  );
+                }
+                if (type === "next") {
+                  return (
+                    <a style={{ marginLeft: "8px" } as CSSProperties}>Next</a>
+                  );
+                }
+                return element;
+              },
+            }}
             renderItem={(item) => (
               <Styled.VoteListItem key={(item as VoteRow).key}>
                 <Styled.VoteItemContent>
@@ -118,6 +149,6 @@ export const VoteTable = ({
           />
         )}
       </Styled.Container>
-    </>
+    </Styled.VoteTableWrapper>
   );
 };

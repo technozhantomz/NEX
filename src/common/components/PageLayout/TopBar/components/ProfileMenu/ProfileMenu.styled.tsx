@@ -2,6 +2,7 @@ import { Avatar, MenuCard, styled } from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
 
 export const ProfileMenu = styled(MenuCard)`
+  cursor: pointer;
   .ant-card-meta {
     display: flex;
     justify-content: start;

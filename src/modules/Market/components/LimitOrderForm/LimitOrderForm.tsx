@@ -52,6 +52,9 @@ export const LimitOrderForm = ({
     setTransactionSuccessMessage,
     transactionSuccessMessage,
     loadingTransaction,
+    price,
+    quantity,
+    total,
   } = useCreateLimitOrder({
     currentBase,
     currentQuote,
@@ -215,34 +218,18 @@ export const LimitOrderForm = ({
             account={localStorageAccount}
             fee={feeAmount}
             transactionType="limit_order_create"
-            price={
-              orderForm.__INTERNAL__.name
-                ? `${orderForm.getFieldValue("price")} ${
-                    activePair.split("_")[1]
-                  } / ${activePair.split("_")[0]}`
-                : ""
-            }
+            price={`${price} ${activePair.split("_")[1]} / ${
+              activePair.split("_")[0]
+            }`}
             buy={
-              orderForm.__INTERNAL__.name
-                ? isBuyOrder
-                  ? `${orderForm.getFieldValue("quantity")} ${
-                      activePair.split("_")[0]
-                    }`
-                  : `${orderForm.getFieldValue("total")} ${
-                      activePair.split("_")[1]
-                    }`
-                : ""
+              isBuyOrder
+                ? `${quantity} ${activePair.split("_")[0]}`
+                : `${total} ${activePair.split("_")[1]}`
             }
             sell={
-              orderForm.__INTERNAL__.name
-                ? isBuyOrder
-                  ? `${orderForm.getFieldValue("total")} ${
-                      activePair.split("_")[1]
-                    }`
-                  : `${orderForm.getFieldValue("quantity")} ${
-                      activePair.split("_")[0]
-                    }`
-                : ""
+              isBuyOrder
+                ? `${total} ${activePair.split("_")[1]}`
+                : `${quantity} ${activePair.split("_")[0]}`
             }
           />
           <PasswordModal
