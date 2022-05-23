@@ -118,38 +118,46 @@ const AssetPage: NextPage = () => {
               <AssetsTable showActions={false} fillterAsset={`${asset}`} />
               <TransferForm asset={`${asset}`} />
             </TabPane>
-            <TabPane tab="Withdraw" key="withdraw">
-              <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-              <Styled.WithdrawFormWrapper>
-                <WithdrawForm asset={`${asset}`} />
-              </Styled.WithdrawFormWrapper>
-            </TabPane>
-            <TabPane tab="Deposit" key="deposit">
-              <AssetsTable showActions={false} fillterAsset={`${asset}`} />
-              {!loadingSidechainAccounts ? (
-                <Styled.AssetFormWapper>
-                  {asset === "BTC" ? (
-                    hasBTCDepositAddress ? (
-                      <AddressGenerated
-                        bitcoinSidechainAccount={
-                          bitcoinSidechainAccount as SidechainAcccount
-                        }
-                        getSidechainAccounts={getSidechainAccounts}
-                      />
-                    ) : (
-                      <GenerateBitcoinAddress
-                        isLoggedIn={!!localStorageAccount}
-                        getSidechainAccounts={getSidechainAccounts}
-                      />
-                    )
+            {sidechainAssets
+              .map((sideAsset) => sideAsset.symbol)
+              .includes(asset as string) ? (
+              <>
+                <TabPane tab="Withdraw" key="withdraw">
+                  <AssetsTable showActions={false} fillterAsset={`${asset}`} />
+                  <Styled.WithdrawFormWrapper>
+                    <WithdrawForm asset={`${asset}`} />
+                  </Styled.WithdrawFormWrapper>
+                </TabPane>
+                <TabPane tab="Deposit" key="deposit">
+                  <AssetsTable showActions={false} fillterAsset={`${asset}`} />
+                  {!loadingSidechainAccounts ? (
+                    <Styled.AssetFormWapper>
+                      {asset === "BTC" ? (
+                        hasBTCDepositAddress ? (
+                          <AddressGenerated
+                            bitcoinSidechainAccount={
+                              bitcoinSidechainAccount as SidechainAcccount
+                            }
+                            getSidechainAccounts={getSidechainAccounts}
+                          />
+                        ) : (
+                          <GenerateBitcoinAddress
+                            isLoggedIn={!!localStorageAccount}
+                            getSidechainAccounts={getSidechainAccounts}
+                          />
+                        )
+                      ) : (
+                        <HIVEAndHBDDeposit assetSymbol={asset as string} />
+                      )}
+                    </Styled.AssetFormWapper>
                   ) : (
-                    <HIVEAndHBDDeposit assetSymbol={asset as string} />
+                    ""
                   )}
-                </Styled.AssetFormWapper>
-              ) : (
-                ""
-              )}
-            </TabPane>
+                </TabPane>
+              </>
+            ) : (
+              ""
+            )}
           </Tabs>
         </Styled.AssetCard>
       )}

@@ -33,8 +33,6 @@ export const AssetCard = styled(UiCard)`
   .ant-tabs-content-holder {
     min-height: 564px;
     border-radius: 4px;
-    opacity: 1;
-    max-width: 335px;
   }
   ${breakpoint.sm} {
     .ant-form {
@@ -84,6 +82,7 @@ export const MobileDropdownWrapper = styled.div`
   .back-link {
     width: 100%;
     text-align: center;
+    padding: 15px 28px 10px;
   }
 `;
 export const MobileDropdown = styled(UiDropdown)`
