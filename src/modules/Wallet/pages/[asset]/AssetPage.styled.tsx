@@ -1,5 +1,10 @@
-import { styled, Card as UiCard } from "../../../../ui/src";
+import {
+  styled,
+  Card as UiCard,
+  Dropdown as UiDropdown,
+} from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
 import { mixIns } from "../../../../ui/src/mixins";
 
 export const AssetCard = styled(UiCard)`
@@ -25,11 +30,9 @@ export const AssetCard = styled(UiCard)`
       height: 2pt;
     }
   }
-  .ant-tabs {
+  .ant-tabs-content-holder {
     min-height: 564px;
     border-radius: 4px;
-    opacity: 1;
-    max-width: 335px;
   }
   ${breakpoint.sm} {
     .ant-form {
@@ -49,7 +52,6 @@ export const AssetCard = styled(UiCard)`
     }
     .ant-tabs {
       min-height: 856px;
-      padding: 35px 0 0 0;
       border-radius: 4px;
       opacity: 1;
       max-width: 1070px;
@@ -69,5 +71,38 @@ export const WithdrawFormWrapper = styled.div`
   }
   .ant-input {
     font-size: 16px;
+  }
+`;
+
+export const MobileDropdownWrapper = styled.div`
+  ${mixIns.inActiveTab}
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .back-link {
+    width: 100%;
+    text-align: center;
+    padding: 15px 28px 10px;
+  }
+`;
+export const MobileDropdown = styled(UiDropdown)`
+  &.ant-btn-text,
+  &.ant-btn-text:hover,
+  &.ant-btn-text:focus {
+    width: 100%;
+    text-transform: capitalize;
+    height: 50px;
+    padding: 15px 28px 10px;
+    background: ${colors.white};
+    border-bottom: 2pt solid ${colors.linkColor};
+    border-radius: 0px;
+    position: relative;
+    top: 2px;
+  }
+`;
+
+export const MobileTabsWrapper = styled.div`
+  .ant-tabs-tab {
+    color: ${colors.textColor};
   }
 `;
