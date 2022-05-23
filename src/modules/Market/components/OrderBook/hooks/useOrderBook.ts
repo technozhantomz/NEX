@@ -193,6 +193,11 @@ export function useOrderBook({
           dataIndex: "expiration",
           key: "expiration",
         },
+        {
+          title: "Action",
+          dataIndex: "cancel",
+          key: "cancel",
+        },
       ]);
       getUserOrderBook(currentBase, currentQuote);
     }

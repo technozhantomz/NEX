@@ -74,5 +74,21 @@ export function useLimitOrderTransactionBuilder(): UseLimitOrderTransactionBuild
     },
     [defaultAsset, roundNum]
   );
+
+  const buildCancelLimitOrderTransaction = useCallback(
+    (order: string, accountData: any): Transaction => {
+      const trx = {
+        type: "limit_order_cancel",
+        params: {
+          fee_paying_account: accountData.id,
+          order,
+          fee: { amount: 0, asset_id: defaultAsset?.id },
+        },
+      };
+      return trx;
+    },
+    [defaultAsset, roundNum]
+  );
+
   return { buildCreateLimitOrderTransaction };
 }

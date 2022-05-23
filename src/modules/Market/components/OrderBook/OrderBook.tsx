@@ -24,6 +24,14 @@ type Props = {
   loadingUserOrderRows: boolean;
 };
 
+export const cancelUserOrderComponent = (): JSX.Element => {
+  return (
+    <>
+      <DeleteOutlined />
+    </>
+  );
+};
+
 export const OrderBook = ({
   forUser = false,
   currentBase,
