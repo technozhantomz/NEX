@@ -11,6 +11,7 @@ export type UsePairModalResult = {
   handleCancel: () => void;
   handleSelectPair: () => void;
   handleSelectRecent: (value: string) => void;
+  handleValuesChange: () => void;
 };
 
 export type FormValidation = {
