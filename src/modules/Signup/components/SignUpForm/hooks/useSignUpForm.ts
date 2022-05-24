@@ -48,7 +48,7 @@ export function useSignUpForm(): ISignUpForm {
     setIsInputTypePassword(!isInputTypePassword);
   };
 
-  const setCheckboxVlaue = (e: CheckboxChangeEvent) => {
+  const setCheckboxValue = (e: CheckboxChangeEvent) => {
     if (e.target.id === "signUpForm_saved")
       signUpForm.setFieldsValue({
         saved: e.target.checked,
@@ -77,7 +77,7 @@ export function useSignUpForm(): ISignUpForm {
   const validateConfirmation = (_: unknown, value: boolean) => {
     return value
       ? Promise.resolve()
-      : Promise.reject(new Error("Confimation Required"));
+      : Promise.reject(new Error("Confirmation Required"));
   };
 
   const validateSaved = (_: unknown, value: boolean) => {
@@ -85,7 +85,7 @@ export function useSignUpForm(): ISignUpForm {
       ? Promise.resolve()
       : Promise.reject(new Error("Please save your password"));
   };
-  const formValdation: IFormValidation = {
+  const formValidation: IFormValidation = {
     username: [
       { required: true, message: "Username is required" },
       { validator: validateUsername },
@@ -102,7 +102,7 @@ export function useSignUpForm(): ISignUpForm {
       },
     ],
     passwordCheck: [
-      { required: true, message: "This feild is required" },
+      { required: true, message: "This field is required" },
       { validator: checkPasswordMatch },
     ],
     confirm: [{ validator: validateConfirmation }],
@@ -112,10 +112,10 @@ export function useSignUpForm(): ISignUpForm {
   return {
     validUser,
     handleSignUp,
-    setCheckboxVlaue,
+    setCheckboxValue,
     checkPasswordMatch,
     validateUsername,
-    formValdation,
+    formValidation,
     signUpForm,
     submitting,
     generatedPassword,
