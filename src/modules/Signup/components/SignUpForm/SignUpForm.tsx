@@ -16,8 +16,8 @@ export const SignUpForm: React.FC = () => {
   const {
     validUser,
     handleSignUp,
-    setCheckboxVlaue,
-    formValdation,
+    setCheckboxValue,
+    formValidation,
     signUpForm,
     submitting,
     generatedPassword,
@@ -34,9 +34,9 @@ export const SignUpForm: React.FC = () => {
     >
       <Styled.UsernameFormItem
         name="username"
-        rules={formValdation.username}
+        rules={formValidation.username}
         validateFirst={true}
-        validateTrigger="onBlur"
+        validateTrigger="onChange"
       >
         <Input
           placeholder="Enter username"
@@ -46,9 +46,9 @@ export const SignUpForm: React.FC = () => {
       <Styled.Label>Your auto-generated password</Styled.Label>
       <Styled.PasswordFormItem
         name="password"
-        rules={formValdation.password}
+        rules={formValidation.password}
         validateFirst={true}
-        validateTrigger="onBlur"
+        validateTrigger="onChange"
       >
         <Styled.GeneratedPassordInput
           type={isInputTypePassword ? "password" : "text"}
@@ -68,9 +68,9 @@ export const SignUpForm: React.FC = () => {
       </Styled.PasswordFormItem>
       <Styled.PasswordCheckFormItem
         name="passwordCheck"
-        rules={formValdation.passwordCheck}
+        rules={formValidation.passwordCheck}
         validateFirst={true}
-        validateTrigger="onBlur"
+        validateTrigger="onChange"
       >
         <Input.Password
           placeholder="Re-enter your auto-generated password"
@@ -80,11 +80,11 @@ export const SignUpForm: React.FC = () => {
       <InfoBar password={generatedPassword} />
       <Styled.ConfirmFormItem
         name="confirm"
-        rules={formValdation.confirm}
+        rules={formValidation.confirm}
         valuePropName="confirmed"
         className="checkbox-item"
       >
-        <Styled.Checkbox onChange={setCheckboxVlaue}>
+        <Styled.Checkbox onChange={setCheckboxValue}>
           <p className="checkbox-text">
             I understand Peerplays cannot recover my lost password
           </p>
@@ -92,11 +92,11 @@ export const SignUpForm: React.FC = () => {
       </Styled.ConfirmFormItem>
       <Styled.SavedFormItem
         name="saved"
-        rules={formValdation.saved}
+        rules={formValidation.saved}
         valuePropName="saved"
         className="checkbox-item"
       >
-        <Styled.Checkbox onChange={setCheckboxVlaue}>
+        <Styled.Checkbox onChange={setCheckboxValue}>
           <p className="checkbox-text">I have securely saved my password</p>
         </Styled.Checkbox>
       </Styled.SavedFormItem>
