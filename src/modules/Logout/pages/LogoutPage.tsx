@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import { FormDisclamer, Layout } from "../../../common/components";
 import { useAccount } from "../../../common/hooks";
+import counterpart from "counterpart";
 
 import * as Styled from "./LogoutPage.styled";
 
@@ -15,16 +16,16 @@ const LogoutPage: NextPage = () => {
   }, []);
 
   return (
-    <Layout title="Logout" type="card" heading="Logout">
+    <Layout title="Logout" type="card" heading={counterpart.translate(`transaction.pages.logout.heading`)}>
       <Styled.LogoutCard>
-        <p>You have successfully logged out</p>
+        <p>{counterpart.translate(`transaction.pages.logout.title`)}</p>
         <Link href="/login" passHref={true}>
-          <Styled.LogoutButton type="primary">Log in</Styled.LogoutButton>
+          <Styled.LogoutButton type="primary">{counterpart.translate(`transaction.buttons.login`)}</Styled.LogoutButton>
         </Link>
         <FormDisclamer>
-          <span>Don't have an account? </span>
+          <span>{counterpart.translate(`transaction.pages.login.disclaimer`)}</span>
           <Link href="/signup">
-            <a>Create account</a>
+            <a>{counterpart.translate(`transaction.links.dontHaveAccount`)}</a>
           </Link>
         </FormDisclamer>
       </Styled.LogoutCard>

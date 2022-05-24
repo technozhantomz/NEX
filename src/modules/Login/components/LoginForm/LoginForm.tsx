@@ -4,6 +4,7 @@ import { CheckOutlined, Form, Input } from "../../../../ui/src";
 
 import * as Styled from "./LoginForm.styled";
 import { useLoginForm } from "./hooks";
+import counterpart from "counterpart";
 
 export const LoginForm: React.FC = () => {
   const { validUser, loginForm, handleLogin, formValdation, submitting } =
@@ -22,7 +23,7 @@ export const LoginForm: React.FC = () => {
         validateTrigger="onBlur"
       >
         <Input
-          placeholder="Enter username"
+          placeholder={counterpart.translate(`transaction.field.labels.userName`)}
           suffix={validUser ? <CheckOutlined /> : ""}
         />
       </Form.Item>
@@ -32,7 +33,7 @@ export const LoginForm: React.FC = () => {
         validateFirst={true}
         validateTrigger="onSubmit"
       >
-        <Input.Password placeholder="Enter password" />
+        <Input.Password placeholder={counterpart.translate(`transaction.field.labels.password`)} />
       </Form.Item>
 
       <Styled.LoginButtonContainer className="form-button">
@@ -41,7 +42,7 @@ export const LoginForm: React.FC = () => {
           htmlType="submit"
           loading={submitting}
         >
-          Log in
+          {counterpart.translate(`transaction.buttons.login`)}
         </Styled.LoginButton>
       </Styled.LoginButtonContainer>
     </Styled.LoginForm>
