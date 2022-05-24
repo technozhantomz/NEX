@@ -1,6 +1,5 @@
-import { copyText } from "../../../api/utils";
+import { CopyButton } from "..";
 import { InfoCircleOutlined } from "../../../ui/src";
-import { CopyIcon } from "../../../ui/src/icons";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import { useViewportContext } from "../../providers";
 import { SidechainAcccount } from "../../types";
@@ -31,9 +30,9 @@ export const AddressGenerated = ({
       <Styled.GeneratedBitcoinAddress
         size="small"
         suffix={
-          <CopyIcon
-            onClick={() => copyText(bitcoinSidechainAccount.deposit_address)}
-          />
+          <CopyButton
+            copyValue={`${bitcoinSidechainAccount.deposit_address}`}
+          ></CopyButton>
         }
         value={bitcoinSidechainAccount.deposit_address}
         disabled

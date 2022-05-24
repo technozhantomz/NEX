@@ -7,7 +7,6 @@ import {
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
-import { CopyIcon as UiCopyIcon } from "../../../../ui/src/icons";
 
 export const KeyManagementCard = styled.div`
   .ant-form-horizontal {
@@ -84,6 +83,7 @@ export const GeneratedKeyInput = styled(UiInput.Password)`
     display: flex;
     justify-content: space-between;
     width: 38px;
+    align-items: center;
   }
   ${breakpoint.sm} {
     width: 50%;
@@ -94,11 +94,6 @@ export const GeneratedKeyInput = styled(UiInput.Password)`
       font-size: 14px;
     }
   }
-`;
-
-export const CopyIcon = styled(UiCopyIcon)`
-  color: #b9b9b9;
-  fill: #b9b9b9;
 `;
 
 export const SubmitButton = styled(CardFormButton)``;
