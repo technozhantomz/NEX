@@ -10,3 +10,4 @@ export * from "./HIVEAndHBDDeposit";
 export * from "./ActivityTable";
 export * from "./TradingPairCard";
 export * from "./TransactionModal";
+export * from "./CopyButton";
