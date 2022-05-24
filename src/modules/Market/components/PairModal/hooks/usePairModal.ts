@@ -29,6 +29,10 @@ export function usePairModal({
   const { dbApi } = usePeerplaysApiContext();
   const router = useRouter();
 
+  const handleValuesChange = useCallback(() => {
+    pairModalForm.validateFields();
+  }, [pairModalForm]);
+
   const handleCancel = useCallback(() => {
     setIsVisible(false);
   }, [setIsVisible]);
@@ -121,5 +125,6 @@ export function usePairModal({
     handleCancel,
     handleSelectPair,
     handleSelectRecent,
+    handleValuesChange,
   };
 }
