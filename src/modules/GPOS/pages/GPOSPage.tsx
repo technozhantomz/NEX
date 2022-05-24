@@ -22,7 +22,6 @@ const GPOSPage: NextPage = () => {
     isMobileDropdownvisible,
     setIsMobileDropdownvisible,
   } = useGposPage();
-
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
       {sm ? (
@@ -31,13 +30,14 @@ const GPOSPage: NextPage = () => {
             visible={isMobileDropdownvisible}
             overlay={
               <Styled.MobileTabsWrapper>
-                <Menu>
-                  <DefaultTabBar {...props}>
-                    {(node: any) => (
-                      <Menu.Item key={node.key}>{node}</Menu.Item>
-                    )}
-                  </DefaultTabBar>
-                </Menu>
+                <Menu
+                  onSelect={(item: any) => {
+                    props.onTabClick(item.key);
+                  }}
+                  items={props.panes.map((pane: any) => {
+                    return { label: pane.props.tab, key: pane.key };
+                  })}
+                />
               </Styled.MobileTabsWrapper>
             }
           >
@@ -56,6 +56,7 @@ const GPOSPage: NextPage = () => {
       )}
     </>
   );
+
   return (
     <Layout
       title="Peerplays (GPOS)"

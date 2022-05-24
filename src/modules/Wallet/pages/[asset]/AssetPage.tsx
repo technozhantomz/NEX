@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 import {
   AddressGenerated,
@@ -14,8 +15,10 @@ import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
 import {
   //useBrowserHistoryContext,
   useUserContext,
+  useViewportContext,
 } from "../../../../common/providers";
-import { Tabs } from "../../../../ui/src";
+import { SidechainAcccount } from "../../../../common/types";
+import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
 import { AssetsTable } from "../../components";
 
 import * as Styled from "./AssetPage.styled";
@@ -34,6 +37,59 @@ const AssetPage: NextPage = () => {
   } = useSidechainAccounts();
   const { localStorageAccount } = useUserContext();
   //const { pageLoading } = useBrowserHistoryContext();
+  const [visible, setVisible] = useState<boolean>(false);
+  const { sm } = useViewportContext();
+  const dropdownItems = [
+    { label: "Transfer", key: "transfer" },
+    { label: "Withdraw", key: "withdraw" },
+    { label: "Deposit", key: "deposit" },
+  ];
+  const renderTabBar = (props: any, DefaultTabBar: any) => (
+    <>
+      {sm ? (
+        <Styled.MobileDropdownWrapper>
+          <Styled.MobileDropdown
+            visible={visible}
+            overlay={
+              <Styled.MobileTabsWrapper>
+                <Menu
+                  onSelect={(item: any) => {
+                    props.onTabClick(item.key);
+                  }}
+                  items={
+                    sidechainAssets
+                      .map((sideAsset) => sideAsset.symbol)
+                      .includes(asset as string)
+                      ? dropdownItems
+                      : [{ label: "Transfer", key: "transfer" }]
+                  }
+                />
+              </Styled.MobileTabsWrapper>
+            }
+          >
+            <Button type="text" onClick={() => setVisible(!visible)}>
+              {tab ? tab : "transfer"} <DownOutlined />
+            </Button>
+          </Styled.MobileDropdown>
+          {props.extra}
+        </Styled.MobileDropdownWrapper>
+      ) : (
+        <DefaultTabBar {...props}>
+          {(node: any) => (
+            <>
+              {sidechainAssets
+                .map((sideAsset) => sideAsset.symbol)
+                .includes(asset as string)
+                ? node
+                : node.key === "transfer"
+                ? node
+                : ""}
+            </>
+          )}
+        </DefaultTabBar>
+      )}
+    </>
+  );
 
   return (
     <Layout
@@ -46,10 +102,16 @@ const AssetPage: NextPage = () => {
       {!loadingSidechainAssets && (
         <Styled.AssetCard>
           <Tabs
-            defaultActiveKey={`${tab ? tab : "transfer"}`}
-            tabBarExtraContent={<Link href="/wallet">Back to Assets</Link>}
+            renderTabBar={renderTabBar}
+            activeKey={`${tab ? tab : "transfer"}`}
+            tabBarExtraContent={
+              <span className="back-link">
+                <Link href="/wallet">Back to Assets</Link>
+              </span>
+            }
             onTabClick={(key) => {
               router.push(`/wallet/${asset}?tab=${key}`);
+              if (sm) setVisible(false);
             }}
           >
             <TabPane tab="Transfer" key="transfer">
@@ -73,7 +135,9 @@ const AssetPage: NextPage = () => {
                       {asset === "BTC" ? (
                         hasBTCDepositAddress ? (
                           <AddressGenerated
-                            bitcoinSidechainAccount={bitcoinSidechainAccount}
+                            bitcoinSidechainAccount={
+                              bitcoinSidechainAccount as SidechainAcccount
+                            }
                             getSidechainAccounts={getSidechainAccounts}
                           />
                         ) : (

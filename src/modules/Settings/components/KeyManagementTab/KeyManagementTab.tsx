@@ -1,7 +1,10 @@
 import React from "react";
 
-import { copyText } from "../../../../api/utils";
-import { PasswordModal, TransactionModal } from "../../../../common/components";
+import {
+  CopyButton,
+  PasswordModal,
+  TransactionModal,
+} from "../../../../common/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
 import { useUserContext } from "../../../../common/providers";
 import {
@@ -111,9 +114,9 @@ export const KeyManagementTab = (): JSX.Element => {
                           value={generatedKey.key}
                           iconRender={(visible = true) => (
                             <div>
-                              <Styled.CopyIcon
-                                onClick={() => copyText(generatedKey.key)}
-                              />
+                              <CopyButton
+                                copyValue={`${generatedKey.key}`}
+                              ></CopyButton>
                               {visible ? (
                                 <EyeOutlined />
                               ) : (
