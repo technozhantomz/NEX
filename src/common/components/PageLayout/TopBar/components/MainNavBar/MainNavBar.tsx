@@ -53,11 +53,11 @@ export const MainNavBar = (): JSX.Element => {
                 onMouseOver={() => openMenu("profile")}
                 onClick={() => openMenu("profile")}
               >
-                <Styled.MainNavBarAvitar
+                <Styled.MainNavBarAvatar
                   icon={localStorageAccount ? "" : <UserOutlined />}
                 >
                   {localStorageAccount ? localStorageAccount.charAt(0) : ""}
-                </Styled.MainNavBarAvitar>
+                </Styled.MainNavBarAvatar>
               </div>
             )}
           </>
