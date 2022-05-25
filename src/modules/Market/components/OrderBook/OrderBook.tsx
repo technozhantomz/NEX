@@ -36,6 +36,10 @@ type Props = {
   refreshHistory: () => void;
 };
 
+type OrderProps = {
+  id: string;
+};
+
 export const OrderBook = ({
   forUser = false,
   currentBase,
@@ -53,7 +57,7 @@ export const OrderBook = ({
   refreshOrderBook,
   refreshHistory,
 }: Props): JSX.Element => {
-  const [currentOrder, setCurrentOrder] = useState<string>("");
+  const [currentOrder, setCurrentOrder] = useState<OrderProps>({ id: "" });
 
   const {
     feeAmount,
@@ -66,7 +70,7 @@ export const OrderBook = ({
   } = useCancelLimitOrder({
     refreshOrderBook,
     refreshHistory,
-    currentOrder,
+    currentOrder: currentOrder.id,
   });
 
   const {
@@ -118,7 +122,7 @@ export const OrderBook = ({
   );
 
   useEffect(() => {
-    if (!currentOrder || currentOrder === "") return;
+    if (!currentOrder || currentOrder.id === "") return;
     console.log(currentOrder);
     showPasswordModal();
   }, [currentOrder]);
