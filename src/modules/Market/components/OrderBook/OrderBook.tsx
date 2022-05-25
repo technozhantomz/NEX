@@ -1,10 +1,20 @@
-import { Dispatch, SetStateAction } from "react";
+// import { DeleteOutlined } from "@ant-design/icons";
+import Link from "next/link";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
+import {
+  FormDisclamer,
+  PasswordModal,
+  TransactionModal,
+} from "../../../../common/components";
+import { useHandleTransactionForm } from "../../../../common/hooks";
+import { useUserContext } from "../../../../common/providers";
 import { Asset } from "../../../../common/types";
-import { DownOutlined, Tooltip } from "../../../../ui/src";
+import { DownOutlined, Form, Tooltip } from "../../../../ui/src";
 import { Order, OrderRow } from "../../types";
 
 import * as Styled from "./OrderBook.styled";
+import { useCancelLimitOrder } from "./hooks/useCancelLimitOrder";
 import { useOrderBook } from "./hooks/useOrderBook";
 import { OrderType } from "./hooks/useOrderBook.types";
 
@@ -22,14 +32,8 @@ type Props = {
   getUserOrderBook: (base: Asset, quote: Asset) => Promise<void>;
   userOrdersRows: OrderRow[];
   loadingUserOrderRows: boolean;
-};
-
-export const cancelUserOrderComponent = (): JSX.Element => {
-  return (
-    <>
-      <DeleteOutlined />
-    </>
-  );
+  refreshOrderBook: () => void;
+  refreshHistory: () => void;
 };
 
 export const OrderBook = ({
@@ -46,7 +50,38 @@ export const OrderBook = ({
   getUserOrderBook,
   userOrdersRows,
   loadingUserOrderRows,
+  refreshOrderBook,
+  refreshHistory,
 }: Props): JSX.Element => {
+  const [currentOrder, setCurrentOrder] = useState<string>("");
+
+  const {
+    feeAmount,
+    handleCancelLimitOrder,
+    setTransactionErrorMessage,
+    transactionErrorMessage,
+    setTransactionSuccessMessage,
+    transactionSuccessMessage,
+    loadingTransaction,
+  } = useCancelLimitOrder({
+    refreshOrderBook,
+    refreshHistory,
+    currentOrder,
+  });
+
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleCancelLimitOrder,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
+
   const {
     orderType,
     threshold,
@@ -63,7 +98,13 @@ export const OrderBook = ({
     bids,
     setOrdersRows,
     getUserOrderBook,
+    showPasswordModal,
+    handleFormFinish,
+    setCurrentOrder,
   });
+
+  const { localStorageAccount } = useUserContext();
+
   const dataSource = forUser ? userOrdersRows : ordersRows;
 
   const types: OrderType[] = ["total", "sell", "buy"];
@@ -75,6 +116,12 @@ export const OrderBook = ({
       <Styled.ThresholdMenu.Item key="0.01">0.01</Styled.ThresholdMenu.Item>
     </Styled.ThresholdMenu>
   );
+
+  useEffect(() => {
+    if (!currentOrder || currentOrder === "") return;
+    console.log(currentOrder);
+    showPasswordModal();
+  }, [currentOrder]);
 
   return (
     <>
@@ -129,6 +176,32 @@ export const OrderBook = ({
           }}
         ></Styled.Table>
       </Styled.TableContainer>
+      <Form.Provider onFormFinish={handleFormFinish}>
+        {localStorageAccount !== null && localStorageAccount !== "" ? (
+          ""
+        ) : (
+          <FormDisclamer>
+            <span>Don't have a Peerplays account? </span>
+            <Link href="/signup">
+              <a>Create account</a>
+            </Link>
+          </FormDisclamer>
+        )}
+        <TransactionModal
+          visible={isTransactionModalVisible}
+          onCancel={hideTransactionModal}
+          transactionErrorMessage={transactionErrorMessage}
+          transactionSuccessMessage={transactionSuccessMessage}
+          loadingTransaction={loadingTransaction}
+          account={localStorageAccount}
+          fee={feeAmount}
+          transactionType="limit_order_cancel"
+        />
+        <PasswordModal
+          visible={isPasswordModalVisible}
+          onCancel={hidePasswordModal}
+        />
+      </Form.Provider>
     </>
   );
 };

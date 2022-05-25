@@ -1,5 +1,7 @@
 import { OrderColumn, OrderType } from "../../../types";
 
+export type { OrderType } from "../../../types";
+
 export type UseOrderBookResult = {
   orderType: OrderType;
   threshold: number;

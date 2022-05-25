@@ -6,6 +6,7 @@ import { usePeerplaysApiContext, useUserContext } from "../../providers";
 import { Account, Asset, FeeParameter, GlobalProperties } from "../../types";
 
 import {
+  CancelLimitOrderFee,
   ChainOperations,
   CreateLimitOrderFee,
   UseFeesResult,
@@ -105,6 +106,18 @@ export function useFees(): UseFeesResult {
     setPrecision,
   ]);
 
+  const calculateCancelLimitOrderFee = useCallback(() => {
+    if (feeParameters.length && defaultAsset) {
+      const cancelLimitOrderFeeParameter = findOperationFee(
+        "limit_order_cancel"
+      ) as FeeParameter;
+      const cancelLimitOrderFee = cancelLimitOrderFeeParameter[1].fee as number;
+      return {
+        fee: setPrecision(false, cancelLimitOrderFee, defaultAsset.precision),
+      } as CancelLimitOrderFee;
+    }
+  }, []);
+
   const calculateCreateLimitOrderFee = useCallback(
     (base: Asset, quote: Asset) => {
       if (feeParameters.length && defaultAsset) {
@@ -183,6 +196,7 @@ export function useFees(): UseFeesResult {
     calculateTransferFee,
     calculateAccountUpgradeFee,
     calculateCreateLimitOrderFee,
+    calculateCancelLimitOrderFee,
     calculateGposVestingFee,
     calculateGposWithdrawFee,
   };

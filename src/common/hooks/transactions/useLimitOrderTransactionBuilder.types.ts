@@ -12,4 +12,8 @@ export type UseLimitOrderTransactionBuilderResult = {
     extensions: any[],
     isBuyOrder: boolean
   ) => Transaction;
+  buildCancelLimitOrderTransaction: (
+    order: string,
+    accountData: any
+  ) => Transaction;
 };
