@@ -153,11 +153,17 @@ export const en = {
     buttons: {
       logout: 'Logout',
       login: 'Log in',
+      deposit: 'Deposit',
+      withdraw: 'Withdraw',
+      market: 'Market',
+      generateBitcoinAddress: 'Generate Bitcoin address',
+      loginAndGenerateBitcoinAddress: 'Log in & Generate Bitcoin Address',
+      dontHavePeerplaysAccount: 'Dont have a Peerplays account?'
     },
     pages: {
       logout: {
         heading: 'Logout',
-        title: 'You have successfully logged out'
+        title: 'You have successfully logged out',
       },
       login: {
         heading: 'Log into your account',
@@ -166,13 +172,13 @@ export const en = {
       },
     },
     links: {
-      dontHaveAccount: 'Create account',
+      createAccount: 'Create account',
     },
     field: {
       labels: {
-        userName: "Enter Username",
-        password: "Enter Password"
-      }
-    }
+        userName: 'Enter Username',
+        password: 'Enter Password',
+      },
+    },
   },
 };

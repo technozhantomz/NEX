@@ -4,6 +4,7 @@ import React from "react";
 
 import { Form } from "../../../ui/src";
 import { PasswordModal } from "../PasswordModal";
+import counterpart from "counterpart";
 
 import * as Styled from "./GenerateBitcoinAddress.styled";
 import { useGenerateBitcoinAddress } from "./hooks";
@@ -34,7 +35,7 @@ export const GenerateBitcoinAddress = ({
           <Styled.FormItem>
             {isLoggedIn ? (
               <Styled.Button type="primary" htmlType="submit">
-                Generate Bitcoin Address
+                {counterpart.translate(`transaction.buttons.generateBitcoinAddress`)}
               </Styled.Button>
             ) : (
               <Styled.Button
@@ -44,7 +45,7 @@ export const GenerateBitcoinAddress = ({
                   router.push("/login");
                 }}
               >
-                Log in & Generate Bitcoin Address
+                {counterpart.translate(`transaction.buttons.loginAndGenerateBitcoinAddress`)}
               </Styled.Button>
             )}
           </Styled.FormItem>
@@ -60,9 +61,9 @@ export const GenerateBitcoinAddress = ({
           ""
         ) : (
           <Styled.FormDisclamer>
-            <span>Don't have a Peerplays account? </span>
+              <span>{counterpart.translate(`transaction.buttons.dontHavePeerplaysAccount`)}</span>
             <Link href="/signup">
-              <a>Create account</a>
+                <a>{counterpart.translate(`transaction.links.createAccount`)}</a>
             </Link>
           </Styled.FormDisclamer>
         )}

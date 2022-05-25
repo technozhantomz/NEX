@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Layout } from "../../../../common/components";
 import { DepositTab, MarketTab, WithdrawTab } from "../../components";
 //import { SwapTab } from "../../components/SwapTab";
+import counterpart from "counterpart";
 
 import * as Styled from "./Dashboard.styled";
 
@@ -20,10 +21,10 @@ const Dashboard: React.FC = () => {
   };
 
   const Tabs = [
-    { tabName: "Deposit" },
-    { tabName: "Withdraw" },
+    { tabName:  counterpart.translate(`transaction.buttons.deposit`)  },
+    { tabName: counterpart.translate(`transaction.buttons.withdraw`) },
     // { tabName: "Swap" },
-    { tabName: "Market" },
+    { tabName: counterpart.translate(`transaction.buttons.market`) },
   ];
   return (
     <Layout title="Dashboard">
