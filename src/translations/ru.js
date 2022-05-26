@@ -1,5 +1,3 @@
 export const ru = {
-  transaction: {
-
-  },
+  transaction: {},
 };

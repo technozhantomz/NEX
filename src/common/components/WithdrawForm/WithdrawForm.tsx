@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -35,7 +36,7 @@ export const WithdrawForm = ({
     handleAssetChange,
     submittingPassword,
   } = useWithdrawForm(asset);
-
+  const issuer = 0;
   return (
     <Form.Provider onFormFinish={onFormFinish}>
       <Styled.WithdrawForm
@@ -78,9 +79,17 @@ export const WithdrawForm = ({
               />
             </Styled.WithdrawFormAssetAmount>
             {selectedAsset === "BTC" ? (
-              <p className="label">Withdraw Public key & Address</p>
+              <p className="label">
+                {counterpart.translate(
+                  `transaction.field.labels.withdraw_public_key_address`
+                )}
+              </p>
             ) : (
-              <p className="label">Hive blockchain account</p>
+              <p className="label">
+                {counterpart.translate(
+                  `transaction.field.labels.hive_blockchain_account`
+                )}
+              </p>
             )}
           </>
         ) : (
@@ -92,7 +101,12 @@ export const WithdrawForm = ({
             validateFirst={true}
             rules={formValdation.withdrawPublicKey}
           >
-            <Input placeholder="Withdraw public key" className="form-input" />
+            <Input
+              placeholder={counterpart.translate(
+                `transaction.field.placeholder.withdraw_public_key`
+              )}
+              className="form-input"
+            />
           </Form.Item>
         ) : (
           ""
@@ -105,8 +119,12 @@ export const WithdrawForm = ({
           <Input
             placeholder={
               selectedAsset === "BTC"
-                ? "Withdraw address"
-                : "Hive blockchain account"
+                ? counterpart.translate(
+                    `transaction.field.placeholder.withdraw_address`
+                  )
+                : counterpart.translate(
+                    `transaction.field.placeholder.hive_blockchain_account`
+                  )
             }
             className="form-input"
           />
@@ -118,13 +136,19 @@ export const WithdrawForm = ({
             rules={formValdation.amount}
             validateTrigger="onBlur"
           >
-            <Input placeholder="amount" type="number" />
+            <Input
+              placeholder={counterpart.translate(
+                `transaction.field.placeholder.amount`
+              )}
+              type="number"
+            />
           </Form.Item>
         ) : (
           ""
         )}
         <Styled.Fee>
-          Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
+          {counterpart.translate(`transaction.field.labels.fees`)}: {feeAmount}{" "}
+          {defaultAsset ? defaultAsset.symbol : ""}
         </Styled.Fee>
         {status === "" ? "" : <p>{status}</p>}
 
@@ -132,7 +156,7 @@ export const WithdrawForm = ({
           {localStorageAccount && localStorageAccount !== "" ? (
             <>
               <Styled.WithdrawFormButton type="primary" htmlType="submit">
-                Withdraw
+                {counterpart.translate(`transaction.buttons.withdraw`)}
               </Styled.WithdrawFormButton>
             </>
           ) : (
@@ -144,7 +168,7 @@ export const WithdrawForm = ({
                   router.push("/login");
                 }}
               >
-                Log in & Withdraw
+                {counterpart.translate(`transaction.buttons.log_in_withdraw`)}
               </Styled.WithdrawFormButton>
             </>
           )}
@@ -154,9 +178,13 @@ export const WithdrawForm = ({
         ""
       ) : (
         <Styled.FormDisclamer>
-          <span>Don't have a Peerplays account? </span>
+          <span>
+            {counterpart.translate(
+              `transaction.buttons.dont_have_peerplays_account`
+            )}
+          </span>
           <Link href="/signup">
-            <a>Create account</a>
+            <a>{counterpart.translate(`transaction.links.create_account`)}</a>
           </Link>
         </Styled.FormDisclamer>
       )}

@@ -1,10 +1,10 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
 import { Form } from "../../../ui/src";
 import { PasswordModal } from "../PasswordModal";
-import counterpart from "counterpart";
 
 import * as Styled from "./GenerateBitcoinAddress.styled";
 import { useGenerateBitcoinAddress } from "./hooks";
@@ -35,7 +35,9 @@ export const GenerateBitcoinAddress = ({
           <Styled.FormItem>
             {isLoggedIn ? (
               <Styled.Button type="primary" htmlType="submit">
-                {counterpart.translate(`transaction.buttons.generateBitcoinAddress`)}
+                {counterpart.translate(
+                  `transaction.buttons.generate_bitcoin_address`
+                )}
               </Styled.Button>
             ) : (
               <Styled.Button
@@ -45,7 +47,9 @@ export const GenerateBitcoinAddress = ({
                   router.push("/login");
                 }}
               >
-                {counterpart.translate(`transaction.buttons.loginAndGenerateBitcoinAddress`)}
+                {counterpart.translate(
+                  `transaction.buttons.login_and_generate_bitcoin_address`
+                )}
               </Styled.Button>
             )}
           </Styled.FormItem>
@@ -61,9 +65,13 @@ export const GenerateBitcoinAddress = ({
           ""
         ) : (
           <Styled.FormDisclamer>
-              <span>{counterpart.translate(`transaction.buttons.dontHavePeerplaysAccount`)}</span>
+            <span>
+              {counterpart.translate(
+                `transaction.buttons.dont_have_peerplays_account`
+              )}
+            </span>
             <Link href="/signup">
-                <a>{counterpart.translate(`transaction.links.createAccount`)}</a>
+              <a>{counterpart.translate(`transaction.links.create_account`)}</a>
             </Link>
           </Styled.FormDisclamer>
         )}
