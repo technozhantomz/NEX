@@ -15,6 +15,8 @@ export type UsePowerDownFormResult = {
   handleWithdraw: (password: string) => Promise<void>;
   feeAmount: number;
   withdrawAmount: number;
+  newBalance: number;
+  newAvailableBalance: number;
 };
 
 export type UsePowerDownFormArgs = {

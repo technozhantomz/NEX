@@ -9,6 +9,7 @@ import {
 import {
   usePeerplaysApiContext,
   useUserContext,
+  useViewportContext,
 } from "../../../../../../../common/providers";
 import { Asset, VestingBalance } from "../../../../../../../common/types";
 import { Form } from "../../../../../../../ui/src";
@@ -29,6 +30,8 @@ export function usePowerDownForm({
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const [newBalance, setNewBalance] = useState<number>(0);
+  const [newAvailableBalance, setNewAvailableBalance] = useState<number>(0);
 
   const [powerDownForm] = Form.useForm();
   const withdrawAmount: number = Form.useWatch("withdrawAmount", powerDownForm);
@@ -38,6 +41,7 @@ export function usePowerDownForm({
   const { buildTrx } = useTransactionBuilder();
   const { getPrivateKey, formAccountBalancesByName } = useAccount();
   const { calculateGposWithdrawFee } = useFees();
+  const { sm } = useViewportContext();
 
   const handleWithdraw = useCallback(
     async (password: string) => {
@@ -67,6 +71,9 @@ export function usePowerDownForm({
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await getGposInfo();
+          powerDownForm.setFieldsValue({
+            withdrawAmount: 0,
+          });
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
             `Successfully Withdrawn ${values.withdrawAmount} ${gposBalances?.asset.precision}`
@@ -137,16 +144,24 @@ export function usePowerDownForm({
 
   useEffect(() => {
     if (gposBalances) {
-      powerDownForm.setFieldsValue({
-        openingBalance:
-          gposBalances.openingBalance + " " + gposBalances.asset.symbol,
-        availableBalance:
-          gposBalances.availableBalance + " " + gposBalances.asset.symbol,
-        newBalance:
-          gposBalances.openingBalance + " " + gposBalances.asset.symbol,
-      });
+      if (!sm) {
+        powerDownForm.setFieldsValue({
+          openingBalance:
+            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
+          availableBalance:
+            gposBalances.availableBalance + " " + gposBalances.asset.symbol,
+          newBalance:
+            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
+        });
+      } else {
+        powerDownForm.setFieldsValue({
+          openingBalance: gposBalances.asset.symbol,
+          availableBalance: gposBalances.asset.symbol,
+          newBalance: gposBalances.asset.symbol,
+        });
+      }
     }
-  }, [gposBalances, powerDownForm]);
+  }, [gposBalances, powerDownForm, sm]);
 
   useEffect(() => {
     const gposWithdrawFee = calculateGposWithdrawFee();
@@ -163,14 +178,30 @@ export function usePowerDownForm({
       const newAvailableBalance =
         (gposBalances.availableBalance as number) - withdrawAmount;
       if (newAvailableBalance >= 0) {
-        powerDownForm.setFieldsValue({
-          availableBalance:
-            newAvailableBalance + " " + gposBalances.asset.symbol,
-          newBalance: newBalance + " " + gposBalances.asset.symbol,
-        });
+        setNewBalance(newBalance);
+        setNewAvailableBalance(newAvailableBalance);
+        if (!sm) {
+          powerDownForm.setFieldsValue({
+            availableBalance:
+              newAvailableBalance + " " + gposBalances.asset.symbol,
+            newBalance: newBalance + " " + gposBalances.asset.symbol,
+          });
+        } else {
+          powerDownForm.setFieldsValue({
+            availableBalance: gposBalances.asset.symbol,
+            newBalance: gposBalances.asset.symbol,
+          });
+        }
       }
     }
-  }, [withdrawAmount, gposBalances, powerDownForm]);
+  }, [
+    withdrawAmount,
+    gposBalances,
+    powerDownForm,
+    sm,
+    setNewBalance,
+    setNewAvailableBalance,
+  ]);
 
   const formValidation = {
     withdrawAmount: [
@@ -191,5 +222,7 @@ export function usePowerDownForm({
     handleWithdraw,
     feeAmount,
     withdrawAmount,
+    newBalance,
+    newAvailableBalance,
   };
 }
