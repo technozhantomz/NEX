@@ -147,8 +147,10 @@ export const WithdrawForm = ({
           ""
         )}
         <Styled.Fee>
-          {counterpart.translate(`transaction.field.labels.fees`)}: {feeAmount}{" "}
-          {defaultAsset ? defaultAsset.symbol : ""}
+          {counterpart.translate(`transaction.field.labels.fees`, {
+            feeAmount: feeAmount,
+            defaultAsset: defaultAsset ? defaultAsset.symbol : "",
+          })}
         </Styled.Fee>
         {status === "" ? "" : <p>{status}</p>}
 

@@ -24,12 +24,10 @@ export const HIVEAndHBDDeposit = ({
             <HIVEIcon width="20px" height="20px" />
           </Styled.LogoContainer>
           <Styled.DepositInstruction>
-            {/* {`To deposit ${assetSymbol} to `}
-            <Styled.AccountContainer>{`${localStorageAccount} `}</Styled.AccountContainer>
-            please send your funds to son-account on the Hive blockchain with
-            the memo
-            <Styled.AccountContainer>{` ${localStorageAccount}`}</Styled.AccountContainer> */}
-            {counterpart.translate(`transaction.field.comments.deposit_hbd`)}
+            {counterpart.translate(`transaction.field.comments.deposit_hbd`, {
+              assetSymbol: assetSymbol,
+              accountName: localStorageAccount,
+            })}
           </Styled.DepositInstruction>
         </Styled.Container>
       ) : (

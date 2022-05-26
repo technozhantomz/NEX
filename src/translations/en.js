@@ -189,11 +189,11 @@ export const en = {
       labels: {
         withdraw_public_key_address: "Withdraw Public key & Address",
         hive_blockchain_account: "Hive blockchain account",
-        fees: "Fees",
+        fees: "Fees : %(feeAmount)s %(defaultAsset)s",
       },
       comments: {
         deposit_hbd:
-          "To deposit HBD to demo1 please send your funds to son-account on the Hive blockchain with the memo demo1",
+          "To deposit %(assetSymbol)s to %(accountName)s please send your funds to son-account on the Hive blockchain with the memo %(accountName)s",
       },
     },
   },
