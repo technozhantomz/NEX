@@ -1,3 +1,4 @@
+import { ChainValidation } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
 import { useAccount, useCreateAccount } from "../../../../../common/hooks";
@@ -70,6 +71,18 @@ export function useSignUpForm(): ISignUpForm {
     if (fullAccount) {
       return Promise.reject(new Error("Username Already taken"));
     }
+    const defaultErrors = ChainValidation.is_account_name_error(value);
+    if (defaultErrors) {
+      return Promise.reject(new Error(`${defaultErrors}`));
+    }
+    if (!ChainValidation.is_cheap_name(value)) {
+      return Promise.reject(
+        new Error(
+          "This is a premium name which is not supported by this faucet."
+        )
+      );
+    }
+
     setValidUser(true);
     return Promise.resolve();
   };
@@ -91,7 +104,7 @@ export function useSignUpForm(): ISignUpForm {
       {
         pattern: new RegExp(/^([a-z])[a-z0-9]*$/),
         message:
-          "Username should not contain capital letter or special characters or only digits",
+          "Username should start with lowercase letter and should not contain capital letter or special characters or only digits",
       },
       { validator: validateUsername },
     ],
