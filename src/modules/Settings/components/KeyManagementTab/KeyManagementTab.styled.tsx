@@ -11,7 +11,6 @@ import { colors } from "../../../../ui/src/colors";
 export const KeyManagementCard = styled.div`
   .ant-form-horizontal {
     text-align: center;
-    height: 856px;
     ${breakpoint} {
       margin-left: 30px;
       margin-right: 30px;

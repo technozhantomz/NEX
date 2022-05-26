@@ -19,7 +19,6 @@ export const GeneralSettingsCard = styled.div`
     text-align: left;
     letter-spacing: 0px;
     color: ${colors.textColor};
-    height: 500px;
     margin: 20px;
     ${breakpoint.sm} {
       margin-left: 30px;
