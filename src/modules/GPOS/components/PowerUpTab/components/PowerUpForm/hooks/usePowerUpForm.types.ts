@@ -15,6 +15,7 @@ export type UsePowerUpFormResult = {
   loadingTransaction: boolean;
   feeAmount: number;
   depositAmount: number;
+  newBalance: number;
 };
 
 export type UsePowerUpFormArgs = {

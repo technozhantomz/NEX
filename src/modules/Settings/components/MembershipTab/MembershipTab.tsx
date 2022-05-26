@@ -64,7 +64,7 @@ export const MembershipTab = (): JSX.Element => {
         >
           <Styled.Space direction="vertical">
             {!isLifetimeMember ? (
-              <Styled.Space direction="vertical">
+              <>
                 <Styled.Heading>
                   {`Upgrade for ${feesCashback}% Cashback`}
                 </Styled.Heading>
@@ -89,14 +89,14 @@ export const MembershipTab = (): JSX.Element => {
                     Buy lifetime subscription
                   </Styled.Button>
                 </Styled.ButtonContainer>
-              </Styled.Space>
+              </>
             ) : (
-              <Styled.Space direction="vertical">
+              <>
                 <Styled.Label>Your referral link</Styled.Label>
                 <Styled.Paragraph>
                   {`Give this to link to people you want to refer to Peerplays: ${link}/signup/?r=${name}`}
                 </Styled.Paragraph>
-              </Styled.Space>
+              </>
             )}
             <Styled.Heading>Fee Allocation</Styled.Heading>
             <Styled.Paragraph>
