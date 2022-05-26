@@ -66,12 +66,15 @@ export const Paragraph = styled(UiParagraph)`
   color: ${colors.textColor};
   opacity: 1;
   ${breakpoint.sm} {
-    width: 70%;
     font: normal normal normal 14px/17px Inter;
   }
 `;
 
-export const Space = styled(UiSpace)``;
+export const Space = styled(UiSpace)`
+  ${breakpoint.sm} {
+    width: 70%;
+  }
+`;
 
 export const ButtonContainer = styled.div`
   margin: 20px auto;
