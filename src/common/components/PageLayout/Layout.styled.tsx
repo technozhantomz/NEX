@@ -45,6 +45,10 @@ export const Layout = styled.main`{
   }
   &.card-layout, &.card-layout__lrg { {
     margin: 0 5%;
+    padding-bottom: 24px;
+  }
+  &.card-layout__lrg > .ant-card{
+    min-height: 661px;
   }
   ${breakpoint.sm} {
     &.card-layout {
@@ -52,8 +56,12 @@ export const Layout = styled.main`{
       max-width: 600px;
     }
     &.card-layout__lrg {
+      padding-bottom: 24px;
       margin: 0 auto;
       max-width: 1070px;
+    }
+    &.card-layout__lrg > .ant-card{
+      min-height: 856px;
     }
   }
 }

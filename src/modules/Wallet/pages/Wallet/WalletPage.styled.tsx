@@ -49,7 +49,6 @@ export const Tabs = styled(UiTabs)`
 
 export const WalletCard = styled(UiCard)`
   .ant-tabs {
-    min-height: 856px;
     border-radius: 4px;
     opacity: 1;
     max-width: 1070px;
