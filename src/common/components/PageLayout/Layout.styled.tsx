@@ -48,10 +48,12 @@ export const Layout = styled.main`{
   }
   ${breakpoint.sm} {
     &.card-layout {
+      padding: 16px;
       margin: 0 auto;
       max-width: 600px;
     }
     &.card-layout__lrg {
+      padding: 16px;
       margin: 0 auto;
       max-width: 1070px;
     }
