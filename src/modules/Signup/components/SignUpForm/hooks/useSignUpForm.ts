@@ -88,6 +88,11 @@ export function useSignUpForm(): ISignUpForm {
   const formValidation: IFormValidation = {
     username: [
       { required: true, message: "Username is required" },
+      {
+        pattern: new RegExp(/^([a-z])[a-z0-9]*$/),
+        message:
+          "Username should not contain capital letter or special characters or only digits",
+      },
       { validator: validateUsername },
     ],
     password: [
