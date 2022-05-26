@@ -62,7 +62,7 @@ export const MembershipTab = (): JSX.Element => {
           name="membershipForm"
           onFinish={showPasswordModal}
         >
-          <Styled.Space direction="vertical">
+          <Styled.InfoContainer>
             {!isLifetimeMember ? (
               <>
                 <Styled.Heading>
@@ -180,7 +180,7 @@ export const MembershipTab = (): JSX.Element => {
               (such as those paid to upgrade your membership or register a premium account name) 
               must vest for a total of ${vestingPeriod} days.`}
             </Styled.Paragraph>
-          </Styled.Space>
+          </Styled.InfoContainer>
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={hidePasswordModal}
