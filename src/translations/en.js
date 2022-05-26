@@ -178,6 +178,29 @@ export const en = {
           heading: "Choose the trading pair you want to use",
         },
       },
+      blocks: {
+        blockchain: {
+          heading: "PeerPlays Blockchain",
+          current_block: "Current Block",
+          supply: "Supply (%(symbol)s)",
+          active_witness: "Active Witness",
+          confirmation_time: "Confirmation Time",
+          search_blocks: "Search Blocks",
+          recent_blocks: "Recent Blocks",
+        },
+        assets: {
+          heading: "PeerPlays Assets",
+        },
+        committees: {
+          heading: "PeerPlays Committees",
+        },
+        witnesses: {
+          heading: "PeerPlays Witnesses",
+        },
+        fees: {
+          heading: "PeerPlays Fees",
+        },
+      },
     },
     links: {
       create_account: "Create account",
@@ -201,5 +224,11 @@ export const en = {
           "To deposit %(assetSymbol)s to %(accountName)s please send your funds to son-account on the Hive blockchain with the memo %(accountName)s",
       },
     },
+  },
+  tableHead: {
+    block_id: "Block ID",
+    time: "Time",
+    witness: "Witness",
+    transaction: "Transaction",
   },
 };
