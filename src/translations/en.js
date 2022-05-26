@@ -173,6 +173,11 @@ export const en = {
         title: "You have successfully logged out",
         dont_have_account: "Don’t have an account?",
       },
+      dashboard: {
+        marketTab: {
+          heading: "Choose the trading pair you want to use",
+        },
+      },
     },
     links: {
       create_account: "Create account",
