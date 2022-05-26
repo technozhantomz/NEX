@@ -39,6 +39,8 @@ export const PowerDownForm = ({
     loadingTransaction,
     handleWithdraw,
     feeAmount,
+    newAvailableBalance,
+    newBalance,
     withdrawAmount,
   } = usePowerDownForm({
     gposBalances,
@@ -75,13 +77,31 @@ export const PowerDownForm = ({
           }}
         >
           <Form.Item name="openingBalance" label={sm ? "Opening Balance:" : ""}>
-            <Input prefix={sm ? "" : "Opening Balance:"} disabled={true} />
+            <Input
+              prefix={
+                sm
+                  ? gposBalances
+                    ? `${gposBalances.openingBalance}`
+                    : ""
+                  : "Opening Balance:"
+              }
+              disabled={true}
+            />
           </Form.Item>
           <Form.Item
             name="availableBalance"
             label={sm ? "Available Balance:" : ""}
           >
-            <Input prefix={sm ? "" : "Available Balance:"} disabled={true} />
+            <Input
+              prefix={
+                sm
+                  ? gposBalances
+                    ? `${newAvailableBalance}`
+                    : ""
+                  : "Available Balance:"
+              }
+              disabled={true}
+            />
           </Form.Item>
           <Form.Item
             name="withdrawAmount"
@@ -105,7 +125,12 @@ export const PowerDownForm = ({
             />
           </Form.Item>
           <Form.Item name="newBalance" label={sm ? "New Balance:" : ""}>
-            <Input prefix={sm ? "" : "New Balance:"} disabled={true} />
+            <Input
+              prefix={
+                sm ? (gposBalances ? `${newBalance}` : "") : "New Balance:"
+              }
+              disabled={true}
+            />
           </Form.Item>
 
           <Form.Item>
