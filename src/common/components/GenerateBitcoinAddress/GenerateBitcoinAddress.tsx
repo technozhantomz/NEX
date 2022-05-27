@@ -35,9 +35,7 @@ export const GenerateBitcoinAddress = ({
           <Styled.FormItem>
             {isLoggedIn ? (
               <Styled.Button type="primary" htmlType="submit">
-                {counterpart.translate(
-                  `transaction.buttons.generate_bitcoin_address`
-                )}
+                {counterpart.translate(`buttons.generate_bitcoin_address`)}
               </Styled.Button>
             ) : (
               <Styled.Button
@@ -48,7 +46,7 @@ export const GenerateBitcoinAddress = ({
                 }}
               >
                 {counterpart.translate(
-                  `transaction.buttons.login_and_generate_bitcoin_address`
+                  `buttons.login_and_generate_bitcoin_address`
                 )}
               </Styled.Button>
             )}
@@ -66,12 +64,10 @@ export const GenerateBitcoinAddress = ({
         ) : (
           <Styled.FormDisclamer>
             <span>
-              {counterpart.translate(
-                `transaction.buttons.dont_have_peerplays_account`
-              )}
+              {counterpart.translate(`buttons.dont_have_peerplays_account`)}
             </span>
             <Link href="/signup">
-              <a>{counterpart.translate(`transaction.links.create_account`)}</a>
+              <a>{counterpart.translate(`links.create_account`)}</a>
             </Link>
           </Styled.FormDisclamer>
         )}

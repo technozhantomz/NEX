@@ -74,9 +74,7 @@ const Blockchain: NextPage = () => {
           }}
         >
           <TabPane
-            tab={counterpart.translate(
-              `transaction.pages.blocks.blockchain.blockchain`
-            )}
+            tab={counterpart.translate(`pages.blocks.blockchain.blockchain`)}
             key="blockchain"
           >
             {blockNumber ? (
@@ -86,31 +84,25 @@ const Blockchain: NextPage = () => {
             )}
           </TabPane>
           <TabPane
-            tab={counterpart.translate(
-              `transaction.pages.blocks.assets.assets`
-            )}
+            tab={counterpart.translate(`pages.blocks.assets.assets`)}
             key="assets"
           >
             <AssetsTab />
           </TabPane>
           <TabPane
-            tab={counterpart.translate(
-              `transaction.pages.blocks.witnesses.witnesses`
-            )}
+            tab={counterpart.translate(`pages.blocks.witnesses.witnesses`)}
             key="witnesses"
           >
             <WitnessesTab />
           </TabPane>
           <TabPane
-            tab={counterpart.translate(
-              `transaction.pages.blocks.committees.committees`
-            )}
+            tab={counterpart.translate(`pages.blocks.committees.committees`)}
             key="committees"
           >
             <CommitteeTab />
           </TabPane>
           <TabPane
-            tab={counterpart.translate(`transaction.pages.blocks.fees.fees`)}
+            tab={counterpart.translate(`pages.blocks.fees.fees`)}
             key="fees"
           >
             <FeesTab />

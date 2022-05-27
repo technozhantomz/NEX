@@ -13,16 +13,14 @@ const LoginPage: NextPage = () => {
     <Layout
       title="Login"
       type="card"
-      heading={counterpart.translate(`transaction.pages.login.heading`)}
+      heading={counterpart.translate(`pages.login.heading`)}
     >
       <Styled.LoginFormCard>
         <LoginForm />
         <Styled.FormDisclamer>
-          <span>
-            {counterpart.translate(`transaction.pages.login.dont_have_account`)}
-          </span>
+          <span>{counterpart.translate(`pages.login.dont_have_account`)}</span>
           <Link href="/signup">
-            <a>{counterpart.translate(`transaction.links.create_account`)}</a>
+            <a>{counterpart.translate(`links.create_account`)}</a>
           </Link>
         </Styled.FormDisclamer>
       </Styled.LoginFormCard>

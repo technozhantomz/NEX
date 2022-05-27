@@ -21,10 +21,10 @@ const Dashboard: React.FC = () => {
   };
 
   const Tabs = [
-    { tabName: counterpart.translate(`transaction.buttons.deposit`) },
-    { tabName: counterpart.translate(`transaction.buttons.withdraw`) },
+    { tabName: counterpart.translate(`buttons.deposit`) },
+    { tabName: counterpart.translate(`buttons.withdraw`) },
     // { tabName: "Swap" },
-    { tabName: counterpart.translate(`transaction.buttons.market`) },
+    { tabName: counterpart.translate(`buttons.market`) },
   ];
   return (
     <Layout title="Dashboard">

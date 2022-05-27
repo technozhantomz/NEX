@@ -150,91 +150,91 @@ export const en = {
       credit_offer_accept: "Accept credit offer",
       credit_deal_repay: "Repay credit deal",
     },
-    buttons: {
-      logout: "Logout",
-      login: "Log in",
-      deposit: "Deposit",
-      withdraw: "Withdraw",
-      market: "Market",
-      generate_bitcoin_address: "Generate Bitcoin address",
-      login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Address",
-      dont_have_peerplays_account: "Dont have a Peerplays account?",
-      withdraw: "Withdraw",
-      log_in_withdraw: "Log in & Withdraw",
-      log_in_deposit_hbd_hive: "Log in & Deposit",
+  },
+  buttons: {
+    logout: "Logout",
+    login: "Log in",
+    deposit: "Deposit",
+    withdraw: "Withdraw",
+    market: "Market",
+    generate_bitcoin_address: "Generate Bitcoin address",
+    login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Address",
+    dont_have_peerplays_account: "Dont have a Peerplays account?",
+    withdraw: "Withdraw",
+    log_in_withdraw: "Log in & Withdraw",
+    log_in_deposit_hbd_hive: "Log in & Deposit",
+  },
+  pages: {
+    logout: {
+      heading: "Logout",
+      title: "You have successfully logged out",
     },
-    pages: {
-      logout: {
-        heading: "Logout",
-        title: "You have successfully logged out",
-      },
-      login: {
-        heading: "Log into your account",
-        title: "You have successfully logged out",
-        dont_have_account: "Don’t have an account?",
-      },
-      dashboard: {
-        marketTab: {
-          heading: "Choose the trading pair you want to use",
-        },
-      },
-      blocks: {
-        blockchain: {
-          blockchain: "Blockchain",
-          heading: "PeerPlays Blockchain",
-          current_block: "Current Block",
-          supply: "Supply (%(symbol)s)",
-          active_witness: "Active Witness",
-          confirmation_time: "Confirmation Time",
-          search_blocks: "Search Blocks",
-          recent_blocks: "Recent Blocks",
-        },
-        assets: {
-          heading: "PeerPlays Assets",
-          assets: "Assets",
-          search_assets: "Search Assets",
-        },
-        committees: {
-          heading: "PeerPlays Committees",
-          active_committees: "Active Committees",
-          search_committees: "Search Committees",
-          committees: "Committees",
-        },
-        witnesses: {
-          heading: "PeerPlays Witnesses",
-          active_witnesses: "Active Witnesses",
-          block_reward: "Block Reward",
-          monthly_earnings: "Monthly Earnings",
-          search_witnesses: "Search Witnesses",
-          witnesses: "Witnesses",
-        },
-        fees: {
-          heading: "PeerPlays Fees",
-          fees: "Fees",
-        },
+    login: {
+      heading: "Log into your account",
+      title: "You have successfully logged out",
+      dont_have_account: "Don’t have an account?",
+    },
+    dashboard: {
+      marketTab: {
+        heading: "Choose the trading pair you want to use",
       },
     },
-    links: {
-      create_account: "Create account",
+    blocks: {
+      blockchain: {
+        blockchain: "Blockchain",
+        heading: "PeerPlays Blockchain",
+        current_block: "Current Block",
+        supply: "Supply (%(symbol)s)",
+        active_witness: "Active Witness",
+        confirmation_time: "Confirmation Time",
+        search_blocks: "Search Blocks",
+        recent_blocks: "Recent Blocks",
+      },
+      assets: {
+        heading: "PeerPlays Assets",
+        assets: "Assets",
+        search_assets: "Search Assets",
+      },
+      committees: {
+        heading: "PeerPlays Committees",
+        active_committees: "Active Committees",
+        search_committees: "Search Committees",
+        committees: "Committees",
+      },
+      witnesses: {
+        heading: "PeerPlays Witnesses",
+        active_witnesses: "Active Witnesses",
+        block_reward: "Block Reward",
+        monthly_earnings: "Monthly Earnings",
+        search_witnesses: "Search Witnesses",
+        witnesses: "Witnesses",
+      },
+      fees: {
+        heading: "PeerPlays Fees",
+        fees: "Fees",
+      },
     },
-    field: {
-      placeholder: {
-        user_name: "Enter Username",
-        password: "Enter Password",
-        withdraw_public_key: "Withdraw public key",
-        withdraw_address: "Withdraw address",
-        hive_blockchain_account: "Hive blockchain account",
-        amount: "amount",
-      },
-      labels: {
-        withdraw_public_key_address: "Withdraw Public key & Address",
-        hive_blockchain_account: "Hive blockchain account",
-        fees: "Fees : %(feeAmount)s %(defaultAsset)s",
-      },
-      comments: {
-        deposit_hbd:
-          "To deposit %(assetSymbol)s to %(accountName)s please send your funds to son-account on the Hive blockchain with the memo %(accountName)s",
-      },
+  },
+  links: {
+    create_account: "Create account",
+  },
+  field: {
+    placeholder: {
+      user_name: "Enter Username",
+      password: "Enter Password",
+      withdraw_public_key: "Withdraw public key",
+      withdraw_address: "Withdraw address",
+      hive_blockchain_account: "Hive blockchain account",
+      amount: "amount",
+    },
+    labels: {
+      withdraw_public_key_address: "Withdraw Public key & Address",
+      hive_blockchain_account: "Hive blockchain account",
+      fees: "Fees : %(feeAmount)s %(defaultAsset)s",
+    },
+    comments: {
+      deposit_hbd:
+        "To deposit %(assetSymbol)s to %(accountName)s please send your funds to son-account on the Hive blockchain with the memo %(accountName)s",
     },
   },
   tableHead: {

@@ -19,21 +19,19 @@ const LogoutPage: NextPage = () => {
     <Layout
       title="Logout"
       type="card"
-      heading={counterpart.translate(`transaction.pages.logout.heading`)}
+      heading={counterpart.translate(`pages.logout.heading`)}
     >
       <Styled.LogoutCard>
-        <p>{counterpart.translate(`transaction.pages.logout.title`)}</p>
+        <p>{counterpart.translate(`pages.logout.title`)}</p>
         <Link href="/login" passHref={true}>
           <Styled.LogoutButton type="primary">
-            {counterpart.translate(`transaction.buttons.login`)}
+            {counterpart.translate(`buttons.login`)}
           </Styled.LogoutButton>
         </Link>
         <FormDisclamer>
-          <span>
-            {counterpart.translate(`transaction.pages.login.disclaimer`)}
-          </span>
+          <span>{counterpart.translate(`pages.login.disclaimer`)}</span>
           <Link href="/signup">
-            <a>{counterpart.translate(`transaction.links.createAccount`)}</a>
+            <a>{counterpart.translate(`links.createAccount`)}</a>
           </Link>
         </FormDisclamer>
       </Styled.LogoutCard>

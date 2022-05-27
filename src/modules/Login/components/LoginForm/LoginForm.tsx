@@ -23,9 +23,7 @@ export const LoginForm: React.FC = () => {
         validateTrigger="onBlur"
       >
         <Input
-          placeholder={counterpart.translate(
-            `transaction.field.placeholder.user_name`
-          )}
+          placeholder={counterpart.translate(`field.placeholder.user_name`)}
           suffix={validUser ? <CheckOutlined /> : ""}
         />
       </Form.Item>
@@ -36,9 +34,7 @@ export const LoginForm: React.FC = () => {
         validateTrigger="onSubmit"
       >
         <Input.Password
-          placeholder={counterpart.translate(
-            `transaction.field.placeholder.password`
-          )}
+          placeholder={counterpart.translate(`field.placeholder.password`)}
         />
       </Form.Item>
 
@@ -48,7 +44,7 @@ export const LoginForm: React.FC = () => {
           htmlType="submit"
           loading={submitting}
         >
-          {counterpart.translate(`transaction.buttons.login`)}
+          {counterpart.translate(`buttons.login`)}
         </Styled.LoginButton>
       </Styled.LoginButtonContainer>
     </Styled.LoginForm>

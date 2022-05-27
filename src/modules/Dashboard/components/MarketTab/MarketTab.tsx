@@ -12,7 +12,7 @@ export const MarketTab = (): JSX.Element => {
   return (
     <Styled.MarketContainer>
       <Styled.Heading>
-        {counterpart.translate(`transaction.pages.dashboard.marketTab.heading`)}
+        {counterpart.translate(`pages.dashboard.marketTab.heading`)}
       </Styled.Heading>
       <Styled.Div>
         <Styled.Row gutter={[16, 16]}>

@@ -26,7 +26,7 @@ export const CommitteeTab = (): JSX.Element => {
         <StatsCard
           noData={activeCommittee === 0}
           title={counterpart.translate(
-            `transaction.pages.blocks.committees.active_committees`
+            `pages.blocks.committees.active_committees`
           )}
           data={`${activeCommittee}`}
           statsData={committeeStats}
@@ -35,7 +35,7 @@ export const CommitteeTab = (): JSX.Element => {
       <Styled.CommitteeSearch
         size="large"
         placeholder={counterpart.translate(
-          `transaction.pages.blocks.committees.search_committees`
+          `pages.blocks.committees.search_committees`
         )}
         onSearch={handleSearch}
         loading={loading}

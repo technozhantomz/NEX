@@ -20,18 +20,14 @@ export const AssetsTab = (): JSX.Element => {
       <Styled.StatsCardsDeck>
         <StatsCard
           noData={assetTableRows.length === 0}
-          title={counterpart.translate(
-            `transaction.pages.blocks.assets.assets`
-          )}
+          title={counterpart.translate(`pages.blocks.assets.assets`)}
           data={`${assetTableRows.length}`}
           statsData={assetsStats}
         />
       </Styled.StatsCardsDeck>
       <Styled.AssetsSearch
         size="large"
-        placeholder={counterpart.translate(
-          `transaction.pages.blocks.assets.search_assets`
-        )}
+        placeholder={counterpart.translate(`pages.blocks.assets.search_assets`)}
         onSearch={handleSearch}
         loading={loading}
       />

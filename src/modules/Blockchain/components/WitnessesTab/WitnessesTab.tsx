@@ -29,7 +29,7 @@ export const WitnessesTab = (): JSX.Element => {
         <StatsCard
           noData={activeWitnesses === 0}
           title={counterpart.translate(
-            `transaction.pages.blocks.witnesses.active_witnesses`
+            `pages.blocks.witnesses.active_witnesses`
           )}
           data={`${activeWitnesses}`}
           statsData={witnessStats.active}
@@ -37,9 +37,7 @@ export const WitnessesTab = (): JSX.Element => {
         <StatsCard
           isRewardCard
           noData={reward === 0}
-          title={counterpart.translate(
-            `transaction.pages.blocks.witnesses.block_reward`
-          )}
+          title={counterpart.translate(`pages.blocks.witnesses.block_reward`)}
           data={`${reward}`}
           statsData={witnessStats.reward}
         />
@@ -47,7 +45,7 @@ export const WitnessesTab = (): JSX.Element => {
           isRewardCard
           noData={earnings === 0}
           title={counterpart.translate(
-            `transaction.pages.blocks.witnesses.monthly_earnings`
+            `pages.blocks.witnesses.monthly_earnings`
           )}
           data={`${earnings}`}
           statsData={witnessStats.earnings}
@@ -56,7 +54,7 @@ export const WitnessesTab = (): JSX.Element => {
       <Styled.WitnessesSearch
         size="large"
         placeholder={counterpart.translate(
-          `transaction.pages.blocks.witnesses.search_witnesses`
+          `pages.blocks.witnesses.search_witnesses`
         )}
         onSearch={handleSearch}
         loading={loading}

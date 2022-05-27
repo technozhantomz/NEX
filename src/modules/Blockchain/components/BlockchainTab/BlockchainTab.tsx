@@ -20,25 +20,22 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
       <Styled.StatsCardsDeck>
         <StatsCard
           noData={blockchainData.currentBlock === 0}
-          title={counterpart.translate(
-            `transaction.pages.blocks.blockchain.current_block`
-          )}
+          title={counterpart.translate(`pages.blocks.blockchain.current_block`)}
           data={`${blockchainData.currentBlock}`}
           statsData={blockchainData.stats.blocks}
         />
         <StatsCard
           noData={blockchainData.supply.amount === 0}
-          title={counterpart.translate(
-            `transaction.pages.blocks.blockchain.supply`,
-            { symbol: blockchainData.supply.symbol }
-          )}
+          title={counterpart.translate(`pages.blocks.blockchain.supply`, {
+            symbol: blockchainData.supply.symbol,
+          })}
           data={`${blockchainData.supply.amount}`}
           statsData={blockchainData.stats.supply}
         />
         <StatsCard
           noData={blockchainData.activeWitnesses.length === 0}
           title={counterpart.translate(
-            `transaction.pages.blocks.blockchain.active_witness`
+            `pages.blocks.blockchain.active_witness`
           )}
           data={`${blockchainData.activeWitnesses.length}`}
           statsData={blockchainData.stats.witnesses}
@@ -47,7 +44,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
           isTimeCard={true}
           noData={blockchainData.avgTime === 0}
           title={counterpart.translate(
-            `transaction.pages.blocks.blockchain.confirmation_time`
+            `pages.blocks.blockchain.confirmation_time`
           )}
           data={`${blockchainData.avgTime}`}
           statsData={blockchainData.stats.times}
@@ -56,16 +53,14 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
       <Styled.BlockSearch
         size="large"
         placeholder={counterpart.translate(
-          `transaction.pages.blocks.blockchain.search_blocks`
+          `pages.blocks.blockchain.search_blocks`
         )}
         onSearch={handleSearch}
         loading={loading}
       />
       <div>
         <h3>
-          {counterpart.translate(
-            `transaction.pages.blocks.blockchain.recent_blocks`
-          )}
+          {counterpart.translate(`pages.blocks.blockchain.recent_blocks`)}
         </h3>
       </div>
       <BlockTable

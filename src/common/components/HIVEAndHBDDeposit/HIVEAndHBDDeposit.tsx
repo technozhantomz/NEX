@@ -24,7 +24,7 @@ export const HIVEAndHBDDeposit = ({
             <HIVEIcon width="20px" height="20px" />
           </Styled.LogoContainer>
           <Styled.DepositInstruction>
-            {counterpart.translate(`transaction.field.comments.deposit_hbd`, {
+            {counterpart.translate(`field.comments.deposit_hbd`, {
               assetSymbol: assetSymbol,
               accountName: localStorageAccount,
             })}
@@ -40,18 +40,16 @@ export const HIVEAndHBDDeposit = ({
             }}
           >
             {counterpart.translate(
-              `transaction.buttons.log_in_deposit_hbd_hive ${assetSymbol}`
+              `buttons.log_in_deposit_hbd_hive ${assetSymbol}`
             )}
           </Styled.Button>
 
           <Styled.FormDisclamer>
             <span>
-              {counterpart.translate(
-                `transaction.buttons.dont_have_peerplays_account`
-              )}
+              {counterpart.translate(`buttons.dont_have_peerplays_account`)}
             </span>
             <Link href="/signup">
-              <a>{counterpart.translate(`transaction.links.create_account`)}</a>
+              <a>{counterpart.translate(`links.create_account`)}</a>
             </Link>
           </Styled.FormDisclamer>
         </Styled.LoginContainer>
