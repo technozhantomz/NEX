@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 
 import { useViewportContext } from "../../../../common/providers";
@@ -19,14 +20,18 @@ export const AssetsTab = (): JSX.Element => {
       <Styled.StatsCardsDeck>
         <StatsCard
           noData={assetTableRows.length === 0}
-          title="Assets"
+          title={counterpart.translate(
+            `transaction.pages.blocks.assets.assets`
+          )}
           data={`${assetTableRows.length}`}
           statsData={assetsStats}
         />
       </Styled.StatsCardsDeck>
       <Styled.AssetsSearch
         size="large"
-        placeholder="Search Assets"
+        placeholder={counterpart.translate(
+          `transaction.pages.blocks.assets.search_assets`
+        )}
         onSearch={handleSearch}
         loading={loading}
       />

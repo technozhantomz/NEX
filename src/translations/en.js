@@ -180,6 +180,7 @@ export const en = {
       },
       blocks: {
         blockchain: {
+          blockchain: "Blockchain",
           heading: "PeerPlays Blockchain",
           current_block: "Current Block",
           supply: "Supply (%(symbol)s)",
@@ -190,15 +191,26 @@ export const en = {
         },
         assets: {
           heading: "PeerPlays Assets",
+          assets: "Assets",
+          search_assets: "Search Assets",
         },
         committees: {
           heading: "PeerPlays Committees",
+          active_committees: "Active Committees",
+          search_committees: "Search Committees",
+          committees: "Committees",
         },
         witnesses: {
           heading: "PeerPlays Witnesses",
+          active_witnesses: "Active Witnesses",
+          block_reward: "Block Reward",
+          monthly_earnings: "Monthly Earnings",
+          search_witnesses: "Search Witnesses",
+          witnesses: "Witnesses",
         },
         fees: {
           heading: "PeerPlays Fees",
+          fees: "Fees",
         },
       },
     },

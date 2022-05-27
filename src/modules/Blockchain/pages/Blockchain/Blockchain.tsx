@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -72,23 +73,46 @@ const Blockchain: NextPage = () => {
             if (sm) setVisible(false);
           }}
         >
-          <TabPane tab="Blockchain" key="blockchain">
+          <TabPane
+            tab={counterpart.translate(
+              `transaction.pages.blocks.blockchain.blockchain`
+            )}
+            key="blockchain"
+          >
             {blockNumber ? (
               <BlockDetails block={blockNumber as string} />
             ) : (
               <BlockchainTab routerQuery={router.query} />
             )}
           </TabPane>
-          <TabPane tab="Assets" key="assets">
+          <TabPane
+            tab={counterpart.translate(
+              `transaction.pages.blocks.assets.assets`
+            )}
+            key="assets"
+          >
             <AssetsTab />
           </TabPane>
-          <TabPane tab="Witnesses" key="witnesses">
+          <TabPane
+            tab={counterpart.translate(
+              `transaction.pages.blocks.witnesses.witnesses`
+            )}
+            key="witnesses"
+          >
             <WitnessesTab />
           </TabPane>
-          <TabPane tab="Committees" key="committees">
+          <TabPane
+            tab={counterpart.translate(
+              `transaction.pages.blocks.committees.committees`
+            )}
+            key="committees"
+          >
             <CommitteeTab />
           </TabPane>
-          <TabPane tab="Fees" key="fees">
+          <TabPane
+            tab={counterpart.translate(`transaction.pages.blocks.fees.fees`)}
+            key="fees"
+          >
             <FeesTab />
           </TabPane>
         </Tabs>

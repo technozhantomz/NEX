@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 
 import { useViewportContext } from "../../../../common/providers";
@@ -24,14 +25,18 @@ export const CommitteeTab = (): JSX.Element => {
       <Styled.StatsCardsDeck>
         <StatsCard
           noData={activeCommittee === 0}
-          title="Active Committees"
+          title={counterpart.translate(
+            `transaction.pages.blocks.committees.active_committees`
+          )}
           data={`${activeCommittee}`}
           statsData={committeeStats}
         />
       </Styled.StatsCardsDeck>
       <Styled.CommitteeSearch
         size="large"
-        placeholder="Search Committees"
+        placeholder={counterpart.translate(
+          `transaction.pages.blocks.committees.search_committees`
+        )}
         onSearch={handleSearch}
         loading={loading}
       />
