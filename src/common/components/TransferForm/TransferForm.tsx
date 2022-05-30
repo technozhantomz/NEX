@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import { Form, Input } from "../../../ui/src";
 import { useAsset } from "../../hooks";
 import { useUserContext } from "../../providers";
@@ -51,7 +53,10 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             rules={formValdation.amount}
             validateTrigger="onBlur"
           >
-            <Input placeholder="Quantity" type="number" />
+            <Input
+              placeholder={counterpart.translate(`field.placeholder.quantity`)}
+              type="number"
+            />
           </Form.Item>
         </div>
         <div className="two-input-row">
@@ -61,7 +66,9 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             rules={formValdation.to}
             validateTrigger="onBlur"
           >
-            <Input placeholder="To" />
+            <Input
+              placeholder={counterpart.translate(`field.placeholder.too`)}
+            />
           </Form.Item>
           <Form.Item
             name="asset"
@@ -73,17 +80,22 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             <Input disabled={true} />
           </Form.Item>
         </div>
-        <p>Only members with memo key can read your memos</p>
+        <p>{counterpart.translate(`field.comments.only_members_can_read`)}</p>
         <Form.Item name="memo" validateFirst={true} rules={formValdation.memo}>
-          <Input placeholder="Memo" />
+          <Input
+            placeholder={counterpart.translate(`field.placeholder.memo`)}
+          />
         </Form.Item>
         <p>
-          Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
+          {counterpart.translate(`field.labels.fees`, {
+            feeAmount: feeAmount,
+            defaultAsset: defaultAsset ? defaultAsset.symbol : "",
+          })}
         </p>
         {status === "" ? "" : <p>{status}</p>}
         <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">
-            Send
+            {counterpart.translate(`buttons.send`)}
           </Styled.TransferFormButton>
         </Styled.FormItem>
       </Styled.TransferForm>

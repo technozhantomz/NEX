@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -40,9 +41,12 @@ const AssetPage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
   const dropdownItems = [
-    { label: "Transfer", key: "transfer" },
-    { label: "Withdraw", key: "withdraw" },
-    { label: "Deposit", key: "deposit" },
+    {
+      label: counterpart.translate(`transaction.trxTypes.transfer`),
+      key: "transfer",
+    },
+    { label: counterpart.translate(`buttons.withdraw`), key: "withdraw" },
+    { label: counterpart.translate(`buttons.deposit`), key: "deposit" },
   ];
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
@@ -95,7 +99,7 @@ const AssetPage: NextPage = () => {
     <Layout
       title="Wallet"
       type="card-lrg"
-      heading="Wallet"
+      heading={counterpart.translate(`pages.wallet.heading`)}
       description={`Wallet Page | ${asset} ${tab}`}
       dexLayout={true}
     >
@@ -106,7 +110,9 @@ const AssetPage: NextPage = () => {
             activeKey={`${tab ? tab : "transfer"}`}
             tabBarExtraContent={
               <span className="back-link">
-                <Link href="/wallet">Back to Assets</Link>
+                <Link href="/wallet">
+                  {counterpart.translate(`pages.wallet.back_to_assets`)}
+                </Link>
               </span>
             }
             onTabClick={(key) => {
@@ -114,7 +120,10 @@ const AssetPage: NextPage = () => {
               if (sm) setVisible(false);
             }}
           >
-            <TabPane tab="Transfer" key="transfer">
+            <TabPane
+              tab={counterpart.translate(`transaction.trxTypes.transfer`)}
+              key="transfer"
+            >
               <AssetsTable showActions={false} fillterAsset={`${asset}`} />
               <TransferForm asset={`${asset}`} />
             </TabPane>
@@ -122,13 +131,19 @@ const AssetPage: NextPage = () => {
               .map((sideAsset) => sideAsset.symbol)
               .includes(asset as string) ? (
               <>
-                <TabPane tab="Withdraw" key="withdraw">
+                <TabPane
+                  tab={counterpart.translate(`buttons.withdraw`)}
+                  key="withdraw"
+                >
                   <AssetsTable showActions={false} fillterAsset={`${asset}`} />
                   <Styled.WithdrawFormWrapper>
                     <WithdrawForm asset={`${asset}`} />
                   </Styled.WithdrawFormWrapper>
                 </TabPane>
-                <TabPane tab="Deposit" key="deposit">
+                <TabPane
+                  tab={counterpart.translate(`buttons.deposit`)}
+                  key="deposit"
+                >
                   <AssetsTable showActions={false} fillterAsset={`${asset}`} />
                   {!loadingSidechainAccounts ? (
                     <Styled.AssetFormWapper>

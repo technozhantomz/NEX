@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import { useAsset } from "../../../../common/hooks";
 import { useViewportContext } from "../../../../common/providers";
 import { List } from "../../../../ui/src";
@@ -21,28 +23,32 @@ export const AssetsTable = ({
   const { sidechainAssets } = useAsset();
   const columns = [
     {
-      title: "Asset",
+      title: counterpart.translate(`tableHead.asset`),
       dataIndex: "asset",
       key: "asset",
     },
     {
-      title: "Available",
+      title: counterpart.translate(`tableHead.available`),
       dataIndex: "available",
       key: "available",
     },
-    { title: "Quote asset", dataIndex: "quoteAsset", key: "quoteAsset" },
     {
-      title: "Price",
+      title: counterpart.translate(`tableHead.quote_asset`),
+      dataIndex: "quoteAsset",
+      key: "quoteAsset",
+    },
+    {
+      title: counterpart.translate(`tableHead.price`),
       dataIndex: "price",
       key: "price",
     },
     {
-      title: "Change (24 hrs)",
+      title: counterpart.translate(`tableHead.change`),
       dataIndex: "change",
       key: "change",
     },
     {
-      title: "Volume",
+      title: counterpart.translate(`tableHead.volume`),
       dataIndex: "volume",
       key: "volume",
     },
@@ -52,7 +58,7 @@ export const AssetsTable = ({
       key: "transfer",
       render: (_value: any, record: any) => (
         <AssetActionButton
-          txt="Transfer"
+          txt={counterpart.translate(`transaction.trxTypes.transfer`)}
           href={`/wallet/${record.asset}?tab=transfer`}
         />
       ),
@@ -68,7 +74,7 @@ export const AssetsTable = ({
         if (hasWithdraw) {
           return (
             <AssetActionButton
-              txt="Withdraw"
+              txt={counterpart.translate(`buttons,withdraw`)}
               href={`/wallet/${record.asset}?tab=withdraw`}
             />
           );
@@ -88,7 +94,7 @@ export const AssetsTable = ({
         if (hasDeposit) {
           return (
             <AssetActionButton
-              txt="Deposit"
+              txt={counterpart.translate(`buttons.deposit`)}
               href={`/wallet/${record.asset}?tab=deposit`}
             />
           );
@@ -117,21 +123,25 @@ export const AssetsTable = ({
                       .includes(item.asset)
                     ? [
                         <AssetActionButton
-                          txt="Transfer"
+                          txt={counterpart.translate(
+                            `transaction.trxTypes.transfer`
+                          )}
                           href={`/wallet/${item.asset}?tab=transfer`}
                         />,
                         <AssetActionButton
-                          txt="Withdraw"
+                          txt={counterpart.translate(`buttons.withdraw`)}
                           href={`/wallet/${item.asset}?tab=withdraw`}
                         />,
                         <AssetActionButton
-                          txt="Deposit"
+                          txt={counterpart.translate(`buttons.deposit`)}
                           href={`/wallet/${item.asset}?tab=deposit`}
                         />,
                       ]
                     : [
                         <AssetActionButton
-                          txt="Transfer"
+                          txt={counterpart.translate(
+                            `transaction.trxTypes.transfer`
+                          )}
                           href={`/wallet/${item.asset}?tab=transfer`}
                         />,
                       ]

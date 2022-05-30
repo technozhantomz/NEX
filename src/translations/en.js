@@ -163,6 +163,7 @@ export const en = {
     withdraw: "Withdraw",
     log_in_withdraw: "Log in & Withdraw",
     log_in_deposit_hbd_hive: "Log in & Deposit",
+    send: "Send",
   },
   pages: {
     logout: {
@@ -228,6 +229,11 @@ export const en = {
         show_more: "Show More",
       },
     },
+    wallet: {
+      heading: "Wallet",
+      activities: "Activities",
+      back_to_assets: "Back to Assets",
+    },
   },
   links: {
     create_account: "Create account",
@@ -240,6 +246,9 @@ export const en = {
       withdraw_address: "Withdraw address",
       hive_blockchain_account: "Hive blockchain account",
       amount: "amount",
+      quantity: "Quantity",
+      to: "To",
+      memo: "Memo",
     },
     labels: {
       withdraw_public_key_address: "Withdraw Public key & Address",
@@ -249,6 +258,7 @@ export const en = {
     comments: {
       deposit_hbd:
         "To deposit %(assetSymbol)s to %(accountName)s please send your funds to son-account on the Hive blockchain with the memo %(accountName)s",
+      only_members_can_read: "Only members with memo key can read your memos",
     },
   },
   tableHead: {
@@ -256,5 +266,11 @@ export const en = {
     time: "Time",
     witness: "Witness",
     transaction: "Transaction",
+    asset: "Asset",
+    quote_asset: "Quote asset",
+    available: "Available",
+    change: "Change (24 hrs)",
+    price: "Price",
+    volume: "Volume",
   },
 };
