@@ -113,7 +113,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.Paragraph>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Network</Styled.Label> <br />
+                <Styled.Label>Network</Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{networkFee}%</Styled.PercentageText>
@@ -121,7 +121,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Lifetime Referrer</Styled.Label> <br />
+                <Styled.Label>Lifetime Referrer</Styled.Label>
                 <Link href={`/user/${lifetimeReferrerName}`}>
                   {lifetimeReferrerName}
                 </Link>
@@ -132,7 +132,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Registrar</Styled.Label> <br />
+                <Styled.Label>Registrar</Styled.Label>
                 <Link href={`/user/${registrarName}`}>{registrarName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
@@ -141,7 +141,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Affiliate Referrer</Styled.Label> <br />
+                <Styled.Label>Affiliate Referrer</Styled.Label>
                 <Link href={`/user/${referrerName}`}>{referrerName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
@@ -150,7 +150,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Membership expiration</Styled.Label> <br />
+                <Styled.Label>Membership expiration</Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{expirationDate}</Styled.PercentageText>
@@ -159,7 +159,7 @@ export const MembershipTab = (): JSX.Element => {
             <Styled.Heading>Fee statistics</Styled.Heading>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Total fees paid</Styled.Label> <br />
+                <Styled.Label>Total fees paid</Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>
