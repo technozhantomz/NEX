@@ -9,7 +9,7 @@ type Props = {
 export const ActivityTag = ({ type }: Props): JSX.Element => {
   return (
     <Tag key={type}>
-      {counterpart.translate(`transaction.trxTypes.${type}`)}
+      {counterpart.translate(`transaction.trxTypes.${type}.title`)}
     </Tag>
   );
 };

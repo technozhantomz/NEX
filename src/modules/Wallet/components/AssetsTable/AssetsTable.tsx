@@ -58,7 +58,7 @@ export const AssetsTable = ({
       key: "transfer",
       render: (_value: any, record: any) => (
         <AssetActionButton
-          txt={counterpart.translate(`transaction.trxTypes.transfer`)}
+          txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}
           href={`/wallet/${record.asset}?tab=transfer`}
         />
       ),
@@ -124,7 +124,7 @@ export const AssetsTable = ({
                     ? [
                         <AssetActionButton
                           txt={counterpart.translate(
-                            `transaction.trxTypes.transfer`
+                            `transaction.trxTypes.transfer.title`
                           )}
                           href={`/wallet/${item.asset}?tab=transfer`}
                         />,
@@ -140,7 +140,7 @@ export const AssetsTable = ({
                     : [
                         <AssetActionButton
                           txt={counterpart.translate(
-                            `transaction.trxTypes.transfer`
+                            `transaction.trxTypes.transfer.title`
                           )}
                           href={`/wallet/${item.asset}?tab=transfer`}
                         />,

@@ -42,7 +42,7 @@ const AssetPage: NextPage = () => {
   const { sm } = useViewportContext();
   const dropdownItems = [
     {
-      label: counterpart.translate(`transaction.trxTypes.transfer`),
+      label: counterpart.translate(`transaction.trxTypes.transfer.title`),
       key: "transfer",
     },
     { label: counterpart.translate(`buttons.withdraw`), key: "withdraw" },
@@ -121,7 +121,7 @@ const AssetPage: NextPage = () => {
             }}
           >
             <TabPane
-              tab={counterpart.translate(`transaction.trxTypes.transfer`)}
+              tab={counterpart.translate(`transaction.trxTypes.transfer.title`)}
               key="transfer"
             >
               <AssetsTable showActions={false} fillterAsset={`${asset}`} />

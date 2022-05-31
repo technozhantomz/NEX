@@ -150,7 +150,9 @@ export const TransactionModal = ({
         ></Styled.TransactionModalForm>
         <Styled.DetailContainer>
           <Styled.TransactionType>
-            {counterpart.translate(`transaction.trxTypes.${transactionType}`)}
+            {counterpart.translate(
+              `transaction.trxTypes.${transactionType}.title`
+            )}
           </Styled.TransactionType>
         </Styled.DetailContainer>
         {transactionDetails[transactionType] !== undefined
