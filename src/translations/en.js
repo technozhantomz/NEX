@@ -442,11 +442,14 @@ export const en = {
     market: "Market",
     generate_bitcoin_address: "Generate Bitcoin address",
     login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Address",
-    dont_have_peerplays_account: "Dont have a Peerplays account?",
-    withdraw: "Withdraw",
+    dont_have_peerplays_account: "Dont have a Peerplays account? ",
     log_in_withdraw: "Log in & Withdraw",
     log_in_deposit_hbd_hive: "Log in & Deposit",
     send: "Send",
+    ok: "Ok",
+    cancel: "Cancel",
+    buy: "Buy",
+    sell: "Sell",
   },
   pages: {
     logout: {
@@ -456,7 +459,7 @@ export const en = {
     login: {
       heading: "Log into your account",
       title: "You have successfully logged out",
-      dont_have_account: "Don’t have an account?",
+      dont_have_account: "Don’t have an account? ",
     },
     dashboard: {
       marketTab: {
@@ -517,6 +520,17 @@ export const en = {
       activities: "Activities",
       back_to_assets: "Back to Assets",
     },
+    market: {
+      heading: "Market",
+      select_pair: "Select Pair",
+      recent_pairs: "Recent Pairs",
+      order_book: "Order Book",
+      history: "History",
+      my_open_orders: "My Open Orders",
+      my_order_history: "My Order History",
+      buy: "BUY",
+      sell: "SELL",
+    },
   },
   links: {
     create_account: "Create account",
@@ -532,11 +546,15 @@ export const en = {
       quantity: "Quantity",
       to: "To",
       memo: "Memo",
+      price: "Price",
+      total: "Total",
     },
     labels: {
       withdraw_public_key_address: "Withdraw Public key & Address",
       hive_blockchain_account: "Hive blockchain account",
       fees: "Fees : %(feeAmount)s %(defaultAsset)s",
+      market_fee: "Market Fee",
+      balance: "Balance",
     },
     comments: {
       deposit_hbd:
@@ -555,6 +573,8 @@ export const en = {
     change: "Change (24 hrs)",
     price: "Price",
     volume: "Volume",
+    current_price: "Current Price",
+    market_change: "Change",
   },
   activitiesDescription: {},
 };

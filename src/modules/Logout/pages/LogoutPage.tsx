@@ -29,9 +29,9 @@ const LogoutPage: NextPage = () => {
           </Styled.LogoutButton>
         </Link>
         <FormDisclamer>
-          <span>{counterpart.translate(`pages.login.disclaimer`)}</span>
+          <span>{counterpart.translate(`pages.login.dont_have_account`)}</span>
           <Link href="/signup">
-            <a>{counterpart.translate(`links.createAccount`)}</a>
+            <a>{counterpart.translate(`links.create_account`)}</a>
           </Link>
         </FormDisclamer>
       </Styled.LogoutCard>

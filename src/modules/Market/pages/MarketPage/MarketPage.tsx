@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
@@ -54,7 +55,7 @@ const MarketPage: NextPage = () => {
     <Layout
       title="market"
       type="card-lrg"
-      heading="Market"
+      heading={counterpart.translate(`pages.market.heading`)}
       description={`Market Page | ${pair}`}
       dexLayout={true}
     >

@@ -121,7 +121,7 @@ export function useActivityTable({
           sender: `[userlink = ${sender}]`,
           amount: asset.amount,
           symbol: asset.symbol,
-          receiver: `[userlink = ${receiver}]`
+          receiver: `[userlink = ${receiver}]`,
         }
       );
     },

@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { Dispatch, SetStateAction } from "react";
 
 import { Exchanges } from "../../../../common/types";
@@ -35,7 +36,7 @@ export const PairModal = ({
   useResetFormOnOpenModal(pairModalForm, isVisible);
   return (
     <Styled.PairModal
-      title="Selet Pair"
+      title={counterpart.translate(`pages.market.select_pair`)}
       visible={isVisible}
       centered={true}
       onOk={pairModalForm.submit}
@@ -76,7 +77,7 @@ export const PairModal = ({
             ))}
           </Select>
         </Form.Item>
-        <p>Recent Pairs</p>
+        <p>{counterpart.translate(`pages.market.recent_pairs`)}</p>
         <Form.Item name="recents">
           <Select onSelect={handleSelectRecent}>
             {exchanges.list.map((pair) => (
