@@ -54,7 +54,9 @@ export const WalletCard = styled(UiCard)`
     max-width: 1070px;
   }
   .ant-table-wrapper {
+    margin-top: 20px;
     margin-left: 35px;
+    margin-right: 35px;
   }
   border-radius: 4pt;
   .ant-card-body {
