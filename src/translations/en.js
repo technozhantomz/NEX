@@ -451,6 +451,7 @@ export const en = {
     buy: "Buy",
     sell: "Sell",
     create_account: "Create account",
+    save: "Save",
   },
   pages: {
     logout: {
@@ -536,6 +537,21 @@ export const en = {
       buy: "BUY",
       sell: "SELL",
     },
+    settings: {
+      heading: "Settings",
+      general: {
+        heading: "General",
+      },
+      keyManagement: {
+        heading: "key Management",
+      },
+      security: {
+        heading: "Security",
+      },
+      membership: {
+        heading: "Membership",
+      },
+    },
   },
   links: {
     create_account: "Create account",
@@ -564,6 +580,12 @@ export const en = {
       auto_generated_password: "Your auto-generated password",
       keep_password_safe: "Keep your password safe to avoid losing any funds. ",
       download_recovery_password: "Download Recovery password file here",
+      select_language: "Select Language",
+      browser_notifications: "Browser Notifications",
+      faucet: "Faucet",
+      faucet_url: "Faucet URL: ",
+      copy_url: "Copy URL",
+      setting_saved: "Setting Saved",
     },
     comments: {
       deposit_hbd:
@@ -574,6 +596,7 @@ export const en = {
       cannot_recover_my_lost_password:
         "I understand Peerplays cannot recover my lost password",
       securely_saved_my_password: "I have securely saved my password",
+      enable_notifications: "Enable Notifications",
     },
   },
   tableHead: {
