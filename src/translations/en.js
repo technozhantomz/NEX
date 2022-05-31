@@ -450,6 +450,7 @@ export const en = {
     cancel: "Cancel",
     buy: "Buy",
     sell: "Sell",
+    create_account: "Create account",
   },
   pages: {
     logout: {
@@ -460,6 +461,10 @@ export const en = {
       heading: "Log into your account",
       title: "You have successfully logged out",
       dont_have_account: "Don’t have an account? ",
+    },
+    signUp: {
+      heading: "Create your account",
+      already_have_account: "Already have a Peerplays account? ",
     },
     dashboard: {
       marketTab: {
@@ -548,6 +553,7 @@ export const en = {
       memo: "Memo",
       price: "Price",
       total: "Total",
+      re_enter_password: "Re-enter your auto-generated password",
     },
     labels: {
       withdraw_public_key_address: "Withdraw Public key & Address",
@@ -555,11 +561,19 @@ export const en = {
       fees: "Fees : %(feeAmount)s %(defaultAsset)s",
       market_fee: "Market Fee",
       balance: "Balance",
+      auto_generated_password: "Your auto-generated password",
+      keep_password_safe: "Keep your password safe to avoid losing any funds. ",
+      download_recovery_password: "Download Recovery password file here",
     },
     comments: {
       deposit_hbd:
         "To deposit %(assetSymbol)s to %(accountName)s please send your funds to son-account on the Hive blockchain with the memo %(accountName)s",
       only_members_can_read: "Only members with memo key can read your memos",
+    },
+    checkBoxes: {
+      cannot_recover_my_lost_password:
+        "I understand Peerplays cannot recover my lost password",
+      securely_saved_my_password: "I have securely saved my password",
     },
   },
   tableHead: {

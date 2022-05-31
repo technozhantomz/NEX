@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import React from "react";
 
 import { CopyButton } from "../../../../common/components";
@@ -39,11 +40,13 @@ export const SignUpForm: React.FC = () => {
         validateTrigger="onChange"
       >
         <Input
-          placeholder="Enter username"
+          placeholder={counterpart.translate(`field.placeholder.user_name`)}
           suffix={validUser ? <CheckOutlined /> : ""}
         />
       </Styled.UsernameFormItem>
-      <Styled.Label>Your auto-generated password</Styled.Label>
+      <Styled.Label>
+        {counterpart.translate(`field.labels.auto_generated_password`)}
+      </Styled.Label>
       <Styled.PasswordFormItem
         name="password"
         rules={formValidation.password}
@@ -73,7 +76,9 @@ export const SignUpForm: React.FC = () => {
         validateTrigger="onChange"
       >
         <Input.Password
-          placeholder="Re-enter your auto-generated password"
+          placeholder={counterpart.translate(
+            `field.placeholder.re_enter_password`
+          )}
           visibilityToggle={false}
         />
       </Styled.PasswordCheckFormItem>
@@ -86,7 +91,9 @@ export const SignUpForm: React.FC = () => {
       >
         <Styled.Checkbox onChange={setCheckboxValue}>
           <p className="checkbox-text">
-            I understand Peerplays cannot recover my lost password
+            {counterpart.translate(
+              `field.checkBoxes.cannot_recover_my_lost_password`
+            )}
           </p>
         </Styled.Checkbox>
       </Styled.ConfirmFormItem>
@@ -97,7 +104,11 @@ export const SignUpForm: React.FC = () => {
         className="checkbox-item"
       >
         <Styled.Checkbox onChange={setCheckboxValue}>
-          <p className="checkbox-text">I have securely saved my password</p>
+          <p className="checkbox-text">
+            {counterpart.translate(
+              `field.checkBoxes.securely_saved_my_password`
+            )}
+          </p>
         </Styled.Checkbox>
       </Styled.SavedFormItem>
       <div>
@@ -106,7 +117,7 @@ export const SignUpForm: React.FC = () => {
           htmlType="submit"
           loading={submitting}
         >
-          Create account
+          {counterpart.translate(`buttons.create_account`)}
         </Styled.SignupFormButton>
       </div>
     </Styled.SignupForm>
