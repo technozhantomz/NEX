@@ -14,11 +14,9 @@ export const MembershipCard = styled.div`
     }
   }
   a {
-    font: normal normal normal 12px/20px Inter;
+    font-weight: 400;
+    font-size: 14px;
     letter-spacing: 0px;
-    ${breakpoint.sm} {
-      font: normal normal normal 14px/20px Inter;
-    }
   }
 `;
 
@@ -31,21 +29,19 @@ export const Heading = styled.h4`
   letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  font: normal normal medium 12px/17px Inter;
-  ${breakpoint.sm} {
-    font: normal normal medium 14px/17px Inter;
-  }
   margin-bottom: 8px;
+  ${breakpoint.sm} {
+  }
 `;
 
 export const Label = styled.p`
    {
-    font: normal normal normal 12px/17px Inter;
+    font-weight: 400;
     letter-spacing: 0px;
     color: ${colors.textColor};
+    margin-bottom: 0px;
     opacity: 1;
     ${breakpoint.sm} {
-      font: normal normal normal 14px/17px Inter;
     }
   }
 `;
@@ -53,12 +49,11 @@ export const Label = styled.p`
 export const Paragraph = styled.p`
   text-align: left;
   width: 100%;
-  font: normal normal normal 12px/17px Inter;
+  font-weight: 400;
   letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
   ${breakpoint.sm} {
-    font: normal normal normal 14px/17px Inter;
   }
 `;
 
@@ -85,12 +80,17 @@ export const Button = styled(CardFormButton)`
 `;
 
 export const PercentageText = styled.p`
+  font-size: 14px;
   margin-left: 50px;
 `;
 
 export const FeeCategoryContainer = styled.div`
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  width: 75%;
+  ${breakpoint.sm} {
+    width: 100%;
+  }
 `;
 
 export const LabelContainer = styled.div`
@@ -101,14 +101,12 @@ export const LabelContainer = styled.div`
 `;
 
 export const PercentageContainer = styled.div`
-  text-align: left;
-  font: normal normal normal 12px/17px Inter;
+  text-align: right;
   letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
   width: 50%;
   ${breakpoint.sm} {
     width: 20%;
-    font: normal normal normal 14px/17px Inter;
   }
 `;
