@@ -454,6 +454,9 @@ export const en = {
     save: "Save",
     lets_go: "Let’s Go!",
     buy_membership: "Buy Lifetime Subscription",
+    power_up: "Power Up",
+    power_down: "Power Down",
+    vote: "Vote",
   },
   pages: {
     logout: {
@@ -582,6 +585,51 @@ export const en = {
     },
     voting: {
       heading: "Voting",
+      peerplays_gpos: "PeerPlays (GPOS)",
+      peerplays_voting: "PeerPlays Voting",
+      gpos: {
+        heading: "GPOS",
+        join_gpos: "Join GPOS by transferring your PPY to your GPOS balance.",
+        consistently_participate:
+          "Consistently participate in voting for the best Witnesses, Advisors, Proposals, and SONs. Share the exciting news and DApps available on Peerplays with others.",
+        gpos_description:
+          "The more value that comes into Peerplays blockchain through its operations, the more those that participate to help make it secure will earn!",
+        rewards_label:
+          "If you want to increase your participation rewards you can do it two ways:",
+        rewards_way_first: "1. Transfer more PPY into your GPOS balance",
+        rewards_way_second: "2. Share Peerplays with others",
+        decentralized_autonomous_cooperative:
+          "Together as a Decentralized Autonomous Cooperative (DAC), we can ensure Peerplays remains the most secure provably fair blockchain globally.",
+        gpos_balance: "GPOS Balance",
+        voting_performance: "Voting Performance",
+        qualified_reward: "Qualified Reward",
+        estimated_rake_reward: "Estimated Rake Reward",
+        available_balance: "Available Balance:",
+        read_less: "Read less",
+        read_more: "Read more",
+        performance_string: {
+          max_rewards: "Max Rewards",
+          good_rewards: "Good Rewards",
+          great_rewards: "Great Rewards",
+          low_rewards: "Low Rewards",
+          ok_rewards: "OK Rewards",
+          critical_low: "Critical Low",
+          lower_rewards: "Lower Rewards",
+          no_rewards: "No Rewards",
+        },
+      },
+      sons: {
+        heading: "Sons",
+      },
+      witnesses: {
+        heading: "Witnesses",
+      },
+      proxy: {
+        heading: "Proxy",
+      },
+      committees: {
+        heading: "Committees",
+      },
     },
   },
   links: {

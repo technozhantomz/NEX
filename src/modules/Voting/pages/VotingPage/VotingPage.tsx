@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { capitalize } from "lodash";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -35,11 +36,20 @@ const VotingPage: NextPage = () => {
     getProxyAccount,
   } = useVoting();
   const dropdowItems = [
-    { label: "GPOS", key: "gpos" },
-    { label: "Witnesses", key: "witnesses" },
-    { label: "Sons", key: "sons" },
-    { label: "Committees", key: "committees" },
-    { label: "Proxy", key: "proxy" },
+    { label: counterpart.translate(`pages.voting.gpos.heading`), key: "gpos" },
+    {
+      label: counterpart.translate(`pages.voting.witnesses.heading`),
+      key: "witnesses",
+    },
+    { label: counterpart.translate(`pages.voting.sons.heading`), key: "sons" },
+    {
+      label: counterpart.translate(`pages.voting.committees.heading`),
+      key: "committees",
+    },
+    {
+      label: counterpart.translate(`pages.voting.proxy.heading`),
+      key: "proxy",
+    },
   ];
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
@@ -86,7 +96,10 @@ const VotingPage: NextPage = () => {
             if (sm) setVisible(false);
           }}
         >
-          <TabPane tab="GPOS" key="gpos">
+          <TabPane
+            tab={counterpart.translate(`pages.voting.gpos.heading`)}
+            key="gpos"
+          >
             <GPOSTab />
           </TabPane>
           {voteTabs.map((voteTab, index) => {
@@ -114,7 +127,10 @@ const VotingPage: NextPage = () => {
               </TabPane>
             );
           })}
-          <TabPane tab="Proxy" key="proxy">
+          <TabPane
+            tab={counterpart.translate(`pages.voting.proxy.heading`)}
+            key="proxy"
+          >
             <ProxyTab
               serverProxy={proxy}
               totalGpos={totalGpos}

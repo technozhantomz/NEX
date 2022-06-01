@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useRouter } from "next/router";
 
 import { useViewportContext } from "../../../../common/providers";
@@ -12,22 +13,16 @@ export const GPOSTab = (): JSX.Element => {
   const { sm } = useViewportContext();
   const ReadMoreBlock = (
     <>
-      <p>
-        The more value that comes into Peerplays blockchain through its
-        operations, the more those that participate to help make it secure will
-        earn!
-      </p>
-      <p>
-        If you want to increase your participation rewards you can do it two
-        ways:
-      </p>
+      <p>{counterpart.translate(`pages.voting.gpos.gpos_descriptions`)}</p>
+      <p>{counterpart.translate(`pages.voting.gpos.rewards_label`)}</p>
       <ul>
-        <li>1. Transfer more PPY into your GPOS balance</li>
-        <li>2. Share Peerplays with others</li>
+        <li>{counterpart.translate(`pages.voting.gpos.rewards_way_first`)}</li>
+        <li>{counterpart.translate(`pages.voting.gpos.rewards_way_second`)}</li>
       </ul>
       <p>
-        Together as a Decentralized Autonomous Cooperative (DAC), we can ensure
-        Peerplays remains the most secure provably fair blockchain globally.
+        {counterpart.translate(
+          `pages.voting.gpos.decentralized_autonomous_cooperative`
+        )}
       </p>
     </>
   );
@@ -35,19 +30,21 @@ export const GPOSTab = (): JSX.Element => {
   return (
     <Styled.GPOSTabWrapper>
       <Styled.GPOSIntro>
-        <p>Join GPOS by transferring your PPY to your GPOS balance.</p>
+        <p>{counterpart.translate(`pages.voting.gpos.join_gpos`)}</p>
         <p>
-          Consistently participate in voting for the best Witnesses, Advisors,
-          Proposals, and SONs. Share the exciting news and DApps available on
-          Peerplays with others.
+          {counterpart.translate(`pages.voting.gpos.consistently_participate`)}
         </p>
         {sm ? (
           <>
             {readMore ? <>{ReadMoreBlock}</> : ""}
             {readMore ? (
-              <a onClick={() => setReadMore(!readMore)}>Read less</a>
+              <a onClick={() => setReadMore(!readMore)}>
+                {counterpart.translate(`pages.voting.gpos.read_less`)}
+              </a>
             ) : (
-              <a onClick={() => setReadMore(!readMore)}>Read More</a>
+              <a onClick={() => setReadMore(!readMore)}>
+                {counterpart.translate(`pages.voting.gpos.read_more`)}
+              </a>
             )}
           </>
         ) : (
@@ -59,14 +56,18 @@ export const GPOSTab = (): JSX.Element => {
           <Styled.GPOSDetails>
             <ul>
               <li>
-                <Styled.GPOSDetailsTitle>GPOS Balance</Styled.GPOSDetailsTitle>
+                <Styled.GPOSDetailsTitle>
+                  {counterpart.translate(`pages.voting.gpos.gpos_balance`)}
+                </Styled.GPOSDetailsTitle>
                 <Styled.GPOSDetailsValue>
                   {GPOSInfo.gposBalance} {GPOSInfo.symbol}
                 </Styled.GPOSDetailsValue>
               </li>
               <li>
                 <Styled.GPOSDetailsTitle>
-                  Voting Performance
+                  {counterpart.translate(
+                    `pages.voting.gpos.voting_performance`
+                  )}
                 </Styled.GPOSDetailsTitle>
                 <Styled.GPOSDetailsValue
                   className={GPOSInfo.performance
@@ -78,7 +79,8 @@ export const GPOSTab = (): JSX.Element => {
               </li>
               <li>
                 <Styled.GPOSDetailsTitle>
-                  Qualified Reward %
+                  {counterpart.translate(`pages.voting.gpos.qualified_reward`)}{" "}
+                  %
                 </Styled.GPOSDetailsTitle>
                 <Styled.GPOSDetailsValue>
                   {GPOSInfo.qualifiedReward} %
@@ -86,7 +88,10 @@ export const GPOSTab = (): JSX.Element => {
               </li>
               <li>
                 <Styled.GPOSDetailsTitle>
-                  Estimated Rake Reward %
+                  {counterpart.translate(
+                    `pages.voting.gpos.estimated_rake_reward`
+                  )}{" "}
+                  %
                 </Styled.GPOSDetailsTitle>
                 <Styled.GPOSDetailsValue>
                   {GPOSInfo.rakeReward} %
@@ -95,7 +100,9 @@ export const GPOSTab = (): JSX.Element => {
             </ul>
           </Styled.GPOSDetails>
           <Styled.GPOSTotal>
-            <Styled.GPOSTotalTitle>Available Balance:</Styled.GPOSTotalTitle>
+            <Styled.GPOSTotalTitle>
+              {counterpart.translate(`pages.voting.gpos.available_balance`)}
+            </Styled.GPOSTotalTitle>
             <Styled.GPOSTotalValue>
               <span>{GPOSInfo.availableBalance}</span>
               <span>{GPOSInfo.symbol}</span>
@@ -107,19 +114,19 @@ export const GPOSTab = (): JSX.Element => {
             type="primary"
             onClick={() => router.push(`/gpos?tab=power-up`)}
           >
-            Power Up
+            {counterpart.translate(`buttons.power_up`)}
           </Styled.GPOSButton>
           <Styled.GPOSButton
             type="primary"
             onClick={() => router.push(`/gpos?tab=power-down`)}
           >
-            Power Down
+            {counterpart.translate(`buttons.power_down`)}
           </Styled.GPOSButton>
           <Styled.GPOSButton
             type="primary"
             onClick={() => router.push(`/voting?tab=witnesses`)}
           >
-            Vote
+            {counterpart.translate(`buttons.vote`)}
           </Styled.GPOSButton>
         </Styled.GPOSActions>
       </Styled.GPOSContentWrapper>

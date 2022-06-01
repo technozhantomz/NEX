@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import { utils } from "../../../../../api/utils";
@@ -36,21 +37,37 @@ export function useGPOSTab(): UseGPOSTabResult {
   const getPerformanceString = useCallback((qualifiedReward: number) => {
     switch (true) {
       case qualifiedReward === 100:
-        return "Max Rewards";
+        return counterpart.translate(
+          `pages.voting.gpos.performance_string.max_rewards`
+        );
       case qualifiedReward > 83.33 && qualifiedReward < 100:
-        return "Great Rewards";
+        return counterpart.translate(
+          `pages.voting.gpos.performance_string.great_rewards`
+        );
       case qualifiedReward > 66.66 && qualifiedReward <= 83.33:
-        return "Good Rewards";
+        return counterpart.translate(
+          `pages.voting.gpos.performance_string.good_rewards`
+        );
       case qualifiedReward > 50 && qualifiedReward <= 66.66:
-        return "OK Rewards";
+        return counterpart.translate(
+          `pages.voting.gpos.performance_string.ok_rewards`
+        );
       case qualifiedReward > 33.33 && qualifiedReward <= 50:
-        return "Low Rewards";
+        return counterpart.translate(
+          `pages.voting.gpos.performance_string.low_rewards`
+        );
       case qualifiedReward > 16.68 && qualifiedReward <= 33.33:
-        return "Lower Rewards";
+        return counterpart.translate(
+          `pages.voting.gpos.performance_string.lower_rewards`
+        );
       case qualifiedReward >= 1 && qualifiedReward <= 16.68:
-        return "Critical Low";
+        return counterpart.translate(
+          `pages.voting.gpos.performance_string.critical_low`
+        );
       default:
-        return "No Rewards";
+        return counterpart.translate(
+          `pages.voting.gpos.performance_string.no_rewards`
+        );
     }
   }, []);
 
