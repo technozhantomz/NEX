@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 
 import {
@@ -30,7 +31,9 @@ export const ProfileMenu = (): JSX.Element => {
             {localStorageAccount?.charAt(0)}
           </Styled.ProfileAvatar>
         }
-        title={`Hello ${localStorageAccount}!`}
+        title={`${counterpart.translate(
+          `field.labels.hello`
+        )} ${localStorageAccount}!`}
         description={`@${localStorageAccount}`}
       />
       <ul>
@@ -40,7 +43,7 @@ export const ProfileMenu = (): JSX.Element => {
               <MenuItem
                 href="/voting"
                 icon={<Vote className={"menu-icon"} />}
-                label="Voting"
+                label={counterpart.translate(`pages.voting.heading`)}
                 onClick={closeMenu}
               />
             </li>
@@ -56,7 +59,7 @@ export const ProfileMenu = (): JSX.Element => {
         ) : (
           <li className={"link"}>
             <Link href={`/user/${localStorageAccount}`} onClick={closeMenu}>
-              See all account activity
+              {counterpart.translate(`links.see_all_account_activity`)}
             </Link>
           </li>
         )}
@@ -65,14 +68,14 @@ export const ProfileMenu = (): JSX.Element => {
           <MenuItem
             href="/settings"
             icon={<SettingOutlined className={"menu-icon"} />}
-            label="Settings"
+            label={counterpart.translate(`pages.settings.heading`)}
             onClick={closeMenu}
           />
         </li>
         {xs ? (
           <li className={"link"}>
             <Link href={`/user/${localStorageAccount}`} onClick={closeMenu}>
-              <a>See all account activity</a>
+              <a>{counterpart.translate(`links.see_all_account_activity`)}</a>
             </Link>
           </li>
         ) : (
@@ -82,7 +85,7 @@ export const ProfileMenu = (): JSX.Element => {
           <MenuItem
             href="/logout"
             icon={<PoweroffOutlined className={"menu-icon"} />}
-            label="Logout"
+            label={counterpart.translate(`pages.logout.heading`)}
             onClick={closeMenu}
           />
         </li>

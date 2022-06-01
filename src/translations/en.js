@@ -470,11 +470,13 @@ export const en = {
       already_have_account: "Already have a Peerplays account? ",
     },
     dashboard: {
+      heading: "Dashboard",
       marketTab: {
         heading: "Choose the trading pair you want to use",
       },
     },
     blocks: {
+      heading: "Blocks",
       blockchain: {
         blockchain: "Blockchain",
         heading: "PeerPlays Blockchain",
@@ -578,9 +580,13 @@ export const en = {
           "Give this to link to people you want to refer to Peerplays: %(link)s/signup/?r=%(name)s",
       },
     },
+    voting: {
+      heading: "Voting",
+    },
   },
   links: {
     create_account: "Create account",
+    see_all_account_activity: "See all account activity",
   },
   field: {
     placeholder: {
@@ -617,6 +623,8 @@ export const en = {
       select_keys: "Select keys to be generated:",
       generated_key:
         "The %(generatedKeyLabel)s key you requested is as follows:",
+      advanced_settings: "Advanced Settings",
+      hello: "Hello",
     },
     comments: {
       deposit_hbd:
