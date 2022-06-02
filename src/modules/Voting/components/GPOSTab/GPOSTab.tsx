@@ -112,7 +112,7 @@ export const GPOSTab = (): JSX.Element => {
         <Styled.GPOSActions>
           <Styled.GPOSButton
             type="primary"
-            onClick={() => router.push(`/gpos?tab=f-up`)}
+            onClick={() => router.push(`/gpos?tab=power-up`)}
           >
             {counterpart.translate(`buttons.power_up`)}
           </Styled.GPOSButton>

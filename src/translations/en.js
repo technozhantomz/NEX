@@ -592,6 +592,9 @@ export const en = {
       heading: "Voting",
       peerplays_gpos: "PeerPlays (GPOS)",
       peerplays_voting: "PeerPlays Voting",
+      lower_case_witnesses: "witnesses",
+      lower_case_sons: "sons",
+      lower_case_committees: "committees",
       gpos: {
         heading: "GPOS",
         join_gpos: "Join GPOS by transferring your PPY to your GPOS balance.",

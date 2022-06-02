@@ -19,7 +19,11 @@ const { TabPane } = Tabs;
 const VotingPage: NextPage = () => {
   const router = useRouter();
   const [visible, setVisible] = useState<boolean>(false);
-  const voteTabs: VoteType[] = ["witnesses", "sons", "committees"];
+  const voteTabs: VoteType[] = [
+    counterpart.translate(`pages.voting.lower_case_witnesses`),
+    counterpart.translate(`pages.voting.lower_case_sons`),
+    counterpart.translate(`pages.voting.lower_case_committees`),
+  ];
   const voteIdentifiers = [1, 3, 0];
   const { tab } = router.query;
   const { pageMeta } = useVotingPageMeta(tab as string);
