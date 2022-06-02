@@ -457,6 +457,11 @@ export const en = {
     power_up: "Power Up",
     power_down: "Power Down",
     vote: "Vote",
+    vest: "Vest",
+    reset_changes: "Reset Changes",
+    publish_changes: "Publish Changes",
+    add: "Add",
+    remove: "Remove",
   },
   pages: {
     logout: {
@@ -617,6 +622,28 @@ export const en = {
           lower_rewards: "Lower Rewards",
           no_rewards: "No Rewards",
         },
+        powerUp: {
+          power_up_description:
+            "When you Power Up your PPY on the Peerplays blockchain you are taking your first steps into participating in the Decentralized Autonomous Cooperative (DAC) that is the magic in blockchain tech. This means you will:",
+          power_up_lists: {
+            first: "Become a big part of something special on a global scale",
+            second: "Earn participation rewards for your efforts",
+            third: "Bragging rights to family and friends",
+            fourth: "Stake your PPY while you participate",
+            fifth: "Help secure the Peerplays blockchain",
+          },
+        },
+        powerDown: {
+          power_down_description:
+            "When you Power Down it will take 30 days for you to withdraw your PPY balance in full. You will continue to receive participation rewards during that time so long as you have been participating. After Power Down you can then use your PPY like any other cryptocurrency. This means you will:",
+          power_down_lists: {
+            first: "Still be a part of something special, just not as much",
+            second: "No longer helping secure the Peerplays blockchain",
+            third: "No longer earn participation rewards",
+            fourth: "Lose bragging rights",
+            fifth: "Stop staking your PPY",
+          },
+        },
       },
       sons: {
         heading: "Sons",
@@ -651,6 +678,10 @@ export const en = {
       total: "Total",
       re_enter_password: "Re-enter your auto-generated password",
       confirm_password: "Confirm password",
+      opening_balance: "Opening Balance:",
+      new_balance: "New Balance:",
+      available_balance: "Available Balance:",
+      search_accounts: "Search Accounts",
     },
     labels: {
       withdraw_public_key_address: "Withdraw Public key & Address",
@@ -673,6 +704,10 @@ export const en = {
         "The %(generatedKeyLabel)s key you requested is as follows:",
       advanced_settings: "Advanced Settings",
       hello: "Hello",
+      approved_by: "Approved by %(localStorageAccount)s",
+      not_approved_by: "Approved by %(localStorageAccount)s",
+      vote_for: "Vote for %(tab)s",
+      vote_for_proxy: "Proxy your vote to other accounts",
     },
     comments: {
       deposit_hbd:

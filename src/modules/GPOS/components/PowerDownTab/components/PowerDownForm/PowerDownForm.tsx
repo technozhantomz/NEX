@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useRouter } from "next/router";
 
 import {
@@ -74,18 +75,43 @@ export const PowerDownForm = ({
             availableBalance: "",
           }}
         >
-          <Form.Item name="openingBalance" label={sm ? "Opening Balance:" : ""}>
-            <Input prefix={sm ? "" : "Opening Balance:"} disabled={true} />
+          <Form.Item
+            name="openingBalance"
+            label={
+              sm
+                ? counterpart.translate(`field.placeholder.opening_balance`)
+                : ""
+            }
+          >
+            <Input
+              prefix={
+                sm
+                  ? ""
+                  : counterpart.translate(`field.placeholder.opening_balance`)
+              }
+              disabled={true}
+            />
           </Form.Item>
           <Form.Item
             name="availableBalance"
-            label={sm ? "Available Balance:" : ""}
+            label={
+              sm
+                ? counterpart.translate(`field.placeholder.available_balance`)
+                : ""
+            }
           >
-            <Input prefix={sm ? "" : "Available Balance:"} disabled={true} />
+            <Input
+              prefix={
+                sm
+                  ? ""
+                  : counterpart.translate(`field.placeholder.available_balance`)
+              }
+              disabled={true}
+            />
           </Form.Item>
           <Form.Item
             name="withdrawAmount"
-            label="Withdraw"
+            label={counterpart.translate(`buttons.withdraw`)}
             rules={formValidation.withdrawAmount}
             validateFirst={true}
             validateTrigger="onChange"
@@ -104,13 +130,27 @@ export const PowerDownForm = ({
               }
             />
           </Form.Item>
-          <Form.Item name="newBalance" label={sm ? "New Balance:" : ""}>
-            <Input prefix={sm ? "" : "New Balance:"} disabled={true} />
+          <Form.Item
+            name="newBalance"
+            label={
+              sm
+                ? counterpart.translate(`field.placeholder.opening_balance`)
+                : ""
+            }
+          >
+            <Input
+              prefix={
+                sm
+                  ? ""
+                  : counterpart.translate(`field.placeholder.opening_balance`)
+              }
+              disabled={true}
+            />
           </Form.Item>
 
           <Form.Item>
             <Styled.PowerDownFormButton type="primary" htmlType="submit">
-              Withdraw
+              {counterpart.translate(`buttons.withdraw`)}
             </Styled.PowerDownFormButton>
           </Form.Item>
         </Styled.PowerDownForm>
@@ -134,7 +174,7 @@ export const PowerDownForm = ({
         type="link"
         onClick={() => router.push(`/voting`)}
       >
-        Cancel
+        {counterpart.translate(`buttons.cancel`)}
       </Styled.PowerDownFormButton>
     </>
   );

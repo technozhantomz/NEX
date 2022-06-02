@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useRouter } from "next/router";
 
 import {
@@ -74,12 +75,26 @@ export const PowerUpForm = ({
             newBalance: "",
           }}
         >
-          <Form.Item name="openingBalance" label={sm ? "Opening Balance:" : ""}>
-            <Input prefix={sm ? "" : "Opening Balance:"} disabled={true} />
+          <Form.Item
+            name="openingBalance"
+            label={
+              sm
+                ? counterpart.translate(`field.placeholder.opening_balance`)
+                : ""
+            }
+          >
+            <Input
+              prefix={
+                sm
+                  ? ""
+                  : counterpart.translate(`field.placeholder.opening_balance`)
+              }
+              disabled={true}
+            />
           </Form.Item>
           <Form.Item
             name="depositAmount"
-            label="Deposit"
+            label={counterpart.translate(`buttons.deposit`)}
             rules={formValidation.depositAmount}
             validateFirst={true}
             validateTrigger="onChange"
@@ -98,13 +113,23 @@ export const PowerUpForm = ({
               }
             />
           </Form.Item>
-          <Form.Item name="newBalance" label={sm ? "New Balance:" : ""}>
-            <Input prefix={sm ? "" : "New Balance:"} disabled={true} />
+          <Form.Item
+            name="newBalance"
+            label={
+              sm ? counterpart.translate(`field.placeholder.new_balance`) : ""
+            }
+          >
+            <Input
+              prefix={
+                sm ? "" : counterpart.translate(`field.placeholder.new_balance`)
+              }
+              disabled={true}
+            />
           </Form.Item>
 
           <Form.Item>
             <Styled.PowerUpFormButton type="primary" htmlType="submit">
-              Vest
+              {counterpart.translate(`buttons.vest`)}
             </Styled.PowerUpFormButton>
           </Form.Item>
         </Styled.PowerUpForm>
@@ -128,7 +153,7 @@ export const PowerUpForm = ({
         type="link"
         onClick={() => router.push(`/voting`)}
       >
-        Cancel
+        {counterpart.translate(`buttons.cancel`)}
       </Styled.PowerUpFormButton>
     </>
   );

@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import { GPOSBalances } from "../../types";
 
 import * as Styled from "./PowerDownTab.styled";
@@ -18,18 +20,36 @@ export const PowerDownTab = ({
     <Styled.PowerDownTabWrapper>
       <Styled.PowerDownTabIntro>
         <p>
-          When you Power Down it will take 30 days for you to withdraw your PPY
-          balance in full. You will continue to receive participation rewards
-          during that time so long as you have been participating. After Power
-          Down you can then use your PPY like any other cryptocurrency. This
-          means you will:
+          {counterpart.translate(
+            `pages.voting.gpos.powerDown.power_down_description`
+          )}
         </p>
         <ul>
-          <li>Still be a part of something special, just not as much</li>
-          <li>No longer helping secure the Peerplays blockchain</li>
-          <li>No longer earn participation rewards</li>
-          <li>Lose bragging rights</li>
-          <li>Stop staking your PPY</li>
+          <li>
+            {counterpart.translate(
+              `pages.voting.gpos.powerDown.power_down_lists.first`
+            )}
+          </li>
+          <li>
+            {counterpart.translate(
+              `pages.voting.gpos.powerDown.power_down_lists.second`
+            )}
+          </li>
+          <li>
+            {counterpart.translate(
+              `pages.voting.gpos.powerDown.power_down_lists.third`
+            )}
+          </li>
+          <li>
+            {counterpart.translate(
+              `pages.voting.gpos.powerDown.power_down_lists.fourth`
+            )}
+          </li>
+          <li>
+            {counterpart.translate(
+              `pages.voting.gpos.powerDown.power_down_lists.fifth`
+            )}
+          </li>
         </ul>
       </Styled.PowerDownTabIntro>
       <Styled.PowerDownTabFormWrapper>

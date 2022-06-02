@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { CSSProperties, ReactNode } from "react";
 
 import {
@@ -31,8 +32,12 @@ export const VoteTable = ({
     <Styled.VoteTableWrapper>
       <Styled.Title>
         {type === "approved"
-          ? `Approved by ${localStorageAccount} `
-          : `Not approved by ${localStorageAccount}`}
+          ? counterpart.translate(`field.labels.approved_by`, {
+              localStorageAccount,
+            })
+          : counterpart.translate(`field.labels.not_approved_by`, {
+              localStorageAccount,
+            })}
         {type === "approved" ? <Styled.Check /> : <Styled.Xmark />}
       </Styled.Title>
       <Styled.Container>
@@ -57,7 +62,9 @@ export const VoteTable = ({
                       {" "}
                       {_page > 0 ? (
                         <a style={{ marginRight: "8px" } as CSSProperties}>
-                          Previous
+                          {counterpart.translate(
+                            `pages.blocks.blockchain.previous`
+                          )}
                         </a>
                       ) : (
                         ""
@@ -67,7 +74,9 @@ export const VoteTable = ({
                 }
                 if (type === "next") {
                   return (
-                    <a style={{ marginLeft: "8px" } as CSSProperties}>Next</a>
+                    <a style={{ marginLeft: "8px" } as CSSProperties}>
+                      {counterpart.translate(`pages.blocks.blockchain.next`)}
+                    </a>
                   );
                 }
                 return element;
@@ -101,13 +110,13 @@ export const VoteTable = ({
                         <Styled.VoteActionButton
                           onClick={() => removeVote((item as VoteRow).id)}
                         >
-                          REMOVE
+                          {counterpart.translate(`buttons.remove`)}
                         </Styled.VoteActionButton>
                       ) : (
                         <Styled.VoteActionButton
                           onClick={() => approveVote((item as VoteRow).id)}
                         >
-                          ADD
+                          {counterpart.translate(`pages.blocks.blockchain.add`)}
                         </Styled.VoteActionButton>
                       )}
                     </span>
@@ -133,13 +142,17 @@ export const VoteTable = ({
                 if (type === "prev") {
                   return (
                     <a style={{ marginRight: "8px" } as CSSProperties}>
-                      Previous
+                      {counterpart.translate(
+                        `pages.blocks.blockchain.previous`
+                      )}
                     </a>
                   );
                 }
                 if (type === "next") {
                   return (
-                    <a style={{ marginLeft: "8px" } as CSSProperties}>Next</a>
+                    <a style={{ marginLeft: "8px" } as CSSProperties}>
+                      {counterpart.translate(`pages.blocks.blockchain.next`)}
+                    </a>
                   );
                 }
                 return element;
