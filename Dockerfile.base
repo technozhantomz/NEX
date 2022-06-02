@@ -1,0 +1,16 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+# cypress/browsers:node16.14.0-chrome99-ff97
+# docker build -f Dockerfile.base --build-arg BASE_IMAGE=cypress/browsers:node16.14.0-chrome99-ff97 -t lolbase . && docker run --rm -it lolbase /bin/bash
+
+# cat package*.json | sha1sum | awk '{print $1}'
+
+RUN apt-get update && apt-get install -y \
+    git
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci && npm cache clean --force
+
+
