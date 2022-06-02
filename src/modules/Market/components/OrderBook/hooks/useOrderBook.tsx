@@ -40,7 +40,6 @@ export function useOrderBook({
   bids,
   setOrdersRows,
   getUserOrderBook,
-  showPasswordModal,
   setCurrentOrder,
 }: Args): UseOrderBookResult {
   const [orderType, setOrderType] = useState<OrderType>("total");
@@ -213,7 +212,7 @@ export function useOrderBook({
                 onClick={(e: any) => {
                   // showPasswordModal();
                   e.preventDefault();
-                  setCurrentOrder({id: record.key});
+                  setCurrentOrder({ id: record.key });
                 }}
               >
                 CANCEL
