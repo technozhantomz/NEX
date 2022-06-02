@@ -62,9 +62,9 @@ export const MembershipTab = (): JSX.Element => {
           name="membershipForm"
           onFinish={showPasswordModal}
         >
-          <Styled.Space direction="vertical">
+          <Styled.InfoContainer>
             {!isLifetimeMember ? (
-              <Styled.Space direction="vertical">
+              <>
                 <Styled.Heading>
                   {`Upgrade for ${feesCashback}% Cashback`}
                 </Styled.Heading>
@@ -89,14 +89,14 @@ export const MembershipTab = (): JSX.Element => {
                     Buy lifetime subscription
                   </Styled.Button>
                 </Styled.ButtonContainer>
-              </Styled.Space>
+              </>
             ) : (
-              <Styled.Space direction="vertical">
+              <>
                 <Styled.Label>Your referral link</Styled.Label>
                 <Styled.Paragraph>
                   {`Give this to link to people you want to refer to Peerplays: ${link}/signup/?r=${name}`}
                 </Styled.Paragraph>
-              </Styled.Space>
+              </>
             )}
             <Styled.Heading>Fee Allocation</Styled.Heading>
             <Styled.Paragraph>
@@ -113,7 +113,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.Paragraph>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Network</Styled.Label> <br />
+                <Styled.Label>Network</Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{networkFee}%</Styled.PercentageText>
@@ -121,7 +121,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Lifetime Referrer</Styled.Label> <br />
+                <Styled.Label>Lifetime Referrer</Styled.Label>
                 <Link href={`/user/${lifetimeReferrerName}`}>
                   {lifetimeReferrerName}
                 </Link>
@@ -132,7 +132,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Registrar</Styled.Label> <br />
+                <Styled.Label>Registrar</Styled.Label>
                 <Link href={`/user/${registrarName}`}>{registrarName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
@@ -141,7 +141,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Affiliate Referrer</Styled.Label> <br />
+                <Styled.Label>Affiliate Referrer</Styled.Label>
                 <Link href={`/user/${referrerName}`}>{referrerName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
@@ -150,7 +150,7 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Membership expiration</Styled.Label> <br />
+                <Styled.Label>Membership expiration</Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{expirationDate}</Styled.PercentageText>
@@ -159,7 +159,7 @@ export const MembershipTab = (): JSX.Element => {
             <Styled.Heading>Fee statistics</Styled.Heading>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Total fees paid</Styled.Label> <br />
+                <Styled.Label>Total fees paid</Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>
@@ -180,7 +180,7 @@ export const MembershipTab = (): JSX.Element => {
               (such as those paid to upgrade your membership or register a premium account name) 
               must vest for a total of ${vestingPeriod} days.`}
             </Styled.Paragraph>
-          </Styled.Space>
+          </Styled.InfoContainer>
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={hidePasswordModal}

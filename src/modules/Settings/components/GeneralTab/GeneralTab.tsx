@@ -1,5 +1,4 @@
 import { defaultLocales, faucetUrl } from "../../../../api/params";
-import { copyText } from "../../../../api/utils";
 import { useSettings } from "../../hooks";
 
 import * as Styled from "./GeneralTab.styled";
@@ -48,11 +47,9 @@ export const GeneralTab = (): JSX.Element => {
           <Styled.FaucetURLWrapper>
             <Styled.FaucetURL>{`Faucet URL: ${faucetUrl}`}</Styled.FaucetURL>
             <Styled.CopyButton
-              type="link"
-              onClick={() => copyText(faucetUrl as string)}
-            >
-              Copy URL <Styled.CopyIcon />
-            </Styled.CopyButton>
+              buttonText="Copy URL"
+              copyValue={`${faucetUrl as string}`}
+            ></Styled.CopyButton>
           </Styled.FaucetURLWrapper>
           {showSuccessMessage && (
             <Styled.LabelText type="success">Setting saved!</Styled.LabelText>

@@ -84,4 +84,6 @@ export const TopBar = styled.div`
   }
 `;
 
-export const MainNavBarAvitar = styled(UiAvatar)``;
+export const MainNavBarAvatar = styled(UiAvatar)`
+  cursor: pointer;
+`;

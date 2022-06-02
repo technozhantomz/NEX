@@ -34,7 +34,13 @@ const VotingPage: NextPage = () => {
     getVotes,
     getProxyAccount,
   } = useVoting();
-
+  const dropdowItems = [
+    { label: "GPOS", key: "gpos" },
+    { label: "Witnesses", key: "witnesses" },
+    { label: "Sons", key: "sons" },
+    { label: "Committees", key: "committees" },
+    { label: "Proxy", key: "proxy" },
+  ];
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
       {sm ? (
@@ -43,18 +49,17 @@ const VotingPage: NextPage = () => {
             visible={visible}
             overlay={
               <Styled.MobileTabsWrapper>
-                <Menu>
-                  <DefaultTabBar {...props}>
-                    {(node: any) => (
-                      <Menu.Item key={node.key}>{node}</Menu.Item>
-                    )}
-                  </DefaultTabBar>
-                </Menu>
+                <Menu
+                  onSelect={(item: any) => {
+                    props.onTabClick(item.key);
+                  }}
+                  items={dropdowItems}
+                />
               </Styled.MobileTabsWrapper>
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab ? (tab as string).toUpperCase() : "GPOS"} <DownOutlined />
+              {tab ? tab : "gpos"} <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>

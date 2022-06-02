@@ -1,13 +1,12 @@
 import React from "react";
 
-import { copyText } from "../../../../api/utils";
+import { CopyButton } from "../../../../common/components";
 import {
   CheckOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
   Input,
 } from "../../../../ui/src";
-import { CopyIcon } from "../../../../ui/src/icons";
 import { InfoBar } from "../InfoBar";
 
 import * as Styled from "./SignUpForm.styled";
@@ -15,10 +14,9 @@ import { useSignUpForm } from "./hooks";
 
 export const SignUpForm: React.FC = () => {
   const {
-    validUser,
     handleSignUp,
-    setCheckboxVlaue,
-    formValdation,
+    setCheckboxValue,
+    formValidation,
     signUpForm,
     submitting,
     generatedPassword,
@@ -35,29 +33,31 @@ export const SignUpForm: React.FC = () => {
     >
       <Styled.UsernameFormItem
         name="username"
-        rules={formValdation.username}
+        rules={formValidation.username}
         validateFirst={true}
-        validateTrigger="onBlur"
+        validateTrigger="onChange"
       >
         <Input
           placeholder="Enter username"
-          suffix={validUser ? <CheckOutlined /> : ""}
+          autoComplete="off"
+          suffix={<CheckOutlined />}
         />
       </Styled.UsernameFormItem>
       <Styled.Label>Your auto-generated password</Styled.Label>
       <Styled.PasswordFormItem
         name="password"
-        rules={formValdation.password}
+        rules={formValidation.password}
         validateFirst={true}
-        validateTrigger="onBlur"
+        validateTrigger="onChange"
       >
         <Styled.GeneratedPassordInput
+          autoComplete="off"
           type={isInputTypePassword ? "password" : "text"}
           suffix={
             <div>
-              <CopyIcon
-                onClick={() => copyText(signUpForm.getFieldValue("password"))}
-              />
+              <CopyButton
+                copyValue={signUpForm.getFieldValue("password")}
+              ></CopyButton>
               {isInputTypePassword ? (
                 <EyeInvisibleOutlined onClick={handleInputType} />
               ) : (
@@ -69,11 +69,12 @@ export const SignUpForm: React.FC = () => {
       </Styled.PasswordFormItem>
       <Styled.PasswordCheckFormItem
         name="passwordCheck"
-        rules={formValdation.passwordCheck}
+        rules={formValidation.passwordCheck}
         validateFirst={true}
-        validateTrigger="onBlur"
+        validateTrigger="onChange"
       >
         <Input.Password
+          autoComplete="off"
           placeholder="Re-enter your auto-generated password"
           visibilityToggle={false}
         />
@@ -81,11 +82,11 @@ export const SignUpForm: React.FC = () => {
       <InfoBar password={generatedPassword} />
       <Styled.ConfirmFormItem
         name="confirm"
-        rules={formValdation.confirm}
+        rules={formValidation.confirm}
         valuePropName="confirmed"
         className="checkbox-item"
       >
-        <Styled.Checkbox onChange={setCheckboxVlaue}>
+        <Styled.Checkbox onChange={setCheckboxValue}>
           <p className="checkbox-text">
             I understand Peerplays cannot recover my lost password
           </p>
@@ -93,11 +94,11 @@ export const SignUpForm: React.FC = () => {
       </Styled.ConfirmFormItem>
       <Styled.SavedFormItem
         name="saved"
-        rules={formValdation.saved}
+        rules={formValidation.saved}
         valuePropName="saved"
         className="checkbox-item"
       >
-        <Styled.Checkbox onChange={setCheckboxVlaue}>
+        <Styled.Checkbox onChange={setCheckboxValue}>
           <p className="checkbox-text">I have securely saved my password</p>
         </Styled.Checkbox>
       </Styled.SavedFormItem>

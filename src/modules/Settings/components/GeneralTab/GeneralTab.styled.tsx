@@ -1,3 +1,4 @@
+import { CopyButton as UiCopyButton } from "../../../../common/components";
 import {
   CardFormButton,
   styled,
@@ -11,7 +12,6 @@ import {
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
-import { CopyIcon as UiCopyIcon } from "../../../../ui/src/icons";
 import { mixIns } from "../../../../ui/src/mixins";
 
 export const GeneralSettingsCard = styled.div`
@@ -19,7 +19,6 @@ export const GeneralSettingsCard = styled.div`
     text-align: left;
     letter-spacing: 0px;
     color: ${colors.textColor};
-    height: 500px;
     margin: 20px;
     ${breakpoint.sm} {
       margin-left: 30px;
@@ -102,19 +101,11 @@ export const SaveButton = styled(CardFormButton)`
   }
 `;
 
-export const CopyButton = styled(CardFormButton)`
-  text-align: left;
-  margin: 0;
-  padding: 0;
-  height: 17px;
-  font: normal normal normal 14px/17px Inter;
-  letter-spacing: 0px;
-  width: unset;
-`;
-
-export const CopyIcon = styled(UiCopyIcon)`
-  color: #b9b9b9;
-  fill: #b9b9b9;
+export const CopyButton = styled(UiCopyButton)`
+  margin-left: 0;
+  ${breakpoint.sm} {
+    margin-left: 15px;
+  }
 `;
 
 export const TransferCheckbox = styled(UiCheckbox)``;

@@ -1,11 +1,4 @@
-import {
-  CardFormButton,
-  styled,
-  Form as UiForm,
-  Paragraph as UiParagraph,
-  Space as UiSpace,
-  Text as UiText,
-} from "../../../../ui/src";
+import { CardFormButton, styled, Form as UiForm } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
@@ -14,20 +7,16 @@ export const MembershipCard = styled.div`
     text-align: left;
     letter-spacing: 0px;
     color: ${colors.textColor};
-    min-height: 856px;
     margin: 20px;
     ${breakpoint.sm} {
       margin-left: 30px;
       position: relative;
-      min-height: 950px;
     }
   }
   a {
-    font: normal normal normal 12px/20px Inter;
+    font-weight: 400;
+    font-size: 14px;
     letter-spacing: 0px;
-    ${breakpoint.sm} {
-      font: normal normal normal 14px/20px Inter;
-    }
   }
 `;
 
@@ -35,43 +24,44 @@ export const MembershipForm = styled(UiForm)`
   margin-top: 24px;
 `;
 
-export const Heading = styled(UiText)`
+export const Heading = styled.h4`
   text-align: left;
   letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  font: normal normal medium 12px/17px Inter;
+  margin-bottom: 8px;
   ${breakpoint.sm} {
-    font: normal normal medium 14px/17px Inter;
   }
 `;
 
-export const Label = styled(UiText)`
+export const Label = styled.p`
    {
-    font: normal normal normal 12px/17px Inter;
+    font-weight: 400;
     letter-spacing: 0px;
     color: ${colors.textColor};
+    margin-bottom: 0px;
     opacity: 1;
     ${breakpoint.sm} {
-      font: normal normal normal 14px/17px Inter;
     }
   }
 `;
 
-export const Paragraph = styled(UiParagraph)`
+export const Paragraph = styled.p`
   text-align: left;
   width: 100%;
-  font: normal normal normal 12px/17px Inter;
+  font-weight: 400;
   letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
   ${breakpoint.sm} {
-    width: 70%;
-    font: normal normal normal 14px/17px Inter;
   }
 `;
 
-export const Space = styled(UiSpace)``;
+export const InfoContainer = styled.div`
+  ${breakpoint.sm} {
+    width: 70%;
+  }
+`;
 
 export const ButtonContainer = styled.div`
   margin: 20px auto;
@@ -89,13 +79,18 @@ export const Button = styled(CardFormButton)`
   }
 `;
 
-export const PercentageText = styled(UiText)`
+export const PercentageText = styled.p`
+  font-size: 14px;
   margin-left: 50px;
 `;
 
 export const FeeCategoryContainer = styled.div`
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  width: 75%;
+  ${breakpoint.sm} {
+    width: 100%;
+  }
 `;
 
 export const LabelContainer = styled.div`
@@ -106,14 +101,12 @@ export const LabelContainer = styled.div`
 `;
 
 export const PercentageContainer = styled.div`
-  text-align: left;
-  font: normal normal normal 12px/17px Inter;
+  text-align: right;
   letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
   width: 50%;
   ${breakpoint.sm} {
     width: 20%;
-    font: normal normal normal 14px/17px Inter;
   }
 `;

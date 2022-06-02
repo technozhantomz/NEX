@@ -7,6 +7,9 @@ export const UserCard = styled(UiCard)`
   }
   ${breakpoint.sm} {
     .ant-card-body {
+      padding-left: 35px;
+      padding-right: 35px;
+      padding-top: 20px;
     }
   }
 `;

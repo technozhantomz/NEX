@@ -17,8 +17,10 @@ export const PowerUpTabWrapper = styled.div`
 `;
 
 export const PowerUpTabIntro = styled.div`
+  margin: 0 auto 25px;
   padding: 0 25px;
   ${breakpoint.sm} {
+    margin: 0 auto 0;
     padding: 20px 35px;
   }
   p,

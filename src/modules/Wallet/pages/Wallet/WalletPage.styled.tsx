@@ -1,33 +1,62 @@
-import { styled, Card as UiCard, Tabs as UiTabs } from "../../../../ui/src";
+import {
+  styled,
+  Card as UiCard,
+  Dropdown as UiDropdown,
+  Tabs as UiTabs,
+} from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
 import { mixIns } from "../../../../ui/src/mixins";
 
+export const MobileDropdownWrapper = styled.div`
+  ${mixIns.inActiveTab}
+`;
+export const MobileDropdown = styled(UiDropdown)`
+  &.ant-btn-text,
+  &.ant-btn-text:hover,
+  &.ant-btn-text:focus {
+    width: 50%;
+    text-transform: capitalize;
+    height: 50px;
+    padding: 15px 28px 10px;
+    background: ${colors.white};
+    border-bottom: 2pt solid ${colors.linkColor};
+    border-radius: 0px;
+    position: relative;
+    top: 2px;
+  }
+`;
+
+export const MobileTabsWrapper = styled.div`
+  .ant-tabs-tab {
+    color: ${colors.textColor};
+  }
+`;
+
 export const Tabs = styled(UiTabs)`
-   {
-    font-weight: 500;
-    ${breakpoint.sm} {
-      &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
-      &.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
-        width: 100%;
-      }
-      .ant-tabs-tab {
-        flex: 1 1 50%;
-        justify-content: center;
-      }
+  font-weight: 500;
+  ${breakpoint.sm} {
+    &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
+    &.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
+      width: 100%;
+    }
+    .ant-tabs-tab {
+      flex: 1 1 50%;
+      justify-content: center;
     }
   }
 `;
 
 export const WalletCard = styled(UiCard)`
   .ant-tabs {
-    min-height: 856px;
-    padding: 35px 0 0 0;
     border-radius: 4px;
     opacity: 1;
     max-width: 1070px;
   }
   .ant-table-wrapper {
+    margin-top: 20px;
     margin-left: 35px;
+    margin-right: 35px;
   }
   border-radius: 4pt;
   .ant-card-body {

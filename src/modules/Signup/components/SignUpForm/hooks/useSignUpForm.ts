@@ -1,3 +1,4 @@
+import { ChainValidation } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
 import { useAccount, useCreateAccount } from "../../../../../common/hooks";
@@ -48,7 +49,7 @@ export function useSignUpForm(): ISignUpForm {
     setIsInputTypePassword(!isInputTypePassword);
   };
 
-  const setCheckboxVlaue = (e: CheckboxChangeEvent) => {
+  const setCheckboxValue = (e: CheckboxChangeEvent) => {
     if (e.target.id === "signUpForm_saved")
       signUpForm.setFieldsValue({
         saved: e.target.checked,
@@ -70,6 +71,18 @@ export function useSignUpForm(): ISignUpForm {
     if (fullAccount) {
       return Promise.reject(new Error("Username Already taken"));
     }
+    const defaultErrors = ChainValidation.is_account_name_error(value);
+    if (defaultErrors) {
+      return Promise.reject(new Error(`${defaultErrors}`));
+    }
+    if (!ChainValidation.is_cheap_name(value)) {
+      return Promise.reject(
+        new Error(
+          "This is a premium name which is not supported by this faucet."
+        )
+      );
+    }
+
     setValidUser(true);
     return Promise.resolve();
   };
@@ -77,7 +90,7 @@ export function useSignUpForm(): ISignUpForm {
   const validateConfirmation = (_: unknown, value: boolean) => {
     return value
       ? Promise.resolve()
-      : Promise.reject(new Error("Confimation Required"));
+      : Promise.reject(new Error("Confirmation Required"));
   };
 
   const validateSaved = (_: unknown, value: boolean) => {
@@ -85,20 +98,29 @@ export function useSignUpForm(): ISignUpForm {
       ? Promise.resolve()
       : Promise.reject(new Error("Please save your password"));
   };
-  const formValdation: IFormValidation = {
+  const formValidation: IFormValidation = {
     username: [
       { required: true, message: "Username is required" },
+      {
+        pattern: new RegExp(/^([a-z])[a-z0-9]*$/),
+        message:
+          "Username should start with lowercase letter and should not contain capital letter or special characters or only digits",
+      },
       { validator: validateUsername },
     ],
     password: [
       { required: true, message: "Password is required" },
+      {
+        pattern: new RegExp(/^\S*$/),
+        message: "Password should not contain any white spaces",
+      },
       {
         min: 12,
         message: "Password should be at least 12 characters long",
       },
     ],
     passwordCheck: [
-      { required: true, message: "This feild is required" },
+      { required: true, message: "This field is required" },
       { validator: checkPasswordMatch },
     ],
     confirm: [{ validator: validateConfirmation }],
@@ -108,10 +130,10 @@ export function useSignUpForm(): ISignUpForm {
   return {
     validUser,
     handleSignUp,
-    setCheckboxVlaue,
+    setCheckboxValue,
     checkPasswordMatch,
     validateUsername,
-    formValdation,
+    formValidation,
     signUpForm,
     submitting,
     generatedPassword,

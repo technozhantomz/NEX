@@ -29,6 +29,7 @@ export const PairModal = ({
     handleCancel,
     handleSelectPair,
     handleSelectRecent,
+    handleValuesChange,
   } = usePairModal({ setIsVisible, currentPair });
 
   useResetFormOnOpenModal(pairModalForm, isVisible);
@@ -48,6 +49,7 @@ export const PairModal = ({
           quote: currentPair.split("_")[0],
           recents: exchanges.list[exchanges.list.length - 1],
         }}
+        onValuesChange={handleValuesChange}
         name="pairModal"
         size="large"
         validateTrigger="onChange"
