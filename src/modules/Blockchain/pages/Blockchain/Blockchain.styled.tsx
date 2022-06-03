@@ -29,10 +29,16 @@ export const MobileDropdown = styled(UiDropdown)`
 export const MobileTabsWrapper = styled.div`
   .ant-tabs-tab {
     color: ${colors.textColor};
+    font-weight: bold;
   }
 `;
 
 export const BlockchainCard = styled(UiCard)`
+  .ant-table-thead {
+    .ant-table-cell {
+      font-weight: bold;
+    }
+  }
   .ant-card-body {
     padding: 0;
   }
@@ -43,6 +49,7 @@ export const BlockchainCard = styled(UiCard)`
         justify-content: center;
         padding: 33px 28px 10px;
         width: 100%;
+        font-weight: bold;
       }
       .ant-tabs-top > .ant-tabs-nav::before {
         ${mixIns.inActiveTab}
