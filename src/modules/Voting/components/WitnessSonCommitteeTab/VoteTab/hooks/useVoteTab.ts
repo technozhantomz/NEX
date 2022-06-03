@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../../api/params";
@@ -169,11 +170,15 @@ export function useVoteTab({
         userDefaultAsset === undefined ||
         (userDefaultAsset.amount as number) < updateAccountFee
       ) {
-        setTransactionErrorMessage("Insufficient balance to pay the fee.");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.balance_not_enough_to_pay`)
+        );
         return;
       }
       if (totalGpos <= 0) {
-        setTransactionErrorMessage("You need to Vest some GPOS balance first");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.need_to_vest_gpos`)
+        );
         return;
       } else {
         setTransactionErrorMessage("");
@@ -184,7 +189,9 @@ export function useVoteTab({
           trxResult = await buildTrx([pendingTransaction], [activeKey]);
         } catch (error) {
           console.log(error);
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
         if (trxResult) {
@@ -193,11 +200,13 @@ export function useVoteTab({
           setIsVotesChanged(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            "You have successfully published your votes"
+            counterpart.translate(`field.errors.published_votes`)
           );
           setLoadingTransaction(false);
         } else {
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
       }

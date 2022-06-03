@@ -104,7 +104,7 @@ export const TransactionModal = ({
   return (
     <>
       <Styled.TransactionModal
-        title={counterpart.translate(`pages.modal.transaction_modal.title`)}
+        title={counterpart.translate(`pages.modal.transaction_modal.heading`)}
         visible={visible}
         onOk={() => {
           transactionModalForm.submit();

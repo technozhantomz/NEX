@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
@@ -479,7 +480,9 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
         userDefaultAsset === undefined ||
         (userDefaultAsset.amount as number) < updateAccountFee
       ) {
-        setTransactionErrorMessage("Insufficient balance to pay the fee.");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.balance_not_enough`)
+        );
         return;
       } else {
         setTransactionErrorMessage("");
@@ -494,21 +497,25 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
             : await buildTrx([pendingTransaction], [ownerPrivateKey]);
         } catch (error) {
           console.log(error);
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            "You have successfully saved your changes"
+            counterpart.translate(`field.errors.saved_changes`)
           );
           await getAccountWithPermissions();
           setIsPublishable(false);
           setLoadingTransaction(false);
           setTransactionConfirmed(true);
         } else {
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
       }
@@ -662,9 +669,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     (checkedValues: CheckboxValueType[]) => {
       setSelectedKeys(checkedValues);
       if (checkedValues.includes("memo")) {
-        setMemoWarning(
-          "WARNING: If you replace the memo key you will be unable to read old memos when logging in with your password"
-        );
+        setMemoWarning(counterpart.translate(`field.errors.memo_warning`));
       } else {
         setMemoWarning("");
       }
@@ -676,7 +681,9 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     if (selectedKeys.length > 0) {
       return Promise.resolve();
     }
-    return Promise.reject(new Error("Please at least select one role"));
+    return Promise.reject(
+      new Error(counterpart.translate(`field.errors.select_role`))
+    );
   };
 
   const checkPasswordMatch = (_: unknown, value: string) => {
@@ -684,17 +691,21 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       serverUserOwnerPermissions === undefined ||
       serverUserActivePermissions == undefined
     ) {
-      return Promise.reject(new Error("Please wait for loading user keys"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.wait_loading_keys`))
+      );
     }
     if (value !== keyManagementForm.getFieldValue("password"))
-      return Promise.reject(new Error("Password do not match"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.password_not_match`))
+      );
     const keys = useFormKeys(localStorageAccount, value);
     if (
       selectedKeys.includes("active") &&
       serverUserActivePermissions.keys.includes(keys.active as string)
     ) {
       return Promise.reject(
-        new Error("These keys are already in used for active permissions")
+        new Error(counterpart.translate(`field.errors.keys_already_used`))
       );
     }
     if (
@@ -702,7 +713,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       serverUserOwnerPermissions.keys.includes(keys.owner as string)
     ) {
       return Promise.reject(
-        new Error("These keys are already in used for owner permissions")
+        new Error(counterpart.translate(`field.errors.keys_already_used`))
       );
     }
     if (
@@ -710,7 +721,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       serverUserMemoKey === (keys.memo as string)
     ) {
       return Promise.reject(
-        new Error("These keys are already in used for memo permissions")
+        new Error(counterpart.translate(`field.errors.keys_already_used`))
       );
     }
 
@@ -719,14 +730,20 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
 
   const formValidation: FormValidation = {
     password: [
-      { required: true, message: "Password is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.password_required`),
+      },
       {
         min: 12,
-        message: "Password should be at least 12 characters long",
+        message: counterpart.translate(`field.errors.password_should_be_long`),
       },
     ],
     passwordCheck: [
-      { required: true, message: "This field is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.field_is_required`),
+      },
       { validator: checkPasswordMatch },
     ],
     roles: [{ validator: validateSelectKeys }],

@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../api/params/networkparams";
@@ -115,20 +116,26 @@ export function useTransferForm(): UseTransferFormResult {
       formAccountBalancesByName(localStorageAccount);
       setIsPasswordModalVisible(false);
       setStatus(
-        `Successfully Transfered ${values.amount} ${values.asset} to ${values.to}`
+        counterpart.translate(`field.errors.unable_transaction`, {
+          amount: values.amount,
+          asset: values.asset,
+          to: values.to,
+        })
       );
       setSubmittingPassword(false);
       transferForm.resetFields();
     } else {
       setIsPasswordModalVisible(false);
       setSubmittingPassword(false);
-      setStatus("Server error, please try again later.");
+      setStatus(counterpart.translate(`field.errors.server_error`));
     }
   };
 
   const validateFrom = async (_: unknown, value: string) => {
     if (value !== localStorageAccount)
-      return Promise.reject(new Error("Not your Account"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.not_your_account`))
+      );
     setFromAccount(await getAccountByName(value));
     return Promise.resolve();
   };
@@ -136,10 +143,14 @@ export function useTransferForm(): UseTransferFormResult {
   const validateTo = async (_: unknown, value: string) => {
     const acc = await getAccountByName(value);
     if (value === localStorageAccount) {
-      return Promise.reject(new Error("Can not send to yourself"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.cannot_send_yourself`))
+      );
     }
     if (!acc) {
-      return Promise.reject(new Error("User not found"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.user_not_found`))
+      );
     }
     if (
       sonAccount &&
@@ -147,7 +158,9 @@ export function useTransferForm(): UseTransferFormResult {
     ) {
       const sonNetworkStatus = await getSonNetworkStatus();
       if (!sonNetworkStatus.isSonNetworkOk) {
-        return Promise.reject(new Error("SONs network is not available now"));
+        return Promise.reject(
+          new Error(counterpart.translate(`field.errors.sons_not_available`))
+        );
       }
     }
     setToAccount(acc);
@@ -161,16 +174,22 @@ export function useTransferForm(): UseTransferFormResult {
       (asset) => asset.symbol === selectedAsset
     );
     if (Number(value) <= 0) {
-      return Promise.reject(new Error("Amount should be greater than 0"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.amount_should_greater`))
+      );
     }
     if (!selectedAccountAsset) {
-      return Promise.reject(new Error("Balance is not enough"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.balance_not_enough`))
+      );
     }
 
     if (isDefaultAsset) {
       const total = Number(value) + feeAmount;
       if ((selectedAccountAsset.amount as number) < total) {
-        return Promise.reject(new Error("Balance is not enough"));
+        return Promise.reject(
+          new Error(counterpart.translate(`field.errors.balance_not_enough`))
+        );
       }
       return Promise.resolve();
     } else {
@@ -178,16 +197,22 @@ export function useTransferForm(): UseTransferFormResult {
         (asset) => asset.symbol === defaultToken
       );
       if ((selectedAccountAsset.amount as number) < value) {
-        return Promise.reject(new Error("Balance is not enough"));
+        return Promise.reject(
+          new Error(counterpart.translate(`field.errors.balance_not_enough`))
+        );
       }
       if (!accountDefaultAsset) {
         return Promise.reject(
-          new Error("Balance is not enough to pay the fee")
+          new Error(
+            counterpart.translate(`field.errors.balance_not_enough_to_pay`)
+          )
         );
       }
       if ((accountDefaultAsset.amount as number) < feeAmount) {
         return Promise.reject(
-          new Error("Balance is not enough to pay the fee")
+          new Error(
+            counterpart.translate(`field.errors.balance_not_enough_to_pay`)
+          )
         );
       }
       return Promise.resolve();
@@ -204,18 +229,32 @@ export function useTransferForm(): UseTransferFormResult {
 
   const formValdation = {
     from: [
-      { required: true, message: "From is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.from_required`),
+      },
       { validator: validateFrom },
     ],
     to: [
-      { required: true, message: "To is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.to_required`),
+      },
       { validator: validateTo },
     ],
     amount: [
-      { required: true, message: "Amount is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.amount_required`),
+      },
       { validator: validateAmount },
     ],
-    asset: [{ required: true, message: "Asset is required" }],
+    asset: [
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.asset_required`),
+      },
+    ],
     memo: [{ validator: validateMemo }],
   };
 

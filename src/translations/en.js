@@ -665,10 +665,10 @@ export const en = {
     },
     modal: {
       transaction_modal: {
-        title: "Please confirm the transaction",
+        heading: "Please confirm the transaction",
       },
       password_modal: {
-        title: "Password",
+        heading: "Password",
       },
     },
   },
@@ -722,6 +722,17 @@ export const en = {
       vote_for: "Vote for %(tab)s",
       vote_for_proxy: "Proxy your vote to other accounts",
       not_available: "Not available",
+      account_name: "Account name",
+      true: "True",
+      proxy_voting_account: "Proxy Voting Account",
+      no_proxy: "No Proxy",
+      fee: "Fee",
+      account_to_upgrade: "Account to upgrade",
+      upgrade_lifetime: "Upgrade to lifetime member",
+      buy_at_least: "Buy at least",
+      seller: "seller",
+      vesting_amount: "Vesting amount",
+      withdrawal_amount: "Withdrawal amount",
     },
     comments: {
       deposit_hbd:
@@ -733,6 +744,65 @@ export const en = {
         "I understand Peerplays cannot recover my lost password",
       securely_saved_my_password: "I have securely saved my password",
       enable_notifications: "Enable Notifications",
+    },
+    errors: {
+      user_not_found: "User not found",
+      password_incorrect: "Password incorrect",
+      username_required: "Username is required",
+      password_required: "Password is required",
+      password_should_be_long: "Password should be at least 12 characters long",
+      password_not_match: "Password do not match",
+      username_taken: "Username Already taken",
+      confirmation_rquired: "Confirmation Required",
+      save_your_password: "Please save your password",
+      password_white_space: "Password should not contain any white spaces",
+      field_is_required: "This field is required",
+      server_error: "Server error, please try again later.",
+      successfully_withdraw: "Successfully withdraw",
+      amount_should_greater: "Amount should be greater than 0",
+      balance_not_enough: "Balance is not enough",
+      balance_not_enough_to_pay: "Balance is not enough to pay the fee",
+      not_your_account: "Not your Account",
+      sons_not_available: "SONs network is not available now",
+      first_generate_bitcoin_address:
+        "Please first generate bitcoin addresses at deposit tab",
+      from_required: "From is required",
+      to_required: "To is required",
+      amount_requireds: "Amount is required",
+      withdraw_add_required: "Withdraw address is required",
+      withdraw_pub_key_required: "Withdraw public key is required",
+      sons_not_available_try_again:
+        "SONs network is not available now. Please try again later!",
+      transaction_unable: "Unable to process the transaction!",
+      limit_order_successfully: "You have successfully created a limit order",
+      price_should_greater: "Price should be greater than 0",
+      assets_must_different: "Assets Must Be Different",
+      assets_should_be: "One of the assets should be %(defaultToken)s",
+      successfully_withdrawn:
+        "Successfully Withdrawn %(withdrawAmount)s %(precision)s",
+      available_balance_cannot_greater:
+        "Can not be greater than available balance",
+      withdraw_amount_required: "Withdraw amount is required",
+      deposit_amount_should_greater: "Deposit amount should be greater than 0",
+      deposit_amount_required: "Deposit amount in required",
+      successfully_deposited:
+        "Successfully Deposited %(depositAmount)s %(symbol)s",
+      saved_changes: "You have successfully saved your changes",
+      memo_warning:
+        "WARNING: If you replace the memo key you will be unable to read old memos when logging in with your password",
+      select_role: "Please at least select one role",
+      wait_loading_keys: "Please wait for loading user keys",
+      keys_already_used:
+        "These keys are already in used for active permissions",
+      account_upgraded_successfully:
+        "Your account successfully upgraded to lifetime membership account",
+      need_to_vest_gpos: "You need to Vest some GPOS balance first",
+      published_proxy: "You have successfully published your proxy",
+      published_votes: "You have successfully published your votes",
+      asset_required: "Asset is required",
+      cannot_send_yourself: "Can not send to yourself",
+      successfully_transfered:
+        "Successfully Transfered %(amount)s %(asset)s to %(to)s",
     },
   },
   tableHead: {

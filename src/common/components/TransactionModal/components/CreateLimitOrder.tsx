@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 
 import { defaultToken } from "../../../../api/params";
@@ -24,34 +25,34 @@ export const CreateLimitOrder = ({
     <>
       {price && (
         <Styled.DetailContainer>
-          <p>Price</p>
+          <p>{counterpart.translate(`field.placeholder.price`)}</p>
           <p>{price}</p>
         </Styled.DetailContainer>
       )}
       {sell && (
         <Styled.DetailContainer>
-          <p>Sell</p>
+          <p>{counterpart.translate(`field.buttons.sell`)}</p>
           <p>{sell}</p>
         </Styled.DetailContainer>
       )}
       {buy && (
         <Styled.DetailContainer>
-          <p>Buy at least</p>
+          <p>{counterpart.translate(`field.labels.buy_at_least`)}</p>
           <p>{buy}</p>
         </Styled.DetailContainer>
       )}
       <Styled.DetailContainer>
-        <p>Seller</p>
+        <p>{counterpart.translate(`field.labels.seller`)}</p>
         <Link href={`/user/${account}`}>{account}</Link>
       </Styled.DetailContainer>
       {expiration && (
         <Styled.DetailContainer>
-          <p>Expiration</p>
+          <p>{counterpart.translate(`field.tableHead.expiration`)}</p>
           <p>{expiration}</p>
         </Styled.DetailContainer>
       )}
       <Styled.DetailContainer>
-        <p>Fee</p>
+        <p>{counterpart.translate(`field.labels.fee`)}</p>
         <p>{`${fee} ${defaultToken}`}</p>
       </Styled.DetailContainer>
     </>
