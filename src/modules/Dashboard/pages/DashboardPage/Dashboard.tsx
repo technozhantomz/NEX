@@ -21,10 +21,10 @@ const Dashboard: React.FC = () => {
   };
 
   const Tabs = [
-    { tabName: counterpart.translate(`buttons.deposit`) },
-    { tabName: counterpart.translate(`buttons.withdraw`) },
+    { tabName: "Deposit" },
+    { tabName: "Withdraw" },
     // { tabName: "Swap" },
-    { tabName: counterpart.translate(`buttons.market`) },
+    { tabName: "Market" },
   ];
   return (
     <Layout title="Dashboard">
@@ -41,7 +41,11 @@ const Dashboard: React.FC = () => {
                   }
                   onClick={() => changeTab(e.tabName)}
                 >
-                  <Styled.ButtonNames>{e.tabName}</Styled.ButtonNames>
+                  <Styled.ButtonNames>
+                    {counterpart.translate(
+                      `buttons.${e.tabName.toLowerCase()}`
+                    )}
+                  </Styled.ButtonNames>
                 </Styled.Buttons>
               </Styled.Col>
             ))}
