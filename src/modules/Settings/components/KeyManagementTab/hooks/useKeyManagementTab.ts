@@ -719,7 +719,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
 
   const formValidation: FormValidation = {
     password: [
-      { required: true, message: "Password is required" },
+      { required: true, message: "This field is required" },
       {
         min: 12,
         message: "Password should be at least 12 characters long",
