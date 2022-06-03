@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import { TableHeading } from "../../../../common/components/TableHeading";
 
 import { useAsset } from "../../../../common/hooks";
 import { useViewportContext } from "../../../../common/providers";
@@ -23,32 +24,32 @@ export const AssetsTable = ({
   const { sidechainAssets } = useAsset();
   const columns = [
     {
-      title: counterpart.translate(`tableHead.asset`),
+      title: (): JSX.Element => <TableHeading heading={'asset'} />,
       dataIndex: "asset",
       key: "asset",
     },
     {
-      title: counterpart.translate(`tableHead.available`),
+      title: (): JSX.Element => <TableHeading heading={'available'} />,
       dataIndex: "available",
       key: "available",
     },
     {
-      title: counterpart.translate(`tableHead.quote_asset`),
+      title: (): JSX.Element => <TableHeading heading={'quote_asset'} />,
       dataIndex: "quoteAsset",
       key: "quoteAsset",
     },
     {
-      title: counterpart.translate(`tableHead.price`),
+      title: (): JSX.Element => <TableHeading heading={'price'} />,
       dataIndex: "price",
       key: "price",
     },
     {
-      title: counterpart.translate(`tableHead.change`),
+      title: (): JSX.Element => <TableHeading heading={'change'} />,
       dataIndex: "change",
       key: "change",
     },
     {
-      title: counterpart.translate(`tableHead.volume`),
+      title: (): JSX.Element => <TableHeading heading={'volume'} />,
       dataIndex: "volume",
       key: "volume",
     },

@@ -737,6 +737,12 @@ export const en = {
     volume: "Volume",
     current_price: "Current Price",
     market_change: "Change",
+    type: "Type",
+    info: "Info",
+    id: "ID",
+    fee: "Fee",
+    expiration: 'Expiration',
+    date: "Date"
   },
   activitiesDescription: {},
 };

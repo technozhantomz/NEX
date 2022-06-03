@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import counterpart from 'counterpart';
 
 import { roundNum } from "../../../../../common/hooks";
 import { Asset } from "../../../../../common/types";
@@ -155,7 +156,7 @@ export function useOrderBook({
     ) {
       setOrderColumns([
         {
-          title: "Price",
+          title: counterpart.translate(`tableHead.price`),
           dataIndex: "price",
           key: "price",
         },
@@ -174,24 +175,24 @@ export function useOrderBook({
       // user section
       setUserOrderColumns([
         {
-          title: "Price",
-          dataIndex: "price",
-          key: "price",
+          title: counterpart.translate(`tableHead.price`),
+          dataIndex: 'price',
+          key: 'price',
         },
         {
           title: currentQuote.symbol,
-          dataIndex: "quote",
-          key: "quote",
+          dataIndex: 'quote',
+          key: 'quote',
         },
         {
           title: currentBase.symbol,
-          dataIndex: "base",
-          key: "base",
+          dataIndex: 'base',
+          key: 'base',
         },
         {
-          title: "Expiration",
-          dataIndex: "expiration",
-          key: "expiration",
+          title: counterpart.translate(`tableHead.expiration`),
+          dataIndex: 'expiration',
+          key: 'expiration',
         },
       ]);
       getUserOrderBook(currentBase, currentQuote);

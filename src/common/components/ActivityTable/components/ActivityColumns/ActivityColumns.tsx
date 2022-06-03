@@ -1,31 +1,33 @@
+import counterpart from "counterpart";
+import { TableHeading } from "../../../TableHeading";
 import { ActivityTag } from "../ActivityTag";
 import { AvtivityInfo } from "../AvtivityInfo";
 
 export const ActivityColumns = [
   {
-    title: "Time",
+    title: (): JSX.Element => <TableHeading heading={'time'} />,
     dataIndex: "time",
     key: "time",
   },
   {
-    title: "Type",
+    title: (): JSX.Element => <TableHeading heading={'type'} />,
     dataIndex: "type",
     key: "type",
     render: (type: string): JSX.Element => <ActivityTag type={type} />,
   },
   {
-    title: "Info",
+    title: (): JSX.Element => <TableHeading heading={'info'} />,
     dataIndex: "info",
     key: "info",
     render: (value: string): JSX.Element => <AvtivityInfo infoString={value} />,
   },
   {
-    title: "ID",
+    title: (): JSX.Element => <TableHeading heading={'time'} />,
     dataIndex: "id",
     key: "id",
   },
   {
-    title: "Fee",
+    title: (): JSX.Element => <TableHeading heading={'fee'} />,
     dataIndex: "fee",
     key: "fee",
   },
