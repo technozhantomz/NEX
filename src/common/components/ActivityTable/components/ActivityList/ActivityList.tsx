@@ -18,7 +18,7 @@ export const ActivityList = ({
   loading,
 }: Props): JSX.Element => {
   return (
-    <Styled._ActivityList
+    <Styled.StyledList
       itemLayout="vertical"
       dataSource={activitiesRows}
       loading={loading}

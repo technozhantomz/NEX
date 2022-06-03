@@ -2,7 +2,7 @@ import { styled, List as UiList } from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 
-export const _ActivityList = styled(UiList)`
+export const StyledList = styled(UiList)`
   .ant-list-pagination {
     margin-top: 0;
   }
