@@ -15,7 +15,7 @@ export function useGposPage(): UseGposPageResult {
   const [isMobileDropdownvisible, _setIsMobileDropdownvisible] =
     useState<boolean>(false);
 
-  const { getAssetById } = useAsset();
+  const { getAssetById, defaultAsset } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
   const { id } = useUserContext();
 
@@ -63,5 +63,6 @@ export function useGposPage(): UseGposPageResult {
     getGposInfo,
     isMobileDropdownvisible,
     setIsMobileDropdownvisible,
+    defaultAsset,
   };
 }

@@ -3,6 +3,7 @@ export type UseGPOSTabResult = {
   setReadMore: (readMore: boolean) => void;
   readMore: boolean;
   loading: boolean;
+  defaultAsset: any;
 };
 
 export type GPOSInfo = {

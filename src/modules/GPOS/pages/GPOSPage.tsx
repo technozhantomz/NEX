@@ -21,6 +21,7 @@ const GPOSPage: NextPage = () => {
     getGposInfo,
     isMobileDropdownvisible,
     setIsMobileDropdownvisible,
+    defaultAsset,
   } = useGposPage();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
@@ -80,6 +81,7 @@ const GPOSPage: NextPage = () => {
               gposBalances={gposBalances}
               loading={loading}
               getGposInfo={getGposInfo}
+              defaultAsset={defaultAsset}
             />
           </TabPane>
           <TabPane tab="Power Down" key="power-down">
@@ -87,6 +89,7 @@ const GPOSPage: NextPage = () => {
               gposBalances={gposBalances}
               loading={loading}
               getGposInfo={getGposInfo}
+              defaultAsset={defaultAsset}
             />
           </TabPane>
           <TabPane tab="Vote" key="vote"></TabPane>

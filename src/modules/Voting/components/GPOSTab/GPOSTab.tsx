@@ -8,7 +8,7 @@ import { useGPOSTab } from "./hooks";
 export const GPOSTab = (): JSX.Element => {
   const router = useRouter();
 
-  const { GPOSInfo, readMore, setReadMore } = useGPOSTab();
+  const { GPOSInfo, readMore, setReadMore, defaultAsset } = useGPOSTab();
   const { sm } = useViewportContext();
   const ReadMoreBlock = (
     <>
@@ -22,7 +22,7 @@ export const GPOSTab = (): JSX.Element => {
         ways:
       </p>
       <ul>
-        <li>1. Transfer more PPY into your GPOS balance</li>
+        <li>{`1. Transfer more ${defaultAsset.symbol} into your GPOS balance`}</li>
         <li>2. Share Peerplays with others</li>
       </ul>
       <p>
@@ -35,7 +35,7 @@ export const GPOSTab = (): JSX.Element => {
   return (
     <Styled.GPOSTabWrapper>
       <Styled.GPOSIntro>
-        <p>Join GPOS by transferring your PPY to your GPOS balance.</p>
+        <p>{`Join GPOS by transferring your ${defaultAsset.symbol} to your GPOS balance.`}</p>
         <p>
           Consistently participate in voting for the best Witnesses, Advisors,
           Proposals, and SONs. Share the exciting news and DApps available on
