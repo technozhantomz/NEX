@@ -86,7 +86,7 @@ export const ProxyForm = ({
           <Styled.ProxyFormSearch
             value={searchValue}
             placeholder={counterpart.translate(
-              `field.placeholder.serach_accounts`
+              `field.placeholder.search_accounts`
             )}
             onChange={searchChange}
             onPressEnter={() => {

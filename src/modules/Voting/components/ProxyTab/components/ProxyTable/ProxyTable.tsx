@@ -1,4 +1,7 @@
+import counterpart from "counterpart";
+
 import { DEFAULT_PROXY_ID } from "../../../../../../api/params";
+import { TableHeading } from "../../../../../../common/components/TableHeading";
 import { useViewportContext } from "../../../../../../common/providers";
 import { Account, Proxy } from "../../../../../../common/types";
 
@@ -18,17 +21,17 @@ export const ProxyTable = ({
   const { sm } = useViewportContext();
   const columns = [
     {
-      title: "Name",
+      title: (): JSX.Element => <TableHeading heading={"name"} />,
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Action",
+      title: (): JSX.Element => <TableHeading heading={"action"} />,
       dataIndex: "action",
       key: "action",
       render: (_value: any, _record: any) => (
         <Styled.ProxyTableActionButton onClick={removeProxy}>
-          Remove
+          {counterpart.translate(`buttons.remove`)}
         </Styled.ProxyTableActionButton>
       ),
     },
@@ -52,7 +55,7 @@ export const ProxyTable = ({
                   <span className="vote-info-title">{columns[1].title}</span>
                   <span className="vote-info-value">
                     <Styled.ProxyTableActionButton onClick={removeProxy}>
-                      Remove
+                      {counterpart.translate(`buttons.remove`)}
                     </Styled.ProxyTableActionButton>
                   </span>
                 </div>

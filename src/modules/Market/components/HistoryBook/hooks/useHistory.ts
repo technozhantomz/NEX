@@ -32,30 +32,30 @@ export function useHistory({
       setColumns([
         {
           title: currentBase.symbol,
-          dataIndex: 'base',
-          key: 'base',
+          dataIndex: "base",
+          key: "base",
         },
         {
           title: currentQuote.symbol,
-          dataIndex: 'quote',
-          key: 'quote',
+          dataIndex: "quote",
+          key: "quote",
         },
         {
           title: counterpart.translate(`tableHead.price`),
-          dataIndex: 'price',
-          key: 'price',
+          dataIndex: "price",
+          key: "price",
         },
         {
           title: counterpart.translate(`tableHead.date`),
-          dataIndex: 'date',
-          key: 'date',
+          dataIndex: "date",
+          key: "date",
         },
       ]);
       getHistory(currentBase, currentQuote);
       getUserHistory(currentBase, currentQuote);
     }
   }, [
-    loadingSelectedPair,  
+    loadingSelectedPair,
     currentBase,
     currentQuote,
     getHistory,

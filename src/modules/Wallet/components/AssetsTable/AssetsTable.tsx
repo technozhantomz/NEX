@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
-import { TableHeading } from "../../../../common/components/TableHeading";
 
+import { TableHeading } from "../../../../common/components/TableHeading";
 import { useAsset } from "../../../../common/hooks";
 import { useViewportContext } from "../../../../common/providers";
 import { List } from "../../../../ui/src";
@@ -24,32 +24,32 @@ export const AssetsTable = ({
   const { sidechainAssets } = useAsset();
   const columns = [
     {
-      title: (): JSX.Element => <TableHeading heading={'asset'} />,
+      title: (): JSX.Element => <TableHeading heading={"asset"} />,
       dataIndex: "asset",
       key: "asset",
     },
     {
-      title: (): JSX.Element => <TableHeading heading={'available'} />,
+      title: (): JSX.Element => <TableHeading heading={"available"} />,
       dataIndex: "available",
       key: "available",
     },
     {
-      title: (): JSX.Element => <TableHeading heading={'quote_asset'} />,
+      title: (): JSX.Element => <TableHeading heading={"quote_asset"} />,
       dataIndex: "quoteAsset",
       key: "quoteAsset",
     },
     {
-      title: (): JSX.Element => <TableHeading heading={'price'} />,
+      title: (): JSX.Element => <TableHeading heading={"price"} />,
       dataIndex: "price",
       key: "price",
     },
     {
-      title: (): JSX.Element => <TableHeading heading={'change'} />,
+      title: (): JSX.Element => <TableHeading heading={"change"} />,
       dataIndex: "change",
       key: "change",
     },
     {
-      title: (): JSX.Element => <TableHeading heading={'volume'} />,
+      title: (): JSX.Element => <TableHeading heading={"volume"} />,
       dataIndex: "volume",
       key: "volume",
     },

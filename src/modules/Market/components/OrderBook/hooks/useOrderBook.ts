@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import {
   Dispatch,
   SetStateAction,
@@ -5,7 +6,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import counterpart from 'counterpart';
 
 import { roundNum } from "../../../../../common/hooks";
 import { Asset } from "../../../../../common/types";
@@ -176,23 +176,23 @@ export function useOrderBook({
       setUserOrderColumns([
         {
           title: counterpart.translate(`tableHead.price`),
-          dataIndex: 'price',
-          key: 'price',
+          dataIndex: "price",
+          key: "price",
         },
         {
           title: currentQuote.symbol,
-          dataIndex: 'quote',
-          key: 'quote',
+          dataIndex: "quote",
+          key: "quote",
         },
         {
           title: currentBase.symbol,
-          dataIndex: 'base',
-          key: 'base',
+          dataIndex: "base",
+          key: "base",
         },
         {
           title: counterpart.translate(`tableHead.expiration`),
-          dataIndex: 'expiration',
-          key: 'expiration',
+          dataIndex: "expiration",
+          key: "expiration",
         },
       ]);
       getUserOrderBook(currentBase, currentQuote);

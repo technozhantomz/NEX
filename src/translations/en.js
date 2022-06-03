@@ -462,6 +462,8 @@ export const en = {
     publish_changes: "Publish Changes",
     add: "Add",
     remove: "Remove",
+    done: "Done",
+    confirm: "Confirm",
   },
   pages: {
     logout: {
@@ -661,6 +663,14 @@ export const en = {
         heading: "Committees",
       },
     },
+    modal: {
+      transaction_modal: {
+        title: "Please confirm the transaction",
+      },
+      password_modal: {
+        title: "Password",
+      },
+    },
   },
   links: {
     create_account: "Create account",
@@ -711,6 +721,7 @@ export const en = {
       not_approved_by: "Approved by %(localStorageAccount)s",
       vote_for: "Vote for %(tab)s",
       vote_for_proxy: "Proxy your vote to other accounts",
+      not_available: "Not available",
     },
     comments: {
       deposit_hbd:
@@ -741,8 +752,23 @@ export const en = {
     info: "Info",
     id: "ID",
     fee: "Fee",
-    expiration: 'Expiration',
-    date: "Date"
+    expiration: "Expiration",
+    date: "Date",
+    symbol: "Symbol",
+    max_supply: "Max Supply",
+    precision: "Precision",
+    issuer: "Issuer",
+    rank: "Rank",
+    name: "Name",
+    total_votes: "Total Votes",
+    url: "Url",
+    operation: "Operation",
+    fee_type: "Fee Type",
+    standard_fee: "Standard Fee",
+    last_block: "Last Block",
+    missed_blocks: "Missed Blocks",
+    website: "Website",
+    action: "Action",
+    votes: "Votes",
   },
-  activitiesDescription: {},
 };

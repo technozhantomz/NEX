@@ -5,9 +5,5 @@ type Props = {
 };
 
 export const TableHeading = ({ heading }: Props): JSX.Element => {
-  return (
-    <>
-      {counterpart.translate(`tableHead.${heading}`)}
-    </>
-  );
+  return <>{counterpart.translate(`tableHead.${heading}`)}</>;
 };

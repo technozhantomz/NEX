@@ -104,7 +104,7 @@ export const TransactionModal = ({
   return (
     <>
       <Styled.TransactionModal
-        title="Please confirm the transaction"
+        title={counterpart.translate(`pages.modal.transaction_modal.title`)}
         visible={visible}
         onOk={() => {
           transactionModalForm.submit();
@@ -114,11 +114,11 @@ export const TransactionModal = ({
         footer={
           transactionErrorMessage !== "" ? (
             <Button key="back" onClick={onCancel}>
-              Cancel
+              {counterpart.translate(`buttons.cancel`)}
             </Button>
           ) : transactionSuccessMessage !== "" ? (
             <Button key="back" onClick={onCancel}>
-              Done
+              {counterpart.translate(`buttons.done`)}
             </Button>
           ) : (
             [
@@ -127,7 +127,7 @@ export const TransactionModal = ({
                 onClick={onCancel}
                 disabled={loadingTransaction}
               >
-                Cancel
+                {counterpart.translate(`buttons.cancel`)}
               </Button>,
               <Button
                 key="submit"
@@ -137,7 +137,7 @@ export const TransactionModal = ({
                 }}
                 loading={loadingTransaction}
               >
-                Confirm
+                {counterpart.translate(`buttons.confirm`)}
               </Button>,
             ]
           )
