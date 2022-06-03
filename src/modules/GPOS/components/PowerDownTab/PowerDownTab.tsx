@@ -1,3 +1,4 @@
+import { Asset } from "../../../../common/types";
 import { GPOSBalances } from "../../types";
 
 import * as Styled from "./PowerDownTab.styled";
@@ -7,7 +8,7 @@ type Props = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
   getGposInfo: () => Promise<void>;
-  defaultAsset: any;
+  defaultAsset: Asset | undefined;
 };
 
 export const PowerDownTab = ({
