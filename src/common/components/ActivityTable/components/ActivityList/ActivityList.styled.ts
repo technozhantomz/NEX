@@ -4,7 +4,8 @@ import { colors } from "../../../../../ui/src/colors";
 
 export const StyledList = styled(UiList)`
   .ant-list-pagination {
-    margin-top: 0;
+    margin-top: 16px;
+    margin-right: 25px;
   }
   .ant-pagination-item {
     border: none;
