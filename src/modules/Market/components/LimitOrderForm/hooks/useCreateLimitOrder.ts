@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { KeyboardEvent, useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
@@ -310,6 +310,12 @@ export function useCreateLimitOrder({
     ],
   };
 
+  const isNumberKey = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "-" || e.key === "+" || e.key === "e") {
+      return e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     setBalance();
     if (
@@ -355,5 +361,6 @@ export function useCreateLimitOrder({
     price,
     total,
     quantity,
+    isNumberKey,
   };
 }

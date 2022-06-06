@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, KeyboardEvent, SetStateAction } from "react";
 
 import { Asset } from "../../../../../common/types";
 import { FormInstance, Rule } from "../../../../../ui/src";
@@ -28,6 +28,7 @@ export type UseCreateLimitOrderResult = {
   price: number;
   quantity: number;
   total: number;
+  isNumberKey: (e: KeyboardEvent<HTMLInputElement>) => void;
 };
 
 export type FormField = {

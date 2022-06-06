@@ -55,6 +55,7 @@ export const LimitOrderForm = ({
     price,
     quantity,
     total,
+    isNumberKey,
   } = useCreateLimitOrder({
     currentBase,
     currentQuote,
@@ -113,6 +114,7 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
+                onKeyPress={(e) => isNumberKey(e)}
               />
             </Styled.FormItem>
             <Styled.FormItem
@@ -133,6 +135,7 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
+                onKeyPress={(e) => isNumberKey(e)}
               />
             </Styled.FormItem>
             <Styled.FormItem
@@ -153,6 +156,7 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
+                onKeyPress={(e) => isNumberKey(e)}
               />
             </Styled.FormItem>
             <Styled.FormItem>
