@@ -58,7 +58,7 @@ export function useCreateLimitOrder({
             orderForm.setFieldsValue({ price: 0 });
           } else if (changedValues.price > 0) {
             orderForm.setFieldsValue({
-              price: roundNum(changedValues.price, currentBase.precision),
+              price: changedValues.price,
             });
           }
         } else if (changedValues.total) {
@@ -66,7 +66,7 @@ export function useCreateLimitOrder({
             orderForm.setFieldsValue({ total: 0 });
           } else if (changedValues.total > 0) {
             orderForm.setFieldsValue({
-              total: roundNum(changedValues.total, currentBase.precision),
+              total: changedValues.total,
             });
           }
         } else if (changedValues.quantity) {
@@ -74,10 +74,7 @@ export function useCreateLimitOrder({
             orderForm.setFieldsValue({ quantity: 0 });
           } else if (changedValues.quantity > 0) {
             orderForm.setFieldsValue({
-              quantity: roundNum(
-                changedValues.quantity,
-                currentQuote.precision
-              ),
+              quantity: changedValues.quantity,
             });
           }
         }
