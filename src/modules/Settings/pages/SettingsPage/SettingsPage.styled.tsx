@@ -36,7 +36,6 @@ export const SettingsCard = styled(UiCard)`
   .ant-card-body {
     padding: 0;
     width: 100%;
-    min-height: 856px;
     border-radius: 4px;
     opacity: 1;
     .ant-tabs-tab,
@@ -47,7 +46,6 @@ export const SettingsCard = styled(UiCard)`
   }
   ${breakpoint.sm} {
     .ant-card-body {
-      height: 790px;
       .ant-tabs-nav-operations {
         display: flex;
       }

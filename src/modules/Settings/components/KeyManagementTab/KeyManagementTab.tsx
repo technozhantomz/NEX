@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import React from "react";
+import React, { Fragment } from "react";
 
 import {
   CopyButton,
@@ -99,7 +99,7 @@ export const KeyManagementTab = (): JSX.Element => {
             validateTrigger="onChange"
           >
             <Checkbox.Group
-              options={["active", "owner", "memo"]}
+              options={["Active", "Owner", "Memo"]}
               onChange={handleCheckboxChange}
               value={selectedKeys}
             ></Checkbox.Group>
@@ -116,7 +116,7 @@ export const KeyManagementTab = (): JSX.Element => {
             ? generatedKeys.map((generatedKey) => {
                 if (generatedKey.key && generatedKey.key !== "") {
                   return (
-                    <>
+                    <Fragment key={`${generatedKey.label}`}>
                       <Styled.Label>
                         {counterpart.translate(`field.labels.generated_key`, {
                           generatedKeyLabel: generatedKey.label,
@@ -139,7 +139,7 @@ export const KeyManagementTab = (): JSX.Element => {
                           )}
                         />
                       </div>
-                    </>
+                    </Fragment>
                   );
                 } else {
                   return "";

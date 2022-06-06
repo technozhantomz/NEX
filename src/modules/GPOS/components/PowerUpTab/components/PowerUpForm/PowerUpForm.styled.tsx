@@ -18,14 +18,16 @@ export const PowerUpForm = styled(CardForm)`
     text-align: right;
     height: 50px;
     ${breakpoint.sm} {
+      font-size: 20px;
       height: 25px;
     }
   }
   .ant-input-affix-wrapper-lg {
-    padding: 15px;
+    padding: 0 15px;
     font-size: 16px;
     ${breakpoint.sm} {
       padding: 20px;
+      font-size: 20px;
     }
   }
 
@@ -35,7 +37,26 @@ export const PowerUpForm = styled(CardForm)`
       text-align: center;
       height: 50px;
       ${breakpoint.sm} {
+        text-align: left;
+        font-size: 20px;
         height: 65px;
+        padding: 0 20px;
+      }
+    }
+    .ant-input-number-group-addon {
+      background-color: #e3ebf8;
+      .ant-btn-text {
+        display: flex;
+        align-items: center;
+      }
+      .ant-btn-text:hover,
+      .ant-btn-text:focus {
+        background: #e3ebf8;
+      }
+      ${breakpoint.sm} {
+        .ant-btn-text > span {
+          font-size: 28px;
+        }
       }
     }
   }

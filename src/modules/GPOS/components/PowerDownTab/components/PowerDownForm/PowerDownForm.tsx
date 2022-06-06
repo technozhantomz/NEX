@@ -40,6 +40,8 @@ export const PowerDownForm = ({
     loadingTransaction,
     handleWithdraw,
     feeAmount,
+    newAvailableBalance,
+    newBalance,
     withdrawAmount,
   } = usePowerDownForm({
     gposBalances,
@@ -86,7 +88,9 @@ export const PowerDownForm = ({
             <Input
               prefix={
                 sm
-                  ? ""
+                  ? gposBalances
+                    ? `${gposBalances.openingBalance}`
+                    : ""
                   : counterpart.translate(`field.placeholder.opening_balance`)
               }
               disabled={true}
@@ -103,7 +107,9 @@ export const PowerDownForm = ({
             <Input
               prefix={
                 sm
-                  ? ""
+                  ? gposBalances
+                    ? `${newAvailableBalance}`
+                    : ""
                   : counterpart.translate(`field.placeholder.available_balance`)
               }
               disabled={true}
@@ -133,16 +139,16 @@ export const PowerDownForm = ({
           <Form.Item
             name="newBalance"
             label={
-              sm
-                ? counterpart.translate(`field.placeholder.opening_balance`)
-                : ""
+              sm ? counterpart.translate(`field.placeholder.new_balance`) : ""
             }
           >
             <Input
               prefix={
                 sm
-                  ? ""
-                  : counterpart.translate(`field.placeholder.opening_balance`)
+                  ? gposBalances
+                    ? `${newBalance}`
+                    : ""
+                  : counterpart.translate(`field.placeholder.new_balance`)
               }
               disabled={true}
             />

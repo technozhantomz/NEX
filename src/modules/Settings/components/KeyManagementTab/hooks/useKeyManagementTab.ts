@@ -492,7 +492,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
         let trxResult;
         try {
           setLoadingTransaction(true);
-          trxResult = !selectedKeys.includes("owner")
+          trxResult = !selectedKeys.includes("Owner")
             ? await buildTrx([pendingTransaction], [activePrivateKey])
             : await buildTrx([pendingTransaction], [ownerPrivateKey]);
         } catch (error) {
@@ -544,7 +544,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       serverUserActivePermissions &&
       serverUserOwnerPermissions
     ) {
-      if (selectedKeys.includes("active")) {
+      if (selectedKeys.includes("Active")) {
         if (
           !isArrayEqual(
             serverUserActivePermissions.keys,
@@ -559,7 +559,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
         }
       }
 
-      if (selectedKeys.includes("owner")) {
+      if (selectedKeys.includes("Owner")) {
         if (
           !isArrayEqual(
             serverUserOwnerPermissions.keys,
@@ -573,7 +573,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           );
         }
       }
-      if (selectedKeys.includes("memo")) {
+      if (selectedKeys.includes("Memo")) {
         if (serverUserMemoKey !== localUserMemoKey) {
           setLocalUserMemoKey(serverUserMemoKey);
         }
@@ -611,7 +611,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           keyManagementForm.getFieldValue("password")
         );
         const generatedKeys: GeneratedKey[] = [];
-        if (selectedKeys.includes("active")) {
+        if (selectedKeys.includes("Active")) {
           handleAddItem(
             "active",
             keys.active as string,
@@ -624,7 +624,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           });
         }
 
-        if (selectedKeys.includes("owner")) {
+        if (selectedKeys.includes("Owner")) {
           handleAddItem(
             "owner",
             keys.owner as string,
@@ -636,7 +636,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
             key: keys.owner as string,
           });
         }
-        if (selectedKeys.includes("memo")) {
+        if (selectedKeys.includes("Memo")) {
           setLocalUserMemoKey(keys.memo as string);
           generatedKeys.push({
             label: "memo",
@@ -668,7 +668,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
   const handleCheckboxChange = useCallback(
     (checkedValues: CheckboxValueType[]) => {
       setSelectedKeys(checkedValues);
-      if (checkedValues.includes("memo")) {
+      if (checkedValues.includes("Memo")) {
         setMemoWarning(counterpart.translate(`field.errors.memo_warning`));
       } else {
         setMemoWarning("");
@@ -701,7 +701,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       );
     const keys = useFormKeys(localStorageAccount, value);
     if (
-      selectedKeys.includes("active") &&
+      selectedKeys.includes("Active") &&
       serverUserActivePermissions.keys.includes(keys.active as string)
     ) {
       return Promise.reject(
@@ -709,7 +709,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       );
     }
     if (
-      selectedKeys.includes("owner") &&
+      selectedKeys.includes("Owner") &&
       serverUserOwnerPermissions.keys.includes(keys.owner as string)
     ) {
       return Promise.reject(
@@ -717,7 +717,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       );
     }
     if (
-      selectedKeys.includes("memo") &&
+      selectedKeys.includes("Memo") &&
       serverUserMemoKey === (keys.memo as string)
     ) {
       return Promise.reject(

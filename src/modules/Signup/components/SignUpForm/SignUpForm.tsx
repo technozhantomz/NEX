@@ -15,7 +15,6 @@ import { useSignUpForm } from "./hooks";
 
 export const SignUpForm: React.FC = () => {
   const {
-    validUser,
     handleSignUp,
     setCheckboxValue,
     formValidation,
@@ -41,7 +40,8 @@ export const SignUpForm: React.FC = () => {
       >
         <Input
           placeholder={counterpart.translate(`field.placeholder.user_name`)}
-          suffix={validUser ? <CheckOutlined /> : ""}
+          autoComplete="off"
+          suffix={<CheckOutlined />}
         />
       </Styled.UsernameFormItem>
       <Styled.Label>
@@ -54,6 +54,7 @@ export const SignUpForm: React.FC = () => {
         validateTrigger="onChange"
       >
         <Styled.GeneratedPassordInput
+          autoComplete="off"
           type={isInputTypePassword ? "password" : "text"}
           suffix={
             <div>
@@ -76,6 +77,7 @@ export const SignUpForm: React.FC = () => {
         validateTrigger="onChange"
       >
         <Input.Password
+          autoComplete="off"
           placeholder={counterpart.translate(
             `field.placeholder.re_enter_password`
           )}

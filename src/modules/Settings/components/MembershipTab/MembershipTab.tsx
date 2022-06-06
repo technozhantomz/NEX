@@ -63,9 +63,9 @@ export const MembershipTab = (): JSX.Element => {
           name="membershipForm"
           onFinish={showPasswordModal}
         >
-          <Styled.Space direction="vertical">
+          <Styled.InfoContainer>
             {!isLifetimeMember ? (
-              <Styled.Space direction="vertical">
+              <>
                 <Styled.Heading>
                   {counterpart.translate(
                     `pages.settings.membership.upgrade_title`,
@@ -93,10 +93,11 @@ export const MembershipTab = (): JSX.Element => {
                     {counterpart.translate(`buttons.buy_membership`)}
                   </Styled.Button>
                 </Styled.ButtonContainer>
-              </Styled.Space>
+              </>
             ) : (
-              <Styled.Space direction="vertical">
+              <>
                 <Styled.Label>
+                  {" "}
                   {counterpart.translate(`buttons.referral_link_title`)}
                 </Styled.Label>
                 <Styled.Paragraph>
@@ -105,7 +106,7 @@ export const MembershipTab = (): JSX.Element => {
                     name,
                   })}
                 </Styled.Paragraph>
-              </Styled.Space>
+              </>
             )}
             <Styled.Heading>
               {counterpart.translate(
@@ -129,8 +130,7 @@ export const MembershipTab = (): JSX.Element => {
               <Styled.LabelContainer>
                 <Styled.Label>
                   {counterpart.translate(`pages.settings.membership.network`)}
-                </Styled.Label>{" "}
-                <br />
+                </Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{networkFee}%</Styled.PercentageText>
@@ -142,8 +142,7 @@ export const MembershipTab = (): JSX.Element => {
                   {counterpart.translate(
                     `pages.settings.membership.lifetime_reviewer`
                   )}
-                </Styled.Label>{" "}
-                <br />
+                </Styled.Label>
                 <Link href={`/user/${lifetimeReferrerName}`}>
                   {lifetimeReferrerName}
                 </Link>
@@ -156,8 +155,7 @@ export const MembershipTab = (): JSX.Element => {
               <Styled.LabelContainer>
                 <Styled.Label>
                   {counterpart.translate(`pages.settings.membership.registrar`)}
-                </Styled.Label>{" "}
-                <br />
+                </Styled.Label>
                 <Link href={`/user/${registrarName}`}>{registrarName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
@@ -170,8 +168,7 @@ export const MembershipTab = (): JSX.Element => {
                   {counterpart.translate(
                     `pages.settings.membership.affiliate_referrer`
                   )}
-                </Styled.Label>{" "}
-                <br />
+                </Styled.Label>
                 <Link href={`/user/${referrerName}`}>{referrerName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
@@ -184,8 +181,7 @@ export const MembershipTab = (): JSX.Element => {
                   {counterpart.translate(
                     `pages.settings.membership.expiration`
                   )}
-                </Styled.Label>{" "}
-                <br />
+                </Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{expirationDate}</Styled.PercentageText>
@@ -202,8 +198,7 @@ export const MembershipTab = (): JSX.Element => {
                   {counterpart.translate(
                     `pages.settings.membership.total_fee_paid`
                   )}
-                </Styled.Label>{" "}
-                <br />
+                </Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>
@@ -229,7 +224,7 @@ export const MembershipTab = (): JSX.Element => {
                 { vestingThreshold, defaultToken, vestingPeriod }
               )}
             </Styled.Paragraph>
-          </Styled.Space>
+          </Styled.InfoContainer>
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={hidePasswordModal}

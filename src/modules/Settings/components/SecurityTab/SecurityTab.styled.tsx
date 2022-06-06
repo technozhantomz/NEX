@@ -14,7 +14,6 @@ export const SecuritySettingsCard = styled.div`
   .ant-form-horizontal {
     text-align: left;
     color: ${colors.textColor};
-    height: 500px;
     margin: 20px;
     ${breakpoint.sm} {
       margin-left: 30px;

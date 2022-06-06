@@ -7,7 +7,10 @@ import {
   useGPOSTransactionBuilder,
   useTransactionBuilder,
 } from "../../../../../../../common/hooks";
-import { useUserContext } from "../../../../../../../common/providers";
+import {
+  useUserContext,
+  useViewportContext,
+} from "../../../../../../../common/providers";
 import { Asset } from "../../../../../../../common/types";
 import { Form } from "../../../../../../../ui/src";
 
@@ -27,6 +30,7 @@ export function usePowerUpForm({
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const [newBalance, setNewBalance] = useState<number>(0);
 
   const [powerUpForm] = Form.useForm();
   const depositAmount: number = Form.useWatch("depositAmount", powerUpForm);
@@ -35,6 +39,7 @@ export function usePowerUpForm({
   const { buildTrx } = useTransactionBuilder();
   const { getPrivateKey, formAccountBalancesByName } = useAccount();
   const { calculateGposVestingFee } = useFees();
+  const { sm } = useViewportContext();
 
   const adjustDeposit = useCallback(
     (direction: string) => {
@@ -70,6 +75,9 @@ export function usePowerUpForm({
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await getGposInfo();
+          powerUpForm.setFieldsValue({
+            depositAmount: 0,
+          });
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
             counterpart.translate(`field.errors.successfully_deposited`, {
@@ -146,14 +154,21 @@ export function usePowerUpForm({
 
   useEffect(() => {
     if (gposBalances) {
-      powerUpForm.setFieldsValue({
-        openingBalance:
-          gposBalances.openingBalance + " " + gposBalances.asset.symbol,
-        newBalance:
-          gposBalances.openingBalance + " " + gposBalances.asset.symbol,
-      });
+      if (!sm) {
+        powerUpForm.setFieldsValue({
+          openingBalance:
+            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
+          newBalance:
+            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
+        });
+      } else {
+        powerUpForm.setFieldsValue({
+          openingBalance: gposBalances.asset.symbol,
+          newBalance: gposBalances.asset.symbol,
+        });
+      }
     }
-  }, [gposBalances, powerUpForm]);
+  }, [gposBalances, powerUpForm, sm]);
 
   useEffect(() => {
     const gposVestingFee = calculateGposVestingFee();
@@ -164,11 +179,18 @@ export function usePowerUpForm({
     //TODO: check that new amount not less then 0 or grater then account balance
     if (gposBalances) {
       const newBalance = gposBalances?.openingBalance + depositAmount;
-      powerUpForm.setFieldsValue({
-        newBalance: newBalance + " " + gposBalances?.asset.symbol,
-      });
+      setNewBalance(newBalance);
+      if (!sm) {
+        powerUpForm.setFieldsValue({
+          newBalance: newBalance + " " + gposBalances?.asset.symbol,
+        });
+      } else {
+        powerUpForm.setFieldsValue({
+          newBalance: gposBalances?.asset.symbol,
+        });
+      }
     }
-  }, [depositAmount, gposBalances, powerUpForm]);
+  }, [depositAmount, gposBalances, powerUpForm, sm, setNewBalance]);
 
   return {
     powerUpForm,
@@ -182,5 +204,6 @@ export function usePowerUpForm({
     loadingTransaction,
     feeAmount,
     depositAmount,
+    newBalance,
   };
 }

@@ -22,6 +22,7 @@ export const StatsCard = ({
   data,
 }: Props): JSX.Element => {
   const config = {
+    width: 188,
     height: 30,
     autoFit: false,
     data: statsData,
