@@ -35,7 +35,7 @@ export const PairModal = ({
   useResetFormOnOpenModal(pairModalForm, isVisible);
   return (
     <Styled.PairModal
-      title="Selet Pair"
+      title="Select Pair"
       visible={isVisible}
       centered={true}
       onOk={pairModalForm.submit}
