@@ -15,3 +15,4 @@ export * from "./maintenance";
 export * from "./useUpdateExchanges";
 export * from "./witnessSonCommittee";
 export * from "./transactionForm";
+export * from "./useToPrecision";
