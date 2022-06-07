@@ -9,16 +9,8 @@ import { colors } from "../../../../ui/src/colors";
 import { mixIns } from "../../../../ui/src/mixins";
 
 export const VotingPageCard = styled(UiCard)`
-  .ant-table-thead {
-    .ant-table-cell {
-      font-weight: bold;
-    }
-  }
   .ant-card-body {
     padding: 0;
-    .ant-tabs-tab {
-      font-weight: bold;
-    }
   }
   ${breakpoint.sm} {
     .ant-card-body {

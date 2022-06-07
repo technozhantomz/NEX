@@ -48,11 +48,6 @@ export const Tabs = styled(UiTabs)`
 `;
 
 export const WalletCard = styled(UiCard)`
-  .ant-table-thead {
-    .ant-table-cell {
-      font-weight: bold;
-    }
-  }
   .ant-tabs {
     border-radius: 4px;
     opacity: 1;
