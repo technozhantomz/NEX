@@ -24,7 +24,7 @@ export function useGPOSTab(): UseGPOSTabResult {
 
   const { dbApi } = usePeerplaysApiContext();
   const { id } = useUserContext();
-  const { getAssetById, defaultAsset } = useAsset();
+  const { getAssetById } = useAsset();
 
   const setReadMore = useCallback(
     (readMore: boolean) => {
@@ -99,5 +99,5 @@ export function useGPOSTab(): UseGPOSTabResult {
     }
   }, [id, getGPOSInfo]);
 
-  return { GPOSInfo, setReadMore, readMore, loading, defaultAsset };
+  return { GPOSInfo, setReadMore, readMore, loading };
 }

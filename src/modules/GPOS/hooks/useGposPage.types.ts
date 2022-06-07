@@ -6,5 +6,4 @@ export type UseGposPageResult = {
   getGposInfo: () => Promise<void>;
   isMobileDropdownvisible: boolean;
   setIsMobileDropdownvisible: (isMobileDropdownvisible: boolean) => void;
-  defaultAsset: any;
 };

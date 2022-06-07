@@ -6,8 +6,9 @@ import {
   useUserContext,
 } from "../../../common/providers";
 import { GPOSInfoResponse } from "../../../common/types";
+import { GPOSBalances } from "../types";
 
-import { GPOSBalances, UseGposPageResult } from "./useGposPage.types";
+import { UseGposPageResult } from "./useGposPage.types";
 
 export function useGposPage(): UseGposPageResult {
   const [gposBalances, setGposBalances] = useState<GPOSBalances>();
@@ -15,7 +16,7 @@ export function useGposPage(): UseGposPageResult {
   const [isMobileDropdownvisible, _setIsMobileDropdownvisible] =
     useState<boolean>(false);
 
-  const { getAssetById, defaultAsset } = useAsset();
+  const { getAssetById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
   const { id } = useUserContext();
 
@@ -63,6 +64,5 @@ export function useGposPage(): UseGposPageResult {
     getGposInfo,
     isMobileDropdownvisible,
     setIsMobileDropdownvisible,
-    defaultAsset,
   };
 }
