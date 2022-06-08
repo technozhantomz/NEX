@@ -16,13 +16,16 @@ export function useUpdateExchanges(): UseUpdateExchangesResult {
       const _selectedPair = selectedPair.split("_").join("/");
 
       if (recentPairs.includes(_selectedPair)) {
-        const filterListExceptSelectedPair = recentPairs.filter(
-          (el) => el !== _selectedPair
+        const recentPairsWithoutSelectedPair = recentPairs.filter(
+          (pair) => pair !== _selectedPair
         );
-        filterListExceptSelectedPair.unshift(_selectedPair);
+        const newRecentPairs = [
+          _selectedPair,
+          ...recentPairsWithoutSelectedPair,
+        ];
         setExchanges({
           active: selectedPair,
-          list: [...filterListExceptSelectedPair],
+          list: [...newRecentPairs],
         } as Exchanges);
       } else {
         recentPairs.unshift(selectedPair.split("_").join("/"));
