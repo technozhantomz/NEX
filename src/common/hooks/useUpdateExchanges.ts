@@ -13,15 +13,24 @@ export function useUpdateExchanges(): UseUpdateExchangesResult {
   const updateExchanges = useCallback(
     (selectedPair: string) => {
       const recentPairs = [...exchanges.list];
+      const _selectedPair = selectedPair.split("_").join("/");
 
-      if (!recentPairs.includes(selectedPair.split("_").join("/"))) {
-        recentPairs.push(selectedPair.split("_").join("/"));
+      if (recentPairs.includes(_selectedPair)) {
+        const filterListExceptSelectedPair = recentPairs.filter(
+          (el) => el !== _selectedPair
+        );
+        filterListExceptSelectedPair.unshift(_selectedPair);
+        setExchanges({
+          active: selectedPair,
+          list: [...filterListExceptSelectedPair],
+        } as Exchanges);
+      } else {
+        recentPairs.unshift(selectedPair.split("_").join("/"));
+        setExchanges({
+          active: selectedPair,
+          list: [...recentPairs],
+        } as Exchanges);
       }
-
-      setExchanges({
-        active: selectedPair,
-        list: [...recentPairs],
-      } as Exchanges);
     },
     [exchanges, setExchanges]
   );
