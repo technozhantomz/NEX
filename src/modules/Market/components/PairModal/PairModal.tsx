@@ -35,7 +35,7 @@ export const PairModal = ({
   useResetFormOnOpenModal(pairModalForm, isVisible);
   return (
     <Styled.PairModal
-      title="Selet Pair"
+      title="Select Pair"
       visible={isVisible}
       centered={true}
       onOk={pairModalForm.submit}
@@ -47,7 +47,7 @@ export const PairModal = ({
         initialValues={{
           base: currentPair.split("_")[1],
           quote: currentPair.split("_")[0],
-          recents: exchanges.list[exchanges.list.length - 1],
+          recents: exchanges.list[0],
         }}
         onValuesChange={handleValuesChange}
         name="pairModal"

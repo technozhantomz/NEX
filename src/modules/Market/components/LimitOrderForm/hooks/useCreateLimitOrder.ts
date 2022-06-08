@@ -2,7 +2,7 @@ import { KeyboardEvent, useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
-  roundNum,
+  toPrecision,
   useAccount,
   useFees,
   useLimitOrderTransactionBuilder,
@@ -56,25 +56,35 @@ export function useCreateLimitOrder({
         if (changedValues.price) {
           if (changedValues.price < 0) {
             orderForm.setFieldsValue({ price: 0 });
-          } else if (changedValues.price > 0) {
+          } else if (
+            changedValues.price > 0 &&
+            changedValues.price.split(".")[1]?.length > currentBase.precision
+          ) {
             orderForm.setFieldsValue({
-              price: roundNum(changedValues.price, currentBase.precision),
+              price: toPrecision(changedValues.price, currentBase.precision),
             });
           }
         } else if (changedValues.total) {
           if (changedValues.total < 0) {
             orderForm.setFieldsValue({ total: 0 });
-          } else if (changedValues.total > 0) {
+          } else if (
+            changedValues.total > 0 &&
+            changedValues.total.split(".")[1]?.length > currentBase.precision
+          ) {
             orderForm.setFieldsValue({
-              total: roundNum(changedValues.total, currentBase.precision),
+              total: toPrecision(changedValues.total, currentBase.precision),
             });
           }
         } else if (changedValues.quantity) {
           if (changedValues.quantity < 0) {
             orderForm.setFieldsValue({ quantity: 0 });
-          } else if (changedValues.quantity > 0) {
+          } else if (
+            changedValues.quantity > 0 &&
+            changedValues.quantity.split(".")[1]?.length >
+              currentQuote.precision
+          ) {
             orderForm.setFieldsValue({
-              quantity: roundNum(
+              quantity: toPrecision(
                 changedValues.quantity,
                 currentQuote.precision
               ),
@@ -83,7 +93,7 @@ export function useCreateLimitOrder({
         }
       }
     },
-    [orderForm, currentBase, currentQuote, loadingSelectedPair, roundNum]
+    [orderForm, currentBase, currentQuote, loadingSelectedPair, toPrecision]
   );
 
   const handleRelationsBetweenInputs = useCallback(
@@ -106,7 +116,10 @@ export function useCreateLimitOrder({
           allValues.quantity > 0
         ) {
           orderForm.setFieldsValue({
-            total: roundNum(allValues.price * allValues.quantity, baseRoundTo),
+            total: toPrecision(
+              allValues.price * allValues.quantity,
+              baseRoundTo
+            ),
           });
         }
       } else if (changedValues.total) {
@@ -117,12 +130,15 @@ export function useCreateLimitOrder({
           allValues.total > 0
         ) {
           orderForm.setFieldsValue({
-            quantity: roundNum(allValues.total / allValues.price, quoteRoundTo),
+            quantity: toPrecision(
+              allValues.total / allValues.price,
+              quoteRoundTo
+            ),
           });
         }
       }
     },
-    [orderForm, currentBase, currentQuote, roundNum]
+    [orderForm, currentBase, currentQuote, toPrecision]
   );
 
   const handleValuesChange = useCallback(

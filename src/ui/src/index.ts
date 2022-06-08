@@ -11,10 +11,10 @@ export { StatsCardsDeck } from "./StatsCardDeck";
 export { Tag } from "./Tag";
 export { TableSearch } from "./TableSearch";
 export { ListItem } from "./ListItem";
+export { Tabs } from "./Tabs";
 
 export {
   Row,
-  Tabs,
   Form,
   Input,
   InputNumber,
