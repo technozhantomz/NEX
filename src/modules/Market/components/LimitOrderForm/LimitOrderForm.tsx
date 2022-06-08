@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { KeyboardEvent } from "react";
 
+import { utils } from "../../../../api/utils";
 import {
   FormDisclamer,
   PasswordModal,
@@ -55,7 +57,6 @@ export const LimitOrderForm = ({
     price,
     quantity,
     total,
-    isNumberKey,
   } = useCreateLimitOrder({
     currentBase,
     currentQuote,
@@ -114,7 +115,11 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
-                onKeyPress={(e) => isNumberKey(e)}
+                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                  if (!utils.isNumberKey(e)) {
+                    e.preventDefault();
+                  }
+                }}
               />
             </Styled.FormItem>
             <Styled.FormItem
@@ -135,7 +140,11 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
-                onKeyPress={(e) => isNumberKey(e)}
+                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                  if (!utils.isNumberKey(e)) {
+                    e.preventDefault();
+                  }
+                }}
               />
             </Styled.FormItem>
             <Styled.FormItem
@@ -156,7 +165,11 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
-                onKeyPress={(e) => isNumberKey(e)}
+                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                  if (!utils.isNumberKey(e)) {
+                    e.preventDefault();
+                  }
+                }}
               />
             </Styled.FormItem>
             <Styled.FormItem>
