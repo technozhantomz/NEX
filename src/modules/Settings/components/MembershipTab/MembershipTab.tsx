@@ -93,9 +93,9 @@ export const MembershipTab = (): JSX.Element => {
             ) : (
               <>
                 <Styled.Label>Your referral link</Styled.Label>
-                <Styled.Paragraph>
+                <Styled.RefferalParagraph>
                   {`Give this to link to people you want to refer to Peerplays: ${link}/signup/?r=${name}`}
-                </Styled.Paragraph>
+                </Styled.RefferalParagraph>
               </>
             )}
             <Styled.Heading>Fee Allocation</Styled.Heading>

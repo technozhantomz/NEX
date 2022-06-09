@@ -110,3 +110,15 @@ export const PercentageContainer = styled.div`
     width: 20%;
   }
 `;
+
+export const RefferalParagraph = styled.p`
+  text-align: left;
+  width: 100%;
+  font-weight: 400;
+  letter-spacing: 0px;
+  color: ${colors.textColor};
+  opacity: 1;
+  ${breakpoint.md} {
+    white-space: nowrap;
+  }
+`;
