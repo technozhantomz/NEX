@@ -6,8 +6,9 @@ import {
   useUserContext,
 } from "../../../common/providers";
 import { GPOSInfoResponse } from "../../../common/types";
+import { GPOSBalances } from "../types";
 
-import { GPOSBalances, UseGposPageResult } from "./useGposPage.types";
+import { UseGposPageResult } from "./useGposPage.types";
 
 export function useGposPage(): UseGposPageResult {
   const [gposBalances, setGposBalances] = useState<GPOSBalances>();

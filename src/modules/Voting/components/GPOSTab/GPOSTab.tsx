@@ -1,6 +1,7 @@
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
 
+import { defaultToken } from "../../../../api/params";
 import { useViewportContext } from "../../../../common/providers";
 
 import * as Styled from "./GPOSTab.styled";
@@ -18,6 +19,8 @@ export const GPOSTab = (): JSX.Element => {
       <ul>
         <li>{counterpart.translate(`pages.voting.gpos.rewards_way_first`)}</li>
         <li>{counterpart.translate(`pages.voting.gpos.rewards_way_second`)}</li>
+        <li>{`1. Transfer more ${defaultToken} into your GPOS balance`}</li>
+        <li>2. Share Peerplays with others</li>
       </ul>
       <p>
         {counterpart.translate(
@@ -31,6 +34,7 @@ export const GPOSTab = (): JSX.Element => {
     <Styled.GPOSTabWrapper>
       <Styled.GPOSIntro>
         <p>{counterpart.translate(`pages.voting.gpos.join_gpos`)}</p>
+        <p>{`Join GPOS by transferring your ${defaultToken} to your GPOS balance.`}</p>
         <p>
           {counterpart.translate(`pages.voting.gpos.consistently_participate`)}
         </p>
