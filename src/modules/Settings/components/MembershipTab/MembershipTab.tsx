@@ -102,7 +102,7 @@ export const MembershipTab = (): JSX.Element => {
                     `pages.settings.membership.referral_link_title`
                   )}
                 </Styled.Label>
-                <Styled.Paragraph>
+                <Styled.RefferalParagraph>
                   {counterpart.translate(
                     `pages.settings.membership.referral_link`,
                     {
@@ -110,7 +110,7 @@ export const MembershipTab = (): JSX.Element => {
                       name,
                     }
                   )}
-                </Styled.Paragraph>
+                </Styled.RefferalParagraph>
               </>
             )}
             <Styled.Heading>
