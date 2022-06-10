@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useState } from "react";
 
 import { useViewportContext } from "../../../../common/providers";
@@ -27,7 +28,9 @@ export const FeesTab = (): JSX.Element => {
   return (
     <Styled.FeesTabWrapper>
       <Styled.Section>
-        <Styled.FeeSpecificHeader>General</Styled.FeeSpecificHeader>
+        <Styled.FeeSpecificHeader>
+          {counterpart.translate(`pages.blocks.fees.general`)}
+        </Styled.FeeSpecificHeader>
         {sm ? (
           <>
             <List
@@ -48,7 +51,7 @@ export const FeesTab = (): JSX.Element => {
                     ) : (
                       <div className="fee-info">
                         <span className="fee-info-title">
-                          {FeesColumns[0].title}
+                          {FeesColumns[0].title()}
                         </span>
                         <span className="fee-info-value">
                           <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -59,7 +62,7 @@ export const FeesTab = (): JSX.Element => {
                     )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[1].title}
+                        {FeesColumns[1].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.types.map((type) => (
@@ -74,7 +77,7 @@ export const FeesTab = (): JSX.Element => {
                     </div>
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[2].title}
+                        {FeesColumns[2].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.fees.map((fee, index) => (
@@ -94,9 +97,13 @@ export const FeesTab = (): JSX.Element => {
             {loading ? (
               ""
             ) : generalFull ? (
-              <a onClick={() => setGeneralFull(false)}>Show Less</a>
+              <a onClick={() => setGeneralFull(false)}>
+                {counterpart.translate(`pages.blocks.fees.show_less`)}
+              </a>
             ) : (
-              <a onClick={() => setGeneralFull(true)}>Show More</a>
+              <a onClick={() => setGeneralFull(true)}>
+                {counterpart.translate(`pages.blocks.fees.show_more`)}
+              </a>
             )}
           </>
         ) : (
@@ -115,15 +122,21 @@ export const FeesTab = (): JSX.Element => {
               pagination={false}
             />
             {generalFull ? (
-              <a onClick={() => setGeneralFull(false)}>Show Less</a>
+              <a onClick={() => setGeneralFull(false)}>
+                {counterpart.translate(`pages.blocks.fees.show_less`)}
+              </a>
             ) : (
-              <a onClick={() => setGeneralFull(true)}>Show More</a>
+              <a onClick={() => setGeneralFull(true)}>
+                {counterpart.translate(`pages.blocks.fees.show_more`)}
+              </a>
             )}
           </>
         )}
       </Styled.Section>
       <Styled.Section>
-        <Styled.FeeSpecificHeader>Asset Specific</Styled.FeeSpecificHeader>
+        <Styled.FeeSpecificHeader>
+          {counterpart.translate(`pages.blocks.fees.asset_specific`)}
+        </Styled.FeeSpecificHeader>
         {sm ? (
           <>
             <List
@@ -144,7 +157,7 @@ export const FeesTab = (): JSX.Element => {
                     ) : (
                       <div className="fee-info">
                         <span className="fee-info-title">
-                          {FeesColumns[0].title}
+                          {FeesColumns[0].title()}
                         </span>
                         <span className="fee-info-value">
                           <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -155,7 +168,7 @@ export const FeesTab = (): JSX.Element => {
                     )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[1].title}
+                        {FeesColumns[1].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.types.map((type) => (
@@ -170,7 +183,7 @@ export const FeesTab = (): JSX.Element => {
                     </div>
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[2].title}
+                        {FeesColumns[2].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.fees.map((fee, index) => (
@@ -190,9 +203,13 @@ export const FeesTab = (): JSX.Element => {
             {loading ? (
               ""
             ) : assetFull ? (
-              <a onClick={() => setAssetFull(false)}>Show Less</a>
+              <a onClick={() => setAssetFull(false)}>
+                {counterpart.translate(`pages.blocks.fees.show_less`)}
+              </a>
             ) : (
-              <a onClick={() => setAssetFull(true)}>Show More</a>
+              <a onClick={() => setAssetFull(true)}>
+                {counterpart.translate(`pages.blocks.fees.show_more`)}
+              </a>
             )}
           </>
         ) : (
@@ -211,15 +228,21 @@ export const FeesTab = (): JSX.Element => {
               pagination={false}
             />
             {assetFull ? (
-              <a onClick={() => setAssetFull(false)}>Show Less</a>
+              <a onClick={() => setAssetFull(false)}>
+                {counterpart.translate(`pages.blocks.fees.show_less`)}
+              </a>
             ) : (
-              <a onClick={() => setAssetFull(true)}>Show More</a>
+              <a onClick={() => setAssetFull(true)}>
+                {counterpart.translate(`pages.blocks.fees.show_more`)}
+              </a>
             )}
           </>
         )}
       </Styled.Section>
       <Styled.Section>
-        <Styled.FeeSpecificHeader>Account Specific</Styled.FeeSpecificHeader>
+        <Styled.FeeSpecificHeader>
+          {counterpart.translate(`pages.blocks.fees.account_specific`)}
+        </Styled.FeeSpecificHeader>
         {sm ? (
           <>
             <List
@@ -240,7 +263,7 @@ export const FeesTab = (): JSX.Element => {
                     ) : (
                       <div className="fee-info">
                         <span className="fee-info-title">
-                          {FeesColumns[0].title}
+                          {FeesColumns[0].title()}
                         </span>
                         <span className="fee-info-value">
                           <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -251,7 +274,7 @@ export const FeesTab = (): JSX.Element => {
                     )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[1].title}
+                        {FeesColumns[1].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.types.map((type) => (
@@ -266,7 +289,7 @@ export const FeesTab = (): JSX.Element => {
                     </div>
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[2].title}
+                        {FeesColumns[2].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.fees.map((fee, index) => (
@@ -286,9 +309,13 @@ export const FeesTab = (): JSX.Element => {
             {loading ? (
               ""
             ) : accountFull ? (
-              <a onClick={() => setAccountFull(false)}>Show Less</a>
+              <a onClick={() => setAccountFull(false)}>
+                {counterpart.translate(`pages.blocks.fees.show_less`)}
+              </a>
             ) : (
-              <a onClick={() => setAccountFull(true)}>Show More</a>
+              <a onClick={() => setAccountFull(true)}>
+                {counterpart.translate(`pages.blocks.fees.show_more`)}
+              </a>
             )}
           </>
         ) : (
@@ -307,15 +334,21 @@ export const FeesTab = (): JSX.Element => {
               pagination={false}
             />
             {accountFull ? (
-              <a onClick={() => setAccountFull(false)}>Show Less</a>
+              <a onClick={() => setAccountFull(false)}>
+                {counterpart.translate(`pages.blocks.fees.show_less`)}
+              </a>
             ) : (
-              <a onClick={() => setAccountFull(true)}>Show More</a>
+              <a onClick={() => setAccountFull(true)}>
+                {counterpart.translate(`pages.blocks.fees.show_more`)}
+              </a>
             )}
           </>
         )}
       </Styled.Section>
       <Styled.Section>
-        <Styled.FeeSpecificHeader>Market Specific</Styled.FeeSpecificHeader>
+        <Styled.FeeSpecificHeader>
+          {counterpart.translate(`pages.blocks.fees.market_specific`)}
+        </Styled.FeeSpecificHeader>
         {sm ? (
           <List
             itemLayout="vertical"
@@ -329,7 +362,7 @@ export const FeesTab = (): JSX.Element => {
                   ) : (
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[0].title}
+                        {FeesColumns[0].title()}
                       </span>
                       <span className="fee-info-value">
                         <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -340,7 +373,7 @@ export const FeesTab = (): JSX.Element => {
                   )}
                   <div className="fee-info">
                     <span className="fee-info-title">
-                      {FeesColumns[1].title}
+                      {FeesColumns[1].title()}
                     </span>
                     <Styled.FeeTypeOrValueContainer>
                       {item.types.map((type) => (
@@ -355,7 +388,7 @@ export const FeesTab = (): JSX.Element => {
                   </div>
                   <div className="fee-info">
                     <span className="fee-info-title">
-                      {FeesColumns[2].title}
+                      {FeesColumns[2].title()}
                     </span>
                     <Styled.FeeTypeOrValueContainer>
                       {item.fees.map((fee, index) => (
@@ -384,7 +417,7 @@ export const FeesTab = (): JSX.Element => {
       </Styled.Section>
       <Styled.Section>
         <Styled.FeeSpecificHeader>
-          Bussiness Administration
+          {counterpart.translate(`pages.blocks.fees.business_administration`)}
         </Styled.FeeSpecificHeader>
         {sm ? (
           <>
@@ -406,7 +439,7 @@ export const FeesTab = (): JSX.Element => {
                     ) : (
                       <div className="fee-info">
                         <span className="fee-info-title">
-                          {FeesColumns[0].title}
+                          {FeesColumns[0].title()}
                         </span>
                         <span className="fee-info-value">
                           <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -417,7 +450,7 @@ export const FeesTab = (): JSX.Element => {
                     )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[1].title}
+                        {FeesColumns[1].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.types.map((type) => (
@@ -432,7 +465,7 @@ export const FeesTab = (): JSX.Element => {
                     </div>
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[2].title}
+                        {FeesColumns[2].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.fees.map((fee, index) => (
@@ -452,9 +485,13 @@ export const FeesTab = (): JSX.Element => {
             {loading ? (
               ""
             ) : businessFull ? (
-              <a onClick={() => setBusinessFull(false)}>Show Less</a>
+              <a onClick={() => setBusinessFull(false)}>
+                {counterpart.translate(`pages.blocks.fees.show_less`)}
+              </a>
             ) : (
-              <a onClick={() => setBusinessFull(true)}>Show More</a>
+              <a onClick={() => setBusinessFull(true)}>
+                {counterpart.translate(`pages.blocks.fees.show_more`)}
+              </a>
             )}
           </>
         ) : (
@@ -473,15 +510,21 @@ export const FeesTab = (): JSX.Element => {
               pagination={false}
             />
             {businessFull ? (
-              <a onClick={() => setBusinessFull(false)}>Show Less</a>
+              <a onClick={() => setBusinessFull(false)}>
+                {counterpart.translate(`pages.blocks.fees.show_less`)}
+              </a>
             ) : (
-              <a onClick={() => setBusinessFull(true)}>Show More</a>
+              <a onClick={() => setBusinessFull(true)}>
+                {counterpart.translate(`pages.blocks.fees.show_more`)}
+              </a>
             )}
           </>
         )}
       </Styled.Section>
       <Styled.Section>
-        <Styled.FeeSpecificHeader>Game Specific</Styled.FeeSpecificHeader>
+        <Styled.FeeSpecificHeader>
+          {counterpart.translate(`pages.blocks.fees.game_specific`)}
+        </Styled.FeeSpecificHeader>
         {sm ? (
           <>
             <List
@@ -502,7 +545,7 @@ export const FeesTab = (): JSX.Element => {
                     ) : (
                       <div className="fee-info">
                         <span className="fee-info-title">
-                          {FeesColumns[0].title}
+                          {FeesColumns[0].title()}
                         </span>
                         <span className="fee-info-value">
                           <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -513,7 +556,7 @@ export const FeesTab = (): JSX.Element => {
                     )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[1].title}
+                        {FeesColumns[1].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.types.map((type) => (
@@ -528,7 +571,7 @@ export const FeesTab = (): JSX.Element => {
                     </div>
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[2].title}
+                        {FeesColumns[2].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.fees.map((fee, index) => (
@@ -548,9 +591,13 @@ export const FeesTab = (): JSX.Element => {
             {loading ? (
               ""
             ) : gameFull ? (
-              <a onClick={() => setGameFull(false)}>Show Less</a>
+              <a onClick={() => setGameFull(false)}>
+                {counterpart.translate(`pages.blocks.fees.show_less`)}
+              </a>
             ) : (
-              <a onClick={() => setGameFull(true)}>Show More</a>
+              <a onClick={() => setGameFull(true)}>
+                {counterpart.translate(`pages.blocks.fees.show_more`)}
+              </a>
             )}
           </>
         ) : (
@@ -569,9 +616,13 @@ export const FeesTab = (): JSX.Element => {
               pagination={false}
             />
             {gameFull ? (
-              <a onClick={() => setGameFull(false)}>Show Less</a>
+              <a onClick={() => setGameFull(false)}>
+                {counterpart.translate(`pages.blocks.fees.show_less`)}
+              </a>
             ) : (
-              <a onClick={() => setGameFull(true)}>Show More</a>
+              <a onClick={() => setGameFull(true)}>
+                {counterpart.translate(`pages.blocks.fees.show_more`)}
+              </a>
             )}
           </>
         )}

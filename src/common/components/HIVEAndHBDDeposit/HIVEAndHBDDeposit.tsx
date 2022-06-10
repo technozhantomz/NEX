@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -23,11 +24,10 @@ export const HIVEAndHBDDeposit = ({
             <HIVEIcon width="20px" height="20px" />
           </Styled.LogoContainer>
           <Styled.DepositInstruction>
-            {`To deposit ${assetSymbol} to `}
-            <Styled.AccountContainer>{`${localStorageAccount} `}</Styled.AccountContainer>
-            please send your funds to son-account on the Hive blockchain with
-            the memo
-            <Styled.AccountContainer>{` ${localStorageAccount}`}</Styled.AccountContainer>
+            {counterpart.translate(`field.comments.deposit_hbd`, {
+              assetSymbol: assetSymbol,
+              accountName: localStorageAccount,
+            })}
           </Styled.DepositInstruction>
         </Styled.Container>
       ) : (
@@ -39,13 +39,17 @@ export const HIVEAndHBDDeposit = ({
               router.push("/login");
             }}
           >
-            {`Log in & Deposit ${assetSymbol}`}
+            {counterpart.translate(
+              `buttons.log_in_deposit_hbd_hive ${assetSymbol}`
+            )}
           </Styled.Button>
 
           <Styled.FormDisclamer>
-            <span>Don't have a Peerplays account? </span>
+            <span>
+              {counterpart.translate(`buttons.dont_have_peerplays_account`)}
+            </span>
             <Link href="/signup">
-              <a>Create account</a>
+              <a>{counterpart.translate(`links.create_account`)}</a>
             </Link>
           </Styled.FormDisclamer>
         </Styled.LoginContainer>

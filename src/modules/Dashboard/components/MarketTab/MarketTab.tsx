@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import React from "react";
 
 import { TradingPairCard } from "../../../../common/components";
@@ -10,7 +11,9 @@ export const MarketTab = (): JSX.Element => {
 
   return (
     <Styled.MarketContainer>
-      <Styled.Heading>Choose the trading pair you want to use</Styled.Heading>
+      <Styled.Heading>
+        {counterpart.translate(`pages.dashboard.marketTab.heading`)}
+      </Styled.Heading>
       <Styled.Div>
         <Styled.Row gutter={[16, 16]}>
           {pairs.map((pair, index) => (

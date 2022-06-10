@@ -39,25 +39,25 @@ export const BlockTable = ({
                 <Styled.BlockItemContent>
                   <div className="block-info">
                     <span className="block-info-title">
-                      {BlockColumns[0].title}
+                      {BlockColumns[0].title()}
                     </span>
                     <span className="block-info-value">{item.blockID}</span>
                   </div>
                   <div className="block-info">
                     <span className="block-info-title">
-                      {BlockColumns[1].title}
+                      {BlockColumns[1].title()}
                     </span>
                     <span className="block-info-value">{item.time}</span>
                   </div>
                   <div className="block-info">
                     <span className="block-info-title">
-                      {BlockColumns[2].title}
+                      {BlockColumns[2].title()}
                     </span>
                     <span className="block-info-value">{item.witness}</span>
                   </div>
                   <div className="block-info">
                     <span className="block-info-title">
-                      {BlockColumns[3].title}
+                      {BlockColumns[3].title()}
                     </span>
                     <span className="block-info-value">{item.transaction}</span>
                   </div>

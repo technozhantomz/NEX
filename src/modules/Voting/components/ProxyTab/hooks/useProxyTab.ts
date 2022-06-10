@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import { DEFAULT_PROXY_ID, defaultToken } from "../../../../../api/params";
@@ -129,11 +130,15 @@ export function useProxyTab({
         userDefaultAsset === undefined ||
         (userDefaultAsset.amount as number) < updateAccountFee
       ) {
-        setTransactionErrorMessage("Insufficient balance to pay the fee.");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.balance_not_enough_to_pay`)
+        );
         return;
       }
       if (totalGpos <= 0) {
-        setTransactionErrorMessage("You need to Vest some GPOS balance first");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.need_to_vest_gpos`)
+        );
       } else {
         setTransactionErrorMessage("");
         const activeKey = getPrivateKey(password, "active");
@@ -144,7 +149,9 @@ export function useProxyTab({
           setLoadingTransaction(false);
         } catch (error) {
           console.log(error);
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
         if (trxResult) {
@@ -153,11 +160,13 @@ export function useProxyTab({
           setIsPublishable(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            "You have successfully published your proxy"
+            counterpart.translate(`field.success.published_proxy`)
           );
           setLoadingTransaction(false);
         } else {
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
       }

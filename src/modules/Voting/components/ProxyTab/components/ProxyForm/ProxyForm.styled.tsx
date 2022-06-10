@@ -28,6 +28,9 @@ export const ProxyFormButton = styled(CardFormButton)`
     font-size: 15px;
     color: #b9b9b9;
   }
+  ${breakpoint.sm} {
+    width: unset;
+  }
 `;
 
 export const ProxySearchWrapper = styled.div`

@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import React from "react";
 
 import { InfoCircleOutlined } from "../../../../ui/src";
@@ -17,9 +18,11 @@ export const InfoBar = ({ password }: Props): JSX.Element => {
       </Styled.InfoDiv>
       <Styled.InfoBarText>
         <p>
-          <span>Keep your password safe to avoid losing any funds. </span>
+          <span>
+            {counterpart.translate(`field.labels.keep_password_safe`)}
+          </span>
           <a href="#" onClick={() => useGetRecoveryPassword(password)}>
-            Download Recovery password file here
+            {counterpart.translate(`field.labels.download_recovery_password`)}
           </a>
         </p>
       </Styled.InfoBarText>

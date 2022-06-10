@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { ChainValidation } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
@@ -63,13 +64,17 @@ export function useSignUpForm(): ISignUpForm {
   const checkPasswordMatch = (_: unknown, value: { passwordCheck: string }) => {
     if (value === signUpForm.getFieldValue("password"))
       return Promise.resolve();
-    return Promise.reject(new Error("Password do not match"));
+    return Promise.reject(
+      new Error(counterpart.translate(`field.errors.password_not_match`))
+    );
   };
 
   const validateUsername = async (_: unknown, value: string) => {
     const fullAccount = await getFullAccount(value, false);
     if (fullAccount) {
-      return Promise.reject(new Error("Username Already taken"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.username_taken`))
+      );
     }
     const defaultErrors = ChainValidation.is_account_name_error(value);
     if (defaultErrors) {
@@ -77,9 +82,7 @@ export function useSignUpForm(): ISignUpForm {
     }
     if (!ChainValidation.is_cheap_name(value)) {
       return Promise.reject(
-        new Error(
-          "This is a premium name which is not supported by this faucet."
-        )
+        new Error(counterpart.translate(`field.errors.premium_username`))
       );
     }
 
@@ -90,37 +93,49 @@ export function useSignUpForm(): ISignUpForm {
   const validateConfirmation = (_: unknown, value: boolean) => {
     return value
       ? Promise.resolve()
-      : Promise.reject(new Error("Confirmation Required"));
+      : Promise.reject(
+          new Error(counterpart.translate(`field.errors.confirmation_required`))
+        );
   };
 
   const validateSaved = (_: unknown, value: boolean) => {
     return value
       ? Promise.resolve()
-      : Promise.reject(new Error("Please save your password"));
+      : Promise.reject(
+          new Error(counterpart.translate(`field.errors.save_your_password`))
+        );
   };
   const formValidation: IFormValidation = {
     username: [
-      { required: true, message: "Username is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.username_required`),
+      },
       {
         pattern: new RegExp(/^([a-z])[a-z0-9]*$/),
-        message:
-          "Username should start with lowercase letter and should not contain capital letter or special characters or only digits",
+        message: counterpart.translate(`field.errors.username_limits`),
       },
       { validator: validateUsername },
     ],
     password: [
-      { required: true, message: "Password is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.password_required`),
+      },
       {
         pattern: new RegExp(/^\S*$/),
-        message: "Password should not contain any white spaces",
+        message: counterpart.translate(`field.errors.password_white_space`),
       },
       {
         min: 12,
-        message: "Password should be at least 12 characters long",
+        message: counterpart.translate(`field.errors.password_should_be_long`),
       },
     ],
     passwordCheck: [
-      { required: true, message: "This field is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.field_is_required`),
+      },
       { validator: checkPasswordMatch },
     ],
     confirm: [{ validator: validateConfirmation }],

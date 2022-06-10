@@ -38,8 +38,11 @@ export const BlockItemContent = styled.div`
     display: flex;
     .block-info-title {
       font-weight: 300;
-      width: 100px;
+      width: 120px;
+      min-width: 120px;
+      word-break: break-word;
       color: ${colors.textColorSecondary};
+      margin-right: 5px;
     }
     .block-info-value {
       font-weight: 500;

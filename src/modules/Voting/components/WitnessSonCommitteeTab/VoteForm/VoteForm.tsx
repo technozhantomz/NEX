@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { capitalize } from "lodash";
 import { Dispatch, SetStateAction } from "react";
 
@@ -64,10 +65,14 @@ export const VoteForm = ({
   });
   return (
     <Styled.VoteFormWrapper>
-      <Styled.Title>Vote for {capitalize(tab)}</Styled.Title>
+      <Styled.Title>
+        {counterpart.translate(`field.labels.vote_for`, {
+          tab: capitalize(tab),
+        })}
+      </Styled.Title>
       <Styled.VoteSearch
         size="large"
-        placeholder="Search account"
+        placeholder={counterpart.translate(`field.placeholder.search_accounts`)}
         onSearch={handleVoteSearch}
         loading={loading}
       />
@@ -81,7 +86,7 @@ export const VoteForm = ({
             {!isVotesChanged ? (
               <Styled.CardFormLinkButtonDisabled>
                 <Styled.Reset />
-                Reset Changes
+                {counterpart.translate(`buttons.reset_changes`)}
               </Styled.CardFormLinkButtonDisabled>
             ) : (
               <Styled.CardFormLinkButton
@@ -90,7 +95,7 @@ export const VoteForm = ({
                 }}
               >
                 <Styled.Reset />
-                Reset Changes
+                {counterpart.translate(`buttons.reset_changes`)}
               </Styled.CardFormLinkButton>
             )}
             {proxy.id !== DEFAULT_PROXY_ID ? (
@@ -103,7 +108,7 @@ export const VoteForm = ({
                   htmlType="submit"
                   disabled={true}
                 >
-                  Publish Changes
+                  {counterpart.translate(`buttons.publish_changes`)}
                 </Styled.Publish>
               </Tooltip>
             ) : (
@@ -112,7 +117,7 @@ export const VoteForm = ({
                 htmlType="submit"
                 disabled={!isVotesChanged}
               >
-                Publish Changes
+                {counterpart.translate(`buttons.publish_changes`)}
               </Styled.Publish>
             )}
           </Styled.ActionsContainer>

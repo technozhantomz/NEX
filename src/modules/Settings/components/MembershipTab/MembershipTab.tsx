@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 import React from "react";
 
@@ -66,19 +67,22 @@ export const MembershipTab = (): JSX.Element => {
             {!isLifetimeMember ? (
               <>
                 <Styled.Heading>
-                  {`Upgrade for ${feesCashback}% Cashback`}
+                  {counterpart.translate(
+                    `pages.settings.membership.upgrade_title`,
+                    { feesCashback }
+                  )}
                 </Styled.Heading>
                 <Styled.Paragraph>
-                  Every transaction on the Peerplays network is divided between
-                  the network and referrers. By registering to a Lifetime
-                  Membership the account will receive {`${feesCashback} `}
-                  cashback on every transaction fee paid. As a bonus it will
-                  also qualify to earn referral income from users registered
-                  with or refered to the network.
+                  {counterpart.translate(
+                    `pages.settings.membership.upgrade_description`,
+                    { feesCashback }
+                  )}
                 </Styled.Paragraph>
                 <Styled.Paragraph>
-                  A Lifetime Membership price will change over time, right now
-                  it is only {`${membershipPrice} ${defaultToken}`} .
+                  {counterpart.translate(
+                    `pages.settings.membership.membership_price`,
+                    { membershipPrice, defaultToken }
+                  )}
                 </Styled.Paragraph>
                 <Styled.ButtonContainer>
                   <Styled.Button
@@ -86,34 +90,52 @@ export const MembershipTab = (): JSX.Element => {
                     htmlType="submit"
                     disabled={loadingAccountMembership}
                   >
-                    Buy lifetime subscription
+                    {counterpart.translate(`buttons.buy_membership`)}
                   </Styled.Button>
                 </Styled.ButtonContainer>
               </>
             ) : (
               <>
-                <Styled.Label>Your referral link</Styled.Label>
+                <Styled.Label>
+                  {" "}
+                  {counterpart.translate(
+                    `pages.settings.membership.referral_link_title`
+                  )}
+                </Styled.Label>
                 <Styled.Paragraph>
-                  {`Give this to link to people you want to refer to Peerplays: ${link}/signup/?r=${name}`}
+                  {counterpart.translate(
+                    `pages.settings.membership.referral_link`,
+                    {
+                      link,
+                      name,
+                    }
+                  )}
                 </Styled.Paragraph>
               </>
             )}
-            <Styled.Heading>Fee Allocation</Styled.Heading>
+            <Styled.Heading>
+              {counterpart.translate(
+                `pages.settings.membership.fee_allocation`
+              )}
+            </Styled.Heading>
             <Styled.Paragraph>
-              Every time {name} pays a transaction fee, that fee is divided
-              among several different accounts. The network takes a {networkFee}
-              % cut, and the Lifetime Member who referred {name} gets a{" "}
-              {lifetimeFee}% cut. The registrar is the account that paid the
-              transaction fee to register {name} with the network. The registrar
-              gets to decide how to divide the remaining {referrerTotalFee}%
-              between themselves and their own Affiliate Referrer program.{" "}
-              {name}'s registrar chose to share {referrerFee}% of the total fee
-              with the Affiliate Referrer and keep {registrarFee}% of the total
-              fee for themselves.
+              {counterpart.translate(
+                `pages.settings.membership.fee_allocation_description`,
+                {
+                  name,
+                  networkFee,
+                  lifetimeFee,
+                  referrerTotalFee,
+                  referrerFee,
+                  registrarFee,
+                }
+              )}
             </Styled.Paragraph>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Network</Styled.Label>
+                <Styled.Label>
+                  {counterpart.translate(`pages.settings.membership.network`)}
+                </Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{networkFee}%</Styled.PercentageText>
@@ -121,7 +143,11 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Lifetime Referrer</Styled.Label>
+                <Styled.Label>
+                  {counterpart.translate(
+                    `pages.settings.membership.lifetime_reviewer`
+                  )}
+                </Styled.Label>
                 <Link href={`/user/${lifetimeReferrerName}`}>
                   {lifetimeReferrerName}
                 </Link>
@@ -132,7 +158,9 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Registrar</Styled.Label>
+                <Styled.Label>
+                  {counterpart.translate(`pages.settings.membership.registrar`)}
+                </Styled.Label>
                 <Link href={`/user/${registrarName}`}>{registrarName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
@@ -141,7 +169,11 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Affiliate Referrer</Styled.Label>
+                <Styled.Label>
+                  {counterpart.translate(
+                    `pages.settings.membership.affiliate_referrer`
+                  )}
+                </Styled.Label>
                 <Link href={`/user/${referrerName}`}>{referrerName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
@@ -150,16 +182,28 @@ export const MembershipTab = (): JSX.Element => {
             </Styled.FeeCategoryContainer>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Membership expiration</Styled.Label>
+                <Styled.Label>
+                  {counterpart.translate(
+                    `pages.settings.membership.expiration`
+                  )}
+                </Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{expirationDate}</Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
-            <Styled.Heading>Fee statistics</Styled.Heading>
+            <Styled.Heading>
+              {counterpart.translate(
+                `pages.settings.membership.fee_statistics`
+              )}
+            </Styled.Heading>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
-                <Styled.Label>Total fees paid</Styled.Label>
+                <Styled.Label>
+                  {counterpart.translate(
+                    `pages.settings.membership.total_fee_paid`
+                  )}
+                </Styled.Label>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>
@@ -167,18 +211,23 @@ export const MembershipTab = (): JSX.Element => {
                 </Styled.PercentageText>
               </Styled.PercentageContainer>
             </Styled.FeeCategoryContainer>
-            <Styled.Heading>Pending fees</Styled.Heading>
+            <Styled.Heading>
+              {counterpart.translate(`pages.settings.membership.pending_fees`)}
+            </Styled.Heading>
             <Styled.Paragraph>
-              {`Fees paid by ${name} are divided among the network, referrers, and registrars 
-              once every maintenance interval (${maintenanceInterval} seconds). 
-              The next maintenance time is ${nextMaintenanceTime}.`}
+              {counterpart.translate(
+                `pages.settings.membership.pending_fee_description`,
+                { name, maintenanceInterval, nextMaintenanceTime }
+              )}
             </Styled.Paragraph>
-            <Styled.Heading>Vesting fees</Styled.Heading>
+            <Styled.Heading>
+              {counterpart.translate(`pages.settings.membership.vesting_fees`)}
+            </Styled.Heading>
             <Styled.Paragraph>
-              {`Most fees are made available immediately, 
-              but fees over ${vestingThreshold} ${defaultToken} 
-              (such as those paid to upgrade your membership or register a premium account name) 
-              must vest for a total of ${vestingPeriod} days.`}
+              {counterpart.translate(
+                `pages.settings.membership.vesting_description`,
+                { vestingThreshold, defaultToken, vestingPeriod }
+              )}
             </Styled.Paragraph>
           </Styled.InfoContainer>
           <PasswordModal

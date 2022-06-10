@@ -27,7 +27,7 @@ export function useAssetsTab(): UseAssetsTabResult {
               id: asset.id,
               symbol: asset.symbol,
               maxSupply: Number(asset.options.max_supply),
-              percision: asset.precision,
+              precision: asset.precision,
               issuer: issuer && issuer.length > 0 ? issuer[0].name : "",
               info: asset.options.description,
             } as AssetTableRow;

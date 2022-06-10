@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
@@ -40,7 +41,11 @@ const Dashboard: React.FC = () => {
                   }
                   onClick={() => changeTab(e.tabName)}
                 >
-                  <Styled.ButtonNames>{e.tabName}</Styled.ButtonNames>
+                  <Styled.ButtonNames>
+                    {counterpart.translate(
+                      `buttons.${e.tabName.toLowerCase()}`
+                    )}
+                  </Styled.ButtonNames>
                 </Styled.Buttons>
               </Styled.Col>
             ))}

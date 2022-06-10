@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import { defaultLocales, faucetUrl } from "../../../../api/params";
 import { useSettings } from "../../hooks";
 
@@ -17,7 +19,9 @@ export const GeneralTab = (): JSX.Element => {
         name="generalSettingsForm"
         onFinish={updateSettings}
       >
-        <Styled.LabelText>Select language</Styled.LabelText>
+        <Styled.LabelText>
+          {counterpart.translate(`field.labels.select_language`)}
+        </Styled.LabelText>
         <Styled.LanguageFormItem name="selectedLanguage">
           <Styled.Select>
             {defaultLocales.map((e, id) => (
@@ -28,10 +32,12 @@ export const GeneralTab = (): JSX.Element => {
           </Styled.Select>
         </Styled.LanguageFormItem>
 
-        <Styled.LabelText>Browser notifications</Styled.LabelText>
+        <Styled.LabelText>
+          {counterpart.translate(`field.labels.browser_notifications`)}
+        </Styled.LabelText>
         <Styled.FormItem valuePropName="checked" name="allowNotifications">
           <Styled.Checkbox onChange={handleAllowNotifications}>
-            Enable notifications
+            {counterpart.translate(`field.checkBoxes.enable_notifications`)}
           </Styled.Checkbox>
         </Styled.FormItem>
         {/* <Styled.FormItem
@@ -43,20 +49,26 @@ export const GeneralTab = (): JSX.Element => {
           </Styled.TransferCheckbox>
         </Styled.FormItem> */}
         <Styled.FaucetSpace>
-          <Styled.LabelText>Faucet</Styled.LabelText>
+          <Styled.LabelText>
+            {counterpart.translate(`field.labels.faucet`)}
+          </Styled.LabelText>
           <Styled.FaucetURLWrapper>
-            <Styled.FaucetURL>{`Faucet URL: ${faucetUrl}`}</Styled.FaucetURL>
+            <Styled.FaucetURL>{`${counterpart.translate(
+              `field.labels.faucet_url`
+            )} ${faucetUrl}`}</Styled.FaucetURL>
             <Styled.CopyButton
-              buttonText="Copy URL"
+              buttonText={counterpart.translate(`field.labels.copy_url`)}
               copyValue={`${faucetUrl as string}`}
             ></Styled.CopyButton>
           </Styled.FaucetURLWrapper>
           {showSuccessMessage && (
-            <Styled.LabelText type="success">Setting saved!</Styled.LabelText>
+            <Styled.LabelText type="success">
+              {counterpart.translate(`field.labels.setting_saved`)}
+            </Styled.LabelText>
           )}
         </Styled.FaucetSpace>
         <Styled.SaveButton type="primary" htmlType="submit">
-          Save
+          {counterpart.translate(`buttons.save`)}
         </Styled.SaveButton>
       </Styled.GeneralTabForm>
     </Styled.GeneralSettingsCard>
