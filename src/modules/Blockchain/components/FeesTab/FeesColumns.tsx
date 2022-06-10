@@ -1,4 +1,4 @@
-import { TableHeading } from "../../../../common/components/TableHeading";
+import { TableHeading } from "../../../../common/components";
 import { Tag } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 

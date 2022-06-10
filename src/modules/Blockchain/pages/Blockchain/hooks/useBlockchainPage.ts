@@ -9,7 +9,7 @@ export function useBlockchainPage(tab?: string): BlockchainPage {
   const [pageMeta, setPageMeta] = useState<PageMeta>({
     title: "PeerPlays Blockchain",
     heading: counterpart.translate(`pages.blocks.blockchain.heading`),
-    description: "Blockchain | ",
+    description: "PeerPlays Blockchain",
   });
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export function useBlockchainPage(tab?: string): BlockchainPage {
         setPageMeta({
           title: "PeerPlays Blockchain",
           heading: counterpart.translate(`pages.blocks.blockchain.heading`),
-          description: "Blockchain | ",
+          description: "PeerPlays Blockchain",
         });
         break;
       case "assets":
@@ -53,7 +53,7 @@ export function useBlockchainPage(tab?: string): BlockchainPage {
         setPageMeta({
           title: "Blockchain",
           heading: counterpart.translate(`pages.blocks.blockchain.heading`),
-          description: "Blockchain | ",
+          description: "PeerPlays Blockchain",
         });
         break;
     }

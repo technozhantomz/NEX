@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 
 import { DEFAULT_PROXY_ID } from "../../../../../../api/params";
-import { TableHeading } from "../../../../../../common/components/TableHeading";
+import { TableHeading } from "../../../../../../common/components";
 import { useViewportContext } from "../../../../../../common/providers";
 import { Account, Proxy } from "../../../../../../common/types";
 
@@ -46,13 +46,13 @@ export const ProxyTable = ({
             <Styled.ProxyListItem key="item.id">
               <Styled.ProxyListItemContent>
                 <div className="vote-info">
-                  <span className="vote-info-title">{columns[0].title}</span>
+                  <span className="vote-info-title">{columns[0].title()}</span>
                   <span className="vote-info-value">
                     {(item as Account).name}
                   </span>
                 </div>
                 <div className="vote-info">
-                  <span className="vote-info-title">{columns[1].title}</span>
+                  <span className="vote-info-title">{columns[1].title()}</span>
                   <span className="vote-info-value">
                     <Styled.ProxyTableActionButton onClick={removeProxy}>
                       {counterpart.translate(`buttons.remove`)}

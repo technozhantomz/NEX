@@ -14,13 +14,15 @@ export const GPOSTab = (): JSX.Element => {
   const { sm } = useViewportContext();
   const ReadMoreBlock = (
     <>
-      <p>{counterpart.translate(`pages.voting.gpos.gpos_descriptions`)}</p>
+      <p>{counterpart.translate(`pages.voting.gpos.gpos_description`)}</p>
       <p>{counterpart.translate(`pages.voting.gpos.rewards_label`)}</p>
       <ul>
-        <li>{counterpart.translate(`pages.voting.gpos.rewards_way_first`)}</li>
+        <li>
+          {counterpart.translate(`pages.voting.gpos.rewards_way_first`, {
+            defaultToken: defaultToken,
+          })}
+        </li>
         <li>{counterpart.translate(`pages.voting.gpos.rewards_way_second`)}</li>
-        <li>{`1. Transfer more ${defaultToken} into your GPOS balance`}</li>
-        <li>2. Share Peerplays with others</li>
       </ul>
       <p>
         {counterpart.translate(
@@ -33,8 +35,11 @@ export const GPOSTab = (): JSX.Element => {
   return (
     <Styled.GPOSTabWrapper>
       <Styled.GPOSIntro>
-        <p>{counterpart.translate(`pages.voting.gpos.join_gpos`)}</p>
-        <p>{`Join GPOS by transferring your ${defaultToken} to your GPOS balance.`}</p>
+        <p>
+          {counterpart.translate(`pages.voting.gpos.join_gpos`, {
+            defaultToken: defaultToken,
+          })}
+        </p>
         <p>
           {counterpart.translate(`pages.voting.gpos.consistently_participate`)}
         </p>

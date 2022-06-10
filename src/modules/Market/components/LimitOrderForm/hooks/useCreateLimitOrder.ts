@@ -214,7 +214,7 @@ export function useCreateLimitOrder({
         refreshHistory();
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
-          counterpart.translate(`field.errors.limit_order_successfully`)
+          counterpart.translate(`field.success.limit_order_successfully`)
         );
         setLoadingTransaction(false);
       } else {

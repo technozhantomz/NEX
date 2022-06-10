@@ -209,7 +209,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       formAccountBalancesByName(localStorageAccount);
       setIsPasswordModalVisible(false);
       setStatus(
-        `${counterpart.translate(`field.errors.successfully_withdraw`)} ${
+        `${counterpart.translate(`field.success.successfully_withdraw`)} ${
           values.amount
         }`
       );

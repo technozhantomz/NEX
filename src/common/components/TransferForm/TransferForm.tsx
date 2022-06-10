@@ -67,7 +67,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             validateTrigger="onBlur"
           >
             <Input
-              placeholder={counterpart.translate(`field.placeholder.too`)}
+              placeholder={counterpart.translate(`field.placeholder.to`)}
             />
           </Form.Item>
           <Form.Item

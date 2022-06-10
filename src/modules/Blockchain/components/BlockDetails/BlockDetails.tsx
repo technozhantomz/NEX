@@ -18,11 +18,11 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
         </span>
         <span>
           <Link href={`/blockchain/${Number(block) - 1}`}>
-            {counterpart.translate(`pages.blocks.blockchain.previous`)}
+            {counterpart.translate(`buttons.previous`)}
           </Link>{" "}
           |{" "}
           <Link href={`/blockchain/${Number(block) + 1}`}>
-            {counterpart.translate(`pages.blocks.blockchain.next`)}
+            {counterpart.translate(`buttons.next`)}
           </Link>
         </span>
       </Styled.BlockNumber>

@@ -80,7 +80,7 @@ export function usePowerUpForm({
           });
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            counterpart.translate(`field.errors.successfully_deposited`, {
+            counterpart.translate(`field.success.successfully_deposited`, {
               depositAmount,
               symbol: gposBalances?.asset.symbol,
             })

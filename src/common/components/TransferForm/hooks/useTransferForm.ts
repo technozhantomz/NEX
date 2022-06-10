@@ -116,7 +116,7 @@ export function useTransferForm(): UseTransferFormResult {
       formAccountBalancesByName(localStorageAccount);
       setIsPasswordModalVisible(false);
       setStatus(
-        counterpart.translate(`field.errors.unable_transaction`, {
+        counterpart.translate(`field.success.successfully_transferred`, {
           amount: values.amount,
           asset: values.asset,
           to: values.to,

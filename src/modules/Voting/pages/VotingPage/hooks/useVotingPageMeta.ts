@@ -8,7 +8,7 @@ import { VotingPageMeta } from "./useVotingPageMeta.types";
 export function useVotingPageMeta(tab?: string): VotingPageMeta {
   const [pageMeta, setPageMeta] = useState<PageMeta>({
     title: "PeerPlays (GPOS)",
-    heading: counterpart.translate(`pages.voting.peerplays_gpos`),
+    heading: "PeerPlays (GPOS)",
     description: "PeerPlays (GPOS) | ",
   });
 
@@ -17,7 +17,7 @@ export function useVotingPageMeta(tab?: string): VotingPageMeta {
       case "gpos":
         setPageMeta({
           title: "PeerPlays (GPOS)",
-          heading: counterpart.translate(`pages.voting.peerplays_gpos`),
+          heading: "PeerPlays (GPOS)",
           description: "PeerPlays (GPOS)",
         });
         break;
@@ -52,7 +52,7 @@ export function useVotingPageMeta(tab?: string): VotingPageMeta {
       default:
         setPageMeta({
           title: "PeerPlays (GPOS)",
-          heading: counterpart.translate(`pages.voting.peerplays_gpos`),
+          heading: "PeerPlays (GPOS)",
           description: "PeerPlays (GPOS)",
         });
         break;

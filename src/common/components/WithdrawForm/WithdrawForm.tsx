@@ -36,7 +36,7 @@ export const WithdrawForm = ({
     handleAssetChange,
     submittingPassword,
   } = useWithdrawForm(asset);
-  const issuer = 0;
+
   return (
     <Form.Provider onFormFinish={onFormFinish}>
       <Styled.WithdrawForm

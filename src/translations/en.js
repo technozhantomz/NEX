@@ -464,6 +464,8 @@ export const en = {
     remove: "Remove",
     done: "Done",
     confirm: "Confirm",
+    previous: "Previous",
+    next: "Next",
   },
   pages: {
     logout: {
@@ -564,14 +566,14 @@ export const en = {
       },
       membership: {
         heading: "Membership",
-        upgrade_title: "Upgrade for %(feesCashback)s  Cashback",
+        upgrade_title: "Upgrade for %(feesCashback)s%%  Cashback",
         upgrade_description:
-          "Every transaction on the Peerplays network is divided between the network and referrers. By registering to a Lifetime Membership the account will receive %(feesCashback)s cashback on every transaction fee paid. As a bonus it will also qualify to earn referral income from users registered with or refered to the network.",
+          "Every transaction on the Peerplays network is divided between the network and referrers. By registering to a Lifetime Membership the account will receive %(feesCashback)s cashback on every transaction fee paid. As a bonus it will also qualify to earn referral income from users registered with or referred to the network.",
         membership_price:
           "A Lifetime Membership price will change over time, right now it is only %(membershipPrice)s %(defaultToken)s.",
         fee_allocation: "Fee Allocation",
         fee_allocation_description:
-          "Every time %(name)s pays a transaction fee, that fee is divided among several different accounts. The network takes a %(networkFee)s cut, and the Lifetime Member who referred %(name)s gets a %(lifetimeFee)s cut. The registrar is the account that paid the transaction fee to register %(name)s with the network. The registrar gets to decide how to divide the remaining %(referrerTotalFee)s between themselves and their own Affiliate Referrer program. %(name)s s registrar chose to share %(referrerFee)s of the total fee with the Affiliate Referrer and keep %(registrarFee)s of the total fee for themselves.",
+          "Every time %(name)s pays a transaction fee, that fee is divided among several different accounts. The network takes a %(networkFee)s%% cut, and the Lifetime Member who referred %(name)s gets a %(lifetimeFee)s%% cut. The registrar is the account that paid the transaction fee to register %(name)s with the network. The registrar gets to decide how to divide the remaining %(referrerTotalFee)s%% between themselves and their own Affiliate Referrer program. %(name)s's registrar chose to share %(referrerFee)s%% of the total fee with the Affiliate Referrer and keep %(registrarFee)s%% of the total fee for themselves.",
         network: "Network",
         lifetime_reviewer: "Lifetime Referrer",
         registrar: "Registrar",
@@ -599,14 +601,16 @@ export const en = {
       lower_case_committees: "committees",
       gpos: {
         heading: "GPOS",
-        join_gpos: "Join GPOS by transferring your PPY to your GPOS balance.",
+        join_gpos:
+          "Join GPOS by transferring your %(defaultToken)s to your GPOS balance.",
         consistently_participate:
           "Consistently participate in voting for the best Witnesses, Advisors, Proposals, and SONs. Share the exciting news and DApps available on Peerplays with others.",
         gpos_description:
           "The more value that comes into Peerplays blockchain through its operations, the more those that participate to help make it secure will earn!",
         rewards_label:
           "If you want to increase your participation rewards you can do it two ways:",
-        rewards_way_first: "1. Transfer more PPY into your GPOS balance",
+        rewards_way_first:
+          "1. Transfer more %(defaultToken)s into your GPOS balance",
         rewards_way_second: "2. Share Peerplays with others",
         decentralized_autonomous_cooperative:
           "Together as a Decentralized Autonomous Cooperative (DAC), we can ensure Peerplays remains the most secure provably fair blockchain globally.",
@@ -629,24 +633,24 @@ export const en = {
         },
         powerUp: {
           power_up_description:
-            "When you Power Up your PPY on the Peerplays blockchain you are taking your first steps into participating in the Decentralized Autonomous Cooperative (DAC) that is the magic in blockchain tech. This means you will:",
+            "When you Power Up your %(defaultToken)s on the Peerplays blockchain you are taking your first steps into participating in the Decentralized Autonomous Cooperative (DAC) that is the magic in blockchain tech. This means you will:",
           power_up_lists: {
             first: "Become a big part of something special on a global scale",
             second: "Earn participation rewards for your efforts",
             third: "Bragging rights to family and friends",
-            fourth: "Stake your PPY while you participate",
+            fourth: "Stake your %(defaultToken)s while you participate",
             fifth: "Help secure the Peerplays blockchain",
           },
         },
         powerDown: {
           power_down_description:
-            "When you Power Down it will take 30 days for you to withdraw your PPY balance in full. You will continue to receive participation rewards during that time so long as you have been participating. After Power Down you can then use your PPY like any other cryptocurrency. This means you will:",
+            "When you Power Down it will take 30 days for you to withdraw your %(defaultToken)s balance in full. You will continue to receive participation rewards during that time so long as you have been participating. After Power Down you can then use your %(defaultToken)s like any other cryptocurrency. This means you will:",
           power_down_lists: {
             first: "Still be a part of something special, just not as much",
             second: "No longer helping secure the Peerplays blockchain",
             third: "No longer earn participation rewards",
             fourth: "Lose bragging rights",
-            fifth: "Stop staking your PPY",
+            fifth: "Stop staking your %(defaultToken)s",
           },
         },
       },
@@ -746,6 +750,12 @@ export const en = {
       enable_notifications: "Enable Notifications",
     },
     errors: {
+      same_account: "Same as your account",
+      no_account: "Account not found",
+      premium_username:
+        "This is a premium name which is not supported by this faucet.",
+      username_limits:
+        "Username should start with lowercase letter and should not contain capital letter or special characters or only digits",
       user_not_found: "User not found",
       password_incorrect: "Password incorrect",
       username_required: "Username is required",
@@ -753,12 +763,11 @@ export const en = {
       password_should_be_long: "Password should be at least 12 characters long",
       password_not_match: "Password do not match",
       username_taken: "Username Already taken",
-      confirmation_rquired: "Confirmation Required",
+      confirmation_required: "Confirmation Required",
       save_your_password: "Please save your password",
       password_white_space: "Password should not contain any white spaces",
       field_is_required: "This field is required",
       server_error: "Server error, please try again later.",
-      successfully_withdraw: "Successfully withdraw",
       amount_should_greater: "Amount should be greater than 0",
       balance_not_enough: "Balance is not enough",
       balance_not_enough_to_pay: "Balance is not enough to pay the fee",
@@ -768,41 +777,45 @@ export const en = {
         "Please first generate bitcoin addresses at deposit tab",
       from_required: "From is required",
       to_required: "To is required",
-      amount_requireds: "Amount is required",
+      amount_required: "Amount is required",
       withdraw_add_required: "Withdraw address is required",
       withdraw_pub_key_required: "Withdraw public key is required",
       sons_not_available_try_again:
         "SONs network is not available now. Please try again later!",
       transaction_unable: "Unable to process the transaction!",
-      limit_order_successfully: "You have successfully created a limit order",
       price_should_greater: "Price should be greater than 0",
       assets_must_different: "Assets Must Be Different",
       assets_should_be: "One of the assets should be %(defaultToken)s",
-      successfully_withdrawn:
-        "Successfully Withdrawn %(withdrawAmount)s %(precision)s",
       available_balance_cannot_greater:
         "Can not be greater than available balance",
       withdraw_amount_required: "Withdraw amount is required",
       deposit_amount_should_greater: "Deposit amount should be greater than 0",
       deposit_amount_required: "Deposit amount in required",
-      successfully_deposited:
-        "Successfully Deposited %(depositAmount)s %(symbol)s",
-      saved_changes: "You have successfully saved your changes",
       memo_warning:
         "WARNING: If you replace the memo key you will be unable to read old memos when logging in with your password",
       select_role: "Please at least select one role",
       wait_loading_keys: "Please wait for loading user keys",
       keys_already_used:
-        "These keys are already in used for active permissions",
-      account_upgraded_successfully:
-        "Your account successfully upgraded to lifetime membership account",
+        "These keys are already in used for %(role)s permissions",
       need_to_vest_gpos: "You need to Vest some GPOS balance first",
-      published_proxy: "You have successfully published your proxy",
-      published_votes: "You have successfully published your votes",
       asset_required: "Asset is required",
       cannot_send_yourself: "Can not send to yourself",
-      successfully_transfered:
-        "Successfully Transfered %(amount)s %(asset)s to %(to)s",
+      unable_transaction: "Unable to process the transaction!",
+    },
+    success: {
+      successfully_transferred:
+        "Successfully Transferred %(amount)s %(asset)s to %(to)s",
+      successfully_withdraw: "Successfully withdraw",
+      successfully_withdrawn:
+        "Successfully Withdrawn %(withdrawAmount)s %(precision)s",
+      successfully_deposited:
+        "Successfully Deposited %(depositAmount)s %(symbol)s",
+      limit_order_successfully: "You have successfully created a limit order",
+      saved_changes: "You have successfully saved your changes",
+      account_upgraded_successfully:
+        "Your account successfully upgraded to lifetime membership account",
+      published_proxy: "You have successfully published your proxy",
+      published_votes: "You have successfully published your votes",
     },
   },
   tableHead: {

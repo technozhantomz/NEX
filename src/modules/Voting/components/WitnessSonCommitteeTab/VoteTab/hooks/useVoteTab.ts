@@ -200,7 +200,7 @@ export function useVoteTab({
           setIsVotesChanged(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            counterpart.translate(`field.errors.published_votes`)
+            counterpart.translate(`field.success.published_votes`)
           );
           setLoadingTransaction(false);
         } else {

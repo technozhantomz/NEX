@@ -1,4 +1,4 @@
-import { TableHeading } from "../../../TableHeading";
+import { TableHeading } from "../../../";
 import { ActivityTag } from "../ActivityTag";
 import { AvtivityInfo } from "../AvtivityInfo";
 
@@ -21,7 +21,7 @@ export const ActivityColumns = [
     render: (value: string): JSX.Element => <AvtivityInfo infoString={value} />,
   },
   {
-    title: (): JSX.Element => <TableHeading heading={"time"} />,
+    title: (): JSX.Element => <TableHeading heading={"id"} />,
     dataIndex: "id",
     key: "id",
   },

@@ -78,8 +78,8 @@ export const ProxyForm = ({
           help={
             searchError
               ? isSameAccount
-                ? "Same as your account"
-                : "Account not found"
+                ? counterpart.translate(`field.errors.same_account`)
+                : counterpart.translate(`field.errors.no_account`)
               : undefined
           }
         >

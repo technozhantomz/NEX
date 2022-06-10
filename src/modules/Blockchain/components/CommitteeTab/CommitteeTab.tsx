@@ -58,13 +58,13 @@ export const CommitteeTab = (): JSX.Element => {
               <Styled.CommiteeItemContent>
                 <div className="commitee-info">
                   <span className="commitee-info-title">
-                    {CommitteeColumns[0].title}
+                    {CommitteeColumns[0].title()}
                   </span>
                   <span className="commitee-info-value">{item.rank}</span>
                 </div>
                 <div className="commitee-info">
                   <span className="commitee-info-title">
-                    {CommitteeColumns[1].title}
+                    {CommitteeColumns[1].title()}
                   </span>
                   <span className="commitee-info-value">
                     <Link href={`/user/${item.name}`}>{item.name}</Link>
@@ -72,13 +72,13 @@ export const CommitteeTab = (): JSX.Element => {
                 </div>
                 <div className="commitee-info">
                   <span className="commitee-info-title">
-                    {CommitteeColumns[2].title}
+                    {CommitteeColumns[2].title()}
                   </span>
                   <span className="commitee-info-value">{item.totalVotes}</span>
                 </div>
                 <div className="commitee-info">
                   <span className="commitee-info-title">
-                    {CommitteeColumns[3].title}
+                    {CommitteeColumns[3].title()}
                   </span>
                   <span className="commitee-info-value">
                     <Link href={`${item.url}`} passHref>

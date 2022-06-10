@@ -160,7 +160,7 @@ export function useProxyTab({
           setIsPublishable(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            counterpart.translate(`field.errors.published_proxy`)
+            counterpart.translate(`field.success.published_proxy`)
           );
           setLoadingTransaction(false);
         } else {

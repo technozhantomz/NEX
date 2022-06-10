@@ -184,7 +184,7 @@ export function useMembershipTab(): UseMembershipTabResult {
           setIsLifetimeMember(true);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            counterpart.translate(`field.errors.account_upgraded_successfully`)
+            counterpart.translate(`field.success.account_upgraded_successfully`)
           );
           setLoadingTransaction(false);
         } else {

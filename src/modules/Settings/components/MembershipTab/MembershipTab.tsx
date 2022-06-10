@@ -98,13 +98,18 @@ export const MembershipTab = (): JSX.Element => {
               <>
                 <Styled.Label>
                   {" "}
-                  {counterpart.translate(`buttons.referral_link_title`)}
+                  {counterpart.translate(
+                    `pages.settings.membership.referral_link_title`
+                  )}
                 </Styled.Label>
                 <Styled.Paragraph>
-                  {counterpart.translate(`buttons.referral_link`, {
-                    link,
-                    name,
-                  })}
+                  {counterpart.translate(
+                    `pages.settings.membership.referral_link`,
+                    {
+                      link,
+                      name,
+                    }
+                  )}
                 </Styled.Paragraph>
               </>
             )}

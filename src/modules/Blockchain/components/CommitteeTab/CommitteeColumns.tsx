@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { TableHeading } from "../../../../common/components/TableHeading";
+import { TableHeading } from "../../../../common/components";
 
 import * as Styled from "./CommitteeColumns.styled";
 

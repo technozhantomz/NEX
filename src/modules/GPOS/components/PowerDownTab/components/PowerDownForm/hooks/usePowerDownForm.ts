@@ -77,7 +77,7 @@ export function usePowerDownForm({
           });
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            counterpart.translate(`field.errors.successfully_withdrawn`, {
+            counterpart.translate(`field.success.successfully_withdrawn`, {
               withdrawAmount: values.withdrawAmount,
               precision: gposBalances?.asset.precision,
             })

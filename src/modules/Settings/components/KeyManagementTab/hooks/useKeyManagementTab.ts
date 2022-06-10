@@ -506,7 +506,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           formAccountBalancesByName(localStorageAccount);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            counterpart.translate(`field.errors.saved_changes`)
+            counterpart.translate(`field.success.saved_changes`)
           );
           await getAccountWithPermissions();
           setIsPublishable(false);
@@ -705,7 +705,11 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       serverUserActivePermissions.keys.includes(keys.active as string)
     ) {
       return Promise.reject(
-        new Error(counterpart.translate(`field.errors.keys_already_used`))
+        new Error(
+          counterpart.translate(`field.errors.keys_already_used`, {
+            role: "active",
+          })
+        )
       );
     }
     if (
@@ -713,7 +717,11 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       serverUserOwnerPermissions.keys.includes(keys.owner as string)
     ) {
       return Promise.reject(
-        new Error(counterpart.translate(`field.errors.keys_already_used`))
+        new Error(
+          counterpart.translate(`field.errors.keys_already_used`, {
+            role: "owner",
+          })
+        )
       );
     }
     if (
@@ -721,7 +729,11 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       serverUserMemoKey === (keys.memo as string)
     ) {
       return Promise.reject(
-        new Error(counterpart.translate(`field.errors.keys_already_used`))
+        new Error(
+          counterpart.translate(`field.errors.keys_already_used`, {
+            role: "memo",
+          })
+        )
       );
     }
 

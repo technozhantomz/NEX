@@ -24,25 +24,25 @@ export const ActivityList = ({
         <Styled.ActivityListItem key={item.key}>
           <Styled.ActivitysItemContent>
             <div className="activity-info">
-              <span className="activity-info-title">{columns[0].title}</span>
+              <span className="activity-info-title">{columns[0].title()}</span>
               <span className="activity-info-value">{item.time}</span>
             </div>
             <div className="activity-info">
-              <span className="activity-info-title">{columns[2].title}</span>
+              <span className="activity-info-title">{columns[2].title()}</span>
               <span className="activity-info-value">
                 <AvtivityInfo infoString={item.info} />
               </span>
             </div>
             <div className="activity-info">
-              <span className="activity-info-title">{columns[3].title}</span>
+              <span className="activity-info-title">{columns[3].title()}</span>
               <span className="activity-info-value">{item.id}</span>
             </div>
             <div className="activity-info">
-              <span className="activity-info-title">{columns[4].title}</span>
+              <span className="activity-info-title">{columns[4].title()}</span>
               <span className="activity-info-value">{item.fee}</span>
             </div>
             <div className="activity-info">
-              <span className="activity-info-title">{columns[1].title}</span>
+              <span className="activity-info-title">{columns[1].title()}</span>
               <span className="activity-info-value">
                 <ActivityTag type={item.type} />
               </span>

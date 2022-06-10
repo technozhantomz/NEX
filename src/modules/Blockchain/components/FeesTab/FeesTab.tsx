@@ -51,7 +51,7 @@ export const FeesTab = (): JSX.Element => {
                     ) : (
                       <div className="fee-info">
                         <span className="fee-info-title">
-                          {FeesColumns[0].title}
+                          {FeesColumns[0].title()}
                         </span>
                         <span className="fee-info-value">
                           <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -62,7 +62,7 @@ export const FeesTab = (): JSX.Element => {
                     )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[1].title}
+                        {FeesColumns[1].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.types.map((type) => (
@@ -77,7 +77,7 @@ export const FeesTab = (): JSX.Element => {
                     </div>
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[2].title}
+                        {FeesColumns[2].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.fees.map((fee, index) => (
@@ -157,7 +157,7 @@ export const FeesTab = (): JSX.Element => {
                     ) : (
                       <div className="fee-info">
                         <span className="fee-info-title">
-                          {FeesColumns[0].title}
+                          {FeesColumns[0].title()}
                         </span>
                         <span className="fee-info-value">
                           <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -168,7 +168,7 @@ export const FeesTab = (): JSX.Element => {
                     )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[1].title}
+                        {FeesColumns[1].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.types.map((type) => (
@@ -183,7 +183,7 @@ export const FeesTab = (): JSX.Element => {
                     </div>
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[2].title}
+                        {FeesColumns[2].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.fees.map((fee, index) => (
@@ -263,7 +263,7 @@ export const FeesTab = (): JSX.Element => {
                     ) : (
                       <div className="fee-info">
                         <span className="fee-info-title">
-                          {FeesColumns[0].title}
+                          {FeesColumns[0].title()}
                         </span>
                         <span className="fee-info-value">
                           <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -274,7 +274,7 @@ export const FeesTab = (): JSX.Element => {
                     )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[1].title}
+                        {FeesColumns[1].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.types.map((type) => (
@@ -289,7 +289,7 @@ export const FeesTab = (): JSX.Element => {
                     </div>
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[2].title}
+                        {FeesColumns[2].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.fees.map((fee, index) => (
@@ -362,7 +362,7 @@ export const FeesTab = (): JSX.Element => {
                   ) : (
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[0].title}
+                        {FeesColumns[0].title()}
                       </span>
                       <span className="fee-info-value">
                         <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -373,7 +373,7 @@ export const FeesTab = (): JSX.Element => {
                   )}
                   <div className="fee-info">
                     <span className="fee-info-title">
-                      {FeesColumns[1].title}
+                      {FeesColumns[1].title()}
                     </span>
                     <Styled.FeeTypeOrValueContainer>
                       {item.types.map((type) => (
@@ -388,7 +388,7 @@ export const FeesTab = (): JSX.Element => {
                   </div>
                   <div className="fee-info">
                     <span className="fee-info-title">
-                      {FeesColumns[2].title}
+                      {FeesColumns[2].title()}
                     </span>
                     <Styled.FeeTypeOrValueContainer>
                       {item.fees.map((fee, index) => (
@@ -439,7 +439,7 @@ export const FeesTab = (): JSX.Element => {
                     ) : (
                       <div className="fee-info">
                         <span className="fee-info-title">
-                          {FeesColumns[0].title}
+                          {FeesColumns[0].title()}
                         </span>
                         <span className="fee-info-value">
                           <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -450,7 +450,7 @@ export const FeesTab = (): JSX.Element => {
                     )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[1].title}
+                        {FeesColumns[1].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.types.map((type) => (
@@ -465,7 +465,7 @@ export const FeesTab = (): JSX.Element => {
                     </div>
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[2].title}
+                        {FeesColumns[2].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.fees.map((fee, index) => (
@@ -545,7 +545,7 @@ export const FeesTab = (): JSX.Element => {
                     ) : (
                       <div className="fee-info">
                         <span className="fee-info-title">
-                          {FeesColumns[0].title}
+                          {FeesColumns[0].title()}
                         </span>
                         <span className="fee-info-value">
                           <Tag key={item.operation} bgColor={colors.assetTag}>
@@ -556,7 +556,7 @@ export const FeesTab = (): JSX.Element => {
                     )}
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[1].title}
+                        {FeesColumns[1].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.types.map((type) => (
@@ -571,7 +571,7 @@ export const FeesTab = (): JSX.Element => {
                     </div>
                     <div className="fee-info">
                       <span className="fee-info-title">
-                        {FeesColumns[2].title}
+                        {FeesColumns[2].title()}
                       </span>
                       <Styled.FeeTypeOrValueContainer>
                         {item.fees.map((fee, index) => (

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { TableHeading } from "../../../../common/components/TableHeading";
+import { TableHeading } from "../../../../common/components";
 
 import * as Styled from "./WitnessesColumns.styled";
 
@@ -11,7 +11,7 @@ export const WitnessesColumns = [
     key: "rank",
   },
   {
-    title: (): JSX.Element => <TableHeading heading={"time"} />,
+    title: (): JSX.Element => <TableHeading heading={"name"} />,
     dataIndex: "name",
     key: "name",
     render: (name: string): JSX.Element => (

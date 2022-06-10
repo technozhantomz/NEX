@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
 
-import { TableHeading } from "../../../../common/components/TableHeading";
+import { TableHeading } from "../../../../common/components";
 import { useAsset } from "../../../../common/hooks";
 import { useViewportContext } from "../../../../common/providers";
 import { List } from "../../../../ui/src";
@@ -75,7 +75,7 @@ export const AssetsTable = ({
         if (hasWithdraw) {
           return (
             <AssetActionButton
-              txt={counterpart.translate(`buttons,withdraw`)}
+              txt={counterpart.translate(`buttons.withdraw`)}
               href={`/wallet/${record.asset}?tab=withdraw`}
             />
           );
@@ -152,23 +152,23 @@ export const AssetsTable = ({
               <AssetTitle symbol={item.asset} />
               <Styled.AssetsItemContent>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[1].title}</span>
+                  <span className="asset-info-title">{columns[1].title()}</span>
                   <span className="asset-info-value">{item.available}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[2].title}</span>
+                  <span className="asset-info-title">{columns[2].title()}</span>
                   <span className="asset-info-value">{item.quoteAsset}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[3].title}</span>
+                  <span className="asset-info-title">{columns[3].title()}</span>
                   <span className="asset-info-value">{item.price}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[4].title}</span>
+                  <span className="asset-info-title">{columns[4].title()}</span>
                   <span className="asset-info-value">{item.change}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[5].title}</span>
+                  <span className="asset-info-title">{columns[5].title()}</span>
                   <span className="asset-info-value">{item.volume}</span>
                 </div>
               </Styled.AssetsItemContent>

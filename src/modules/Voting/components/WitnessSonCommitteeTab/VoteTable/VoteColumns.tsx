@@ -32,7 +32,7 @@ export const showVotesColumns = (
       render: (_value: string, _record: any): JSX.Element => {
         if (_value === "") {
           return (
-            <span>counterpart.translate(`pages.labels.not_available`)</span>
+            <span>{counterpart.translate(`field.labels.not_available`)}</span>
           );
         } else {
           return (

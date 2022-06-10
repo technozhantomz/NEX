@@ -73,7 +73,7 @@ export const AssetsTab = (): JSX.Element => {
                   <span className="asset-info-title">
                     {AssetsColumns[3].title}
                   </span>
-                  <span className="asset-info-value">{item.percision}</span>
+                  <span className="asset-info-value">{item.precision}</span>
                 </div>
                 <div className="asset-info">
                   <span className="asset-info-title">

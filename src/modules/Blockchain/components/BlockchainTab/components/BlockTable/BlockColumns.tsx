@@ -1,4 +1,4 @@
-import { TableHeading } from "../../../../../../common/components/TableHeading";
+import { TableHeading } from "../../../../../../common/components";
 
 export const BlockColumns = [
   {

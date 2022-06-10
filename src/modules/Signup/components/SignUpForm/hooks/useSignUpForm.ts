@@ -82,9 +82,7 @@ export function useSignUpForm(): ISignUpForm {
     }
     if (!ChainValidation.is_cheap_name(value)) {
       return Promise.reject(
-        new Error(
-          "This is a premium name which is not supported by this faucet."
-        )
+        new Error(counterpart.translate(`field.errors.premium_username`))
       );
     }
 
@@ -109,10 +107,13 @@ export function useSignUpForm(): ISignUpForm {
   };
   const formValidation: IFormValidation = {
     username: [
-      { required: true, message: "Username is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.username_required`),
+      },
       {
         pattern: new RegExp(/^([a-z])[a-z0-9]*$/),
-        message: counterpart.translate(`field.errors.username_required`),
+        message: counterpart.translate(`field.errors.username_limits`),
       },
       { validator: validateUsername },
     ],

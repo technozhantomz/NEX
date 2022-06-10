@@ -62,9 +62,7 @@ export const VoteTable = ({
                       {" "}
                       {_page > 0 ? (
                         <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(
-                            `pages.blocks.blockchain.previous`
-                          )}
+                          {counterpart.translate(`buttons.previous`)}
                         </a>
                       ) : (
                         ""
@@ -75,7 +73,7 @@ export const VoteTable = ({
                 if (type === "next") {
                   return (
                     <a style={{ marginLeft: "8px" } as CSSProperties}>
-                      {counterpart.translate(`pages.blocks.blockchain.next`)}
+                      {counterpart.translate(`buttons.next`)}
                     </a>
                   );
                 }
@@ -116,7 +114,7 @@ export const VoteTable = ({
                         <Styled.VoteActionButton
                           onClick={() => approveVote((item as VoteRow).id)}
                         >
-                          {counterpart.translate(`pages.blocks.blockchain.add`)}
+                          {counterpart.translate(`buttons.add`)}
                         </Styled.VoteActionButton>
                       )}
                     </span>
@@ -142,16 +140,14 @@ export const VoteTable = ({
                 if (type === "prev") {
                   return (
                     <a style={{ marginRight: "8px" } as CSSProperties}>
-                      {counterpart.translate(
-                        `pages.blocks.blockchain.previous`
-                      )}
+                      {counterpart.translate(`buttons.previous`)}
                     </a>
                   );
                 }
                 if (type === "next") {
                   return (
                     <a style={{ marginLeft: "8px" } as CSSProperties}>
-                      {counterpart.translate(`pages.blocks.blockchain.next`)}
+                      {counterpart.translate(`buttons.next`)}
                     </a>
                   );
                 }

@@ -77,13 +77,13 @@ export const WitnessesTab = (): JSX.Element => {
               <Styled.WitnessItemContent>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[0].title}
+                    {WitnessesColumns[0].title()}
                   </span>
                   <span className="witness-info-value">{item.rank}</span>
                 </div>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[1].title}
+                    {WitnessesColumns[1].title()}
                   </span>
                   <span className="witness-info-value">
                     <Link href={`/user/${item.name}`}>{item.name}</Link>
@@ -91,13 +91,13 @@ export const WitnessesTab = (): JSX.Element => {
                 </div>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[2].title}
+                    {WitnessesColumns[2].title()}
                   </span>
                   <span className="witness-info-value">{item.totalVotes}</span>
                 </div>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[3].title}
+                    {WitnessesColumns[3].title()}
                   </span>
                   <span className="witness-info-value">
                     <ListStyled.LastBlock>
@@ -107,7 +107,7 @@ export const WitnessesTab = (): JSX.Element => {
                 </div>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[4].title}
+                    {WitnessesColumns[4].title()}
                   </span>
                   <span className="witness-info-value">
                     <ListStyled.MissedBlocks>
@@ -117,7 +117,7 @@ export const WitnessesTab = (): JSX.Element => {
                 </div>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[5].title}
+                    {WitnessesColumns[5].title()}
                   </span>
                   <span className="witness-info-value">
                     <Link href={`${item.url}`} passHref>
