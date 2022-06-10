@@ -466,6 +466,8 @@ export const ru = {
     remove: "Удалять",
     done: "Сделанный",
     confirm: "Подтверждать",
+    next: "следующий",
+    previous: "предыдущий",
   },
   pages: {
     logout: {
@@ -496,7 +498,7 @@ export const ru = {
         supply: "Поставлять (%(symbol)s)",
         active_witness: "Активный свидетель",
         confirmation_time: "Время подтверждения",
-        search_blocks: "Search Blocks",
+        search_blocks: "Блоки поиска",
         recent_blocks: "Недавние блоки",
         block: "Блокировать",
         next: "Следующий",

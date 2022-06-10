@@ -1,17 +1,17 @@
-import counterpart from "counterpart";
 import Link from "next/link";
 
+import { TableHeading } from "../../../../common/components";
 import { InfoCircleOutlined, Tag, Tooltip } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
 export const AssetsColumns = [
   {
-    title: counterpart.translate(`tableHead.id`),
+    title: (): JSX.Element => <TableHeading heading={"id"} />,
     dataIndex: "id",
     key: "id",
   },
   {
-    title: counterpart.translate(`tableHead.symbol`),
+    title: (): JSX.Element => <TableHeading heading={"symbol"} />,
     dataIndex: "symbol",
     key: "symbol",
     render: (symbol: string): JSX.Element => (
@@ -21,17 +21,17 @@ export const AssetsColumns = [
     ),
   },
   {
-    title: counterpart.translate(`tableHead.max_supply`),
+    title: (): JSX.Element => <TableHeading heading={"max_supply"} />,
     dataIndex: "maxSupply",
     key: "maxSupply",
   },
   {
-    title: counterpart.translate(`tableHead.precision`),
+    title: (): JSX.Element => <TableHeading heading={"precision"} />,
     dataIndex: "precision",
     key: "precision",
   },
   {
-    title: counterpart.translate(`tableHead.issuer`),
+    title: (): JSX.Element => <TableHeading heading={"issuer"} />,
     dataIndex: "issuer",
     key: "issuer",
     render: (issuer: string): JSX.Element => (
@@ -39,7 +39,7 @@ export const AssetsColumns = [
     ),
   },
   {
-    title: counterpart.translate(`tableHead.info`),
+    title: (): JSX.Element => <TableHeading heading={"info"} />,
     dataIndex: "info",
     key: "info",
     render: (info: string): JSX.Element => (
