@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { Dispatch, SetStateAction } from "react";
 
 import { Asset } from "../../../../common/types";
@@ -58,7 +59,14 @@ export const OrderTabs = ({
       centered={true}
       className={forUser ? "for-user" : ""}
     >
-      <TabPane tab={forUser ? "My Open Orders" : "Order Book"} key="1">
+      <TabPane
+        tab={
+          forUser
+            ? counterpart.translate(`pages.market.my_open_orders`)
+            : counterpart.translate(`pages.market.order_book`)
+        }
+        key="1"
+      >
         <OrderBook
           currentBase={currentBase}
           currentQuote={currentQuote}
@@ -75,7 +83,14 @@ export const OrderTabs = ({
           loadingUserOrderRows={loadingUserOrderRows}
         />
       </TabPane>
-      <TabPane tab={forUser ? "My Order History" : "History"} key="2">
+      <TabPane
+        tab={
+          forUser
+            ? counterpart.translate(`pages.market.my_order_history`)
+            : counterpart.translate(`pages.market.history`)
+        }
+        key="2"
+      >
         <HistoryBook
           currentBase={currentBase}
           currentQuote={currentQuote}

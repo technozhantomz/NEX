@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
@@ -158,28 +159,28 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
               await getSidechainAccounts(id);
               if (!addTrxResult) {
                 setIsPasswordModalVisible(false);
-                setStatus("Server error, please try again later.");
+                setStatus(counterpart.translate(`field.errors.server_error`));
                 setSubmittingPassword(false);
                 return;
               }
             } catch (e) {
               await getSidechainAccounts(id);
               setIsPasswordModalVisible(false);
-              setStatus("Server error, please try again later.");
+              setStatus(counterpart.translate(`field.errors.server_error`));
               setSubmittingPassword(false);
               console.log(e);
               return;
             }
           } else {
             setIsPasswordModalVisible(false);
-            setStatus("Server error, please try again later.");
+            setStatus(counterpart.translate(`field.errors.server_error`));
             setSubmittingPassword(false);
             return;
           }
         } catch (e) {
           console.log(e);
           setIsPasswordModalVisible(false);
-          setStatus("Server error, please try again later.");
+          setStatus(counterpart.translate(`field.errors.server_error`));
           setSubmittingPassword(false);
           return;
         }
@@ -207,12 +208,16 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
       setIsPasswordModalVisible(false);
-      setStatus(`Successfully withdrew ${values.amount}`);
+      setStatus(
+        `${counterpart.translate(`field.success.successfully_withdraw`)} ${
+          values.amount
+        }`
+      );
       setSubmittingPassword(false);
       withdrawForm.resetFields();
     } else {
       setIsPasswordModalVisible(false);
-      setStatus("Server error, please try again later.");
+      setStatus(counterpart.translate(`field.errors.server_error`));
       setSubmittingPassword(false);
     }
   };
@@ -223,19 +228,33 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       (asset) => asset.symbol === defaultToken
     );
     if (Number(value) <= 0) {
-      return Promise.reject(new Error("Amount should be greater than 0"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.amount_should_greater`))
+      );
     }
     if (!accountAsset) {
-      return Promise.reject(new Error("Balance is not enough"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.balance_not_enough`))
+      );
     }
     if ((accountAsset.amount as number) < Number(value)) {
-      return Promise.reject(new Error("Balance is not enough"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.balance_not_enough`))
+      );
     }
     if (!accountDefaultAsset) {
-      return Promise.reject(new Error("Balance is not enough to pay the fee"));
+      return Promise.reject(
+        new Error(
+          counterpart.translate(`field.errors.balance_not_enough_to_pay`)
+        )
+      );
     }
     if ((accountDefaultAsset.amount as number) < feeAmount) {
-      return Promise.reject(new Error("Balance is not enough to pay the fee"));
+      return Promise.reject(
+        new Error(
+          counterpart.translate(`field.errors.balance_not_enough_to_pay`)
+        )
+      );
     }
 
     return Promise.resolve();
@@ -243,7 +262,9 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
 
   const validateFrom = async (_: unknown, value: string) => {
     if (value !== localStorageAccount)
-      return Promise.reject(new Error("Not your Account"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.not_your_account`))
+      );
     return Promise.resolve();
   };
 
@@ -251,13 +272,19 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const validateWithdrawAddress = async (_: unknown, value: string) => {
     const sonNetworkStatus = await getSonNetworkStatus();
     if (!sonNetworkStatus.isSonNetworkOk) {
-      return Promise.reject(new Error("SONs network is not available now"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.sons_not_available`))
+      );
     }
     if (selectedAsset === "BTC") {
       if (!loadingSidechainAccounts) {
         if (!hasBTCDepositAddress) {
           return Promise.reject(
-            new Error("Please first generate bitcoin addresses at deposit tab")
+            new Error(
+              counterpart.translate(
+                `field.errors.first_generate_bitcoin_address`
+              )
+            )
           );
         }
         return Promise.resolve();
@@ -277,12 +304,16 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const validateWithdrawPublicKey = async (_: unknown, value: string) => {
     const sonNetworkStatus = await getSonNetworkStatus();
     if (!sonNetworkStatus.isSonNetworkOk) {
-      return Promise.reject(new Error("SONs network is not available now"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.sons_not_available`))
+      );
     }
     if (!loadingSidechainAccounts) {
       if (!hasBTCDepositAddress) {
         return Promise.reject(
-          new Error("Please first generate bitcoin addresses at deposit tab")
+          new Error(
+            counterpart.translate(`field.errors.first_generate_bitcoin_address`)
+          )
         );
       }
       return Promise.resolve();
@@ -292,19 +323,33 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
 
   const formValdation = {
     from: [
-      { required: true, message: "From is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.from_required`),
+      },
       { validator: validateFrom },
     ],
     amount: [
-      { required: true, message: "Amount is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.amount_required`),
+      },
       { validator: validateAmount },
     ],
     withdrawAddress: [
-      { required: true, message: "Withdraw address is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.withdraw_add_required`),
+      },
       { validator: validateWithdrawAddress },
     ],
     withdrawPublicKey: [
-      { required: true, message: "Withdraw public key is required" },
+      {
+        required: true,
+        message: counterpart.translate(
+          `field.errors.withdraw_pub_key_required`
+        ),
+      },
       { validator: validateWithdrawPublicKey },
     ],
   };

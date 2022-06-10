@@ -18,7 +18,8 @@ export const ActivitysItemContent = styled.div`
     margin: 5px 0;
     display: flex;
     .activity-info-title {
-      min-width: 28px;
+      width: 100px;
+      min-width: 100px;
       margin-right: 15px;
       font-weight: 300;
       color: ${colors.textColorSecondary};

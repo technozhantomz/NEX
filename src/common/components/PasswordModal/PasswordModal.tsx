@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import { Form, Input } from "../../../ui/src";
 
 import * as Styled from "./PasswordModal.styled";
@@ -21,7 +23,7 @@ export const PasswordModal = ({
 
   return (
     <Styled.PasswordModal
-      title="Password"
+      title={counterpart.translate(`pages.modal.password_modal.heading`)}
       visible={visible}
       centered={true}
       onOk={() => {
@@ -41,7 +43,11 @@ export const PasswordModal = ({
           validateFirst={true}
           validateTrigger="onBlur"
         >
-          <Input.Password placeholder="Password" />
+          <Input.Password
+            placeholder={counterpart.translate(
+              `pages.modal.password_modal.heading`
+            )}
+          />
         </Form.Item>
         <Form.Item>
           <Styled.PasswordModalFormButton
@@ -49,7 +55,7 @@ export const PasswordModal = ({
             htmlType="submit"
             loading={submitting !== undefined ? submitting : false}
           >
-            Confirm
+            {counterpart.translate(`buttons.confirm`)}
           </Styled.PasswordModalFormButton>
         </Form.Item>
       </Styled.PasswordModalForm>

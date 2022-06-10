@@ -6,13 +6,17 @@ import { mixIns } from "./mixins";
 
 export const Button = styled(AntdButton)`
    {
-    height: 35px;
+    & > span {
+      white-space: normal;
+    }
+    height: unset;
+    min-height: 35px;
     ${mixIns.borderRadius}
     &:after {
       display: none;
     }
     ${breakpoint.sm} {
-      height: 45px;
+      min-height: 45px;
     }
   }
 `;

@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import * as Styled from "./VoteTable.styled";
 
 export const showVotesColumns = (
@@ -19,17 +21,19 @@ export const showVotesColumns = (
 )[] => {
   const columns = [
     {
-      title: "Name",
+      title: counterpart.translate(`tableHead.name`),
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Website",
+      title: counterpart.translate(`tableHead.website`),
       dataIndex: "website",
       key: "website",
       render: (_value: string, _record: any): JSX.Element => {
         if (_value === "") {
-          return <span>Not available</span>;
+          return (
+            <span>{counterpart.translate(`field.labels.not_available`)}</span>
+          );
         } else {
           return (
             <a target="_blank" href={_value}>
@@ -40,12 +44,12 @@ export const showVotesColumns = (
       },
     },
     {
-      title: "Votes",
+      title: counterpart.translate(`tableHead.votes`),
       dataIndex: "votes",
       key: "votes",
     },
     {
-      title: "Action",
+      title: counterpart.translate(`tableHead.action`),
       dataIndex: "action",
       key: "action",
       render: (_value: string, _record: any): JSX.Element => {

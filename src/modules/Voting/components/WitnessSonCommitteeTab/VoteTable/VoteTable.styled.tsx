@@ -69,8 +69,9 @@ export const VoteItemContent = styled.div`
     .vote-info-title {
       font-weight: 300;
       color: ${colors.textColorSecondary};
-      width: 54px;
-      margin-right: 9px;
+      width: 80px;
+      min-width: 80px;
+      margin-right: 10px;
     }
     .vote-info-value {
       font-weight: 500;

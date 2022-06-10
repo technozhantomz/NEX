@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -43,7 +44,15 @@ const SettingPage: NextPage = () => {
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab ? tab : "general"} <DownOutlined />
+              {tab
+                ? counterpart.translate(
+                    `pages.settings.${(tab as string).replace(
+                      "-",
+                      "_"
+                    )}.heading`
+                  )
+                : counterpart.translate(`pages.settings.general.heading`)}{" "}
+              <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -57,7 +66,7 @@ const SettingPage: NextPage = () => {
     <Layout
       title="Settings"
       type="card-lrg"
-      heading="Settings"
+      heading={counterpart.translate(`pages.settings.heading`)}
       description="Settings Page"
       dexLayout={true}
     >
@@ -70,16 +79,28 @@ const SettingPage: NextPage = () => {
             if (sm) setVisible(false);
           }}
         >
-          <TabPane tab="General" key="general">
+          <TabPane
+            tab={counterpart.translate(`pages.settings.general.heading`)}
+            key="general"
+          >
             <GeneralTab />
           </TabPane>
-          <TabPane tab="Security" key="security">
+          <TabPane
+            tab={counterpart.translate(`pages.settings.security.heading`)}
+            key="security"
+          >
             <SecurityTab />
           </TabPane>
-          <TabPane tab="Key management" key="key-management">
+          <TabPane
+            tab={counterpart.translate(`pages.settings.key_management.heading`)}
+            key="key-management"
+          >
             <KeyManagementTab />
           </TabPane>
-          <TabPane tab="Membership" key="membership">
+          <TabPane
+            tab={counterpart.translate(`pages.settings.membership.heading`)}
+            key="membership"
+          >
             <MembershipTab />
           </TabPane>
         </Tabs>

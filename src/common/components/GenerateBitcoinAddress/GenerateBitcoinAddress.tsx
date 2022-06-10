@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -34,7 +35,7 @@ export const GenerateBitcoinAddress = ({
           <Styled.FormItem>
             {isLoggedIn ? (
               <Styled.Button type="primary" htmlType="submit">
-                Generate Bitcoin Address
+                {counterpart.translate(`buttons.generate_bitcoin_address`)}
               </Styled.Button>
             ) : (
               <Styled.Button
@@ -44,7 +45,9 @@ export const GenerateBitcoinAddress = ({
                   router.push("/login");
                 }}
               >
-                Log in & Generate Bitcoin Address
+                {counterpart.translate(
+                  `buttons.login_and_generate_bitcoin_address`
+                )}
               </Styled.Button>
             )}
           </Styled.FormItem>
@@ -60,9 +63,11 @@ export const GenerateBitcoinAddress = ({
           ""
         ) : (
           <Styled.FormDisclamer>
-            <span>Don't have a Peerplays account? </span>
+            <span>
+              {counterpart.translate(`buttons.dont_have_peerplays_account`)}
+            </span>
             <Link href="/signup">
-              <a>Create account</a>
+              <a>{counterpart.translate(`links.create_account`)}</a>
             </Link>
           </Styled.FormDisclamer>
         )}
