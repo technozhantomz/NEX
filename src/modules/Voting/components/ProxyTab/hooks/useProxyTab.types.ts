@@ -21,4 +21,5 @@ export type UseProxyTab = {
   resetChanges: () => void;
   searchValue: string;
   isSameAccount: boolean;
+  isAlreadyAccount: boolean;
 };

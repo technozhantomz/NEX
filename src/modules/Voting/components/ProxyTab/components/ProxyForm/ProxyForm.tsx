@@ -31,6 +31,7 @@ type Props = {
   resetChanges: () => void;
   searchValue: string;
   isSameAccount: boolean;
+  isAlreadyAccount: boolean;
 };
 
 export const ProxyForm = ({
@@ -52,6 +53,7 @@ export const ProxyForm = ({
   isPublishable,
   resetChanges,
   isSameAccount,
+  isAlreadyAccount,
 }: Props): JSX.Element => {
   const [proxyForm] = Form.useForm();
   const {
@@ -78,6 +80,8 @@ export const ProxyForm = ({
             searchError
               ? isSameAccount
                 ? "Same as your account"
+                : isAlreadyAccount
+                ? "Account is already added"
                 : "Account not found"
               : undefined
           }
