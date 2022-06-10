@@ -69,7 +69,10 @@ const VotingPage: NextPage = () => {
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab ? tab : "gpos"} <DownOutlined />
+              {tab
+                ? counterpart.translate(`pages.voting.${tab}.heading`)
+                : counterpart.translate(`pages.voting.gpos.heading`)}{" "}
+              <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>

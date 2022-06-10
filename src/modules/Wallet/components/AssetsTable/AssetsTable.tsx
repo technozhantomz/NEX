@@ -152,23 +152,43 @@ export const AssetsTable = ({
               <AssetTitle symbol={item.asset} />
               <Styled.AssetsItemContent>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[1].title()}</span>
+                  <span className="asset-info-title">
+                    {typeof columns[1].title === "string"
+                      ? columns[1].title
+                      : columns[1].title()}
+                  </span>
                   <span className="asset-info-value">{item.available}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[2].title()}</span>
+                  <span className="asset-info-title">
+                    {typeof columns[2].title === "string"
+                      ? columns[2].title
+                      : columns[2].title()}
+                  </span>
                   <span className="asset-info-value">{item.quoteAsset}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[3].title()}</span>
+                  <span className="asset-info-title">
+                    {typeof columns[3].title === "string"
+                      ? columns[3].title
+                      : columns[3].title()}
+                  </span>
                   <span className="asset-info-value">{item.price}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[4].title()}</span>
+                  <span className="asset-info-title">
+                    {typeof columns[4].title === "string"
+                      ? columns[4].title
+                      : columns[4].title()}
+                  </span>
                   <span className="asset-info-value">{item.change}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[5].title()}</span>
+                  <span className="asset-info-title">
+                    {typeof columns[5].title === "string"
+                      ? columns[5].title
+                      : columns[5].title()}
+                  </span>
                   <span className="asset-info-value">{item.volume}</span>
                 </div>
               </Styled.AssetsItemContent>

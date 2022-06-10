@@ -48,7 +48,12 @@ const GPOSPage: NextPage = () => {
                 setIsMobileDropdownvisible(!isMobileDropdownvisible)
               }
             >
-              {tab ? tab : "power-up"} <DownOutlined />
+              {tab
+                ? counterpart.translate(
+                    `buttons.${(tab as string).replace("-", "_")}`
+                  )
+                : counterpart.translate(`buttons.power_up`)}{" "}
+              <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>

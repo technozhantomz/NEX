@@ -42,7 +42,7 @@ const AssetPage: NextPage = () => {
   const { sm } = useViewportContext();
   const dropdownItems = [
     {
-      label: counterpart.translate(`transaction.trxTypes.transfer.title`),
+      label: counterpart.translate(`buttons.transfer`),
       key: "transfer",
     },
     { label: counterpart.translate(`buttons.withdraw`), key: "withdraw" },
@@ -65,14 +65,22 @@ const AssetPage: NextPage = () => {
                       .map((sideAsset) => sideAsset.symbol)
                       .includes(asset as string)
                       ? dropdownItems
-                      : [{ label: "Transfer", key: "transfer" }]
+                      : [
+                          {
+                            label: counterpart.translate(`buttons.transfer`),
+                            key: "transfer",
+                          },
+                        ]
                   }
                 />
               </Styled.MobileTabsWrapper>
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab ? tab : "transfer"} <DownOutlined />
+              {tab
+                ? counterpart.translate(`buttons.${tab}`)
+                : counterpart.translate(`buttons.transfer`)}{" "}
+              <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
           {props.extra}

@@ -1,4 +1,5 @@
 import { TinyArea } from "@ant-design/plots";
+import counterpart from "counterpart";
 
 import { useAsset } from "../../../../common/hooks";
 
@@ -41,7 +42,7 @@ export const StatsCard = ({
     <Styled.StatsCard className={noData ? "no-data stats-card" : "stats-card"}>
       <Styled.StatsCardHeading>{title}</Styled.StatsCardHeading>
       <Styled.StatsCardValue>
-        {noData ? "No Data" : data}
+        {noData ? counterpart.translate(`pages.blocks.no_data`) : data}
         {isTimeCard && !noData ? <span> seconds</span> : ""}
         {isRewardCard && !noData ? <span> {defaultAsset?.symbol}</span> : ""}
       </Styled.StatsCardValue>

@@ -48,7 +48,10 @@ export const WitnessItemContent = styled.div`
     display: flex;
     .witness-info-title {
       font-weight: 300;
-      width: 100px;
+      width: 120px;
+      min-width: 120px;
+      word-break: break-word;
+      margin-right: 5px;
       color: ${colors.textColorSecondary};
     }
     .witness-info-value {

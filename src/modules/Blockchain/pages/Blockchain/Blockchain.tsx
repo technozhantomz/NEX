@@ -46,7 +46,12 @@ const Blockchain: NextPage = () => {
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab ? tab : "blockchain"} <DownOutlined />
+              {tab
+                ? counterpart.translate(`pages.blocks.${tab}.${tab}`)
+                : counterpart.translate(
+                    `pages.blocks.blockchain.blockchain`
+                  )}{" "}
+              <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>

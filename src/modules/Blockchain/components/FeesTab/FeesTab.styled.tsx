@@ -90,6 +90,7 @@ export const FeeItemContent = styled.div`
     .fee-info-title {
       font-weight: 300;
       width: 85px;
+      min-width: 85px;
       margin-right: 5px;
       color: ${colors.textColorSecondary};
     }

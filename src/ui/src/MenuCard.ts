@@ -48,6 +48,8 @@ export const MenuCard = styled(AntdCard)`
     }
   }
   .advanced {
+    display: flex;
+    align-items: center;
     border: none;
     margin: 30px 0;
     padding: 0 15px 0;

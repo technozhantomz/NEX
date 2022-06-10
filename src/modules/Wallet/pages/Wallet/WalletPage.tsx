@@ -39,7 +39,10 @@ const WalletPage: NextPage = () => {
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab ? tab : "assets"} <DownOutlined />
+              {tab
+                ? counterpart.translate(`pages.wallet.${tab}`)
+                : counterpart.translate(`pages.wallet.assets`)}{" "}
+              <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -67,7 +70,7 @@ const WalletPage: NextPage = () => {
           }}
         >
           <TabPane
-            tab={counterpart.translate(`pages.blocks.assets.assets`)}
+            tab={counterpart.translate(`pages.wallet.assets`)}
             key="assets"
           >
             <AssetsTable />

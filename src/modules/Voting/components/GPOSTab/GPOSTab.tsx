@@ -83,7 +83,11 @@ export const GPOSTab = (): JSX.Element => {
                     .replace(" ", "-")
                     .toLowerCase()}
                 >
-                  {GPOSInfo.performance}
+                  {`${counterpart.translate(
+                    `pages.voting.gpos.performance_string.${GPOSInfo.performance
+                      .replace(" ", "_")
+                      .toLowerCase()}`
+                  )}`}
                 </Styled.GPOSDetailsValue>
               </li>
               <li>

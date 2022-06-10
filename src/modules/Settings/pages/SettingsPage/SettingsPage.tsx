@@ -44,7 +44,15 @@ const SettingPage: NextPage = () => {
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab ? tab : "general"} <DownOutlined />
+              {tab
+                ? counterpart.translate(
+                    `pages.settings.${(tab as string).replace(
+                      "-",
+                      "_"
+                    )}.heading`
+                  )
+                : counterpart.translate(`pages.settings.general.heading`)}{" "}
+              <DownOutlined />
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -84,7 +92,7 @@ const SettingPage: NextPage = () => {
             <SecurityTab />
           </TabPane>
           <TabPane
-            tab={counterpart.translate(`pages.settings.keyManagement.heading`)}
+            tab={counterpart.translate(`pages.settings.key_management.heading`)}
             key="key-management"
           >
             <KeyManagementTab />

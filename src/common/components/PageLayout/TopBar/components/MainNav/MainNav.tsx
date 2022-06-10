@@ -87,7 +87,7 @@ export const MainNav = (): JSX.Element => {
                 <MenuItem
                   onClick={() => openMenu("profile")}
                   icon={<UserOutlined className={"menu-icon avitar"} />}
-                  label="Profile"
+                  label={counterpart.translate(`links.profile`)}
                 />
               </li>
             ) : (

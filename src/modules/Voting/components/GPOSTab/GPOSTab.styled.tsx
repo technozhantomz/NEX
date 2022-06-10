@@ -60,6 +60,9 @@ export const GPOSDetails = styled.div`
     justify-content: space-between;
     margin-bottom: 10px;
   }
+  ul li span {
+    margin-right: 5px;
+  }
 `;
 
 export const GPOSDetailsTitle = styled.span`

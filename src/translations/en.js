@@ -439,6 +439,7 @@ export const en = {
     login: "Log in",
     deposit: "Deposit",
     withdraw: "Withdraw",
+    transfer: "Transfer",
     market: "Market",
     generate_bitcoin_address: "Generate Bitcoin address",
     login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Address",
@@ -489,6 +490,7 @@ export const en = {
     },
     blocks: {
       heading: "Blocks",
+      no_data: "No Data",
       blockchain: {
         blockchain: "Blockchain",
         heading: "PeerPlays Blockchain",
@@ -540,6 +542,7 @@ export const en = {
     wallet: {
       heading: "Wallet",
       activities: "Activities",
+      assets: "Assets",
       back_to_assets: "Back to Assets",
     },
     market: {
@@ -558,7 +561,7 @@ export const en = {
       general: {
         heading: "General",
       },
-      keyManagement: {
+      key_management: {
         heading: "key Management",
       },
       security: {
@@ -679,6 +682,7 @@ export const en = {
   links: {
     create_account: "Create account",
     see_all_account_activity: "See all account activity",
+    profile: "profile",
   },
   field: {
     placeholder: {
@@ -853,5 +857,9 @@ export const en = {
     website: "Website",
     action: "Action",
     votes: "Votes",
+  },
+  tooltips: {
+    copy: "copy",
+    copied: "copied",
   },
 };
