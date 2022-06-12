@@ -6,6 +6,8 @@ export type ILoginForm = {
   formValdation: IFormValidation;
   loginForm: FormInstance;
   submitting: boolean;
+  isWhaleChecked: boolean;
+  setIsWhaleChecked: (checkboxValue: boolean) => void;
 };
 
 export type IFormField = {

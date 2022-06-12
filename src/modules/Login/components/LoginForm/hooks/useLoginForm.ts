@@ -21,6 +21,7 @@ export function useLoginForm(): ILoginForm {
     formAccountAfterConfirmation,
     validateAccountPassword,
   } = useAccount();
+  const [isWhaleChecked, setIsWhaleChecked] = useState(false);
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
   const { handleLoginRedirect } = useBrowserHistoryContext();
   const [loginForm] = Form.useForm();
@@ -33,9 +34,12 @@ export function useLoginForm(): ILoginForm {
 
   const handleLogin = async () => {
     setSubmitting(true);
+
     loginForm
       .validateFields()
       .then(async () => {
+        console.log(`[handleLogin] handling login..........................`);
+
         if (temporaryFullAccount) {
           await formAccountAfterConfirmation(temporaryFullAccount);
           setLocalStorageAccount(temporaryFullAccount.account.name);
@@ -48,8 +52,23 @@ export function useLoginForm(): ILoginForm {
   };
 
   const validateUsername = async (_: unknown, value: string) => {
+    console.log(
+      `${Date.now()} validating username (checked: ${isWhaleChecked})`
+    );
+
+    if (isWhaleChecked) {
+      if ((window as any).whalevault) {
+        setValidUser(true);
+        return Promise.resolve();
+      } else {
+        setValidUser(false);
+        return Promise.reject(new Error("Whale Vault not installed"));
+      }
+    }
+
     const fullAccount = await getFullAccount(value, false);
     if (!fullAccount) {
+      setValidUser(false);
       return Promise.reject(new Error("User not found"));
     }
     setTemporaryFullAccount(fullAccount);
@@ -58,6 +77,13 @@ export function useLoginForm(): ILoginForm {
   };
 
   const validatePassword = (_: unknown, value: string) => {
+    console.log(
+      `${Date.now()} validating password (checked: ${isWhaleChecked})`
+    );
+    if (isWhaleChecked) {
+      // check against whale vault here
+    }
+
     if (temporaryFullAccount) {
       const account = temporaryFullAccount.account;
       const checkPassword = validateAccountPassword(value, account);
@@ -89,5 +115,7 @@ export function useLoginForm(): ILoginForm {
     handleLogin,
     formValdation,
     submitting,
+    isWhaleChecked,
+    setIsWhaleChecked,
   };
 }

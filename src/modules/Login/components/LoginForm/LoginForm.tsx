@@ -1,13 +1,27 @@
 import React from "react";
 
-import { CheckOutlined, Form, Input } from "../../../../ui/src";
+import { Checkbox, CheckOutlined, Form, Input } from "../../../../ui/src";
 
 import * as Styled from "./LoginForm.styled";
 import { useLoginForm } from "./hooks";
 
 export const LoginForm: React.FC = () => {
-  const { validUser, loginForm, handleLogin, formValdation, submitting } =
-    useLoginForm();
+  const {
+    validUser,
+    loginForm,
+    handleLogin,
+    formValdation,
+    submitting,
+    isWhaleChecked,
+    setIsWhaleChecked,
+  } = useLoginForm();
+
+  const whaleCheckboxChanged = (e: any) => {
+    console.log(`checked = ${e.target.checked}`);
+    setIsWhaleChecked(e.target.checked);
+    loginForm.validateFields();
+  };
+
   return (
     <Styled.LoginForm
       form={loginForm}
@@ -26,13 +40,22 @@ export const LoginForm: React.FC = () => {
           suffix={validUser ? <CheckOutlined /> : ""}
         />
       </Form.Item>
-      <Form.Item
-        name="password"
-        rules={formValdation.password}
-        validateFirst={true}
-        validateTrigger="onSubmit"
-      >
-        <Input.Password placeholder="Enter password" />
+
+      {!isWhaleChecked && (
+        <Form.Item
+          name="password"
+          rules={formValdation.password}
+          validateFirst={true}
+          validateTrigger="onSubmit"
+        >
+          <Input.Password placeholder="Enter password" />
+        </Form.Item>
+      )}
+
+      <Form.Item>
+        <Checkbox onChange={whaleCheckboxChanged}>
+          Use WhaleVault extension
+        </Checkbox>
       </Form.Item>
 
       <Styled.LoginButtonContainer className="form-button">

@@ -1,4 +1,4 @@
-import { ChainConfig, ChainStore } from "peerplaysjs-lib";
+import { ChainConfig, ChainStore, WhaleVaultConfig } from "peerplaysjs-lib";
 import React, {
   createContext,
   useCallback,
@@ -106,6 +106,8 @@ export function PeerplaysApiProvider({ children }: Props): JSX.Element {
   useEffect(() => {
     initFirstNode();
     ChainConfig.setPrefix(defaultToken);
+    WhaleVaultConfig.setWhaleVault((window as any).whalevault);
+    (window as any).ppwhale = WhaleVaultConfig;
   }, []);
   return (
     <peerplaysApiContext.Provider
