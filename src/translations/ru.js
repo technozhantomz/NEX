@@ -441,6 +441,7 @@ export const ru = {
     login: "Авторизоваться",
     deposit: "Депозит",
     withdraw: "Отзывать",
+    swap: "менять",
     transfer: "Передача",
     market: "Рынок",
     generate_bitcoin_address: "Сгенерировать биткойн-адрес",

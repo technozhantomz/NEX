@@ -439,6 +439,7 @@ export const en = {
     login: "Log in",
     deposit: "Deposit",
     withdraw: "Withdraw",
+    swap: "Swap",
     transfer: "Transfer",
     market: "Market",
     generate_bitcoin_address: "Generate Bitcoin address",
