@@ -39,6 +39,9 @@
     "styled-components": "^5.3.3",
     "tiny-secp256k1": "^2.2.0"
   },
+  "overrides": {
+    "minimist": "1.2.6"
+  },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.1.0",
     "@types/bs58": "^4.0.1",
