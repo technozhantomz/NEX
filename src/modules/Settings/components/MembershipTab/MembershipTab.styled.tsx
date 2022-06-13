@@ -81,33 +81,36 @@ export const Button = styled(CardFormButton)`
 
 export const PercentageText = styled.p`
   font-size: 14px;
-  margin-left: 50px;
+  margin-left: 34px;
+  ${breakpoint.sm} {
+    margin-left: 50px;
+  }
 `;
 
 export const FeeCategoryContainer = styled.div`
   display: flex;
   margin-bottom: 15px;
-  width: 75%;
+  width: 100%;
   ${breakpoint.sm} {
     width: 100%;
   }
 `;
 
 export const LabelContainer = styled.div`
-  width: 53%;
+  width: 35%;
   ${breakpoint.sm} {
-    width: 15%;
+    width: 25%;
   }
 `;
 
 export const PercentageContainer = styled.div`
-  text-align: right;
+  text-align: left;
   letter-spacing: 0px;
   color: ${colors.textColor};
   opacity: 1;
-  width: 50%;
+  width: 65%;
   ${breakpoint.sm} {
-    width: 20%;
+    width: 40%;
   }
 `;
 
