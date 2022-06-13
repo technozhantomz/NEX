@@ -89,6 +89,9 @@ const VotingPage: NextPage = () => {
       heading={`${pageMeta.heading}`}
       description={`${pageMeta.description}`}
       dexLayout={true}
+      onClick={() => {
+        visible && setVisible(false);
+      }}
     >
       <Styled.VotingPageCard>
         <Tabs

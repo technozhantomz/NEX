@@ -69,6 +69,9 @@ const SettingPage: NextPage = () => {
       heading={counterpart.translate(`pages.settings.heading`)}
       description="Settings Page"
       dexLayout={true}
+      onClick={() => {
+        visible && setVisible(false);
+      }}
     >
       <Styled.SettingsCard>
         <Tabs

@@ -25,6 +25,7 @@ type Props = {
   type?: string | undefined;
   heading?: string | undefined;
   dexLayout?: boolean;
+  onClick?: () => void;
 };
 
 export const Layout: FunctionComponent<Props> = ({
@@ -34,6 +35,7 @@ export const Layout: FunctionComponent<Props> = ({
   type,
   heading,
   dexLayout = false,
+  onClick= () => {}
 }: Props) => {
   const { settings } = useSettingsContext();
   const [locale, _setLocale] = useState<Locale>(enUS);
@@ -88,7 +90,7 @@ export const Layout: FunctionComponent<Props> = ({
         <meta name="description" content={description} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Styled.Page className={dexLayout ? "dex-layout" : ""}>
+      <Styled.Page className={dexLayout ? "dex-layout" : ""} onClick={onClick}>
         <TopBar />
         <ConfigProvider locale={locale}>
           <Styled.Layout

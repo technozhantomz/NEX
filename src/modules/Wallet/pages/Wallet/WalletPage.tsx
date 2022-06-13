@@ -59,8 +59,11 @@ const WalletPage: NextPage = () => {
       heading={counterpart.translate(`pages.wallet.heading`)}
       description={`Wallet Page | ${tab}`}
       dexLayout={true}
+      onClick={() => {
+        visible && setVisible(false);
+      }}
     >
-      <Styled.WalletCard>
+      <Styled.WalletCard onClick={() => visible && setVisible(false)}>
         <Styled.Tabs
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "assets"}`}
