@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -76,16 +77,23 @@ export function usePowerDownForm({
           });
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            `Successfully Withdrawn ${values.withdrawAmount} ${gposBalances?.asset.precision}`
+            counterpart.translate(`field.success.successfully_withdrawn`, {
+              withdrawAmount: values.withdrawAmount,
+              precision: gposBalances?.asset.precision,
+            })
           );
           setLoadingTransaction(false);
         } else {
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage("Unable to process the transaction!");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.unable_transaction`)
+        );
         setLoadingTransaction(false);
       }
     },
@@ -126,18 +134,28 @@ export function usePowerDownForm({
       (asset) => asset.symbol === gposBalances?.asset.symbol
     );
     if (value <= 0) {
-      return Promise.reject(new Error("Amount should be greater than 0"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.amount_should_greater`))
+      );
     }
     if (value > (gposBalances?.availableBalance as number)) {
       return Promise.reject(
-        new Error("Can not be greater than available balance")
+        new Error(
+          counterpart.translate(`field.errors.available_balance_cannot_greater`)
+        )
       );
     }
     if (!accountAsset) {
-      return Promise.reject(new Error("Balance is not enough"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.balance_not_enough`))
+      );
     } else {
       if (feeAmount > (accountAsset?.amount as number))
-        return Promise.reject(new Error("Balance is not enough to pay fees"));
+        return Promise.reject(
+          new Error(
+            counterpart.translate(`field.errors.balance_not_enough_to_pay`)
+          )
+        );
     }
     return Promise.resolve();
   };
@@ -205,7 +223,10 @@ export function usePowerDownForm({
 
   const formValidation = {
     withdrawAmount: [
-      { required: true, message: "Withdraw amount is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.withdraw_amount_required`),
+      },
       { validator: validateWithdrawAmount },
     ],
   };

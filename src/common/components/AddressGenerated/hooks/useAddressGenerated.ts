@@ -31,6 +31,7 @@ export function useAddressGenerated(
           \n ##### PeerPlays Deposit Address #####
           \nPeerPlays Deposit Address: ${sidechainDepositAddress}
         `;
+
     const file = new Blob([fileContents], {
       type: "text/plain",
     });

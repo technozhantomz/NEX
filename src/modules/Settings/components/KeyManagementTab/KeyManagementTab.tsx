@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import React, { Fragment } from "react";
 
 import {
@@ -69,7 +70,9 @@ export const KeyManagementTab = (): JSX.Element => {
             validateFirst={true}
             validateTrigger="onBlur"
           >
-            <Styled.PasswordInput placeholder="Enter password" />
+            <Styled.PasswordInput
+              placeholder={counterpart.translate(`field.placeholder.password`)}
+            />
           </Styled.PasswordFormItem>
 
           <Styled.PasswordFormItem
@@ -78,10 +81,16 @@ export const KeyManagementTab = (): JSX.Element => {
             validateFirst={true}
             validateTrigger="onBlur"
           >
-            <Styled.PasswordInput placeholder="Confirm password" />
+            <Styled.PasswordInput
+              placeholder={counterpart.translate(
+                `field.placeholder.confirm_password`
+              )}
+            />
           </Styled.PasswordFormItem>
           <Styled.LabelWrapper>
-            <Styled.Label strong>Select keys to be generated:</Styled.Label>
+            <Styled.Label strong>
+              {counterpart.translate(`field.labels.select_keys`)}
+            </Styled.Label>
           </Styled.LabelWrapper>
           <Styled.CheckBoxGroup
             name="roles"
@@ -99,7 +108,7 @@ export const KeyManagementTab = (): JSX.Element => {
 
           <Styled.ButtonFormItem>
             <Styled.SubmitButton type="primary" htmlType="submit">
-              Let’s Go!
+              {counterpart.translate(`buttons.lets_go`)}
             </Styled.SubmitButton>
           </Styled.ButtonFormItem>
 
@@ -108,7 +117,11 @@ export const KeyManagementTab = (): JSX.Element => {
                 if (generatedKey.key && generatedKey.key !== "") {
                   return (
                     <Fragment key={`${generatedKey.label}`}>
-                      <Styled.Label>{`The ${generatedKey.label} key you requested is as follows:`}</Styled.Label>
+                      <Styled.Label>
+                        {counterpart.translate(`field.labels.generated_key`, {
+                          generatedKeyLabel: generatedKey.label,
+                        })}
+                      </Styled.Label>
                       <div>
                         <Styled.GeneratedKeyInput
                           value={generatedKey.key}

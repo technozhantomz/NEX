@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import {
   Dispatch,
   SetStateAction,
@@ -155,7 +156,7 @@ export function useOrderBook({
     ) {
       setOrderColumns([
         {
-          title: "Price",
+          title: counterpart.translate(`tableHead.price`),
           dataIndex: "price",
           key: "price",
         },
@@ -174,7 +175,7 @@ export function useOrderBook({
       // user section
       setUserOrderColumns([
         {
-          title: "Price",
+          title: counterpart.translate(`tableHead.price`),
           dataIndex: "price",
           key: "price",
         },
@@ -189,7 +190,7 @@ export function useOrderBook({
           key: "base",
         },
         {
-          title: "Expiration",
+          title: counterpart.translate(`tableHead.expiration`),
           dataIndex: "expiration",
           key: "expiration",
         },

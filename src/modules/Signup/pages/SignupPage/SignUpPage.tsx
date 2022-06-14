@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import type { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
@@ -10,14 +11,20 @@ import * as Styled from "./SignUpPage.styled";
 
 const SignUpPage: NextPage = () => {
   return (
-    <Layout title="SignUp" type="card" heading="Create your account">
+    <Layout
+      title="SignUp"
+      type="card"
+      heading={counterpart.translate(`pages.signUp.heading`)}
+    >
       <Styled.SignUpFormCard>
         <SignUpForm />
         <Styled.FormDisclamerContainer>
           <FormDisclamer>
-            <span>Already have a Peerplays account? </span>
+            <span>
+              {counterpart.translate(`pages.signUp.already_have_account`)}
+            </span>
             <Link href="/login">
-              <a>Log in</a>
+              <a>{counterpart.translate(`buttons.login`)}</a>
             </Link>
           </FormDisclamer>
         </Styled.FormDisclamerContainer>

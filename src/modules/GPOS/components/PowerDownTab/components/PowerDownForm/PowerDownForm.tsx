@@ -1,5 +1,8 @@
+import counterpart from "counterpart";
 import { useRouter } from "next/router";
+import { KeyboardEvent } from "react";
 
+import { utils } from "../../../../../../api/utils";
 import {
   PasswordModal,
   TransactionModal,
@@ -76,21 +79,32 @@ export const PowerDownForm = ({
             availableBalance: "",
           }}
         >
-          <Form.Item name="openingBalance" label={sm ? "Opening Balance:" : ""}>
+          <Form.Item
+            name="openingBalance"
+            label={
+              sm
+                ? counterpart.translate(`field.placeholder.opening_balance`)
+                : ""
+            }
+          >
             <Input
               prefix={
                 sm
                   ? gposBalances
                     ? `${gposBalances.openingBalance}`
                     : ""
-                  : "Opening Balance:"
+                  : counterpart.translate(`field.placeholder.opening_balance`)
               }
               disabled={true}
             />
           </Form.Item>
           <Form.Item
             name="availableBalance"
-            label={sm ? "Available Balance:" : ""}
+            label={
+              sm
+                ? counterpart.translate(`field.placeholder.available_balance`)
+                : ""
+            }
           >
             <Input
               prefix={
@@ -98,14 +112,14 @@ export const PowerDownForm = ({
                   ? gposBalances
                     ? `${newAvailableBalance}`
                     : ""
-                  : "Available Balance:"
+                  : counterpart.translate(`field.placeholder.available_balance`)
               }
               disabled={true}
             />
           </Form.Item>
           <Form.Item
             name="withdrawAmount"
-            label="Withdraw"
+            label={counterpart.translate(`buttons.withdraw`)}
             rules={formValidation.withdrawAmount}
             validateFirst={true}
             validateTrigger="onChange"
@@ -122,12 +136,27 @@ export const PowerDownForm = ({
                   -
                 </Button>
               }
+              type="number"
+              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                if (!utils.isNumberKey(e)) {
+                  e.preventDefault();
+                }
+              }}
             />
           </Form.Item>
-          <Form.Item name="newBalance" label={sm ? "New Balance:" : ""}>
+          <Form.Item
+            name="newBalance"
+            label={
+              sm ? counterpart.translate(`field.placeholder.new_balance`) : ""
+            }
+          >
             <Input
               prefix={
-                sm ? (gposBalances ? `${newBalance}` : "") : "New Balance:"
+                sm
+                  ? gposBalances
+                    ? `${newBalance}`
+                    : ""
+                  : counterpart.translate(`field.placeholder.new_balance`)
               }
               disabled={true}
             />
@@ -135,7 +164,7 @@ export const PowerDownForm = ({
 
           <Form.Item>
             <Styled.PowerDownFormButton type="primary" htmlType="submit">
-              Withdraw
+              {counterpart.translate(`buttons.withdraw`)}
             </Styled.PowerDownFormButton>
           </Form.Item>
         </Styled.PowerDownForm>
@@ -159,7 +188,7 @@ export const PowerDownForm = ({
         type="link"
         onClick={() => router.push(`/voting`)}
       >
-        Cancel
+        {counterpart.translate(`buttons.cancel`)}
       </Styled.PowerDownFormButton>
     </>
   );

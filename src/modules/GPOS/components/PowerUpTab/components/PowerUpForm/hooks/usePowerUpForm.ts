@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -79,16 +80,23 @@ export function usePowerUpForm({
           });
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            `Successfully Deposited ${values.depositAmount} ${gposBalances?.asset.symbol}`
+            counterpart.translate(`field.success.successfully_deposited`, {
+              depositAmount,
+              symbol: gposBalances?.asset.symbol,
+            })
           );
           setLoadingTransaction(false);
         } else {
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage("Unable to process the transaction!");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.unable_transaction`)
+        );
         setLoadingTransaction(false);
       }
     },
@@ -115,14 +123,20 @@ export function usePowerUpForm({
     const total = Number(value) + feeAmount;
     if (value <= 0) {
       return Promise.reject(
-        new Error("Deposit amount should be greater than 0")
+        new Error(
+          counterpart.translate(`field.errors.deposit_amount_should_greater`)
+        )
       );
     }
     if (!accountAsset) {
-      return Promise.reject(new Error("Balance is not enough"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.balance_not_enough`))
+      );
     } else {
       if (total > (accountAsset.amount as number)) {
-        return Promise.reject(new Error("Balance is not enough"));
+        return Promise.reject(
+          new Error(counterpart.translate(`field.errors.balance_not_enough`))
+        );
       }
     }
     return Promise.resolve();
@@ -130,7 +144,10 @@ export function usePowerUpForm({
 
   const formValidation = {
     depositAmount: [
-      { required: true, message: "Deposit amount in required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.deposit_amount_required`),
+      },
       { validator: validateDepositAmount },
     ],
   };

@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -15,16 +16,22 @@ const LogoutPage: NextPage = () => {
   }, []);
 
   return (
-    <Layout title="Logout" type="card" heading="Logout">
+    <Layout
+      title="Logout"
+      type="card"
+      heading={counterpart.translate(`pages.logout.heading`)}
+    >
       <Styled.LogoutCard>
-        <p>You have successfully logged out</p>
+        <p>{counterpart.translate(`pages.logout.title`)}</p>
         <Link href="/login" passHref={true}>
-          <Styled.LogoutButton type="primary">Log in</Styled.LogoutButton>
+          <Styled.LogoutButton type="primary">
+            {counterpart.translate(`buttons.login`)}
+          </Styled.LogoutButton>
         </Link>
         <FormDisclamer>
-          <span>Don't have an account? </span>
+          <span>{counterpart.translate(`pages.login.dont_have_account`)}</span>
           <Link href="/signup">
-            <a>Create account</a>
+            <a>{counterpart.translate(`links.create_account`)}</a>
           </Link>
         </FormDisclamer>
       </Styled.LogoutCard>

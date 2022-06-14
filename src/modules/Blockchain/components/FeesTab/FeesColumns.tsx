@@ -1,9 +1,10 @@
+import { TableHeading } from "../../../../common/components";
 import { Tag } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
 export const FeesColumns = [
   {
-    title: "Operation",
+    title: (): JSX.Element => <TableHeading heading={"operation"} />,
     dataIndex: "operation",
     key: "operation",
     render: (operation: string): JSX.Element => (
@@ -19,7 +20,7 @@ export const FeesColumns = [
     ),
   },
   {
-    title: "Fee Type",
+    title: (): JSX.Element => <TableHeading heading={"fee_type"} />,
     dataIndex: "types",
     key: "types",
     render: (types: string[], record: any): JSX.Element => (
@@ -31,7 +32,7 @@ export const FeesColumns = [
     ),
   },
   {
-    title: "Standard Fee",
+    title: (): JSX.Element => <TableHeading heading={"standard_fee"} />,
     dataIndex: "fees",
     key: "fees",
     render: (fees: string[], record: any): JSX.Element => (

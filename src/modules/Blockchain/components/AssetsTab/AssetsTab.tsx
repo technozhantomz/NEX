@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 
 import { useViewportContext } from "../../../../common/providers";
@@ -19,14 +20,14 @@ export const AssetsTab = (): JSX.Element => {
       <Styled.StatsCardsDeck>
         <StatsCard
           noData={assetTableRows.length === 0}
-          title="Assets"
+          title={counterpart.translate(`pages.blocks.assets.assets`)}
           data={`${assetTableRows.length}`}
           statsData={assetsStats}
         />
       </Styled.StatsCardsDeck>
       <Styled.AssetsSearch
         size="large"
-        placeholder="Search Assets"
+        placeholder={counterpart.translate(`pages.blocks.assets.search_assets`)}
         onSearch={handleSearch}
         loading={loading}
       />
@@ -48,13 +49,13 @@ export const AssetsTab = (): JSX.Element => {
               <Styled.AssetItemContent>
                 <div className="asset-info">
                   <span className="asset-info-title">
-                    {AssetsColumns[0].title}
+                    {AssetsColumns[0].title()}
                   </span>
                   <span className="asset-info-value">{item.id}</span>
                 </div>
                 <div className="asset-info">
                   <span className="asset-info-title">
-                    {AssetsColumns[1].title}
+                    {AssetsColumns[1].title()}
                   </span>
                   <span className="asset-info-value">
                     <Tag key={item.symbol} bgColor={colors.assetTag}>
@@ -64,19 +65,19 @@ export const AssetsTab = (): JSX.Element => {
                 </div>
                 <div className="asset-info">
                   <span className="asset-info-title">
-                    {AssetsColumns[2].title}
+                    {AssetsColumns[2].title()}
                   </span>
                   <span className="asset-info-value">{item.maxSupply}</span>
                 </div>
                 <div className="asset-info">
                   <span className="asset-info-title">
-                    {AssetsColumns[3].title}
+                    {AssetsColumns[3].title()}
                   </span>
-                  <span className="asset-info-value">{item.percision}</span>
+                  <span className="asset-info-value">{item.precision}</span>
                 </div>
                 <div className="asset-info">
                   <span className="asset-info-title">
-                    {AssetsColumns[4].title}
+                    {AssetsColumns[4].title()}
                   </span>
                   <span className="asset-info-value">
                     <Link href={`/user/${item.issuer}`}>{item.issuer}</Link>
@@ -84,7 +85,7 @@ export const AssetsTab = (): JSX.Element => {
                 </div>
                 <div className="asset-info">
                   <span className="asset-info-title">
-                    {AssetsColumns[5].title}
+                    {AssetsColumns[5].title()}
                   </span>
                   <span className="asset-info-value">
                     <Tooltip placement="top" title={item.info}>

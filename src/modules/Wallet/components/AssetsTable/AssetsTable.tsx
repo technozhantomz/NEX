@@ -1,3 +1,6 @@
+import counterpart from "counterpart";
+
+import { TableHeading } from "../../../../common/components";
 import { useAsset } from "../../../../common/hooks";
 import { useViewportContext } from "../../../../common/providers";
 import { List } from "../../../../ui/src";
@@ -21,28 +24,32 @@ export const AssetsTable = ({
   const { sidechainAssets } = useAsset();
   const columns = [
     {
-      title: "Asset",
+      title: (): JSX.Element => <TableHeading heading={"asset"} />,
       dataIndex: "asset",
       key: "asset",
     },
     {
-      title: "Available",
+      title: (): JSX.Element => <TableHeading heading={"available"} />,
       dataIndex: "available",
       key: "available",
     },
-    { title: "Quote asset", dataIndex: "quoteAsset", key: "quoteAsset" },
     {
-      title: "Price",
+      title: (): JSX.Element => <TableHeading heading={"quote_asset"} />,
+      dataIndex: "quoteAsset",
+      key: "quoteAsset",
+    },
+    {
+      title: (): JSX.Element => <TableHeading heading={"price"} />,
       dataIndex: "price",
       key: "price",
     },
     {
-      title: "Change (24 hrs)",
+      title: (): JSX.Element => <TableHeading heading={"change"} />,
       dataIndex: "change",
       key: "change",
     },
     {
-      title: "Volume",
+      title: (): JSX.Element => <TableHeading heading={"volume"} />,
       dataIndex: "volume",
       key: "volume",
     },
@@ -52,7 +59,7 @@ export const AssetsTable = ({
       key: "transfer",
       render: (_value: any, record: any) => (
         <AssetActionButton
-          txt="Transfer"
+          txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}
           href={`/wallet/${record.asset}?tab=transfer`}
         />
       ),
@@ -68,7 +75,7 @@ export const AssetsTable = ({
         if (hasWithdraw) {
           return (
             <AssetActionButton
-              txt="Withdraw"
+              txt={counterpart.translate(`buttons.withdraw`)}
               href={`/wallet/${record.asset}?tab=withdraw`}
             />
           );
@@ -88,7 +95,7 @@ export const AssetsTable = ({
         if (hasDeposit) {
           return (
             <AssetActionButton
-              txt="Deposit"
+              txt={counterpart.translate(`buttons.deposit`)}
               href={`/wallet/${record.asset}?tab=deposit`}
             />
           );
@@ -117,21 +124,25 @@ export const AssetsTable = ({
                       .includes(item.asset)
                     ? [
                         <AssetActionButton
-                          txt="Transfer"
+                          txt={counterpart.translate(
+                            `transaction.trxTypes.transfer.title`
+                          )}
                           href={`/wallet/${item.asset}?tab=transfer`}
                         />,
                         <AssetActionButton
-                          txt="Withdraw"
+                          txt={counterpart.translate(`buttons.withdraw`)}
                           href={`/wallet/${item.asset}?tab=withdraw`}
                         />,
                         <AssetActionButton
-                          txt="Deposit"
+                          txt={counterpart.translate(`buttons.deposit`)}
                           href={`/wallet/${item.asset}?tab=deposit`}
                         />,
                       ]
                     : [
                         <AssetActionButton
-                          txt="Transfer"
+                          txt={counterpart.translate(
+                            `transaction.trxTypes.transfer.title`
+                          )}
                           href={`/wallet/${item.asset}?tab=transfer`}
                         />,
                       ]
@@ -141,23 +152,43 @@ export const AssetsTable = ({
               <AssetTitle symbol={item.asset} />
               <Styled.AssetsItemContent>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[1].title}</span>
+                  <span className="asset-info-title">
+                    {typeof columns[1].title === "string"
+                      ? columns[1].title
+                      : columns[1].title()}
+                  </span>
                   <span className="asset-info-value">{item.available}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[2].title}</span>
+                  <span className="asset-info-title">
+                    {typeof columns[2].title === "string"
+                      ? columns[2].title
+                      : columns[2].title()}
+                  </span>
                   <span className="asset-info-value">{item.quoteAsset}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[3].title}</span>
+                  <span className="asset-info-title">
+                    {typeof columns[3].title === "string"
+                      ? columns[3].title
+                      : columns[3].title()}
+                  </span>
                   <span className="asset-info-value">{item.price}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[4].title}</span>
+                  <span className="asset-info-title">
+                    {typeof columns[4].title === "string"
+                      ? columns[4].title
+                      : columns[4].title()}
+                  </span>
                   <span className="asset-info-value">{item.change}</span>
                 </div>
                 <div className="asset-info">
-                  <span className="asset-info-title">{columns[5].title}</span>
+                  <span className="asset-info-title">
+                    {typeof columns[5].title === "string"
+                      ? columns[5].title
+                      : columns[5].title()}
+                  </span>
                   <span className="asset-info-value">{item.volume}</span>
                 </div>
               </Styled.AssetsItemContent>
