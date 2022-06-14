@@ -1,6 +1,6 @@
+import counterpart from "counterpart";
 import { CSSProperties, ReactNode } from "react";
 
-// import { List } from "../../../../../ui/src";
 import { ActivityRow } from "../../hooks/useActivityTable.types";
 import { ActivityColumns as columns } from "../ActivityColumns/";
 import { ActivityTag } from "../ActivityTag";
@@ -22,36 +22,45 @@ export const ActivityList = ({
       itemLayout="vertical"
       dataSource={activitiesRows}
       loading={loading}
-      pagination={{
-        position: "bottom",
-        size: "small",
-        pageSize: 2,
-        showLessItems: true,
-        itemRender: (
-          _page: number,
-          type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-          element: ReactNode
-        ) => {
-          if (type === "prev") {
-            return (
-              <>
-                {" "}
-                {_page > 0 ? (
-                  <a style={{ marginRight: "8px" } as CSSProperties}>
-                    Previous
-                  </a>
-                ) : (
-                  ""
-                )}
-              </>
-            );
-          }
-          if (type === "next") {
-            return <a style={{ marginLeft: "8px" } as CSSProperties}>Next</a>;
-          }
-          return element;
-        },
-      }}
+      pagination={
+        !loading
+          ? {
+              position: "bottom",
+              showSizeChanger: false,
+              size: "small",
+              pageSize: 2,
+              showLessItems: true,
+              itemRender: (
+                _page: number,
+                type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
+                element: ReactNode
+              ) => {
+                if (type === "prev") {
+                  return (
+                    <>
+                      {" "}
+                      {_page > 0 ? (
+                        <a style={{ marginRight: "8px" } as CSSProperties}>
+                          {counterpart.translate(`buttons.previous`)}
+                        </a>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  );
+                }
+                if (type === "next") {
+                  return (
+                    <a style={{ marginLeft: "8px" } as CSSProperties}>
+                      {counterpart.translate(`buttons.next`)}
+                    </a>
+                  );
+                }
+                return element;
+              },
+            }
+          : false
+      }
       renderItem={(item) => (
         <Styled.ActivityListItem key={item.key}>
           <Styled.ActivitysItemContent>
