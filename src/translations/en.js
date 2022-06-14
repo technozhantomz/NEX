@@ -756,6 +756,7 @@ export const en = {
     errors: {
       same_account: "Same as your account",
       no_account: "Account not found",
+      added_account: "Account is already added",
       premium_username:
         "This is a premium name which is not supported by this faucet.",
       username_limits:

@@ -763,6 +763,7 @@ export const ru = {
     errors: {
       same_account: "Так же, как ваш аккаунт",
       no_account: "аккаунт не найден",
+      added_account: "Аккаунт уже добавлен",
       premium_username:
         "Это премиальное имя, которое не поддерживается этим сборщиком..",
       username_limits:

@@ -39,6 +39,7 @@ export const ProxyTab = ({
     resetChanges,
     searchValue,
     isSameAccount,
+    accountAlreadyAdded,
   } = useProxyTab({ serverProxy, totalGpos, getProxyAccount });
   return (
     <Styled.ProxyTabWrapper>
@@ -70,6 +71,7 @@ export const ProxyTab = ({
         resetChanges={resetChanges}
         searchValue={searchValue}
         isSameAccount={isSameAccount}
+        accountAlreadyAdded={accountAlreadyAdded}
       />
       <ProxyTable
         loading={loading}
