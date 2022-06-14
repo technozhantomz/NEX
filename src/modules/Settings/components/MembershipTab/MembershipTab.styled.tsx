@@ -5,7 +5,6 @@ import { colors } from "../../../../ui/src/colors";
 export const MembershipCard = styled.div`
   .ant-form-horizontal {
     text-align: left;
-    letter-spacing: 0px;
     color: ${colors.textColor};
     margin: 20px;
     ${breakpoint.sm} {
@@ -16,7 +15,6 @@ export const MembershipCard = styled.div`
   a {
     font-weight: 400;
     font-size: 14px;
-    letter-spacing: 0px;
   }
 `;
 
@@ -26,23 +24,16 @@ export const MembershipForm = styled(UiForm)`
 
 export const Heading = styled.h4`
   text-align: left;
-  letter-spacing: 0px;
   color: ${colors.textColor};
-  opacity: 1;
   margin-bottom: 8px;
-  ${breakpoint.sm} {
-  }
+  font-weight: 500;
 `;
 
 export const Label = styled.p`
    {
     font-weight: 400;
-    letter-spacing: 0px;
     color: ${colors.textColor};
     margin-bottom: 0px;
-    opacity: 1;
-    ${breakpoint.sm} {
-    }
   }
 `;
 
@@ -50,11 +41,7 @@ export const Paragraph = styled.p`
   text-align: left;
   width: 100%;
   font-weight: 400;
-  letter-spacing: 0px;
   color: ${colors.textColor};
-  opacity: 1;
-  ${breakpoint.sm} {
-  }
 `;
 
 export const InfoContainer = styled.div`
@@ -91,9 +78,6 @@ export const FeeCategoryContainer = styled.div`
   display: flex;
   margin-bottom: 15px;
   width: 100%;
-  ${breakpoint.sm} {
-    width: 100%;
-  }
 `;
 
 export const LabelContainer = styled.div`
@@ -105,9 +89,7 @@ export const LabelContainer = styled.div`
 
 export const PercentageContainer = styled.div`
   text-align: left;
-  letter-spacing: 0px;
   color: ${colors.textColor};
-  opacity: 1;
   width: 65%;
   ${breakpoint.sm} {
     width: 40%;
