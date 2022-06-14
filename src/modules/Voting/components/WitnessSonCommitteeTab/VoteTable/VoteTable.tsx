@@ -46,40 +46,52 @@ export const VoteTable = ({
             itemLayout="vertical"
             dataSource={votes}
             loading={loading}
-            pagination={{
-              position: "bottom",
-              size: "small",
-              pageSize: 2,
-              showLessItems: true,
-              itemRender: (
-                _page: number,
-                type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                element: ReactNode
-              ) => {
-                if (type === "prev") {
-                  return (
-                    <>
-                      {" "}
-                      {_page > 0 ? (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.previous`)}
-                        </a>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  );
-                }
-                if (type === "next") {
-                  return (
-                    <a style={{ marginLeft: "8px" } as CSSProperties}>
-                      {counterpart.translate(`buttons.next`)}
-                    </a>
-                  );
-                }
-                return element;
-              },
-            }}
+            pagination={
+              !loading
+                ? {
+                    position: "bottom",
+                    size: "small",
+                    showSizeChanger: false,
+                    pageSize: 2,
+                    showLessItems: true,
+                    itemRender: (
+                      _page: number,
+                      type:
+                        | "page"
+                        | "prev"
+                        | "next"
+                        | "jump-prev"
+                        | "jump-next",
+                      element: ReactNode
+                    ) => {
+                      if (type === "prev") {
+                        return (
+                          <>
+                            {" "}
+                            {_page > 0 ? (
+                              <a
+                                style={{ marginRight: "8px" } as CSSProperties}
+                              >
+                                {counterpart.translate(`buttons.previous`)}
+                              </a>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        );
+                      }
+                      if (type === "next") {
+                        return (
+                          <a style={{ marginLeft: "8px" } as CSSProperties}>
+                            {counterpart.translate(`buttons.next`)}
+                          </a>
+                        );
+                      }
+                      return element;
+                    },
+                  }
+                : false
+            }
             renderItem={(item) => (
               <Styled.VoteListItem key={(item as VoteRow).key}>
                 <Styled.VoteItemContent>
