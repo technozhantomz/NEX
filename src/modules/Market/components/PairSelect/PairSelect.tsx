@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import { Asset } from "../../../../common/types";
 import { Col, DownOutlined, Row } from "../../../../ui/src";
 
@@ -39,19 +41,25 @@ export const PairSelect = ({
           <Col span={10}>
             <Styled.ColumnFlex>
               <span>{latest}</span>
-              <Styled.PairInfoLabel>Current price</Styled.PairInfoLabel>
+              <Styled.PairInfoLabel>
+                {counterpart.translate(`tableHead.current_price`)}
+              </Styled.PairInfoLabel>
             </Styled.ColumnFlex>
           </Col>
           <Col span={7}>
             <Styled.ColumnFlex>
               <span>{change}%</span>
-              <Styled.PairInfoLabel>Change</Styled.PairInfoLabel>
+              <Styled.PairInfoLabel>
+                {counterpart.translate(`tableHead.market_change`)}
+              </Styled.PairInfoLabel>
             </Styled.ColumnFlex>
           </Col>
           <Col span={7}>
             <Styled.ColumnFlex>
               <span>{volume}</span>
-              <Styled.PairInfoLabel>Volume</Styled.PairInfoLabel>
+              <Styled.PairInfoLabel>
+                {counterpart.translate(`tableHead.volume`)}
+              </Styled.PairInfoLabel>
             </Styled.ColumnFlex>
           </Col>
         </Row>

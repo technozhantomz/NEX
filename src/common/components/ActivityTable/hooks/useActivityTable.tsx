@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { ChainTypes } from "peerplaysjs-lib";
 import { useCallback, useEffect, useState } from "react";
 
@@ -69,7 +70,13 @@ export function useActivityTable({
     }) => {
       const registrarName = await getUserNameById(registrar);
       const userName = await getUserNameById(name);
-      return `[userlink=${registrarName}], registered the account ,[userlink=${userName}]`;
+      return counterpart.translate(
+        `transaction.trxTypes.account_create.description`,
+        {
+          registrarName: `[userlink = ${registrarName}]`,
+          userName: `[userlink=${userName}]`,
+        }
+      );
     },
     account_upgrade: async ({
       account_to_upgrade,
@@ -77,15 +84,24 @@ export function useActivityTable({
       account_to_upgrade: string;
     }) => {
       const user = await getUserNameById(account_to_upgrade);
-      return `[userlink=${user}], upgraded account to lifetime member`;
+      return counterpart.translate(
+        `transaction.trxTypes.account_upgrade.description`,
+        { user: `[userlink = ${user}]` }
+      );
     },
     worker_create: async ({ owner }: { owner: string }) => {
       const user = await getUserNameById(owner);
-      return `[userlink=${user}], created a worker proposal with daily pay of ${defaultToken}`;
+      return counterpart.translate(
+        `transaction.trxTypes.worker_create.description`,
+        { user: `[userlink = ${user}]`, defaultToken: defaultToken }
+      );
     },
     account_update: async ({ account }: { account: string }) => {
       const user = await getUserNameById(account);
-      return `[userlink=${user}], updated account data`;
+      return counterpart.translate(
+        `transaction.trxTypes.account_update.description`,
+        { user: `[userlink = ${user}]` }
+      );
     },
     transfer: async ({
       from,
@@ -99,7 +115,15 @@ export function useActivityTable({
       const asset = await formAssetBalanceById(amount.asset_id, amount.amount);
       const sender = await getUserNameById(from);
       const receiver = await getUserNameById(to);
-      return `[userlink=${sender}], send ${asset.amount} ${asset.symbol} to ,[userlink=${receiver}]`;
+      return counterpart.translate(
+        `transaction.trxTypes.transfer.description`,
+        {
+          sender: `[userlink = ${sender}]`,
+          amount: asset.amount,
+          symbol: asset.symbol,
+          receiver: `[userlink = ${receiver}]`,
+        }
+      );
     },
     limit_order_cancel: async ({
       fee_paying_account,
@@ -110,7 +134,10 @@ export function useActivityTable({
     }) => {
       const id = order.split(".")[2];
       const user = await getUserNameById(fee_paying_account);
-      return `[userlink=${user}], cancelled order #${id}`;
+      return counterpart.translate(
+        `transaction.trxTypes.limit_order_cancel.description`,
+        { user: `[userlink = ${user}]`, id: id }
+      );
     },
     limit_order_create: async (
       {
@@ -136,7 +163,15 @@ export function useActivityTable({
       const orderId = id.split(".")[2];
       const buyAmount = `${buyAsset.amount} ${buyAsset.symbol}`;
       const sellAmount = `${sellAsset.amount} ${sellAsset.symbol}`;
-      return `[userlink=${creator}], placed order #${orderId} to buy ${buyAmount} for ${sellAmount}`;
+      return counterpart.translate(
+        `transaction.trxTypes.limit_order_create.description`,
+        {
+          creator: `[userlink = ${creator}]`,
+          orderId: orderId,
+          buyAmount: buyAmount,
+          sellAmount: sellAmount,
+        }
+      );
     },
     fill_order: async ({
       receives,
@@ -158,7 +193,15 @@ export function useActivityTable({
       const user = await getUserNameById(account_id);
       const paysAmount = `${buyAsset.amount} ${buyAsset.symbol}`;
       const receivesAmmount = `${sellAsset.amount} ${sellAsset.symbol}`;
-      return `[userlink=${user}], bought ${paysAmount} for ${receivesAmmount} for order #${id}`;
+      return counterpart.translate(
+        `transaction.trxTypes.fill_order.description`,
+        {
+          user: `[userlink = ${user}]`,
+          paysAmount: paysAmount,
+          receivesAmmount: receivesAmmount,
+          id: id,
+        }
+      );
     },
     asset_fund_fee_pool: async ({
       from_account,
@@ -171,7 +214,14 @@ export function useActivityTable({
     }) => {
       const asset = await formAssetBalanceById(asset_id, amount);
       const from = await getUserNameById(from_account);
-      return `[userlink=${from}], funded ${asset.symbol} fee pool with ${asset.amount}`;
+      return counterpart.translate(
+        `transaction.trxTypes.asset_fund_fee_pool.description`,
+        {
+          from: `[userlink = ${from}]`,
+          symbol: asset.symbol,
+          amount: asset.amount,
+        }
+      );
     },
     account_whitelist: async ({
       account_to_list,
@@ -191,7 +241,14 @@ export function useActivityTable({
       };
       const issuerName = await getUserNameById(account_to_list);
       const listed = await getUserNameById(authorizing_account);
-      return `[userlink=${issuerName}], ${statuses[new_listing]} the account ,[userlink=${listed}]`;
+      return counterpart.translate(
+        `transaction.trxTypes.account_whitelist.description`,
+        {
+          issuer: `[userlink = ${issuerName}]`,
+          status: statuses[new_listing],
+          listed: `[userlink=${listed}]`,
+        }
+      );
     },
     asset_create: async ({
       symbol,
@@ -201,7 +258,10 @@ export function useActivityTable({
       issuer: string;
     }) => {
       const issuerName = await getUserNameById(issuer);
-      return `[userlink=${issuerName}], created the asset ${symbol}`;
+      return counterpart.translate(
+        `transaction.trxTypes.asset_create.description`,
+        { issuer: `[userlink = ${issuerName}]`, symbol: symbol }
+      );
     },
     asset_issue: async ({
       asset_to_issue,
@@ -218,7 +278,15 @@ export function useActivityTable({
       );
       const issuerName = await getUserNameById(issuer);
       const receiver = await getUserNameById(issue_to_account);
-      return `[userlink=${issuerName}], issued ${asset.amount} ${asset.symbol} to ,[userlink=${receiver}]`;
+      return counterpart.translate(
+        `transaction.trxTypes.asset_issue.description`,
+        {
+          issuer: `[userlink = ${issuerName}]`,
+          assetAmount: asset.amount,
+          symbol: asset.symbol,
+          receiver: `[userlink = ${receiver}]`,
+        }
+      );
     },
     asset_update: async ({
       issuer,
@@ -229,7 +297,10 @@ export function useActivityTable({
     }) => {
       const issuerName = await getUserNameById(issuer);
       const asset = await getAssetById(asset_to_update);
-      return `[userlink=${issuerName}], updated asset ${asset.symbol}`;
+      return counterpart.translate(
+        `transaction.trxTypes.asset_update.description`,
+        { issuer: `[userlink = ${issuerName}]`, symbol: asset.symbol }
+      );
     },
     // unnecessary
     asset_claim_pool: async ({
@@ -247,7 +318,15 @@ export function useActivityTable({
       );
       const issuerName = await getUserNameById(issuer);
       const asset = await getAssetById(asset_id);
-      return `[userlink=${issuerName}], claimed ${claimedAsset.amount} ${claimedAsset.symbol} from ${asset.symbol} fee pool`;
+      return counterpart.translate(
+        `transaction.trxTypes.asset_claim_pool.description`,
+        {
+          issuer: `[userlink = ${issuerName}]`,
+          claimed: claimedAsset.amount,
+          claimedSymbol: claimedAsset.symbol,
+          asset: asset.symbol,
+        }
+      );
     },
     // unnecessary
     asset_update_issuer: async ({
@@ -262,7 +341,14 @@ export function useActivityTable({
       const issuerName = await getUserNameById(issuer);
       const asset = await getAssetById(asset_to_update);
       const newOwner = await getUserNameById(new_issuer);
-      return `[userlink=${issuerName}], transferred rights for ${asset.symbol} to .[userlink=${newOwner}]`;
+      return counterpart.translate(
+        `transaction.trxTypes.asset_update_issuer.description`,
+        {
+          issuer: `[userlink = ${issuerName}]`,
+          asset: asset.symbol,
+          newOwner: `[userlink=${newOwner}]`,
+        }
+      );
     },
     asset_update_feed_producers: async ({
       asset_to_update,
@@ -273,7 +359,10 @@ export function useActivityTable({
     }) => {
       const issuerName = await getUserNameById(issuer);
       const asset = await getAssetById(asset_to_update);
-      return `[userlink=${issuerName}], updated the feed producers for the asset ${asset.symbol}`;
+      return counterpart.translate(
+        `transaction.trxTypes.asset_update_feed_producers.description`,
+        { issuer: `[userlink = ${issuerName}]`, asset: asset.symbol }
+      );
     },
   };
 

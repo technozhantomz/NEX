@@ -11,6 +11,14 @@ export const FormContainer = styled.div`
   ${breakpoint.md} {
     padding: 40px 20px 60px 20px;
   }
+  form + p {
+    padding 0 20px 20px 20px;
+  }
+  ${breakpoint.md} {
+    form + p {
+      padding 0;
+    }
+  }
 `;
 
 export const Form = styled(UiForm)``;

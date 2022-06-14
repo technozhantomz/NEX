@@ -11,3 +11,4 @@ export * from "./ActivityTable";
 export * from "./TradingPairCard";
 export * from "./TransactionModal";
 export * from "./CopyButton";
+export * from "./TableHeading";

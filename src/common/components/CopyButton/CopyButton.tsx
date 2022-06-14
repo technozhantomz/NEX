@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import { Tooltip } from "../../../ui/src";
 import { CopyIcon } from "../../../ui/src/icons";
 
@@ -21,7 +23,10 @@ export const CopyButton = ({
     <span className={className}>
       {buttonText && buttonText !== "" ? (
         !copied ? (
-          <Tooltip placement="top" title="Copy">
+          <Tooltip
+            placement="top"
+            title={`${counterpart.translate(`tooltips.copy`)}`}
+          >
             <Styled.TextButton
               type="link"
               onClick={() => handleClick(copyValue)}
@@ -30,7 +35,10 @@ export const CopyButton = ({
             </Styled.TextButton>
           </Tooltip>
         ) : (
-          <Tooltip placement="top" title="Copied">
+          <Tooltip
+            placement="top"
+            title={`${counterpart.translate(`tooltips.copied`)}`}
+          >
             <Styled.TextButton
               type="link"
               onClick={() => handleClick(copyValue)}
@@ -40,11 +48,17 @@ export const CopyButton = ({
           </Tooltip>
         )
       ) : !copied ? (
-        <Tooltip placement="top" title="Copy">
+        <Tooltip
+          placement="top"
+          title={`${counterpart.translate(`tooltips.copy`)}`}
+        >
           <CopyIcon onClick={() => handleClick(copyValue)} />
         </Tooltip>
       ) : (
-        <Tooltip placement="top" title="Copied">
+        <Tooltip
+          placement="top"
+          title={`${counterpart.translate(`tooltips.copied`)}`}
+        >
           <Styled.Check />
         </Tooltip>
       )}

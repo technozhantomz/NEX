@@ -1,10 +1,11 @@
+import counterpart from "counterpart";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { ActivityTable, Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
-import { Button, DownOutlined, Menu } from "../../../../ui/src";
+import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
 //import { useBrowserHistoryContext } from "../../../../common/providers";
 import { AssetsTable } from "../../components/AssetsTable";
 
@@ -38,7 +39,10 @@ const WalletPage: NextPage = () => {
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab ? tab : "assets"} <DownOutlined />
+              {tab
+                ? counterpart.translate(`pages.wallet.${tab}`)
+                : counterpart.translate(`pages.wallet.assets`)}{" "}
+              {!visible ? <DownOutlined /> : <UpOutlined />}
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -52,11 +56,16 @@ const WalletPage: NextPage = () => {
     <Layout
       title="Wallet"
       type="card-lrg"
-      heading="Wallet"
+      heading={counterpart.translate(`pages.wallet.heading`)}
       description={`Wallet Page | ${tab}`}
       dexLayout={true}
+      onClick={() => {
+        if (sm) {
+          visible && setVisible(false);
+        }
+      }}
     >
-      <Styled.WalletCard>
+      <Styled.WalletCard onClick={() => visible && setVisible(false)}>
         <Styled.Tabs
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "assets"}`}
@@ -65,10 +74,16 @@ const WalletPage: NextPage = () => {
             if (sm) setVisible(false);
           }}
         >
-          <TabPane tab="Assets" key="assets">
+          <TabPane
+            tab={counterpart.translate(`pages.wallet.assets`)}
+            key="assets"
+          >
             <AssetsTable />
           </TabPane>
-          <TabPane tab="Activities" key="activities">
+          <TabPane
+            tab={counterpart.translate(`pages.wallet.activities`)}
+            key="activities"
+          >
             <ActivityTable isWalletActivityTable={true} />
           </TabPane>
         </Styled.Tabs>

@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import { DEFAULT_PROXY_ID, defaultToken } from "../../../../../api/params";
@@ -35,6 +36,8 @@ export function useProxyTab({
     useState<string>("");
   const [isPublishable, setIsPublishable] = useState<boolean>(false);
   const [isSameAccount, setIsSameAccount] = useState<boolean>(false);
+  const [accountAlreadyAdded, setAccountAlreadyAdded] =
+    useState<boolean>(false);
 
   const { id, assets, name, localStorageAccount } = useUserContext();
   const {
@@ -55,6 +58,11 @@ export function useProxyTab({
         if (account.name === localStorageAccount) {
           setIsSameAccount(true);
           setSearchError(true);
+          setAccountAlreadyAdded(false);
+        } else if (account.name === localProxy.name) {
+          setAccountAlreadyAdded(true);
+          setIsSameAccount(false);
+          setSearchError(true);
         } else {
           setSearchedAccount(account);
           setIsSameAccount(false);
@@ -62,6 +70,7 @@ export function useProxyTab({
         }
       } else {
         setIsSameAccount(false);
+        setAccountAlreadyAdded(false);
         setSearchError(true);
       }
     },
@@ -71,6 +80,8 @@ export function useProxyTab({
       setSearchError,
       setSearchValue,
       setIsSameAccount,
+      setAccountAlreadyAdded,
+      localProxy,
     ]
   );
 
@@ -129,11 +140,15 @@ export function useProxyTab({
         userDefaultAsset === undefined ||
         (userDefaultAsset.amount as number) < updateAccountFee
       ) {
-        setTransactionErrorMessage("Insufficient balance to pay the fee.");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.balance_not_enough_to_pay`)
+        );
         return;
       }
       if (totalGpos <= 0) {
-        setTransactionErrorMessage("You need to Vest some GPOS balance first");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.need_to_vest_gpos`)
+        );
       } else {
         setTransactionErrorMessage("");
         const activeKey = getPrivateKey(password, "active");
@@ -144,7 +159,9 @@ export function useProxyTab({
           setLoadingTransaction(false);
         } catch (error) {
           console.log(error);
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
         if (trxResult) {
@@ -153,11 +170,13 @@ export function useProxyTab({
           setIsPublishable(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            "You have successfully published your proxy"
+            counterpart.translate(`field.success.published_proxy`)
           );
           setLoadingTransaction(false);
         } else {
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
       }
@@ -237,5 +256,6 @@ export function useProxyTab({
     resetChanges,
     searchValue,
     isSameAccount,
+    accountAlreadyAdded,
   };
 }

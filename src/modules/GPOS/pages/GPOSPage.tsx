@@ -1,9 +1,10 @@
+import counterpart from "counterpart";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
-import { Button, DownOutlined, Menu, Tabs } from "../../../ui/src";
+import { Button, DownOutlined, Menu, Tabs, UpOutlined } from "../../../ui/src";
 import { PowerDownTab, PowerUpTab } from "../components";
 import { useGposPage } from "../hooks";
 
@@ -47,7 +48,12 @@ const GPOSPage: NextPage = () => {
                 setIsMobileDropdownvisible(!isMobileDropdownvisible)
               }
             >
-              {tab ? tab : "power-up"} <DownOutlined />
+              {tab
+                ? counterpart.translate(
+                    `buttons.${(tab as string).replace("-", "_")}`
+                  )
+                : counterpart.translate(`buttons.power_up`)}{" "}
+              {!isMobileDropdownvisible ? <DownOutlined /> : <UpOutlined />}
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -61,9 +67,14 @@ const GPOSPage: NextPage = () => {
     <Layout
       title="Peerplays (GPOS)"
       type="card-lrg"
-      heading="Peerplays (GPOS)"
+      heading={counterpart.translate(`pages.voting.peerplays_gpos`)}
       description="Peerplays (GPOS)"
       dexLayout={true}
+      onClick={() => {
+        if (sm) {
+          isMobileDropdownvisible && setIsMobileDropdownvisible(false);
+        }
+      }}
     >
       <Styled.GPOSCard>
         <Tabs
@@ -75,21 +86,30 @@ const GPOSPage: NextPage = () => {
             if (sm) setIsMobileDropdownvisible(false);
           }}
         >
-          <TabPane tab="Power up" key="power-up">
+          <TabPane
+            tab={counterpart.translate(`buttons.power_up`)}
+            key="power-up"
+          >
             <PowerUpTab
               gposBalances={gposBalances}
               loading={loading}
               getGposInfo={getGposInfo}
             />
           </TabPane>
-          <TabPane tab="Power Down" key="power-down">
+          <TabPane
+            tab={counterpart.translate(`buttons.power_down`)}
+            key="power-down"
+          >
             <PowerDownTab
               gposBalances={gposBalances}
               loading={loading}
               getGposInfo={getGposInfo}
             />
           </TabPane>
-          <TabPane tab="Vote" key="vote"></TabPane>
+          <TabPane
+            tab={counterpart.translate(`buttons.vote`)}
+            key="vote"
+          ></TabPane>
         </Tabs>
       </Styled.GPOSCard>
     </Layout>

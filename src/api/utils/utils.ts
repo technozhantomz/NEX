@@ -1,3 +1,5 @@
+import { KeyboardEvent } from "react";
+
 const id_regex = /\b\d+\.\d+\.(\d+)\b/;
 
 export const utils = {
@@ -25,5 +27,12 @@ export const utils = {
         ? numString.substring(0, decimalIndex + (digits + 1))
         : num;
     return parseFloat(subString as string);
+  },
+  isNumberKey: (e: KeyboardEvent<HTMLInputElement>): boolean => {
+    const numbers = "0123456789.";
+    if (numbers.includes(e.key)) {
+      return true;
+    }
+    return false;
   },
 };

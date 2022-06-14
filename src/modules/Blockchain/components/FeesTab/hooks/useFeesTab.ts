@@ -138,7 +138,7 @@ export function useFeesTab(): UseFeesTabResult {
       return {
         key: operationWithFeeParameter.type,
         operation: counterpart.translate(
-          `transaction.trxTypes.${operationWithFeeParameter.type}`
+          `transaction.trxTypes.${operationWithFeeParameter.type}.title`
         ),
         types: Object.keys(operationWithFeeParameter.feeParameter[1]).map(
           (key) => counterpart.translate(`transaction.feeTypes.${key}`)

@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import { Proxy } from "../../../../common/types";
 //import { InfoCircleOutlined } from "../../../../ui/src";
 
@@ -37,11 +39,14 @@ export const ProxyTab = ({
     resetChanges,
     searchValue,
     isSameAccount,
+    accountAlreadyAdded,
   } = useProxyTab({ serverProxy, totalGpos, getProxyAccount });
   return (
     <Styled.ProxyTabWrapper>
       <Styled.ProxyIntroWrapper>
-        <Styled.ProxyTitle>Proxy your vote to other accounts</Styled.ProxyTitle>
+        <Styled.ProxyTitle>
+          {counterpart.translate(`field.labels.vote_for_proxy`)}
+        </Styled.ProxyTitle>
         {/* <Styled.ProxyInfoLink>
           <InfoCircleOutlined /> <a>See details here</a>
         </Styled.ProxyInfoLink> */}
@@ -66,6 +71,7 @@ export const ProxyTab = ({
         resetChanges={resetChanges}
         searchValue={searchValue}
         isSameAccount={isSameAccount}
+        accountAlreadyAdded={accountAlreadyAdded}
       />
       <ProxyTable
         loading={loading}

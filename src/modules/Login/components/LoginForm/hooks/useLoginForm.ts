@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useEffect, useState } from "react";
 
 import { useAccount } from "../../../../../common/hooks";
@@ -50,7 +51,9 @@ export function useLoginForm(): ILoginForm {
   const validateUsername = async (_: unknown, value: string) => {
     const fullAccount = await getFullAccount(value, false);
     if (!fullAccount) {
-      return Promise.reject(new Error("User not found"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.user_not_found`))
+      );
     }
     setTemporaryFullAccount(fullAccount);
     setValidUser(true);
@@ -62,7 +65,9 @@ export function useLoginForm(): ILoginForm {
       const account = temporaryFullAccount.account;
       const checkPassword = validateAccountPassword(value, account);
       if (!checkPassword)
-        return Promise.reject(new Error("Password incorrect"));
+        return Promise.reject(
+          new Error(counterpart.translate(`field.errors.password_incorrect`))
+        );
     }
 
     return Promise.resolve();
@@ -70,14 +75,20 @@ export function useLoginForm(): ILoginForm {
 
   const formValdation = {
     username: [
-      { required: true, message: "Username is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.username_required`),
+      },
       { validator: validateUsername },
     ],
     password: [
-      { required: true, message: "Password is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.password_required`),
+      },
       {
         min: 12,
-        message: "Password should be at least 12 characters long",
+        message: counterpart.translate(`field.errors.password_should_be_long`),
       },
       { validator: validatePassword },
     ],

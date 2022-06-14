@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -78,9 +79,15 @@ export const WithdrawForm = ({
               />
             </Styled.WithdrawFormAssetAmount>
             {selectedAsset === "BTC" ? (
-              <p className="label">Withdraw Public key & Address</p>
+              <p className="label">
+                {counterpart.translate(
+                  `field.labels.withdraw_public_key_address`
+                )}
+              </p>
             ) : (
-              <p className="label">Hive blockchain account</p>
+              <p className="label">
+                {counterpart.translate(`field.labels.hive_blockchain_account`)}
+              </p>
             )}
           </>
         ) : (
@@ -92,7 +99,12 @@ export const WithdrawForm = ({
             validateFirst={true}
             rules={formValdation.withdrawPublicKey}
           >
-            <Input placeholder="Withdraw public key" className="form-input" />
+            <Input
+              placeholder={counterpart.translate(
+                `field.placeholder.withdraw_public_key`
+              )}
+              className="form-input"
+            />
           </Form.Item>
         ) : (
           ""
@@ -105,8 +117,10 @@ export const WithdrawForm = ({
           <Input
             placeholder={
               selectedAsset === "BTC"
-                ? "Withdraw address"
-                : "Hive blockchain account"
+                ? counterpart.translate(`field.placeholder.withdraw_address`)
+                : counterpart.translate(
+                    `field.placeholder.hive_blockchain_account`
+                  )
             }
             className="form-input"
           />
@@ -118,13 +132,19 @@ export const WithdrawForm = ({
             rules={formValdation.amount}
             validateTrigger="onBlur"
           >
-            <Input placeholder="amount" type="number" />
+            <Input
+              placeholder={counterpart.translate(`field.placeholder.amount`)}
+              type="number"
+            />
           </Form.Item>
         ) : (
           ""
         )}
         <Styled.Fee>
-          Fees: {feeAmount} {defaultAsset ? defaultAsset.symbol : ""}
+          {counterpart.translate(`field.labels.fees`, {
+            feeAmount: feeAmount,
+            defaultAsset: defaultAsset ? defaultAsset.symbol : "",
+          })}
         </Styled.Fee>
         {status === "" ? "" : <p>{status}</p>}
 
@@ -132,7 +152,7 @@ export const WithdrawForm = ({
           {localStorageAccount && localStorageAccount !== "" ? (
             <>
               <Styled.WithdrawFormButton type="primary" htmlType="submit">
-                Withdraw
+                {counterpart.translate(`buttons.withdraw`)}
               </Styled.WithdrawFormButton>
             </>
           ) : (
@@ -144,7 +164,7 @@ export const WithdrawForm = ({
                   router.push("/login");
                 }}
               >
-                Log in & Withdraw
+                {counterpart.translate(`buttons.log_in_withdraw`)}
               </Styled.WithdrawFormButton>
             </>
           )}
@@ -154,9 +174,11 @@ export const WithdrawForm = ({
         ""
       ) : (
         <Styled.FormDisclamer>
-          <span>Don't have a Peerplays account? </span>
+          <span>
+            {counterpart.translate(`buttons.dont_have_peerplays_account`)}
+          </span>
           <Link href="/signup">
-            <a>Create account</a>
+            <a>{counterpart.translate(`links.create_account`)}</a>
           </Link>
         </Styled.FormDisclamer>
       )}
