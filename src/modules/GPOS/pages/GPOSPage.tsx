@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
-import { Button, DownOutlined, Menu, Tabs } from "../../../ui/src";
+import { Button, DownOutlined, Menu, Tabs, UpOutlined } from "../../../ui/src";
 import { PowerDownTab, PowerUpTab } from "../components";
 import { useGposPage } from "../hooks";
 
@@ -53,7 +53,7 @@ const GPOSPage: NextPage = () => {
                     `buttons.${(tab as string).replace("-", "_")}`
                   )
                 : counterpart.translate(`buttons.power_up`)}{" "}
-              <DownOutlined />
+              {!isMobileDropdownvisible ? <DownOutlined /> : <UpOutlined />}
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -70,6 +70,11 @@ const GPOSPage: NextPage = () => {
       heading={counterpart.translate(`pages.voting.peerplays_gpos`)}
       description="Peerplays (GPOS)"
       dexLayout={true}
+      onClick={() => {
+        if (sm) {
+          isMobileDropdownvisible && setIsMobileDropdownvisible(false);
+        }
+      }}
     >
       <Styled.GPOSCard>
         <Tabs

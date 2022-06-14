@@ -6,7 +6,13 @@ import React, { useState } from "react";
 import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 //import { useBrowserHistoryContext } from "../../../../common/providers";
-import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
+import {
+  Button,
+  DownOutlined,
+  Menu,
+  Tabs,
+  UpOutlined,
+} from "../../../../ui/src";
 import {
   GeneralTab,
   KeyManagementTab,
@@ -52,7 +58,7 @@ const SettingPage: NextPage = () => {
                     )}.heading`
                   )
                 : counterpart.translate(`pages.settings.general.heading`)}{" "}
-              <DownOutlined />
+              {!visible ? <DownOutlined /> : <UpOutlined />}
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -70,7 +76,9 @@ const SettingPage: NextPage = () => {
       description="Settings Page"
       dexLayout={true}
       onClick={() => {
-        visible && setVisible(false);
+        if (sm) {
+          visible && setVisible(false);
+        }
       }}
     >
       <Styled.SettingsCard>

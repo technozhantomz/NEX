@@ -35,7 +35,7 @@ export const Layout: FunctionComponent<Props> = ({
   type,
   heading,
   dexLayout = false,
-  onClick= () => {}
+  onClick,
 }: Props) => {
   const { settings } = useSettingsContext();
   const [locale, _setLocale] = useState<Locale>(enUS);

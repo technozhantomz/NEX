@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { ActivityTable, Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
-import { Button, DownOutlined, Menu } from "../../../../ui/src";
+import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
 //import { useBrowserHistoryContext } from "../../../../common/providers";
 import { AssetsTable } from "../../components/AssetsTable";
 
@@ -42,7 +42,7 @@ const WalletPage: NextPage = () => {
               {tab
                 ? counterpart.translate(`pages.wallet.${tab}`)
                 : counterpart.translate(`pages.wallet.assets`)}{" "}
-              <DownOutlined />
+              {!visible ? <DownOutlined /> : <UpOutlined />}
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -60,7 +60,9 @@ const WalletPage: NextPage = () => {
       description={`Wallet Page | ${tab}`}
       dexLayout={true}
       onClick={() => {
-        visible && setVisible(false);
+        if (sm) {
+          visible && setVisible(false);
+        }
       }}
     >
       <Styled.WalletCard onClick={() => visible && setVisible(false)}>
