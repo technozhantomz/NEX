@@ -19,7 +19,13 @@ import {
   useViewportContext,
 } from "../../../../common/providers";
 import { SidechainAcccount } from "../../../../common/types";
-import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
+import {
+  Button,
+  DownOutlined,
+  Menu,
+  Tabs,
+  UpOutlined,
+} from "../../../../ui/src";
 import { AssetsTable } from "../../components";
 
 import * as Styled from "./AssetPage.styled";
@@ -80,7 +86,7 @@ const AssetPage: NextPage = () => {
               {tab
                 ? counterpart.translate(`buttons.${tab}`)
                 : counterpart.translate(`buttons.transfer`)}{" "}
-              <DownOutlined />
+              {!visible ? <DownOutlined /> : <UpOutlined />}
             </Button>
           </Styled.MobileDropdown>
           {props.extra}
@@ -110,6 +116,11 @@ const AssetPage: NextPage = () => {
       heading={counterpart.translate(`pages.wallet.heading`)}
       description={`Wallet Page | ${asset} ${tab}`}
       dexLayout={true}
+      onClick={() => {
+        if (sm) {
+          visible && setVisible(false);
+        }
+      }}
     >
       {!loadingSidechainAssets && (
         <Styled.AssetCard>

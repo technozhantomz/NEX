@@ -5,7 +5,13 @@ import { useState } from "react";
 
 import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
-import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
+import {
+  Button,
+  DownOutlined,
+  Menu,
+  Tabs,
+  UpOutlined,
+} from "../../../../ui/src";
 import {
   AssetsTab,
   BlockchainTab,
@@ -51,7 +57,7 @@ const Blockchain: NextPage = () => {
                 : counterpart.translate(
                     `pages.blocks.blockchain.blockchain`
                   )}{" "}
-              <DownOutlined />
+              {!visible ? <DownOutlined /> : <UpOutlined />}
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -68,6 +74,11 @@ const Blockchain: NextPage = () => {
       heading={`${pageMeta.heading}`}
       description={`${pageMeta.description}`}
       dexLayout={true}
+      onClick={() => {
+        if (sm) {
+          visible && setVisible(false);
+        }
+      }}
     >
       <Styled.BlockchainCard>
         <Tabs
