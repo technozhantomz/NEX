@@ -46,12 +46,12 @@ export const AccountUpdate = ({
           </p>
         </Styled.DetailContainer>
       )}
-      {desiredMembers && (
+      {desiredMembers >= 0 ? (
         <Styled.DetailContainer>
           <p>{`Desired ${memberType}`}</p>
           <p>{`${desiredMembers}`}</p>
         </Styled.DetailContainer>
-      )}
+      ) : ''}
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.labels.fee`)}</p>
         <p>{`${fee} ${defaultToken}`}</p>
