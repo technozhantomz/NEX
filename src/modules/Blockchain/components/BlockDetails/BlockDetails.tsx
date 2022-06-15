@@ -1,5 +1,8 @@
 import counterpart from "counterpart";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
+import { useBlockchainTab } from "../BlockchainTab/hooks";
 
 import * as Styled from "./BlockDetails.styled";
 import { useBlockDetails } from "./hooks";
@@ -8,7 +11,9 @@ type Props = {
   block: string;
 };
 export const BlockDetails = ({ block }: Props): JSX.Element => {
+  const router = useRouter();
   const { blockDetails } = useBlockDetails(block as string);
+  const { blockchainData } = useBlockchainTab(router.query);
 
   return (
     <Styled.BlockWrapper>
@@ -21,9 +26,13 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
             {counterpart.translate(`buttons.previous`)}
           </Link>{" "}
           |{" "}
-          <Link href={`/blockchain/${Number(block) + 1}`}>
-            {counterpart.translate(`buttons.next`)}
-          </Link>
+          {Number(block) <= blockchainData.currentBlock ? (
+            <Link href={`/blockchain/${Number(block) + 1}`} scroll={false}>
+              {counterpart.translate(`buttons.next`)}
+            </Link>
+          ) : (
+            counterpart.translate(`buttons.next`)
+          )}
         </span>
       </Styled.BlockNumber>
       <Styled.BlockTime>{blockDetails.time}</Styled.BlockTime>
