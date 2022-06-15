@@ -22,6 +22,7 @@ export const AccountUpdate = ({
   proxy,
   generatedKeys,
 }: Props): JSX.Element => {
+  console.log("desirede", desiredMembers);
   return (
     <>
       <Styled.DetailContainer>
@@ -46,12 +47,14 @@ export const AccountUpdate = ({
           </p>
         </Styled.DetailContainer>
       )}
-      {desiredMembers >= 0 ? (
+      {desiredMembers !== undefined && desiredMembers >= 0 ? (
         <Styled.DetailContainer>
           <p>{`Desired ${memberType}`}</p>
           <p>{`${desiredMembers}`}</p>
         </Styled.DetailContainer>
-      ) : ''}
+      ) : (
+        ""
+      )}
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.labels.fee`)}</p>
         <p>{`${fee} ${defaultToken}`}</p>
