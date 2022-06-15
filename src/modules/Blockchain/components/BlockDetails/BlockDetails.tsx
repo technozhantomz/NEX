@@ -8,7 +8,8 @@ type Props = {
   block: string;
 };
 export const BlockDetails = ({ block }: Props): JSX.Element => {
-  const { blockDetails } = useBlockDetails(block as string);
+  const { blockDetails, hasNextBlock, hasPreviousBlock, loadingSideBlocks } =
+    useBlockDetails(block as string);
 
   return (
     <Styled.BlockWrapper>
@@ -17,13 +18,21 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
           {counterpart.translate(`pages.blocks.blockchain.block`)} #{block}
         </span>
         <span>
-          <Link href={`/blockchain/${Number(block) - 1}`}>
-            {counterpart.translate(`buttons.previous`)}
-          </Link>{" "}
+          {!loadingSideBlocks && hasPreviousBlock ? (
+            <Link href={`/blockchain/${Number(block) - 1}`}>
+              {counterpart.translate(`buttons.previous`)}
+            </Link>
+          ) : (
+            <span> {counterpart.translate(`buttons.previous`)}</span>
+          )}{" "}
           |{" "}
-          <Link href={`/blockchain/${Number(block) + 1}`}>
-            {counterpart.translate(`buttons.next`)}
-          </Link>
+          {!loadingSideBlocks && hasNextBlock ? (
+            <Link href={`/blockchain/${Number(block) + 1}`}>
+              {counterpart.translate(`buttons.next`)}
+            </Link>
+          ) : (
+            <span>{counterpart.translate(`buttons.next`)}</span>
+          )}
         </span>
       </Styled.BlockNumber>
       <Styled.BlockTime>{blockDetails.time}</Styled.BlockTime>
