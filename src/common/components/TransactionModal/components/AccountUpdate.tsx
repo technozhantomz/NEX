@@ -22,7 +22,6 @@ export const AccountUpdate = ({
   proxy,
   generatedKeys,
 }: Props): JSX.Element => {
-  console.log("desirede", desiredMembers);
   return (
     <>
       <Styled.DetailContainer>
