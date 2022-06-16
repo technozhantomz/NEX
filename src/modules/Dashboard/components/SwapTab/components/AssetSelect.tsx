@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   AddressGenerated,
   GenerateBitcoinAddress,
@@ -8,12 +9,12 @@ import { useAsset, useSidechainAccounts } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
 import { LogoSelect } from "../SwapTab.styled";
 
-import { AssetSwapWrapper } from './AssetSelect.styled';
+import { AssetSwapWrapper } from "./AssetSelect.styled";
 
 type PropTypes = {
   selectedAsset: string;
   handleAssetChange: () => void;
-}
+};
 
 export const AssetSelect = ({
   selectedAsset,
@@ -37,4 +38,4 @@ export const AssetSelect = ({
       />
     </AssetSwapWrapper>
   );
-}
+};

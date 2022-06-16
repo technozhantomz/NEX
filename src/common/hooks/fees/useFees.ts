@@ -178,6 +178,7 @@ export function useFees(): UseFeesResult {
   }, [localStorageAccount, dbApi]);
 
   return {
+    getFeesFromGlobal,
     feeParameters,
     findOperationFee,
     calculateTransferFee,

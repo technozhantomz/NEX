@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import { Layout } from "../../../../common/components";
-import { DepositTab, MarketTab, WithdrawTab, SwapTab } from "../../components";
+import { DepositTab, MarketTab, SwapTab, WithdrawTab } from "../../components";
 
 import * as Styled from "./Dashboard.styled";
 

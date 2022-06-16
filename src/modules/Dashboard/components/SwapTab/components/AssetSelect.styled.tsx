@@ -3,7 +3,8 @@ import { CardFormButton, styled } from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 import { mixIns } from "../../../../../ui/src/mixins";
-import { AssetSelect } from './components';
+
+import { AssetSelect } from "./components";
 
 export const AssetSwapWrapper = styled.div`
   margin: 25px 10px;
