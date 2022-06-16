@@ -13,9 +13,10 @@ export const AvtivityInfo = ({ infoString }: Props): JSX.Element => {
   }, [infoString]);
 
   const getUserLink = (userLink: string, key: number) => {
-    const userName = userLink.substring(
-      userLink.indexOf("=") + 1,
-      userLink.lastIndexOf("]")
+    const trimedUserLink = userLink.replace(/\s/g, "");
+    const userName = trimedUserLink.substring(
+      trimedUserLink.indexOf("=") + 1,
+      trimedUserLink.lastIndexOf("]")
     );
     return (
       <Link key={key} href={`/user/${userName}`}>
