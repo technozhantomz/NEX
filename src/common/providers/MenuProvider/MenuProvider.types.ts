@@ -8,6 +8,7 @@ export type MenuProviderContextType = {
   mainMenuOpen: boolean;
   hasUnreadMessages: boolean;
   notifications: Notification[];
+  loadingNotifications: boolean;
   markAllNotificationsRead: () => void;
   markTheNotificationRead: (id: string) => void;
 };

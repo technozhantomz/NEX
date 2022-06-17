@@ -67,7 +67,13 @@ export const MenuCard = styled(AntdCard)`
     margin-top: 25px;
     border: none;
   }
-
+  .unread-switch {
+    display: flex;
+    align-items: center;
+    span {
+      margin-left: 4px;
+    }
+  }
   .ant-list {
     margin-top: 40px;
   }

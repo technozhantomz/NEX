@@ -36,6 +36,7 @@ const DefaultMenuState: MenuProviderContextType = {
   mainMenuOpen: false,
   hasUnreadMessages: false,
   notifications: defaultNotifications,
+  loadingNotifications: true,
 };
 
 const MenuProviderContext =
@@ -50,6 +51,8 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   const [notifications, setNotifications] = useLocalStorage(
     "notifications"
   ) as [Notification[], (value: Notification[]) => void];
+  const [loadingNotifications, setLoadingNotifications] =
+    useState<boolean>(true);
 
   const { localStorageAccount } = useUserContext();
   const { getActivitiesRows } = useActivity();
@@ -137,6 +140,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
       new Date().setDate(today.getDate() - 30)
     );
     try {
+      setLoadingNotifications(true);
       const serverActivities = await getActivitiesRows(
         localStorageAccount,
         false
@@ -178,14 +182,17 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
             setHasUnreadMessages(newNotifications);
           }
         }
+        setLoadingNotifications(false);
       } else {
         setNotifications([]);
         _setHasUnreadMessages(false);
+        setLoadingNotifications(false);
       }
     } catch (e) {
       console.log(e);
       setNotifications([]);
       _setHasUnreadMessages(false);
+      setLoadingNotifications(false);
     }
   };
 
@@ -214,6 +221,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
         closeMenu,
         hasUnreadMessages,
         notifications,
+        loadingNotifications,
         markAllNotificationsRead,
         markTheNotificationRead,
       }}

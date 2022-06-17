@@ -1,14 +1,23 @@
 import { styled, List as UiList } from "../../../../../../ui/src";
 import { colors } from "../../../../../../ui/src/colors";
 
+export const ControlsContainer = styled.div`
+  display: flex;
+
+  justify-content: ${(props) =>
+    props.hasUnread ? `space-between` : `flex-end`};
+  font-size: 12px;
+  .mark-all {
+    color: ${colors.linkColor};
+  }
+`;
+
 export const ActivityListItem = styled(UiList.Item)`
   padding: 15px 20px;
 `;
 
 export const ActivitysItemContent = styled.div`
-   {
-    margin: 18px 0 25px;
-  }
+  margin: 18px 0 25px;
   .activity-info {
     margin: 5px 0;
     display: flex;
