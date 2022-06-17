@@ -59,7 +59,6 @@ const MarketPage: NextPage = () => {
       description={`Market Page | ${pair}`}
       dexLayout={true}
     >
-      {/* md should be fixed with useMarketPage */}
       {md ? (
         <>
           <Row>
@@ -67,7 +66,7 @@ const MarketPage: NextPage = () => {
               <Styled.MarketContainer>
                 <Styled.Div>
                   <Row gutter={[16, 16]}>
-                    {tradingPairsStats.map((pairStats, _index) => (
+                    {tradingPairsStats.slice(0, 4).map((pairStats, _index) => (
                       <Col span={12} key={_index}>
                         <TradingPairCard
                           tradingPair={pairStats.tradingPair}

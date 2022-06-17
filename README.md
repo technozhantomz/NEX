@@ -35,22 +35,22 @@ cp .env.example .env.local
 .env.local
 ```
 # Token symbol
-DEFAULT_TOKEN=''
+NEXT_PUBLIC_DEFAULT_TOKEN=''
 
 # Token symbol
-DEFAULT_QUOTE=''
+NEXT_PUBLIC_DEFAULT_QUOTE=''
 
 # Full URL to the blockchain's faucet
-FAUCET_URL=''
+NEXT_PUBLIC_FAUCET_URL=''
 
 # Full URL to your DEX instance
-DEX_URL=''
+NEXT_PUBLIC_DEX_URL=''
 
 # Chain ID of the blockchain
-DEFAULT_CHAIN_ID=''
+NEXT_PUBLIC_DEFAULT_CHAIN_ID=''
 
 # Blockchain API endpoints (websocket)
-BLOCKCHAIN_ENDPOINTS=''
+NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS=''
 ```
 
 ## Mannual Starting after installation and ENV configuration

@@ -1,4 +1,4 @@
-const isDev = process.env.NODE_ENV === "development";
+const isDev = process.env.NEXT_PUBLIC_NODE_ENV === "development";
 const DEFAULT_TOKEN = process.env.NEXT_PUBLIC_DEFAULT_TOKEN;
 const DEFAULT_QUOTE = process.env.NEXT_PUBLIC_DEFAULT_QUOTE;
 const FAUCET_URL = process.env.NEXT_PUBLIC_FAUCET_URL;
