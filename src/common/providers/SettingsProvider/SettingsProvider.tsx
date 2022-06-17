@@ -93,7 +93,7 @@ export function SettingsProvider({
         .toUpperCase();
       selectedLang = defaultLocales.some((e) => e.type === defaultLanguage)
         ? defaultLanguage
-        : "EN";
+        : "en";
     }
     return selectedLang;
   }, [settings]);

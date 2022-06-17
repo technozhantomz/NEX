@@ -68,6 +68,10 @@ export const MenuCard = styled(AntdCard)`
     border: none;
   }
 
+  .ant-list {
+    margin-top: 40px;
+  }
+
   ${breakpoint.sm} {
     height: inherit;
     .ant-card-body {

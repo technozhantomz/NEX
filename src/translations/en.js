@@ -37,7 +37,7 @@ export const en = {
       },
       account_update: {
         title: "Update account",
-        description: "%(user)s , updated account data",
+        description: "%(user)s, updated account data",
       },
       account_upgrade: {
         title: "Upgrade Account",
@@ -387,9 +387,11 @@ export const en = {
       },
       vesting_balance_create: {
         title: "Create vesting balance",
+        description: "%(creator)s, vest %(amount)s %(symbol)s in GPOS",
       },
       vesting_balance_withdraw: {
         title: "Withdraw vesting balance",
+        description: "%(owner)s, withdraw %(amount)s %(symbol)s from GPOS",
       },
       withdraw_permission_claim: {
         title: "Claim withdrawal permission",

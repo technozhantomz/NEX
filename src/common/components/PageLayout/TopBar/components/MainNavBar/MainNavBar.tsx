@@ -1,4 +1,6 @@
 import {
+  Avatar,
+  Badge,
   BellOutlined,
   MenuOutlined,
   MoreOutlined,
@@ -24,6 +26,7 @@ export const MainNavBar = (): JSX.Element => {
     notificationMenuOpen,
     profileMenuOpen,
     mainMenuOpen,
+    hasUnreadMessages,
   } = useMenuContext();
   const CloseButton = (
     <>
@@ -41,11 +44,32 @@ export const MainNavBar = (): JSX.Element => {
       <Styled.MainNavBar>
         {localStorageAccount ? (
           <>
-            <BellOutlined
-              className={"bell"}
-              onMouseOver={() => openMenu("notify")}
-              onClick={() => openMenu("notify")}
-            />
+            {hasUnreadMessages ? (
+              <>
+                <Badge dot>
+                  <Avatar
+                    icon={
+                      <BellOutlined
+                        onMouseOver={() => openMenu("notify")}
+                        onClick={() => openMenu("notify")}
+                      />
+                    }
+                  />
+                </Badge>
+              </>
+            ) : (
+              <>
+                <Avatar
+                  icon={
+                    <BellOutlined
+                      onMouseOver={() => openMenu("notify")}
+                      onClick={() => openMenu("notify")}
+                    />
+                  }
+                />
+              </>
+            )}
+
             {sm ? (
               ""
             ) : (
