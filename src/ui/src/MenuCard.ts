@@ -8,7 +8,7 @@ import { mixIns } from "./mixins";
 export const MenuCard = styled(AntdCard)`
   height: 93%;
   ${mixIns.borderRadius}
-  ul {
+  .ant-card-body > ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -67,23 +67,13 @@ export const MenuCard = styled(AntdCard)`
     margin-top: 25px;
     border: none;
   }
-  .unread-switch {
-    display: flex;
-    align-items: center;
-    span {
-      margin-left: 4px;
-    }
-  }
-  .ant-list {
-    margin-top: 40px;
-  }
 
   ${breakpoint.sm} {
     height: inherit;
     .ant-card-body {
       padding: 20px;
     }
-    ul {
+    .ant-card-body > ul {
       li {
         border-bottom: none;
         padding: 0 0 10px 0;

@@ -20,7 +20,7 @@ export const LoginForm: React.FC = () => {
         name="username"
         rules={formValdation.username}
         validateFirst={true}
-        validateTrigger="onChange"
+        validateTrigger={["onChange", "onSubmit"]}
       >
         <Input
           placeholder={counterpart.translate(`field.placeholder.user_name`)}

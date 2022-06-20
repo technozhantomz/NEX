@@ -10,5 +10,5 @@ export type MenuProviderContextType = {
   notifications: Notification[];
   loadingNotifications: boolean;
   markAllNotificationsRead: () => void;
-  markTheNotificationRead: (id: string) => void;
+  markTheNotificationAsReadOrUnread: (id: string, unread: boolean) => void;
 };

@@ -101,11 +101,15 @@ export const MainNav = (): JSX.Element => {
                 onClick={closeMenu}
               />
             </li>
-            <li className={"advanced"}>
+            <li
+              className={"advanced"}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
               <Switch
                 size="small"
-                onChange={(checked, e) => {
-                  e.stopPropagation();
+                onChange={(checked) => {
                   handleAdvancedModeChange(checked);
                 }}
                 defaultChecked={advancedMode}

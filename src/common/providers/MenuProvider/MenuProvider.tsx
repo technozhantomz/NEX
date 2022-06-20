@@ -28,8 +28,13 @@ const DefaultMenuState: MenuProviderContextType = {
   markAllNotificationsRead: function (): void {
     throw new Error(`Function not implemented.`);
   },
-  markTheNotificationRead: function (id: string): void {
-    throw new Error(`Function not implemented. for ${id} notification`);
+  markTheNotificationAsReadOrUnread: function (
+    id: string,
+    unread: boolean
+  ): void {
+    throw new Error(
+      `Function not implemented. for ${id} notification as ${unread}`
+    );
   },
   notificationMenuOpen: false,
   profileMenuOpen: false,
@@ -116,12 +121,12 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
     }
   };
 
-  const markTheNotificationRead = (id: string) => {
+  const markTheNotificationAsReadOrUnread = (id: string, unread: boolean) => {
     const newNotifications = notifications.map((notification) => {
       if (notification.activity.id === id) {
         return {
           activity: notification.activity,
-          unread: false,
+          unread: unread,
         } as Notification;
       } else {
         return {
@@ -199,6 +204,9 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   useEffect(() => {
     if (localStorageAccount) {
       updateNotifications();
+    } else {
+      setNotifications([]);
+      _setHasUnreadMessages(false);
     }
   }, [localStorageAccount]);
 
@@ -223,7 +231,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
         notifications,
         loadingNotifications,
         markAllNotificationsRead,
-        markTheNotificationRead,
+        markTheNotificationAsReadOrUnread,
       }}
     >
       {children}

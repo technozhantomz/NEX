@@ -469,6 +469,7 @@ export const en = {
     confirm: "Confirm",
     previous: "Previous",
     next: "Next",
+    show_only_unread: "Show only unread",
   },
   pages: {
     logout: {
@@ -685,6 +686,7 @@ export const en = {
     create_account: "Create account",
     see_all_account_activity: "See all account activity",
     profile: "profile",
+    mark_all_read: "Mark all as read",
   },
   field: {
     placeholder: {
@@ -743,6 +745,8 @@ export const en = {
       seller: "seller",
       vesting_amount: "Vesting amount",
       withdrawal_amount: "Withdrawal amount",
+      today: "Today",
+      yesterday: "yesterday",
     },
     comments: {
       deposit_hbd:
@@ -864,5 +868,7 @@ export const en = {
   tooltips: {
     copy: "copy",
     copied: "copied",
+    mark_read: "mark as read",
+    mark_unread: "mark as unread",
   },
 };
