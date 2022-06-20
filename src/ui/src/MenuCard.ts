@@ -7,6 +7,7 @@ import { mixIns } from "./mixins";
 
 export const MenuCard = styled(AntdCard)`
   height: 93%;
+  overflow-y: auto;
   ${mixIns.borderRadius}
   .ant-card-body > ul {
     list-style: none;
