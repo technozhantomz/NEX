@@ -15,10 +15,12 @@ export const SwapTab = (): JSX.Element => {
   return (
     <Styled.SwapContainer>
       <AssetSelect
+        type="from"
         selectedAsset={fromAsset}
         handleAssetChange={handleFromAssetChange}
       />
       <AssetSelect
+        type="to"
         selectedAsset={toAsset}
         handleAssetChange={handleToAssetChange}
       />

@@ -13,11 +13,13 @@ import { LogoSelect } from "../SwapTab.styled";
 import * as Styled from "./AssetSelect.styled";
 
 type PropTypes = {
+  type: string;
   selectedAsset: string;
   handleAssetChange: () => void;
 };
 
 export const AssetSelect = ({
+  type,
   selectedAsset,
   handleAssetChange,
 }: PropTypes): JSX.Element => {
@@ -32,12 +34,12 @@ export const AssetSelect = ({
 
   return (
     <Styled.AssetSwapWrapper>
-      <Styled.SwapFormAmmount name="amount">
+      <Styled.SwapFormAmmount name={`${type}-amount`}>
         <Input
           placeholder="0.00000"
           type="number"
           prefix={
-            <Styled.SwapFormAsset name="asset">
+            <Styled.SwapFormAsset name={`${type}-asset`}>
               <LogoSelect
                 assets={sidechainAssets}
                 defaultValue={selectedAsset}
