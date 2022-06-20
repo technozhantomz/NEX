@@ -3,7 +3,6 @@ import { CardFormButton, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 import { mixIns } from "../../../../ui/src/mixins";
-import { AssetSelect } from './components';
 
 export const SwapContainer = styled.div`
   background: ${colors.white} 0% 0% no-repeat padding-box;
@@ -40,3 +39,5 @@ export const LogoSelect = styled(LogoSelectOption)`
     height: 65px;
   }
 `;
+
+export const SwapFormButton = styled(CardFormButton)``;
