@@ -51,7 +51,10 @@ export const MainNavBar = (): JSX.Element => {
                     icon={
                       <BellOutlined
                         onMouseOver={() => openMenu("notify")}
-                        onClick={() => openMenu("notify")}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openMenu("notify");
+                        }}
                       />
                     }
                   />
@@ -63,7 +66,10 @@ export const MainNavBar = (): JSX.Element => {
                   icon={
                     <BellOutlined
                       onMouseOver={() => openMenu("notify")}
-                      onClick={() => openMenu("notify")}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openMenu("notify");
+                      }}
                     />
                   }
                 />
@@ -75,7 +81,10 @@ export const MainNavBar = (): JSX.Element => {
             ) : (
               <div
                 onMouseOver={() => openMenu("profile")}
-                onClick={() => openMenu("profile")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openMenu("profile");
+                }}
               >
                 <Styled.MainNavBarAvatar
                   icon={localStorageAccount ? "" : <UserOutlined />}
@@ -92,13 +101,19 @@ export const MainNavBar = (): JSX.Element => {
           <MenuOutlined
             className={"hambuger"}
             onMouseOver={() => openMenu("main")}
-            onClick={() => openMenu("main")}
+            onClick={(e) => {
+              e.stopPropagation();
+              openMenu("main");
+            }}
           />
         ) : (
           <MoreOutlined
             className={"hambuger"}
             onMouseOver={() => openMenu("main")}
-            onClick={() => openMenu("main")}
+            onClick={(e) => {
+              e.stopPropagation();
+              openMenu("main");
+            }}
           />
         )}
       </Styled.MainNavBar>
