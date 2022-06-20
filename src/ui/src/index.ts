@@ -15,6 +15,7 @@ export { ListItem } from "./ListItem";
 export { Tabs } from "./Tabs";
 
 export {
+  Badge,
   Row,
   Form,
   Input,
@@ -25,6 +26,7 @@ export {
   Tooltip,
   Card,
   Checkbox,
+  Radio,
   Space,
   Switch,
   List,

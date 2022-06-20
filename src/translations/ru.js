@@ -469,6 +469,7 @@ export const ru = {
     confirm: "Подтверждать",
     next: "следующий",
     previous: "предыдущий",
+    show_only_unread: "Показать только непрочитанные",
   },
   pages: {
     logout: {
@@ -687,6 +688,7 @@ export const ru = {
     create_account: "Зарегистрироваться",
     see_all_account_activity: "Просмотреть всю активность аккаунта",
     profile: "профиль",
+    mark_all_read: "отметить все как прочитанное",
   },
   field: {
     placeholder: {
@@ -747,6 +749,8 @@ export const ru = {
       seller: "продавец",
       vesting_amount: "Сумма вестинга",
       withdrawal_amount: "Сумма вывода",
+      today: "Сегодня",
+      yesterday: "вчерашний день",
     },
     comments: {
       deposit_hbd:
@@ -868,5 +872,7 @@ export const ru = {
   tooltips: {
     copy: "копировать",
     copied: "скопировано",
+    mark_read: "пометить, как прочитанное",
+    mark_unread: "отметить как непрочитанное",
   },
 };

@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { useUserContext } from "../../../../providers";
+
 type Props = {
   infoString: string;
 };
 
 export const AvtivityInfo = ({ infoString }: Props): JSX.Element => {
   const [stringParts, setStringParts] = useState<string[]>([]);
+
+  const { localStorageAccount } = useUserContext();
 
   useEffect(() => {
     setStringParts(infoString.split(","));
@@ -20,7 +24,7 @@ export const AvtivityInfo = ({ infoString }: Props): JSX.Element => {
     );
     return (
       <Link key={key} href={`/user/${userName}`}>
-        {userName}
+        {userName === localStorageAccount ? "You" : userName}
       </Link>
     );
   };

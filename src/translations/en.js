@@ -37,7 +37,7 @@ export const en = {
       },
       account_update: {
         title: "Update account",
-        description: "%(user)s , updated account data",
+        description: "%(user)s, updated account data",
       },
       account_upgrade: {
         title: "Upgrade Account",
@@ -387,9 +387,11 @@ export const en = {
       },
       vesting_balance_create: {
         title: "Create vesting balance",
+        description: "%(creator)s, vest %(amount)s %(symbol)s in GPOS",
       },
       vesting_balance_withdraw: {
         title: "Withdraw vesting balance",
+        description: "%(owner)s, withdraw %(amount)s %(symbol)s from GPOS",
       },
       withdraw_permission_claim: {
         title: "Claim withdrawal permission",
@@ -467,6 +469,7 @@ export const en = {
     confirm: "Confirm",
     previous: "Previous",
     next: "Next",
+    show_only_unread: "Show only unread",
   },
   pages: {
     logout: {
@@ -683,6 +686,7 @@ export const en = {
     create_account: "Create account",
     see_all_account_activity: "See all account activity",
     profile: "profile",
+    mark_all_read: "Mark all as read",
   },
   field: {
     placeholder: {
@@ -741,6 +745,8 @@ export const en = {
       seller: "seller",
       vesting_amount: "Vesting amount",
       withdrawal_amount: "Withdrawal amount",
+      today: "Today",
+      yesterday: "yesterday",
     },
     comments: {
       deposit_hbd:
@@ -862,5 +868,7 @@ export const en = {
   tooltips: {
     copy: "copy",
     copied: "copied",
+    mark_read: "mark as read",
+    mark_unread: "mark as unread",
   },
 };

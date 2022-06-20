@@ -8,7 +8,7 @@ import { mixIns } from "./mixins";
 export const MenuCard = styled(AntdCard)`
   height: 93%;
   ${mixIns.borderRadius}
-  ul {
+  .ant-card-body > ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -73,7 +73,7 @@ export const MenuCard = styled(AntdCard)`
     .ant-card-body {
       padding: 20px;
     }
-    ul {
+    .ant-card-body > ul {
       li {
         border-bottom: none;
         padding: 0 0 10px 0;

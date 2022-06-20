@@ -12,7 +12,6 @@ import {
 import {
   usePeerplaysApiContext,
   useUserContext,
-  useViewportContext,
 } from "../../../../../common/providers";
 import {
   Asset,
@@ -30,7 +29,6 @@ type Props = {
 };
 
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
-  const { md } = useViewportContext();
   const { historyApi, dbApi } = usePeerplaysApiContext();
   const { exchanges, updateExchanges } = useUpdateExchanges();
   const { setPrecision } = useAsset();

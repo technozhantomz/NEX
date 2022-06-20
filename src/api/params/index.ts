@@ -3,4 +3,5 @@ export * from "./networkparams";
 export * from "./defaultSettings";
 export * from "./defaultExchanges";
 export * from "./defaultLocales";
+export * from "./defaultNotifications";
 export * from "./nodesList";
