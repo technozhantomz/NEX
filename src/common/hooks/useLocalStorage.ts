@@ -1,7 +1,7 @@
 import { isNil } from "lodash";
 import { useEffect, useState } from "react";
 
-import { Cache, Exchanges, Settings } from "../types";
+import { Cache, Exchanges, Notification, Settings } from "../types";
 
 type Value =
   | string
@@ -13,6 +13,7 @@ type Value =
   | Settings
   | Cache
   | undefined
+  | Notification[]
   | null;
 
 type Result = [Value, (value?: Value) => void];

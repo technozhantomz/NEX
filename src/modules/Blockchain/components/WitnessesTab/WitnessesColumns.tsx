@@ -1,15 +1,17 @@
 import Link from "next/link";
 
+import { TableHeading } from "../../../../common/components";
+
 import * as Styled from "./WitnessesColumns.styled";
 
 export const WitnessesColumns = [
   {
-    title: "Rank",
+    title: (): JSX.Element => <TableHeading heading={"rank"} />,
     dataIndex: "rank",
     key: "rank",
   },
   {
-    title: "Name",
+    title: (): JSX.Element => <TableHeading heading={"name"} />,
     dataIndex: "name",
     key: "name",
     render: (name: string): JSX.Element => (
@@ -17,12 +19,12 @@ export const WitnessesColumns = [
     ),
   },
   {
-    title: "Total Votes",
+    title: (): JSX.Element => <TableHeading heading={"total_votes"} />,
     dataIndex: "totalVotes",
     key: "totalVotes",
   },
   {
-    title: "Last Block",
+    title: (): JSX.Element => <TableHeading heading={"last_block"} />,
     dataIndex: "lastBlock",
     key: "lastBlock",
     render: (lastBlock: string): JSX.Element => (
@@ -30,7 +32,7 @@ export const WitnessesColumns = [
     ),
   },
   {
-    title: "Missed Blocks",
+    title: (): JSX.Element => <TableHeading heading={"missed_blocks"} />,
     dataIndex: "missedBlocks",
     key: "missedBlocks",
     render: (missedBlocks: string): JSX.Element => (
@@ -38,7 +40,7 @@ export const WitnessesColumns = [
     ),
   },
   {
-    title: "Url",
+    title: (): JSX.Element => <TableHeading heading={"url"} />,
     dataIndex: "url",
     key: "url",
     render: (url: string): JSX.Element => (

@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useRouter } from "next/router";
 import {
   Dispatch,
@@ -85,11 +86,17 @@ export function usePairModal({
   const validateQuote = (_: unknown, value: string) => {
     const baseValue = pairModalForm.getFieldValue("base");
     if (baseValue === value) {
-      return Promise.reject(new Error("Assets Must Be Different"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.assets_must_different`))
+      );
     }
     if (baseValue !== defaultToken && value !== defaultToken) {
       return Promise.reject(
-        new Error(`One of the assets should be ${defaultToken}`)
+        new Error(
+          counterpart.translate(`field.errors.assets_should_be`, {
+            defaultToken,
+          })
+        )
       );
     }
     return Promise.resolve();
@@ -98,11 +105,17 @@ export function usePairModal({
   const validateBase = (_: unknown, value: string) => {
     const quoteValue = pairModalForm.getFieldValue("quote");
     if (quoteValue === value) {
-      return Promise.reject(new Error("Assets Must Be Different"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.assets_must_different`))
+      );
     }
     if (quoteValue !== defaultToken && value !== defaultToken) {
       return Promise.reject(
-        new Error(`One of the assets should be ${defaultToken}`)
+        new Error(
+          counterpart.translate(`field.errors.assets_should_be`, {
+            defaultToken,
+          })
+        )
       );
     }
     return Promise.resolve();

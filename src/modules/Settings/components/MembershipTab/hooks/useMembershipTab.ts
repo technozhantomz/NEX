@@ -1,3 +1,6 @@
+/** @format */
+
+import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -146,7 +149,9 @@ export function useMembershipTab(): UseMembershipTabResult {
         (assets.filter((asset) => asset.id === defaultAsset.id)[0]
           .amount as number) < membershipPrice
       ) {
-        setTransactionErrorMessage("Balance is not enough.");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.balance_not_enough`)
+        );
         return;
       } else {
         setTransactionErrorMessage("");
@@ -168,7 +173,9 @@ export function useMembershipTab(): UseMembershipTabResult {
           trxResult = await buildTrx([trx], [activeKey]);
         } catch (error) {
           console.log(error);
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
 
@@ -177,11 +184,13 @@ export function useMembershipTab(): UseMembershipTabResult {
           setIsLifetimeMember(true);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
-            "Your account successfully upgraded to lifetime membership account"
+            counterpart.translate(`field.success.account_upgraded_successfully`)
           );
           setLoadingTransaction(false);
         } else {
-          setTransactionErrorMessage("Unable to process the transaction!");
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
           setLoadingTransaction(false);
         }
       }

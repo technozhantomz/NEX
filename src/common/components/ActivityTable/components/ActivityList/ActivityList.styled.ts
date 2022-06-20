@@ -2,6 +2,20 @@ import { styled, List as UiList } from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 
+export const StyledList = styled(UiList)`
+  .ant-list-pagination {
+    margin-top: 16px;
+    margin-right: 25px;
+  }
+  .ant-pagination-item {
+    border: none;
+  }
+  .ant-pagination.mini .ant-pagination-item,
+  .ant-pagination-item-active {
+    border-right: 2px solid ${colors.borderColorBase};
+  }
+`;
+
 export const ActivityListItem = styled(UiList.Item)`
   padding: 25px 25px;
   a {
@@ -18,7 +32,8 @@ export const ActivitysItemContent = styled.div`
     margin: 5px 0;
     display: flex;
     .activity-info-title {
-      min-width: 28px;
+      width: 100px;
+      min-width: 100px;
       margin-right: 15px;
       font-weight: 300;
       color: ${colors.textColorSecondary};

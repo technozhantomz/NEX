@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 
 import * as Styled from "./BlockDetails.styled";
@@ -7,25 +8,45 @@ type Props = {
   block: string;
 };
 export const BlockDetails = ({ block }: Props): JSX.Element => {
-  const { blockDetails } = useBlockDetails(block as string);
+  const { blockDetails, hasNextBlock, hasPreviousBlock, loadingSideBlocks } =
+    useBlockDetails(block as string);
 
   return (
     <Styled.BlockWrapper>
       <Styled.BlockNumber>
-        <span>Block #{block}</span>
         <span>
-          <Link href={`/blockchain/${Number(block) - 1}`}>Previous</Link> |{" "}
-          <Link href={`/blockchain/${Number(block) + 1}`}>Next</Link>
+          {counterpart.translate(`pages.blocks.blockchain.block`)} #{block}
+        </span>
+        <span>
+          {!loadingSideBlocks && hasPreviousBlock ? (
+            <Link href={`/blockchain/${Number(block) - 1}`}>
+              {counterpart.translate(`buttons.previous`)}
+            </Link>
+          ) : (
+            <span> {counterpart.translate(`buttons.previous`)}</span>
+          )}{" "}
+          |{" "}
+          {!loadingSideBlocks && hasNextBlock ? (
+            <Link href={`/blockchain/${Number(block) + 1}`}>
+              {counterpart.translate(`buttons.next`)}
+            </Link>
+          ) : (
+            <span>{counterpart.translate(`buttons.next`)}</span>
+          )}
         </span>
       </Styled.BlockNumber>
       <Styled.BlockTime>{blockDetails.time}</Styled.BlockTime>
-      <Styled.BlockInfoTitle>Block Information</Styled.BlockInfoTitle>
+      <Styled.BlockInfoTitle>
+        {counterpart.translate(`pages.blocks.blockchain.block_information`)}
+      </Styled.BlockInfoTitle>
       <Styled.BlockInfo>
-        <span>Transactions</span>
+        <span>
+          {counterpart.translate(`pages.blocks.blockchain.transactions`)}
+        </span>
         <span>{blockDetails.transaction}</span>
       </Styled.BlockInfo>
       <Styled.BlockInfo>
-        <span>Witness</span>
+        <span>{counterpart.translate(`pages.blocks.blockchain.witness`)}</span>
         <span>
           <Link href={`/user/${blockDetails.witness}`}>
             {blockDetails.witness}

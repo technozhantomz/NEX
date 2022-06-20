@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 
 import { useViewportContext } from "../../../../common/providers";
@@ -27,28 +28,34 @@ export const WitnessesTab = (): JSX.Element => {
       <Styled.StatsCardsDeck>
         <StatsCard
           noData={activeWitnesses === 0}
-          title="Active Witnesses"
+          title={counterpart.translate(
+            `pages.blocks.witnesses.active_witnesses`
+          )}
           data={`${activeWitnesses}`}
           statsData={witnessStats.active}
         />
         <StatsCard
           isRewardCard
           noData={reward === 0}
-          title="Block Reward"
+          title={counterpart.translate(`pages.blocks.witnesses.block_reward`)}
           data={`${reward}`}
           statsData={witnessStats.reward}
         />
         <StatsCard
           isRewardCard
           noData={earnings === 0}
-          title="Monthly Earnings"
+          title={counterpart.translate(
+            `pages.blocks.witnesses.monthly_earnings`
+          )}
           data={`${earnings}`}
           statsData={witnessStats.earnings}
         />
       </Styled.StatsCardsDeck>
       <Styled.WitnessesSearch
         size="large"
-        placeholder="Search Witnesses"
+        placeholder={counterpart.translate(
+          `pages.blocks.witnesses.search_witnesses`
+        )}
         onSearch={handleSearch}
         loading={loading}
       />
@@ -70,13 +77,13 @@ export const WitnessesTab = (): JSX.Element => {
               <Styled.WitnessItemContent>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[0].title}
+                    {WitnessesColumns[0].title()}
                   </span>
                   <span className="witness-info-value">{item.rank}</span>
                 </div>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[1].title}
+                    {WitnessesColumns[1].title()}
                   </span>
                   <span className="witness-info-value">
                     <Link href={`/user/${item.name}`}>{item.name}</Link>
@@ -84,13 +91,13 @@ export const WitnessesTab = (): JSX.Element => {
                 </div>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[2].title}
+                    {WitnessesColumns[2].title()}
                   </span>
                   <span className="witness-info-value">{item.totalVotes}</span>
                 </div>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[3].title}
+                    {WitnessesColumns[3].title()}
                   </span>
                   <span className="witness-info-value">
                     <ListStyled.LastBlock>
@@ -100,7 +107,7 @@ export const WitnessesTab = (): JSX.Element => {
                 </div>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[4].title}
+                    {WitnessesColumns[4].title()}
                   </span>
                   <span className="witness-info-value">
                     <ListStyled.MissedBlocks>
@@ -110,7 +117,7 @@ export const WitnessesTab = (): JSX.Element => {
                 </div>
                 <div className="witness-info">
                   <span className="witness-info-title">
-                    {WitnessesColumns[5].title}
+                    {WitnessesColumns[5].title()}
                   </span>
                   <span className="witness-info-value">
                     <Link href={`${item.url}`} passHref>

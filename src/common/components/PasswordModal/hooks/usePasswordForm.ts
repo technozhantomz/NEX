@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useEffect, useRef } from "react";
 
 import { Form, FormInstance } from "../../../../ui/src";
@@ -34,13 +35,19 @@ export function usePasswordForm(): IUsePasswordForm {
     if (account) {
       checkPassword = validateAccountPassword(value, account);
     }
-    if (!checkPassword) return Promise.reject(new Error("Password incorrect"));
+    if (!checkPassword)
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.password_incorrect`))
+      );
     return Promise.resolve();
   };
 
   const formValidation = {
     password: [
-      { required: true, message: "Password is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.password_required`),
+      },
       { validator: validatePassword },
     ],
   };

@@ -1,4 +1,5 @@
 import * as bitcoin from "bitcoinjs-lib";
+import counterpart from "counterpart";
 import ECPairFactory from "ecpair";
 import { useCallback, useState } from "react";
 import * as ecc from "tiny-secp256k1";
@@ -80,7 +81,9 @@ export function useGenerateBitcoinAddress(
 
       if (!sonNetworkStatus.isSonNetworkOk) {
         setIsPasswordModalVisible(false);
-        setStatus("SONs network is not available now. Please try again later!");
+        setStatus(
+          counterpart.translate(`field.errors.sons_not_available_try_again`)
+        );
         setSubmittingPassword(false);
         return;
       }

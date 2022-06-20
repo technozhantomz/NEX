@@ -91,7 +91,6 @@ export const MobileDropdown = styled(UiDropdown)`
     width: 100%;
     text-transform: capitalize;
     height: 50px;
-    padding: 15px 28px 10px;
     background: ${colors.white};
     border-bottom: 2pt solid ${colors.linkColor};
     border-radius: 0px;

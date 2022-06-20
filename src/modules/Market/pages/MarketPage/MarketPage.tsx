@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
@@ -54,11 +55,10 @@ const MarketPage: NextPage = () => {
     <Layout
       title="market"
       type="card-lrg"
-      heading="Market"
+      heading={counterpart.translate(`pages.market.heading`)}
       description={`Market Page | ${pair}`}
       dexLayout={true}
     >
-      {/* md should be fixed with useMarketPage */}
       {md ? (
         <>
           <Row>
@@ -66,7 +66,7 @@ const MarketPage: NextPage = () => {
               <Styled.MarketContainer>
                 <Styled.Div>
                   <Row gutter={[16, 16]}>
-                    {tradingPairsStats.map((pairStats, _index) => (
+                    {tradingPairsStats.slice(0, 4).map((pairStats, _index) => (
                       <Col span={12} key={_index}>
                         <TradingPairCard
                           tradingPair={pairStats.tradingPair}

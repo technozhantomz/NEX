@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { useEffect, useState } from "react";
 
 import { Asset } from "../../../../../common/types";
@@ -40,12 +41,12 @@ export function useHistory({
           key: "quote",
         },
         {
-          title: "Price",
+          title: counterpart.translate(`tableHead.price`),
           dataIndex: "price",
           key: "price",
         },
         {
-          title: "Date",
+          title: counterpart.translate(`tableHead.date`),
           dataIndex: "date",
           key: "date",
         },

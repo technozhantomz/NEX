@@ -5,7 +5,6 @@ import { colors } from "../../../../ui/src/colors";
 export const MembershipCard = styled.div`
   .ant-form-horizontal {
     text-align: left;
-    letter-spacing: 0px;
     color: ${colors.textColor};
     margin: 20px;
     ${breakpoint.sm} {
@@ -16,7 +15,6 @@ export const MembershipCard = styled.div`
   a {
     font-weight: 400;
     font-size: 14px;
-    letter-spacing: 0px;
   }
 `;
 
@@ -26,23 +24,16 @@ export const MembershipForm = styled(UiForm)`
 
 export const Heading = styled.h4`
   text-align: left;
-  letter-spacing: 0px;
   color: ${colors.textColor};
-  opacity: 1;
   margin-bottom: 8px;
-  ${breakpoint.sm} {
-  }
+  font-weight: 500;
 `;
 
 export const Label = styled.p`
    {
     font-weight: 400;
-    letter-spacing: 0px;
     color: ${colors.textColor};
     margin-bottom: 0px;
-    opacity: 1;
-    ${breakpoint.sm} {
-    }
   }
 `;
 
@@ -50,11 +41,7 @@ export const Paragraph = styled.p`
   text-align: left;
   width: 100%;
   font-weight: 400;
-  letter-spacing: 0px;
   color: ${colors.textColor};
-  opacity: 1;
-  ${breakpoint.sm} {
-  }
 `;
 
 export const InfoContainer = styled.div`
@@ -81,32 +68,40 @@ export const Button = styled(CardFormButton)`
 
 export const PercentageText = styled.p`
   font-size: 14px;
-  margin-left: 50px;
+  margin-left: 34px;
+  ${breakpoint.sm} {
+    margin-left: 50px;
+  }
 `;
 
 export const FeeCategoryContainer = styled.div`
   display: flex;
   margin-bottom: 15px;
-  width: 75%;
-  ${breakpoint.sm} {
-    width: 100%;
-  }
+  width: 100%;
 `;
 
 export const LabelContainer = styled.div`
-  width: 53%;
+  width: 35%;
   ${breakpoint.sm} {
-    width: 15%;
+    width: 25%;
   }
 `;
 
 export const PercentageContainer = styled.div`
-  text-align: right;
-  letter-spacing: 0px;
+  text-align: left;
   color: ${colors.textColor};
-  opacity: 1;
-  width: 50%;
+  width: 65%;
   ${breakpoint.sm} {
-    width: 20%;
+    width: 40%;
+  }
+`;
+
+export const RefferalParagraph = styled.p`
+  text-align: left;
+  width: 100%;
+  font-weight: 400;
+  color: ${colors.textColor};
+  ${breakpoint.md} {
+    white-space: nowrap;
   }
 `;

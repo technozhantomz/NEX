@@ -45,8 +45,10 @@ export const ProxyListItemContent = styled.div`
     align-items: center;
     .vote-info-title {
       font-weight: 300;
+      width: 80px;
+      min-width: 80px;
       color: ${colors.textColorSecondary};
-      margin-right: 30px;
+      margin-right: 10px;
     }
     .vote-info-value {
       font-weight: 500;

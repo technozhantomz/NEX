@@ -3,6 +3,7 @@ export { Button } from "./Button";
 export { Select, Option } from "./Select";
 export { Dropdown } from "./Dropdown";
 export { DownOutlined } from "./DownOutlined";
+export { UpOutlined } from "./UpOutlined";
 export { CardForm, CardFormButton } from "./CardForm";
 export { MenuCard } from "./MenuCard";
 export { Avatar } from "./Avatar";
@@ -11,10 +12,11 @@ export { StatsCardsDeck } from "./StatsCardDeck";
 export { Tag } from "./Tag";
 export { TableSearch } from "./TableSearch";
 export { ListItem } from "./ListItem";
+export { Tabs } from "./Tabs";
 
 export {
+  Badge,
   Row,
-  Tabs,
   Form,
   Input,
   InputNumber,
@@ -24,6 +26,7 @@ export {
   Tooltip,
   Card,
   Checkbox,
+  Radio,
   Space,
   Switch,
   List,

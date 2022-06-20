@@ -1,6 +1,9 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { KeyboardEvent } from "react";
 
+import { utils } from "../../../../api/utils";
 import {
   FormDisclamer,
   PasswordModal,
@@ -82,7 +85,11 @@ export const LimitOrderForm = ({
       <Styled.FormContainer>
         <Form.Provider onFormFinish={handleFormFinish}>
           {showTitle ? (
-            <Styled.FormTitle>{isBuyOrder ? "BUY" : "SELL"}</Styled.FormTitle>
+            <Styled.FormTitle>
+              {isBuyOrder
+                ? counterpart.translate(`pages.market.buy`)
+                : counterpart.translate(`pages.market.sell`)}
+            </Styled.FormTitle>
           ) : (
             ""
           )}
@@ -103,7 +110,9 @@ export const LimitOrderForm = ({
               <Styled.InputNumber
                 prefix={
                   <InputPrefix
-                    constLabel="Price"
+                    constLabel={counterpart.translate(
+                      `field.placeholder.price`
+                    )}
                     inputSymbol={activePair.split("_")[1]}
                     quoteSymbol={activePair.split("_")[0]}
                     baseSymbol={activePair.split("_")[1]}
@@ -112,6 +121,11 @@ export const LimitOrderForm = ({
                 type="number"
                 onFocus={(e) => {
                   e.target.select();
+                }}
+                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                  if (!utils.isNumberKey(e)) {
+                    e.preventDefault();
+                  }
                 }}
               />
             </Styled.FormItem>
@@ -124,7 +138,9 @@ export const LimitOrderForm = ({
               <Styled.InputNumber
                 prefix={
                   <InputPrefix
-                    constLabel="Quantity"
+                    constLabel={counterpart.translate(
+                      `field.placeholder.quantity`
+                    )}
                     inputSymbol={activePair.split("_")[0]}
                     quoteSymbol={activePair.split("_")[0]}
                   />
@@ -132,6 +148,11 @@ export const LimitOrderForm = ({
                 type="number"
                 onFocus={(e) => {
                   e.target.select();
+                }}
+                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                  if (!utils.isNumberKey(e)) {
+                    e.preventDefault();
+                  }
                 }}
               />
             </Styled.FormItem>
@@ -144,7 +165,9 @@ export const LimitOrderForm = ({
               <Styled.InputNumber
                 prefix={
                   <InputPrefix
-                    constLabel="Total"
+                    constLabel={counterpart.translate(
+                      `field.placeholder.total`
+                    )}
                     inputSymbol={activePair.split("_")[1]}
                     quoteSymbol={activePair.split("_")[1]}
                   />
@@ -153,24 +176,33 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
+                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                  if (!utils.isNumberKey(e)) {
+                    e.preventDefault();
+                  }
+                }}
               />
             </Styled.FormItem>
             <Styled.FormItem>
               <Styled.OrderInfo>
                 <Styled.OderInfoItem>
-                  <span>Fees:</span>
+                  <span>
+                    {counterpart.translate(`pages.blocks.fees.fees`)}:
+                  </span>
                   <span>{`${feeAmount} ${
                     defaultAsset ? defaultAsset.symbol : ""
                   }`}</span>
                 </Styled.OderInfoItem>
 
                 <Styled.OderInfoItem>
-                  <span>Market Fee:</span>
+                  <span>
+                    {counterpart.translate(`field.labels.market_fee`)}:
+                  </span>
                   <span>{`${marketFeePercent}%`}</span>
                 </Styled.OderInfoItem>
 
                 <Styled.OderInfoItem>
-                  <span>Balance:</span>
+                  <span>{counterpart.translate(`field.labels.balance`)}:</span>
                   <span>{`${balance} ${
                     isBuyOrder
                       ? activePair.split("_")[1]
@@ -182,7 +214,11 @@ export const LimitOrderForm = ({
             <Styled.FormItem>
               {localStorageAccount !== null && localStorageAccount !== "" ? (
                 <Styled.FormButton type="primary" htmlType="submit">
-                  {`${isBuyOrder ? "Buy" : "Sell"} ${activePair.split("_")[0]}`}
+                  {`${
+                    isBuyOrder
+                      ? counterpart.translate(`buttons.buy`)
+                      : counterpart.translate(`buttons.sell`)
+                  } ${activePair.split("_")[0]}`}
                 </Styled.FormButton>
               ) : (
                 <Styled.FormButton
@@ -192,9 +228,11 @@ export const LimitOrderForm = ({
                     router.push("/login");
                   }}
                 >
-                  {`Log in & ${isBuyOrder ? "Buy" : "Sell"} ${
-                    activePair.split("_")[0]
-                  }`}
+                  {`${counterpart.translate(`buttons.login`)} & ${
+                    isBuyOrder
+                      ? counterpart.translate(`buttons.buy`)
+                      : counterpart.translate(`buttons.sell`)
+                  } ${activePair.split("_")[0]}`}
                 </Styled.FormButton>
               )}
             </Styled.FormItem>
@@ -203,9 +241,11 @@ export const LimitOrderForm = ({
             ""
           ) : (
             <FormDisclamer>
-              <span>Don't have a Peerplays account? </span>
+              <span>
+                {counterpart.translate(`buttons.dont_have_peerplays_account`)}
+              </span>
               <Link href="/signup">
-                <a>Create account</a>
+                <a>{counterpart.translate(`links.create_account`)}</a>
               </Link>
             </FormDisclamer>
           )}

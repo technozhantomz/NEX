@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 import {
@@ -31,6 +32,7 @@ type Props = {
   resetChanges: () => void;
   searchValue: string;
   isSameAccount: boolean;
+  accountAlreadyAdded: boolean;
 };
 
 export const ProxyForm = ({
@@ -52,6 +54,7 @@ export const ProxyForm = ({
   isPublishable,
   resetChanges,
   isSameAccount,
+  accountAlreadyAdded,
 }: Props): JSX.Element => {
   const [proxyForm] = Form.useForm();
   const {
@@ -77,14 +80,18 @@ export const ProxyForm = ({
           help={
             searchError
               ? isSameAccount
-                ? "Same as your account"
-                : "Account not found"
+                ? counterpart.translate(`field.errors.same_account`)
+                : accountAlreadyAdded
+                ? counterpart.translate(`field.errors.added_account`)
+                : counterpart.translate(`field.errors.no_account`)
               : undefined
           }
         >
           <Styled.ProxyFormSearch
             value={searchValue}
-            placeholder="Search Accounts"
+            placeholder={counterpart.translate(
+              `field.placeholder.search_accounts`
+            )}
             onChange={searchChange}
             onPressEnter={() => {
               addProxy(searchedAccount as Account);
@@ -99,7 +106,7 @@ export const ProxyForm = ({
             onClick={() => addProxy(searchedAccount as Account)}
             disabled={searchError || searchedAccount === undefined}
           >
-            Add
+            {counterpart.translate(`buttons.add`)}
           </Styled.ProxyFormButton>
         </Form.Item>
       </Styled.ProxySearchWrapper>
@@ -117,7 +124,7 @@ export const ProxyForm = ({
               htmlType="submit"
               disabled={!isPublishable}
             >
-              Publish changes
+              {counterpart.translate(`buttons.publish_changes`)}
             </Styled.ProxyFormButton>
           </Form.Item>
           <Form.Item>
@@ -126,7 +133,8 @@ export const ProxyForm = ({
               type="link"
               onClick={resetChanges}
             >
-              <RedoOutlined rotate={-90} /> Reset changes
+              <RedoOutlined rotate={-90} />{" "}
+              {counterpart.translate(`buttons.reset_changes`)}
             </Styled.ProxyFormButton>
           </Form.Item>
         </Styled.ProxyForm>

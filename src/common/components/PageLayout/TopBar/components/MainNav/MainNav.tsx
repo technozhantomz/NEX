@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import {
   DollarOutlined,
   MenuCard,
@@ -38,7 +40,7 @@ export const MainNav = (): JSX.Element => {
             <MenuItem
               href="/login"
               icon={<PoweroffOutlined className={"menu-icon"} />}
-              label="Login"
+              label={counterpart.translate(`pages.login.heading`)}
               onClick={closeMenu}
             />
           </li>
@@ -48,7 +50,7 @@ export const MainNav = (): JSX.Element => {
           <MenuItem
             href="/dashboard"
             icon={<Dashboard className={"menu-icon"} />}
-            label="Dashboard"
+            label={counterpart.translate(`pages.dashboard.heading`)}
             onClick={closeMenu}
           />
         </li>
@@ -56,7 +58,7 @@ export const MainNav = (): JSX.Element => {
           <MenuItem
             href={`/market/${exchanges.active}`}
             icon={<Market className={"menu-icon"} />}
-            label="Market"
+            label={counterpart.translate(`pages.market.heading`)}
             onClick={closeMenu}
           />
         </li>
@@ -64,7 +66,7 @@ export const MainNav = (): JSX.Element => {
           <MenuItem
             href="/blockchain"
             icon={<Blockchain className={"menu-icon"} />}
-            label="Blocks"
+            label={counterpart.translate(`pages.blocks.heading`)}
             onClick={closeMenu}
           />
         </li>
@@ -76,7 +78,7 @@ export const MainNav = (): JSX.Element => {
               <MenuItem
                 href="/wallet"
                 icon={<DollarOutlined className={"menu-icon"} />}
-                label="Wallet"
+                label={counterpart.translate(`pages.wallet.heading`)}
                 onClick={closeMenu}
               />
             </li>
@@ -85,7 +87,7 @@ export const MainNav = (): JSX.Element => {
                 <MenuItem
                   onClick={() => openMenu("profile")}
                   icon={<UserOutlined className={"menu-icon avitar"} />}
-                  label="Profile"
+                  label={counterpart.translate(`links.profile`)}
                 />
               </li>
             ) : (
@@ -95,20 +97,26 @@ export const MainNav = (): JSX.Element => {
               <MenuItem
                 href="/settings"
                 icon={<SettingOutlined className={"menu-icon"} />}
-                label="Settings"
+                label={counterpart.translate(`pages.settings.heading`)}
                 onClick={closeMenu}
               />
             </li>
-            <li className={"advanced"}>
+            <li
+              className={"advanced"}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
               <Switch
                 size="small"
-                onChange={(checked, e) => {
-                  e.stopPropagation();
+                onChange={(checked) => {
                   handleAdvancedModeChange(checked);
                 }}
                 defaultChecked={advancedMode}
               />
-              <span>Advanced Settings</span>
+              <span>
+                {counterpart.translate(`field.labels.advanced_settings`)}
+              </span>
             </li>
           </>
         )}
@@ -119,7 +127,7 @@ export const MainNav = (): JSX.Element => {
               <MenuItem
                 href="/voting"
                 icon={<Vote className={"menu-icon"} />}
-                label="Voting"
+                label={counterpart.translate(`pages.voting.heading`)}
                 onClick={closeMenu}
               />
             </li>
@@ -135,7 +143,7 @@ export const MainNav = (): JSX.Element => {
             <MenuItem
               href="/logout"
               icon={<PoweroffOutlined className={"menu-icon"} />}
-              label="Logout"
+              label={counterpart.translate(`pages.logout.heading`)}
               onClick={closeMenu}
             />
           </li>

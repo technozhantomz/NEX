@@ -1,8 +1,9 @@
+import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
-  roundNum,
+  toPrecision,
   useAccount,
   useFees,
   useLimitOrderTransactionBuilder,
@@ -56,25 +57,35 @@ export function useCreateLimitOrder({
         if (changedValues.price) {
           if (changedValues.price < 0) {
             orderForm.setFieldsValue({ price: 0 });
-          } else if (changedValues.price > 0) {
+          } else if (
+            changedValues.price > 0 &&
+            changedValues.price.split(".")[1]?.length > currentBase.precision
+          ) {
             orderForm.setFieldsValue({
-              price: roundNum(changedValues.price, currentBase.precision),
+              price: toPrecision(changedValues.price, currentBase.precision),
             });
           }
         } else if (changedValues.total) {
           if (changedValues.total < 0) {
             orderForm.setFieldsValue({ total: 0 });
-          } else if (changedValues.total > 0) {
+          } else if (
+            changedValues.total > 0 &&
+            changedValues.total.split(".")[1]?.length > currentBase.precision
+          ) {
             orderForm.setFieldsValue({
-              total: roundNum(changedValues.total, currentBase.precision),
+              total: toPrecision(changedValues.total, currentBase.precision),
             });
           }
         } else if (changedValues.quantity) {
           if (changedValues.quantity < 0) {
             orderForm.setFieldsValue({ quantity: 0 });
-          } else if (changedValues.quantity > 0) {
+          } else if (
+            changedValues.quantity > 0 &&
+            changedValues.quantity.split(".")[1]?.length >
+              currentQuote.precision
+          ) {
             orderForm.setFieldsValue({
-              quantity: roundNum(
+              quantity: toPrecision(
                 changedValues.quantity,
                 currentQuote.precision
               ),
@@ -83,7 +94,7 @@ export function useCreateLimitOrder({
         }
       }
     },
-    [orderForm, currentBase, currentQuote, loadingSelectedPair, roundNum]
+    [orderForm, currentBase, currentQuote, loadingSelectedPair, toPrecision]
   );
 
   const handleRelationsBetweenInputs = useCallback(
@@ -106,7 +117,10 @@ export function useCreateLimitOrder({
           allValues.quantity > 0
         ) {
           orderForm.setFieldsValue({
-            total: roundNum(allValues.price * allValues.quantity, baseRoundTo),
+            total: toPrecision(
+              allValues.price * allValues.quantity,
+              baseRoundTo
+            ),
           });
         }
       } else if (changedValues.total) {
@@ -117,12 +131,15 @@ export function useCreateLimitOrder({
           allValues.total > 0
         ) {
           orderForm.setFieldsValue({
-            quantity: roundNum(allValues.total / allValues.price, quoteRoundTo),
+            quantity: toPrecision(
+              allValues.total / allValues.price,
+              quoteRoundTo
+            ),
           });
         }
       }
     },
-    [orderForm, currentBase, currentQuote, roundNum]
+    [orderForm, currentBase, currentQuote, toPrecision]
   );
 
   const handleValuesChange = useCallback(
@@ -186,7 +203,9 @@ export function useCreateLimitOrder({
         trxResult = await buildTrx([trx], [activeKey]);
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage("Unable to process the transaction!");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.transaction_unable`)
+        );
         setLoadingTransaction(false);
       }
       if (trxResult) {
@@ -195,13 +214,15 @@ export function useCreateLimitOrder({
         refreshHistory();
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
-          "You have successfully created a limit order"
+          counterpart.translate(`field.success.limit_order_successfully`)
         );
         setLoadingTransaction(false);
       } else {
         refreshOrderBook();
         refreshHistory();
-        setTransactionErrorMessage("Unable to process the transaction!");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.unable_transaction`)
+        );
         setLoadingTransaction(false);
       }
     },
@@ -226,29 +247,39 @@ export function useCreateLimitOrder({
 
   const validatePrice = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
-      return Promise.reject(new Error("Price should be greater than 0"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.pirce_should_greater`))
+      );
     }
     return Promise.resolve();
   };
 
   const validateQuantity = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
-      return Promise.reject(new Error("Price should be greater than 0"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.pirce_should_greater`))
+      );
     }
     const userQuoteAsset = assets.find(
       (asset) => asset.symbol === currentQuote?.symbol
     );
     if (!isBuyOrder) {
       if (!userQuoteAsset) {
-        return Promise.reject(new Error("Balance is not enough"));
+        return Promise.reject(
+          new Error(counterpart.translate(`field.errors.balance_not_enough`))
+        );
       }
       if (currentQuote?.symbol === defaultToken) {
         if (Number(value) + feeAmount > (userQuoteAsset?.amount as number)) {
-          return Promise.reject(new Error("Balance is not enough"));
+          return Promise.reject(
+            new Error(counterpart.translate(`field.errors.balance_not_enough`))
+          );
         }
       } else {
         if (Number(value) > (userQuoteAsset?.amount as number)) {
-          return Promise.reject(new Error("Balance is not enough"));
+          return Promise.reject(
+            new Error(counterpart.translate(`field.errors.balance_not_enough`))
+          );
         }
       }
     }
@@ -257,7 +288,9 @@ export function useCreateLimitOrder({
 
   const validateTotal = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
-      return Promise.reject(new Error("Price should be greater than 0"));
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.pirce_should_greater`))
+      );
     }
     const userDefaultAsset = assets.find(
       (asset) => asset.symbol === defaultToken
@@ -266,7 +299,11 @@ export function useCreateLimitOrder({
       userDefaultAsset === undefined ||
       feeAmount > (userDefaultAsset?.amount as number)
     ) {
-      return Promise.reject(new Error("Balance is not enough to pay the fee"));
+      return Promise.reject(
+        new Error(
+          counterpart.translate(`field.errors.balance_not_enough_to_pay`)
+        )
+      );
     }
 
     const userBaseAsset = assets.find(
@@ -274,22 +311,30 @@ export function useCreateLimitOrder({
     );
     if (isBuyOrder) {
       if (!userBaseAsset) {
-        return Promise.reject(new Error("Balance is not enough"));
+        return Promise.reject(
+          new Error(counterpart.translate(`field.errors.balance_not_enough`))
+        );
       }
       if (currentBase?.symbol === defaultToken) {
         if (Number(value) + feeAmount > (userBaseAsset?.amount as number)) {
-          return Promise.reject(new Error("Balance is not enough"));
+          return Promise.reject(
+            new Error(counterpart.translate(`field.errors.balance_not_enough`))
+          );
         }
       } else {
         if (Number(value) > (userBaseAsset?.amount as number)) {
-          return Promise.reject(new Error("Balance is not enough"));
+          return Promise.reject(
+            new Error(counterpart.translate(`field.errors.balance_not_enough`))
+          );
         }
       }
       if (
         userBaseAsset === undefined ||
         Number(value) > (userBaseAsset?.amount as number)
       ) {
-        return Promise.reject(new Error("Balance is not enough"));
+        return Promise.reject(
+          new Error(counterpart.translate(`field.errors.balance_not_enough`))
+        );
       }
     }
     return Promise.resolve();
@@ -297,15 +342,24 @@ export function useCreateLimitOrder({
 
   const formValidation = {
     price: [
-      { required: true, message: "This field is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.field_is_required`),
+      },
       { validator: validatePrice },
     ],
     quantity: [
-      { required: true, message: "This field is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.field_is_required`),
+      },
       { validator: validateQuantity },
     ],
     total: [
-      { required: true, message: "This field is required" },
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.field_is_required`),
+      },
       { validator: validateTotal },
     ],
   };

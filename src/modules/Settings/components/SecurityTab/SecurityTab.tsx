@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import React from "react";
 
 import { useSettingsContext } from "../../../../common/providers";
@@ -20,7 +21,9 @@ export const SecurityTab = (): JSX.Element => {
         onFinish={updateSettings}
         initialValues={{ walletLockInMinutes: settings.walletLock }}
       >
-        <Styled.LabelText>Lock Wallet</Styled.LabelText>
+        <Styled.LabelText>
+          {counterpart.translate(`field.labels.lock_wallet`)}
+        </Styled.LabelText>
         <Styled.LockWalletFormItem name="walletLockInMinutes">
           <Styled.Select>
             {walletLockInMinutes.map((e, i) => (
@@ -31,11 +34,13 @@ export const SecurityTab = (): JSX.Element => {
           </Styled.Select>
         </Styled.LockWalletFormItem>
         {showSuccessMessage && (
-          <Styled.LabelText type="success">Setting saved!</Styled.LabelText>
+          <Styled.LabelText type="success">
+            {counterpart.translate(`field.labels.setting_saved`)}
+          </Styled.LabelText>
         )}
         <Styled.BtnDiv>
           <Styled.SaveButton type="primary" htmlType="submit">
-            Save
+            {counterpart.translate(`buttons.save`)}
           </Styled.SaveButton>
         </Styled.BtnDiv>
       </Styled.SecurityTabForm>

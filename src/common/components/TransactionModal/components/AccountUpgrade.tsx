@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 
 import { defaultToken } from "../../../../api/params";
@@ -12,15 +13,15 @@ export const AccountUpgrade = ({ account, fee }: Props): JSX.Element => {
   return (
     <>
       <Styled.DetailContainer>
-        <p>Account to upgrade</p>
+        <p>{counterpart.translate(`field.labels.account_to_upgrade`)}</p>
         <Link href={`/user/${account}`}>{account}</Link>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
-        <p>Upgrade to lifetime member</p>
-        <p>true</p>
+        <p>{counterpart.translate(`field.labels.upgrade_lifetime`)}</p>
+        <p>{counterpart.translate(`field.labels.true`)}</p>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
-        <p>Fee</p>
+        <p>{counterpart.translate(`field.labels.fee`)}</p>
         <p>{`${fee} ${defaultToken}`}</p>
       </Styled.DetailContainer>
     </>

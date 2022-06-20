@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { CSSProperties, ReactNode } from "react";
 
 import {
@@ -31,8 +32,12 @@ export const VoteTable = ({
     <Styled.VoteTableWrapper>
       <Styled.Title>
         {type === "approved"
-          ? `Approved by ${localStorageAccount} `
-          : `Not approved by ${localStorageAccount}`}
+          ? counterpart.translate(`field.labels.approved_by`, {
+              localStorageAccount,
+            })
+          : counterpart.translate(`field.labels.not_approved_by`, {
+              localStorageAccount,
+            })}
         {type === "approved" ? <Styled.Check /> : <Styled.Xmark />}
       </Styled.Title>
       <Styled.Container>
@@ -41,38 +46,52 @@ export const VoteTable = ({
             itemLayout="vertical"
             dataSource={votes}
             loading={loading}
-            pagination={{
-              position: "bottom",
-              size: "small",
-              pageSize: 2,
-              showLessItems: true,
-              itemRender: (
-                _page: number,
-                type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                element: ReactNode
-              ) => {
-                if (type === "prev") {
-                  return (
-                    <>
-                      {" "}
-                      {_page > 0 ? (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          Previous
-                        </a>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  );
-                }
-                if (type === "next") {
-                  return (
-                    <a style={{ marginLeft: "8px" } as CSSProperties}>Next</a>
-                  );
-                }
-                return element;
-              },
-            }}
+            pagination={
+              !loading
+                ? {
+                    position: "bottom",
+                    size: "small",
+                    showSizeChanger: false,
+                    pageSize: 2,
+                    showLessItems: true,
+                    itemRender: (
+                      _page: number,
+                      type:
+                        | "page"
+                        | "prev"
+                        | "next"
+                        | "jump-prev"
+                        | "jump-next",
+                      element: ReactNode
+                    ) => {
+                      if (type === "prev") {
+                        return (
+                          <>
+                            {" "}
+                            {_page > 0 ? (
+                              <a
+                                style={{ marginRight: "8px" } as CSSProperties}
+                              >
+                                {counterpart.translate(`buttons.previous`)}
+                              </a>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        );
+                      }
+                      if (type === "next") {
+                        return (
+                          <a style={{ marginLeft: "8px" } as CSSProperties}>
+                            {counterpart.translate(`buttons.next`)}
+                          </a>
+                        );
+                      }
+                      return element;
+                    },
+                  }
+                : false
+            }
             renderItem={(item) => (
               <Styled.VoteListItem key={(item as VoteRow).key}>
                 <Styled.VoteItemContent>
@@ -101,13 +120,13 @@ export const VoteTable = ({
                         <Styled.VoteActionButton
                           onClick={() => removeVote((item as VoteRow).id)}
                         >
-                          REMOVE
+                          {counterpart.translate(`buttons.remove`)}
                         </Styled.VoteActionButton>
                       ) : (
                         <Styled.VoteActionButton
                           onClick={() => approveVote((item as VoteRow).id)}
                         >
-                          ADD
+                          {counterpart.translate(`buttons.add`)}
                         </Styled.VoteActionButton>
                       )}
                     </span>
@@ -133,13 +152,15 @@ export const VoteTable = ({
                 if (type === "prev") {
                   return (
                     <a style={{ marginRight: "8px" } as CSSProperties}>
-                      Previous
+                      {counterpart.translate(`buttons.previous`)}
                     </a>
                   );
                 }
                 if (type === "next") {
                   return (
-                    <a style={{ marginLeft: "8px" } as CSSProperties}>Next</a>
+                    <a style={{ marginLeft: "8px" } as CSSProperties}>
+                      {counterpart.translate(`buttons.next`)}
+                    </a>
                   );
                 }
                 return element;
