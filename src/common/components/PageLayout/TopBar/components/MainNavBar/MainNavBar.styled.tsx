@@ -15,10 +15,26 @@ export const MainNavBar = styled.div`
   .hambuger {
     font-size: 2em;
     font-weight: bold;
-    margin-left: 10px;
+    margin-left: 8px;
   }
   .ant-avatar {
     background: ${colors.successTag};
+    margin-left: 8px;
+  }
+  .ant-badge-dot {
+    width: 8px;
+    min-width: 6px;
+    height: 8px;
+    box-shadow: none;
+    transform: translate(-80%, 70%);
+  }
+
+  .ant-avatar.ant-avatar-circle.ant-avatar-icon {
+    background: bottom;
+  }
+
+  .ant-avatar.ant-avatar-icon {
+    margin-top: 1.5px;
   }
   .bell {
     font-size: 1.2em;
@@ -58,6 +74,9 @@ export const MenuWrapper = styled.div`{
       }
       &.notification-menu-wrapper{
           right:110px;
+          width:325px;
+          min-height:311px;
+          border-radius: 4px;
       }
   }
 `;

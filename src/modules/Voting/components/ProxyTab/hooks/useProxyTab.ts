@@ -36,6 +36,8 @@ export function useProxyTab({
     useState<string>("");
   const [isPublishable, setIsPublishable] = useState<boolean>(false);
   const [isSameAccount, setIsSameAccount] = useState<boolean>(false);
+  const [accountAlreadyAdded, setAccountAlreadyAdded] =
+    useState<boolean>(false);
 
   const { id, assets, name, localStorageAccount } = useUserContext();
   const {
@@ -56,6 +58,11 @@ export function useProxyTab({
         if (account.name === localStorageAccount) {
           setIsSameAccount(true);
           setSearchError(true);
+          setAccountAlreadyAdded(false);
+        } else if (account.name === localProxy.name) {
+          setAccountAlreadyAdded(true);
+          setIsSameAccount(false);
+          setSearchError(true);
         } else {
           setSearchedAccount(account);
           setIsSameAccount(false);
@@ -63,6 +70,7 @@ export function useProxyTab({
         }
       } else {
         setIsSameAccount(false);
+        setAccountAlreadyAdded(false);
         setSearchError(true);
       }
     },
@@ -72,6 +80,8 @@ export function useProxyTab({
       setSearchError,
       setSearchValue,
       setIsSameAccount,
+      setAccountAlreadyAdded,
+      localProxy,
     ]
   );
 
@@ -246,5 +256,6 @@ export function useProxyTab({
     resetChanges,
     searchValue,
     isSameAccount,
+    accountAlreadyAdded,
   };
 }

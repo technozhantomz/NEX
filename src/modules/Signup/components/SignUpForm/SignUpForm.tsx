@@ -68,6 +68,7 @@ export const SignUpForm: React.FC = () => {
               )}
             </div>
           }
+          disabled
         />
       </Styled.PasswordFormItem>
       <Styled.PasswordCheckFormItem

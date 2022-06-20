@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { useUserContext } from "../../../../providers";
+
 type Props = {
   infoString: string;
 };
@@ -8,18 +10,21 @@ type Props = {
 export const AvtivityInfo = ({ infoString }: Props): JSX.Element => {
   const [stringParts, setStringParts] = useState<string[]>([]);
 
+  const { localStorageAccount } = useUserContext();
+
   useEffect(() => {
     setStringParts(infoString.split(","));
   }, [infoString]);
 
   const getUserLink = (userLink: string, key: number) => {
-    const userName = userLink.substring(
-      userLink.indexOf("=") + 1,
-      userLink.lastIndexOf("]")
+    const trimedUserLink = userLink.replace(/\s/g, "");
+    const userName = trimedUserLink.substring(
+      trimedUserLink.indexOf("=") + 1,
+      trimedUserLink.lastIndexOf("]")
     );
     return (
       <Link key={key} href={`/user/${userName}`}>
-        {userName}
+        {userName === localStorageAccount ? "You" : userName}
       </Link>
     );
   };
