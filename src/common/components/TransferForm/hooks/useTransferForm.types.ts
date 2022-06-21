@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 import { FormInstance, Rule } from "../../../../ui/src";
 
 export type UseTransferFormResult = {
@@ -11,6 +13,12 @@ export type UseTransferFormResult = {
   confirm: () => void;
   handleValuesChange: (changedValues: any) => void;
   submittingPassword: boolean;
+  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
+  transactionErrorMessage: string;
+  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  transactionSuccessMessage: string;
+  transfer: (password: string) => Promise<void>;
+  loadingTransaction: boolean;
 };
 
 export type FormField = {

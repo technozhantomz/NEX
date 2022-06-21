@@ -1,9 +1,10 @@
 import counterpart from "counterpart";
 
 import { Form, Input } from "../../../ui/src";
-import { useAsset } from "../../hooks";
+import { useAsset, useHandleTransactionForm } from "../../hooks";
 import { useUserContext } from "../../providers";
 import { PasswordModal } from "../PasswordModal";
+import { TransactionModal } from "../TransactionModal";
 
 import * as Styled from "./TransferForm.styled";
 import { useTransferForm } from "./hooks";
@@ -16,7 +17,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
-    isPasswordModalVisible,
+    // isPasswordModalVisible,
     feeAmount,
     transferForm,
     formValdation,
@@ -25,15 +26,34 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
     onFormFinish,
     handleValuesChange,
     submittingPassword,
+    setTransactionErrorMessage,
+    transactionErrorMessage,
+    setTransactionSuccessMessage,
+    transactionSuccessMessage,
+    transfer,
+    loadingTransaction,
   } = useTransferForm();
   const { defaultAsset } = useAsset();
 
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: transfer,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
+
   return (
-    <Form.Provider onFormFinish={onFormFinish}>
+    <Form.Provider onFormFinish={handleFormFinish}>
       <Styled.TransferForm
         form={transferForm}
         name="transferForm"
-        onFinish={confirm}
+        onFinish={showPasswordModal}
         size="large"
         onValuesChange={handleValuesChange}
       >
@@ -101,8 +121,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
       </Styled.TransferForm>
       <PasswordModal
         visible={isPasswordModalVisible}
-        onCancel={handlePasswordModalCancel}
-        submitting={submittingPassword}
+        onCancel={hidePasswordModal}
       />
     </Form.Provider>
   );

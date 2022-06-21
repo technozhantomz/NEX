@@ -24,6 +24,11 @@ export function useTransferForm(): UseTransferFormResult {
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [toAccount, setToAccount] = useState<Account>();
   const [fromAccount, setFromAccount] = useState<Account>();
+  const [transactionErrorMessage, setTransactionErrorMessage] =
+    useState<string>("");
+  const [transactionSuccessMessage, setTransactionSuccessMessage] =
+    useState<string>("");
+  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
     useAccount();
   const { localStorageAccount, assets } = useUserContext();
@@ -87,6 +92,7 @@ export function useTransferForm(): UseTransferFormResult {
   };
 
   const transfer = async (password: string) => {
+    console.log("ss");
     setSubmittingPassword(true);
     const values = transferForm.getFieldsValue();
     const from = (
@@ -107,10 +113,12 @@ export function useTransferForm(): UseTransferFormResult {
     );
     let trxResult;
     try {
+      setLoadingTransaction(true);
       trxResult = await buildTrx([trx], [activeKey]);
     } catch (e) {
       console.log(e);
       setSubmittingPassword(false);
+      setLoadingTransaction(false);
     }
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
@@ -124,10 +132,12 @@ export function useTransferForm(): UseTransferFormResult {
       );
       setSubmittingPassword(false);
       transferForm.resetFields();
+      setLoadingTransaction(false);
     } else {
       setIsPasswordModalVisible(false);
       setSubmittingPassword(false);
       setStatus(counterpart.translate(`field.errors.server_error`));
+      setLoadingTransaction(false);
     }
   };
 
@@ -269,5 +279,11 @@ export function useTransferForm(): UseTransferFormResult {
     onFormFinish,
     handleValuesChange,
     submittingPassword,
+    transactionErrorMessage,
+    setTransactionErrorMessage,
+    transactionSuccessMessage,
+    setTransactionSuccessMessage,
+    transfer,
+    loadingTransaction,
   };
 }
