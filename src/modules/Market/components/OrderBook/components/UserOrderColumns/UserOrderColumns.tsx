@@ -39,7 +39,6 @@ export const showUserOrderColumns = (
         <Styled.DeleteIconContainer
           onClick={(e) => {
             e.preventDefault();
-            // setCurrentOrder({ id: record.key });
             handleClick(record.key);
           }}
         >
