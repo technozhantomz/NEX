@@ -172,13 +172,14 @@ export function useOrderBook({
       const activeKey = getPrivateKey(password, "active");
       const trx = buildCancelLimitOrderTransaction(selectedOrderId, id);
       let trxResult;
-      console.log("this is trx", trx);
       try {
         setLoadingTransaction(true);
         trxResult = await buildTrx([trx], [activeKey]);
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage("Unable to process the transaction!");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.transaction_unable`)
+        );
         setLoadingTransaction(false);
       }
       if (trxResult) {
@@ -186,11 +187,15 @@ export function useOrderBook({
         getUserOrderBook(currentBase as Asset, currentQuote as Asset);
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
-          `You have successfully canceled #${selectedOrderId} order`
+          counterpart.translate(`field.success.canceled_limit_order`, {
+            selectedOrderId,
+          })
         );
         setLoadingTransaction(false);
       } else {
-        setTransactionErrorMessage("Unable to process the transaction!");
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.transaction_unable`)
+        );
         setLoadingTransaction(false);
       }
     },

@@ -828,6 +828,8 @@ export const en = {
         "Your account successfully upgraded to lifetime membership account",
       published_proxy: "You have successfully published your proxy",
       published_votes: "You have successfully published your votes",
+      canceled_limit_order:
+        "You have successfully canceled #%(selectedOrderId)s order",
     },
   },
   tableHead: {
