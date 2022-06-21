@@ -6,7 +6,6 @@ import { usePeerplaysApiContext, useUserContext } from "../../providers";
 import { Account, Asset, FeeParameter, GlobalProperties } from "../../types";
 
 import {
-  CancelLimitOrderFee,
   ChainOperations,
   CreateLimitOrderFee,
   UseFeesResult,
@@ -112,11 +111,16 @@ export function useFees(): UseFeesResult {
         "limit_order_cancel"
       ) as FeeParameter;
       const cancelLimitOrderFee = cancelLimitOrderFeeParameter[1].fee as number;
-      return {
-        fee: setPrecision(false, cancelLimitOrderFee, defaultAsset.precision),
-      } as CancelLimitOrderFee;
+
+      return setPrecision(false, cancelLimitOrderFee, defaultAsset.precision);
     }
-  }, []);
+  }, [
+    feeParameters,
+    feeParameters.length,
+    findOperationFee,
+    defaultAsset,
+    setPrecision,
+  ]);
 
   const calculateCreateLimitOrderFee = useCallback(
     (base: Asset, quote: Asset) => {

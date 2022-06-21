@@ -1,12 +1,6 @@
-// import { DeleteOutlined } from "@ant-design/icons";
-import Link from "next/link";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
-import {
-  FormDisclamer,
-  PasswordModal,
-  TransactionModal,
-} from "../../../../common/components";
+import { PasswordModal, TransactionModal } from "../../../../common/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
 import { useUserContext } from "../../../../common/providers";
 import { Asset } from "../../../../common/types";
@@ -14,9 +8,8 @@ import { DownOutlined, Form, Tooltip } from "../../../../ui/src";
 import { Order, OrderRow } from "../../types";
 
 import * as Styled from "./OrderBook.styled";
-import { useCancelLimitOrder } from "./hooks/useCancelLimitOrder";
-import { useOrderBook } from "./hooks/useOrderBook";
-import { OrderType } from "./hooks/useOrderBook.types";
+import { showUserOrderColumns } from "./components";
+import { OrderType, useOrderBook } from "./hooks";
 
 type Props = {
   currentBase: Asset | undefined;
@@ -32,12 +25,6 @@ type Props = {
   getUserOrderBook: (base: Asset, quote: Asset) => Promise<void>;
   userOrdersRows: OrderRow[];
   loadingUserOrderRows: boolean;
-  refreshOrderBook: () => void;
-  refreshHistory: () => void;
-};
-
-type OrderProps = {
-  id: string;
 };
 
 export const OrderBook = ({
@@ -54,23 +41,31 @@ export const OrderBook = ({
   getUserOrderBook,
   userOrdersRows,
   loadingUserOrderRows,
-  refreshOrderBook,
-  refreshHistory,
 }: Props): JSX.Element => {
-  const [currentOrder, setCurrentOrder] = useState<OrderProps>({ id: "" });
-
   const {
-    feeAmount,
-    handleCancelLimitOrder,
-    setTransactionErrorMessage,
+    orderType,
+    threshold,
+    handleThresholdChange,
+    handleFilterChange,
+    orderColumns,
+    cancelOrderfeeAmount,
     transactionErrorMessage,
-    setTransactionSuccessMessage,
+    setTransactionErrorMessage,
     transactionSuccessMessage,
+    setTransactionSuccessMessage,
     loadingTransaction,
-  } = useCancelLimitOrder({
-    refreshOrderBook,
-    refreshHistory,
-    currentOrder: currentOrder.id,
+    setSelectedOrderId,
+    selectedOrderId,
+    handleCancelLimitOrder,
+  } = useOrderBook({
+    currentBase,
+    currentQuote,
+    loadingSelectedPair,
+    getOrderBook,
+    asks,
+    bids,
+    setOrdersRows,
+    getUserOrderBook,
   });
 
   const {
@@ -86,27 +81,6 @@ export const OrderBook = ({
     setTransactionSuccessMessage,
   });
 
-  const {
-    orderType,
-    threshold,
-    handleThresholdChange,
-    handleFilterChange,
-    orderColumns,
-    userOrderColumns,
-  } = useOrderBook({
-    currentBase,
-    currentQuote,
-    loadingSelectedPair,
-    getOrderBook,
-    asks,
-    bids,
-    setOrdersRows,
-    getUserOrderBook,
-    showPasswordModal,
-    handleFormFinish,
-    setCurrentOrder,
-  });
-
   const { localStorageAccount } = useUserContext();
 
   const dataSource = forUser ? userOrdersRows : ordersRows;
@@ -120,12 +94,6 @@ export const OrderBook = ({
       <Styled.ThresholdMenu.Item key="0.01">0.01</Styled.ThresholdMenu.Item>
     </Styled.ThresholdMenu>
   );
-
-  useEffect(() => {
-    if (!currentOrder || currentOrder.id === "") return;
-    console.log(currentOrder);
-    showPasswordModal();
-  }, [currentOrder]);
 
   return (
     <>
@@ -173,7 +141,20 @@ export const OrderBook = ({
         <Styled.Table
           loading={forUser ? loadingUserOrderRows : loadingOrderRows}
           pagination={false}
-          columns={forUser ? userOrderColumns : orderColumns}
+          columns={
+            forUser
+              ? currentQuote && currentBase
+                ? showUserOrderColumns(
+                    currentQuote.symbol,
+                    currentBase.symbol,
+                    (orderId) => {
+                      setSelectedOrderId(orderId);
+                      showPasswordModal();
+                    }
+                  )
+                : undefined
+              : orderColumns
+          }
           dataSource={dataSource}
           rowClassName={(record: any) => {
             return record.isBuyOrder ? "buy" : "sell";
@@ -181,16 +162,6 @@ export const OrderBook = ({
         ></Styled.Table>
       </Styled.TableContainer>
       <Form.Provider onFormFinish={handleFormFinish}>
-        {localStorageAccount !== null && localStorageAccount !== "" ? (
-          ""
-        ) : (
-          <FormDisclamer>
-            <span>Don't have a Peerplays account? </span>
-            <Link href="/signup">
-              <a>Create account</a>
-            </Link>
-          </FormDisclamer>
-        )}
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
@@ -198,7 +169,8 @@ export const OrderBook = ({
           transactionSuccessMessage={transactionSuccessMessage}
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
-          fee={feeAmount}
+          fee={cancelOrderfeeAmount}
+          orderId={selectedOrderId}
           transactionType="limit_order_cancel"
         />
         <PasswordModal

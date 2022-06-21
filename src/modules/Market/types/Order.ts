@@ -11,7 +11,7 @@ export type OrderColumn = {
   title: string;
   dataIndex: string;
   key: string;
-  render?: (_, record: any) => JSX.Element;
+  render?: (_value: string, record: any) => JSX.Element;
 };
 
 export type OrderRow = {

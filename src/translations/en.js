@@ -747,6 +747,7 @@ export const en = {
       withdrawal_amount: "Withdrawal amount",
       today: "Today",
       yesterday: "yesterday",
+      order_to_cancel: "Order to cancel",
     },
     comments: {
       deposit_hbd:

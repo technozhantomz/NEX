@@ -30,8 +30,6 @@ type Props = {
   getUserHistory: (base: Asset, quote: Asset) => Promise<void>;
   userOrderHistoryRows: OrderHistoryRow[];
   loadingUserHistoryRows: boolean;
-  refreshOrderBook: () => void;
-  refreshHistory: () => void;
 };
 
 export const OrderTabs = ({
@@ -54,8 +52,6 @@ export const OrderTabs = ({
   getUserHistory,
   userOrderHistoryRows,
   loadingUserHistoryRows,
-  refreshOrderBook,
-  refreshHistory,
 }: Props): JSX.Element => {
   return (
     <Styled.Tabs
@@ -85,8 +81,6 @@ export const OrderTabs = ({
           getUserOrderBook={getUserOrderBook}
           userOrdersRows={userOrdersRows}
           loadingUserOrderRows={loadingUserOrderRows}
-          refreshOrderBook={refreshOrderBook}
-          refreshHistory={refreshHistory}
         />
       </TabPane>
       <TabPane

@@ -13,7 +13,7 @@ export type UseLimitOrderTransactionBuilderResult = {
     isBuyOrder: boolean
   ) => Transaction;
   buildCancelLimitOrderTransaction: (
-    order: string,
-    accountData: any
+    orderId: string,
+    feePayingAccount: string
   ) => Transaction;
 };

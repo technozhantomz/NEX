@@ -111,8 +111,6 @@ const MarketPage: NextPage = () => {
                     getUserHistory={getUserHistory}
                     userOrderHistoryRows={userOrderHistoryRows}
                     loadingUserHistoryRows={loadingUserHistoryRows}
-                    refreshOrderBook={refreshOrderBook}
-                    refreshHistory={refreshHistory}
                   />
                 </Styled.ColumnFlex>
               </Styled.Container>
@@ -139,8 +137,6 @@ const MarketPage: NextPage = () => {
                   getUserHistory={getUserHistory}
                   userOrderHistoryRows={userOrderHistoryRows}
                   loadingUserHistoryRows={loadingUserHistoryRows}
-                  refreshOrderBook={refreshOrderBook}
-                  refreshHistory={refreshHistory}
                 />
               </Styled.Container>
             </Col>
@@ -213,8 +209,6 @@ const MarketPage: NextPage = () => {
                   getUserHistory={getUserHistory}
                   userOrderHistoryRows={userOrderHistoryRows}
                   loadingUserHistoryRows={loadingUserHistoryRows}
-                  refreshOrderBook={refreshOrderBook}
-                  refreshHistory={refreshHistory}
                 />
               </Styled.ColumnFlex>
             </Col>
@@ -277,8 +271,6 @@ const MarketPage: NextPage = () => {
                   getUserHistory={getUserHistory}
                   userOrderHistoryRows={userOrderHistoryRows}
                   loadingUserHistoryRows={loadingUserHistoryRows}
-                  refreshOrderBook={refreshOrderBook}
-                  refreshHistory={refreshHistory}
                 />
               </Row>
             </Col>
