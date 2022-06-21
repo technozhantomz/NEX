@@ -751,6 +751,7 @@ export const ru = {
       withdrawal_amount: "Сумма вывода",
       today: "Сегодня",
       yesterday: "вчерашний день",
+      order_to_cancel: "Заказ на отмену",
     },
     comments: {
       deposit_hbd:

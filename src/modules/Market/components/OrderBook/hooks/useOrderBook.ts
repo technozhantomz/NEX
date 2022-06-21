@@ -7,7 +7,14 @@ import {
   useState,
 } from "react";
 
-import { roundNum } from "../../../../../common/hooks";
+import {
+  roundNum,
+  useAccount,
+  useFees,
+  useLimitOrderTransactionBuilder,
+  useTransactionBuilder,
+} from "../../../../../common/hooks";
+import { useUserContext } from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
 import { Order, OrderColumn, OrderRow, OrderType } from "../../../types";
 
@@ -34,12 +41,23 @@ export function useOrderBook({
   setOrdersRows,
   getUserOrderBook,
 }: Args): UseOrderBookResult {
+  const [cancelOrderfeeAmount, setCancelOrderfeeAmount] = useState<number>(0);
   const [orderType, setOrderType] = useState<OrderType>("total");
   const [threshold, setThreshold] = useState<number>(0.001);
   const [orderColumns, setOrderColumns] = useState<OrderColumn[]>([]);
-  const [userOrderColumns, setUserOrderColumns] = useState<OrderColumn[]>([]);
+  const [selectedOrderId, setSelectedOrderId] = useState<string>("");
+  const [transactionErrorMessage, setTransactionErrorMessage] =
+    useState<string>("");
+  const [transactionSuccessMessage, setTransactionSuccessMessage] =
+    useState<string>("");
+  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const { getPrivateKey, formAccountBalancesByName } = useAccount();
 
-  //const [tableScroll, setTableScroll] = useState<TableScroll>();
+  const { localStorageAccount, id } = useUserContext();
+  const { buildTrx } = useTransactionBuilder();
+  const { buildCancelLimitOrderTransaction } =
+    useLimitOrderTransactionBuilder();
+  const { calculateCancelLimitOrderFee } = useFees();
 
   const handleFilterChange = useCallback(
     (type: OrderType) => {
@@ -148,6 +166,50 @@ export function useOrderBook({
     setOrdersRows,
   ]);
 
+  const handleCancelLimitOrder = useCallback(
+    async (password: string) => {
+      setTransactionErrorMessage("");
+      const activeKey = getPrivateKey(password, "active");
+      const trx = buildCancelLimitOrderTransaction(selectedOrderId, id);
+      let trxResult;
+      console.log("this is trx", trx);
+      try {
+        setLoadingTransaction(true);
+        trxResult = await buildTrx([trx], [activeKey]);
+      } catch (e) {
+        console.log(e);
+        setTransactionErrorMessage("Unable to process the transaction!");
+        setLoadingTransaction(false);
+      }
+      if (trxResult) {
+        formAccountBalancesByName(localStorageAccount);
+        getUserOrderBook(currentBase as Asset, currentQuote as Asset);
+        setTransactionErrorMessage("");
+        setTransactionSuccessMessage(
+          `You have successfully canceled #${selectedOrderId} order`
+        );
+        setLoadingTransaction(false);
+      } else {
+        setTransactionErrorMessage("Unable to process the transaction!");
+        setLoadingTransaction(false);
+      }
+    },
+    [
+      setTransactionErrorMessage,
+      getPrivateKey,
+      buildCancelLimitOrderTransaction,
+      selectedOrderId,
+      id,
+      setLoadingTransaction,
+      buildTrx,
+      formAccountBalancesByName,
+      localStorageAccount,
+      getUserOrderBook,
+      currentBase,
+      currentQuote,
+    ]
+  );
+
   useEffect(() => {
     if (
       !loadingSelectedPair &&
@@ -172,29 +234,8 @@ export function useOrderBook({
         },
       ]);
       getOrderBook(currentBase, currentQuote);
+
       // user section
-      setUserOrderColumns([
-        {
-          title: counterpart.translate(`tableHead.price`),
-          dataIndex: "price",
-          key: "price",
-        },
-        {
-          title: currentQuote.symbol,
-          dataIndex: "quote",
-          key: "quote",
-        },
-        {
-          title: currentBase.symbol,
-          dataIndex: "base",
-          key: "base",
-        },
-        {
-          title: counterpart.translate(`tableHead.expiration`),
-          dataIndex: "expiration",
-          key: "expiration",
-        },
-      ]);
       getUserOrderBook(currentBase, currentQuote);
     }
   }, [
@@ -210,12 +251,27 @@ export function useOrderBook({
     selectOrdersForThresholdAndFilter();
   }, [selectOrdersForThresholdAndFilter]);
 
+  useEffect(() => {
+    const cancelLimitOrderFee = calculateCancelLimitOrderFee();
+    if (cancelLimitOrderFee !== undefined) {
+      setCancelOrderfeeAmount(cancelLimitOrderFee);
+    }
+  }, [calculateCancelLimitOrderFee, setCancelOrderfeeAmount]);
+
   return {
     orderType,
     threshold,
     handleThresholdChange,
     handleFilterChange,
     orderColumns,
-    userOrderColumns,
+    cancelOrderfeeAmount,
+    transactionErrorMessage,
+    setTransactionErrorMessage,
+    transactionSuccessMessage,
+    setTransactionSuccessMessage,
+    loadingTransaction,
+    setSelectedOrderId,
+    selectedOrderId,
+    handleCancelLimitOrder,
   };
 }

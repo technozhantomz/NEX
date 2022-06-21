@@ -105,6 +105,23 @@ export function useFees(): UseFeesResult {
     setPrecision,
   ]);
 
+  const calculateCancelLimitOrderFee = useCallback(() => {
+    if (feeParameters.length && defaultAsset) {
+      const cancelLimitOrderFeeParameter = findOperationFee(
+        "limit_order_cancel"
+      ) as FeeParameter;
+      const cancelLimitOrderFee = cancelLimitOrderFeeParameter[1].fee as number;
+
+      return setPrecision(false, cancelLimitOrderFee, defaultAsset.precision);
+    }
+  }, [
+    feeParameters,
+    feeParameters.length,
+    findOperationFee,
+    defaultAsset,
+    setPrecision,
+  ]);
+
   const calculateCreateLimitOrderFee = useCallback(
     (base: Asset, quote: Asset) => {
       if (feeParameters.length && defaultAsset) {
@@ -183,6 +200,7 @@ export function useFees(): UseFeesResult {
     calculateTransferFee,
     calculateAccountUpgradeFee,
     calculateCreateLimitOrderFee,
+    calculateCancelLimitOrderFee,
     calculateGposVestingFee,
     calculateGposWithdrawFee,
   };

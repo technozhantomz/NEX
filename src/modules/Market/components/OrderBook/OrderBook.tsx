@@ -1,12 +1,15 @@
 import { Dispatch, SetStateAction } from "react";
 
+import { PasswordModal, TransactionModal } from "../../../../common/components";
+import { useHandleTransactionForm } from "../../../../common/hooks";
+import { useUserContext } from "../../../../common/providers";
 import { Asset } from "../../../../common/types";
-import { DownOutlined, Tooltip } from "../../../../ui/src";
+import { DownOutlined, Form, Tooltip } from "../../../../ui/src";
 import { Order, OrderRow } from "../../types";
 
 import * as Styled from "./OrderBook.styled";
-import { useOrderBook } from "./hooks/useOrderBook";
-import { OrderType } from "./hooks/useOrderBook.types";
+import { showUserOrderColumns } from "./components";
+import { OrderType, useOrderBook } from "./hooks";
 
 type Props = {
   currentBase: Asset | undefined;
@@ -45,7 +48,15 @@ export const OrderBook = ({
     handleThresholdChange,
     handleFilterChange,
     orderColumns,
-    userOrderColumns,
+    cancelOrderfeeAmount,
+    transactionErrorMessage,
+    setTransactionErrorMessage,
+    transactionSuccessMessage,
+    setTransactionSuccessMessage,
+    loadingTransaction,
+    setSelectedOrderId,
+    selectedOrderId,
+    handleCancelLimitOrder,
   } = useOrderBook({
     currentBase,
     currentQuote,
@@ -56,6 +67,22 @@ export const OrderBook = ({
     setOrdersRows,
     getUserOrderBook,
   });
+
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleCancelLimitOrder,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
+
+  const { localStorageAccount } = useUserContext();
+
   const dataSource = forUser ? userOrdersRows : ordersRows;
 
   const types: OrderType[] = ["total", "sell", "buy"];
@@ -114,13 +141,43 @@ export const OrderBook = ({
         <Styled.Table
           loading={forUser ? loadingUserOrderRows : loadingOrderRows}
           pagination={false}
-          columns={forUser ? userOrderColumns : orderColumns}
+          columns={
+            forUser
+              ? currentQuote && currentBase
+                ? showUserOrderColumns(
+                    currentQuote.symbol,
+                    currentBase.symbol,
+                    (orderId) => {
+                      setSelectedOrderId(orderId);
+                      showPasswordModal();
+                    }
+                  )
+                : undefined
+              : orderColumns
+          }
           dataSource={dataSource}
           rowClassName={(record: any) => {
             return record.isBuyOrder ? "buy" : "sell";
           }}
         ></Styled.Table>
       </Styled.TableContainer>
+      <Form.Provider onFormFinish={handleFormFinish}>
+        <TransactionModal
+          visible={isTransactionModalVisible}
+          onCancel={hideTransactionModal}
+          transactionErrorMessage={transactionErrorMessage}
+          transactionSuccessMessage={transactionSuccessMessage}
+          loadingTransaction={loadingTransaction}
+          account={localStorageAccount}
+          fee={cancelOrderfeeAmount}
+          orderId={selectedOrderId}
+          transactionType="limit_order_cancel"
+        />
+        <PasswordModal
+          visible={isPasswordModalVisible}
+          onCancel={hidePasswordModal}
+        />
+      </Form.Provider>
     </>
   );
 };

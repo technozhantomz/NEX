@@ -36,6 +36,7 @@ export {
 export {
   LinkOutlined,
   DollarOutlined,
+  DeleteOutlined,
   PoweroffOutlined,
   SettingOutlined,
   BellOutlined,
