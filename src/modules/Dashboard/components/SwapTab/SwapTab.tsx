@@ -14,8 +14,7 @@ import * as Styled from "./SwapTab.styled";
 import { useSwap } from "./hooks/useSwapTab";
 
 export const SwapTab = (): JSX.Element => {
-  const { sidechainAssets } = useAsset();
-
+  const { defaultAsset, sidechainAssets } = useAsset();
   const {
     visible,
     onCancel,
@@ -23,14 +22,12 @@ export const SwapTab = (): JSX.Element => {
     confirm,
     handleAssetChange,
     swapForm,
-    formValdation,
+    formValidation,
     feeData,
     swapAsset,
     status,
     assetValueInfo,
   } = useSwap();
-
-  console.log(sidechainAssets);
 
   const InfoToolTip = (
     <Styled.TooltipPara>
@@ -51,7 +48,7 @@ export const SwapTab = (): JSX.Element => {
           />
           <Styled.SwapSellItem
             name="sellAmount"
-            rules={formValdation.sellAmount}
+            rules={formValidation.sellAmount}
             validateFirst={true}
             validateTrigger="onBlur"
           >
@@ -61,14 +58,14 @@ export const SwapTab = (): JSX.Element => {
               prefix={
                 <Styled.SwapFormItem
                   name="sellAsset"
-                  rules={formValdation.sellAsset}
+                  rules={formValidation.sellAsset}
                   validateFirst={true}
                   validateTrigger="onBlur"
                 >
                   <LogoSelectOption
-                    assets={
-                      sidechainAssets.length === 0 ? undefined : sidechainAssets
-                    }
+                    id="sellAsset"
+                    defaultValue="TEST"
+                    assets={sidechainAssets.concat(defaultAsset ?? [])}
                     labelInValue
                     onChange={handleAssetChange}
                   />
@@ -78,7 +75,7 @@ export const SwapTab = (): JSX.Element => {
           </Styled.SwapSellItem>
           <Styled.SwapItem
             name="buyAmount"
-            rules={formValdation.buyAmount}
+            rules={formValidation.buyAmount}
             validateFirst={true}
             validateTrigger="onBlur"
           >
@@ -88,11 +85,17 @@ export const SwapTab = (): JSX.Element => {
               prefix={
                 <Styled.SwapFormItem
                   name="buyAsset"
-                  rules={formValdation.buyAsset}
+                  rules={formValidation.buyAsset}
                   validateFirst={true}
                   validateTrigger="onBlur"
                 >
-                  <LogoSelectOption labelInValue onChange={handleAssetChange} />
+                  <LogoSelectOption
+                    id="buyAsset"
+                    defaultValue="BTC"
+                    assets={sidechainAssets.concat(defaultAsset ?? [])}
+                    labelInValue
+                    onChange={handleAssetChange}
+                  />
                 </Styled.SwapFormItem>
               }
             />

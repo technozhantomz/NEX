@@ -5,7 +5,6 @@ export type ChainOperations = {
 };
 
 export type UseFeesResult = {
-  getFeesFromGlobal: any;
   findOperationFee: (operationType: string) => FeeParameter | undefined;
   calculateTransferFee: (memo: string) => number | undefined;
   calculateAccountUpgradeFee: () => number | undefined;
@@ -22,4 +21,9 @@ export type CreateLimitOrderFee = {
   fee: number;
   buyMarketFeePercent: number;
   sellMarketFeePercent: number;
+};
+
+export type TransactionFee = {
+  amount: number;
+  asset_id: string;
 };

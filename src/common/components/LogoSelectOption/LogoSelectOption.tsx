@@ -9,6 +9,7 @@ import { Asset } from "../../types";
 import * as Styled from "./LogoSelectOption.styled";
 
 type LogoSelectionProps = {
+  id?: string;
   onChange?:
     | ((
         value: unknown,
@@ -57,6 +58,7 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
           .filter((asset) => asset.symbol !== props.defaultValue)
           .map((asset) => (
             <Styled.SelectOptionContainer
+              action={props.id}
               key={asset.symbol}
               value={asset.symbol}
               label={asset.symbol}

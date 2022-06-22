@@ -1,17 +1,19 @@
 import { Form } from "antd";
-import FormFinishInfo from "rc-field-form";
+// import FormFinishInfo from "rc-field-form";
 import { useCallback, useEffect, useState } from "react";
 
-import { defaultToken } from "../../../../../api/params/networkparams";
-import { usePeerplaysApiContext } from "../../../../../common/components/PeerplaysApiProvider/PeerplaysApiProvider";
-import { useUserContext } from "../../../../../common/components/UserProvider/UserProvider";
+import { defaultToken } from "../../../../../api/params";
 import {
   useAccount,
   useAsset,
   useFees,
   useTransactionBuilder,
-} from "../../../../../common/hooks/";
-import { TransactionFee } from "../../../../../common/hooks/useFees.types";
+} from "../../../../../common/hooks";
+import { TransactionFee } from "../../../../../common/hooks/fees/useFees.types";
+import {
+  usePeerplaysApiContext,
+  useUserContext,
+} from "../../../../../common/providers";
 
 import { Swap } from "./useSwapTab.types";
 
@@ -19,20 +21,20 @@ export function useSwap(): Swap {
   const [assetValueInfo, setAssetValueInfo] = useState<string>("");
   const [status, upStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
-  const { trxBuilder } = useTransactionBuilder();
+  const { buildTrx } = useTransactionBuilder();
   const { getPrivateKey } = useAccount();
-  const { getAssetBySymbol } = useAsset();
+  const { getAssetBySymbol, defaultAsset } = useAsset();
   const [swapForm] = Form.useForm();
   const { id, assets } = useUserContext();
   const [feeData, setFeeData] = useState<TransactionFee>();
-  const { getFeesFromGlobal } = useFees();
+  const { feeParameters } = useFees();
   const { dbApi } = usePeerplaysApiContext();
 
-  const handleAssetChange = (value: unknown) => {
-    if (value.label._owner.pendingProps.id === "swapForm_sellAsset") {
-      swapForm.setFieldsValue({ sellAsset: value.value });
+  const handleAssetChange = (value: unknown, option: any) => {
+    if (option.action === "sellAsset") {
+      swapForm.setFieldsValue({ sellAsset: value });
     } else {
-      swapForm.setFieldsValue({ buyAsset: value.value });
+      swapForm.setFieldsValue({ buyAsset: value });
     }
     console.log(swapForm.getFieldsValue());
   };
@@ -46,13 +48,14 @@ export function useSwap(): Swap {
   };
 
   useEffect(() => {
+    if (!defaultToken) return;
     swapForm.setFieldsValue({ sellAsset: defaultToken });
     swapForm.setFieldsValue({ buyAsset: "BTC" });
     getFeeData();
     updateAssetValueInfo(defaultToken, "BTC");
   }, []);
 
-  const onFormFinish = (name: string, info: FormFinishInfo) => {
+  const onFormFinish = (name: string, info: any) => {
     const { values, forms } = info;
     const { passwordModal } = forms;
     if (name === "passwordModal") {
@@ -63,11 +66,12 @@ export function useSwap(): Swap {
   };
 
   const getFeeData = async () => {
-    const rawFeeData = (await getFeesFromGlobal()).filter(
-      (item) => item.name === "LIMIT ORDER CREATE"
+    console.log(feeParameters);
+    const rawFeeData = feeParameters.filter(
+      (item) => item.name === "LIMIT_ORDER_CREATE"
     )[0];
     setFeeData({
-      amount: rawFeeData.fee,
+      amount: rawFeeData?.fee,
       asset_id: "1.3.0",
     });
   };
@@ -78,6 +82,7 @@ export function useSwap(): Swap {
     const buyAsset = await getAssetBySymbol(values.buyAsset);
 
     console.log(values);
+    console.log("id: ", id);
     const activeKey = getPrivateKey(password, "active");
 
     const amount_to_sell = {
@@ -93,14 +98,14 @@ export function useSwap(): Swap {
     const expiration = new Date(
       new Date().getTime() + 1000 * 60 * 60 * 24 * 365
     ).toISOString();
-
+    console.log(id);
     const trx = {
       type: "limit_order_create",
       params: {
-        fee: {
-          amount: 0,
-          asset_id: "1.3.0",
-        },
+        // fee: {
+        //   amount: 0,
+        //   asset_id: defaultAsset?.id,
+        // },
         seller: id,
         amount_to_sell,
         min_to_receive,
@@ -114,7 +119,7 @@ export function useSwap(): Swap {
 
     try {
       console.log(trx);
-      trxResult = await trxBuilder([trx], [activeKey]);
+      trxResult = await buildTrx([trx], [activeKey]);
     } catch (error) {
       console.log(error);
       setVisible(false);
@@ -178,7 +183,7 @@ export function useSwap(): Swap {
     }
   };
 
-  const formValdation = {
+  const formValidation = {
     sellAmount: [
       { required: true, message: "Sell amount required" },
       { validator: validateSellAmount },
@@ -209,13 +214,14 @@ export function useSwap(): Swap {
 
   const updateAssetValueInfo = async (sellAsset: string, buyAsset: string) => {
     const tickerData = await dbApi("get_ticker", [buyAsset, sellAsset]);
+    console.log(tickerData);
     const buyAssetData = await getAssetBySymbol(buyAsset);
     const buyAmount = swapForm.getFieldValue("buyAmount")
       ? swapForm.getFieldValue("buyAmount")
       : 0;
     const price = tickerData ? Number(tickerData?.latest) : 0;
     const sellPrice = Number(
-      parseFloat(price * buyAmount).toFixed(buyAssetData?.precision)
+      parseFloat(price * buyAmount + "").toFixed(buyAssetData?.precision)
     );
     setAssetValueInfo(`${buyAmount} ${buyAsset} = ${sellPrice} ${sellAsset}`);
   };
@@ -227,7 +233,7 @@ export function useSwap(): Swap {
     confirm,
     handleAssetChange,
     swapForm,
-    formValdation,
+    formValidation,
     feeData,
     swapAsset,
     status,

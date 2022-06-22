@@ -29,6 +29,7 @@ export function useFees(): UseFeesResult {
 
   const getFeesFromGlobal = useCallback(async () => {
     try {
+      console.log("main");
       const globalProperties: GlobalProperties = await dbApi(
         "get_global_properties"
       );
@@ -178,7 +179,6 @@ export function useFees(): UseFeesResult {
   }, [localStorageAccount, dbApi]);
 
   return {
-    getFeesFromGlobal,
     feeParameters,
     findOperationFee,
     calculateTransferFee,
