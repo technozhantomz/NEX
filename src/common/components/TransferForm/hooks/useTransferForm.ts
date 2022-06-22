@@ -197,7 +197,7 @@ export function useTransferForm(): UseTransferFormResult {
         new Error(counterpart.translate(`field.errors.balance_not_enough`))
       );
     }
-
+    setQuantity(value);
     if (isDefaultAsset) {
       const total = Number(value) + feeAmount;
       if ((selectedAccountAsset.amount as number) < total) {
@@ -229,7 +229,6 @@ export function useTransferForm(): UseTransferFormResult {
           )
         );
       }
-      setQuantity(value);
       return Promise.resolve();
     }
   };

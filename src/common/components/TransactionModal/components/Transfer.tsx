@@ -22,20 +22,19 @@ export const Transfer = ({
   return (
     <>
       <Styled.DetailContainer>
-        {/* <p>{counterpart.translate(`field.labels.account_to_upgrade`)}</p> */}
-        <p>From</p>
+        <p>{counterpart.translate(`field.placeholder.from`)}</p>
         <Link href={`/user/${account}`}>{account}</Link>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
-        <p>To</p>
+        <p>{counterpart.translate(`field.placeholder.to`)}</p>
         <Link href={`/user/${to}`}>{to}</Link>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
-        <p>Quantity</p>
+        <p>{counterpart.translate(`field.placeholder.quantity`)}</p>
         <p>{quantity}</p>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
-        <p>Asset</p>
+        <p>{counterpart.translate(`tableHead.asset`)}</p>
         <p>{asset}</p>
       </Styled.DetailContainer>
       <Styled.DetailContainer>

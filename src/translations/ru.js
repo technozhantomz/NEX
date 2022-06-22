@@ -710,6 +710,7 @@ export const ru = {
       new_balance: "Новый баланс:",
       available_balance: "Доступные средства:",
       search_accounts: "Поиск аккаунтов",
+      from: "из",
     },
     labels: {
       withdraw_public_key_address: "Отозвать открытый ключ и адрес",
