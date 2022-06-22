@@ -84,7 +84,7 @@ export const MenuWrapper = styled.div`{
 export const CloseButton = styled(UiButton)`
   color: ${colors.textColor};
   position: absolute;
-  top: 0;
+  top: 5px;
   right: 0;
   z-index: 9999;
   text-align: center;
