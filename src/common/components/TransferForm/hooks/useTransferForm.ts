@@ -29,6 +29,7 @@ export function useTransferForm(): UseTransferFormResult {
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const [quantity, setQuantity] = useState<number>(0);
   const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
     useAccount();
   const { localStorageAccount, assets } = useUserContext();
@@ -92,7 +93,7 @@ export function useTransferForm(): UseTransferFormResult {
   };
 
   const transfer = async (password: string) => {
-    console.log("ss");
+    setTransactionErrorMessage("");
     setSubmittingPassword(true);
     const values = transferForm.getFieldsValue();
     const from = (
@@ -123,7 +124,8 @@ export function useTransferForm(): UseTransferFormResult {
     if (trxResult) {
       formAccountBalancesByName(localStorageAccount);
       setIsPasswordModalVisible(false);
-      setStatus(
+      setTransactionErrorMessage("");
+      setTransactionSuccessMessage(
         counterpart.translate(`field.success.successfully_transferred`, {
           amount: values.amount,
           asset: values.asset,
@@ -136,7 +138,9 @@ export function useTransferForm(): UseTransferFormResult {
     } else {
       setIsPasswordModalVisible(false);
       setSubmittingPassword(false);
-      setStatus(counterpart.translate(`field.errors.server_error`));
+      setTransactionErrorMessage(
+        counterpart.translate(`field.errors.server_error`)
+      );
       setLoadingTransaction(false);
     }
   };
@@ -225,6 +229,7 @@ export function useTransferForm(): UseTransferFormResult {
           )
         );
       }
+      setQuantity(value);
       return Promise.resolve();
     }
   };
@@ -285,5 +290,7 @@ export function useTransferForm(): UseTransferFormResult {
     setTransactionSuccessMessage,
     transfer,
     loadingTransaction,
+    toAccount,
+    quantity,
   };
 }

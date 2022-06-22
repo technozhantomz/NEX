@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 import { FormInstance, Rule } from "../../../../ui/src";
+import { Account } from "../../../types";
 
 export type UseTransferFormResult = {
   status: string;
@@ -19,6 +20,8 @@ export type UseTransferFormResult = {
   transactionSuccessMessage: string;
   transfer: (password: string) => Promise<void>;
   loadingTransaction: boolean;
+  toAccount: Account | undefined;
+  quantity: number;
 };
 
 export type FormField = {

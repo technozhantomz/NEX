@@ -17,7 +17,6 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
     status,
-    // isPasswordModalVisible,
     feeAmount,
     transferForm,
     formValdation,
@@ -32,6 +31,8 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
     transactionSuccessMessage,
     transfer,
     loadingTransaction,
+    toAccount,
+    quantity,
   } = useTransferForm();
   const { defaultAsset } = useAsset();
 
@@ -122,6 +123,19 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
       <PasswordModal
         visible={isPasswordModalVisible}
         onCancel={hidePasswordModal}
+      />
+      <TransactionModal
+        visible={isTransactionModalVisible}
+        onCancel={hideTransactionModal}
+        transactionErrorMessage={transactionErrorMessage}
+        transactionSuccessMessage={transactionSuccessMessage}
+        loadingTransaction={loadingTransaction}
+        account={localStorageAccount}
+        fee={feeAmount}
+        asset={asset}
+        to={toAccount?.name}
+        quantity={quantity}
+        transactionType="transfer"
       />
     </Form.Provider>
   );
