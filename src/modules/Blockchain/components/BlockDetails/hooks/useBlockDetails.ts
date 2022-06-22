@@ -6,6 +6,8 @@ import { BlockTableRow } from "../../../types";
 import { UseBlockDetailsResult } from "./useBlockDetails.types";
 
 export function useBlockDetails(block: string): UseBlockDetailsResult {
+  const [hasNextBlock, setHasNextBlock] = useState<boolean>(false);
+  const [hasPreviousBlock, setHasPreviousBlock] = useState<boolean>(false);
   const [blockDetails, setBlockDetails] = useState<BlockTableRow>({
     key: block,
     blockID: block,
@@ -14,6 +16,8 @@ export function useBlockDetails(block: string): UseBlockDetailsResult {
     witness: "",
   });
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingSideBlocks, setLoadingSideBlocks] = useState<boolean>(true);
+
   const { getBlock } = useBlockchain();
 
   const getBlockDetails = useCallback(async () => {
@@ -37,9 +41,43 @@ export function useBlockDetails(block: string): UseBlockDetailsResult {
     }
   }, [block, setBlockDetails]);
 
+  const getSideBlocks = useCallback(async () => {
+    try {
+      setLoadingSideBlocks(true);
+      const nextBlock = await getBlock(Number(block) + 1);
+      if (nextBlock) {
+        setHasNextBlock(true);
+      } else {
+        setHasNextBlock(false);
+      }
+      const previousBlock = await getBlock(Number(block) - 1);
+      if (previousBlock) {
+        setHasPreviousBlock(true);
+      } else {
+        setHasPreviousBlock(false);
+      }
+      setLoadingSideBlocks(false);
+    } catch (e) {
+      console.log(e);
+      setHasNextBlock(false);
+      setHasPreviousBlock(false);
+      setLoadingSideBlocks(false);
+    }
+  }, [getBlock, block, setHasNextBlock, setHasPreviousBlock]);
+
   useEffect(() => {
     getBlockDetails();
   }, [block]);
 
-  return { blockDetails, loading };
+  useEffect(() => {
+    getSideBlocks();
+  }, [getSideBlocks]);
+
+  return {
+    blockDetails,
+    loading,
+    hasNextBlock,
+    hasPreviousBlock,
+    loadingSideBlocks,
+  };
 }

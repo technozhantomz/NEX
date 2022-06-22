@@ -31,7 +31,7 @@ export const CreateLimitOrder = ({
       )}
       {sell && (
         <Styled.DetailContainer>
-          <p>{counterpart.translate(`field.buttons.sell`)}</p>
+          <p>{counterpart.translate(`buttons.sell`)}</p>
           <p>{sell}</p>
         </Styled.DetailContainer>
       )}

@@ -7,7 +7,13 @@ import React, { useState } from "react";
 import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { VoteType } from "../../../../common/types";
-import { Button, DownOutlined, Menu, Tabs } from "../../../../ui/src";
+import {
+  Button,
+  DownOutlined,
+  Menu,
+  Tabs,
+  UpOutlined,
+} from "../../../../ui/src";
 import { GPOSTab, ProxyTab, VoteTab } from "../../components";
 import { useVoting } from "../../hooks";
 
@@ -72,7 +78,7 @@ const VotingPage: NextPage = () => {
               {tab
                 ? counterpart.translate(`pages.voting.${tab}.heading`)
                 : counterpart.translate(`pages.voting.gpos.heading`)}{" "}
-              <DownOutlined />
+              {!visible ? <DownOutlined /> : <UpOutlined />}
             </Button>
           </Styled.MobileDropdown>
         </Styled.MobileDropdownWrapper>
@@ -89,6 +95,11 @@ const VotingPage: NextPage = () => {
       heading={`${pageMeta.heading}`}
       description={`${pageMeta.description}`}
       dexLayout={true}
+      onClick={() => {
+        if (sm) {
+          visible && setVisible(false);
+        }
+      }}
     >
       <Styled.VotingPageCard>
         <Tabs

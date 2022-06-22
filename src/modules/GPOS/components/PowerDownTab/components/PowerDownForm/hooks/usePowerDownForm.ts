@@ -135,7 +135,7 @@ export function usePowerDownForm({
     );
     if (value <= 0) {
       return Promise.reject(
-        new Error(counterpart.translate(`field.errors.amount_should__greater`))
+        new Error(counterpart.translate(`field.errors.amount_should_greater`))
       );
     }
     if (value > (gposBalances?.availableBalance as number)) {

@@ -12,7 +12,6 @@ import {
 import {
   usePeerplaysApiContext,
   useUserContext,
-  useViewportContext,
 } from "../../../../../common/providers";
 import {
   Asset,
@@ -30,7 +29,6 @@ type Props = {
 };
 
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
-  const { md } = useViewportContext();
   const { historyApi, dbApi } = usePeerplaysApiContext();
   const { exchanges, updateExchanges } = useUpdateExchanges();
   const { setPrecision } = useAsset();
@@ -90,11 +88,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       try {
         setLoadingTradingPairs(true);
         const initPairs: string[] =
-          exchanges.list.length > 0
-            ? md
-              ? exchanges.list.splice(0, 4)
-              : exchanges.list
-            : await getDefaultPairs();
+          exchanges.list.length > 0 ? exchanges.list : await getDefaultPairs();
         const tradingPairsStats = await Promise.all(
           initPairs.map(formPairStats)
         );

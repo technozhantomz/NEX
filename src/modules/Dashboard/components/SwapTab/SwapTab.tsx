@@ -10,6 +10,8 @@ import {
   SwapOutlined,
 } from "../../../../ui/src";
 
+import { useUserContext } from "../../../../common/providers";
+
 import * as Styled from "./SwapTab.styled";
 import { useSwap } from "./hooks/useSwapTab";
 

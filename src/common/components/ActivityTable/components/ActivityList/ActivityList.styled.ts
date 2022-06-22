@@ -2,6 +2,20 @@ import { styled, List as UiList } from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 
+export const StyledList = styled(UiList)`
+  .ant-list-pagination {
+    margin-top: 16px;
+    margin-right: 25px;
+  }
+  .ant-pagination-item {
+    border: none;
+  }
+  .ant-pagination.mini .ant-pagination-item,
+  .ant-pagination-item-active {
+    border-right: 2px solid ${colors.borderColorBase};
+  }
+`;
+
 export const ActivityListItem = styled(UiList.Item)`
   padding: 25px 25px;
   a {

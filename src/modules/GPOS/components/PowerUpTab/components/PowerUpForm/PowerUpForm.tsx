@@ -1,6 +1,8 @@
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
+import { KeyboardEvent } from "react";
 
+import { utils } from "../../../../../../api/utils";
 import {
   PasswordModal,
   TransactionModal,
@@ -114,6 +116,12 @@ export const PowerUpForm = ({
                   -
                 </Button>
               }
+              type="number"
+              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                if (!utils.isNumberKey(e)) {
+                  e.preventDefault();
+                }
+              }}
             />
           </Form.Item>
           <Form.Item

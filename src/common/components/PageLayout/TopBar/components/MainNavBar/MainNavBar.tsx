@@ -1,4 +1,6 @@
 import {
+  Avatar,
+  Badge,
   BellOutlined,
   MenuOutlined,
   MoreOutlined,
@@ -24,6 +26,7 @@ export const MainNavBar = (): JSX.Element => {
     notificationMenuOpen,
     profileMenuOpen,
     mainMenuOpen,
+    hasUnreadMessages,
   } = useMenuContext();
   const CloseButton = (
     <>
@@ -41,17 +44,47 @@ export const MainNavBar = (): JSX.Element => {
       <Styled.MainNavBar>
         {localStorageAccount ? (
           <>
-            <BellOutlined
-              className={"bell"}
-              onMouseOver={() => openMenu("notify")}
-              onClick={() => openMenu("notify")}
-            />
+            {hasUnreadMessages ? (
+              <>
+                <Badge dot>
+                  <Avatar
+                    icon={
+                      <BellOutlined
+                        onMouseOver={() => openMenu("notify")}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openMenu("notify");
+                        }}
+                      />
+                    }
+                  />
+                </Badge>
+              </>
+            ) : (
+              <>
+                <Avatar
+                  icon={
+                    <BellOutlined
+                      onMouseOver={() => openMenu("notify")}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openMenu("notify");
+                      }}
+                    />
+                  }
+                />
+              </>
+            )}
+
             {sm ? (
               ""
             ) : (
               <div
                 onMouseOver={() => openMenu("profile")}
-                onClick={() => openMenu("profile")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openMenu("profile");
+                }}
               >
                 <Styled.MainNavBarAvatar
                   icon={localStorageAccount ? "" : <UserOutlined />}
@@ -68,13 +101,19 @@ export const MainNavBar = (): JSX.Element => {
           <MenuOutlined
             className={"hambuger"}
             onMouseOver={() => openMenu("main")}
-            onClick={() => openMenu("main")}
+            onClick={(e) => {
+              e.stopPropagation();
+              openMenu("main");
+            }}
           />
         ) : (
           <MoreOutlined
             className={"hambuger"}
             onMouseOver={() => openMenu("main")}
-            onClick={() => openMenu("main")}
+            onClick={(e) => {
+              e.stopPropagation();
+              openMenu("main");
+            }}
           />
         )}
       </Styled.MainNavBar>

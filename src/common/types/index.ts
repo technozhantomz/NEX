@@ -20,3 +20,4 @@ export * from "./WitnessAccount";
 export * from "./Proxy";
 export * from "./GPOS";
 export * from "./VestingBalance";
+export * from "./Notification";

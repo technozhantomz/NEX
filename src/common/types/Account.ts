@@ -117,3 +117,12 @@ export type AccountStatistics = {
   total_core_in_orders: number;
   total_ops: number;
 };
+
+export type ActivityRow = {
+  key: string;
+  time: string;
+  type: string;
+  info: string;
+  id: string;
+  fee: string;
+};
