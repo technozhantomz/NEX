@@ -88,7 +88,10 @@ export function useCommitteeTab(): UseCommitteeTabResult {
   );
 
   useEffect(() => {
-    setInterval(() => getCommitteesTableRows(), 3000);
+    const committeeInterval = setInterval(() => getCommitteesTableRows(), 3000);
+    return () => {
+      clearInterval(committeeInterval);
+    };
   }, [defaultAsset]);
 
   return {

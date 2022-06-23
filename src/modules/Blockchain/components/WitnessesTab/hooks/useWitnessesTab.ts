@@ -139,7 +139,10 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   );
 
   useEffect(() => {
-    setInterval(() => getWitnessData(), 3000);
+    const witnessInterval = setInterval(() => getWitnessData(), 3000);
+    return () => {
+      clearInterval(witnessInterval);
+    };
   }, [defaultAsset]);
 
   return {

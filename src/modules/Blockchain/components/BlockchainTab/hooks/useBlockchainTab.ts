@@ -157,7 +157,13 @@ export function useBlockchainTab(
   useEffect(() => {
     const intervalTime =
       blockchainData.avgTime > 0 ? blockchainData.avgTime * 1000 : 3000;
-    setInterval(() => getBlockchainData(), intervalTime);
+    const blockchainInterval = setInterval(
+      () => getBlockchainData(),
+      intervalTime
+    );
+    return () => {
+      clearInterval(blockchainInterval);
+    };
   }, [defaultAsset, getBlockchainData, routerQuery]);
 
   return {
