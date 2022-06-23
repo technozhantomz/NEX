@@ -17,7 +17,8 @@ import { UseActivityResult } from "./useActivity.types";
 
 export function useActivity(): UseActivityResult {
   const { getUserNameById, getAccountByName } = useAccount();
-  const { formAssetBalanceById, getAssetById, setPrecision } = useAsset();
+  const { formAssetBalanceById, getAssetById, setPrecision, getAssetBySymbol } =
+    useAsset();
   const { defaultAsset } = useAssetsContext();
   const { dbApi } = usePeerplaysApiContext();
   const { sm } = useViewportContext();
@@ -241,14 +242,17 @@ export function useActivity(): UseActivityResult {
       asset_id: string;
       amount: number;
     }) => {
-      const asset = await formAssetBalanceById(asset_id, amount);
+      const defaultAsset = await getAssetBySymbol(defaultToken as string);
+      const asset = await formAssetBalanceById(defaultAsset.id, amount);
+      const feePoolAsset = await getAssetById(asset_id);
       const from = await getUserNameById(from_account);
       return counterpart.translate(
         `transaction.trxTypes.asset_fund_fee_pool.description`,
         {
           from: `[userlink = ${from}]`,
-          symbol: asset.symbol,
+          symbol: feePoolAsset.symbol,
           amount: asset.amount,
+          defaultToken,
         }
       );
     },

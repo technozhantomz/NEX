@@ -78,7 +78,7 @@ export const ru = {
       asset_fund_fee_pool: {
         title: "Пул комиссий за активы фонда",
         description:
-          "%(from)s, финансируемый %(symbol)s комиссионный пул с %(amount)s",
+          "%(from)s, финансируемый %(symbol)s комиссионный пул с %(amount)s %(defaultToken)s",
       },
       asset_global_settle: {
         title: "Глобальный расчет активов",

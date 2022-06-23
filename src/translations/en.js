@@ -76,7 +76,8 @@ export const en = {
       },
       asset_fund_fee_pool: {
         title: "Fund asset fee pool",
-        description: "%(from)s, funded %(symbol)s fee pool with %(amount)s",
+        description:
+          "%(from)s, funded %(symbol)s fee pool with %(amount)s %(defaultToken)s",
       },
       asset_global_settle: {
         title: "Global asset settlement",
