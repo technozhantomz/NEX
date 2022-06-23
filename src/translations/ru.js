@@ -823,8 +823,7 @@ export const ru = {
       successfully_transferred:
         "Успешно переведено %(amount)s %(asset)s к %(to)s",
       successfully_withdraw: "Успешно отозвать",
-      successfully_withdrawn:
-        "Успешно отозвано %(withdrawAmount)s %(precision)s",
+      successfully_withdrawn: "Успешно отозвано %(withdrawAmount)s %(symbol)s",
       successfully_deposited:
         "Успешно депонирован %(depositAmount)s %(symbol)s",
       limit_order_successfully: "You have successfully created a limit order",

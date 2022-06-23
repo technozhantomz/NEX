@@ -821,7 +821,7 @@ export const en = {
         "Successfully Transferred %(amount)s %(asset)s to %(to)s",
       successfully_withdraw: "Successfully withdraw",
       successfully_withdrawn:
-        "Successfully Withdrawn %(withdrawAmount)s %(precision)s",
+        "Successfully Withdrawn %(withdrawAmount)s %(symbol)s",
       successfully_deposited:
         "Successfully Deposited %(depositAmount)s %(symbol)s",
       limit_order_successfully: "You have successfully created a limit order",

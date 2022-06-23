@@ -1,5 +1,6 @@
 import counterpart from "counterpart";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import * as Styled from "../TransactionModal.styled";
@@ -15,6 +16,13 @@ export const WithdrawVestingBalance = ({
   withdrawalAmount,
   account,
 }: Props): JSX.Element => {
+  const prevWithdrawalAmount = useRef<number>();
+  useEffect(() => {
+    if (withdrawalAmount || !prevWithdrawalAmount.current) {
+      prevWithdrawalAmount.current = withdrawalAmount;
+    }
+  });
+
   return (
     <>
       {account && (
@@ -24,10 +32,12 @@ export const WithdrawVestingBalance = ({
         </Styled.DetailContainer>
       )}
 
-      {withdrawalAmount && (
+      {prevWithdrawalAmount && (
         <Styled.DetailContainer>
           <p>{counterpart.translate(`field.labels.withdrawal_amount`)}</p>
-          <p>{`${withdrawalAmount} ${defaultToken}`}</p>
+          <p>{`${
+            !withdrawalAmount ? prevWithdrawalAmount.current : withdrawalAmount
+          } ${defaultToken}`}</p>
         </Styled.DetailContainer>
       )}
       <Styled.DetailContainer>
