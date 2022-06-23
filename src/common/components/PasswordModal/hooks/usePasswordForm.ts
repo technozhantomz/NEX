@@ -8,9 +8,9 @@ import { useUserContext } from "../../../providers";
 import { IPasswordForm, IUsePasswordForm } from "./usePasswordForm.types";
 
 export function usePasswordForm(): IUsePasswordForm {
-  const { localStorageAccount } = useUserContext();
+  const { account } = useUserContext();
   const [passwordModalForm] = Form.useForm();
-  const { getAccountByName, validateAccountPassword } = useAccount();
+  const { validateAccountPassword } = useAccount();
 
   const useResetFormOnCloseModal = (
     form: FormInstance<IPasswordForm>,
@@ -30,7 +30,6 @@ export function usePasswordForm(): IUsePasswordForm {
   };
 
   const validatePassword = async (_: unknown, value: string) => {
-    const account = await getAccountByName(localStorageAccount);
     let checkPassword = false;
     if (account) {
       checkPassword = validateAccountPassword(value, account);
