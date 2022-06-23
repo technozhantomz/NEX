@@ -1,14 +1,15 @@
 import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
-import { useAccount, useAsset } from "..";
+import { useAccount } from "..";
+import { useAssetsContext } from "../../providers";
 import { Account, Asset, Transaction } from "../../types";
 
 import { UseTransferTransactionBuilderResult } from "./useTransferTransactionBuilder.types";
 
 export function useTransferTransactionBuilder(): UseTransferTransactionBuilderResult {
   const { getPrivateKey } = useAccount();
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   const buildTransferTransaction = useCallback(
     (

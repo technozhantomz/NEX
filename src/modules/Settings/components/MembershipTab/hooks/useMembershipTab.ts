@@ -11,6 +11,7 @@ import {
   useTransactionBuilder,
 } from "../../../../../common/hooks";
 import {
+  useAssetsContext,
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
@@ -20,7 +21,8 @@ import { Form } from "../../../../../ui/src";
 import { UseMembershipTabResult } from "./useMembershipTab.types";
 
 export function useMembershipTab(): UseMembershipTabResult {
-  const { defaultAsset, setPrecision } = useAsset();
+  const { setPrecision } = useAsset();
+  const { defaultAsset } = useAssetsContext();
   const { name, id, assets, localStorageAccount } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
   const { getPrivateKey, getFullAccount, formAccountBalancesByName } =

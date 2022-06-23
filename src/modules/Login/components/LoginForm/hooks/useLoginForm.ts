@@ -68,9 +68,12 @@ export function useLoginForm(): ILoginForm {
         return Promise.reject(
           new Error(counterpart.translate(`field.errors.password_incorrect`))
         );
+      return Promise.resolve();
+    } else {
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.user_name_first`))
+      );
     }
-
-    return Promise.resolve();
   };
 
   const formValdation = {

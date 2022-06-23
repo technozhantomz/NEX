@@ -1,12 +1,13 @@
 import { useCallback } from "react";
 
-import { roundNum, useAsset } from "..";
+import { roundNum } from "..";
+import { useAssetsContext } from "../../providers";
 import { Amount, Asset, Transaction } from "../../types";
 
 import { UseLimitOrderTransactionBuilderResult } from "./useLimitOrderTransactionBuilder.types";
 
 export function useLimitOrderTransactionBuilder(): UseLimitOrderTransactionBuilderResult {
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   const buildCreateLimitOrderTransaction = useCallback(
     (

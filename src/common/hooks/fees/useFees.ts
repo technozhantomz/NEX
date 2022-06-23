@@ -1,9 +1,13 @@
 import { ChainTypes, TransactionHelper } from "peerplaysjs-lib";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
-import { useAccount, useAsset } from "..";
-import { usePeerplaysApiContext, useUserContext } from "../../providers";
-import { Account, Asset, FeeParameter, GlobalProperties } from "../../types";
+import { useAsset } from "..";
+import {
+  useAssetsContext,
+  useFeesContext,
+  useUserContext,
+} from "../../providers";
+import { Asset, FeeParameter } from "../../types";
 
 import {
   ChainOperations,
@@ -12,32 +16,11 @@ import {
 } from "./useFees.types";
 
 export function useFees(): UseFeesResult {
-  const [feeParameters, setFeeParameters] = useState<FeeParameter[]>([]);
-  const [account, _setAccount] = useState<Account>();
-  const { dbApi } = usePeerplaysApiContext();
-  const { getAccountByName } = useAccount();
-  const { localStorageAccount } = useUserContext();
+  const { feeParameters } = useFeesContext();
+  const { account } = useUserContext();
   const defaultNonce = TransactionHelper.unique_nonce_uint64();
-  const { defaultAsset, setPrecision } = useAsset();
-
-  const setAccount = useCallback(async () => {
-    const acc = await getAccountByName(localStorageAccount);
-    if (acc) {
-      _setAccount(acc);
-    }
-  }, [getAccountByName, localStorageAccount, _setAccount]);
-
-  const getFeesFromGlobal = useCallback(async () => {
-    try {
-      const globalProperties: GlobalProperties = await dbApi(
-        "get_global_properties"
-      );
-      const feeParameters = globalProperties.parameters.current_fees.parameters;
-      setFeeParameters(feeParameters);
-    } catch (e) {
-      console.log(e);
-    }
-  }, [dbApi, setFeeParameters]);
+  const { setPrecision } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   const findOperationFee = useCallback(
     (operationType: string): FeeParameter | undefined => {
@@ -189,13 +172,7 @@ export function useFees(): UseFeesResult {
     setPrecision,
   ]);
 
-  useEffect(() => {
-    getFeesFromGlobal();
-    setAccount();
-  }, [localStorageAccount, dbApi]);
-
   return {
-    feeParameters,
     findOperationFee,
     calculateTransferFee,
     calculateAccountUpgradeFee,

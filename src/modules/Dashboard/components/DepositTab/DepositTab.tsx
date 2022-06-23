@@ -5,8 +5,8 @@ import {
   GenerateBitcoinAddress,
   HIVEAndHBDDeposit,
 } from "../../../../common/components";
-import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
-import { useUserContext } from "../../../../common/providers";
+import { useSidechainAccounts } from "../../../../common/hooks";
+import { useAssetsContext, useUserContext } from "../../../../common/providers";
 
 import * as Styled from "./DepositTab.styled";
 import { useDepositTab } from "./hooks";
@@ -19,7 +19,7 @@ export const DepositTab = (): JSX.Element => {
     loadingSidechainAccounts,
   } = useSidechainAccounts();
   const { localStorageAccount } = useUserContext();
-  const { sidechainAssets } = useAsset();
+  const { sidechainAssets } = useAssetsContext();
   const { handleAssetChange, selectedAsset } = useDepositTab();
   return (
     <Styled.DepositFormContainer>

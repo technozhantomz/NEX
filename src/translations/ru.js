@@ -766,6 +766,7 @@ export const ru = {
       enable_notifications: "Включить уведомления",
     },
     errors: {
+      user_name_first: "Сначала укажите действительное имя пользователя",
       same_account: "Так же, как ваш аккаунт",
       no_account: "аккаунт не найден",
       added_account: "Аккаунт уже добавлен",

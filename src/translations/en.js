@@ -761,6 +761,7 @@ export const en = {
       enable_notifications: "Enable Notifications",
     },
     errors: {
+      user_name_first: "Please provide a valid username first",
       same_account: "Same as your account",
       no_account: "Account not found",
       added_account: "Account is already added",

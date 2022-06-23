@@ -1,4 +1,4 @@
-import { Asset } from "../../types";
+import { Account, Asset } from "../../types";
 
 export type UserContextType = {
   localStorageAccount: string;
@@ -7,7 +7,13 @@ export type UserContextType = {
   name: string;
   assets: Asset[];
   password: string;
-  updateAccount: (id: string, name: string, assets: Asset[]) => void;
+  updateAccount: (
+    id: string,
+    name: string,
+    assets: Asset[],
+    account: Account | undefined
+  ) => void;
   setAssets: (assets: Asset[]) => void;
   setPassword: (password: string) => void;
+  account: Account | undefined;
 };

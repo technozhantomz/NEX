@@ -54,7 +54,7 @@ export function useAccount(): UseAccountResult {
   );
 
   const removeAccount = useCallback(() => {
-    updateAccount("", "", []);
+    updateAccount("", "", [], undefined);
     setPassword("");
     setLocalStorageAccount("");
   }, [updateAccount, setPassword, setLocalStorageAccount]);
@@ -68,7 +68,12 @@ export function useAccount(): UseAccountResult {
             return formAssetBalanceById(balance.asset_type, balance.balance);
           })
         );
-        updateAccount(fullAccount.account.id, fullAccount.account.name, assets);
+        updateAccount(
+          fullAccount.account.id,
+          fullAccount.account.name,
+          assets,
+          fullAccount.account
+        );
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -92,7 +97,8 @@ export function useAccount(): UseAccountResult {
           updateAccount(
             fullAccount.account.id,
             fullAccount.account.name,
-            assets
+            assets,
+            fullAccount.account
           );
         }
         setLoading(false);

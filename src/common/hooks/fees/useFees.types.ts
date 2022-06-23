@@ -15,7 +15,6 @@ export type UseFeesResult = {
     quote: Asset
   ) => CreateLimitOrderFee | undefined;
   calculateCancelLimitOrderFee: () => number | undefined;
-  feeParameters: FeeParameter[];
 };
 
 export type CreateLimitOrderFee = {

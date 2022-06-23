@@ -9,7 +9,10 @@ import {
   useTransactionBuilder,
   useUpdateAccountTransactionBuilder,
 } from "../../../../../../common/hooks";
-import { useUserContext } from "../../../../../../common/providers";
+import {
+  useAssetsContext,
+  useUserContext,
+} from "../../../../../../common/providers";
 import {
   AccountOptions,
   Asset,
@@ -56,7 +59,8 @@ export function useVoteTab({
   const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
 
-  const { defaultAsset, formAssetBalanceById } = useAsset();
+  const { formAssetBalanceById } = useAsset();
+  const { defaultAsset } = useAssetsContext();
   const { getPrivateKey, formAccountBalancesByName } = useAccount();
   const { id, assets, name, localStorageAccount } = useUserContext();
   const { buildUpdateAccountTransaction } =

@@ -5,6 +5,7 @@ import { useCallback } from "react";
 import { useAccountHistory, useAsset } from "..";
 import { defaultToken } from "../../../api/params";
 import {
+  useAssetsContext,
   usePeerplaysApiContext,
   useUserContext,
   useViewportContext,
@@ -16,8 +17,8 @@ import { UseActivityResult } from "./useActivity.types";
 
 export function useActivity(): UseActivityResult {
   const { getUserNameById, getAccountByName } = useAccount();
-  const { formAssetBalanceById, getAssetById, setPrecision, defaultAsset } =
-    useAsset();
+  const { formAssetBalanceById, getAssetById, setPrecision } = useAsset();
+  const { defaultAsset } = useAssetsContext();
   const { dbApi } = usePeerplaysApiContext();
   const { sm } = useViewportContext();
   const { getAccountHistoryById } = useAccountHistory();

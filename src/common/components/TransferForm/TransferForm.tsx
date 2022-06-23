@@ -1,8 +1,7 @@
 import counterpart from "counterpart";
 
 import { Form, Input } from "../../../ui/src";
-import { useAsset } from "../../hooks";
-import { useUserContext } from "../../providers";
+import { useAssetsContext, useUserContext } from "../../providers";
 import { PasswordModal } from "../PasswordModal";
 
 import * as Styled from "./TransferForm.styled";
@@ -26,7 +25,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
     handleValuesChange,
     submittingPassword,
   } = useTransferForm();
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   return (
     <Form.Provider onFormFinish={onFormFinish}>

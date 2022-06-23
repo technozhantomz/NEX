@@ -7,7 +7,7 @@ import React, {
 } from "react";
 
 import { useAsset, useLocalStorage } from "../../hooks";
-import { Asset, FullAccount } from "../../types";
+import { Account, Asset, FullAccount } from "../../types";
 import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
 import { UserContextType } from "./UserProvider.types";
@@ -50,14 +50,21 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const [assets, _setAssets] = useState<Asset[]>([]);
   // should add lock time functionality
   const [password, _setPassword] = useState<string>("");
+  const [account, setAccount] = useState<Account | undefined>();
 
   const updateAccount = useCallback(
-    (id: string, name: string, assets: Asset[]) => {
+    (
+      id: string,
+      name: string,
+      assets: Asset[],
+      account: Account | undefined
+    ) => {
       setId(id);
       setName(name);
       _setAssets(assets);
+      setAccount(account);
     },
-    [setId, setName, _setAssets]
+    [setId, setName, _setAssets, setAccount]
   );
 
   const setAssets = useCallback(
@@ -92,7 +99,8 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
           updateAccount(
             fullAccount.account.id,
             fullAccount.account.name,
-            assets
+            assets,
+            fullAccount.account
           );
         }
       } catch (e) {
@@ -114,6 +122,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         id,
         name,
         assets,
+        account,
         localStorageAccount,
         setLocalStorageAccount,
         password,
