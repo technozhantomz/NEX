@@ -155,6 +155,7 @@ export const OrderBook = ({
                 : undefined
               : orderColumns
           }
+          scroll={{ x: true }}
           dataSource={dataSource}
           rowClassName={(record: any) => {
             return record.isBuyOrder ? "buy" : "sell";
