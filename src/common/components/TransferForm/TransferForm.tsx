@@ -1,5 +1,7 @@
 import counterpart from "counterpart";
+import { KeyboardEvent } from "react";
 
+import { utils } from "../../../api/utils";
 import { Form, Input } from "../../../ui/src";
 import { useHandleTransactionForm } from "../../hooks";
 import { useAssetsContext, useUserContext } from "../../providers";
@@ -16,7 +18,6 @@ type Props = {
 export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
-    status,
     feeAmount,
     transferForm,
     formValdation,
@@ -53,6 +54,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
         onFinish={showPasswordModal}
         size="large"
         onValuesChange={handleValuesChange}
+        validateTrigger={["onBlur", "onSubmit"]}
       >
         <div className="two-input-row">
           <Form.Item
@@ -73,6 +75,11 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             <Input
               placeholder={counterpart.translate(`field.placeholder.quantity`)}
               type="number"
+              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                if (!utils.isNumberKey(e)) {
+                  e.preventDefault();
+                }
+              }}
             />
           </Form.Item>
         </div>
@@ -109,7 +116,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             defaultAsset: defaultAsset ? defaultAsset.symbol : "",
           })}
         </p>
-        {status === "" ? "" : <p>{status}</p>}
+
         <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">
             {counterpart.translate(`buttons.send`)}
