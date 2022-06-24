@@ -2,7 +2,7 @@ import counterpart from "counterpart";
 import { ChainTypes } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
-import { useAccountHistory, useAsset } from "..";
+import { useAccountHistory, useAsset, useFormDate } from "..";
 import { defaultToken } from "../../../api/params";
 import {
   useAssetsContext,
@@ -24,13 +24,15 @@ export function useActivity(): UseActivityResult {
   const { sm } = useViewportContext();
   const { getAccountHistoryById } = useAccountHistory();
   const { id } = useUserContext();
+  const { convertUTCDateToLocalDate } = useFormDate();
 
   const formDate = useCallback(
     (
       date: string | number | Date,
       pattern = ["day", "month", "date", "year"]
     ): string => {
-      const newDate = String(new Date(date)).split(" ");
+      const localDate = convertUTCDateToLocalDate(new Date(date));
+      const newDate = String(localDate).split(" ");
       const dateObj: {
         [segment: string]: string;
       } = {
@@ -47,7 +49,10 @@ export function useActivity(): UseActivityResult {
           dateObj.time
         );
       }
-      return String(date).replace("T", " ");
+
+      return `${dateObj.year}-${
+        localDate.getMonth() + 1
+      }-${localDate.getDate()} ${dateObj.time}`;
     },
     [sm]
   );
@@ -426,7 +431,7 @@ export function useActivity(): UseActivityResult {
         }`,
       } as ActivityRow;
     },
-    [dbApi, defaultAsset, getAssetById, formDate, formActivityDescription]
+    [dbApi, defaultAsset, getAssetById, formActivityDescription]
   );
 
   const getActivitiesRows = useCallback(

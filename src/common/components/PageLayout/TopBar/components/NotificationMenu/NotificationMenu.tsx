@@ -37,6 +37,7 @@ export const NotificationMenu = (): JSX.Element => {
     loadingNotifications,
   });
   const { localStorageAccount } = useUserContext();
+  const { formDate } = useFormDate();
 
   return (
     <MenuCard bordered={false}>
@@ -265,7 +266,7 @@ export const NotificationMenu = (): JSX.Element => {
             thirdClusterNotifications.length > 0 ? (
               <>
                 <Styled.TimeSpecification>
-                  {useFormDate(thirdClusterNotifications[0].activity.time)}
+                  {formDate(thirdClusterNotifications[0].activity.time)}
                 </Styled.TimeSpecification>
                 <List
                   loading={loadingNotifications}
