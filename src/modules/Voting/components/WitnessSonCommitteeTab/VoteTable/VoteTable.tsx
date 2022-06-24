@@ -104,9 +104,15 @@ export const VoteTable = ({
                   <div className="vote-info">
                     <span className="vote-info-title">{columns[1].title}</span>
                     <span className="vote-info-value">
-                      <a target="_blank" href={(item as VoteRow).website}>
-                        {(item as VoteRow).website}
-                      </a>
+                      {(item as VoteRow).website == "" ? (
+                        <span>
+                          {counterpart.translate(`field.labels.not_available`)}
+                        </span>
+                      ) : (
+                        <a target="_blank" href={(item as VoteRow).website}>
+                          {(item as VoteRow).website}
+                        </a>
+                      )}
                     </span>
                   </div>
                   <div className="vote-info">
