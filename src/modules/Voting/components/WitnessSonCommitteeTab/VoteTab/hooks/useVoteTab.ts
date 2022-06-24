@@ -207,6 +207,8 @@ export function useVoteTab({
             counterpart.translate(`field.success.published_votes`)
           );
           setLoadingTransaction(false);
+          setServerApprovedRows([...localApprovedRows]);
+          setLocalApprovedRows([...localApprovedRows]);
         } else {
           setTransactionErrorMessage(
             counterpart.translate(`field.errors.unable_transaction`)
@@ -227,6 +229,9 @@ export function useVoteTab({
       formAccountBalancesByName,
       localStorageAccount,
       getVotes,
+      localApprovedRows,
+      setServerApprovedRows,
+      setLocalApprovedRows,
     ]
   );
 
