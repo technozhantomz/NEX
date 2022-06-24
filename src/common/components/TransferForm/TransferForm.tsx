@@ -1,8 +1,12 @@
 import counterpart from "counterpart";
+import { KeyboardEvent } from "react";
 
+import { utils } from "../../../api/utils";
 import { Form, Input } from "../../../ui/src";
+import { useHandleTransactionForm } from "../../hooks";
 import { useAssetsContext, useUserContext } from "../../providers";
 import { PasswordModal } from "../PasswordModal";
+import { TransactionModal } from "../TransactionModal";
 
 import * as Styled from "./TransferForm.styled";
 import { useTransferForm } from "./hooks";
@@ -14,27 +18,43 @@ type Props = {
 export const TransferForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
-    status,
-    isPasswordModalVisible,
     feeAmount,
     transferForm,
     formValdation,
-    handlePasswordModalCancel,
-    confirm,
-    onFormFinish,
     handleValuesChange,
-    submittingPassword,
+    setTransactionErrorMessage,
+    transactionErrorMessage,
+    setTransactionSuccessMessage,
+    transactionSuccessMessage,
+    transfer,
+    loadingTransaction,
+    toAccount,
+    quantity,
   } = useTransferForm();
   const { defaultAsset } = useAssetsContext();
 
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: transfer,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
+
   return (
-    <Form.Provider onFormFinish={onFormFinish}>
+    <Form.Provider onFormFinish={handleFormFinish}>
       <Styled.TransferForm
         form={transferForm}
         name="transferForm"
-        onFinish={confirm}
+        onFinish={showPasswordModal}
         size="large"
         onValuesChange={handleValuesChange}
+        validateTrigger={["onBlur", "onSubmit"]}
       >
         <div className="two-input-row">
           <Form.Item
@@ -55,6 +75,11 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             <Input
               placeholder={counterpart.translate(`field.placeholder.quantity`)}
               type="number"
+              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                if (!utils.isNumberKey(e)) {
+                  e.preventDefault();
+                }
+              }}
             />
           </Form.Item>
         </div>
@@ -91,7 +116,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             defaultAsset: defaultAsset ? defaultAsset.symbol : "",
           })}
         </p>
-        {status === "" ? "" : <p>{status}</p>}
+
         <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">
             {counterpart.translate(`buttons.send`)}
@@ -100,8 +125,20 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
       </Styled.TransferForm>
       <PasswordModal
         visible={isPasswordModalVisible}
-        onCancel={handlePasswordModalCancel}
-        submitting={submittingPassword}
+        onCancel={hidePasswordModal}
+      />
+      <TransactionModal
+        visible={isTransactionModalVisible}
+        onCancel={hideTransactionModal}
+        transactionErrorMessage={transactionErrorMessage}
+        transactionSuccessMessage={transactionSuccessMessage}
+        loadingTransaction={loadingTransaction}
+        account={localStorageAccount}
+        fee={feeAmount}
+        asset={asset}
+        to={toAccount?.name}
+        quantity={quantity}
+        transactionType="transfer"
       />
     </Form.Provider>
   );

@@ -708,6 +708,7 @@ export const en = {
       new_balance: "New Balance:",
       available_balance: "Available Balance:",
       search_accounts: "Search Accounts",
+      from: "From",
     },
     labels: {
       withdraw_public_key_address: "Withdraw Public key & Address",
