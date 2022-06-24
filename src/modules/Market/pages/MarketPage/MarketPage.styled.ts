@@ -20,7 +20,7 @@ export const StatsCardsDeck = styled(UIStatsCardsDeck)`
     flex-wrap: nowrap;
     justify-content: flex-start;
     .trading-card {
-      width: 203px;
+      min-width: 203px;
       margin: 0 10px;
     }
   }

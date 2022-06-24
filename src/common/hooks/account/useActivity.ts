@@ -2,9 +2,10 @@ import counterpart from "counterpart";
 import { ChainTypes } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
-import { useAccountHistory, useAsset } from "..";
+import { useAccountHistory, useAsset, useFormDate } from "..";
 import { defaultToken } from "../../../api/params";
 import {
+  useAssetsContext,
   usePeerplaysApiContext,
   useUserContext,
   useViewportContext,
@@ -16,19 +17,22 @@ import { UseActivityResult } from "./useActivity.types";
 
 export function useActivity(): UseActivityResult {
   const { getUserNameById, getAccountByName } = useAccount();
-  const { formAssetBalanceById, getAssetById, setPrecision, defaultAsset } =
+  const { formAssetBalanceById, getAssetById, setPrecision, getAssetBySymbol } =
     useAsset();
+  const { defaultAsset } = useAssetsContext();
   const { dbApi } = usePeerplaysApiContext();
   const { sm } = useViewportContext();
   const { getAccountHistoryById } = useAccountHistory();
   const { id } = useUserContext();
+  const { convertUTCDateToLocalDate } = useFormDate();
 
   const formDate = useCallback(
     (
       date: string | number | Date,
       pattern = ["day", "month", "date", "year"]
     ): string => {
-      const newDate = String(new Date(date)).split(" ");
+      const localDate = convertUTCDateToLocalDate(new Date(date));
+      const newDate = String(localDate).split(" ");
       const dateObj: {
         [segment: string]: string;
       } = {
@@ -45,7 +49,10 @@ export function useActivity(): UseActivityResult {
           dateObj.time
         );
       }
-      return String(date).replace("T", " ");
+
+      return `${dateObj.year}-${
+        localDate.getMonth() + 1
+      }-${localDate.getDate()} ${dateObj.time}`;
     },
     [sm]
   );
@@ -240,14 +247,17 @@ export function useActivity(): UseActivityResult {
       asset_id: string;
       amount: number;
     }) => {
-      const asset = await formAssetBalanceById(asset_id, amount);
+      const defaultAsset = await getAssetBySymbol(defaultToken as string);
+      const asset = await formAssetBalanceById(defaultAsset.id, amount);
+      const feePoolAsset = await getAssetById(asset_id);
       const from = await getUserNameById(from_account);
       return counterpart.translate(
         `transaction.trxTypes.asset_fund_fee_pool.description`,
         {
           from: `[userlink = ${from}]`,
-          symbol: asset.symbol,
+          symbol: feePoolAsset.symbol,
           amount: asset.amount,
+          defaultToken,
         }
       );
     },
@@ -421,7 +431,7 @@ export function useActivity(): UseActivityResult {
         }`,
       } as ActivityRow;
     },
-    [dbApi, defaultAsset, getAssetById, formDate, formActivityDescription]
+    [dbApi, defaultAsset, getAssetById, formActivityDescription]
   );
 
   const getActivitiesRows = useCallback(

@@ -78,7 +78,7 @@ export const ru = {
       asset_fund_fee_pool: {
         title: "Пул комиссий за активы фонда",
         description:
-          "%(from)s, финансируемый %(symbol)s комиссионный пул с %(amount)s",
+          "%(from)s, финансируемый %(symbol)s комиссионный пул с %(amount)s %(defaultToken)s",
       },
       asset_global_settle: {
         title: "Глобальный расчет активов",
@@ -752,6 +752,7 @@ export const ru = {
       withdrawal_amount: "Сумма вывода",
       today: "Сегодня",
       yesterday: "вчерашний день",
+      order_to_cancel: "Заказ на отмену",
     },
     comments: {
       deposit_hbd:
@@ -766,6 +767,7 @@ export const ru = {
       enable_notifications: "Включить уведомления",
     },
     errors: {
+      user_name_first: "Сначала укажите действительное имя пользователя",
       same_account: "Так же, как ваш аккаунт",
       no_account: "аккаунт не найден",
       added_account: "Аккаунт уже добавлен",
@@ -822,8 +824,7 @@ export const ru = {
       successfully_transferred:
         "Успешно переведено %(amount)s %(asset)s к %(to)s",
       successfully_withdraw: "Успешно отозвать",
-      successfully_withdrawn:
-        "Успешно отозвано %(withdrawAmount)s %(precision)s",
+      successfully_withdrawn: "Успешно отозвано %(withdrawAmount)s %(symbol)s",
       successfully_deposited:
         "Успешно депонирован %(depositAmount)s %(symbol)s",
       limit_order_successfully: "You have successfully created a limit order",
@@ -832,6 +833,7 @@ export const ru = {
         "Ваша учетная запись успешно обновлена до пожизненной учетной записи членства",
       published_proxy: "Вы успешно опубликовали свой прокси",
       published_votes: "Вы успешно опубликовали свои голоса",
+      canceled_limit_order: "Вы успешно отменили заказ #%(selectedOrderId)s",
     },
   },
   tableHead: {

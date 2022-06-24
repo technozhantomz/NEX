@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 
-import { useAsset } from "..";
+import { useAssetsContext } from "../../providers";
 import { Transaction } from "../../types";
 
 import { UseUpdateAccountTransactionBuilderResult } from "./useUpdateAccountTransactionBuilder.types";
 
 export function useUpdateAccountTransactionBuilder(): UseUpdateAccountTransactionBuilderResult {
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   const buildUpdateAccountTransaction = useCallback(
     (updatedAccount: any, accountId: string): Transaction => {

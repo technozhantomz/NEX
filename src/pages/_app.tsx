@@ -1,8 +1,10 @@
 import type { AppProps } from "next/app";
 
 import {
+  AssetsProvider,
   BrowserHistoryProvider,
   ConnectionManager,
+  FeesProvider,
   MenuProvider,
   PeerplaysApiProvider,
   SettingsProvider,
@@ -17,13 +19,17 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
       <SettingsProvider>
         <PeerplaysApiProvider>
           <ConnectionManager>
-            <UserProvider>
-              <BrowserHistoryProvider>
-                <MenuProvider>
-                  <Component {...pageProps} />
-                </MenuProvider>
-              </BrowserHistoryProvider>
-            </UserProvider>
+            <AssetsProvider>
+              <UserProvider>
+                <FeesProvider>
+                  <BrowserHistoryProvider>
+                    <MenuProvider>
+                      <Component {...pageProps} />
+                    </MenuProvider>
+                  </BrowserHistoryProvider>
+                </FeesProvider>
+              </UserProvider>
+            </AssetsProvider>
           </ConnectionManager>
         </PeerplaysApiProvider>
       </SettingsProvider>

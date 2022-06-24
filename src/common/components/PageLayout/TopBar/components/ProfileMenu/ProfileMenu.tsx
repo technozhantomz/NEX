@@ -20,7 +20,7 @@ const { Meta } = Card;
 
 export const ProfileMenu = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
-  const { xs } = useViewportContext();
+  const { sm } = useViewportContext();
   const { closeMenu } = useMenuContext();
 
   return (
@@ -37,7 +37,7 @@ export const ProfileMenu = (): JSX.Element => {
         description={`@${localStorageAccount}`}
       />
       <ul>
-        {xs ? (
+        {sm ? (
           <>
             <li>
               <MenuItem
@@ -72,7 +72,7 @@ export const ProfileMenu = (): JSX.Element => {
             onClick={closeMenu}
           />
         </li>
-        {xs ? (
+        {sm ? (
           <li className={"link"}>
             <Link href={`/user/${localStorageAccount}`} onClick={closeMenu}>
               <a>{counterpart.translate(`links.see_all_account_activity`)}</a>

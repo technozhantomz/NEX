@@ -81,23 +81,24 @@ pm2 start npm --name <must be unique> -- start
 
 ```
 server {
-  listen 80;
-  listen [::]:80;
+        listen 80;
+        server_name <domain name or serve ip address>;
+        root /var/www/html;
+        index index.html index.htm;
 
-  server_name <domain>;
+        location / {
+                proxy_pass             http://127.0.0.1:3000;
+                proxy_read_timeout     60;
+                proxy_connect_timeout  60;
+                proxy_redirect         off;
 
-  location / {
-    proxy_pass http://localhost:3000;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-  }
-
-  location /_next/static/ {
-    alias /<application absolute path>/.next/static/;
-  }
+                # Allow the use of websockets
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
 }
 ```
 

@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 
-import { useAsset } from "..";
+import { useAssetsContext } from "../../providers";
 import { Transaction } from "../../types";
 
 import { UseSidechainTransactionBuilderResult } from "./useSidechainTransactionBuilder.types";
 
 export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilderResult {
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
   const buildAddingBitcoinSidechainTransaction = useCallback(
     (
       payer: string,

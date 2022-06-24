@@ -1,43 +1,32 @@
 import counterpart from "counterpart";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import * as Styled from "../TransactionModal.styled";
 
 type Props = {
   fee: number;
-  withdrawalAmount?: number;
-  account?: string;
+  account: string;
+  orderId: string;
 };
 
-export const WithdrawVestingBalance = ({
-  fee,
-  withdrawalAmount,
+export const CancelLimitOrder = ({
   account,
+  fee,
+  orderId,
 }: Props): JSX.Element => {
-  const prevWithdrawalAmount = useRef<number>();
-  useEffect(() => {
-    if (withdrawalAmount || !prevWithdrawalAmount.current) {
-      prevWithdrawalAmount.current = withdrawalAmount;
-    }
-  });
-
   return (
     <>
       {account && (
         <Styled.DetailContainer>
-          <p>{counterpart.translate(`field.labels.account_name`)}</p>
+          <p>{counterpart.translate(`field.labels.seller`)}</p>
           <Link href={`/user/${account}`}>{account}</Link>
         </Styled.DetailContainer>
       )}
-
-      {prevWithdrawalAmount && (
+      {orderId && (
         <Styled.DetailContainer>
-          <p>{counterpart.translate(`field.labels.withdrawal_amount`)}</p>
-          <p>{`${
-            !withdrawalAmount ? prevWithdrawalAmount.current : withdrawalAmount
-          } ${defaultToken}`}</p>
+          <p>{counterpart.translate(`field.labels.order_to_cancel`)}</p>
+          <p>{orderId}</p>
         </Styled.DetailContainer>
       )}
       <Styled.DetailContainer>

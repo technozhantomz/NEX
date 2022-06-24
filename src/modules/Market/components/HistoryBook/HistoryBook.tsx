@@ -46,10 +46,10 @@ export const HistoryBook = ({
         <Styled.Table
           scroll={
             md
-              ? {}
+              ? { x: true }
               : dataSource.length > 24
-              ? { scrollToFirstRowOnChange: false, y: 540 }
-              : { scrollToFirstRowOnChange: false }
+              ? { scrollToFirstRowOnChange: false, y: 540, x: true }
+              : { scrollToFirstRowOnChange: false, x: true }
           }
           loading={forUser ? loadingUserHistoryRows : loadingOrderHistoryRows}
           pagination={false}

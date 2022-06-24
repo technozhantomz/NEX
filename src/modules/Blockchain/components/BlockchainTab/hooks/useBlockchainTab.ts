@@ -2,11 +2,8 @@ import { ParsedUrlQuery } from "querystring";
 
 import { useCallback, useEffect, useState } from "react";
 
-import {
-  useArrayLimiter,
-  useAsset,
-  useBlockchain,
-} from "../../../../../common/hooks";
+import { useArrayLimiter, useBlockchain } from "../../../../../common/hooks";
+import { useAssetsContext } from "../../../../../common/providers";
 import { BlockTableRow } from "../../../types";
 
 import {
@@ -39,7 +36,7 @@ export function useBlockchainTab(
     useState<BlockChainData>(defaultData);
   const [searchResult, setSearchResult] = useState<BlockTableRow[]>();
   const [loading, setLoading] = useState<boolean>(true);
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const {
     getChain,
@@ -160,7 +157,13 @@ export function useBlockchainTab(
   useEffect(() => {
     const intervalTime =
       blockchainData.avgTime > 0 ? blockchainData.avgTime * 1000 : 3000;
-    setInterval(() => getBlockchainData(), intervalTime);
+    const blockchainInterval = setInterval(
+      () => getBlockchainData(),
+      intervalTime
+    );
+    return () => {
+      clearInterval(blockchainInterval);
+    };
   }, [defaultAsset, getBlockchainData, routerQuery]);
 
   return {

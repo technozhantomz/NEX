@@ -7,6 +7,7 @@ import * as Styled from "./TransactionModal.styled";
 import {
   AccountUpdate,
   AccountUpgrade,
+  CancelLimitOrder,
   CreateLimitOrder,
   CreateVestingBalance,
   Transfer,
@@ -36,6 +37,7 @@ type Props = {
   asset?: string;
   to?: string;
   quantity?: number;
+  orderId?: string;
 };
 
 export const TransactionModal = ({
@@ -60,6 +62,7 @@ export const TransactionModal = ({
   asset,
   to,
   quantity,
+  orderId,
 }: Props): JSX.Element => {
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
@@ -85,6 +88,13 @@ export const TransactionModal = ({
         sell={sell as string}
         buy={buy as string}
         expiration={expiration as string}
+      />
+    ),
+    limit_order_cancel: (
+      <CancelLimitOrder
+        account={account as string}
+        fee={fee as number}
+        orderId={orderId as string}
       />
     ),
     vesting_balance_create: (

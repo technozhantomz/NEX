@@ -5,7 +5,10 @@ import {
   useAsset,
   useMembers,
 } from "../../../../../common/hooks";
-import { usePeerplaysApiContext } from "../../../../../common/providers";
+import {
+  useAssetsContext,
+  usePeerplaysApiContext,
+} from "../../../../../common/providers";
 
 import {
   CommitteeTableRow,
@@ -21,7 +24,8 @@ export function useCommitteeTab(): UseCommitteeTabResult {
     CommitteeTableRow[]
   >([]);
   const { dbApi } = usePeerplaysApiContext();
-  const { defaultAsset, formAssetBalanceById } = useAsset();
+  const { formAssetBalanceById } = useAsset();
+  const { defaultAsset } = useAssetsContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { getCommittees } = useMembers();
 
@@ -84,7 +88,10 @@ export function useCommitteeTab(): UseCommitteeTabResult {
   );
 
   useEffect(() => {
-    setInterval(() => getCommitteesTableRows(), 3000);
+    const committeeInterval = setInterval(() => getCommitteesTableRows(), 3000);
+    return () => {
+      clearInterval(committeeInterval);
+    };
   }, [defaultAsset]);
 
   return {

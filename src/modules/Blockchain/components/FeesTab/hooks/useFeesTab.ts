@@ -2,7 +2,11 @@ import counterpart from "counterpart";
 import { ChainTypes } from "peerplaysjs-lib";
 import { useCallback, useEffect, useState } from "react";
 
-import { useAsset, useFees } from "../../../../../common/hooks";
+import { useAsset } from "../../../../../common/hooks";
+import {
+  useAssetsContext,
+  useFeesContext,
+} from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
 
 import {
@@ -19,8 +23,9 @@ export function useFeesTab(): UseFeesTabResult {
   const [businessFeesRows, setBusinessFeesRows] = useState<FeesTableRow[]>([]);
   const [gameFeesRows, setGameFeesRows] = useState<FeesTableRow[]>([]);
   const [marketFeesRows, setMarketFeesRows] = useState<FeesTableRow[]>([]);
-  const { feeParameters } = useFees();
-  const { defaultAsset, setPrecision } = useAsset();
+  const { feeParameters } = useFeesContext();
+  const { setPrecision } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   const getFees = useCallback(async () => {
     setLoading(true);

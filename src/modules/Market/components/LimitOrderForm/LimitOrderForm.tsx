@@ -9,8 +9,8 @@ import {
   PasswordModal,
   TransactionModal,
 } from "../../../../common/components";
-import { useAsset, useHandleTransactionForm } from "../../../../common/hooks";
-import { useUserContext } from "../../../../common/providers";
+import { useHandleTransactionForm } from "../../../../common/hooks";
+import { useAssetsContext, useUserContext } from "../../../../common/providers";
 import { Asset } from "../../../../common/types";
 import { Form } from "../../../../ui/src";
 
@@ -41,7 +41,7 @@ export const LimitOrderForm = ({
 }: Props): JSX.Element => {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
   const {
     feeAmount,
     marketFeePercent,

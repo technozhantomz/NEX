@@ -12,8 +12,9 @@ import {
   TransferForm,
   WithdrawForm,
 } from "../../../../common/components";
-import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
+import { useSidechainAccounts } from "../../../../common/hooks";
 import {
+  useAssetsContext,
   //useBrowserHistoryContext,
   useUserContext,
   useViewportContext,
@@ -35,7 +36,7 @@ const { TabPane } = Tabs;
 const AssetPage: NextPage = () => {
   const router = useRouter();
   const { asset, tab } = router.query;
-  const { loadingSidechainAssets, sidechainAssets } = useAsset();
+  const { loadingSidechainAssets, sidechainAssets } = useAssetsContext();
   const {
     bitcoinSidechainAccount,
     hasBTCDepositAddress,

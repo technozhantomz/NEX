@@ -2,11 +2,13 @@ import { TransactionBuilder } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
 import { useAsset } from "../../hooks";
+import { useAssetsContext } from "../../providers";
 
 import { ITransactionBuilder } from "./useTransactionBuilder.types";
 
 export function useTransactionBuilder(): ITransactionBuilder {
-  const { defaultAsset, setPrecision } = useAsset();
+  const { setPrecision } = useAsset();
+  const { defaultAsset } = useAssetsContext();
   const buildTrx = useCallback(async (trx, keys) => {
     const tr = new TransactionBuilder();
 

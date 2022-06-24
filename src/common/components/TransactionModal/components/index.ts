@@ -4,3 +4,4 @@ export * from "./CreateLimitOrder";
 export * from "./CreateVestingBalance";
 export * from "./WithdrawVestingBalance";
 export * from "./Transfer";
+export * from "./CancelLimitOrder";

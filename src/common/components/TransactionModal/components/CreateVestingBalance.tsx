@@ -1,5 +1,6 @@
 import counterpart from "counterpart";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import * as Styled from "../TransactionModal.styled";
@@ -15,6 +16,13 @@ export const CreateVestingBalance = ({
   vestingAmount,
   account,
 }: Props): JSX.Element => {
+  const prevVestingAmount = useRef<number>();
+  useEffect(() => {
+    if (vestingAmount || !prevVestingAmount.current) {
+      prevVestingAmount.current = vestingAmount;
+    }
+  });
+
   return (
     <>
       {account && (
@@ -24,10 +32,12 @@ export const CreateVestingBalance = ({
         </Styled.DetailContainer>
       )}
 
-      {vestingAmount && (
+      {prevVestingAmount && (
         <Styled.DetailContainer>
           <p>{counterpart.translate(`field.labels.vesting_amount`)}</p>
-          <p>{`${vestingAmount} ${defaultToken}`}</p>
+          <p>{`${
+            !vestingAmount ? prevVestingAmount.current : vestingAmount
+          } ${defaultToken}`}</p>
         </Styled.DetailContainer>
       )}
       <Styled.DetailContainer>

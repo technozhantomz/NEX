@@ -76,7 +76,8 @@ export const en = {
       },
       asset_fund_fee_pool: {
         title: "Fund asset fee pool",
-        description: "%(from)s, funded %(symbol)s fee pool with %(amount)s",
+        description:
+          "%(from)s, funded %(symbol)s fee pool with %(amount)s %(defaultToken)s",
       },
       asset_global_settle: {
         title: "Global asset settlement",
@@ -748,6 +749,7 @@ export const en = {
       withdrawal_amount: "Withdrawal amount",
       today: "Today",
       yesterday: "yesterday",
+      order_to_cancel: "Order to cancel",
     },
     comments: {
       deposit_hbd:
@@ -761,6 +763,7 @@ export const en = {
       enable_notifications: "Enable Notifications",
     },
     errors: {
+      user_name_first: "Please provide a valid username first",
       same_account: "Same as your account",
       no_account: "Account not found",
       added_account: "Account is already added",
@@ -819,7 +822,7 @@ export const en = {
         "Successfully Transferred %(amount)s %(asset)s to %(to)s",
       successfully_withdraw: "Successfully withdraw",
       successfully_withdrawn:
-        "Successfully Withdrawn %(withdrawAmount)s %(precision)s",
+        "Successfully Withdrawn %(withdrawAmount)s %(symbol)s",
       successfully_deposited:
         "Successfully Deposited %(depositAmount)s %(symbol)s",
       limit_order_successfully: "You have successfully created a limit order",
@@ -828,6 +831,8 @@ export const en = {
         "Your account successfully upgraded to lifetime membership account",
       published_proxy: "You have successfully published your proxy",
       published_votes: "You have successfully published your votes",
+      canceled_limit_order:
+        "You have successfully canceled #%(selectedOrderId)s order",
     },
   },
   tableHead: {

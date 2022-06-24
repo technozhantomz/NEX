@@ -1,8 +1,8 @@
 import counterpart from "counterpart";
 
 import { Form, Input } from "../../../ui/src";
-import { useAsset, useHandleTransactionForm } from "../../hooks";
-import { useUserContext } from "../../providers";
+import { useHandleTransactionForm } from "../../hooks";
+import { useAssetsContext, useUserContext } from "../../providers";
 import { PasswordModal } from "../PasswordModal";
 import { TransactionModal } from "../TransactionModal";
 
@@ -30,7 +30,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
     toAccount,
     quantity,
   } = useTransferForm();
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   const {
     isPasswordModalVisible,
