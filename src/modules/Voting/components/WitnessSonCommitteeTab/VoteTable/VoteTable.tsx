@@ -104,7 +104,9 @@ export const VoteTable = ({
                   <div className="vote-info">
                     <span className="vote-info-title">{columns[1].title}</span>
                     <span className="vote-info-value">
-                      {(item as VoteRow).website}
+                      <a target="_blank" href={(item as VoteRow).website}>
+                        {(item as VoteRow).website}
+                      </a>
                     </span>
                   </div>
                   <div className="vote-info">
