@@ -80,6 +80,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
                   e.preventDefault();
                 }
               }}
+              step="any"
             />
           </Form.Item>
         </div>

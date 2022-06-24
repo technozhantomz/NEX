@@ -66,6 +66,7 @@ export const WithdrawForm = ({
               <Input
                 placeholder="0.00000"
                 type="number"
+                step="any"
                 prefix={
                   <Styled.WithdrawFormAsset name="asset">
                     <LogoSelectOption
@@ -134,6 +135,7 @@ export const WithdrawForm = ({
             <Input
               placeholder={counterpart.translate(`field.placeholder.amount`)}
               type="number"
+              step="any"
             />
           </Form.Item>
         ) : (

@@ -137,6 +137,7 @@ export const PowerDownForm = ({
                 </Button>
               }
               type="number"
+              step="any"
               onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
                 if (!utils.isNumberKey(e)) {
                   e.preventDefault();
