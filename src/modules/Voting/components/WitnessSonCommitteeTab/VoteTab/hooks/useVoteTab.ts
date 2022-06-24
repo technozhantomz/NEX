@@ -207,13 +207,8 @@ export function useVoteTab({
             counterpart.translate(`field.success.published_votes`)
           );
           setLoadingTransaction(false);
-          // setServerApprovedRows(sortVotesRows([...serverApprovedRows]));
-            // setLocalApprovedRows(sortVotesRows([...serverApprovedRows]));
-            setServerApprovedRows([...localApprovedRows]);
-
-          console.log('serverApprovedRows',serverApprovedRows)
-      
-          console.log('localApprovedRows',localApprovedRows)
+          setServerApprovedRows([...localApprovedRows]);
+          setLocalApprovedRows([...localApprovedRows]);
         } else {
           setTransactionErrorMessage(
             counterpart.translate(`field.errors.unable_transaction`)
@@ -234,10 +229,9 @@ export function useVoteTab({
       formAccountBalancesByName,
       localStorageAccount,
       getVotes,
-      serverApprovedRows,
       localApprovedRows,
       setServerApprovedRows,
-      setLocalApprovedRows
+      setLocalApprovedRows,
     ]
   );
 
@@ -339,9 +333,6 @@ export function useVoteTab({
 
   const checkVotesChanged = useCallback(
     (serverApprovedRows: VoteRow[], localApprovedRows: VoteRow[]) => {
-      console.log('serverApprovedRows',serverApprovedRows)
-      
-      console.log('localApprovedRows',localApprovedRows)
       const isVotesChanged = !isArrayEqual(
         serverApprovedRows,
         localApprovedRows
