@@ -799,6 +799,8 @@ export const en = {
         "SONs network is not available now. Please try again later!",
       transaction_unable: "Unable to process the transaction!",
       price_should_greater: "Price should be greater than 0",
+      quantity_should_greater: "Quantity should be greater than 0",
+      total_should_greater: "Total should be greater than 0",
       assets_must_different: "Assets Must Be Different",
       assets_should_be: "One of the assets should be %(defaultToken)s",
       available_balance_cannot_greater:
