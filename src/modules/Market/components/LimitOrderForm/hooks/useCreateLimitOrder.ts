@@ -248,7 +248,7 @@ export function useCreateLimitOrder({
   const validatePrice = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
       return Promise.reject(
-        new Error(counterpart.translate(`field.errors.pirce_should_greater`))
+        new Error(counterpart.translate(`field.errors.price_should_greater`))
       );
     }
     return Promise.resolve();
@@ -257,7 +257,7 @@ export function useCreateLimitOrder({
   const validateQuantity = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
       return Promise.reject(
-        new Error(counterpart.translate(`field.errors.pirce_should_greater`))
+        new Error(counterpart.translate(`field.errors.quantity_should_greater`))
       );
     }
     const userQuoteAsset = assets.find(
@@ -289,7 +289,7 @@ export function useCreateLimitOrder({
   const validateTotal = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
       return Promise.reject(
-        new Error(counterpart.translate(`field.errors.pirce_should_greater`))
+        new Error(counterpart.translate(`field.errors.total_should_greater`))
       );
     }
     const userDefaultAsset = assets.find(
