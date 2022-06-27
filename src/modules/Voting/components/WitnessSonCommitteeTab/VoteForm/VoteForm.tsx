@@ -9,7 +9,7 @@ import {
 } from "../../../../../common/components";
 import { useHandleTransactionForm } from "../../../../../common/hooks";
 import { Proxy } from "../../../../../common/types";
-import { Tooltip } from "../../../../../ui/src";
+import { Form, Tooltip } from "../../../../../ui/src";
 
 import * as Styled from "./VoteForm.styled";
 import { useVoteForm } from "./hooks";
@@ -49,7 +49,7 @@ export const VoteForm = ({
   proxy,
   desiredMembers,
 }: Props): JSX.Element => {
-  const { voteForm } = useVoteForm();
+  const { voteForm, searchChange, searchError, isSameAccount, searchValue } = useVoteForm();
 
   const {
     isPasswordModalVisible,
@@ -70,12 +70,42 @@ export const VoteForm = ({
           tab: capitalize(tab),
         })}
       </Styled.Title>
-      <Styled.VoteSearch
-        size="large"
-        placeholder={counterpart.translate(`field.placeholder.search_accounts`)}
-        onSearch={handleVoteSearch}
-        loading={loading}
-      />
+
+      <Form.Item
+        className="search-input"
+        validateStatus={searchError ? "error" : undefined}
+        help={
+          searchError
+            ? isSameAccount
+              ? counterpart.translate(`field.errors.same_account`)
+                  : counterpart.translate(`field.errors.no_account`)
+            : undefined
+        }
+      >
+        {/* <Styled.ProxyFormSearch
+          value={searchValue}
+          placeholder={counterpart.translate(
+            `field.placeholder.search_accounts`
+          )}
+          onChange={searchChange}
+          onPressEnter={() => {
+            addProxy(searchedAccount as Account);
+          }}
+          loading={loading}
+          size="large"
+        /> */}
+        <Styled.VoteSearch
+          size="large"
+          placeholder={counterpart.translate(`field.placeholder.search_accounts`)}
+          onSearch={handleVoteSearch}
+          loading={loading}
+          onChange={searchChange}
+          value={searchValue}
+
+        />
+      </Form.Item>
+
+    
       <Styled.VoteForm.Provider onFormFinish={handleFormFinish}>
         <Styled.VoteForm
           form={voteForm}
