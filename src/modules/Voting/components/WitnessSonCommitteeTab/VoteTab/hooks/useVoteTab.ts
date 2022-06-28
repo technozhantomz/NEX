@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../../api/params";
 import { isArrayEqual } from "../../../../../../api/utils";
@@ -58,10 +58,14 @@ export function useVoteTab({
     useState<string>("");
   const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const [searchError, setSearchError] = useState<boolean>(false);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [isSameAccount, setIsSameAccount] = useState<boolean>(false);
 
   const { formAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
-  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { getPrivateKey, formAccountBalancesByName, getAccountByName } =
+    useAccount();
   const { id, assets, name, localStorageAccount } = useUserContext();
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
@@ -237,6 +241,7 @@ export function useVoteTab({
 
   const handleVoteSearch = useCallback(
     (name: string) => {
+      console.log(name);
       setLoading(true);
       setVoteSearchValue(name);
       setLoading(false);
@@ -395,6 +400,26 @@ export function useVoteTab({
     setIsVotesChanged(false);
   }, [serverApprovedRows, setLocalApprovedRows, setIsVotesChanged]);
 
+  const searchChange = useCallback(
+    async (inputEvent: ChangeEvent<HTMLInputElement>) => {
+      setSearchValue(inputEvent.target.value);
+      const account = await getAccountByName(inputEvent.target.value);
+      if (account) {
+        if (account.name === localStorageAccount) {
+          setIsSameAccount(true);
+          setSearchError(true);
+        } else {
+          setIsSameAccount(false);
+          setSearchError(false);
+        }
+      } else {
+        setIsSameAccount(false);
+        setSearchError(true);
+      }
+    },
+    [getAccountByName, setSearchError, setSearchValue, setIsSameAccount]
+  );
+
   useEffect(() => {
     if (isArrayEqual(serverApprovedRows, localApprovedRows)) {
       formTableRows();
@@ -424,5 +449,9 @@ export function useVoteTab({
     setTransactionSuccessMessage,
     handlePublishChanges,
     loadingTransaction,
+    searchChange,
+    searchError,
+    isSameAccount,
+    searchValue,
   };
 }

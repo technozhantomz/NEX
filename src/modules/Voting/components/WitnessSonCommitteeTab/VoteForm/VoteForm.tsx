@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
-import { Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 import { DEFAULT_PROXY_ID } from "../../../../../api/params";
 import {
@@ -9,7 +9,7 @@ import {
 } from "../../../../../common/components";
 import { useHandleTransactionForm } from "../../../../../common/hooks";
 import { Proxy } from "../../../../../common/types";
-import { Tooltip } from "../../../../../ui/src";
+import { Form, Tooltip } from "../../../../../ui/src";
 
 import * as Styled from "./VoteForm.styled";
 import { useVoteForm } from "./hooks";
@@ -30,6 +30,10 @@ type Props = {
   updateAccountFee: number;
   proxy: Proxy;
   desiredMembers: number;
+  searchError: boolean;
+  searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => Promise<void>;
+  searchValue: string;
+  isSameAccount: boolean;
 };
 
 export const VoteForm = ({
@@ -48,6 +52,10 @@ export const VoteForm = ({
   updateAccountFee,
   proxy,
   desiredMembers,
+  searchChange,
+  searchError,
+  isSameAccount,
+  searchValue,
 }: Props): JSX.Element => {
   const { voteForm } = useVoteForm();
 
@@ -70,12 +78,29 @@ export const VoteForm = ({
           tab: capitalize(tab),
         })}
       </Styled.Title>
-      <Styled.VoteSearch
-        size="large"
-        placeholder={counterpart.translate(`field.placeholder.search_accounts`)}
-        onSearch={handleVoteSearch}
-        loading={loading}
-      />
+
+      <Form.Item
+        className="search-input"
+        validateStatus={searchError ? "error" : undefined}
+        help={
+          searchError
+            ? isSameAccount
+              ? counterpart.translate(`field.errors.same_account`)
+              : counterpart.translate(`field.errors.no_account`)
+            : undefined
+        }
+      >
+        <Styled.VoteSearch
+          size="large"
+          placeholder={counterpart.translate(
+            `field.placeholder.search_accounts`
+          )}
+          onSearch={handleVoteSearch}
+          loading={loading}
+          onChange={searchChange}
+          value={searchValue}
+        />
+      </Form.Item>
       <Styled.VoteForm.Provider onFormFinish={handleFormFinish}>
         <Styled.VoteForm
           form={voteForm}

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 import { VoteRow } from "../../../../types";
 
@@ -21,4 +21,8 @@ export type UseVoteTabResult = {
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   handlePublishChanges: (password: string) => Promise<void>;
   loadingTransaction: boolean;
+  searchError: boolean;
+  searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => Promise<void>;
+  searchValue: string;
+  isSameAccount: boolean;
 };
