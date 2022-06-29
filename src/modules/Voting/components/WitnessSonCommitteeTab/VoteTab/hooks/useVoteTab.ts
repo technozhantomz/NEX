@@ -59,9 +59,6 @@ export function useVoteTab({
   const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<boolean>(false);
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [isSameAccount, setIsSameAccount] = useState<boolean>(false);
-
   const { formAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { getPrivateKey, formAccountBalancesByName, getAccountByName } =
@@ -241,7 +238,6 @@ export function useVoteTab({
 
   const handleVoteSearch = useCallback(
     (name: string) => {
-      console.log(name);
       setLoading(true);
       setVoteSearchValue(name);
       setLoading(false);
@@ -400,24 +396,39 @@ export function useVoteTab({
     setIsVotesChanged(false);
   }, [serverApprovedRows, setLocalApprovedRows, setIsVotesChanged]);
 
+  const getWitnessSonCommitteeAccountByName = useCallback(
+    (name: string) => {
+      try {
+        const account: VoteRow | undefined = allMembersRows.find(
+          (account) => account.name == name
+        );
+        return account;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [allMembersRows]
+  );
+
   const searchChange = useCallback(
-    async (inputEvent: ChangeEvent<HTMLInputElement>) => {
-      setSearchValue(inputEvent.target.value);
-      const account = await getAccountByName(inputEvent.target.value);
+    (inputEvent: ChangeEvent<HTMLInputElement>) => {
+      setVoteSearchValue(inputEvent.target.value);
+
+      const account = getWitnessSonCommitteeAccountByName(
+        inputEvent.target.value
+      );
       if (account) {
-        if (account.name === localStorageAccount) {
-          setIsSameAccount(true);
-          setSearchError(true);
-        } else {
-          setIsSameAccount(false);
-          setSearchError(false);
-        }
+        setSearchError(false);
       } else {
-        setIsSameAccount(false);
         setSearchError(true);
       }
     },
-    [getAccountByName, setSearchError, setSearchValue, setIsSameAccount]
+    [
+      getAccountByName,
+      setSearchError,
+      setVoteSearchValue,
+      getWitnessSonCommitteeAccountByName,
+    ]
   );
 
   useEffect(() => {
@@ -451,7 +462,5 @@ export function useVoteTab({
     loadingTransaction,
     searchChange,
     searchError,
-    isSameAccount,
-    searchValue,
   };
 }

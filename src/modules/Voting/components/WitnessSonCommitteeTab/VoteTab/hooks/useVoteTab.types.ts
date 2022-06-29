@@ -22,7 +22,5 @@ export type UseVoteTabResult = {
   handlePublishChanges: (password: string) => Promise<void>;
   loadingTransaction: boolean;
   searchError: boolean;
-  searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => Promise<void>;
-  searchValue: string;
-  isSameAccount: boolean;
+  searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => void;
 };

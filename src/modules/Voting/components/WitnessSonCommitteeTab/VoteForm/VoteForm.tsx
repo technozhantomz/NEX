@@ -31,9 +31,7 @@ type Props = {
   proxy: Proxy;
   desiredMembers: number;
   searchError: boolean;
-  searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => Promise<void>;
-  searchValue: string;
-  isSameAccount: boolean;
+  searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const VoteForm = ({
@@ -54,8 +52,6 @@ export const VoteForm = ({
   desiredMembers,
   searchChange,
   searchError,
-  isSameAccount,
-  searchValue,
 }: Props): JSX.Element => {
   const { voteForm } = useVoteForm();
 
@@ -84,9 +80,7 @@ export const VoteForm = ({
         validateStatus={searchError ? "error" : undefined}
         help={
           searchError
-            ? isSameAccount
-              ? counterpart.translate(`field.errors.same_account`)
-              : counterpart.translate(`field.errors.no_account`)
+            ? counterpart.translate(`field.errors.no_account`)
             : undefined
         }
       >
@@ -98,7 +92,6 @@ export const VoteForm = ({
           onSearch={handleVoteSearch}
           loading={loading}
           onChange={searchChange}
-          value={searchValue}
         />
       </Form.Item>
       <Styled.VoteForm.Provider onFormFinish={handleFormFinish}>
