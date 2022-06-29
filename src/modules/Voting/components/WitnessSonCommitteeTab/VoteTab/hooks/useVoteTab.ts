@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../../api/params";
 import { isArrayEqual } from "../../../../../../api/utils";
@@ -58,10 +58,11 @@ export function useVoteTab({
     useState<string>("");
   const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-
+  const [searchError, setSearchError] = useState<boolean>(false);
   const { formAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
-  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { getPrivateKey, formAccountBalancesByName, getAccountByName } =
+    useAccount();
   const { id, assets, name, localStorageAccount } = useUserContext();
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
@@ -395,6 +396,41 @@ export function useVoteTab({
     setIsVotesChanged(false);
   }, [serverApprovedRows, setLocalApprovedRows, setIsVotesChanged]);
 
+  const getWitnessSonCommitteeAccountByName = useCallback(
+    (name: string) => {
+      try {
+        const account: VoteRow | undefined = allMembersRows.find(
+          (account) => account.name == name
+        );
+        return account;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [allMembersRows]
+  );
+
+  const searchChange = useCallback(
+    (inputEvent: ChangeEvent<HTMLInputElement>) => {
+      setVoteSearchValue(inputEvent.target.value);
+
+      const account = getWitnessSonCommitteeAccountByName(
+        inputEvent.target.value
+      );
+      if (account) {
+        setSearchError(false);
+      } else {
+        setSearchError(true);
+      }
+    },
+    [
+      getAccountByName,
+      setSearchError,
+      setVoteSearchValue,
+      getWitnessSonCommitteeAccountByName,
+    ]
+  );
+
   useEffect(() => {
     if (isArrayEqual(serverApprovedRows, localApprovedRows)) {
       formTableRows();
@@ -424,5 +460,7 @@ export function useVoteTab({
     setTransactionSuccessMessage,
     handlePublishChanges,
     loadingTransaction,
+    searchChange,
+    searchError,
   };
 }
