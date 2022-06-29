@@ -107,7 +107,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
         </div>
         <p>{counterpart.translate(`field.comments.only_members_can_read`)}</p>
         <Form.Item name="memo" validateFirst={true} rules={formValdation.memo}>
-          <Input
+          <Input.TextArea
             placeholder={counterpart.translate(`field.placeholder.memo`)}
           />
         </Form.Item>
