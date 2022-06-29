@@ -81,7 +81,7 @@ const GPOSPage: NextPage = () => {
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "power-up"}`}
           onTabClick={(key) => {
-            if (key === "vote") router.push(`/voting`);
+            if (key === "vote") router.push(`/voting?tab=witnesses`);
             else router.push(`/gpos?tab=${key}`);
             if (sm) setIsMobileDropdownvisible(false);
           }}
