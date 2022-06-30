@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 
 import { TableHeading } from "../../../../common/components";
@@ -29,9 +30,15 @@ export const CommitteeColumns = [
     dataIndex: "url",
     key: "url",
     render: (url: string): JSX.Element => (
-      <Link href={`${url}`} passHref>
-        <Styled.urlIcon rotate={45} />
-      </Link>
+      <>
+        {url == "" ? (
+          <span>{counterpart.translate(`field.labels.not_available`)}</span>
+        ) : (
+          <Link href={`${url}`} passHref>
+            <Styled.urlIcon rotate={45} />
+          </Link>
+        )}
+      </>
     ),
   },
 ];
