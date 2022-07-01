@@ -14,7 +14,7 @@ type Props = {
 export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
   const { loading, blockchainData, searchValue, searchResult, handleSearch } =
     useBlockchainTab(routerQuery);
-
+  console.log(blockchainData.recentBlocks)
   return (
     <Styled.BlockTabWrapper>
       <Styled.StatsCardsDeck>
@@ -57,6 +57,8 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
         )}
         onSearch={handleSearch}
         loading={loading}
+        onChange={handleSearch}
+
       />
       <div>
         <h3>

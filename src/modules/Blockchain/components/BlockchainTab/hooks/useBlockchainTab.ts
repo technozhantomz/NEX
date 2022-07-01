@@ -120,10 +120,10 @@ export function useBlockchainTab(
     async (value: string) => {
       setLoading(true);
       setSearchValue(value);
-      const inRecents = blockchainData.recentBlocks.filter((block) =>
+      const inRecents = blockchainData.recentBlocks.find((block) =>
         block.key.startsWith(value)
       );
-      if (inRecents.length > 0) {
+      if (!inRecents) {
         setSearchResult(undefined);
         setLoading(false);
       } else {
