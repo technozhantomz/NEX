@@ -88,7 +88,14 @@ export const AssetsTab = (): JSX.Element => {
                     {AssetsColumns[5].title()}
                   </span>
                   <span className="asset-info-value">
-                    <Tooltip placement="top" title={item.info}>
+                    <Tooltip
+                      placement="top"
+                      title={
+                        item.info == ""
+                          ? `asset with precision ${item.precision}`
+                          : item.info
+                      }
+                    >
                       <InfoCircleOutlined />
                     </Tooltip>
                   </span>

@@ -42,8 +42,11 @@ export const AssetsColumns = [
     title: (): JSX.Element => <TableHeading heading={"info"} />,
     dataIndex: "info",
     key: "info",
-    render: (info: string): JSX.Element => (
-      <Tooltip placement="top" title={info}>
+    render: (info: string, _record: any): JSX.Element => (
+      <Tooltip
+        placement="top"
+        title={info == "" ? `asset with precision ${_record.precision}` : info}
+      >
         <InfoCircleOutlined />
       </Tooltip>
     ),
