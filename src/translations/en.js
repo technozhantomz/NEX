@@ -596,7 +596,7 @@ export const en = {
           "Most fees are made available immediately, but fees over %(vestingThreshold)s %(defaultToken)s (such as those paid to upgrade your membership or register a premium account name) must vest for a total of %(vestingPeriod)s days.",
         referral_link_title: "Your referral link",
         referral_link:
-          "Give this to link to people you want to refer to Peerplays: %(link)s/signup/?r=%(name)s",
+          "Give this link to people you want to refer to Peerplays: %(link)s/signup/?r=%(name)s",
       },
     },
     voting: {
@@ -673,6 +673,10 @@ export const en = {
       committees: {
         heading: "Committees",
       },
+    },
+    user: {
+      heading: "All Activity",
+      discription: "Profile Page",
     },
     modal: {
       transaction_modal: {

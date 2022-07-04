@@ -389,9 +389,11 @@ export const ru = {
       },
       vesting_balance_create: {
         title: "Создать вестинговый баланс",
+        description: "%(creator)s, жилет %(amount)s %(symbol)s в GPOS",
       },
       vesting_balance_withdraw: {
         title: "Вывод вестингового баланса",
+        description: "%(owner)s, отводить %(amount)s %(symbol)s От GPOS",
       },
       withdraw_permission_claim: {
         title: "Разрешение на снятие претензии",
@@ -674,6 +676,10 @@ export const ru = {
       committees: {
         heading: "Комитеты",
       },
+    },
+    user: {
+      heading: "Вся деятельность",
+      discription: "Страница профиля",
     },
     modal: {
       transaction_modal: {
