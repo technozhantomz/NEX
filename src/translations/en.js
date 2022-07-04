@@ -757,6 +757,7 @@ export const en = {
       today: "Today",
       yesterday: "yesterday",
       order_to_cancel: "Order to cancel",
+      threshold: "Threshold",
     },
     comments: {
       deposit_hbd:

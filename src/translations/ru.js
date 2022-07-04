@@ -762,6 +762,7 @@ export const ru = {
       today: "Сегодня",
       yesterday: "вчерашний день",
       order_to_cancel: "Заказ на отмену",
+      threshold: "Порог",
     },
     comments: {
       deposit_hbd:
