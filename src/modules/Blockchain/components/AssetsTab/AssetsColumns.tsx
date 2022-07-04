@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import Link from "next/link";
 
 import { TableHeading } from "../../../../common/components";
@@ -42,10 +43,18 @@ export const AssetsColumns = [
     title: (): JSX.Element => <TableHeading heading={"info"} />,
     dataIndex: "info",
     key: "info",
-    render: (info: string): JSX.Element => (
-      <Tooltip placement="top" title={info}>
-        <InfoCircleOutlined />
-      </Tooltip>
-    ),
+    render: (info: string): JSX.Element => {
+      if (!info || info === "") {
+        return (
+          <span>{counterpart.translate(`field.labels.not_available`)}</span>
+        );
+      } else {
+        return (
+          <Tooltip placement="top" title={info}>
+            <InfoCircleOutlined />
+          </Tooltip>
+        );
+      }
+    },
   },
 ];

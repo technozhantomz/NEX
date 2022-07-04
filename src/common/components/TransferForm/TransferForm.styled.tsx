@@ -1,4 +1,4 @@
-import { CardForm, CardFormButton, styled } from "../../../ui/src";
+import { CardForm, CardFormButton, Form, Input, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const TransferForm = styled(CardForm)`
@@ -47,4 +47,17 @@ export const FormItem = styled(CardForm.Item)`
       height: 45px;
     }
   }
+`;
+
+export const MemoFormItem = styled(Form.Item)`
+  ${breakpoint.sm} {
+    .ant-form-item-control-input-content {
+      height: 60px;
+    }
+  }
+`;
+
+export const Memo = styled(Input.TextArea)`
+  resize: none;
+  scroll: auto;
 `;

@@ -106,11 +106,17 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           </Form.Item>
         </div>
         <p>{counterpart.translate(`field.comments.only_members_can_read`)}</p>
-        <Form.Item name="memo" validateFirst={true} rules={formValdation.memo}>
-          <Input.TextArea
+        <Styled.MemoFormItem
+          name="memo"
+          validateFirst={true}
+          rules={formValdation.memo}
+          validateTrigger="onChange"
+        >
+          <Styled.Memo
             placeholder={counterpart.translate(`field.placeholder.memo`)}
+            maxLength={256}
           />
-        </Form.Item>
+        </Styled.MemoFormItem>
         <p>
           {counterpart.translate(`field.labels.fees`, {
             feeAmount: feeAmount,
