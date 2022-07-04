@@ -674,6 +674,10 @@ export const en = {
         heading: "Committees",
       },
     },
+    user: {
+      heading: "All Activity",
+      discription: "Profile Page",
+    },
     modal: {
       transaction_modal: {
         heading: "Please confirm the transaction",
