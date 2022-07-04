@@ -88,9 +88,15 @@ export const AssetsTab = (): JSX.Element => {
                     {AssetsColumns[5].title()}
                   </span>
                   <span className="asset-info-value">
-                    <Tooltip placement="top" title={item.info}>
-                      <InfoCircleOutlined />
-                    </Tooltip>
+                    {!item.info || item.info === "" ? (
+                      <span>
+                        {counterpart.translate(`field.labels.not_available`)}
+                      </span>
+                    ) : (
+                      <Tooltip placement="top" title={item.info}>
+                        <InfoCircleOutlined />
+                      </Tooltip>
+                    )}
                   </span>
                 </div>
               </Styled.AssetItemContent>
