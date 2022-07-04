@@ -6,7 +6,6 @@ export type UseTransferTransactionBuilderResult = {
     to: Account,
     memo: string,
     asset: Asset,
-    password: string,
     quantity: number
   ) => Transaction;
 };

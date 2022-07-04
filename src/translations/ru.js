@@ -763,8 +763,7 @@ export const ru = {
     comments: {
       deposit_hbd:
         "Чтобы перевести %(assetSymbol)s на %(accountName)s, отправьте свои средства на son-account в блокчейне Hive с памяткой %(accountName)s",
-      only_members_can_read:
-        "Только участники с ключом для заметок могут читать ваши заметки",
+      public_memo: "Эта памятка общедоступна",
     },
     checkBoxes: {
       cannot_recover_my_lost_password:

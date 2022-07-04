@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../api/params/networkparams";
 import { Form } from "../../../../ui/src";
@@ -30,21 +30,11 @@ export function useTransferForm(): UseTransferFormResult {
     useAccount();
 
   const { localStorageAccount, assets } = useUserContext();
-  const { buildTrx } = useTransactionBuilder();
+  const { buildTrx, getTrxFee } = useTransactionBuilder();
   const { calculateTransferFee } = useFees();
   const { buildTransferTransaction } = useTransferTransactionBuilder();
   const { sonAccount, getSonNetworkStatus } = useSonNetwork();
   const [transferForm] = Form.useForm();
-
-  useEffect(() => {
-    const transferFee = calculateTransferFee(
-      transferForm.getFieldValue("memo")
-    );
-    if (transferFee) {
-      setFeeAmount(transferFee);
-    }
-    transferForm.setFieldsValue({ from: localStorageAccount });
-  }, [localStorageAccount, calculateTransferFee, assets]);
 
   const handleValuesChange = (changedValues: any) => {
     if (changedValues.amount) {
@@ -68,30 +58,54 @@ export function useTransferForm(): UseTransferFormResult {
     }
   };
 
-  const transfer = async (password: string) => {
-    setTransactionErrorMessage("");
+  const buildTransferFormTransaction = useCallback(async () => {
     const values = transferForm.getFieldsValue();
-
-    const activeKey = getPrivateKey(password, "active");
-    const asset = assets.filter((asset) => asset.symbol === values.asset)[0];
-
-    let trxResult;
     try {
-      setLoadingTransaction(true);
       const from = (
         fromAccount ? fromAccount : await getAccountByName(values.from)
       ) as Account;
       const to = (
         toAccount ? toAccount : await getAccountByName(values.to)
       ) as Account;
+      const asset = assets.filter((asset) => asset.symbol === values.asset)[0];
       const trx = buildTransferTransaction(
         from,
         to,
         values.memo,
         asset,
-        password,
         values.amount
       );
+      return trx;
+    } catch (e) {
+      console.log(e);
+    }
+  }, [
+    transferForm,
+    fromAccount,
+    toAccount,
+    assets,
+    buildTransferTransaction,
+    getAccountByName,
+  ]);
+
+  const calculateTransferFeeWithMemo = useCallback(async () => {
+    const trx = await buildTransferFormTransaction();
+    if (trx !== undefined) {
+      const fee = await getTrxFee([trx]);
+      setFeeAmount(fee);
+    }
+  }, [buildTransferFormTransaction, getTrxFee, setFeeAmount]);
+
+  const transfer = async (password: string) => {
+    setTransactionErrorMessage("");
+    const values = transferForm.getFieldsValue();
+
+    const activeKey = getPrivateKey(password, "active");
+
+    let trxResult;
+    try {
+      setLoadingTransaction(true);
+      const trx = await buildTransferFormTransaction();
       trxResult = await buildTrx([trx], [activeKey]);
     } catch (e) {
       console.log(e);
@@ -210,11 +224,8 @@ export function useTransferForm(): UseTransferFormResult {
     }
   };
 
-  const validateMemo = async (_: unknown, value: string) => {
-    const updatedFee = calculateTransferFee(value);
-    if (updatedFee) {
-      setFeeAmount(updatedFee);
-    }
+  const validateMemo = async (_: unknown) => {
+    await calculateTransferFeeWithMemo();
     return Promise.resolve();
   };
 
@@ -248,6 +259,14 @@ export function useTransferForm(): UseTransferFormResult {
     ],
     memo: [{ validator: validateMemo }],
   };
+
+  useEffect(() => {
+    const transferFee = calculateTransferFee("");
+    if (transferFee) {
+      setFeeAmount(transferFee);
+    }
+    transferForm.setFieldsValue({ from: localStorageAccount });
+  }, [localStorageAccount, calculateTransferFee, assets]);
 
   return {
     feeAmount,
