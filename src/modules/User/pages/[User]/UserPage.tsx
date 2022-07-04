@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
@@ -13,8 +14,10 @@ const UserPage: NextPage = () => {
     <Layout
       title="Profile"
       type="card-lrg"
-      heading="All Activity"
-      description={`Profile Page | ${user}`}
+      heading={counterpart.translate(`pages.user.heading`)}
+      description={`${counterpart.translate(
+        `pages.user.discription`
+      )} | ${user}`}
       dexLayout={true}
     >
       <Styled.UserCard>
