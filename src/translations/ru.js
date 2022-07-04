@@ -697,6 +697,9 @@ export const ru = {
     mark_all_read: "отметить все как прочитанное",
   },
   field: {
+    options: {
+      lock_wallet: "минуты ",
+    },
     placeholder: {
       user_name: "Введите имя пользователя",
       password: "Введите пароль",
@@ -770,6 +773,7 @@ export const ru = {
         "Я понимаю, что Peerplays не может восстановить мой утерянный пароль",
       securely_saved_my_password: "Я надежно сохранил свой пароль",
       enable_notifications: "Включить уведомления",
+      key_management_group: ["Активный", "Владелец", "Памятка"],
     },
     errors: {
       user_name_first: "Сначала укажите действительное имя пользователя",

@@ -694,6 +694,9 @@ export const en = {
     mark_all_read: "Mark all as read",
   },
   field: {
+    options: {
+      lock_wallet: "minutes ",
+    },
     placeholder: {
       user_name: "Enter username",
       password: "Enter password",
@@ -765,6 +768,7 @@ export const en = {
         "I understand Peerplays cannot recover my lost password",
       securely_saved_my_password: "I have securely saved my password",
       enable_notifications: "Enable Notifications",
+      key_management_group: ["Active", "Owner", "Memo"],
     },
     errors: {
       user_name_first: "Please provide a valid username first",
