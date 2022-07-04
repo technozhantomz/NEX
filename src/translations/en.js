@@ -758,6 +758,9 @@ export const en = {
       yesterday: "yesterday",
       order_to_cancel: "Order to cancel",
       threshold: "Threshold",
+      desired_witnesses: "Desired witnesses",
+      desired_committees: "Desired committees",
+      desired_sons: "Desired sons",
     },
     comments: {
       deposit_hbd:
