@@ -105,7 +105,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             <Input disabled={true} />
           </Form.Item>
         </div>
-        <p>{counterpart.translate(`field.comments.only_members_can_read`)}</p>
+        <p>{counterpart.translate(`field.comments.public_memo`)}</p>
         <Styled.MemoFormItem
           name="memo"
           validateFirst={true}
