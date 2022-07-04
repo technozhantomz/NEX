@@ -88,7 +88,7 @@ export function useTransferForm(): UseTransferFormResult {
     getAccountByName,
   ]);
 
-  const calculateTransferFeeWithMemo = useCallback(async () => {
+  const setTransferFeeWithMemo = useCallback(async () => {
     const trx = await buildTransferFormTransaction();
     if (trx !== undefined) {
       const fee = await getTrxFee([trx]);
@@ -225,7 +225,7 @@ export function useTransferForm(): UseTransferFormResult {
   };
 
   const validateMemo = async (_: unknown) => {
-    await calculateTransferFeeWithMemo();
+    await setTransferFeeWithMemo();
     return Promise.resolve();
   };
 
