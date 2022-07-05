@@ -758,7 +758,7 @@ export const en = {
     comments: {
       deposit_hbd:
         "To deposit %(assetSymbol)s to %(accountName)s please send your funds to son-account on the Hive blockchain with the memo %(accountName)s",
-      only_members_can_read: "Only members with memo key can read your memos",
+      public_memo: "This memo is public",
     },
     checkBoxes: {
       cannot_recover_my_lost_password:

@@ -1,5 +1,5 @@
 type UseFormDateResult = {
-  formDate(date: string | number | Date, pattern?: string[]): string;
+  formLocalDate(date: string | number | Date, pattern?: string[]): string;
   convertUTCDateToLocalDate: (date: Date) => Date;
 };
 
@@ -11,7 +11,7 @@ export function useFormDate(): UseFormDateResult {
     return newDate;
   };
 
-  const formDate = (
+  const formLocalDate = (
     date: string | number | Date,
     pattern = ["date", "month", "year"]
   ): string => {
@@ -30,7 +30,7 @@ export function useFormDate(): UseFormDateResult {
   };
 
   return {
-    formDate,
+    formLocalDate,
     convertUTCDateToLocalDate,
   };
 }

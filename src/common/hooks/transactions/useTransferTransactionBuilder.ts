@@ -1,4 +1,3 @@
-import { Aes, TransactionHelper } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
 import { useAccount } from "..";
@@ -17,7 +16,6 @@ export function useTransferTransactionBuilder(): UseTransferTransactionBuilderRe
       to: Account,
       memo: string,
       asset: Asset,
-      password: string,
       quantity: number
     ): Transaction => {
       let memoFromPublic, memoToPublic;
@@ -25,49 +23,17 @@ export function useTransferTransactionBuilder(): UseTransferTransactionBuilderRe
         memoFromPublic = from.options.memo_key;
         memoToPublic = to.options.memo_key;
       }
-      let memoFromPrivkey;
-      if (memo) {
-        if (from.options.memo_key === from.active.key_auths[0][0]) {
-          memoFromPrivkey = getPrivateKey(password, "active");
-        } else {
-          memoFromPrivkey = getPrivateKey(password, "memo");
-        }
-        if (!memoFromPrivkey) {
-          throw new Error("Missing private memo key for sender: " + from.name);
-        }
-      }
+
       let memoObject;
       if (memo && memoFromPublic && memoToPublic) {
-        if (
-          !/111111111111111111111/.test(memoFromPublic) &&
-          !/111111111111111111111/.test(memoToPublic)
-        ) {
-          const nonce = TransactionHelper.unique_nonce_uint64();
-          const message = Aes.encrypt_with_checksum(
-            memoFromPrivkey,
-            memoToPublic,
-            nonce,
-            memo
-          );
-          memoObject = {
-            from: memoFromPublic,
-            to: memoToPublic,
-            nonce,
-            message,
-          };
-        } else {
-          memoObject = {
-            from: memoFromPublic,
-            to: memoToPublic,
-            nonce: 0,
-            message: Buffer.isBuffer(memo)
-              ? memo
-              : Buffer.concat([
-                  Buffer.alloc(4),
-                  Buffer.from(memo.toString(), "utf-8"),
-                ]),
-          };
-        }
+        memoObject = {
+          from: memoFromPublic,
+          to: memoToPublic,
+          nonce: 0,
+          message: Buffer.isBuffer(memo)
+            ? memo
+            : Buffer.concat([Buffer.alloc(4), Buffer.from(memo, "utf-8")]),
+        };
       }
 
       const amount = {

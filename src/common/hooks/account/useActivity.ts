@@ -2,13 +2,12 @@ import counterpart from "counterpart";
 import { ChainTypes } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
-import { useAccountHistory, useAsset, useFormDate } from "..";
+import { useAccountHistory, useAsset } from "..";
 import { defaultToken } from "../../../api/params";
 import {
   useAssetsContext,
   usePeerplaysApiContext,
   useUserContext,
-  useViewportContext,
 } from "../../providers";
 import { ActivityRow, Amount, BlockHeader, Fee, History } from "../../types";
 
@@ -21,41 +20,8 @@ export function useActivity(): UseActivityResult {
     useAsset();
   const { defaultAsset } = useAssetsContext();
   const { dbApi } = usePeerplaysApiContext();
-  const { sm } = useViewportContext();
   const { getAccountHistoryById } = useAccountHistory();
   const { id } = useUserContext();
-  const { convertUTCDateToLocalDate } = useFormDate();
-
-  const formDate = useCallback(
-    (
-      date: string | number | Date,
-      pattern = ["day", "month", "date", "year"]
-    ): string => {
-      const localDate = convertUTCDateToLocalDate(new Date(date));
-      const newDate = String(localDate).split(" ");
-      const dateObj: {
-        [segment: string]: string;
-      } = {
-        day: newDate[0] + ",",
-        date: newDate[2],
-        month: newDate[1],
-        year: newDate[3],
-        time: newDate[4],
-      };
-      if (sm) {
-        return (
-          pattern.map((el: string) => dateObj[el]).join(" ") +
-          " | " +
-          dateObj.time
-        );
-      }
-
-      return `${dateObj.year}-${
-        localDate.getMonth() + 1
-      }-${localDate.getDate()} ${dateObj.time}`;
-    },
-    [sm]
-  );
 
   const formActivityDescription: {
     [activityType: string]: (operation: any, result?: any) => Promise<string>;
@@ -410,7 +376,7 @@ export function useActivity(): UseActivityResult {
       const blockHeader: BlockHeader = await dbApi("get_block_header", [
         activity.block_num,
       ]);
-      const time = formDate(blockHeader.timestamp);
+      const time = blockHeader.timestamp;
       const feeAsset = await getAssetById(fee.asset_id);
       const operationsNames = Object.keys(ChainTypes.operations);
       const operationType = operationsNames[activity.op[0]].toLowerCase();

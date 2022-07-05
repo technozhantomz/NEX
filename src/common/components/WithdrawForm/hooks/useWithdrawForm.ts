@@ -189,14 +189,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       memo = values.withdrawAddress;
     }
     const asset = assets.filter((asset) => asset.symbol === selectedAsset)[0];
-    const trx = buildTransferTransaction(
-      from,
-      to,
-      memo,
-      asset,
-      password,
-      values.amount
-    );
+    const trx = buildTransferTransaction(from, to, memo, asset, values.amount);
     let trxResult;
 
     try {

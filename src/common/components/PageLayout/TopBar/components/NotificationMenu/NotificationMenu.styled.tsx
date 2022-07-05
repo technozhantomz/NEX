@@ -1,5 +1,12 @@
-import { styled, List as UiList } from "../../../../../../ui/src";
+import { MenuCard, styled, List as UiList } from "../../../../../../ui/src";
+import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
+
+export const NotificationMenuCard = styled(MenuCard)`
+  ${breakpoint.sm} {
+    max-height: 524px;
+  }
+`;
 
 export const ControlsContainer = styled.div`
   display: flex;
@@ -45,15 +52,12 @@ export const ActivitysItemContent = styled.div`
 `;
 
 export const ListsContainer = styled.div`
-  margin-bottom: 25px;
+  margin-bottom: 32px;
   .ant-list-pagination {
     margin-top: 16px;
     .ant-pagination {
       font-size: 12px;
     }
-  }
-  .ant-empty-normal {
-    margin: 0;
   }
 `;
 

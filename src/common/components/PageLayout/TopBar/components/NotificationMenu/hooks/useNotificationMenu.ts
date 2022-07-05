@@ -13,64 +13,42 @@ export function useNotificationMenu({
   notifications,
   loadingNotifications,
 }: Props): UseNotificationMenuResult {
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-
   const [showUnreadOnly, setShowUnreadOnly] = useState<boolean>(false);
-  const [todayNotifications, setTodayNotifications] = useState<Notification[]>(
-    []
-  );
-  const [yesterdayNotifications, setYesterdayNotifications] = useState<
-    Notification[]
-  >([]);
-  const [thirdClusterNotifications, setThirdClusterNotifications] = useState<
-    Notification[]
-  >([]);
+  const [groupedNotificationsByDate, setGroupedNotificationsByDate] = useState<{
+    [time: string]: Notification[];
+  }>({});
 
   const clusterNotificationsByDate = useCallback(() => {
-    if (!loadingNotifications && notifications) {
-      setTodayNotifications(
-        notifications.filter(
-          (notification) =>
-            new Date(notification.activity.time).toDateString() ===
-            today.toDateString()
-        )
+    if (!loadingNotifications && notifications && notifications.length) {
+      const groupedNotificationsByDate = notifications.reduce(
+        (previousValue, currentValue) => {
+          const time = new Date(currentValue.activity.time).toDateString();
+
+          const repeatedTimeIndex = Object.keys(previousValue).findIndex(
+            (key) => key === time
+          );
+          if (!showUnreadOnly || currentValue.unread) {
+            if (repeatedTimeIndex === -1) {
+              previousValue[time] = [] as Notification[];
+              previousValue[time].push(currentValue);
+            } else {
+              previousValue[time].push(currentValue);
+            }
+          }
+          return previousValue;
+        },
+        {} as {
+          [time: string]: Notification[];
+        }
       );
-      setYesterdayNotifications(
-        notifications.filter(
-          (notification) =>
-            new Date(notification.activity.time).toDateString() ===
-            yesterday.toDateString()
-        )
-      );
-      const olderNotifications = notifications.filter(
-        (notification) =>
-          new Date(notification.activity.time).toDateString() !==
-            yesterday.toDateString() &&
-          new Date(notification.activity.time).toDateString() !==
-            today.toDateString()
-      );
-      const thirdClusterTime =
-        olderNotifications.length > 0
-          ? olderNotifications[0].activity.time
-          : "";
-      if (thirdClusterTime !== "") {
-        const thirdClusterNotifications = notifications.filter(
-          (notification) =>
-            new Date(notification.activity.time).toDateString() ===
-            new Date(thirdClusterTime).toDateString()
-        );
-        setThirdClusterNotifications(thirdClusterNotifications);
-      }
+      setGroupedNotificationsByDate(groupedNotificationsByDate);
     }
   }, [
     notifications,
     notifications && notifications.length,
     loadingNotifications,
-    setTodayNotifications,
-    setYesterdayNotifications,
-    setThirdClusterNotifications,
+    setGroupedNotificationsByDate,
+    showUnreadOnly,
   ]);
 
   useEffect(() => {
@@ -80,8 +58,6 @@ export function useNotificationMenu({
   return {
     showUnreadOnly,
     setShowUnreadOnly,
-    todayNotifications,
-    yesterdayNotifications,
-    thirdClusterNotifications,
+    groupedNotificationsByDate,
   };
 }
