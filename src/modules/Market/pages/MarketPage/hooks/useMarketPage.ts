@@ -36,7 +36,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { id, localStorageAccount } = useUserContext();
   const { getAccountHistoryById } = useAccountHistory();
   const { getDefaultPairs, formPairStats } = useMarketPairStats();
-  const { formDate } = useFormDate();
+  const { formLocalDate } = useFormDate();
 
   const [tradingPairsStats, setTradingPairsStats] = useState<
     PairNameAndMarketStats[]
@@ -140,7 +140,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         quote = 0,
         isBuyOrder = false;
       const key = limitOrder.id;
-      const expiration = formDate(limitOrder.expiration);
+      const expiration = formLocalDate(limitOrder.expiration);
       if (baseAsset.id === limitOrder.sell_price.base.asset_id) {
         base = setPrecision(false, limitOrder.for_sale, baseAsset.precision);
         price = roundNum(
@@ -248,7 +248,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
   const formOrderHistoryRow = useCallback(
     (history: OrderHistory, base: Asset, quote: Asset): OrderHistoryRow => {
-      const time = formDate(history.time, ["month", "year", "time"]);
+      const time = formLocalDate(history.time, ["month", "year", "time"]);
       const { pays, receives } = history.op;
       let baseAmount = 0,
         quoteAmount = 0,
@@ -308,7 +308,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       const blockHeader: BlockHeader = await dbApi("get_block_header", [
         history.block_num,
       ]);
-      const date = formDate(blockHeader.timestamp);
+      const date = formLocalDate(blockHeader.timestamp);
       const operationDetails = history.op[1];
       const key = history.id;
 

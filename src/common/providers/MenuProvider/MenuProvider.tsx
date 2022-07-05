@@ -9,7 +9,7 @@ import React, {
 import { useUserContext, useViewportContext } from "..";
 import { defaultNotifications } from "../../../api/params";
 import { breakpoints } from "../../../ui/src/breakpoints";
-import { useActivity, useLocalStorage } from "../../hooks";
+import { useActivity, useFormDate, useLocalStorage } from "../../hooks";
 import { Notification } from "../../types";
 
 import { MenuProviderContextType } from "./MenuProvider.types";
@@ -62,6 +62,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { getActivitiesRows } = useActivity();
   const { width } = useViewportContext();
+  const { formLocalDate } = useFormDate();
 
   const openMenu = useCallback(
     (menuName: string) => {
@@ -150,9 +151,13 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
         localStorageAccount,
         false
       );
-      if (serverActivities) {
+      if (serverActivities && serverActivities.length) {
         const filteredServerActivities = serverActivities.filter(
-          (serverActivity) => new Date(serverActivity.time) > pastThirtyDaysDate
+          (serverActivity) => {
+            return (
+              new Date(formLocalDate(serverActivity.time)) >= pastThirtyDaysDate
+            );
+          }
         );
         const serverNotifications = filteredServerActivities.map(
           (serverActivity) => {
