@@ -48,7 +48,7 @@ export const AccountUpdate = ({
       )}
       {desiredMembers !== undefined && desiredMembers >= 0 ? (
         <Styled.DetailContainer>
-          <p>{`Desired ${memberType}`}</p>
+          <p>{counterpart.translate(`field.labels.desired_${memberType}`)}</p>
           <p>{`${desiredMembers}`}</p>
         </Styled.DetailContainer>
       ) : (

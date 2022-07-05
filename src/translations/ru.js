@@ -697,6 +697,9 @@ export const ru = {
     mark_all_read: "отметить все как прочитанное",
   },
   field: {
+    options: {
+      lock_wallet: "минуты ",
+    },
     placeholder: {
       user_name: "Введите имя пользователя",
       password: "Введите пароль",
@@ -759,6 +762,10 @@ export const ru = {
       today: "Сегодня",
       yesterday: "вчерашний день",
       order_to_cancel: "Заказ на отмену",
+      threshold: "Порог",
+      desired_witnesses: "Желаемые свидетели",
+      desired_committees: "Желаемые комитеты",
+      desired_sons: "Желаемые сыновья",
     },
     comments: {
       deposit_hbd:
@@ -770,6 +777,7 @@ export const ru = {
         "Я понимаю, что Peerplays не может восстановить мой утерянный пароль",
       securely_saved_my_password: "Я надежно сохранил свой пароль",
       enable_notifications: "Включить уведомления",
+      key_management_group: ["Активный", "Владелец", "Памятка"],
     },
     errors: {
       user_name_first: "Сначала укажите действительное имя пользователя",
@@ -834,7 +842,7 @@ export const ru = {
       successfully_withdrawn: "Успешно отозвано %(withdrawAmount)s %(symbol)s",
       successfully_deposited:
         "Успешно депонирован %(depositAmount)s %(symbol)s",
-      limit_order_successfully: "You have successfully created a limit order",
+      limit_order_successfully: "Вы успешно создали лимитный ордер",
       saved_changes: "Вы успешно сохранили изменения",
       account_upgraded_successfully:
         "Ваша учетная запись успешно обновлена до пожизненной учетной записи членства",

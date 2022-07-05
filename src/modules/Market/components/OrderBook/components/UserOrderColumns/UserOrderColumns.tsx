@@ -32,7 +32,7 @@ export const showUserOrderColumns = (
       key: "expiration",
     },
     {
-      title: "Action",
+      title: counterpart.translate(`tableHead.action`),
       dataIndex: "cancel",
       key: "cancel",
       render: (_value: string, record: any) => (
