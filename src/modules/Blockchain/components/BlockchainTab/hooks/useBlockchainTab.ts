@@ -2,7 +2,11 @@ import { ParsedUrlQuery } from "querystring";
 
 import { useCallback, useEffect, useState } from "react";
 
-import { useArrayLimiter, useBlockchain } from "../../../../../common/hooks";
+import {
+  useArrayLimiter,
+  useBlockchain,
+  useFormDate,
+} from "../../../../../common/hooks";
 import { useAssetsContext } from "../../../../../common/providers";
 import { BlockTableRow } from "../../../types";
 
@@ -34,7 +38,7 @@ export function useBlockchainTab(
   const [searchValue, setSearchValue] = useState<string>("");
   const [blockchainData, setBlockchainData] =
     useState<BlockChainData>(defaultData);
-  const [searchResult, setSearchResult] = useState<BlockTableRow[]>();
+  const [searchResult, setSearchResult] = useState<BlockTableRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { defaultAsset } = useAssetsContext();
   const { updateArrayWithLimit } = useArrayLimiter();
@@ -44,8 +48,10 @@ export function useBlockchainTab(
     getDynamic,
     getRecentBlocks,
     getAvgBlockTime,
-    getBlock,
+    getBlocks,
   } = useBlockchain();
+  const { formDate } = useFormDate();
+  const MAX_BLOCKS_LIMIT = 100;
 
   const getBlockchainData = useCallback(async () => {
     try {
@@ -61,7 +67,7 @@ export function useBlockchainTab(
         return {
           key: (block.id as number).toString(),
           blockID: (block.id as number).toString(),
-          time: new Date(block.timestamp.toLocaleString()).toLocaleTimeString(),
+          time: formDate(block.timestamp, ["month", "date", "year", "time"]),
           witness: block.witness_account_name,
           transaction: block.transactions.length,
         };
@@ -118,37 +124,54 @@ export function useBlockchainTab(
 
   const handleSearch = useCallback(
     async (value: string) => {
-      setLoading(true);
-      setSearchValue(value);
-      const inRecents = blockchainData.recentBlocks.filter((block) =>
-        block.key.startsWith(value)
-      );
-      if (inRecents.length > 0) {
-        setSearchResult(undefined);
-        setLoading(false);
-      } else {
+      if (value && value !== "") {
+        setLoading(true);
+        setSearchValue(value);
         try {
-          const block = await getBlock(Number(value));
-          if (block) {
-            setSearchResult([
-              {
-                key: value,
-                blockID: value,
-                time: new Date(block.timestamp).toLocaleTimeString(),
+          let blocks = await getBlocks(
+            Number(value),
+            Number(value) + MAX_BLOCKS_LIMIT,
+            MAX_BLOCKS_LIMIT
+          );
+          if (blocks && blocks.length) {
+            let blockCounter = Number(value) - 1;
+            blocks = blocks
+              .map((block) => {
+                blockCounter = blockCounter + 1;
+                return {
+                  ...block,
+                  id: blockCounter,
+                };
+              })
+              .filter((block) => block.id.toString().startsWith(value));
+
+            const searchResult = blocks.map((block) => {
+              return {
+                key: String(block.id),
+                blockID: String(block.id),
+                time: formDate(block.timestamp, [
+                  "month",
+                  "date",
+                  "year",
+                  "time",
+                ]),
                 witness: block.witness_account_name,
                 transaction: block.transactions.length,
-              },
-            ]);
+              } as BlockTableRow;
+            });
+            setSearchResult(searchResult);
             setLoading(false);
           } else {
-            setSearchResult(undefined);
+            setSearchResult([]);
             setLoading(false);
           }
         } catch (e) {
           console.log(e);
-          setSearchResult(undefined);
+          setSearchResult([]);
           setLoading(false);
         }
+      } else {
+        setSearchValue("");
       }
     },
     [setLoading, setSearchValue, setSearchResult]

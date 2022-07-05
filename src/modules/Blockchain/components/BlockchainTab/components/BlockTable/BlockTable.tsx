@@ -9,16 +9,11 @@ import { BlockColumns } from "./BlockColumns";
 import * as Styled from "./BlockTable.styled";
 
 type Props = {
-  searchValue: string;
   blocks: BlockTableRow[];
   loading: boolean;
 };
 
-export const BlockTable = ({
-  searchValue = "",
-  blocks,
-  loading,
-}: Props): JSX.Element => {
+export const BlockTable = ({ blocks, loading }: Props): JSX.Element => {
   const router = useRouter();
   const { sm } = useViewportContext();
 
@@ -27,11 +22,7 @@ export const BlockTable = ({
       {sm ? (
         <List
           itemLayout="vertical"
-          dataSource={
-            searchValue === ""
-              ? blocks
-              : blocks.filter((item) => item.blockID.startsWith(searchValue))
-          }
+          dataSource={blocks}
           loading={loading}
           renderItem={(item) => (
             <Link href={`/blockchain/${item.blockID}`} passHref>
@@ -69,11 +60,7 @@ export const BlockTable = ({
       ) : (
         <Styled.BlockTable
           bordered={false}
-          dataSource={
-            searchValue === ""
-              ? blocks
-              : blocks.filter((item) => item.blockID.startsWith(searchValue))
-          }
+          dataSource={blocks}
           columns={BlockColumns}
           rowKey={(record) => record.blockID}
           loading={loading}
