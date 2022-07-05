@@ -128,19 +128,27 @@ export function useBlockchainTab(
         setLoading(true);
         setSearchValue(value);
         try {
-          const blocks = await getBlocks(
+          let blocks = await getBlocks(
             Number(value),
             Number(value) + MAX_BLOCKS_LIMIT,
             MAX_BLOCKS_LIMIT
           );
           if (blocks && blocks.length) {
-            console.log(blocks);
             let blockCounter = Number(value) - 1;
+            blocks = blocks
+              .map((block) => {
+                blockCounter = blockCounter + 1;
+                return {
+                  ...block,
+                  id: blockCounter,
+                };
+              })
+              .filter((block) => block.id.toString().startsWith(value));
+
             const searchResult = blocks.map((block) => {
-              blockCounter = blockCounter + 1;
               return {
-                key: String(blockCounter),
-                blockID: String(blockCounter),
+                key: String(block.id),
+                blockID: String(block.id),
                 time: formDate(block.timestamp, [
                   "month",
                   "date",
@@ -162,6 +170,8 @@ export function useBlockchainTab(
           setSearchResult([]);
           setLoading(false);
         }
+      } else {
+        setSearchValue("");
       }
     },
     [setLoading, setSearchValue, setSearchResult]

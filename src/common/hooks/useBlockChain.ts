@@ -112,18 +112,29 @@ export function useBlockchain(): UseBlockchainResult {
           last,
           limit,
         ]);
-        if (blocks && blocks.length && blocks.find((block) => block !== null)) {
-          blocks.map(async (block) => {
-            const witness: WitnessAccount = (
-              await dbApi("get_objects", [[block.witness]])
-            )[0];
-            const witnessAccount: Account = (
-              await dbApi("get_accounts", [[witness.witness_account]])
-            )[0];
-            block.witness_account_name = witnessAccount.name;
-            return block;
-          });
-          return blocks;
+        if (blocks) {
+          let nonNullBlocks = blocks.filter((block) => block);
+          if (nonNullBlocks && nonNullBlocks.length > 0) {
+            const witnessesAccounts: WitnessAccount[] = await dbApi(
+              "get_objects",
+              [nonNullBlocks.map((block) => block.witness)]
+            );
+            const accounts: Account[] = await dbApi("get_accounts", [
+              witnessesAccounts.map((witness) => witness.witness_account),
+            ]);
+            nonNullBlocks = nonNullBlocks.map((block) => {
+              const witnessAccount = witnessesAccounts.find(
+                (witness) => witness.id === block.witness
+              ) as WitnessAccount;
+              const account = accounts.find(
+                (a) => a.id === witnessAccount.witness_account
+              ) as Account;
+              block.witness_account_name = account.name;
+
+              return block;
+            });
+            return nonNullBlocks;
+          }
         }
       } catch (e) {
         console.log(e);
