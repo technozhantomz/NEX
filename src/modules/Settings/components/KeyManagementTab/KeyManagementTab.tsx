@@ -99,7 +99,9 @@ export const KeyManagementTab = (): JSX.Element => {
             validateTrigger="onChange"
           >
             <Checkbox.Group
-              options={["Active", "Owner", "Memo"]}
+              options={counterpart.translate(
+                `field.checkBoxes.key_management_group`
+              )}
               onChange={handleCheckboxChange}
               value={selectedKeys}
             ></Checkbox.Group>

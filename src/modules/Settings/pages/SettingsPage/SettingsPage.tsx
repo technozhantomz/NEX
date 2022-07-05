@@ -70,7 +70,7 @@ const SettingPage: NextPage = () => {
 
   return (
     <Layout
-      title="Settings"
+      title={counterpart.translate(`pages.settings.heading`)}
       type="card-lrg"
       heading={counterpart.translate(`pages.settings.heading`)}
       description="Settings Page"

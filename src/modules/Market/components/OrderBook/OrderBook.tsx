@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { Dispatch, SetStateAction } from "react";
 
 import { PasswordModal, TransactionModal } from "../../../../common/components";
@@ -129,7 +130,9 @@ export const OrderBook = ({
                 className="ant-dropdown-link"
                 onClick={(e) => e.preventDefault()}
               >
-                <Styled.ThresholdLabel>Threshold</Styled.ThresholdLabel>
+                <Styled.ThresholdLabel>
+                  {counterpart.translate(`field.labels.threshold`)}
+                </Styled.ThresholdLabel>
                 <Styled.ThresholdValue>{threshold}</Styled.ThresholdValue>
                 <DownOutlined />
               </a>
