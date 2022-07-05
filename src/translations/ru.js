@@ -808,6 +808,8 @@ export const ru = {
         "Сеть SON сейчас недоступна. Пожалуйста, попробуйте позже!",
       transaction_unable: "Невозможно обработать транзакцию!",
       price_should_greater: "Цена должна быть больше 0",
+      quantity_should_greater: "Количество должно быть больше 0",
+      total_should_greater: "Сумма должна быть больше, чем 0",
       assets_must_different: "Активы должны быть разными",
       assets_should_be: "Один из активов должен быть %(defaultToken)s",
       available_balance_cannot_greater:
