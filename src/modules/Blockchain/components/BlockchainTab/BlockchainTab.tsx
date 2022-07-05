@@ -63,8 +63,11 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
         </h3>
       </div>
       <BlockTable
-        searchValue={searchValue}
-        blocks={searchResult ? searchResult : blockchainData.recentBlocks}
+        blocks={
+          searchValue && searchValue !== ""
+            ? searchResult
+            : blockchainData.recentBlocks
+        }
         loading={loading}
       />
     </Styled.BlockTabWrapper>

@@ -86,15 +86,17 @@ export function useBlockchain(): UseBlockchainResult {
   const getBlock = useCallback(
     async (value: number) => {
       try {
-        const block: Block = await dbApi("get_block", [value]);
-        const witness: WitnessAccount = (
-          await dbApi("get_objects", [[block.witness]])
-        )[0];
-        const witnessAccount: Account = (
-          await dbApi("get_accounts", [[witness.witness_account]])
-        )[0];
-        block.witness_account_name = witnessAccount.name;
-        return block;
+        const block: Block | null = await dbApi("get_block", [value]);
+        if (block) {
+          const witness: WitnessAccount = (
+            await dbApi("get_objects", [[block.witness]])
+          )[0];
+          const witnessAccount: Account = (
+            await dbApi("get_accounts", [[witness.witness_account]])
+          )[0];
+          block.witness_account_name = witnessAccount.name;
+          return block;
+        }
       } catch (e) {
         console.log(e);
       }
@@ -105,9 +107,13 @@ export function useBlockchain(): UseBlockchainResult {
   const getBlocks = useCallback(
     async (first: number, last: number, limit: number) => {
       try {
-        const blocks = await dbApi("get_blocks", [first, last, limit]);
-        if (blocks) {
-          blocks.map(async (block: Block) => {
+        const blocks: Block[] | undefined = await dbApi("get_blocks", [
+          first,
+          last,
+          limit,
+        ]);
+        if (blocks && blocks.length && blocks.find((block) => block !== null)) {
+          blocks.map(async (block) => {
             const witness: WitnessAccount = (
               await dbApi("get_objects", [[block.witness]])
             )[0];

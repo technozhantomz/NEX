@@ -1,6 +1,7 @@
 type UseFormDateResult = {
   formLocalDate(date: string | number | Date, pattern?: string[]): string;
   convertUTCDateToLocalDate: (date: Date) => Date;
+  formDate: (date: string | number | Date, pattern?: string[]) => string;
 };
 
 export function useFormDate(): UseFormDateResult {
@@ -29,8 +30,26 @@ export function useFormDate(): UseFormDateResult {
     return pattern.map((el) => dateObj[el]).join(" ");
   };
 
+  const formDate = (
+    date: string | number | Date,
+    pattern = ["date", "month", "year"]
+  ): string => {
+    const newDate = String(new Date(date)).split(" ");
+    const dateObj: {
+      [segment: string]: string;
+    } = {
+      day: newDate[0] + ",",
+      date: newDate[2],
+      month: newDate[1],
+      year: newDate[3],
+      time: newDate[4],
+    };
+    return pattern.map((el) => dateObj[el]).join(" ");
+  };
+
   return {
     formLocalDate,
     convertUTCDateToLocalDate,
+    formDate,
   };
 }
