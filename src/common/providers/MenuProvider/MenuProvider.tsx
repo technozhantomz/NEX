@@ -104,9 +104,10 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
     for (let index = 0; index < notifications.length; index++) {
       if (notifications[index].unread) {
         _setHasUnreadMessages(true);
-        break;
+        return;
       }
     }
+    _setHasUnreadMessages(false);
   };
 
   const markAllNotificationsRead = () => {
