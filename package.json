@@ -30,7 +30,7 @@
     "next": "12.1.0",
     "next-compose-plugins": "^2.2.1",
     "next-with-less": "^2.0.5",
-    "peerplaysjs-lib": "git+https://gitlab.com/PBSA/tools-libs/peerplaysjs-lib#8f19901818ea89cab6f5bd8dc628c0e392909b89",
+    "peerplaysjs-lib": "git+https://gitlab.com/PBSA/tools-libs/peerplaysjs-lib",
     "react": "^17.0.2",
     "react-dom": "17.0.2",
     "react-usestateref": "^1.0.8",
