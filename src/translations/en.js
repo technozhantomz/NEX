@@ -47,6 +47,12 @@ export const en = {
         title: "Account whitelist",
         description: "%(issuer)s, %(status)s the account, %(listed)s",
       },
+      affiliate_payout: {
+        title: "payout affiliate",
+      },
+      affiliate_referral_payout: {
+        title: "Payout referral affiliate",
+      },
       all: {
         title: "Show all",
       },
@@ -176,6 +182,9 @@ export const en = {
       call_order_update: {
         title: "Update margin",
       },
+      cancel_offer: {
+        title: "Cancel offer",
+      },
       committee_member_create: {
         title: "Create committee member",
       },
@@ -235,6 +244,9 @@ export const en = {
         description:
           "%(user)s, bought %(paysAmount)s for %(receivesAmmount)s for order #%(id)s",
       },
+      finalize_offer: {
+        title: "Finalize offer",
+      },
       game_move: {
         title: "Game move",
       },
@@ -292,6 +304,9 @@ export const en = {
       nft_set_approval_for_all: {
         title: "Set approval for all nfts",
       },
+      offer: {
+        title: "Offer",
+      },
       proposal_create: {
         title: "Create proposal",
       },
@@ -346,11 +361,23 @@ export const en = {
       son_update: {
         title: "Update SON",
       },
+      son_wallet_deposit_create: {
+        title: "Create deposit son wallet",
+      },
+      son_wallet_deposit_process: {
+        title: "Process deposit SON wallet",
+      },
       son_wallet_recreate: {
         title: "Recreate SON wallet",
       },
       son_wallet_update: {
         title: "Update SON wallet",
+      },
+      son_wallet_withdraw_create: {
+        title: "Create withdraw SON wallet",
+      },
+      son_wallet_withdraw_process: {
+        title: "Process withdraw SON wallet",
       },
       sport_create: {
         title: "Create sport",
