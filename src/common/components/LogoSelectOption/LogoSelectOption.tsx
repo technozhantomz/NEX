@@ -35,6 +35,7 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
     HIVE: <HIVEIcon height="30" width="30" />,
     HBD: <HIVEIcon height="30" width="30" />,
   };
+
   return (
     <Styled.SelectContainer
       onChange={props.onChange}
@@ -45,6 +46,7 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
       <Styled.SelectOptionContainer
         value={props.defaultValue}
         label={props.defaultValue}
+        key={props.defaultValue}
       >
         <Styled.OptionDiv>
           <Styled.IconContainer>

@@ -1,16 +1,16 @@
 import { Form, Input } from "antd";
+import { useCallback } from "react";
 
 import { defaultToken } from "../../../../api/params/networkparams";
 import { PasswordModal } from "../../../../common/components";
 import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
 import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
+import { useUserContext } from "../../../../common/providers";
 import {
   CardFormButton,
   InfoCircleOutlined,
   SwapOutlined,
 } from "../../../../ui/src";
-
-import { useUserContext } from "../../../../common/providers";
 
 import * as Styled from "./SwapTab.styled";
 import { useSwap } from "./hooks/useSwapTab";
@@ -29,13 +29,14 @@ export const SwapTab = (): JSX.Element => {
     swapAsset,
     status,
     assetValueInfo,
+    selectedAssets,
   } = useSwap();
 
   const InfoToolTip = (
     <Styled.TooltipPara>
       {status === "" ? "" : status}
-      {status === "" ? "" : <p>Transaction Type : Trade</p>}
-      Fees : {feeData ? feeData.amount : 0} {defaultToken}
+      {<p>Transaction Type : Trade</p>}
+      Fee : {feeData?.amount ? feeData.amount : "0"} {defaultToken}
     </Styled.TooltipPara>
   );
 
@@ -57,6 +58,7 @@ export const SwapTab = (): JSX.Element => {
             <Input
               placeholder="0.00000"
               type="number"
+              min={0}
               prefix={
                 <Styled.SwapFormItem
                   name="sellAsset"
@@ -66,9 +68,10 @@ export const SwapTab = (): JSX.Element => {
                 >
                   <LogoSelectOption
                     id="sellAsset"
-                    defaultValue="TEST"
+                    defaultValue={selectedAssets.sellAsset}
                     assets={sidechainAssets.concat(defaultAsset ?? [])}
                     labelInValue
+                    key={selectedAssets.sellAsset}
                     onChange={handleAssetChange}
                   />
                 </Styled.SwapFormItem>
@@ -84,6 +87,7 @@ export const SwapTab = (): JSX.Element => {
             <Input
               placeholder="0.00000"
               type="number"
+              min={0}
               prefix={
                 <Styled.SwapFormItem
                   name="buyAsset"
@@ -93,8 +97,9 @@ export const SwapTab = (): JSX.Element => {
                 >
                   <LogoSelectOption
                     id="buyAsset"
-                    defaultValue="BTC"
+                    defaultValue={selectedAssets.buyAsset}
                     assets={sidechainAssets.concat(defaultAsset ?? [])}
+                    key={selectedAssets.buyAsset}
                     labelInValue
                     onChange={handleAssetChange}
                   />
@@ -102,6 +107,18 @@ export const SwapTab = (): JSX.Element => {
               }
             />
           </Styled.SwapItem>
+          <Styled.InfoDiv>
+            <Styled.InfoPara>
+              {assetValueInfo}
+              <Styled.Tooltip
+                placement="left"
+                title={InfoToolTip}
+                color="#E3EBF8"
+              >
+                <InfoCircleOutlined />
+              </Styled.Tooltip>
+            </Styled.InfoPara>
+          </Styled.InfoDiv>
           <Form.Item>
             <CardFormButton type="primary" htmlType="submit">
               Swap Coins
@@ -110,23 +127,16 @@ export const SwapTab = (): JSX.Element => {
         </Styled.SwapForm>
         <PasswordModal visible={visible} onCancel={onCancel} />
       </Styled.SwapForm.Provider>
-      <Styled.InfoDiv>
-        <Styled.InfoPara>
-          {assetValueInfo}
-          <Styled.Tooltip placement="left" title={InfoToolTip} color="#E3EBF8">
-            <InfoCircleOutlined />
-          </Styled.Tooltip>
-        </Styled.InfoPara>
-      </Styled.InfoDiv>
       {/*<DashboardButton label="Swap Coins" />
       <Styled.HistoryLinkDiv>
         <Styled.HistoryLink>See My Swap History</Styled.HistoryLink>
-      </Styled.HistoryLinkDiv> */}
+      </Styled.HistoryLinkDiv> 
       <Styled.FooterPara>
         {status === "" ? "" : status}
         {status === "" ? "" : "Transaction Type : Trade"}
         Fees : {feeData ? feeData.amount : 0} {defaultToken}
       </Styled.FooterPara>
+      */}
     </Styled.SwapContainer>
   );
 };

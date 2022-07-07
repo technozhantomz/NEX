@@ -15,9 +15,13 @@ import {
   useUserContext,
 } from "../../../../../common/providers";
 
-import { Swap } from "./useSwapTab.types";
+import { Swap, SwapAssetPair } from "./useSwapTab.types";
 
 export function useSwap(): Swap {
+  const [selectedAssets, setSelectedAssets] = useState<SwapAssetPair>({
+    sellAsset: "TEST",
+    buyAsset: "BTC",
+  });
   const [assetValueInfo, setAssetValueInfo] = useState<string>("");
   const [status, upStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
@@ -36,7 +40,7 @@ export function useSwap(): Swap {
     } else {
       swapForm.setFieldsValue({ buyAsset: value });
     }
-    console.log(swapForm.getFieldsValue());
+    setSelectedAssets({ ...selectedAssets, [option.action]: String(value) });
   };
 
   const onCancel = () => {
@@ -55,6 +59,11 @@ export function useSwap(): Swap {
     updateAssetValueInfo(defaultToken, "BTC");
   }, []);
 
+  useEffect(() => {
+    swapForm.setFieldsValue({ sellAsset: selectedAssets.sellAsset });
+    swapForm.setFieldsValue({ buyAsset: selectedAssets.buyAsset });
+  }, [selectedAssets]);
+
   const onFormFinish = (name: string, info: any) => {
     const { values, forms } = info;
     const { passwordModal } = forms;
@@ -66,7 +75,6 @@ export function useSwap(): Swap {
   };
 
   const getFeeData = async () => {
-    console.log(feeParameters);
     const rawFeeData = feeParameters.filter(
       (item) => item.name === "LIMIT_ORDER_CREATE"
     )[0];
@@ -81,8 +89,6 @@ export function useSwap(): Swap {
     const sellAsset = await getAssetBySymbol(values.sellAsset);
     const buyAsset = await getAssetBySymbol(values.buyAsset);
 
-    console.log(values);
-    console.log("id: ", id);
     const activeKey = getPrivateKey(password, "active");
 
     const amount_to_sell = {
@@ -140,6 +146,8 @@ export function useSwap(): Swap {
       return Promise.reject(
         new Error(`Must be less then ${accountAsset?.amount}`)
       );
+    const values = swapForm.getFieldsValue();
+    updateAssetValueInfo(values.sellAsset, values.buyAsset, true);
     return Promise.resolve();
   };
 
@@ -151,7 +159,7 @@ export function useSwap(): Swap {
       return Promise.reject(new Error(`Cannot swap same tokens`));
     if (accountAsset === undefined)
       return Promise.reject(new Error(`${value} not available`));
-    updateAssetValueInfo(values.sellAsset, values.buyAsset);
+    updateAssetValueInfo(values.sellAsset, values.buyAsset, true);
     return Promise.resolve();
   };
 
@@ -159,13 +167,13 @@ export function useSwap(): Swap {
     const values = swapForm.getFieldsValue();
     if (value === swapForm.getFieldValue("sellAsset"))
       return Promise.reject(new Error(`Cannot swap same tokens`));
-    updateAssetValueInfo(values.sellAsset, values.buyAsset);
+    updateAssetValueInfo(values.sellAsset, values.buyAsset, false);
     return Promise.resolve();
   };
 
   const validateBuyAmount = (_: unknown, value: number) => {
     const values = swapForm.getFieldsValue();
-    updateAssetValueInfo(values.sellAsset, values.buyAsset);
+    updateAssetValueInfo(values.sellAsset, values.buyAsset, false);
     return Promise.resolve();
   };
 
@@ -209,21 +217,41 @@ export function useSwap(): Swap {
     swapForm.setFieldsValue({ sellAmount: values.buyAmount });
     swapForm.setFieldsValue({ buyAmount: values.sellAmount });
     values = swapForm.getFieldsValue();
+    const { sellAsset, buyAsset } = selectedAssets;
+    setSelectedAssets({ buyAsset: sellAsset, sellAsset: buyAsset });
     updateAssetValueInfo(values.sellAsset, values.buyAsset);
   };
 
-  const updateAssetValueInfo = async (sellAsset: string, buyAsset: string) => {
+  const updateAssetValueInfo = async (
+    sellAsset: string,
+    buyAsset: string,
+    isSellAssetChanged: boolean
+  ) => {
     const tickerData = await dbApi("get_ticker", [buyAsset, sellAsset]);
-    console.log(tickerData);
     const buyAssetData = await getAssetBySymbol(buyAsset);
+    const sellAssetData = await getAssetBySymbol(sellAsset);
     const buyAmount = swapForm.getFieldValue("buyAmount")
       ? swapForm.getFieldValue("buyAmount")
+      : 0;
+    const sellAmount = swapForm.getFieldValue("sellAmount")
+      ? swapForm.getFieldValue("sellAmount")
       : 0;
     const price = tickerData ? Number(tickerData?.latest) : 0;
     const sellPrice = Number(
       parseFloat(price * buyAmount + "").toFixed(buyAssetData?.precision)
     );
-    setAssetValueInfo(`${buyAmount} ${buyAsset} = ${sellPrice} ${sellAsset}`);
+    const buyPrice =
+      price > 0
+        ? Number(
+            parseFloat(sellAmount / price + "").toFixed(
+              sellAssetData?.precision
+            )
+          )
+        : 0;
+    isSellAssetChanged === true
+      ? swapForm.setFieldsValue({ buyAmount: buyPrice })
+      : swapForm.setFieldsValue({ sellAmount: sellPrice });
+    setAssetValueInfo(`${1} ${buyAsset} = ${price} ${sellAsset}`);
   };
 
   return {
@@ -238,5 +266,6 @@ export function useSwap(): Swap {
     swapAsset,
     status,
     assetValueInfo,
+    selectedAssets,
   };
 }

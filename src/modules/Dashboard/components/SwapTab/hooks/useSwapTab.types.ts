@@ -24,6 +24,7 @@ export type Swap = {
   swapAsset: () => void;
   status: string;
   assetValueInfo: string;
+  selectedAssets: Record<string, string>;
 };
 
 export type FormValidation = {
@@ -39,3 +40,8 @@ export type SwapFormData = {
   sellAsset: string;
   buyAsset: string;
 };
+
+export type SwapAssetPair = {
+  sellAsset: string;
+  buyAsset: string;
+}

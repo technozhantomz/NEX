@@ -18,9 +18,19 @@ export const SwapContainer = styled.div`
   margin: 10px;
   padding: 30px 10px 10px;
   text-align: center;
+  .ant-form-item-explain {
+    position: absolute;
+    right: 20px;
+    bottom: 0px;
+  }
+  .ant-form-item-with-help {
+    margin-bottom: 24px !important;
+  }
 `;
 
-export const SwapForm = styled(swapForm)``;
+export const SwapForm = styled(swapForm)`
+  padding: 1rem;
+`;
 export const InfoDiv = styled.div`
   text-align: right;
   font: normal normal normal 14px/17px Inter;
@@ -97,7 +107,7 @@ export const SwapItem = styled(swapForm.Item)`
 
 export const SwapSellItem = styled(SwapItem)`
   margin: 0;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 `;
 
 export const button = styled(Button)`
@@ -111,6 +121,8 @@ export const Tooltip = styled(tooltip)`
   margin-left: 30px;
 `;
 export const TooltipPara = styled.p`
+  padding: 1rem;
+  padding-bottom: 0px;
   color: var(---text-icons);
   font: normal normal normal 14px/20px Inter;
   letter-spacing: 0px;
