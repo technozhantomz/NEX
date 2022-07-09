@@ -32,7 +32,7 @@ export const SwapTab = (): JSX.Element => {
 
   const InfoToolTip = (
     <Styled.TooltipPara>
-      {<span>status === "" ? "" : status</span>}
+      {<span>{status === "" ? "" : status}</span>}
       {<span>Transaction Type : Trade</span>}
       {
         <span>

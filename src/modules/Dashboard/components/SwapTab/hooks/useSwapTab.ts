@@ -7,12 +7,11 @@ import {
   useAccount,
   useAsset,
   useFees,
-  useTransactionBuilder,
   useLimitOrderTransactionBuilder,
+  useTransactionBuilder,
 } from "../../../../../common/hooks";
 import {
   CreateLimitOrderFee,
-  // TransactionFee,
 } from "../../../../../common/hooks/fees/useFees.types";
 import {
   usePeerplaysApiContext,
@@ -34,7 +33,6 @@ export function useSwap(): Swap {
   const { getPrivateKey } = useAccount();
   const { buildCreateLimitOrderTransaction } =
     useLimitOrderTransactionBuilder();
-  // const { defaultAsset } = useAssetsContext();
   const { calculateCreateLimitOrderFee } = useFees();
   const [swapOrderFee, setSwapOrderFee] = useState<CreateLimitOrderFee>();
   const { getAssetBySymbol } = useAsset();
@@ -112,22 +110,6 @@ export function useSwap(): Swap {
     const expiration = new Date(
       new Date().getTime() + 1000 * 60 * 60 * 24 * 365
     ).toISOString();
-    console.log(id);
-    // const trx = {
-    //   type: "limit_order_create",
-    //   params: {
-    //     // fee: {
-    //     //   amount: 0,
-    //     //   asset_id: defaultAsset?.id,
-    //     // },
-    //     seller: id,
-    //     amount_to_sell,
-    //     min_to_receive,
-    //     expiration,
-    //     fill_or_kill: false,
-    //     extensions: [],
-    //   },
-    // };
 
     const trx = buildCreateLimitOrderTransaction(
       id,
@@ -157,7 +139,12 @@ export function useSwap(): Swap {
         `Your swap was completed and you received ${values.buyAmount} ${values.buyAsset} for ${values.sellAmount} ${values.sellAsset}`
       );
     }
-  }, []);
+  }, [
+    id,
+    swapForm,
+    buildTrx,
+    buildCreateLimitOrderTransaction
+  ]);
 
   const validateSellAmount = (_: unknown, value: number) => {
     const sellAsset = swapForm.getFieldValue("sellAsset");
@@ -259,10 +246,12 @@ export function useSwap(): Swap {
     const sellAmount = swapForm.getFieldValue("sellAmount")
       ? swapForm.getFieldValue("sellAmount")
       : 0;
+
     const price = tickerData ? Number(tickerData?.latest) : 0;
     const sellPrice = Number(
       parseFloat(price * buyAmount + "").toFixed(buyAssetData?.precision)
     );
+    
     const buyPrice =
       price > 0
         ? Number(
