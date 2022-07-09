@@ -2,7 +2,7 @@ import { FormInstance, Rule } from "antd/lib/form";
 import { BaseOptionType, DefaultOptionType } from "antd/lib/select";
 import FormFinishInfo from "rc-field-form";
 
-import { TransactionFee } from "../../../../../common/hooks/fees/useFees.types";
+import { CreateLimitOrderFee } from "../../../../../common/hooks/fees/useFees.types";
 
 export type Swap = {
   visible: boolean;
@@ -11,7 +11,7 @@ export type Swap = {
   confirm: () => void;
   swapForm: FormInstance<SwapFormData>;
   formValidation: FormValidation;
-  feeData: TransactionFee | undefined;
+  swapOrderFee: CreateLimitOrderFee | undefined;
   handleAssetChange:
     | ((
         value: unknown,

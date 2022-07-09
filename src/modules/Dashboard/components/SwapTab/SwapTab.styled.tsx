@@ -128,6 +128,9 @@ export const TooltipPara = styled.p`
   letter-spacing: 0px;
   color: #212121;
   opacity: 1;
+  span {
+    display: block;
+  }
   @media (max-width: 500px) {
     font-size: 11px;
   }

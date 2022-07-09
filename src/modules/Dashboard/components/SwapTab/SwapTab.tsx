@@ -1,11 +1,9 @@
 import { Form, Input } from "antd";
-import { useCallback } from "react";
 
 import { defaultToken } from "../../../../api/params/networkparams";
 import { PasswordModal } from "../../../../common/components";
 import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
-import { useAsset, useSidechainAccounts } from "../../../../common/hooks";
-import { useUserContext } from "../../../../common/providers";
+import { useAssetsContext } from "../../../../common/providers";
 import {
   CardFormButton,
   InfoCircleOutlined,
@@ -16,7 +14,8 @@ import * as Styled from "./SwapTab.styled";
 import { useSwap } from "./hooks/useSwapTab";
 
 export const SwapTab = (): JSX.Element => {
-  const { defaultAsset, sidechainAssets } = useAsset();
+  const { defaultAsset, sidechainAssets } = useAssetsContext();
+
   const {
     visible,
     onCancel,
@@ -25,18 +24,21 @@ export const SwapTab = (): JSX.Element => {
     handleAssetChange,
     swapForm,
     formValidation,
-    feeData,
+    swapOrderFee,
     swapAsset,
-    status,
     assetValueInfo,
     selectedAssets,
   } = useSwap();
 
   const InfoToolTip = (
     <Styled.TooltipPara>
-      {status === "" ? "" : status}
-      {<p>Transaction Type : Trade</p>}
-      Fee : {feeData?.amount ? feeData.amount : "0"} {defaultToken}
+      {<span>status === "" ? "" : status</span>}
+      {<span>Transaction Type : Trade</span>}
+      {
+        <span>
+          Fee : {swapOrderFee?.fee ? swapOrderFee.fee : "0"} {defaultToken}
+        </span>
+      }
     </Styled.TooltipPara>
   );
 
@@ -134,7 +136,7 @@ export const SwapTab = (): JSX.Element => {
       <Styled.FooterPara>
         {status === "" ? "" : status}
         {status === "" ? "" : "Transaction Type : Trade"}
-        Fees : {feeData ? feeData.amount : 0} {defaultToken}
+        Fees : {swapOrderFee ? swapOrderFee.amount : 0} {defaultToken}
       </Styled.FooterPara>
       */}
     </Styled.SwapContainer>

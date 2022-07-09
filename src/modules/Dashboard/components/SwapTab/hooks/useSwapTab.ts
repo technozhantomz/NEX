@@ -8,12 +8,17 @@ import {
   useAsset,
   useFees,
   useTransactionBuilder,
+  useLimitOrderTransactionBuilder,
 } from "../../../../../common/hooks";
-import { TransactionFee } from "../../../../../common/hooks/fees/useFees.types";
+import {
+  CreateLimitOrderFee,
+  // TransactionFee,
+} from "../../../../../common/hooks/fees/useFees.types";
 import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
+// import { useAssetsContext } from "../../../../../common/providers/AssetsProvider";
 
 import { Swap, SwapAssetPair } from "./useSwapTab.types";
 
@@ -27,11 +32,14 @@ export function useSwap(): Swap {
   const [visible, setVisible] = useState<boolean>(false);
   const { buildTrx } = useTransactionBuilder();
   const { getPrivateKey } = useAccount();
-  const { getAssetBySymbol, defaultAsset } = useAsset();
+  const { buildCreateLimitOrderTransaction } =
+    useLimitOrderTransactionBuilder();
+  // const { defaultAsset } = useAssetsContext();
+  const { calculateCreateLimitOrderFee } = useFees();
+  const [swapOrderFee, setSwapOrderFee] = useState<CreateLimitOrderFee>();
+  const { getAssetBySymbol } = useAsset();
   const [swapForm] = Form.useForm();
   const { id, assets } = useUserContext();
-  const [feeData, setFeeData] = useState<TransactionFee>();
-  const { feeParameters } = useFees();
   const { dbApi } = usePeerplaysApiContext();
 
   const handleAssetChange = (value: unknown, option: any) => {
@@ -55,9 +63,19 @@ export function useSwap(): Swap {
     if (!defaultToken) return;
     swapForm.setFieldsValue({ sellAsset: defaultToken });
     swapForm.setFieldsValue({ buyAsset: "BTC" });
-    getFeeData();
-    updateAssetValueInfo(defaultToken, "BTC");
+    updateAssetValueInfo(defaultToken, "BTC", true);
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const base = await getAssetBySymbol(selectedAssets.sellAsset);
+      const quote = await getAssetBySymbol(selectedAssets.buyAsset);
+      const _swapOrderFee = calculateCreateLimitOrderFee(base, quote);
+      if (_swapOrderFee !== undefined) {
+        setSwapOrderFee(_swapOrderFee);
+      }
+    })();
+  }, [calculateCreateLimitOrderFee, setSwapOrderFee]);
 
   useEffect(() => {
     swapForm.setFieldsValue({ sellAsset: selectedAssets.sellAsset });
@@ -72,16 +90,6 @@ export function useSwap(): Swap {
         handleSwap(values.password);
       });
     }
-  };
-
-  const getFeeData = async () => {
-    const rawFeeData = feeParameters.filter(
-      (item) => item.name === "LIMIT_ORDER_CREATE"
-    )[0];
-    setFeeData({
-      amount: rawFeeData?.fee,
-      asset_id: "1.3.0",
-    });
   };
 
   const handleSwap = useCallback(async (password: string) => {
@@ -105,21 +113,33 @@ export function useSwap(): Swap {
       new Date().getTime() + 1000 * 60 * 60 * 24 * 365
     ).toISOString();
     console.log(id);
-    const trx = {
-      type: "limit_order_create",
-      params: {
-        // fee: {
-        //   amount: 0,
-        //   asset_id: defaultAsset?.id,
-        // },
-        seller: id,
-        amount_to_sell,
-        min_to_receive,
-        expiration,
-        fill_or_kill: false,
-        extensions: [],
-      },
-    };
+    // const trx = {
+    //   type: "limit_order_create",
+    //   params: {
+    //     // fee: {
+    //     //   amount: 0,
+    //     //   asset_id: defaultAsset?.id,
+    //     // },
+    //     seller: id,
+    //     amount_to_sell,
+    //     min_to_receive,
+    //     expiration,
+    //     fill_or_kill: false,
+    //     extensions: [],
+    //   },
+    // };
+
+    const trx = buildCreateLimitOrderTransaction(
+      id,
+      amount_to_sell.amount,
+      min_to_receive.amount,
+      sellAsset,
+      buyAsset,
+      expiration,
+      false,
+      [],
+      true
+    );
 
     let trxResult;
 
@@ -173,6 +193,8 @@ export function useSwap(): Swap {
 
   const validateBuyAmount = (_: unknown, value: number) => {
     const values = swapForm.getFieldsValue();
+    if (value === swapForm.getFieldValue("sellAsset"))
+      return Promise.reject(new Error(`Cannot swap same tokens`));
     updateAssetValueInfo(values.sellAsset, values.buyAsset, false);
     return Promise.resolve();
   };
@@ -183,11 +205,12 @@ export function useSwap(): Swap {
   ): boolean | undefined => {
     const sellAsset = assets.find((asset) => asset.symbol === assetSymbol);
     const feeAsset = assets.find((asset) => asset.symbol === defaultToken);
+    const feeAmount = swapOrderFee ? swapOrderFee.fee : 0;
     if (feeAsset?.amount !== undefined && sellAsset?.amount !== undefined) {
       if (assetSymbol === defaultToken) {
-        return amount + feeData?.amount > sellAsset?.amount;
+        return amount + feeAmount > sellAsset?.amount;
       }
-      return feeAsset.amount > feeData?.amount;
+      return feeAsset.amount > feeAmount;
     }
   };
 
@@ -219,7 +242,7 @@ export function useSwap(): Swap {
     values = swapForm.getFieldsValue();
     const { sellAsset, buyAsset } = selectedAssets;
     setSelectedAssets({ buyAsset: sellAsset, sellAsset: buyAsset });
-    updateAssetValueInfo(values.sellAsset, values.buyAsset);
+    updateAssetValueInfo(values.sellAsset, values.buyAsset, true);
   };
 
   const updateAssetValueInfo = async (
@@ -259,10 +282,10 @@ export function useSwap(): Swap {
     onCancel,
     onFormFinish,
     confirm,
+    swapOrderFee,
     handleAssetChange,
     swapForm,
     formValidation,
-    feeData,
     swapAsset,
     status,
     assetValueInfo,
