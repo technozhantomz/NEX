@@ -8,6 +8,7 @@ import {
   useAsset,
   useFees,
   useTransactionBuilder,
+  useLimitOrderTransactionBuilder,
 } from "../../../../../common/hooks";
 import {
   CreateLimitOrderFee,
@@ -31,6 +32,8 @@ export function useSwap(): Swap {
   const [visible, setVisible] = useState<boolean>(false);
   const { buildTrx } = useTransactionBuilder();
   const { getPrivateKey } = useAccount();
+  const { buildCreateLimitOrderTransaction } =
+    useLimitOrderTransactionBuilder();
   // const { defaultAsset } = useAssetsContext();
   const { calculateCreateLimitOrderFee } = useFees();
   const [swapOrderFee, setSwapOrderFee] = useState<CreateLimitOrderFee>();
@@ -110,21 +113,33 @@ export function useSwap(): Swap {
       new Date().getTime() + 1000 * 60 * 60 * 24 * 365
     ).toISOString();
     console.log(id);
-    const trx = {
-      type: "limit_order_create",
-      params: {
-        // fee: {
-        //   amount: 0,
-        //   asset_id: defaultAsset?.id,
-        // },
-        seller: id,
-        amount_to_sell,
-        min_to_receive,
-        expiration,
-        fill_or_kill: false,
-        extensions: [],
-      },
-    };
+    // const trx = {
+    //   type: "limit_order_create",
+    //   params: {
+    //     // fee: {
+    //     //   amount: 0,
+    //     //   asset_id: defaultAsset?.id,
+    //     // },
+    //     seller: id,
+    //     amount_to_sell,
+    //     min_to_receive,
+    //     expiration,
+    //     fill_or_kill: false,
+    //     extensions: [],
+    //   },
+    // };
+
+    const trx = buildCreateLimitOrderTransaction(
+      id,
+      amount_to_sell.amount,
+      min_to_receive.amount,
+      sellAsset,
+      buyAsset,
+      expiration,
+      false,
+      [],
+      true
+    );
 
     let trxResult;
 
