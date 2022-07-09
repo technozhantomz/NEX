@@ -44,4 +44,4 @@ export type SwapFormData = {
 export type SwapAssetPair = {
   sellAsset: string;
   buyAsset: string;
-}
+};
