@@ -2,6 +2,7 @@ import BitcoinCashIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinCa
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import BitsharesIcon from "../../../../ui/src/icons/Cryptocurrencies/BitsharesIcon.svg";
 import DefaultIcon from "../../../../ui/src/icons/Cryptocurrencies/DefaultIcon.svg";
+import EOSIcon from "../../../../ui/src/icons/Cryptocurrencies/EOSIcon.svg";
 import EthereumIcon from "../../../../ui/src/icons/Cryptocurrencies/EthereumIcon.svg";
 import HIVEIcon from "../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import PPYIcon from "../../../../ui/src/icons/Cryptocurrencies/PPYIcon.svg";
@@ -26,11 +27,15 @@ export function InputPrefix({
   const icons: {
     [inputSymbol: string]: JSX.Element;
   } = {
+    PEOS: <EOSIcon height="30" width="30" />,
+    EOS: <EOSIcon height="30" width="30" />,
+    PBTC: <BitcoinIcon height="30" width="30" />,
     BTC: <BitcoinIcon height="30" width="30" />,
     TEST: <PPYIcon height="30" width="30" />,
     PPY: <PPYIcon height="30" width="30" />,
     HIVE: <HIVEIcon height="30" width="30" />,
     HBD: <HIVEIcon height="30" width="30" />,
+    PETH: <EthereumIcon height="30" width="30" />,
     ETH: <EthereumIcon height="30" width="30" />,
     BTS: <BitsharesIcon height="30" width="30" />,
     USDT: <TetherIcon height="30" width="30" />,

@@ -3,13 +3,7 @@ import Link from "next/link";
 import { CSSProperties, ReactNode } from "react";
 
 import { AvtivityInfo } from "../../../..";
-import {
-  Checkbox,
-  List,
-  MenuCard,
-  Switch,
-  Tooltip,
-} from "../../../../../../ui/src";
+import { Checkbox, List, Switch, Tooltip } from "../../../../../../ui/src";
 import { useFormDate } from "../../../../../hooks";
 import { useMenuContext, useUserContext } from "../../../../../providers";
 import { Notification } from "../../../../../types";
@@ -26,20 +20,20 @@ export const NotificationMenu = (): JSX.Element => {
     markTheNotificationAsReadOrUnread,
     closeMenu,
   } = useMenuContext();
-  const {
-    showUnreadOnly,
-    setShowUnreadOnly,
-    todayNotifications,
-    yesterdayNotifications,
-    thirdClusterNotifications,
-  } = useNotificationMenu({
-    notifications,
-    loadingNotifications,
-  });
+  const { showUnreadOnly, setShowUnreadOnly, groupedNotificationsByDate } =
+    useNotificationMenu({
+      notifications,
+      loadingNotifications,
+    });
   const { localStorageAccount } = useUserContext();
+  const { formLocalDate } = useFormDate();
+
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
 
   return (
-    <MenuCard bordered={false}>
+    <Styled.NotificationMenuCard bordered={false}>
       <Styled.ControlsContainer
         hasUnread={hasUnreadMessages}
         onClick={(e) => {
@@ -73,298 +67,127 @@ export const NotificationMenu = (): JSX.Element => {
           e.stopPropagation();
         }}
       >
-        {notifications && (
+        {groupedNotificationsByDate &&
+        Object.keys(groupedNotificationsByDate).length > 0 &&
+        !loadingNotifications ? (
           <>
-            <Styled.TimeSpecification>
-              {counterpart.translate(`field.labels.today`)}
-            </Styled.TimeSpecification>
-            <List
-              loading={loadingNotifications}
-              pagination={
-                !loadingNotifications
-                  ? {
-                      position: "bottom",
-                      showSizeChanger: false,
-                      size: "small",
-                      pageSize: 2,
-                      hideOnSinglePage: true,
-                      showLessItems: true,
-                      itemRender: (
-                        _page: number,
-                        type:
-                          | "page"
-                          | "prev"
-                          | "next"
-                          | "jump-prev"
-                          | "jump-next",
-                        element: ReactNode
-                      ) => {
-                        if (type === "prev") {
-                          return (
-                            <>
-                              {" "}
-                              {_page > 0 ? (
-                                <a
-                                  style={
-                                    { marginRight: "8px" } as CSSProperties
-                                  }
-                                >
-                                  {counterpart.translate(`buttons.previous`)}
-                                </a>
-                              ) : (
-                                ""
-                              )}
-                            </>
-                          );
-                        }
-                        if (type === "next") {
-                          return (
-                            <a style={{ marginLeft: "8px" } as CSSProperties}>
-                              {counterpart.translate(`buttons.next`)}
-                            </a>
-                          );
-                        }
-                        return element;
-                      },
-                    }
-                  : false
-              }
-              itemLayout="vertical"
-              dataSource={
-                showUnreadOnly
-                  ? todayNotifications.filter(
-                      (notification) => notification.unread
-                    )
-                  : todayNotifications
-              }
-              renderItem={(item: Notification) => (
-                <Styled.ActivityListItem key={item.activity.key}>
-                  <Styled.ActivitysItemContent>
-                    <div className="activity-info">
-                      <Tooltip
-                        placement="top"
-                        title={`${
-                          item.unread
-                            ? counterpart.translate(`tooltips.mark_read`)
-                            : counterpart.translate(`tooltips.mark_unread`)
-                        }`}
-                      >
-                        <Checkbox
-                          checked={!item.unread}
-                          onChange={(e) => {
-                            markTheNotificationAsReadOrUnread(
-                              item.activity.id,
-                              !e.target.checked
-                            );
-                          }}
-                        ></Checkbox>
-                        <span className="activity-info-value">
-                          <AvtivityInfo infoString={item.activity.info} />
-                        </span>
-                      </Tooltip>
-                    </div>
-                  </Styled.ActivitysItemContent>
-                </Styled.ActivityListItem>
-              )}
-            />
+            {Object.keys(groupedNotificationsByDate).map((time) => {
+              const dataSource = groupedNotificationsByDate[time];
 
-            <Styled.TimeSpecification>
-              {counterpart.translate(`field.labels.yesterday`)}
-            </Styled.TimeSpecification>
-            <List
-              loading={loadingNotifications}
-              pagination={
-                !loadingNotifications
-                  ? {
-                      position: "bottom",
-                      showSizeChanger: false,
-                      size: "small",
-                      pageSize: 2,
-                      hideOnSinglePage: true,
-                      showLessItems: true,
-                      itemRender: (
-                        _page: number,
-                        type:
-                          | "page"
-                          | "prev"
-                          | "next"
-                          | "jump-prev"
-                          | "jump-next",
-                        element: ReactNode
-                      ) => {
-                        if (type === "prev") {
-                          return (
-                            <>
-                              {" "}
-                              {_page > 0 ? (
-                                <a
-                                  style={
-                                    { marginRight: "8px" } as CSSProperties
-                                  }
-                                >
-                                  {counterpart.translate(`buttons.previous`)}
-                                </a>
-                              ) : (
-                                ""
-                              )}
-                            </>
-                          );
-                        }
-                        if (type === "next") {
-                          return (
-                            <a style={{ marginLeft: "8px" } as CSSProperties}>
-                              {counterpart.translate(`buttons.next`)}
-                            </a>
-                          );
-                        }
-                        return element;
-                      },
-                    }
-                  : false
-              }
-              itemLayout="vertical"
-              dataSource={
-                showUnreadOnly
-                  ? yesterdayNotifications.filter(
-                      (notification) => notification.unread
-                    )
-                  : yesterdayNotifications
-              }
-              renderItem={(item: Notification) => (
-                <Styled.ActivityListItem key={item.activity.key}>
-                  <Styled.ActivitysItemContent>
-                    <div className="activity-info">
-                      <Tooltip
-                        placement="top"
-                        title={`${
-                          item.unread
-                            ? counterpart.translate(`tooltips.mark_read`)
-                            : counterpart.translate(`tooltips.mark_unread`)
-                        }`}
-                      >
-                        <Checkbox
-                          checked={!item.unread}
-                          onChange={(e) => {
-                            markTheNotificationAsReadOrUnread(
-                              item.activity.id,
-                              !e.target.checked
-                            );
-                          }}
-                        ></Checkbox>
-                        <span className="activity-info-value">
-                          <AvtivityInfo infoString={item.activity.info} />
-                        </span>
-                      </Tooltip>
-                    </div>
-                  </Styled.ActivitysItemContent>
-                </Styled.ActivityListItem>
-              )}
-            />
-
-            {thirdClusterNotifications &&
-            thirdClusterNotifications.length > 0 ? (
-              <>
-                <Styled.TimeSpecification>
-                  {useFormDate(thirdClusterNotifications[0].activity.time)}
-                </Styled.TimeSpecification>
-                <List
-                  loading={loadingNotifications}
-                  pagination={
-                    !loadingNotifications
-                      ? {
-                          position: "bottom",
-                          showSizeChanger: false,
-                          size: "small",
-                          pageSize: 2,
-                          hideOnSinglePage: true,
-                          showLessItems: true,
-                          itemRender: (
-                            _page: number,
-                            type:
-                              | "page"
-                              | "prev"
-                              | "next"
-                              | "jump-prev"
-                              | "jump-next",
-                            element: ReactNode
-                          ) => {
-                            if (type === "prev") {
-                              return (
-                                <>
-                                  {" "}
-                                  {_page > 0 ? (
-                                    <a
-                                      style={
-                                        { marginRight: "8px" } as CSSProperties
-                                      }
-                                    >
-                                      {counterpart.translate(
-                                        `buttons.previous`
-                                      )}
-                                    </a>
-                                  ) : (
-                                    ""
-                                  )}
-                                </>
-                              );
-                            }
-                            if (type === "next") {
-                              return (
-                                <a
-                                  style={{ marginLeft: "8px" } as CSSProperties}
-                                >
-                                  {counterpart.translate(`buttons.next`)}
-                                </a>
-                              );
-                            }
-                            return element;
-                          },
-                        }
-                      : false
-                  }
-                  itemLayout="vertical"
-                  dataSource={
-                    showUnreadOnly
-                      ? thirdClusterNotifications.filter(
-                          (notification) => notification.unread
-                        )
-                      : thirdClusterNotifications
-                  }
-                  renderItem={(item: Notification) => (
-                    <Styled.ActivityListItem key={item.activity.key}>
-                      <Styled.ActivitysItemContent>
-                        <div className="activity-info">
-                          <Tooltip
-                            placement="top"
-                            title={`${
-                              item.unread
-                                ? counterpart.translate(`tooltips.mark_read`)
-                                : counterpart.translate(`tooltips.mark_unread`)
-                            }`}
-                          >
-                            <Checkbox
-                              checked={!item.unread}
-                              onChange={(e) => {
-                                markTheNotificationAsReadOrUnread(
-                                  item.activity.id,
-                                  !e.target.checked
+              return (
+                <div key={time}>
+                  <Styled.TimeSpecification>
+                    {today.toDateString() ===
+                    new Date(formLocalDate(time)).toDateString()
+                      ? counterpart.translate(`field.labels.today`)
+                      : yesterday.toDateString() ===
+                        new Date(formLocalDate(time)).toDateString()
+                      ? counterpart.translate(`field.labels.yesterday`)
+                      : formLocalDate(time)}
+                  </Styled.TimeSpecification>
+                  <List
+                    loading={loadingNotifications}
+                    pagination={
+                      !loadingNotifications
+                        ? {
+                            position: "bottom",
+                            showSizeChanger: false,
+                            size: "small",
+                            pageSize: 2,
+                            hideOnSinglePage: true,
+                            showLessItems: true,
+                            itemRender: (
+                              _page: number,
+                              type:
+                                | "page"
+                                | "prev"
+                                | "next"
+                                | "jump-prev"
+                                | "jump-next",
+                              element: ReactNode
+                            ) => {
+                              if (type === "prev") {
+                                return (
+                                  <>
+                                    {" "}
+                                    {_page > 0 ? (
+                                      <a
+                                        style={
+                                          {
+                                            marginRight: "8px",
+                                          } as CSSProperties
+                                        }
+                                      >
+                                        {counterpart.translate(
+                                          `buttons.previous`
+                                        )}
+                                      </a>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </>
                                 );
-                              }}
-                            ></Checkbox>
-                            <span className="activity-info-value">
-                              <AvtivityInfo infoString={item.activity.info} />
-                            </span>
-                          </Tooltip>
-                        </div>
-                      </Styled.ActivitysItemContent>
-                    </Styled.ActivityListItem>
-                  )}
-                />
-              </>
-            ) : (
-              ""
-            )}
+                              }
+                              if (type === "next") {
+                                return (
+                                  <a
+                                    style={
+                                      { marginLeft: "8px" } as CSSProperties
+                                    }
+                                  >
+                                    {counterpart.translate(`buttons.next`)}
+                                  </a>
+                                );
+                              }
+                              return element;
+                            },
+                          }
+                        : false
+                    }
+                    itemLayout="vertical"
+                    dataSource={dataSource}
+                    renderItem={(item: Notification) => (
+                      <Styled.ActivityListItem key={item.activity.key}>
+                        <Styled.ActivitysItemContent>
+                          <div className="activity-info">
+                            <Tooltip
+                              placement="top"
+                              title={`${
+                                item.unread
+                                  ? counterpart.translate(`tooltips.mark_read`)
+                                  : counterpart.translate(
+                                      `tooltips.mark_unread`
+                                    )
+                              }`}
+                            >
+                              <Checkbox
+                                checked={!item.unread}
+                                onChange={(e) => {
+                                  markTheNotificationAsReadOrUnread(
+                                    item.activity.id,
+                                    !e.target.checked
+                                  );
+                                }}
+                              ></Checkbox>
+                              <span className="activity-info-value">
+                                <AvtivityInfo infoString={item.activity.info} />
+                              </span>
+                            </Tooltip>
+                          </div>
+                        </Styled.ActivitysItemContent>
+                      </Styled.ActivityListItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
           </>
+        ) : (
+          <List
+            loading={loadingNotifications}
+            itemLayout="vertical"
+            dataSource={[]}
+          />
         )}
       </Styled.ListsContainer>
 
@@ -373,6 +196,6 @@ export const NotificationMenu = (): JSX.Element => {
           <a>{counterpart.translate(`links.see_all_account_activity`)}</a>
         </Link>
       </Styled.AllActivityContainer>
-    </MenuCard>
+    </Styled.NotificationMenuCard>
   );
 };

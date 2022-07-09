@@ -1,14 +1,13 @@
 import counterpart from "counterpart";
 import React from "react";
 
-import { CheckOutlined, Form, Input } from "../../../../ui/src";
+import { Form, Input } from "../../../../ui/src";
 
 import * as Styled from "./LoginForm.styled";
 import { useLoginForm } from "./hooks";
 
 export const LoginForm: React.FC = () => {
-  const { validUser, loginForm, handleLogin, formValdation, submitting } =
-    useLoginForm();
+  const { loginForm, handleLogin, formValdation, submitting } = useLoginForm();
   return (
     <Styled.LoginForm
       form={loginForm}
@@ -24,7 +23,6 @@ export const LoginForm: React.FC = () => {
       >
         <Input
           placeholder={counterpart.translate(`field.placeholder.user_name`)}
-          suffix={validUser ? <CheckOutlined /> : ""}
         />
       </Form.Item>
       <Form.Item

@@ -5,9 +5,9 @@ import { useCallback } from "react";
 import { useAccountHistory, useAsset } from "..";
 import { defaultToken } from "../../../api/params";
 import {
+  useAssetsContext,
   usePeerplaysApiContext,
   useUserContext,
-  useViewportContext,
 } from "../../providers";
 import { ActivityRow, Amount, BlockHeader, Fee, History } from "../../types";
 
@@ -16,39 +16,12 @@ import { UseActivityResult } from "./useActivity.types";
 
 export function useActivity(): UseActivityResult {
   const { getUserNameById, getAccountByName } = useAccount();
-  const { formAssetBalanceById, getAssetById, setPrecision, defaultAsset } =
+  const { formAssetBalanceById, getAssetById, setPrecision, getAssetBySymbol } =
     useAsset();
+  const { defaultAsset } = useAssetsContext();
   const { dbApi } = usePeerplaysApiContext();
-  const { sm } = useViewportContext();
   const { getAccountHistoryById } = useAccountHistory();
   const { id } = useUserContext();
-
-  const formDate = useCallback(
-    (
-      date: string | number | Date,
-      pattern = ["day", "month", "date", "year"]
-    ): string => {
-      const newDate = String(new Date(date)).split(" ");
-      const dateObj: {
-        [segment: string]: string;
-      } = {
-        day: newDate[0] + ",",
-        date: newDate[2],
-        month: newDate[1],
-        year: newDate[3],
-        time: newDate[4],
-      };
-      if (sm) {
-        return (
-          pattern.map((el: string) => dateObj[el]).join(" ") +
-          " | " +
-          dateObj.time
-        );
-      }
-      return String(date).replace("T", " ");
-    },
-    [sm]
-  );
 
   const formActivityDescription: {
     [activityType: string]: (operation: any, result?: any) => Promise<string>;
@@ -240,14 +213,17 @@ export function useActivity(): UseActivityResult {
       asset_id: string;
       amount: number;
     }) => {
-      const asset = await formAssetBalanceById(asset_id, amount);
+      const defaultAsset = await getAssetBySymbol(defaultToken as string);
+      const asset = await formAssetBalanceById(defaultAsset.id, amount);
+      const feePoolAsset = await getAssetById(asset_id);
       const from = await getUserNameById(from_account);
       return counterpart.translate(
         `transaction.trxTypes.asset_fund_fee_pool.description`,
         {
           from: `[userlink = ${from}]`,
-          symbol: asset.symbol,
+          symbol: feePoolAsset.symbol,
           amount: asset.amount,
+          defaultToken,
         }
       );
     },
@@ -400,7 +376,7 @@ export function useActivity(): UseActivityResult {
       const blockHeader: BlockHeader = await dbApi("get_block_header", [
         activity.block_num,
       ]);
-      const time = formDate(blockHeader.timestamp);
+      const time = blockHeader.timestamp;
       const feeAsset = await getAssetById(fee.asset_id);
       const operationsNames = Object.keys(ChainTypes.operations);
       const operationType = operationsNames[activity.op[0]].toLowerCase();
@@ -421,7 +397,7 @@ export function useActivity(): UseActivityResult {
         }`,
       } as ActivityRow;
     },
-    [dbApi, defaultAsset, getAssetById, formDate, formActivityDescription]
+    [dbApi, defaultAsset, getAssetById, formActivityDescription]
   );
 
   const getActivitiesRows = useCallback(

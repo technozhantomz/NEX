@@ -1,7 +1,7 @@
 import { TinyArea } from "@ant-design/plots";
 import counterpart from "counterpart";
 
-import { useAsset } from "../../../../common/hooks";
+import { useAssetsContext } from "../../../../common/providers";
 
 import * as Styled from "./StatsCard.styled";
 
@@ -36,7 +36,7 @@ export const StatsCard = ({
     },
   };
 
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   return (
     <Styled.StatsCard className={noData ? "no-data stats-card" : "stats-card"}>

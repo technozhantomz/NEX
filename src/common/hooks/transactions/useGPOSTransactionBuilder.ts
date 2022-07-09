@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 
-import { useAsset } from "..";
+import { useAssetsContext } from "../../providers";
 import { Asset, Transaction, VestingBalance } from "../../types";
 
 import { UseGPOSTransactionBuilderResult } from "./useGPOSTransactionBuilder.types";
 
 export function useGPOSTransactionBuilder(): UseGPOSTransactionBuilderResult {
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   const buildVestingBalanceCreateTransaction = useCallback(
     (

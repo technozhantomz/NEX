@@ -86,15 +86,17 @@ export function useBlockchain(): UseBlockchainResult {
   const getBlock = useCallback(
     async (value: number) => {
       try {
-        const block: Block = await dbApi("get_block", [value]);
-        const witness: WitnessAccount = (
-          await dbApi("get_objects", [[block.witness]])
-        )[0];
-        const witnessAccount: Account = (
-          await dbApi("get_accounts", [[witness.witness_account]])
-        )[0];
-        block.witness_account_name = witnessAccount.name;
-        return block;
+        const block: Block | null = await dbApi("get_block", [value]);
+        if (block) {
+          const witness: WitnessAccount = (
+            await dbApi("get_objects", [[block.witness]])
+          )[0];
+          const witnessAccount: Account = (
+            await dbApi("get_accounts", [[witness.witness_account]])
+          )[0];
+          block.witness_account_name = witnessAccount.name;
+          return block;
+        }
       } catch (e) {
         console.log(e);
       }
@@ -105,19 +107,34 @@ export function useBlockchain(): UseBlockchainResult {
   const getBlocks = useCallback(
     async (first: number, last: number, limit: number) => {
       try {
-        const blocks = await dbApi("get_blocks", [first, last, limit]);
+        const blocks: Block[] | undefined = await dbApi("get_blocks", [
+          first,
+          last,
+          limit,
+        ]);
         if (blocks) {
-          blocks.map(async (block: Block) => {
-            const witness: WitnessAccount = (
-              await dbApi("get_objects", [[block.witness]])
-            )[0];
-            const witnessAccount: Account = (
-              await dbApi("get_accounts", [[witness.witness_account]])
-            )[0];
-            block.witness_account_name = witnessAccount.name;
-            return block;
-          });
-          return blocks;
+          let nonNullBlocks = blocks.filter((block) => block);
+          if (nonNullBlocks && nonNullBlocks.length > 0) {
+            const witnessesAccounts: WitnessAccount[] = await dbApi(
+              "get_objects",
+              [nonNullBlocks.map((block) => block.witness)]
+            );
+            const accounts: Account[] = await dbApi("get_accounts", [
+              witnessesAccounts.map((witness) => witness.witness_account),
+            ]);
+            nonNullBlocks = nonNullBlocks.map((block) => {
+              const witnessAccount = witnessesAccounts.find(
+                (witness) => witness.id === block.witness
+              ) as WitnessAccount;
+              const account = accounts.find(
+                (a) => a.id === witnessAccount.witness_account
+              ) as Account;
+              block.witness_account_name = account.name;
+
+              return block;
+            });
+            return nonNullBlocks;
+          }
         }
       } catch (e) {
         console.log(e);

@@ -36,6 +36,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { id, localStorageAccount } = useUserContext();
   const { getAccountHistoryById } = useAccountHistory();
   const { getDefaultPairs, formPairStats } = useMarketPairStats();
+  const { formLocalDate } = useFormDate();
 
   const [tradingPairsStats, setTradingPairsStats] = useState<
     PairNameAndMarketStats[]
@@ -139,7 +140,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         quote = 0,
         isBuyOrder = false;
       const key = limitOrder.id;
-      const expiration = useFormDate(limitOrder.expiration);
+      const expiration = formLocalDate(limitOrder.expiration);
       if (baseAsset.id === limitOrder.sell_price.base.asset_id) {
         base = setPrecision(false, limitOrder.for_sale, baseAsset.precision);
         price = roundNum(
@@ -186,7 +187,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         expiration,
       } as OrderRow;
     },
-    [setPrecision, roundNum, useFormDate]
+    [setPrecision, roundNum]
   );
 
   const getUserOrderBook = useCallback(
@@ -247,7 +248,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
   const formOrderHistoryRow = useCallback(
     (history: OrderHistory, base: Asset, quote: Asset): OrderHistoryRow => {
-      const time = useFormDate(history.time, ["month", "year", "time"]);
+      const time = formLocalDate(history.time, ["month", "year", "time"]);
       const { pays, receives } = history.op;
       let baseAmount = 0,
         quoteAmount = 0,
@@ -273,7 +274,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         isBuyOrder,
       } as OrderHistoryRow;
     },
-    [useFormDate, setPrecision, roundNum]
+    [setPrecision, roundNum]
   );
 
   const getHistory = useCallback(
@@ -307,7 +308,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       const blockHeader: BlockHeader = await dbApi("get_block_header", [
         history.block_num,
       ]);
-      const date = useFormDate(blockHeader.timestamp);
+      const date = formLocalDate(blockHeader.timestamp);
       const operationDetails = history.op[1];
       const key = history.id;
 
@@ -346,7 +347,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
       return { key, price, base, quote, date, isBuyOrder };
     },
-    [dbApi, useFormDate, setPrecision, roundNum]
+    [dbApi, setPrecision, roundNum]
   );
 
   const getUserHistory = useCallback(

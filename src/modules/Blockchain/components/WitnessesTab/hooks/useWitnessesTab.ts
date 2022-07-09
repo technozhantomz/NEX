@@ -6,7 +6,10 @@ import {
   useBlockchain,
   useMembers,
 } from "../../../../../common/hooks";
-import { usePeerplaysApiContext } from "../../../../../common/providers";
+import {
+  useAssetsContext,
+  usePeerplaysApiContext,
+} from "../../../../../common/providers";
 
 import {
   UseWitnessesTabResult,
@@ -32,7 +35,8 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const { getWitnesses } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { dbApi } = usePeerplaysApiContext();
-  const { defaultAsset, formAssetBalanceById, setPrecision } = useAsset();
+  const { formAssetBalanceById, setPrecision } = useAsset();
+  const { defaultAsset } = useAssetsContext();
   const { getChain, getAvgBlockTime } = useBlockchain();
 
   const getDaysInThisMonth = useCallback(() => {
@@ -135,7 +139,10 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   );
 
   useEffect(() => {
-    setInterval(() => getWitnessData(), 3000);
+    const witnessInterval = setInterval(() => getWitnessData(), 3000);
+    return () => {
+      clearInterval(witnessInterval);
+    };
   }, [defaultAsset]);
 
   return {

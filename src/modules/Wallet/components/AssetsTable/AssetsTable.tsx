@@ -1,8 +1,10 @@
 import counterpart from "counterpart";
 
 import { TableHeading } from "../../../../common/components";
-import { useAsset } from "../../../../common/hooks";
-import { useViewportContext } from "../../../../common/providers";
+import {
+  useAssetsContext,
+  useViewportContext,
+} from "../../../../common/providers";
 import { List } from "../../../../ui/src";
 import { AssetActionButton } from "../AssetActionButton";
 import { AssetTitle } from "../AssetTitle";
@@ -21,7 +23,7 @@ export const AssetsTable = ({
 }: Props): JSX.Element => {
   const { tableAssets, loading } = useAssetsTable();
   const { sm } = useViewportContext();
-  const { sidechainAssets } = useAsset();
+  const { sidechainAssets } = useAssetsContext();
   const columns = [
     {
       title: (): JSX.Element => <TableHeading heading={"asset"} />,

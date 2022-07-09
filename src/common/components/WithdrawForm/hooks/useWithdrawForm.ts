@@ -35,7 +35,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   } = useSidechainAccounts();
   const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
     useAccount();
-  const { localStorageAccount, assets, id } = useUserContext();
+  const { account, localStorageAccount, assets, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
   const { calculateTransferFee } = useFees();
   const { buildTransferTransaction } = useTransferTransactionBuilder();
@@ -127,7 +127,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const handleWithdraw = async (password: string) => {
     setSubmittingPassword(true);
     const values = withdrawForm.getFieldsValue();
-    const from = (await getAccountByName(localStorageAccount)) as Account;
+    const from = account as Account;
     const to = sonAccount
       ? sonAccount
       : ((await getAccountByName("son-account")) as Account);
@@ -189,14 +189,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       memo = values.withdrawAddress;
     }
     const asset = assets.filter((asset) => asset.symbol === selectedAsset)[0];
-    const trx = buildTransferTransaction(
-      from,
-      to,
-      memo,
-      asset,
-      password,
-      values.amount
-    );
+    const trx = buildTransferTransaction(from, to, memo, asset, values.amount);
     let trxResult;
 
     try {

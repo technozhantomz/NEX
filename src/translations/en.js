@@ -47,6 +47,12 @@ export const en = {
         title: "Account whitelist",
         description: "%(issuer)s, %(status)s the account, %(listed)s",
       },
+      affiliate_payout: {
+        title: "payout affiliate",
+      },
+      affiliate_referral_payout: {
+        title: "Payout referral affiliate",
+      },
       all: {
         title: "Show all",
       },
@@ -76,7 +82,8 @@ export const en = {
       },
       asset_fund_fee_pool: {
         title: "Fund asset fee pool",
-        description: "%(from)s, funded %(symbol)s fee pool with %(amount)s",
+        description:
+          "%(from)s, funded %(symbol)s fee pool with %(amount)s %(defaultToken)s",
       },
       asset_global_settle: {
         title: "Global asset settlement",
@@ -175,6 +182,9 @@ export const en = {
       call_order_update: {
         title: "Update margin",
       },
+      cancel_offer: {
+        title: "Cancel offer",
+      },
       committee_member_create: {
         title: "Create committee member",
       },
@@ -234,6 +244,9 @@ export const en = {
         description:
           "%(user)s, bought %(paysAmount)s for %(receivesAmmount)s for order #%(id)s",
       },
+      finalize_offer: {
+        title: "Finalize offer",
+      },
       game_move: {
         title: "Game move",
       },
@@ -291,6 +304,9 @@ export const en = {
       nft_set_approval_for_all: {
         title: "Set approval for all nfts",
       },
+      offer: {
+        title: "Offer",
+      },
       proposal_create: {
         title: "Create proposal",
       },
@@ -345,11 +361,23 @@ export const en = {
       son_update: {
         title: "Update SON",
       },
+      son_wallet_deposit_create: {
+        title: "Create deposit son wallet",
+      },
+      son_wallet_deposit_process: {
+        title: "Process deposit SON wallet",
+      },
       son_wallet_recreate: {
         title: "Recreate SON wallet",
       },
       son_wallet_update: {
         title: "Update SON wallet",
+      },
+      son_wallet_withdraw_create: {
+        title: "Create withdraw SON wallet",
+      },
+      son_wallet_withdraw_process: {
+        title: "Process withdraw SON wallet",
       },
       sport_create: {
         title: "Create sport",
@@ -596,7 +624,7 @@ export const en = {
           "Most fees are made available immediately, but fees over %(vestingThreshold)s %(defaultToken)s (such as those paid to upgrade your membership or register a premium account name) must vest for a total of %(vestingPeriod)s days.",
         referral_link_title: "Your referral link",
         referral_link:
-          "Give this to link to people you want to refer to Peerplays: %(link)s/signup/?r=%(name)s",
+          "Give this link to people you want to refer to Peerplays: %(link)s/signup/?r=%(name)s",
       },
     },
     voting: {
@@ -674,6 +702,10 @@ export const en = {
         heading: "Committees",
       },
     },
+    user: {
+      heading: "All Activity",
+      discription: "Profile Page",
+    },
     modal: {
       transaction_modal: {
         heading: "Please confirm the transaction",
@@ -690,6 +722,9 @@ export const en = {
     mark_all_read: "Mark all as read",
   },
   field: {
+    options: {
+      lock_wallet: "minutes ",
+    },
     placeholder: {
       user_name: "Enter username",
       password: "Enter password",
@@ -708,6 +743,7 @@ export const en = {
       new_balance: "New Balance:",
       available_balance: "Available Balance:",
       search_accounts: "Search Accounts",
+      from: "From",
     },
     labels: {
       withdraw_public_key_address: "Withdraw Public key & Address",
@@ -748,19 +784,26 @@ export const en = {
       withdrawal_amount: "Withdrawal amount",
       today: "Today",
       yesterday: "yesterday",
+      order_to_cancel: "Order to cancel",
+      threshold: "Threshold",
+      desired_witnesses: "Desired witnesses",
+      desired_committees: "Desired committees",
+      desired_sons: "Desired sons",
     },
     comments: {
       deposit_hbd:
         "To deposit %(assetSymbol)s to %(accountName)s please send your funds to son-account on the Hive blockchain with the memo %(accountName)s",
-      only_members_can_read: "Only members with memo key can read your memos",
+      public_memo: "This memo is public",
     },
     checkBoxes: {
       cannot_recover_my_lost_password:
         "I understand Peerplays cannot recover my lost password",
       securely_saved_my_password: "I have securely saved my password",
       enable_notifications: "Enable Notifications",
+      key_management_group: ["Active", "Owner", "Memo"],
     },
     errors: {
+      user_name_first: "Please provide a valid username first",
       same_account: "Same as your account",
       no_account: "Account not found",
       added_account: "Account is already added",
@@ -796,6 +839,8 @@ export const en = {
         "SONs network is not available now. Please try again later!",
       transaction_unable: "Unable to process the transaction!",
       price_should_greater: "Price should be greater than 0",
+      quantity_should_greater: "Quantity should be greater than 0",
+      total_should_greater: "Total should be greater than 0",
       assets_must_different: "Assets Must Be Different",
       assets_should_be: "One of the assets should be %(defaultToken)s",
       available_balance_cannot_greater:
@@ -819,7 +864,7 @@ export const en = {
         "Successfully Transferred %(amount)s %(asset)s to %(to)s",
       successfully_withdraw: "Successfully withdraw",
       successfully_withdrawn:
-        "Successfully Withdrawn %(withdrawAmount)s %(precision)s",
+        "Successfully Withdrawn %(withdrawAmount)s %(symbol)s",
       successfully_deposited:
         "Successfully Deposited %(depositAmount)s %(symbol)s",
       limit_order_successfully: "You have successfully created a limit order",
@@ -828,6 +873,8 @@ export const en = {
         "Your account successfully upgraded to lifetime membership account",
       published_proxy: "You have successfully published your proxy",
       published_votes: "You have successfully published your votes",
+      canceled_limit_order:
+        "You have successfully canceled #%(selectedOrderId)s order",
     },
   },
   tableHead: {

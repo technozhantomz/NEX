@@ -13,6 +13,7 @@ export function useAssetsTab(): UseAssetsTabResult {
   const [assetsStats, setAssetsStats] = useState<number[]>([]);
   const { dbApi } = usePeerplaysApiContext();
   const { updateArrayWithLimit } = useArrayLimiter();
+
   const getAssetRows = useCallback(async () => {
     try {
       const rawAssets: Asset[] = await dbApi("list_assets", ["", 99]);
@@ -61,7 +62,10 @@ export function useAssetsTab(): UseAssetsTabResult {
   );
 
   useEffect(() => {
-    setInterval(() => getAssetRows(), 3000);
+    const assetInterval = setInterval(() => getAssetRows(), 3000);
+    return () => {
+      clearInterval(assetInterval);
+    };
   }, []);
 
   return { loading, assetTableRows, searchValue, handleSearch, assetsStats };

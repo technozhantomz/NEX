@@ -4,8 +4,7 @@ import { useRouter } from "next/router";
 
 import { LogoSelectOption, PasswordModal } from "..";
 import { Form, Input } from "../../../ui/src";
-import { useAsset } from "../../hooks";
-import { useUserContext } from "../../providers";
+import { useAssetsContext, useUserContext } from "../../providers";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -21,7 +20,7 @@ export const WithdrawForm = ({
 }: Props): JSX.Element => {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
-  const { defaultAsset, sidechainAssets } = useAsset();
+  const { defaultAsset, sidechainAssets } = useAssetsContext();
   const {
     status,
     isPasswordModalVisible,
@@ -67,6 +66,7 @@ export const WithdrawForm = ({
               <Input
                 placeholder="0.00000"
                 type="number"
+                step="any"
                 prefix={
                   <Styled.WithdrawFormAsset name="asset">
                     <LogoSelectOption
@@ -135,6 +135,7 @@ export const WithdrawForm = ({
             <Input
               placeholder={counterpart.translate(`field.placeholder.amount`)}
               type="number"
+              step="any"
             />
           </Form.Item>
         ) : (

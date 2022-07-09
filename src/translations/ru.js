@@ -78,7 +78,7 @@ export const ru = {
       asset_fund_fee_pool: {
         title: "Пул комиссий за активы фонда",
         description:
-          "%(from)s, финансируемый %(symbol)s комиссионный пул с %(amount)s",
+          "%(from)s, финансируемый %(symbol)s комиссионный пул с %(amount)s %(defaultToken)s",
       },
       asset_global_settle: {
         title: "Глобальный расчет активов",
@@ -389,9 +389,11 @@ export const ru = {
       },
       vesting_balance_create: {
         title: "Создать вестинговый баланс",
+        description: "%(creator)s, жилет %(amount)s %(symbol)s в GPOS",
       },
       vesting_balance_withdraw: {
         title: "Вывод вестингового баланса",
+        description: "%(owner)s, отводить %(amount)s %(symbol)s От GPOS",
       },
       withdraw_permission_claim: {
         title: "Разрешение на снятие претензии",
@@ -676,6 +678,10 @@ export const ru = {
         heading: "Комитеты",
       },
     },
+    user: {
+      heading: "Вся деятельность",
+      discription: "Страница профиля",
+    },
     modal: {
       transaction_modal: {
         heading: "Пожалуйста, подтвердите транзакцию",
@@ -692,6 +698,9 @@ export const ru = {
     mark_all_read: "отметить все как прочитанное",
   },
   field: {
+    options: {
+      lock_wallet: "минуты ",
+    },
     placeholder: {
       user_name: "Введите имя пользователя",
       password: "Введите пароль",
@@ -711,6 +720,7 @@ export const ru = {
       new_balance: "Новый баланс:",
       available_balance: "Доступные средства:",
       search_accounts: "Поиск аккаунтов",
+      from: "из",
     },
     labels: {
       withdraw_public_key_address: "Отозвать открытый ключ и адрес",
@@ -752,20 +762,26 @@ export const ru = {
       withdrawal_amount: "Сумма вывода",
       today: "Сегодня",
       yesterday: "вчерашний день",
+      order_to_cancel: "Заказ на отмену",
+      threshold: "Порог",
+      desired_witnesses: "Желаемые свидетели",
+      desired_committees: "Желаемые комитеты",
+      desired_sons: "Желаемые сыновья",
     },
     comments: {
       deposit_hbd:
         "Чтобы перевести %(assetSymbol)s на %(accountName)s, отправьте свои средства на son-account в блокчейне Hive с памяткой %(accountName)s",
-      only_members_can_read:
-        "Только участники с ключом для заметок могут читать ваши заметки",
+      public_memo: "Эта памятка общедоступна",
     },
     checkBoxes: {
       cannot_recover_my_lost_password:
         "Я понимаю, что Peerplays не может восстановить мой утерянный пароль",
       securely_saved_my_password: "Я надежно сохранил свой пароль",
       enable_notifications: "Включить уведомления",
+      key_management_group: ["Активный", "Владелец", "Памятка"],
     },
     errors: {
+      user_name_first: "Сначала укажите действительное имя пользователя",
       same_account: "Так же, как ваш аккаунт",
       no_account: "аккаунт не найден",
       added_account: "Аккаунт уже добавлен",
@@ -801,6 +817,8 @@ export const ru = {
         "Сеть SON сейчас недоступна. Пожалуйста, попробуйте позже!",
       transaction_unable: "Невозможно обработать транзакцию!",
       price_should_greater: "Цена должна быть больше 0",
+      quantity_should_greater: "Количество должно быть больше 0",
+      total_should_greater: "Сумма должна быть больше, чем 0",
       assets_must_different: "Активы должны быть разными",
       assets_should_be: "Один из активов должен быть %(defaultToken)s",
       available_balance_cannot_greater:
@@ -822,16 +840,16 @@ export const ru = {
       successfully_transferred:
         "Успешно переведено %(amount)s %(asset)s к %(to)s",
       successfully_withdraw: "Успешно отозвать",
-      successfully_withdrawn:
-        "Успешно отозвано %(withdrawAmount)s %(precision)s",
+      successfully_withdrawn: "Успешно отозвано %(withdrawAmount)s %(symbol)s",
       successfully_deposited:
         "Успешно депонирован %(depositAmount)s %(symbol)s",
-      limit_order_successfully: "You have successfully created a limit order",
+      limit_order_successfully: "Вы успешно создали лимитный ордер",
       saved_changes: "Вы успешно сохранили изменения",
       account_upgraded_successfully:
         "Ваша учетная запись успешно обновлена до пожизненной учетной записи членства",
       published_proxy: "Вы успешно опубликовали свой прокси",
       published_votes: "Вы успешно опубликовали свои голоса",
+      canceled_limit_order: "Вы успешно отменили заказ #%(selectedOrderId)s",
     },
   },
   tableHead: {

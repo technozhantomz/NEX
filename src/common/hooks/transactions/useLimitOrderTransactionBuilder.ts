@@ -1,12 +1,13 @@
 import { useCallback } from "react";
 
-import { roundNum, useAsset } from "..";
+import { roundNum } from "..";
+import { useAssetsContext } from "../../providers";
 import { Amount, Asset, Transaction } from "../../types";
 
 import { UseLimitOrderTransactionBuilderResult } from "./useLimitOrderTransactionBuilder.types";
 
 export function useLimitOrderTransactionBuilder(): UseLimitOrderTransactionBuilderResult {
-  const { defaultAsset } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   const buildCreateLimitOrderTransaction = useCallback(
     (
@@ -74,5 +75,21 @@ export function useLimitOrderTransactionBuilder(): UseLimitOrderTransactionBuild
     },
     [defaultAsset, roundNum]
   );
-  return { buildCreateLimitOrderTransaction };
+
+  const buildCancelLimitOrderTransaction = useCallback(
+    (orderId: string, feePayingAccount: string): Transaction => {
+      const trx = {
+        type: "limit_order_cancel",
+        params: {
+          fee_paying_account: feePayingAccount,
+          order: orderId,
+          fee: { amount: 0, asset_id: defaultAsset?.id },
+        },
+      };
+      return trx;
+    },
+    [defaultAsset, roundNum]
+  );
+
+  return { buildCreateLimitOrderTransaction, buildCancelLimitOrderTransaction };
 }

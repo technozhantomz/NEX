@@ -28,7 +28,7 @@ export const SecurityTab = (): JSX.Element => {
           <Styled.Select>
             {walletLockInMinutes.map((e, i) => (
               <Styled.Option value={e} key={i}>
-                {e} minutes{" "}
+                {e} {counterpart.translate(`field.options.lock_wallet`)}
               </Styled.Option>
             ))}
           </Styled.Select>

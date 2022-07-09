@@ -25,7 +25,7 @@ export const VoteTable = ({
   approveVote,
   removeVote,
 }: Props): JSX.Element => {
-  const { xs } = useViewportContext();
+  const { sm } = useViewportContext();
   const { localStorageAccount } = useUserContext();
   const columns = showVotesColumns(approveVote, removeVote);
   return (
@@ -41,7 +41,7 @@ export const VoteTable = ({
         {type === "approved" ? <Styled.Check /> : <Styled.Xmark />}
       </Styled.Title>
       <Styled.Container>
-        {xs ? (
+        {sm ? (
           <Styled.VoteList
             itemLayout="vertical"
             dataSource={votes}
@@ -104,7 +104,15 @@ export const VoteTable = ({
                   <div className="vote-info">
                     <span className="vote-info-title">{columns[1].title}</span>
                     <span className="vote-info-value">
-                      {(item as VoteRow).website}
+                      {(item as VoteRow).website == "" ? (
+                        <span>
+                          {counterpart.translate(`field.labels.not_available`)}
+                        </span>
+                      ) : (
+                        <a target="_blank" href={(item as VoteRow).website}>
+                          {(item as VoteRow).website}
+                        </a>
+                      )}
                     </span>
                   </div>
                   <div className="vote-info">

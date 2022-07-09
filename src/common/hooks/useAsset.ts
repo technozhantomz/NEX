@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
-import { defaultToken } from "../../api/params";
 import { usePeerplaysApiContext, useSettingsContext } from "../providers";
-import { Asset, Cache, GlobalProperties } from "../types";
+import { Asset, Cache } from "../types";
 
 import { UseAssetResult } from "./useAsset.types";
 import { roundNum } from "./useRoundNum";
@@ -10,10 +9,7 @@ import { roundNum } from "./useRoundNum";
 export function useAsset(): UseAssetResult {
   const { dbApi } = usePeerplaysApiContext();
   const { cache, setCache } = useSettingsContext();
-  const [defaultAsset, setDefaultAsset] = useState<Asset>();
-  const [sidechainAssets, setSidechainAssets] = useState<Asset[]>([]);
-  const [loadingSidechainAssets, setLoadingSidechainAssets] =
-    useState<boolean>(true);
+
   const getAssetById = useCallback(
     async (id: string) => {
       if (
@@ -112,51 +108,10 @@ export function useAsset(): UseAssetResult {
     [getAssetById, setPrecision]
   );
 
-  const getDefaultAsset = useCallback(async () => {
-    const defaultAsset = await getAssetBySymbol(defaultToken as string);
-    setDefaultAsset(defaultAsset);
-  }, [getAssetBySymbol, setDefaultAsset]);
-
-  const getSidechainAssets = useCallback(async () => {
-    try {
-      setLoadingSidechainAssets(true);
-      const globalProperties: GlobalProperties = await dbApi(
-        "get_global_properties"
-      );
-
-      const btcAssetId = globalProperties.parameters.extensions
-        .btc_asset as string;
-      const hbdAssetId = globalProperties.parameters.extensions
-        .hbd_asset as string;
-      const hiveAssetId = globalProperties.parameters.extensions
-        .hive_asset as string;
-
-      const sidechainAssetsIds = [btcAssetId, hbdAssetId, hiveAssetId];
-
-      const sidechainAssets = await Promise.all(
-        sidechainAssetsIds.map(getAssetById)
-      );
-      setSidechainAssets(sidechainAssets);
-      setLoadingSidechainAssets(false);
-    } catch (e) {
-      console.log(e);
-      setLoadingSidechainAssets(false);
-    }
-  }, [dbApi, getAssetById, setSidechainAssets, setLoadingSidechainAssets]);
-
-  useEffect(() => {
-    getDefaultAsset();
-    getSidechainAssets();
-  }, [getDefaultAsset, getSidechainAssets]);
-
   return {
     formAssetBalanceById,
     getAssetById,
     setPrecision,
-    getDefaultAsset,
     getAssetBySymbol,
-    defaultAsset,
-    sidechainAssets,
-    loadingSidechainAssets,
   };
 }

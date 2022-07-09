@@ -84,7 +84,6 @@ export function useVoting(): UseVotingResult {
 
       if (fullAccount !== undefined) {
         const votes = fullAccount.votes;
-
         setServerApprovedVotes(votes);
       }
       setLoading(false);

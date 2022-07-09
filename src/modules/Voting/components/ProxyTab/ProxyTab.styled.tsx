@@ -7,9 +7,9 @@ export const ProxyTabWrapper = styled.div`
 `;
 
 export const ProxyIntroWrapper = styled.div`
-  margin: 10px 25px;
+  margin: 0 25px;
   ${breakpoint.sm} {
-    margin: 10px 35px;
+    margin: 0 35px;
   }
 `;
 
