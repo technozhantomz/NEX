@@ -97,6 +97,23 @@ export const SwapItem = styled(swapForm.Item)`
     .ant-input-prefix {
       min-width: 135px;
       width: 33%;
+      .ant-form-item-with-help {
+        margin-bottom: 0px !important;
+      }
+      .ant-form-item-explain {
+        position: absolute;
+        right: 0;
+        left: 0px;
+        bottom: -15px;
+      }
+      .ant-select-selector {
+        border: none;
+      }
+      @media (max-width: 500px) {
+        .ant-form-item-explain-error {
+          font-size: 0.7rem;
+        }
+      }
     }
     .ant-input {
       text-align: right;

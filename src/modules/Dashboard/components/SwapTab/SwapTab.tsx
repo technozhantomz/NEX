@@ -21,6 +21,7 @@ export const SwapTab = (): JSX.Element => {
     onCancel,
     onFormFinish,
     confirm,
+    status,
     handleAssetChange,
     swapForm,
     formValidation,

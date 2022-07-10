@@ -27,7 +27,7 @@ export function useSwap(): Swap {
     buyAsset: "BTC",
   });
   const [assetValueInfo, setAssetValueInfo] = useState<string>("");
-  const [status, upStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const { buildTrx } = useTransactionBuilder();
   const { getPrivateKey } = useAccount();
@@ -135,7 +135,7 @@ export function useSwap(): Swap {
 
     if (trxResult) {
       setVisible(false);
-      upStatus(
+      setStatus(
         `Your swap was completed and you received ${values.buyAmount} ${values.buyAsset} for ${values.sellAmount} ${values.sellAsset}`
       );
     }
@@ -154,6 +154,9 @@ export function useSwap(): Swap {
         new Error(`Must be less then ${accountAsset?.amount}`)
       );
     const values = swapForm.getFieldsValue();
+    // if(value === swapForm.getFieldValue("buyAsset")) {
+    //   return Promise.reject(new Error(`Cannot swap same tokens`));
+    // }
     updateAssetValueInfo(values.sellAsset, values.buyAsset, true);
     return Promise.resolve();
   };
@@ -251,7 +254,7 @@ export function useSwap(): Swap {
     const sellPrice = Number(
       parseFloat(price * buyAmount + "").toFixed(buyAssetData?.precision)
     );
-    
+
     const buyPrice =
       price > 0
         ? Number(
