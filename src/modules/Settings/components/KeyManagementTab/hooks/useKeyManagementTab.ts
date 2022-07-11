@@ -744,7 +744,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     password: [
       {
         required: true,
-        message: counterpart.translate(`field.errors.password_required`),
+        message: counterpart.translate(`field.errors.field_is_required`),
       },
       {
         min: 12,
