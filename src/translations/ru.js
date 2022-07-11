@@ -850,6 +850,7 @@ export const ru = {
       successfully_deposited:
         "Успешно депонирован %(depositAmount)s %(symbol)s",
       limit_order_successfully: "Вы успешно создали лимитный ордер",
+      swap_order_successfully: "Вы успешно создали своп-ордер",
       saved_changes: "Вы успешно сохранили изменения",
       account_upgraded_successfully:
         "Ваша учетная запись успешно обновлена до пожизненной учетной записи членства",

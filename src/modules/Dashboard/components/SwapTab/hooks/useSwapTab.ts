@@ -1,4 +1,5 @@
 import { Form } from "antd";
+import counterpart from "counterpart";
 // import FormFinishInfo from "rc-field-form";
 import { useCallback, useEffect, useState } from "react";
 
@@ -118,11 +119,17 @@ export function useSwap(): Swap {
         trxResult = await buildTrx([trx], [activeKey]);
       } catch (error) {
         console.log(error);
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.transaction_unable`)
+        );
         setLoadingTransaction(false);
       }
 
       if (trxResult) {
         setLoadingTransaction(false);
+        setTransactionSuccessMessage(
+          counterpart.translate(`field.success.swap_order_successfully`)
+        );
         setStatus(
           `Your swap was completed and you received ${values.buyAmount} ${values.buyAsset} for ${values.sellAmount} ${values.sellAsset}`
         );
@@ -260,7 +267,6 @@ export function useSwap(): Swap {
     swapForm,
     formValidation,
     swapAsset,
-    swapInfo,
     status,
     assetValueInfo,
     selectedAssets,
