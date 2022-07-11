@@ -185,7 +185,7 @@ export function useCreateLimitOrder({
         new Date().getTime() + 1000 * 60 * 60 * 24 * 365
       ).toISOString();
       const activeKey = getPrivateKey(password, "active");
-      
+
       const trx = buildCreateLimitOrderTransaction(
         id,
         values.quantity,

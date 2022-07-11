@@ -38,8 +38,8 @@ export const InfoDiv = styled.div`
   color: #6c6c6c;
   opacity: 1;
   margin-right: 30px;
-  // display:flex;
 `;
+
 export const InfoPara = styled.p`
   @media (max-width: 500px) {
     font-size: 12px;
@@ -62,6 +62,7 @@ export const FooterPara = styled.p`
   margin-left: 30px;
   margin-top: 30px;
 `;
+
 export const HistoryLinkDiv = styled.div`
   margin-top: 30px;
   backgroundcolor: red;
@@ -137,6 +138,7 @@ export const button = styled(Button)`
 export const Tooltip = styled(tooltip)`
   margin-left: 30px;
 `;
+
 export const TooltipPara = styled.p`
   padding: 1rem;
   padding-bottom: 0px;

@@ -262,6 +262,11 @@ export const ru = {
         description:
           "%(creator)s, размещенный заказ #%(orderId)s покупать %(buyAmount)s за %(sellAmount)s",
       },
+      swap_order_create: {
+        title: "своп ордер",
+        description:
+          "%(creator)s, размещенный своп-ордер #%(orderId)s поменяться %(buyAmount)s за %(sellAmount)s",
+      },
       lottery_asset_create: {
         title: "Создать лотерейный актив",
       },
@@ -758,6 +763,7 @@ export const ru = {
       upgrade_lifetime: "Повышение статуса до пожизненного участника",
       buy_at_least: "Купить не менее",
       seller: "продавец",
+      swapper: "своппер",
       vesting_amount: "Сумма вестинга",
       withdrawal_amount: "Сумма вывода",
       today: "Сегодня",

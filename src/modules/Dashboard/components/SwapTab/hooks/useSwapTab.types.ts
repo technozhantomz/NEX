@@ -1,13 +1,10 @@
 import { FormInstance, Rule } from "antd/lib/form";
 import { BaseOptionType, DefaultOptionType } from "antd/lib/select";
-import FormFinishInfo from "rc-field-form";
+import { Dispatch, SetStateAction } from "react";
 
 import { CreateLimitOrderFee } from "../../../../../common/hooks/fees/useFees.types";
 
 export type Swap = {
-  visible: boolean;
-  onFormFinish: (name: string, info: FormFinishInfo) => void;
-  onCancel: () => void;
   confirm: () => void;
   swapForm: FormInstance<SwapFormData>;
   formValidation: FormValidation;
@@ -24,7 +21,16 @@ export type Swap = {
   swapAsset: () => void;
   status: string;
   assetValueInfo: string;
+  swapInfo: string;
   selectedAssets: Record<string, string>;
+  localStorageAccount: string;
+  transactionErrorMessage: string;
+  transactionSuccessMessage: string;
+  loadingTransaction: boolean;
+  feeAmount: number | undefined;
+  handleSwap: (password: string) => Promise<any>;
+  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
+  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
 };
 
 export type FormValidation = {

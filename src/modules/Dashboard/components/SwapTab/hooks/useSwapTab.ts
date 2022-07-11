@@ -10,9 +10,7 @@ import {
   useLimitOrderTransactionBuilder,
   useTransactionBuilder,
 } from "../../../../../common/hooks";
-import {
-  CreateLimitOrderFee,
-} from "../../../../../common/hooks/fees/useFees.types";
+import { CreateLimitOrderFee } from "../../../../../common/hooks/fees/useFees.types";
 import {
   usePeerplaysApiContext,
   useUserContext,
@@ -22,13 +20,19 @@ import {
 import { Swap, SwapAssetPair } from "./useSwapTab.types";
 
 export function useSwap(): Swap {
+  const [transactionErrorMessage, setTransactionErrorMessage] =
+    useState<string>("");
+  const [transactionSuccessMessage, setTransactionSuccessMessage] =
+    useState<string>("");
+  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const { localStorageAccount } = useUserContext();
   const [selectedAssets, setSelectedAssets] = useState<SwapAssetPair>({
     sellAsset: "TEST",
     buyAsset: "BTC",
   });
   const [assetValueInfo, setAssetValueInfo] = useState<string>("");
+  const [swapInfo, setSwapInfo] = useState<string>("");
   const [status, setStatus] = useState<string>("");
-  const [visible, setVisible] = useState<boolean>(false);
   const { buildTrx } = useTransactionBuilder();
   const { getPrivateKey } = useAccount();
   const { buildCreateLimitOrderTransaction } =
@@ -49,18 +53,11 @@ export function useSwap(): Swap {
     setSelectedAssets({ ...selectedAssets, [option.action]: String(value) });
   };
 
-  const onCancel = () => {
-    setVisible(false);
-  };
-
-  const confirm = () => {
-    setVisible(true);
-  };
-
   useEffect(() => {
     if (!defaultToken) return;
     swapForm.setFieldsValue({ sellAsset: defaultToken });
     swapForm.setFieldsValue({ buyAsset: "BTC" });
+    setSelectedAssets({ sellAsset: defaultToken, buyAsset: "BTC" });
     updateAssetValueInfo(defaultToken, "BTC", true);
   }, []);
 
@@ -80,71 +77,59 @@ export function useSwap(): Swap {
     swapForm.setFieldsValue({ buyAsset: selectedAssets.buyAsset });
   }, [selectedAssets]);
 
-  const onFormFinish = (name: string, info: any) => {
-    const { values, forms } = info;
-    const { passwordModal } = forms;
-    if (name === "passwordModal") {
-      passwordModal.validateFields().then(() => {
-        handleSwap(values.password);
-      });
-    }
-  };
+  const handleSwap = useCallback(
+    async (password: string) => {
+      const values = swapForm.getFieldsValue();
+      const sellAsset = await getAssetBySymbol(values.sellAsset);
+      const buyAsset = await getAssetBySymbol(values.buyAsset);
 
-  const handleSwap = useCallback(async (password: string) => {
-    const values = swapForm.getFieldsValue();
-    const sellAsset = await getAssetBySymbol(values.sellAsset);
-    const buyAsset = await getAssetBySymbol(values.buyAsset);
+      const activeKey = getPrivateKey(password, "active");
 
-    const activeKey = getPrivateKey(password, "active");
+      const amount_to_sell = {
+        amount: values.sellAmount,
+        asset_id: sellAsset.id,
+      };
 
-    const amount_to_sell = {
-      amount: values.sellAmount,
-      asset_id: sellAsset.id,
-    };
+      const min_to_receive = {
+        amount: values.buyAmount,
+        asset_id: buyAsset.id,
+      };
 
-    const min_to_receive = {
-      amount: values.buyAmount,
-      asset_id: buyAsset.id,
-    };
+      const expiration = new Date(
+        new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+      ).toISOString();
 
-    const expiration = new Date(
-      new Date().getTime() + 1000 * 60 * 60 * 24 * 365
-    ).toISOString();
-
-    const trx = buildCreateLimitOrderTransaction(
-      id,
-      amount_to_sell.amount,
-      min_to_receive.amount,
-      sellAsset,
-      buyAsset,
-      expiration,
-      false,
-      [],
-      true
-    );
-
-    let trxResult;
-
-    try {
-      console.log(trx);
-      trxResult = await buildTrx([trx], [activeKey]);
-    } catch (error) {
-      console.log(error);
-      setVisible(false);
-    }
-
-    if (trxResult) {
-      setVisible(false);
-      setStatus(
-        `Your swap was completed and you received ${values.buyAmount} ${values.buyAsset} for ${values.sellAmount} ${values.sellAsset}`
+      const trx = buildCreateLimitOrderTransaction(
+        id,
+        amount_to_sell.amount,
+        min_to_receive.amount,
+        sellAsset,
+        buyAsset,
+        expiration,
+        false,
+        [],
+        true
       );
-    }
-  }, [
-    id,
-    swapForm,
-    buildTrx,
-    buildCreateLimitOrderTransaction
-  ]);
+
+      let trxResult;
+
+      try {
+        setLoadingTransaction(true);
+        trxResult = await buildTrx([trx], [activeKey]);
+      } catch (error) {
+        console.log(error);
+        setLoadingTransaction(false);
+      }
+
+      if (trxResult) {
+        setLoadingTransaction(false);
+        setStatus(
+          `Your swap was completed and you received ${values.buyAmount} ${values.buyAsset} for ${values.sellAmount} ${values.sellAsset}`
+        );
+      }
+    },
+    [id, swapForm, buildTrx, buildCreateLimitOrderTransaction]
+  );
 
   const validateSellAmount = (_: unknown, value: number) => {
     const sellAsset = swapForm.getFieldValue("sellAsset");
@@ -154,9 +139,6 @@ export function useSwap(): Swap {
         new Error(`Must be less then ${accountAsset?.amount}`)
       );
     const values = swapForm.getFieldsValue();
-    // if(value === swapForm.getFieldValue("buyAsset")) {
-    //   return Promise.reject(new Error(`Cannot swap same tokens`));
-    // }
     updateAssetValueInfo(values.sellAsset, values.buyAsset, true);
     return Promise.resolve();
   };
@@ -165,7 +147,6 @@ export function useSwap(): Swap {
     const values = swapForm.getFieldsValue();
     const accountAsset = assets.find((asset) => asset.symbol === value);
     if (value === swapForm.getFieldValue("buyAsset"))
-      // swapForm.setFields([sellAmount : {errors:`Cannot swap same tokens`,value:values.sellAmount}])
       return Promise.reject(new Error(`Cannot swap same tokens`));
     if (accountAsset === undefined)
       return Promise.reject(new Error(`${value} not available`));
@@ -249,12 +230,10 @@ export function useSwap(): Swap {
     const sellAmount = swapForm.getFieldValue("sellAmount")
       ? swapForm.getFieldValue("sellAmount")
       : 0;
-
     const price = tickerData ? Number(tickerData?.latest) : 0;
     const sellPrice = Number(
       parseFloat(price * buyAmount + "").toFixed(buyAssetData?.precision)
     );
-
     const buyPrice =
       price > 0
         ? Number(
@@ -263,24 +242,35 @@ export function useSwap(): Swap {
             )
           )
         : 0;
+
     isSellAssetChanged === true
       ? swapForm.setFieldsValue({ buyAmount: buyPrice })
       : swapForm.setFieldsValue({ sellAmount: sellPrice });
     setAssetValueInfo(`${1} ${buyAsset} = ${price} ${sellAsset}`);
+    setSwapInfo(`
+      Swap ${buyAmount} ${buyAsset} for ${price * buyAmount} ${sellAsset}
+    `);
   };
 
   return {
-    visible,
-    onCancel,
-    onFormFinish,
     confirm,
+    swapInfo,
     swapOrderFee,
     handleAssetChange,
     swapForm,
     formValidation,
     swapAsset,
+    swapInfo,
     status,
     assetValueInfo,
     selectedAssets,
+    localStorageAccount,
+    transactionErrorMessage,
+    setTransactionErrorMessage,
+    transactionSuccessMessage,
+    setTransactionSuccessMessage,
+    loadingTransaction,
+    feeAmount: swapOrderFee?.fee,
+    handleSwap,
   };
 }

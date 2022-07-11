@@ -9,6 +9,7 @@ import {
   AccountUpgrade,
   CancelLimitOrder,
   CreateLimitOrder,
+  CreateSwapOrder,
   CreateVestingBalance,
   Transfer,
   WithdrawVestingBalance,
@@ -31,6 +32,7 @@ type Props = {
   price?: string;
   sell?: string;
   buy?: string;
+  swap?: string;
   expiration?: string;
   vestingAmount?: number;
   withdrawalAmount?: number;
@@ -56,6 +58,7 @@ export const TransactionModal = ({
   price,
   sell,
   buy,
+  swap,
   expiration,
   vestingAmount,
   withdrawalAmount,
@@ -87,6 +90,15 @@ export const TransactionModal = ({
         price={price as string}
         sell={sell as string}
         buy={buy as string}
+        expiration={expiration as string}
+      />
+    ),
+    swap_order_create: (
+      <CreateSwapOrder
+        account={account as string}
+        fee={fee as number}
+        price={price as string}
+        swap={swap as string}
         expiration={expiration as string}
       />
     ),

@@ -1,8 +1,9 @@
 import { Form, Input } from "antd";
 
 import { defaultToken } from "../../../../api/params/networkparams";
-import { PasswordModal } from "../../../../common/components";
+import { PasswordModal, TransactionModal } from "../../../../common/components";
 import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
+import { useHandleTransactionForm } from "../../../../common/hooks";
 import { useAssetsContext } from "../../../../common/providers";
 import {
   CardFormButton,
@@ -17,19 +18,37 @@ export const SwapTab = (): JSX.Element => {
   const { defaultAsset, sidechainAssets } = useAssetsContext();
 
   const {
-    visible,
-    onCancel,
-    onFormFinish,
-    confirm,
     status,
     handleAssetChange,
     swapForm,
     formValidation,
     swapOrderFee,
     swapAsset,
+    swapInfo,
     assetValueInfo,
     selectedAssets,
+    localStorageAccount,
+    transactionErrorMessage,
+    setTransactionErrorMessage,
+    transactionSuccessMessage,
+    setTransactionSuccessMessage,
+    loadingTransaction,
+    feeAmount,
+    handleSwap,
   } = useSwap();
+
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleSwap,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
 
   const InfoToolTip = (
     <Styled.TooltipPara>
@@ -45,8 +64,12 @@ export const SwapTab = (): JSX.Element => {
 
   return (
     <Styled.SwapContainer>
-      <Styled.SwapForm.Provider onFormFinish={onFormFinish}>
-        <Styled.SwapForm form={swapForm} name="swapForm" onFinish={confirm}>
+      <Styled.SwapForm.Provider onFormFinish={handleFormFinish}>
+        <Styled.SwapForm
+          form={swapForm}
+          name="swapForm"
+          onFinish={showPasswordModal}
+        >
           <Styled.button
             icon={<SwapOutlined />}
             shape="circle"
@@ -128,7 +151,21 @@ export const SwapTab = (): JSX.Element => {
             </CardFormButton>
           </Form.Item>
         </Styled.SwapForm>
-        <PasswordModal visible={visible} onCancel={onCancel} />
+        <TransactionModal
+          visible={isTransactionModalVisible}
+          onCancel={hideTransactionModal}
+          transactionErrorMessage={transactionErrorMessage}
+          transactionSuccessMessage={transactionSuccessMessage}
+          loadingTransaction={loadingTransaction}
+          account={localStorageAccount}
+          fee={feeAmount || 0}
+          transactionType="swap_order_create"
+          swap={swapInfo}
+        />
+        <PasswordModal
+          visible={isPasswordModalVisible}
+          onCancel={hidePasswordModal}
+        />
       </Styled.SwapForm.Provider>
       {/*<DashboardButton label="Swap Coins" />
       <Styled.HistoryLinkDiv>

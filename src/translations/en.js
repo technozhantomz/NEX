@@ -274,6 +274,11 @@ export const en = {
         description:
           "%(creator)s, placed order #%(orderId)s to buy %(buyAmount)s for %(sellAmount)s",
       },
+      swap_order_create: {
+        title: "Swap Order",
+        description:
+          "%(creator)s, placed swap order #%(orderId)s to swap %(buyAmount)s for %(sellAmount)s",
+      },
       lottery_asset_create: {
         title: "Create lottery asset",
       },
@@ -780,6 +785,7 @@ export const en = {
       upgrade_lifetime: "Upgrade to lifetime member",
       buy_at_least: "Buy at least",
       seller: "seller",
+      swapper: "Swapper",
       vesting_amount: "Vesting amount",
       withdrawal_amount: "Withdrawal amount",
       today: "Today",
