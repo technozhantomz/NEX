@@ -48,7 +48,7 @@ export const PairModal = ({
         initialValues={{
           base: currentPair.split("_")[1],
           quote: currentPair.split("_")[0],
-          recents: exchanges.list[0],
+          recents: exchanges.list[1] ? exchanges.list[1] : exchanges.list[0],
         }}
         onValuesChange={handleValuesChange}
         name="pairModal"
