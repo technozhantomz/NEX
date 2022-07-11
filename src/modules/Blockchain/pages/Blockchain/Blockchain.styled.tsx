@@ -29,6 +29,10 @@ export const MobileTabsWrapper = styled.div`
   .ant-tabs-tab {
     color: ${colors.textColor};
   }
+  .menu-selected {
+    color: #0148be;
+    background-color: #e6f4ff;
+  }
 `;
 
 export const BlockchainCard = styled(UiCard)`

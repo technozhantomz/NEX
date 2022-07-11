@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
@@ -32,6 +32,14 @@ const Blockchain: NextPage = () => {
   const { blockNumber, tab } = router.query;
   const { pageMeta } = useBlockchainPage(tab as string);
   const { sm } = useViewportContext();
+
+  useEffect(() => {
+    const curTab = document.querySelector(`
+      [data-key="${tab ? tab : "blockchain"}"]
+    `);
+    curTab?.classList.add(`menu-selected`);
+  }, [tab, visible]);
+
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
       {sm ? (
@@ -45,7 +53,11 @@ const Blockchain: NextPage = () => {
                     props.onTabClick(item.key);
                   }}
                   items={props.panes.map((pane: any) => {
-                    return { label: pane.props.tab, key: pane.key };
+                    return {
+                      label: pane.props.tab,
+                      key: pane.key,
+                      "data-key": pane.key,
+                    };
                   })}
                 />
               </Styled.MobileTabsWrapper>
