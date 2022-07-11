@@ -12,6 +12,9 @@ export const GeneralTab = (): JSX.Element => {
     handleAllowNotifications,
     showSuccessMessage,
   } = useSettings();
+
+  console.log(showSuccessMessage);
+
   return (
     <Styled.GeneralSettingsCard>
       <Styled.GeneralTabForm

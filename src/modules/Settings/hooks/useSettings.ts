@@ -28,35 +28,33 @@ export function useSettings(): UseSettingsResult {
     }
   };
 
-  const updateSettings = useCallback(async () => {
-    const values = generalSettingsForm.getFieldsValue();
+  const updateSettings = useCallback(() => {
+    (async () => {
+      const values = generalSettingsForm.getFieldsValue();
 
-    const newSettings: Settings = {
-      ...settings,
-      language: values.selectedLanguage
-        ? values.selectedLanguage
-        : settings.language,
-      notifications:
-        values.allowNotifications !== undefined
-          ? {
-              allow: values.allowNotifications,
-              additional: {
-                transferToMe: values.allowTransferToMeNotifications,
-              },
-            }
-          : settings.notifications,
-      walletLock: values.walletLockInMinutes
-        ? values.walletLockInMinutes
-        : settings.walletLock,
-    };
-    if (values.selectedLanguage) {
-      setLocale(values.selectedLanguage);
-    }
-    setSettings(newSettings);
-    setShowSuccessMessage(true);
-    setTimeout(() => {
-      setShowSuccessMessage(false);
-    }, 2000);
+      const newSettings: Settings = {
+        ...settings,
+        language: values.selectedLanguage
+          ? values.selectedLanguage
+          : settings.language,
+        notifications:
+          values.allowNotifications !== undefined
+            ? {
+                allow: values.allowNotifications,
+                additional: {
+                  transferToMe: values.allowTransferToMeNotifications,
+                },
+              }
+            : settings.notifications,
+        walletLock: values.walletLockInMinutes
+          ? values.walletLockInMinutes
+          : settings.walletLock,
+      };
+      if (values.selectedLanguage) {
+        setLocale(values.selectedLanguage);
+      }
+      setSettings(newSettings);
+    })();
   }, [
     settings,
     generalSettingsForm,
@@ -64,6 +62,13 @@ export function useSettings(): UseSettingsResult {
     setSettings,
     setShowSuccessMessage,
   ]);
+
+  useEffect(() => {
+    setShowSuccessMessage(true);
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 2000);
+  }, [settings]);
 
   return {
     updateSettings,
