@@ -174,7 +174,7 @@ export const OrderBook = ({
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
           fee={cancelOrderfeeAmount}
-          orderId={selectedOrderId}
+          orderId={selectedOrderId.split(".")[2]}
           transactionType="limit_order_cancel"
         />
         <PasswordModal
