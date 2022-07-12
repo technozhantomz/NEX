@@ -805,6 +805,8 @@ export const en = {
       key_management_group: ["Active", "Owner", "Memo"],
     },
     errors: {
+      no_key_for_password: "There is no %(role)s key for this password",
+      login_first: "Please login first",
       checking_sons_status: "Please wait for checking the SONs network status",
       user_name_first: "Please provide a valid username first",
       same_account: "Same as your account",
