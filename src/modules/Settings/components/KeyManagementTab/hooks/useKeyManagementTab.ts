@@ -59,7 +59,13 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
       }
       setGeneratedKeys(generatedKeys);
     }
-  }, [account, keyManagementForm, selectedKeys]);
+  }, [
+    account,
+    keyManagementForm,
+    selectedKeys,
+    setGeneratedKeys,
+    defaultToken,
+  ]);
 
   const validateSelectKeys = (_: unknown) => {
     if (selectedKeys.length > 0) {

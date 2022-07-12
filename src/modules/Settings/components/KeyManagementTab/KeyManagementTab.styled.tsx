@@ -68,7 +68,8 @@ export const PasswordInput = styled(UiInput.Password)`
 export const GeneratedKeyInput = styled(UiInput.Password)`
   height: 50px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 24px;
+  margin-bottom: 24px;
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
   border-radius: 4px;
