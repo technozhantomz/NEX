@@ -12,6 +12,7 @@ import {
   CreateSwapOrder,
   CreateVestingBalance,
   Transfer,
+  Withdraw,
   WithdrawVestingBalance,
 } from "./components";
 import { useTransactionModal } from "./hooks";
@@ -40,6 +41,7 @@ type Props = {
   to?: string;
   quantity?: number;
   orderId?: string;
+  withdrawAddress?: string;
 };
 
 export const TransactionModal = ({
@@ -66,6 +68,7 @@ export const TransactionModal = ({
   to,
   quantity,
   orderId,
+  withdrawAddress,
 }: Props): JSX.Element => {
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
@@ -129,6 +132,15 @@ export const TransactionModal = ({
         fee={fee as number}
         asset={asset as string}
         to={to as string}
+        quantity={quantity as number}
+      />
+    ),
+    withdraw: (
+      <Withdraw
+        account={account as string}
+        fee={fee as number}
+        asset={asset as string}
+        withdrawAddress={withdrawAddress as string}
         quantity={quantity as number}
       />
     ),

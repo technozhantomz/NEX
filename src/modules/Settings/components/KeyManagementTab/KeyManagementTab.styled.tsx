@@ -54,11 +54,6 @@ export const CheckBoxGroup = styled(Form.Item)`
   margin-bottom: 50px;
 `;
 
-export const MemoWarning = styled.div`
-  color: ${colors.errorColor};
-  margin-top: 5px;
-`;
-
 export const ButtonFormItem = styled.div`
   margin-bottom: 20px;
   ${breakpoint.sm} {
@@ -73,7 +68,8 @@ export const PasswordInput = styled(UiInput.Password)`
 export const GeneratedKeyInput = styled(UiInput.Password)`
   height: 50px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 24px;
+  margin-bottom: 24px;
   background: ${colors.white} 0% 0% no-repeat padding-box;
   border: 1px solid ${colors.borderColorBase};
   border-radius: 4px;
@@ -93,6 +89,11 @@ export const GeneratedKeyInput = styled(UiInput.Password)`
       font-size: 14px;
     }
   }
+`;
+
+export const NoKey = styled.div`
+  color: ${colors.errorColor};
+  margin-top: 8px;
 `;
 
 export const SubmitButton = styled(CardFormButton)``;

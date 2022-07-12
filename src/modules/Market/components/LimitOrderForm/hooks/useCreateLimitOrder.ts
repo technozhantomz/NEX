@@ -47,7 +47,7 @@ export function useCreateLimitOrder({
   const { buildCreateLimitOrderTransaction } =
     useLimitOrderTransactionBuilder();
 
-  const handleNegativeValuesAndAssetPrecission = useCallback(
+  const handleAssetPrecission = useCallback(
     (changedValues) => {
       if (
         !loadingSelectedPair &&
@@ -55,9 +55,7 @@ export function useCreateLimitOrder({
         currentQuote !== undefined
       ) {
         if (changedValues.price) {
-          if (changedValues.price < 0) {
-            orderForm.setFieldsValue({ price: 0 });
-          } else if (
+          if (
             changedValues.price > 0 &&
             changedValues.price.split(".")[1]?.length > currentBase.precision
           ) {
@@ -66,9 +64,7 @@ export function useCreateLimitOrder({
             });
           }
         } else if (changedValues.total) {
-          if (changedValues.total < 0) {
-            orderForm.setFieldsValue({ total: 0 });
-          } else if (
+          if (
             changedValues.total > 0 &&
             changedValues.total.split(".")[1]?.length > currentBase.precision
           ) {
@@ -77,9 +73,7 @@ export function useCreateLimitOrder({
             });
           }
         } else if (changedValues.quantity) {
-          if (changedValues.quantity < 0) {
-            orderForm.setFieldsValue({ quantity: 0 });
-          } else if (
+          if (
             changedValues.quantity > 0 &&
             changedValues.quantity.split(".")[1]?.length >
               currentQuote.precision
@@ -144,10 +138,10 @@ export function useCreateLimitOrder({
 
   const handleValuesChange = useCallback(
     (changedValues: any, allValues: any) => {
-      handleNegativeValuesAndAssetPrecission(changedValues);
+      handleAssetPrecission(changedValues);
       handleRelationsBetweenInputs(changedValues, allValues);
     },
-    [handleNegativeValuesAndAssetPrecission, handleRelationsBetweenInputs]
+    [handleAssetPrecission, handleRelationsBetweenInputs]
   );
 
   const setBalance = useCallback(() => {

@@ -400,6 +400,9 @@ export const ru = {
         title: "Вывод вестингового баланса",
         description: "%(owner)s, отводить %(amount)s %(symbol)s От GPOS",
       },
+      withdraw: {
+        title: "Отзывать",
+      },
       withdraw_permission_claim: {
         title: "Разрешение на снятие претензии",
       },
@@ -787,6 +790,9 @@ export const ru = {
       key_management_group: ["Активный", "Владелец", "Памятка"],
     },
     errors: {
+      no_key_for_password: "Для этого пароля нет ключа %(role)s",
+      login_first: "Пожалуйста, войдите сначала",
+      checking_sons_status: "Дождитесь проверки состояния сети SON.",
       user_name_first: "Сначала укажите действительное имя пользователя",
       same_account: "Так же, как ваш аккаунт",
       no_account: "аккаунт не найден",
