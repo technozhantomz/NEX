@@ -29,9 +29,13 @@ export const MobileTabsWrapper = styled.div`
   .ant-tabs-tab {
     color: ${colors.textColor};
   }
-  .menu-selected {
-    color: #0148be;
-    background-color: #e6f4ff;
+  .ant-menu-item {
+    color: black !important;
+    background: white !important;
+    &.menu-selected {
+      color: #0148be !important;
+      background-color: #e6f4ff !important;
+    }
   }
 `;
 

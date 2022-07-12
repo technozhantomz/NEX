@@ -34,6 +34,10 @@ const Blockchain: NextPage = () => {
   const { sm } = useViewportContext();
 
   useEffect(() => {
+    const items = document.getElementsByClassName(`menu-selected`);
+    for (let i = 0; i < items.length; i++) {
+      items[i].classList.remove('menu-selected');
+    }
     const curTab = document.querySelector(`
       [data-key="${tab ? tab : "blockchain"}"]
     `);
