@@ -783,6 +783,8 @@ export const ru = {
       key_management_group: ["Активный", "Владелец", "Памятка"],
     },
     errors: {
+      no_key_for_password: "Для этого пароля нет ключа %(role)s",
+      login_first: "Пожалуйста, войдите сначала",
       checking_sons_status: "Дождитесь проверки состояния сети SON.",
       user_name_first: "Сначала укажите действительное имя пользователя",
       same_account: "Так же, как ваш аккаунт",
