@@ -4,7 +4,10 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import { Layout } from "../../../../common/components";
-import { useViewportContext } from "../../../../common/providers";
+import {
+  useSettingsContext,
+  useViewportContext,
+} from "../../../../common/providers";
 //import { useBrowserHistoryContext } from "../../../../common/providers";
 import {
   Button,
@@ -28,6 +31,7 @@ const SettingPage: NextPage = () => {
   const router = useRouter();
   const [visible, setVisible] = useState<boolean>(false);
   const { tab } = router.query;
+  const { settings } = useSettingsContext();
   //const { pageLoading } = useBrowserHistoryContext();
   const { sm } = useViewportContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
@@ -50,7 +54,7 @@ const SettingPage: NextPage = () => {
             }
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab
+              {tab && settings
                 ? counterpart.translate(
                     `pages.settings.${(tab as string).replace(
                       "-",
