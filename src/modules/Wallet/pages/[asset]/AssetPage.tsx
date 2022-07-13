@@ -79,6 +79,7 @@ const AssetPage: NextPage = () => {
                           },
                         ]
                   }
+                  selectedKeys={tab ? [tab as string] : ["transfer"]}
                 />
               </Styled.MobileTabsWrapper>
             }

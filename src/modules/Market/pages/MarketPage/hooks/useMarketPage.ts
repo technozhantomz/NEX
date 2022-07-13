@@ -248,7 +248,12 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
   const formOrderHistoryRow = useCallback(
     (history: OrderHistory, base: Asset, quote: Asset): OrderHistoryRow => {
-      const time = formLocalDate(history.time, ["month", "year", "time"]);
+      const time = formLocalDate(history.time, [
+        "month",
+        "date",
+        "year",
+        "time",
+      ]);
       const { pays, receives } = history.op;
       let baseAmount = 0,
         quoteAmount = 0,
