@@ -15,6 +15,7 @@ export const Table = styled(UiTable)`
     border-bottom: none;
     padding: 13px;
     text-align: center;
+    font-size: 0.7rem;
   }
   .ant-table-thead
     > tr
