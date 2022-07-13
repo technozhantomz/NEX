@@ -70,6 +70,7 @@ const VotingPage: NextPage = () => {
                     props.onTabClick(item.key);
                   }}
                   items={dropdowItems}
+                  selectedKeys={tab ? [tab as string] : ["gpos"]}
                 />
               </Styled.MobileTabsWrapper>
             }

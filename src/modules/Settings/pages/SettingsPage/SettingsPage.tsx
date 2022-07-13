@@ -49,6 +49,7 @@ const SettingPage: NextPage = () => {
                   items={props.panes.map((pane: any) => {
                     return { label: pane.props.tab, key: pane.key };
                   })}
+                  selectedKeys={tab ? [tab as string] : ["general"]}
                 />
               </Styled.MobileTabsWrapper>
             }
