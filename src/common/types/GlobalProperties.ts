@@ -1,6 +1,6 @@
 export type GlobalProperties = {
   active_committee_members: string[];
-  active_sons: string[];
+  active_sons: ActiveSon[];
   active_witnesses: string[];
   id: string;
   parameters: GlobalPropertiesParameters;

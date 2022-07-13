@@ -22,4 +22,5 @@ export const TransactionType = styled.span`
 export const DetailContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  word-break: break-word;
 `;

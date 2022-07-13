@@ -37,39 +37,6 @@ export const Layout: FunctionComponent<Props> = ({
   dexLayout = false,
   onClick,
 }: Props) => {
-  const { settings } = useSettingsContext();
-  const [locale, _setLocale] = useState<Locale>(enUS);
-
-  useEffect(() => {
-    ConfigProvider.config({
-      theme: {
-        primaryColor: "#0148BE",
-        errorColor: "#ff4d4f",
-        warningColor: "#f2c222",
-        successColor: "#2ADF5D",
-        infoColor: "#1890ff",
-      },
-    });
-    setLocale(settings.language);
-  }, [settings]);
-
-  const setLocale = (language: string) => {
-    switch (true) {
-      case language === "en":
-        _setLocale(enUS);
-        moment.locale("en");
-        break;
-      case language === "ru":
-        _setLocale(ruRU);
-        moment.locale("ru");
-        break;
-      default:
-        _setLocale(enUS);
-        moment.locale("en");
-        break;
-    }
-  };
-
   const getStyles = () => {
     switch (true) {
       case type == "card":
@@ -92,11 +59,8 @@ export const Layout: FunctionComponent<Props> = ({
       </Head>
       <Styled.Page className={dexLayout ? "dex-layout" : ""} onClick={onClick}>
         <TopBar />
-        <ConfigProvider locale={locale}>
-          <Styled.Layout
-            className={`${locale.locale} ${getStyles()}`}
-            key={locale.locale}
-          >
+        <ConfigProvider>
+          <Styled.Layout className={`${getStyles()}`}>
             {heading != undefined ? (
               <Styled.PageHeading className={"page-heading"}>
                 {heading}

@@ -64,7 +64,7 @@ const AssetPage: NextPage = () => {
             overlay={
               <Styled.MobileTabsWrapper>
                 <Menu
-                  onSelect={(item: any) => {
+                  onClick={(item: any) => {
                     props.onTabClick(item.key);
                   }}
                   items={
