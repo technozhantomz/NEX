@@ -54,30 +54,6 @@ export function useSwap(): Swap {
     setSelectedAssets({ ...selectedAssets, [option.action]: String(value) });
   };
 
-  useEffect(() => {
-    if (!defaultToken) return;
-    swapForm.setFieldsValue({ sellAsset: defaultToken });
-    swapForm.setFieldsValue({ buyAsset: "BTC" });
-    setSelectedAssets({ sellAsset: defaultToken, buyAsset: "BTC" });
-    updateAssetValueInfo(defaultToken, "BTC", true);
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const base = await getAssetBySymbol(selectedAssets.sellAsset);
-      const quote = await getAssetBySymbol(selectedAssets.buyAsset);
-      const _swapOrderFee = calculateCreateLimitOrderFee(base, quote);
-      if (_swapOrderFee !== undefined) {
-        setSwapOrderFee(_swapOrderFee);
-      }
-    })();
-  }, [calculateCreateLimitOrderFee, setSwapOrderFee]);
-
-  useEffect(() => {
-    swapForm.setFieldsValue({ sellAsset: selectedAssets.sellAsset });
-    swapForm.setFieldsValue({ buyAsset: selectedAssets.buyAsset });
-  }, [selectedAssets]);
-
   const handleSwap = useCallback(
     async (password: string) => {
       const values = swapForm.getFieldsValue();
@@ -258,6 +234,30 @@ export function useSwap(): Swap {
       Swap ${buyAmount} ${buyAsset} for ${price * buyAmount} ${sellAsset}
     `);
   };
+
+  useEffect(() => {
+    swapForm.setFieldsValue({ sellAsset: selectedAssets.sellAsset });
+    swapForm.setFieldsValue({ buyAsset: selectedAssets.buyAsset });
+  }, [selectedAssets]);
+
+  useEffect(() => {
+    if (!defaultToken) return;
+    swapForm.setFieldsValue({ sellAsset: defaultToken });
+    swapForm.setFieldsValue({ buyAsset: "BTC" });
+    setSelectedAssets({ sellAsset: defaultToken, buyAsset: "BTC" });
+    updateAssetValueInfo(defaultToken, "BTC", true);
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const base = await getAssetBySymbol(selectedAssets.sellAsset);
+      const quote = await getAssetBySymbol(selectedAssets.buyAsset);
+      const _swapOrderFee = calculateCreateLimitOrderFee(base, quote);
+      if (_swapOrderFee !== undefined) {
+        setSwapOrderFee(_swapOrderFee);
+      }
+    })();
+  }, [calculateCreateLimitOrderFee, setSwapOrderFee]);
 
   return {
     confirm,

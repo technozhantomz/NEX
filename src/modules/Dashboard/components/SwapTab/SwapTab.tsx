@@ -1,5 +1,3 @@
-import { Form, Input } from "antd";
-
 import { defaultToken } from "../../../../api/params/networkparams";
 import { PasswordModal, TransactionModal } from "../../../../common/components";
 import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
@@ -7,7 +5,9 @@ import { useHandleTransactionForm } from "../../../../common/hooks";
 import { useAssetsContext } from "../../../../common/providers";
 import {
   CardFormButton,
+  Form,
   InfoCircleOutlined,
+  Input,
   SwapOutlined,
 } from "../../../../ui/src";
 
@@ -85,6 +85,7 @@ export const SwapTab = (): JSX.Element => {
               placeholder="0.00000"
               type="number"
               min={0}
+              //controls={false}
               prefix={
                 <Styled.SwapFormItem
                   name="sellAsset"

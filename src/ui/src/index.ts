@@ -13,12 +13,12 @@ export { Tag } from "./Tag";
 export { TableSearch } from "./TableSearch";
 export { ListItem } from "./ListItem";
 export { Tabs } from "./Tabs";
+export { Input } from "./Input";
 
 export {
   Badge,
   Row,
   Form,
-  Input,
   InputNumber,
   Menu,
   Modal,
