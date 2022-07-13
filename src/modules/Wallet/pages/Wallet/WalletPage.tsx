@@ -28,7 +28,7 @@ const WalletPage: NextPage = () => {
             overlay={
               <Styled.MobileTabsWrapper>
                 <Menu
-                  onSelect={(item: any) => {
+                  onClick={(item: any) => {
                     props.onTabClick(item.key);
                   }}
                   items={props.panes.map((pane: any) => {

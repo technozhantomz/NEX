@@ -127,7 +127,9 @@ export function useProxyTab({
     const trx = await getUpdateAccountTrx();
     if (trx !== undefined) {
       const fee = await getTrxFee([trx]);
-      setUpdateAccountFee(fee);
+      if (fee !== undefined) {
+        setUpdateAccountFee(fee);
+      }
     }
   }, [getUpdateAccountTrx, getTrxFee, setUpdateAccountFee]);
 
