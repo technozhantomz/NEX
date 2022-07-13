@@ -13,8 +13,6 @@ export const GeneralTab = (): JSX.Element => {
     showSuccessMessage,
   } = useSettings();
 
-  console.log(showSuccessMessage);
-
   return (
     <Styled.GeneralSettingsCard>
       <Styled.GeneralTabForm

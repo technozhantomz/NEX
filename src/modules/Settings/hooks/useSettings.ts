@@ -11,15 +11,6 @@ export function useSettings(): UseSettingsResult {
   const { settings, setSettings, setLocale } = useSettingsContext();
   const [generalSettingsForm] = Form.useForm();
 
-  useEffect(() => {
-    generalSettingsForm.setFieldsValue({
-      selectedLanguage: settings.language,
-      allowNotifications: settings.notifications.allow,
-      allowTransferToMeNotifications:
-        settings.notifications.additional.transferToMe,
-    });
-  }, [settings, setSettings]);
-
   const handleAllowNotifications = (e: any) => {
     if (!e.target.checked) {
       generalSettingsForm.setFieldsValue({
@@ -29,32 +20,35 @@ export function useSettings(): UseSettingsResult {
   };
 
   const updateSettings = useCallback(() => {
-    (async () => {
-      const values = generalSettingsForm.getFieldsValue();
+    const values = generalSettingsForm.getFieldsValue();
 
-      const newSettings: Settings = {
-        ...settings,
-        language: values.selectedLanguage
-          ? values.selectedLanguage
-          : settings.language,
-        notifications:
-          values.allowNotifications !== undefined
-            ? {
-                allow: values.allowNotifications,
-                additional: {
-                  transferToMe: values.allowTransferToMeNotifications,
-                },
-              }
-            : settings.notifications,
-        walletLock: values.walletLockInMinutes
-          ? values.walletLockInMinutes
-          : settings.walletLock,
-      };
-      if (values.selectedLanguage) {
-        setLocale(values.selectedLanguage);
-      }
-      setSettings(newSettings);
-    })();
+    const newSettings: Settings = {
+      ...settings,
+      language: values.selectedLanguage
+        ? values.selectedLanguage
+        : settings.language,
+      notifications:
+        values.allowNotifications !== undefined
+          ? {
+              allow: values.allowNotifications,
+              additional: {
+                transferToMe: values.allowTransferToMeNotifications,
+              },
+            }
+          : settings.notifications,
+      walletLock: values.walletLockInMinutes
+        ? values.walletLockInMinutes
+        : settings.walletLock,
+    };
+    setSettings(newSettings);
+    if (values.selectedLanguage) {
+      setLocale(values.selectedLanguage);
+    }
+
+    setShowSuccessMessage(true);
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 2000);
   }, [
     settings,
     generalSettingsForm,
@@ -64,11 +58,13 @@ export function useSettings(): UseSettingsResult {
   ]);
 
   useEffect(() => {
-    setShowSuccessMessage(true);
-    setTimeout(() => {
-      setShowSuccessMessage(false);
-    }, 2000);
-  }, [settings]);
+    generalSettingsForm.setFieldsValue({
+      selectedLanguage: settings.language,
+      allowNotifications: settings.notifications.allow,
+      allowTransferToMeNotifications:
+        settings.notifications.additional.transferToMe,
+    });
+  }, [settings, setSettings]);
 
   return {
     updateSettings,
