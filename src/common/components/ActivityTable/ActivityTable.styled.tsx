@@ -10,6 +10,9 @@ export const ActivityTable = styled(UiTable)`
         &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
             display:none;
         }
+        &:nth-child(2) {
+            width: 20%;
+        }
     }
 }
 .ant-table-tbody > tr > td {

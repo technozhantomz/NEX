@@ -380,11 +380,14 @@ export function useActivity(): UseActivityResult {
       const feeAsset = await getAssetById(fee.asset_id);
       const operationsNames = Object.keys(ChainTypes.operations);
       const operationType = operationsNames[activity.op[0]].toLowerCase();
-
+      // console.log(activity);
       const activityDescription = await formActivityDescription[operationType](
         activity.op[1],
         activity.result[1]
       );
+      const message =
+        operationType === "transfer" ? activity.op[1]?.memo?.message || "" : "";
+      const memo = Buffer.from(message.slice(8), "hex").toString();
 
       return {
         key: activity.id,
@@ -395,6 +398,7 @@ export function useActivity(): UseActivityResult {
         fee: `${setPrecision(false, fee.amount, feeAsset.precision)} ${
           feeAsset.symbol
         }`,
+        memo: `${memo}`,
       } as ActivityRow;
     },
     [dbApi, defaultAsset, getAssetById, formActivityDescription]

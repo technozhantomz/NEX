@@ -899,6 +899,7 @@ export const en = {
     info: "Info",
     id: "ID",
     fee: "Fee",
+    memo: "Memo",
     expiration: "Expiration",
     date: "Date",
     symbol: "Symbol",

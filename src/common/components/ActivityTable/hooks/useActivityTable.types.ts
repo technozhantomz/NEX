@@ -5,6 +5,7 @@ export interface ActivityRow {
   info: string;
   id: string;
   fee: string;
+  memo: string;
 }
 
 export type UseActivityTableResult = {

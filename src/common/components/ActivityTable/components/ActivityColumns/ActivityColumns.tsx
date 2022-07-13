@@ -30,4 +30,9 @@ export const ActivityColumns = [
     dataIndex: "fee",
     key: "fee",
   },
+  {
+    title: (): JSX.Element => <TableHeading heading={"memo"} />,
+    dataIndex: "memo",
+    key: "memo",
+  },
 ];
