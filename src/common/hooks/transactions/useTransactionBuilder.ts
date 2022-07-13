@@ -41,7 +41,6 @@ export function useTransactionBuilder(): ITransactionBuilder {
           return fee;
         } catch (e) {
           console.log(e);
-          return 0;
         }
       }
     },

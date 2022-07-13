@@ -38,22 +38,23 @@ export function useTransferForm(): UseTransferFormResult {
 
   const handleValuesChange = (changedValues: any) => {
     if (changedValues.amount) {
-      if (changedValues.amount < 0) {
-        transferForm.setFieldsValue({ amount: 0 });
-      } else {
-        const selectedAsset = transferForm.getFieldValue("asset");
-        const selectedAccountAsset = assets.find(
-          (asset) => asset.symbol === selectedAsset
-        );
+      const selectedAsset = transferForm.getFieldValue("asset");
+      const selectedAccountAsset = assets.find(
+        (asset) => asset.symbol === selectedAsset
+      );
 
-        if (selectedAccountAsset && changedValues.amount > 0) {
-          transferForm.setFieldsValue({
-            amount: roundNum(
-              changedValues.amount,
-              selectedAccountAsset.precision
-            ),
-          });
-        }
+      if (
+        selectedAccountAsset &&
+        changedValues.amount > 0 &&
+        changedValues.amount.split(".")[1]?.length >
+          selectedAccountAsset.precision
+      ) {
+        transferForm.setFieldsValue({
+          amount: roundNum(
+            changedValues.amount,
+            selectedAccountAsset.precision
+          ),
+        });
       }
     }
   };
@@ -92,7 +93,9 @@ export function useTransferForm(): UseTransferFormResult {
     const trx = await buildTransferFormTransaction();
     if (trx !== undefined) {
       const fee = await getTrxFee([trx]);
-      setFeeAmount(fee);
+      if (fee !== undefined) {
+        setFeeAmount(fee);
+      }
     }
   }, [buildTransferFormTransaction, getTrxFee, setFeeAmount]);
 

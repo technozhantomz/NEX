@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { usePeerplaysApiContext } from "../../providers";
-import { Account, GlobalProperties } from "../../types";
+import {
+  Account,
+  GlobalProperties,
+  SonAccount,
+  SonStatistics,
+} from "../../types";
 
 import { SonNetworkStatus, UseSonNetworkResult } from "./useSonNetwork.types";
 
@@ -27,18 +32,24 @@ export function useSonNetwork(): UseSonNetworkResult {
     let activeSons = 0;
     try {
       const gpo: GlobalProperties = await dbApi("get_global_properties");
-      if (!gpo.active_sons || gpo.active_sons.length == 0) {
+      if (!gpo.active_sons || gpo.active_sons.length === 0) {
         return result;
       }
-      const sonIds = gpo.active_sons.map(
-        (active_son: any) => active_son.son_id
-      );
-      const sons = await dbApi("get_sons", [sonIds]);
+      const sonIds = gpo.active_sons.map((active_son) => active_son.son_id);
+      const sons: SonAccount[] = await dbApi("get_sons", [sonIds]);
+      const sonsStatistics: SonStatistics[] = await dbApi("get_objects", [
+        sons.map((son) => {
+          if (son) {
+            return son.statistics;
+          }
+        }),
+      ]);
+      let i = 0;
       for (const son of sons) {
         if (son) {
-          const sonStatisticsObject = (
-            await dbApi("get_objects", [[son.statistics]])
-          )[0];
+          const sonStatisticsObject = sonsStatistics.find(
+            (sonStatistics) => sonStatistics.owner === son.id
+          ) as SonStatistics;
           const now = new Date();
           const utcNowMS = new Date(
             now.getUTCFullYear(),
@@ -74,8 +85,9 @@ export function useSonNetwork(): UseSonNetworkResult {
             }
           }
         } else {
-          result.status.push([son.id, "NOT OK, invalid SON id"]);
+          result.status.push([sonIds[i], "NOT OK, invalid SON id"]);
         }
+        i++;
       }
       result.isSonNetworkOk =
         activeSons / gpo.parameters.extensions.maximum_son_count > 2 / 3

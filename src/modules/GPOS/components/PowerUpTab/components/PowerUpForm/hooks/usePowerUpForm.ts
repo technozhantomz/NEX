@@ -48,7 +48,7 @@ export function usePowerUpForm({
         depositAmount:
           direction === "+"
             ? currentAmount + 1
-            : currentAmount > 0
+            : currentAmount >= 1
             ? currentAmount - 1
             : 0,
       });
