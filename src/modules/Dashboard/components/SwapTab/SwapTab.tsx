@@ -1,8 +1,10 @@
 import { defaultToken } from "../../../../api/params/networkparams";
-import { PasswordModal, TransactionModal } from "../../../../common/components";
-import { LogoSelectOption } from "../../../../common/components/LogoSelectOption/LogoSelectOption";
+import {
+  LogoSelectOption,
+  PasswordModal,
+  TransactionModal,
+} from "../../../../common/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
-import { useAssetsContext } from "../../../../common/providers";
 import {
   CardFormButton,
   Form,
@@ -15,8 +17,6 @@ import * as Styled from "./SwapTab.styled";
 import { useSwap } from "./hooks/useSwapTab";
 
 export const SwapTab = (): JSX.Element => {
-  const { defaultAsset, sidechainAssets } = useAssetsContext();
-
   const {
     status,
     handleAssetChange,
@@ -35,20 +35,21 @@ export const SwapTab = (): JSX.Element => {
     loadingTransaction,
     feeAmount,
     handleSwap,
+    allAssets,
   } = useSwap();
 
-  const {
-    isPasswordModalVisible,
-    isTransactionModalVisible,
-    showPasswordModal,
-    hidePasswordModal,
-    handleFormFinish,
-    hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleSwap,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-  });
+  // const {
+  //   isPasswordModalVisible,
+  //   isTransactionModalVisible,
+  //   showPasswordModal,
+  //   hidePasswordModal,
+  //   handleFormFinish,
+  //   hideTransactionModal,
+  // } = useHandleTransactionForm({
+  //   handleTransactionConfirmation: handleSwap,
+  //   setTransactionErrorMessage,
+  //   setTransactionSuccessMessage,
+  // });
 
   const InfoToolTip = (
     <Styled.TooltipPara>
@@ -64,7 +65,7 @@ export const SwapTab = (): JSX.Element => {
 
   return (
     <Styled.SwapContainer>
-      <Styled.SwapForm.Provider onFormFinish={handleFormFinish}>
+      {/* <Styled.SwapForm.Provider onFormFinish={handleFormFinish}>
         <Styled.SwapForm
           form={swapForm}
           name="swapForm"
@@ -84,24 +85,17 @@ export const SwapTab = (): JSX.Element => {
             <Input
               placeholder="0.00000"
               type="number"
-              min={0}
-              //controls={false}
+              step="any"
               prefix={
-                <Styled.SwapFormItem
-                  name="sellAsset"
-                  rules={formValidation.sellAsset}
-                  validateFirst={true}
-                  validateTrigger="onBlur"
-                >
+                <Styled.AssetSelectContainer>
                   <LogoSelectOption
                     id="sellAsset"
                     defaultValue={selectedAssets.sellAsset}
-                    assets={sidechainAssets.concat(defaultAsset ?? [])}
-                    labelInValue
+                    assets={allAssets}
                     key={selectedAssets.sellAsset}
-                    onChange={handleAssetChange}
+                    //onChange={handleAssetChange}
                   />
-                </Styled.SwapFormItem>
+                </Styled.AssetSelectContainer>
               }
             />
           </Styled.SwapSellItem>
@@ -116,21 +110,15 @@ export const SwapTab = (): JSX.Element => {
               type="number"
               min={0}
               prefix={
-                <Styled.SwapFormItem
-                  name="buyAsset"
-                  rules={formValidation.buyAsset}
-                  validateFirst={true}
-                  validateTrigger="onBlur"
-                >
+                <Styled.AssetSelectContainer>
                   <LogoSelectOption
-                    id="buyAsset"
+                    id="buyAssetSymbol"
                     defaultValue={selectedAssets.buyAsset}
-                    assets={sidechainAssets.concat(defaultAsset ?? [])}
+                    assets={allAssets}
                     key={selectedAssets.buyAsset}
-                    labelInValue
-                    onChange={handleAssetChange}
+                    //onChange={handleAssetChange}
                   />
-                </Styled.SwapFormItem>
+                </Styled.AssetSelectContainer>
               }
             />
           </Styled.SwapItem>
@@ -166,8 +154,8 @@ export const SwapTab = (): JSX.Element => {
         <PasswordModal
           visible={isPasswordModalVisible}
           onCancel={hidePasswordModal}
-        />
-      </Styled.SwapForm.Provider>
+        /> */}
+      {/* </Styled.SwapForm.Provider> */}
       {/*<DashboardButton label="Swap Coins" />
       <Styled.HistoryLinkDiv>
         <Styled.HistoryLink>See My Swap History</Styled.HistoryLink>

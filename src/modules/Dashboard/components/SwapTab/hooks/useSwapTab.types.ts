@@ -3,6 +3,7 @@ import { BaseOptionType, DefaultOptionType } from "antd/lib/select";
 import { Dispatch, SetStateAction } from "react";
 
 import { CreateLimitOrderFee } from "../../../../../common/hooks/fees/useFees.types";
+import { Asset } from "../../../../../common/types";
 
 export type Swap = {
   confirm: () => void;
@@ -31,6 +32,7 @@ export type Swap = {
   handleSwap: (password: string) => Promise<any>;
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  allAssets: Asset[];
 };
 
 export type FormValidation = {
@@ -48,6 +50,6 @@ export type SwapFormData = {
 };
 
 export type SwapAssetPair = {
-  sellAsset: string;
-  buyAsset: string;
+  sellAssetSymbol: string;
+  buyAssetSymbol: string;
 };

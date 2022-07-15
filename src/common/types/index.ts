@@ -21,3 +21,4 @@ export * from "./Proxy";
 export * from "./GPOS";
 export * from "./VestingBalance";
 export * from "./Notification";
+export * from "./BookedOrder";

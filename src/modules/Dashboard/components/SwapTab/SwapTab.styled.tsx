@@ -75,7 +75,7 @@ export const HistoryLink = styled.a`
   opacity: 1;
 `;
 
-export const SwapFormItem = styled(swapForm.Item)`
+export const AssetSelectContainer = styled.div`
    {
     width: 100%;
     margin-bottom: 0;
