@@ -11,15 +11,6 @@ export function useSettings(): UseSettingsResult {
   const { settings, setSettings, setLocale } = useSettingsContext();
   const [generalSettingsForm] = Form.useForm();
 
-  useEffect(() => {
-    generalSettingsForm.setFieldsValue({
-      selectedLanguage: settings.language,
-      allowNotifications: settings.notifications.allow,
-      allowTransferToMeNotifications:
-        settings.notifications.additional.transferToMe,
-    });
-  }, [settings, setSettings]);
-
   const handleAllowNotifications = (e: any) => {
     if (!e.target.checked) {
       generalSettingsForm.setFieldsValue({
@@ -28,7 +19,7 @@ export function useSettings(): UseSettingsResult {
     }
   };
 
-  const updateSettings = useCallback(async () => {
+  const updateSettings = useCallback(() => {
     const values = generalSettingsForm.getFieldsValue();
 
     const newSettings: Settings = {
@@ -49,10 +40,11 @@ export function useSettings(): UseSettingsResult {
         ? values.walletLockInMinutes
         : settings.walletLock,
     };
+    setSettings(newSettings);
     if (values.selectedLanguage) {
       setLocale(values.selectedLanguage);
     }
-    setSettings(newSettings);
+
     setShowSuccessMessage(true);
     setTimeout(() => {
       setShowSuccessMessage(false);
@@ -64,6 +56,15 @@ export function useSettings(): UseSettingsResult {
     setSettings,
     setShowSuccessMessage,
   ]);
+
+  useEffect(() => {
+    generalSettingsForm.setFieldsValue({
+      selectedLanguage: settings.language,
+      allowNotifications: settings.notifications.allow,
+      allowTransferToMeNotifications:
+        settings.notifications.additional.transferToMe,
+    });
+  }, [settings, setSettings]);
 
   return {
     updateSettings,
