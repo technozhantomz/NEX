@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useBlockchain } from "../../../../../common/hooks";
+import { useBlockchain, useFormDate } from "../../../../../common/hooks";
 import { BlockTableRow } from "../../../types";
 
 import { UseBlockDetailsResult } from "./useBlockDetails.types";
@@ -17,7 +17,7 @@ export function useBlockDetails(block: string): UseBlockDetailsResult {
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSideBlocks, setLoadingSideBlocks] = useState<boolean>(true);
-
+  const { formLocalDate } = useFormDate();
   const { getBlock } = useBlockchain();
 
   const getBlockDetails = useCallback(async () => {
@@ -28,7 +28,12 @@ export function useBlockDetails(block: string): UseBlockDetailsResult {
         setBlockDetails({
           key: block,
           blockID: block,
-          time: new Date(rawBlock.timestamp).toLocaleString(),
+          time: formLocalDate(rawBlock.timestamp, [
+            "month",
+            "date",
+            "year",
+            "time",
+          ]),
           transaction: rawBlock.transactions.length,
           witness: rawBlock.witness_account_name,
         });
