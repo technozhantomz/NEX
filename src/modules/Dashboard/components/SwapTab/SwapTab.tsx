@@ -13,7 +13,6 @@ import {
 import { useHandleTransactionForm } from "../../../../common/hooks";
 import {
   CardFormButton,
-  Form,
   InfoCircleOutlined,
   Input,
   SwapOutlined,
@@ -112,7 +111,9 @@ export const SwapTab = (): JSX.Element => {
                     )}
                     onChange={handleSellAssetChange}
                   />
-                  <Styled.Balance>{`Balance: ${sellAssetBalance}`}</Styled.Balance>
+                  <Styled.Balance>{`${counterpart.translate(
+                    `field.labels.balance`
+                  )}: ${sellAssetBalance}`}</Styled.Balance>
                 </Styled.AssetSelectContainer>
               }
             />
@@ -145,7 +146,9 @@ export const SwapTab = (): JSX.Element => {
                     )}
                     onChange={handleBuyAssetChange}
                   />
-                  <Styled.Balance>{`Balance: ${buyAssetBalance}`}</Styled.Balance>
+                  <Styled.Balance>{`${counterpart.translate(
+                    `field.labels.balance`
+                  )}: ${buyAssetBalance}`}</Styled.Balance>
                 </Styled.AssetSelectContainer>
               }
             />
@@ -191,6 +194,19 @@ export const SwapTab = (): JSX.Element => {
             )}
           </Styled.SwapButtonFormItem>
         </Styled.SwapForm>
+        {!localStorageAccount ? (
+          <Styled.FormDisclamer>
+            <span>
+              {counterpart.translate(`buttons.dont_have_peerplays_account`)}
+            </span>
+            <Link href="/signup">
+              <a>{counterpart.translate(`links.create_account`)}</a>
+            </Link>
+          </Styled.FormDisclamer>
+        ) : (
+          ""
+        )}
+
         {/* <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}

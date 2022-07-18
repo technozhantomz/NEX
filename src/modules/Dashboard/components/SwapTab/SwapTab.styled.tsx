@@ -1,5 +1,6 @@
 import { Button } from "antd";
 
+import { FormDisclamer as UiFormDisclamer } from "../../../../common/components";
 import {
   LoadingOutlined,
   styled,
@@ -89,6 +90,13 @@ export const PriceLoadingOutlined = styled(LoadingOutlined)`
 
 export const SwapButtonFormItem = styled(swapForm.Item)`
   margin-bottom: 0;
+`;
+
+export const FormDisclamer = styled(UiFormDisclamer)`
+  margin-top: 25px;
+  ${breakpoint.sm} {
+    margin-top: 35px;
+  }
 `;
 
 export const FooterPara = styled.p`
