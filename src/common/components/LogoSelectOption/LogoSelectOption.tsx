@@ -27,9 +27,9 @@ type LogoSelectionProps = {
           | (DefaultOptionType | BaseOptionType)[]
       ) => void)
     | undefined;
-  defaultValue: string;
   assets: Asset[];
   className?: string;
+  value: string;
 };
 
 export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
@@ -56,42 +56,28 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
   return (
     <Styled.SelectContainer
       onChange={props.onChange}
-      defaultValue={props.defaultValue}
       bordered={false}
       className={props.className}
+      value={props.value}
     >
-      <Styled.SelectOptionContainer
-        action={props.id}
-        value={props.defaultValue}
-        label={props.defaultValue}
-      >
-        <Styled.OptionDiv>
-          <Styled.IconContainer>
-            {icons[props.defaultValue]}
-          </Styled.IconContainer>
-          <Styled.AssetName>{props.defaultValue}</Styled.AssetName>
-        </Styled.OptionDiv>
-      </Styled.SelectOptionContainer>
       {props.assets &&
-        props.assets
-          .filter((asset) => asset.symbol !== props.defaultValue)
-          .map((asset) => (
-            <Styled.SelectOptionContainer
-              action={props.id}
-              key={asset.symbol}
-              value={asset.symbol}
-              label={asset.symbol}
-            >
-              <Styled.OptionDiv>
-                <Styled.IconContainer>
-                  {icons[asset.symbol] !== undefined
-                    ? icons[asset.symbol]
-                    : icons["Default"]}
-                </Styled.IconContainer>
-                <Styled.AssetName>{asset.symbol}</Styled.AssetName>
-              </Styled.OptionDiv>
-            </Styled.SelectOptionContainer>
-          ))}
+        props.assets.map((asset) => (
+          <Styled.SelectOptionContainer
+            action={props.id}
+            key={asset.symbol}
+            value={asset.symbol}
+            label={asset.symbol}
+          >
+            <Styled.OptionDiv>
+              <Styled.IconContainer>
+                {icons[asset.symbol] !== undefined
+                  ? icons[asset.symbol]
+                  : icons["Default"]}
+              </Styled.IconContainer>
+              <Styled.AssetName>{asset.symbol}</Styled.AssetName>
+            </Styled.OptionDiv>
+          </Styled.SelectOptionContainer>
+        ))}
     </Styled.SelectContainer>
   );
 };

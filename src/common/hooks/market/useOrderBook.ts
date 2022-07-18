@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 
-import { roundNum } from "..";
 import { usePeerplaysApiContext } from "../../providers";
 import { Asset, BookedOrder } from "../../types";
 
@@ -28,44 +27,34 @@ export function useOrderBook(): UseOrderBookResult {
     [dbApi]
   );
 
-  const reduceBookedOrdersByPrice = useCallback(
-    (orders: BookedOrder[], base: Asset, quote: Asset) => {
-      const reducedOrders = orders.reduce((previousOrders, currentOrder) => {
-        const repeatedPriceIndex = previousOrders.findIndex(
-          (previousOrder) =>
-            roundNum(Number(previousOrder.price), base.precision) ===
-            roundNum(Number(currentOrder.price), base.precision)
-        );
-        if (repeatedPriceIndex === -1) {
-          previousOrders.push({
-            quote: String(
-              roundNum(Number(currentOrder.quote), quote.precision)
-            ),
-            base: String(roundNum(Number(currentOrder.base), base.precision)),
-            price: String(roundNum(Number(currentOrder.price), base.precision)),
-          } as BookedOrder);
-        } else {
-          const orderWithRepeatedPrice = previousOrders[repeatedPriceIndex];
-          previousOrders[repeatedPriceIndex] = {
-            quote: String(
-              roundNum(Number(orderWithRepeatedPrice.quote), quote.precision) +
-                roundNum(Number(currentOrder.quote), quote.precision)
-            ),
-            base: String(
-              roundNum(Number(orderWithRepeatedPrice.base), base.precision) +
-                roundNum(Number(currentOrder.base), base.precision)
-            ),
-            price: String(
-              roundNum(Number(orderWithRepeatedPrice.price), base.precision)
-            ),
-          };
-        }
-        return previousOrders;
-      }, [] as BookedOrder[]);
-      return reducedOrders;
-    },
-    []
-  );
+  const reduceBookedOrdersByPrice = useCallback((orders: BookedOrder[]) => {
+    const reducedOrders = orders.reduce((previousOrders, currentOrder) => {
+      const repeatedPriceIndex = previousOrders.findIndex(
+        (previousOrder) =>
+          Number(previousOrder.price) === Number(currentOrder.price)
+      );
+      if (repeatedPriceIndex === -1) {
+        previousOrders.push({
+          quote: String(Number(currentOrder.quote)),
+          base: String(Number(currentOrder.base)),
+          price: String(Number(currentOrder.price)),
+        } as BookedOrder);
+      } else {
+        const orderWithRepeatedPrice = previousOrders[repeatedPriceIndex];
+        previousOrders[repeatedPriceIndex] = {
+          quote: String(
+            Number(orderWithRepeatedPrice.quote) + Number(currentOrder.quote)
+          ),
+          base: String(
+            Number(orderWithRepeatedPrice.base) + Number(currentOrder.base)
+          ),
+          price: String(Number(orderWithRepeatedPrice.price)),
+        };
+      }
+      return previousOrders;
+    }, [] as BookedOrder[]);
+    return reducedOrders;
+  }, []);
 
   return {
     getOrderBook,

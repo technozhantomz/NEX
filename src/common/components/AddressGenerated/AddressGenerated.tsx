@@ -36,6 +36,7 @@ export const AddressGenerated = ({
         }
         value={bitcoinSidechainAccount.deposit_address}
         disabled
+        downloaded={downloaded}
       />
       {!downloaded ? (
         <>

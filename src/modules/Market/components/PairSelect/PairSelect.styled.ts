@@ -37,7 +37,7 @@ export const PairButton = styled(Button)`
 
 export const PairInfoLabel = styled.span`
   font-size: 12px;
-  color: #6c6c6c;
+  color: ${colors.textColorSecondary};
 `;
 
 export const ColumnFlex = styled.div`

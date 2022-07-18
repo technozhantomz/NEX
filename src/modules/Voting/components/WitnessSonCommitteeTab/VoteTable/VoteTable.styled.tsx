@@ -108,7 +108,7 @@ export const Title = styled.h3`
 export const ColHeader = styled(col)`
   width: 25%;
   font-size: 12px;
-  color: #6c6c6c;
+  color: ${colors.textColorSecondary};
   margin-bottom: 10px;
 `;
 

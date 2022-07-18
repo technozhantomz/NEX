@@ -458,7 +458,7 @@ export const ru = {
     login_and_generate_bitcoin_address: "Войти и создать биткойн-адрес",
     dont_have_peerplays_account: "У вас нет учетной записи Peerplays? ",
     log_in_withdraw: "Войти и выйти",
-    log_in_deposit_hbd_hive: "Войти и внести депозит",
+    log_in_deposit_hbd_hive: "Войти и внести депозит %(assetSymbol)s",
     send: "Отправлять",
     ok: "Ok",
     cancel: "Отмена",

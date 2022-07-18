@@ -50,6 +50,7 @@ export {
   EyeInvisibleOutlined,
   EyeOutlined,
   SwapOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";

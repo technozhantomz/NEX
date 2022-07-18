@@ -3,7 +3,6 @@ import { CardForm, CardFormButton, Form, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 
 export const WithdrawForm = styled(CardForm)`
-  margin: 0 20px;
   .form-input {
     font-size: 12px;
     ${breakpoint.sm} {
@@ -21,6 +20,7 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)`
     }
     .ant-input {
       text-align: right;
+      direction: ltr;
       padding-right: 30px;
       font-size: 16px;
       ${breakpoint.sm} {
@@ -29,7 +29,7 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)`
     }
   }
 `;
-export const WithdrawFormAsset = styled(CardForm.Item)`
+export const WithdrawFormAsset = styled.div`
   width: 100%;
   margin-bottom: 0;
   &.ant-form-item-has-error
@@ -40,6 +40,7 @@ export const WithdrawFormAsset = styled(CardForm.Item)`
 `;
 
 export const Fee = styled.p`
+  margin-bottom: 24px;
   font-size: 12px;
   ${breakpoint.sm} {
     font-size: 14px;
@@ -61,9 +62,13 @@ export const FormItem = styled(Form.Item)`
   }
 `;
 
+export const ButtonFormItem = styled(FormItem)`
+  margin-bottom: 0;
+`;
+
 export const FormDisclamer = styled(UiFormDisclamer)`
-  margin-bottom: 15px;
+  margin-top: 25px;
   ${breakpoint.sm} {
-    margin-bottom: 25px;
+    margin-top: 35px;
   }
 `;

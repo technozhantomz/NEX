@@ -8,25 +8,24 @@ export const Button = styled(CardFormButton)``;
 export const WithdrawContainer = styled.div`
   background: ${colors.white} 0% 0% no-repeat padding-box;
   ${mixIns.borderRadius}
-  opacity: 1;
   color: ${colors.textColor};
   font-size: 20px;
   width: 600px;
   margin: 10px;
-  padding: 30px 10px 10px;
+  padding: 25px 20px;
+  ${breakpoint.xs} {
+    padding: 35px 30px;
+  }
   .label {
     font-size: 12px;
     letter-spacing: 0px;
-    color: #6c6c6c;
-    opacity: 1;
+    color: ${colors.textColorSecondary};
     margin-top: 30px;
     ${breakpoint.sm} {
       font-size: 14px;
     }
   }
   .ant-form {
-    width: 90%;
-    margin: 0 auto;
     .ant-input {
       height: 50px;
       ${breakpoint.sm} {

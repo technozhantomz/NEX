@@ -90,10 +90,10 @@ export const WithdrawForm = ({
                   }
                 }}
                 prefix={
-                  <Styled.WithdrawFormAsset name="asset">
+                  <Styled.WithdrawFormAsset>
                     <LogoSelectOption
                       assets={sidechainAssets}
-                      defaultValue={asset}
+                      value={selectedAsset}
                       onChange={handleAssetChange}
                     />
                   </Styled.WithdrawFormAsset>
@@ -174,7 +174,7 @@ export const WithdrawForm = ({
           })}
         </Styled.Fee>
 
-        <Styled.FormItem>
+        <Styled.ButtonFormItem>
           {localStorageAccount && localStorageAccount !== "" ? (
             <>
               <Styled.WithdrawFormButton type="primary" htmlType="submit">
@@ -194,7 +194,7 @@ export const WithdrawForm = ({
               </Styled.WithdrawFormButton>
             </>
           )}
-        </Styled.FormItem>
+        </Styled.ButtonFormItem>
       </Styled.WithdrawForm>
       {localStorageAccount && localStorageAccount !== "" ? (
         ""

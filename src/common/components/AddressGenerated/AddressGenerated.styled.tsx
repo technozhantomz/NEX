@@ -23,6 +23,7 @@ export const DisclaimerFooter = styled.p`
   text-align: left;
   font-size: 12px;
   max-width: 100%;
+  margin-bottom: 0;
   ${breakpoint.sm} {
     font-size: 14px;
   }
@@ -34,9 +35,9 @@ export const GeneratedBitcoinAddress = styled(Input)`
   border: 1px solid ${colors.borderColorBase};
   ${mixIns.borderRadius}
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: ${(props) => (!props.downloaded ? "25px" : "0px")};
   ${breakpoint.sm} {
-    margin-bottom: 25px;
+    margin-bottom: ${(props) => (!props.downloaded ? "35px" : "0px")};
     width: 100%;
   }
   .ant-input.ant-input-disabled.ant-input-sm {
@@ -59,7 +60,11 @@ export const InfoBox = styled.div`
   }
 `;
 
-export const AddressLinkContainer = styled.div``;
+export const AddressLinkContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+`;
 
 export const AddressContainer = styled.div`
   display: flex;

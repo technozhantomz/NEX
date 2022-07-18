@@ -1,54 +1,94 @@
 import { Button } from "antd";
 
 import {
+  LoadingOutlined,
   styled,
   Form as swapForm,
   Tooltip as tooltip,
 } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const SwapContainer = styled.div`
-  background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 4px;
-  opacity: 1;
-  color: white;
+  background: ${colors.white} 0% 0% no-repeat padding-box;
+  ${mixIns.borderRadius}
+  text-align: center;
   font-size: 20px;
   width: 600px;
-  // height: 354px;
   margin: 10px;
-  padding: 30px 10px 10px;
-  text-align: center;
-  .ant-form-item-explain {
-    position: absolute;
-    right: 20px;
-    bottom: 0px;
-  }
-  .ant-form-item-with-help {
-    margin-bottom: 24px !important;
+  padding: 25px 20px;
+  ${breakpoint.sm} {
+    padding: 35px 30px;
   }
 `;
 
-export const SwapForm = styled(swapForm)`
-  padding: 1rem;
+export const SwapForm = styled(swapForm)``;
+
+export const SwapItem = styled(swapForm.Item)`
+  .ant-input-affix-wrapper {
+    background: ${colors.white} 0% 0% no-repeat padding-box;
+    ${mixIns.borderRadius}
+    height: 65px;
+    ${breakpoint.sm} {
+      height: 85px;
+    }
+    .ant-input-prefix {
+      min-width: 135px;
+      width: 40%;
+    }
+    .ant-input {
+      text-align: right;
+      direction: ltr;
+    }
+  }
+  z-index: 1;
 `;
-export const InfoDiv = styled.div`
+
+export const SwapSellItem = styled(SwapItem)`
+  margin: 0;
+  margin-bottom: 24px;
+`;
+
+export const AssetSelectContainer = styled.div`
+  width: 100%;
+  margin-bottom: 0;
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    padding: 0;
+  }
+`;
+
+export const Balance = styled.div`
+  text-align: left;
+`;
+
+export const SwapButton = styled(Button)`
+  transform: rotate(90deg);
+  position: absolute;
+  z-index: 2;
+  margin-top: 60px;
+  ${breakpoint.sm} {
+    margin-top: 80px;
+  }
+`;
+
+export const PriceContainer = styled.div`
   text-align: right;
-  font: normal normal normal 14px/17px Inter;
-  letter-spacing: 0px;
-  color: #6c6c6c;
-  opacity: 1;
-  margin-right: 30px;
-`;
-
-export const InfoPara = styled.p`
-  @media (max-width: 500px) {
-    font-size: 12px;
-  }
-  font-size: 16px;
+  font-size: 14px;
+  color: ${colors.textColorSecondary};
+  margin-bottom: 24px;
   .anticon {
     color: var(--ant-warning-color);
-    margin-left: 20px;
+    margin-left: 16px;
   }
+`;
+
+export const PriceLoadingOutlined = styled(LoadingOutlined)`
+  margin-right: 4px;
+`;
+
+export const SwapButtonFormItem = styled(swapForm.Item)`
+  margin-bottom: 0;
 `;
 
 export const FooterPara = styled.p`
@@ -73,66 +113,6 @@ export const HistoryLink = styled.a`
   letter-spacing: 0px;
   color: #0a48be;
   opacity: 1;
-`;
-
-export const AssetSelectContainer = styled.div`
-   {
-    width: 100%;
-    margin-bottom: 0;
-    .ant-form-item-has-error
-      .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
-      .ant-select-selector {
-      border-color: none !important;
-    }
-  }
-`;
-
-export const SwapItem = styled(swapForm.Item)`
-  .ant-input-affix-wrapper {
-    height: 65px;
-    background: var(---text-icons-ffffff) 0% 0% no-repeat padding-box;
-    background: #ffffff 0% 0% no-repeat padding-box;
-    border: 1px solid #c1c2c4;
-    border-radius: 4px;
-    opacity: 1;
-    .ant-input-prefix {
-      min-width: 135px;
-      width: 33%;
-      .ant-form-item-with-help {
-        margin-bottom: 0px !important;
-      }
-      .ant-form-item-explain {
-        position: absolute;
-        right: 0;
-        left: 0px;
-        bottom: -15px;
-      }
-      .ant-select-selector {
-        border: none;
-      }
-      @media (max-width: 500px) {
-        .ant-form-item-explain-error {
-          font-size: 0.7rem;
-        }
-      }
-    }
-    .ant-input {
-      text-align: right;
-    }
-  }
-  z-index: 1;
-`;
-
-export const SwapSellItem = styled(SwapItem)`
-  margin: 0;
-  margin-bottom: 24px;
-`;
-
-export const button = styled(Button)`
-  transform: rotate(90deg);
-  position: absolute;
-  z-index: 2;
-  margin-top: 60px;
 `;
 
 export const Tooltip = styled(tooltip)`

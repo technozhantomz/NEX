@@ -473,6 +473,8 @@ export const en = {
     },
   },
   buttons: {
+    swap_coins: "Swap coins",
+    login_and_swap_coins: "Login & swap coins",
     logout: "Logout",
     login: "Log in",
     deposit: "Deposit",
@@ -484,7 +486,7 @@ export const en = {
     login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Address",
     dont_have_peerplays_account: "Dont have a Peerplays account? ",
     log_in_withdraw: "Log in & Withdraw",
-    log_in_deposit_hbd_hive: "Log in & Deposit",
+    log_in_deposit_hbd_hive: "Log in & Deposit %(assetSymbol)s",
     send: "Send",
     ok: "Ok",
     cancel: "Cancel",
@@ -754,6 +756,7 @@ export const en = {
       from: "From",
     },
     labels: {
+      fetching_price: "Fetching price",
       withdraw_public_key_address: "Withdraw Public key & Address",
       hive_blockchain_account: "Hive blockchain account",
       fees: "Fees : %(feeAmount)s %(defaultAsset)s",
@@ -931,5 +934,6 @@ export const en = {
     copied: "copied",
     mark_read: "mark as read",
     mark_unread: "mark as unread",
+    swap_transaction_type: "Transaction Type : Swap",
   },
 };

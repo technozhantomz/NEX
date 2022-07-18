@@ -1,4 +1,10 @@
-import { defaultToken } from "../../../../api/params/networkparams";
+import counterpart from "counterpart";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { KeyboardEvent } from "react";
+
+import { defaultToken } from "../../../../api/params";
+import { utils } from "../../../../api/utils";
 import {
   LogoSelectOption,
   PasswordModal,
@@ -17,25 +23,27 @@ import * as Styled from "./SwapTab.styled";
 import { useSwap } from "./hooks/useSwapTab";
 
 export const SwapTab = (): JSX.Element => {
+  const router = useRouter();
   const {
-    status,
-    handleAssetChange,
     swapForm,
-    formValidation,
-    swapOrderFee,
-    swapAsset,
-    swapInfo,
-    assetValueInfo,
-    selectedAssets,
-    localStorageAccount,
     transactionErrorMessage,
-    setTransactionErrorMessage,
     transactionSuccessMessage,
-    setTransactionSuccessMessage,
     loadingTransaction,
-    feeAmount,
-    handleSwap,
+    selectedAssets,
     allAssets,
+    handleSellAssetChange,
+    handleBuyAssetChange,
+    localStorageAccount,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    swapOrderFee,
+    price,
+    loadingSwapData,
+    //loadingAssets,
+    handleValuesChange,
+    handleSwapAssets,
+    buyAssetBalance,
+    sellAssetBalance,
   } = useSwap();
 
   // const {
@@ -53,11 +61,11 @@ export const SwapTab = (): JSX.Element => {
 
   const InfoToolTip = (
     <Styled.TooltipPara>
-      {<span>{status === "" ? "" : status}</span>}
-      {<span>Transaction Type : Trade</span>}
+      {<span>{counterpart.translate(`tooltips.swap_transaction_type`)}</span>}
       {
         <span>
-          Fee : {swapOrderFee?.fee ? swapOrderFee.fee : "0"} {defaultToken}
+          {counterpart.translate(`tableHead.fee`)} : {swapOrderFee}{" "}
+          {defaultToken}
         </span>
       }
     </Styled.TooltipPara>
@@ -65,20 +73,20 @@ export const SwapTab = (): JSX.Element => {
 
   return (
     <Styled.SwapContainer>
-      {/* <Styled.SwapForm.Provider onFormFinish={handleFormFinish}>
+      <Styled.SwapForm.Provider>
         <Styled.SwapForm
           form={swapForm}
           name="swapForm"
-          onFinish={showPasswordModal}
+          onValuesChange={handleValuesChange}
         >
-          <Styled.button
+          <Styled.SwapButton
             icon={<SwapOutlined />}
             shape="circle"
-            onClick={swapAsset}
+            onClick={handleSwapAssets}
           />
           <Styled.SwapSellItem
             name="sellAmount"
-            rules={formValidation.sellAmount}
+            //rules={formValidation.sellAmount}
             validateFirst={true}
             validateTrigger="onBlur"
           >
@@ -86,61 +94,104 @@ export const SwapTab = (): JSX.Element => {
               placeholder="0.00000"
               type="number"
               step="any"
+              onFocus={(e) => {
+                e.target.select();
+              }}
+              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                if (!utils.isNumberKey(e)) {
+                  e.preventDefault();
+                }
+              }}
               prefix={
                 <Styled.AssetSelectContainer>
                   <LogoSelectOption
                     id="sellAsset"
-                    defaultValue={selectedAssets.sellAsset}
-                    assets={allAssets}
-                    key={selectedAssets.sellAsset}
-                    //onChange={handleAssetChange}
+                    value={selectedAssets.sellAssetSymbol}
+                    assets={allAssets.filter(
+                      (asset) => asset.symbol !== selectedAssets.buyAssetSymbol
+                    )}
+                    onChange={handleSellAssetChange}
                   />
+                  <Styled.Balance>{`Balance: ${sellAssetBalance}`}</Styled.Balance>
                 </Styled.AssetSelectContainer>
               }
             />
           </Styled.SwapSellItem>
           <Styled.SwapItem
             name="buyAmount"
-            rules={formValidation.buyAmount}
+            //rules={formValidation.buyAmount}
             validateFirst={true}
             validateTrigger="onBlur"
           >
             <Input
               placeholder="0.00000"
               type="number"
-              min={0}
+              step="any"
+              onFocus={(e) => {
+                e.target.select();
+              }}
+              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                if (!utils.isNumberKey(e)) {
+                  e.preventDefault();
+                }
+              }}
               prefix={
                 <Styled.AssetSelectContainer>
                   <LogoSelectOption
-                    id="buyAssetSymbol"
-                    defaultValue={selectedAssets.buyAsset}
-                    assets={allAssets}
-                    key={selectedAssets.buyAsset}
-                    //onChange={handleAssetChange}
+                    id="buyAsset"
+                    value={selectedAssets.buyAssetSymbol}
+                    assets={allAssets.filter(
+                      (asset) => asset.symbol !== selectedAssets.sellAssetSymbol
+                    )}
+                    onChange={handleBuyAssetChange}
                   />
+                  <Styled.Balance>{`Balance: ${buyAssetBalance}`}</Styled.Balance>
                 </Styled.AssetSelectContainer>
               }
             />
           </Styled.SwapItem>
-          <Styled.InfoDiv>
-            <Styled.InfoPara>
-              {assetValueInfo}
-              <Styled.Tooltip
-                placement="left"
-                title={InfoToolTip}
-                color="#E3EBF8"
+          <Styled.PriceContainer>
+            {loadingSwapData ? (
+              <>
+                <Styled.PriceLoadingOutlined></Styled.PriceLoadingOutlined>
+                {`${counterpart.translate(`field.labels.fetching_price`)}...`}
+              </>
+            ) : price === 0 ? (
+              ""
+            ) : (
+              <>
+                <span>
+                  {`1 ${selectedAssets.buyAssetSymbol} = ${price} ${selectedAssets.sellAssetSymbol}`}
+                </span>
+                <Styled.Tooltip
+                  placement="left"
+                  title={InfoToolTip}
+                  color="#E3EBF8"
+                >
+                  <InfoCircleOutlined />
+                </Styled.Tooltip>
+              </>
+            )}
+          </Styled.PriceContainer>
+          <Styled.SwapButtonFormItem>
+            {localStorageAccount ? (
+              <CardFormButton type="primary" htmlType="submit">
+                {counterpart.translate(`buttons.swap_coins`)}
+              </CardFormButton>
+            ) : (
+              <CardFormButton
+                type="primary"
+                htmlType="button"
+                onClick={() => {
+                  router.push("/login");
+                }}
               >
-                <InfoCircleOutlined />
-              </Styled.Tooltip>
-            </Styled.InfoPara>
-          </Styled.InfoDiv>
-          <Form.Item>
-            <CardFormButton type="primary" htmlType="submit">
-              Swap Coins
-            </CardFormButton>
-          </Form.Item>
+                {counterpart.translate(`buttons.login_and_swap_coins`)}
+              </CardFormButton>
+            )}
+          </Styled.SwapButtonFormItem>
         </Styled.SwapForm>
-        <TransactionModal
+        {/* <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
           transactionErrorMessage={transactionErrorMessage}
@@ -155,17 +206,7 @@ export const SwapTab = (): JSX.Element => {
           visible={isPasswordModalVisible}
           onCancel={hidePasswordModal}
         /> */}
-      {/* </Styled.SwapForm.Provider> */}
-      {/*<DashboardButton label="Swap Coins" />
-      <Styled.HistoryLinkDiv>
-        <Styled.HistoryLink>See My Swap History</Styled.HistoryLink>
-      </Styled.HistoryLinkDiv> 
-      <Styled.FooterPara>
-        {status === "" ? "" : status}
-        {status === "" ? "" : "Transaction Type : Trade"}
-        Fees : {swapOrderFee ? swapOrderFee.amount : 0} {defaultToken}
-      </Styled.FooterPara>
-      */}
+      </Styled.SwapForm.Provider>
     </Styled.SwapContainer>
   );
 };
