@@ -101,8 +101,8 @@ export const TransactionModal = ({
         account={account as string}
         fee={fee as number}
         price={price as string}
-        swap={swap as string}
-        expiration={expiration as string}
+        sell={sell as string}
+        buy={buy as string}
       />
     ),
     limit_order_cancel: (

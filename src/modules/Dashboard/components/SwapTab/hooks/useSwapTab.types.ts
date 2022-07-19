@@ -8,20 +8,6 @@ export type UseSwapResult = {
   //confirm: () => void;
   swapForm: FormInstance<SwapForm>;
   // formValidation: FormValidation;
-  // swapOrderFee: CreateLimitOrderFee | undefined;
-  // handleAssetChange:
-  //   | ((
-  //       value: unknown,
-  //       option:
-  //         | DefaultOptionType
-  //         | BaseOptionType
-  //         | (DefaultOptionType | BaseOptionType)[]
-  //     ) => void)
-  //   | undefined;
-  // swapAsset: () => void;
-  // status: string;
-  // assetValueInfo: string;
-  // swapInfo: string;
   handleSellAssetChange: (value: unknown) => void;
   handleBuyAssetChange: (value: unknown) => void;
   selectedAssets: SwapAssetPair;
@@ -40,6 +26,9 @@ export type UseSwapResult = {
   handleSwapAssets: () => void;
   buyAssetBalance: number;
   sellAssetBalance: number;
+  transactionModalSellAmount: number;
+  transactionModalBuyAmount: number;
+  handleSwapSubmit: (password: string) => Promise<void>;
 };
 
 export type FormValidation = {

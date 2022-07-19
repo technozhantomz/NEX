@@ -10,15 +10,14 @@ type Props = {
   price?: string;
   sell?: string;
   buy?: string;
-  expiration?: string;
 };
 
 export const CreateSwapOrder = ({
   account,
   fee,
   price,
-  swap,
-  expiration,
+  sell,
+  buy,
 }: Props): JSX.Element => {
   return (
     <>
@@ -28,22 +27,22 @@ export const CreateSwapOrder = ({
           <p>{price}</p>
         </Styled.DetailContainer>
       )}
-      {swap && (
+      {sell && (
         <Styled.DetailContainer>
-          <p>{counterpart.translate(`buttons.swap`)}</p>
-          <p>{swap}</p>
+          <p>{counterpart.translate(`field.labels.sell_amount`)}</p>
+          <p>{sell}</p>
+        </Styled.DetailContainer>
+      )}
+      {buy && (
+        <Styled.DetailContainer>
+          <p>{counterpart.translate(`field.labels.buy_amount`)}</p>
+          <p>{buy}</p>
         </Styled.DetailContainer>
       )}
       <Styled.DetailContainer>
-        <p>{counterpart.translate(`field.labels.swapper`)}</p>
+        <p>{counterpart.translate(`field.labels.seller`)}</p>
         <Link href={`/user/${account}`}>{account}</Link>
       </Styled.DetailContainer>
-      {expiration && (
-        <Styled.DetailContainer>
-          <p>{counterpart.translate(`field.tableHead.expiration`)}</p>
-          <p>{expiration}</p>
-        </Styled.DetailContainer>
-      )}
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.labels.fee`)}</p>
         <p>{`${fee} ${defaultToken}`}</p>

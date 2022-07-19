@@ -43,20 +43,23 @@ export const SwapTab = (): JSX.Element => {
     handleSwapAssets,
     buyAssetBalance,
     sellAssetBalance,
+    transactionModalBuyAmount,
+    transactionModalSellAmount,
+    handleSwapSubmit,
   } = useSwap();
 
-  // const {
-  //   isPasswordModalVisible,
-  //   isTransactionModalVisible,
-  //   showPasswordModal,
-  //   hidePasswordModal,
-  //   handleFormFinish,
-  //   hideTransactionModal,
-  // } = useHandleTransactionForm({
-  //   handleTransactionConfirmation: handleSwap,
-  //   setTransactionErrorMessage,
-  //   setTransactionSuccessMessage,
-  // });
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleSwapSubmit,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  });
 
   const InfoToolTip = (
     <Styled.TooltipPara>
@@ -72,11 +75,12 @@ export const SwapTab = (): JSX.Element => {
 
   return (
     <Styled.SwapContainer>
-      <Styled.SwapForm.Provider>
+      <Styled.SwapForm.Provider onFormFinish={handleFormFinish}>
         <Styled.SwapForm
           form={swapForm}
           name="swapForm"
           onValuesChange={handleValuesChange}
+          onFinish={showPasswordModal}
         >
           <Styled.SwapButton
             icon={<SwapOutlined />}
@@ -91,8 +95,6 @@ export const SwapTab = (): JSX.Element => {
           >
             <Input
               placeholder="0.00000"
-              type="number"
-              step="any"
               onFocus={(e) => {
                 e.target.select();
               }}
@@ -111,9 +113,13 @@ export const SwapTab = (): JSX.Element => {
                     )}
                     onChange={handleSellAssetChange}
                   />
-                  <Styled.Balance>{`${counterpart.translate(
-                    `field.labels.balance`
-                  )}: ${sellAssetBalance}`}</Styled.Balance>
+                  {localStorageAccount ? (
+                    <Styled.Balance>{`${counterpart.translate(
+                      `field.labels.balance`
+                    )}: ${sellAssetBalance}`}</Styled.Balance>
+                  ) : (
+                    ""
+                  )}
                 </Styled.AssetSelectContainer>
               }
             />
@@ -126,8 +132,6 @@ export const SwapTab = (): JSX.Element => {
           >
             <Input
               placeholder="0.00000"
-              type="number"
-              step="any"
               onFocus={(e) => {
                 e.target.select();
               }}
@@ -146,9 +150,13 @@ export const SwapTab = (): JSX.Element => {
                     )}
                     onChange={handleBuyAssetChange}
                   />
-                  <Styled.Balance>{`${counterpart.translate(
-                    `field.labels.balance`
-                  )}: ${buyAssetBalance}`}</Styled.Balance>
+                  {localStorageAccount ? (
+                    <Styled.Balance>{`${counterpart.translate(
+                      `field.labels.balance`
+                    )}: ${buyAssetBalance}`}</Styled.Balance>
+                  ) : (
+                    ""
+                  )}
                 </Styled.AssetSelectContainer>
               }
             />
@@ -207,21 +215,22 @@ export const SwapTab = (): JSX.Element => {
           ""
         )}
 
-        {/* <TransactionModal
+        <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
           transactionErrorMessage={transactionErrorMessage}
           transactionSuccessMessage={transactionSuccessMessage}
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
-          fee={feeAmount || 0}
+          fee={swapOrderFee}
           transactionType="swap_order_create"
-          swap={swapInfo}
+          sell={`${transactionModalSellAmount} ${selectedAssets.sellAssetSymbol}`}
+          buy={`${transactionModalBuyAmount} ${selectedAssets.buyAssetSymbol}`}
         />
         <PasswordModal
           visible={isPasswordModalVisible}
           onCancel={hidePasswordModal}
-        /> */}
+        />
       </Styled.SwapForm.Provider>
     </Styled.SwapContainer>
   );
