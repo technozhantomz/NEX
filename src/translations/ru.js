@@ -264,8 +264,6 @@ export const ru = {
       },
       swap_order_create: {
         title: "своп ордер",
-        description:
-          "%(creator)s, размещенный своп-ордер #%(orderId)s поменяться %(buyAmount)s за %(sellAmount)s",
       },
       lottery_asset_create: {
         title: "Создать лотерейный актив",
@@ -447,6 +445,8 @@ export const ru = {
     },
   },
   buttons: {
+    swap_coins: "Обменять монеты",
+    login_and_swap_coins: "Войти и поменять монеты",
     logout: "Выйти",
     login: "Авторизоваться",
     deposit: "Депозит",
@@ -731,6 +731,7 @@ export const ru = {
       from: "из",
     },
     labels: {
+      fetching_price: "Получение цены",
       withdraw_public_key_address: "Отозвать открытый ключ и адрес",
       hive_blockchain_account: "Блокчейн-аккаунт Hive",
       fees: "Комиссии: %(feeAmount)s %(defaultAsset)s",
@@ -765,6 +766,8 @@ export const ru = {
       account_to_upgrade: "Аккаунт для обновления",
       upgrade_lifetime: "Повышение статуса до пожизненного участника",
       buy_at_least: "Купить не менее",
+      buy_amount: "Сумма покупки",
+      sell_amount: "Сумма продажи",
       seller: "продавец",
       swapper: "своппер",
       vesting_amount: "Сумма вестинга",
@@ -790,6 +793,12 @@ export const ru = {
       key_management_group: ["Активный", "Владелец", "Памятка"],
     },
     errors: {
+      enter_amount: "Введите сумму",
+      insufficient_asset_balance: "Недостаточный баланс %(asset)s",
+      insufficient_balance_for_fee: "Недостаточно %(coreAsset)s для комиссии",
+      not_enough_liquidity: "Недостаточно ликвидности",
+      sell_amount_should_greater: "Нулевая сумма продажи",
+      buy_amount_should_greater: "Нулевая сумма покупки",
       no_key_for_password: "Для этого пароля нет ключа %(role)s",
       login_first: "Пожалуйста, войдите сначала",
       checking_sons_status: "Дождитесь проверки состояния сети SON.",
@@ -856,7 +865,8 @@ export const ru = {
       successfully_deposited:
         "Успешно депонирован %(depositAmount)s %(symbol)s",
       limit_order_successfully: "Вы успешно создали лимитный ордер",
-      swap_order_successfully: "Вы успешно создали своп-ордер",
+      swap_order_successfully:
+        "Ваш обмен был завершен, и вы получили %(buyAmount)s %(buyAssetSymbol)s за %(sellAmount)s %(sellAssetSymbol)s",
       saved_changes: "Вы успешно сохранили изменения",
       account_upgraded_successfully:
         "Ваша учетная запись успешно обновлена до пожизненной учетной записи членства",
@@ -906,5 +916,6 @@ export const ru = {
     copied: "скопировано",
     mark_read: "пометить, как прочитанное",
     mark_unread: "отметить как непрочитанное",
+    swap_transaction_type: "Тип сделки: своп",
   },
 };

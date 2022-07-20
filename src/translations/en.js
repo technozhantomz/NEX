@@ -890,7 +890,7 @@ export const en = {
         "Successfully Deposited %(depositAmount)s %(symbol)s",
       limit_order_successfully: "You have successfully created a limit order",
       swap_order_successfully:
-        "Your swap was completed and your received %(buyAmount)s %(buyAssetSymbol)s for %(sellAmount)s %(sellAssetSymbol)",
+        "Your swap was completed and your received %(buyAmount)s %(buyAssetSymbol)s for %(sellAmount)s %(sellAssetSymbol)s",
       saved_changes: "You have successfully saved your changes",
       account_upgraded_successfully:
         "Your account successfully upgraded to lifetime membership account",
