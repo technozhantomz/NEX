@@ -274,6 +274,9 @@ export const en = {
         description:
           "%(creator)s, placed order #%(orderId)s to buy %(buyAmount)s for %(sellAmount)s",
       },
+      swap_order_create: {
+        title: "Swap Order",
+      },
       lottery_asset_create: {
         title: "Create lottery asset",
       },
@@ -468,17 +471,20 @@ export const en = {
     },
   },
   buttons: {
+    swap_coins: "Swap coins",
+    login_and_swap_coins: "Login & swap coins",
     logout: "Logout",
     login: "Log in",
     deposit: "Deposit",
     withdraw: "Withdraw",
+    swap: "Swap",
     transfer: "Transfer",
     market: "Market",
     generate_bitcoin_address: "Generate Bitcoin address",
     login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Address",
     dont_have_peerplays_account: "Dont have a Peerplays account? ",
     log_in_withdraw: "Log in & Withdraw",
-    log_in_deposit_hbd_hive: "Log in & Deposit",
+    log_in_deposit_hbd_hive: "Log in & Deposit %(assetSymbol)s",
     send: "Send",
     ok: "Ok",
     cancel: "Cancel",
@@ -748,6 +754,7 @@ export const en = {
       from: "From",
     },
     labels: {
+      fetching_price: "Fetching price",
       withdraw_public_key_address: "Withdraw Public key & Address",
       hive_blockchain_account: "Hive blockchain account",
       fees: "Fees : %(feeAmount)s %(defaultAsset)s",
@@ -781,7 +788,10 @@ export const en = {
       account_to_upgrade: "Account to upgrade",
       upgrade_lifetime: "Upgrade to lifetime member",
       buy_at_least: "Buy at least",
+      buy_amount: "Buy amount",
+      sell_amount: "Sell amount",
       seller: "seller",
+      swapper: "Swapper",
       vesting_amount: "Vesting amount",
       withdrawal_amount: "Withdrawal amount",
       today: "Today",
@@ -805,6 +815,12 @@ export const en = {
       key_management_group: ["Active", "Owner", "Memo"],
     },
     errors: {
+      enter_amount: "Enter amount",
+      insufficient_asset_balance: "Insufficient %(asset)s balance",
+      insufficient_balance_for_fee: "Insufficient %(coreAsset)s for fee",
+      not_enough_liquidity: "Not enough liquidity",
+      sell_amount_should_greater: "Zero sell amount",
+      buy_amount_should_greater: "Zero buy amount",
       no_key_for_password: "There is no %(role)s key for this password",
       login_first: "Please login first",
       checking_sons_status: "Please wait for checking the SONs network status",
@@ -873,6 +889,8 @@ export const en = {
       successfully_deposited:
         "Successfully Deposited %(depositAmount)s %(symbol)s",
       limit_order_successfully: "You have successfully created a limit order",
+      swap_order_successfully:
+        "Your swap was completed and your received %(buyAmount)s %(buyAssetSymbol)s for %(sellAmount)s %(sellAssetSymbol)s",
       saved_changes: "You have successfully saved your changes",
       account_upgraded_successfully:
         "Your account successfully upgraded to lifetime membership account",
@@ -923,5 +941,6 @@ export const en = {
     copied: "copied",
     mark_read: "mark as read",
     mark_unread: "mark as unread",
+    swap_transaction_type: "Transaction Type : Swap",
   },
 };

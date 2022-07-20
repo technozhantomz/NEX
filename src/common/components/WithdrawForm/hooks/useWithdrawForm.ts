@@ -16,7 +16,7 @@ import {
 import { useUserContext } from "../../../providers";
 import { Account } from "../../../types";
 
-import { UseWithdrawFormResult } from "./useWithdrawForm.types";
+import { UseWithdrawFormResult, WithdrawForm } from "./useWithdrawForm.types";
 
 export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [selectedAsset, setSelectedAsset] = useState<string>(asset);
@@ -48,7 +48,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     buildAddingBitcoinSidechainTransaction,
     buildDeletingBitcoinSidechainTransaction,
   } = useSidechainTransactionBuilder();
-  const [withdrawForm] = Form.useForm();
+  const [withdrawForm] = Form.useForm<WithdrawForm>();
 
   const handleValuesChange = (changedValues: any) => {
     if (changedValues.amount) {
@@ -73,7 +73,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   };
 
   const handleAssetChange = useCallback(
-    (value: unknown) => {
+    (value: string) => {
       setSelectedAsset(value as string);
     },
     [setSelectedAsset]

@@ -108,10 +108,20 @@ export function useAsset(): UseAssetResult {
     [getAssetById, setPrecision]
   );
 
+  const getAllAssets = useCallback(async () => {
+    try {
+      const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
+      return allAssets;
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi]);
+
   return {
     formAssetBalanceById,
     getAssetById,
     setPrecision,
     getAssetBySymbol,
+    getAllAssets,
   };
 }

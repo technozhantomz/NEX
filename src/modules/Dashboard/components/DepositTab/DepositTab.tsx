@@ -25,7 +25,7 @@ export const DepositTab = (): JSX.Element => {
     <Styled.DepositFormContainer>
       <Styled.LogoSelect
         assets={sidechainAssets}
-        defaultValue={selectedAsset}
+        value={selectedAsset}
         onChange={handleAssetChange}
       />
 

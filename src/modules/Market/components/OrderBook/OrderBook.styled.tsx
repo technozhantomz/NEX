@@ -1,5 +1,6 @@
 import { Dropdown, Menu, styled, Table as UiTable } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
 
 export const Flex = styled.div`
   display: flex;
@@ -85,7 +86,7 @@ export const ThresholdMenu = styled(Menu)``;
 export const ThresholdDropdown = styled(Dropdown)``;
 
 export const ThresholdLabel = styled.span`
-  color: #6c6c6c;
+  color: ${colors.textColorSecondary};
   font-size: 12px;
   margin-right: 10px;
 `;

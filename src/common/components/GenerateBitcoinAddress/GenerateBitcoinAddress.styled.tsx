@@ -14,11 +14,10 @@ export const FormItem = styled(Form.Item)`
   margin-left: auto;
   margin-right: auto;
   height: 35px;
-  margin-bottom: 25px;
+  margin-bottom: 0;
   ${breakpoint.sm} {
     width: 399px;
     height: 44px;
-    margin-bottom: 35px;
   }
 `;
 
@@ -27,8 +26,8 @@ export const Button = styled(CardFormButton)`
 `;
 
 export const FormDisclamer = styled(UiFormDisclamer)`
-  margin-bottom: 15px;
+  margin-top: 25px;
   ${breakpoint.sm} {
-    margin-bottom: 25px;
+    margin-top: 35px;
   }
 `;

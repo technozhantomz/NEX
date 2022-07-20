@@ -3,8 +3,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import { Layout } from "../../../../common/components";
-import { DepositTab, MarketTab, WithdrawTab } from "../../components";
-//import { SwapTab } from "../../components/SwapTab";
+import { DepositTab, MarketTab, SwapTab, WithdrawTab } from "../../components";
 
 import * as Styled from "./Dashboard.styled";
 
@@ -23,7 +22,7 @@ const Dashboard: React.FC = () => {
   const Tabs = [
     { tabName: "Deposit" },
     { tabName: "Withdraw" },
-    // { tabName: "Swap" },
+    { tabName: "Swap" },
     { tabName: "Market" },
   ];
   return (
@@ -59,7 +58,7 @@ const Dashboard: React.FC = () => {
         {activeTab.toLowerCase() === "Withdraw".toLowerCase() && (
           <WithdrawTab />
         )}
-        {/* {activeTab === "Swap" && <SwapTab />} */}
+        {activeTab.toLowerCase() === "Swap".toLowerCase() && <SwapTab />}
         {activeTab.toLowerCase() === "Market".toLowerCase() && <MarketTab />}
       </Styled.BodyContainer>
     </Layout>

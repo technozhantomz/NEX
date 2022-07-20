@@ -1,7 +1,8 @@
 import { styled } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 
 export const InputPrefixConstLabel = styled.span`
-  color: #6c6c6c;
+  color: ${colors.textColorSecondary};
   font-size: 16px;
   margin-right: 3px;
 `;

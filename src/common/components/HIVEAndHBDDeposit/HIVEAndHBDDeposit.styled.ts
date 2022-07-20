@@ -7,10 +7,6 @@ export const Container = styled.div`
   display: flex;
   padding-left: 8px;
   align-items: center;
-  margin: 25px 20px;
-  ${breakpoint.sm} {
-    margin: 35px 30px;
-  }
 `;
 
 export const LogoContainer = styled.div`
@@ -29,16 +25,11 @@ export const DepositInstruction = styled.div`
 
 export const LoginContainer = styled.div``;
 
-export const Button = styled(CardFormButton)`
-  margin-bottom: 25px;
-  ${breakpoint.sm} {
-    margin-bottom: 35px;
-  }
-`;
+export const Button = styled(CardFormButton)``;
 
 export const FormDisclamer = styled(UiFormDisclamer)`
-  margin-bottom: 15px;
+  margin-top: 25px;
   ${breakpoint.sm} {
-    margin-bottom: 25px;
+    margin-top: 35px;
   }
 `;

@@ -39,9 +39,9 @@ export const HIVEAndHBDDeposit = ({
               router.push("/login");
             }}
           >
-            {counterpart.translate(
-              `buttons.log_in_deposit_hbd_hive ${assetSymbol}`
-            )}
+            {counterpart.translate(`buttons.log_in_deposit_hbd_hive`, {
+              assetSymbol: assetSymbol,
+            })}
           </Styled.Button>
 
           <Styled.FormDisclamer>

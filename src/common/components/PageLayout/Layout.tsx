@@ -1,17 +1,7 @@
 import { ConfigProvider } from "antd";
-import { Locale } from "antd/lib/locale-provider";
-import enUS from "antd/lib/locale/en_US";
-import ruRU from "antd/lib/locale/ru_RU";
 import moment from "moment";
 import Head from "next/head";
-import React, {
-  FunctionComponent,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
-
-import { useSettingsContext } from "../../providers";
+import React, { FunctionComponent, ReactNode } from "react";
 
 import * as Styled from "./Layout.styled";
 import { TopBar } from "./TopBar";
