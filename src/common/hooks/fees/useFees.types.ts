@@ -22,8 +22,3 @@ export type CreateLimitOrderFee = {
   buyMarketFeePercent: number;
   sellMarketFeePercent: number;
 };
-
-export type TransactionFee = {
-  amount: number;
-  asset_id: string;
-};
