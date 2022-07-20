@@ -24,7 +24,26 @@ export const SwapContainer = styled.div`
   }
 `;
 
-export const SwapForm = styled(swapForm)``;
+export const SwapForm = styled(swapForm)`
+  .ant-input-affix-wrapper-status-error .ant-input-prefix {
+    color: inherit;
+  }
+  .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
+    .ant-select-selector {
+    border-color: transparent !important;
+  }
+  .ant-form-item-with-help .ant-form-item-explain {
+    display: none;
+  }
+  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper,
+  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper:hover {
+    border-color: ${colors.borderColorBase};
+  }
+  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper:focus,
+  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper-focused {
+    box-shadow: unset;
+  }
+`;
 
 export const SwapItem = styled(swapForm.Item)`
   .ant-input-affix-wrapper {

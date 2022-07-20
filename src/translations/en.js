@@ -815,6 +815,12 @@ export const en = {
       key_management_group: ["Active", "Owner", "Memo"],
     },
     errors: {
+      enter_amount: "Enter amount",
+      insufficient_asset_balance: "Insufficient %(asset)s balance",
+      insufficient_balance_for_fee: "Insufficient %(coreAsset)s for fee",
+      not_enough_liquidity: "Not enough liquidity",
+      sell_amount_should_greater: "Zero sell amount",
+      buy_amount_should_greater: "Zero buy amount",
       no_key_for_password: "There is no %(role)s key for this password",
       login_first: "Please login first",
       checking_sons_status: "Please wait for checking the SONs network status",
@@ -883,7 +889,8 @@ export const en = {
       successfully_deposited:
         "Successfully Deposited %(depositAmount)s %(symbol)s",
       limit_order_successfully: "You have successfully created a limit order",
-      swap_order_successfully: "You have successfully created a swap order",
+      swap_order_successfully:
+        "Your swap was completed and your received %(buyAmount)s %(buyAssetSymbol)s for %(sellAmount)s %(sellAssetSymbol)",
       saved_changes: "You have successfully saved your changes",
       account_upgraded_successfully:
         "Your account successfully upgraded to lifetime membership account",

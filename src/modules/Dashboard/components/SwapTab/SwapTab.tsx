@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { KeyboardEvent } from "react";
+import { KeyboardEvent, useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import { utils } from "../../../../api/utils";
@@ -28,7 +28,7 @@ export const SwapTab = (): JSX.Element => {
     transactionErrorMessage,
     transactionSuccessMessage,
     loadingTransaction,
-    selectedAssets,
+    selectedAssetsSymbols,
     allAssets,
     handleSellAssetChange,
     handleBuyAssetChange,
@@ -43,9 +43,11 @@ export const SwapTab = (): JSX.Element => {
     handleSwapAssets,
     buyAssetBalance,
     sellAssetBalance,
-    transactionModalBuyAmount,
-    transactionModalSellAmount,
     handleSwapSubmit,
+    formValidation,
+    sellAmountErrors,
+    buyAmountErrors,
+    lastChangedField,
   } = useSwap();
 
   const {
@@ -60,6 +62,11 @@ export const SwapTab = (): JSX.Element => {
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
   });
+
+  const [transactionModalSellAmount, setTransactionModalSellAmount] =
+    useState<number>(0);
+  const [transactionModalBuyAmount, setTransactionModalBuyAmount] =
+    useState<number>(0);
 
   const InfoToolTip = (
     <Styled.TooltipPara>
@@ -80,7 +87,13 @@ export const SwapTab = (): JSX.Element => {
           form={swapForm}
           name="swapForm"
           onValuesChange={handleValuesChange}
-          onFinish={showPasswordModal}
+          onFinish={() => {
+            const values = swapForm.getFieldsValue();
+            setTransactionModalSellAmount(values.sellAmount);
+            setTransactionModalBuyAmount(values.buyAmount);
+            showPasswordModal();
+          }}
+          validateTrigger={["onChange", "onSubmit", "onBlur"]}
         >
           <Styled.SwapButton
             icon={<SwapOutlined />}
@@ -89,12 +102,11 @@ export const SwapTab = (): JSX.Element => {
           />
           <Styled.SwapSellItem
             name="sellAmount"
-            //rules={formValidation.sellAmount}
+            rules={formValidation.sellAmount}
             validateFirst={true}
-            validateTrigger="onBlur"
           >
             <Input
-              placeholder="0.00000"
+              placeholder="0.0"
               onFocus={(e) => {
                 e.target.select();
               }}
@@ -107,9 +119,10 @@ export const SwapTab = (): JSX.Element => {
                 <Styled.AssetSelectContainer>
                   <LogoSelectOption
                     id="sellAsset"
-                    value={selectedAssets.sellAssetSymbol}
+                    value={selectedAssetsSymbols.sellAssetSymbol}
                     assets={allAssets.filter(
-                      (asset) => asset.symbol !== selectedAssets.buyAssetSymbol
+                      (asset) =>
+                        asset.symbol !== selectedAssetsSymbols.buyAssetSymbol
                     )}
                     onChange={handleSellAssetChange}
                   />
@@ -126,12 +139,11 @@ export const SwapTab = (): JSX.Element => {
           </Styled.SwapSellItem>
           <Styled.SwapItem
             name="buyAmount"
-            //rules={formValidation.buyAmount}
+            rules={formValidation.buyAmount}
             validateFirst={true}
-            validateTrigger="onBlur"
           >
             <Input
-              placeholder="0.00000"
+              placeholder="0.0"
               onFocus={(e) => {
                 e.target.select();
               }}
@@ -144,9 +156,10 @@ export const SwapTab = (): JSX.Element => {
                 <Styled.AssetSelectContainer>
                   <LogoSelectOption
                     id="buyAsset"
-                    value={selectedAssets.buyAssetSymbol}
+                    value={selectedAssetsSymbols.buyAssetSymbol}
                     assets={allAssets.filter(
-                      (asset) => asset.symbol !== selectedAssets.sellAssetSymbol
+                      (asset) =>
+                        asset.symbol !== selectedAssetsSymbols.sellAssetSymbol
                     )}
                     onChange={handleBuyAssetChange}
                   />
@@ -172,7 +185,7 @@ export const SwapTab = (): JSX.Element => {
             ) : (
               <>
                 <span>
-                  {`1 ${selectedAssets.buyAssetSymbol} = ${price} ${selectedAssets.sellAssetSymbol}`}
+                  {`1 ${selectedAssetsSymbols.buyAssetSymbol} = ${price} ${selectedAssetsSymbols.sellAssetSymbol}`}
                 </span>
                 <Styled.Tooltip
                   placement="left"
@@ -186,8 +199,21 @@ export const SwapTab = (): JSX.Element => {
           </Styled.PriceContainer>
           <Styled.SwapButtonFormItem>
             {localStorageAccount ? (
-              <CardFormButton type="primary" htmlType="submit">
-                {counterpart.translate(`buttons.swap_coins`)}
+              <CardFormButton
+                type="primary"
+                htmlType="submit"
+                disabled={
+                  sellAmountErrors.length > 0 || buyAmountErrors.length > 0
+                }
+              >
+                {sellAmountErrors.length > 0 || buyAmountErrors.length > 0
+                  ? lastChangedField === "sellAsset" &&
+                    sellAmountErrors.length > 0
+                    ? sellAmountErrors[0]
+                    : buyAmountErrors.length > 0
+                    ? buyAmountErrors[0]
+                    : sellAmountErrors[0]
+                  : counterpart.translate(`buttons.swap_coins`)}
               </CardFormButton>
             ) : (
               <CardFormButton
@@ -224,8 +250,8 @@ export const SwapTab = (): JSX.Element => {
           account={localStorageAccount}
           fee={swapOrderFee}
           transactionType="swap_order_create"
-          sell={`${transactionModalSellAmount} ${selectedAssets.sellAssetSymbol}`}
-          buy={`${transactionModalBuyAmount} ${selectedAssets.buyAssetSymbol}`}
+          sell={`${transactionModalSellAmount} ${selectedAssetsSymbols.sellAssetSymbol}`}
+          buy={`${transactionModalBuyAmount} ${selectedAssetsSymbols.buyAssetSymbol}`}
         />
         <PasswordModal
           visible={isPasswordModalVisible}

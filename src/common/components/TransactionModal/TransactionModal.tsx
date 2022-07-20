@@ -33,7 +33,6 @@ type Props = {
   price?: string;
   sell?: string;
   buy?: string;
-  swap?: string;
   expiration?: string;
   vestingAmount?: number;
   withdrawalAmount?: number;
@@ -60,7 +59,6 @@ export const TransactionModal = ({
   price,
   sell,
   buy,
-  swap,
   expiration,
   vestingAmount,
   withdrawalAmount,

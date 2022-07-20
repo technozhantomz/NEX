@@ -60,24 +60,41 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
       className={props.className}
       value={props.value}
     >
+      <Styled.SelectOptionContainer
+        action={props.id}
+        key={props.value}
+        value={props.value}
+        label={props.value}
+      >
+        <Styled.OptionDiv>
+          <Styled.IconContainer>
+            {icons[props.value] !== undefined
+              ? icons[props.value]
+              : icons["Default"]}
+          </Styled.IconContainer>
+          <Styled.AssetName>{props.value}</Styled.AssetName>
+        </Styled.OptionDiv>
+      </Styled.SelectOptionContainer>
       {props.assets &&
-        props.assets.map((asset) => (
-          <Styled.SelectOptionContainer
-            action={props.id}
-            key={asset.symbol}
-            value={asset.symbol}
-            label={asset.symbol}
-          >
-            <Styled.OptionDiv>
-              <Styled.IconContainer>
-                {icons[asset.symbol] !== undefined
-                  ? icons[asset.symbol]
-                  : icons["Default"]}
-              </Styled.IconContainer>
-              <Styled.AssetName>{asset.symbol}</Styled.AssetName>
-            </Styled.OptionDiv>
-          </Styled.SelectOptionContainer>
-        ))}
+        props.assets
+          .filter((asset) => asset.symbol !== props.value)
+          .map((asset) => (
+            <Styled.SelectOptionContainer
+              action={props.id}
+              key={asset.symbol}
+              value={asset.symbol}
+              label={asset.symbol}
+            >
+              <Styled.OptionDiv>
+                <Styled.IconContainer>
+                  {icons[asset.symbol] !== undefined
+                    ? icons[asset.symbol]
+                    : icons["Default"]}
+                </Styled.IconContainer>
+                <Styled.AssetName>{asset.symbol}</Styled.AssetName>
+              </Styled.OptionDiv>
+            </Styled.SelectOptionContainer>
+          ))}
     </Styled.SelectContainer>
   );
 };
