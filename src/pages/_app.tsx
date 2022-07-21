@@ -13,6 +13,8 @@ import {
 } from "../common/providers";
 import "../ui/src/ui.less";
 
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ViewportProvider>
