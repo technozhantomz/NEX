@@ -1,6 +1,6 @@
-import { styled } from "../../../ui/src";
-import { breakpoint } from "../../../ui/src/breakpoints";
-import { colors } from "../../../ui/src/colors";
+import { styled } from '../../../ui/src';
+import { breakpoint } from '../../../ui/src/breakpoints';
+import { colors } from '../../../ui/src/colors';
 
 export const Page = styled.section`
    {
@@ -58,6 +58,20 @@ export const Layout = styled.main`{
     &.card-layout__lrg {
       padding-bottom: 24px;
       margin: 0 auto;
+      max-width: 1070px;
+    }
+    &.card-layout__lrg > .ant-card{
+      min-height: 856px;
+    }
+  }
+  ${breakpoint.md} {
+    &.card-layout {
+      margin: 0 auto;
+      max-width: 600px;
+    }
+    &.card-layout__lrg {
+      padding-bottom: 24px;
+      margin: 0 24px;
       max-width: 1070px;
     }
     &.card-layout__lrg > .ant-card{
