@@ -445,6 +445,7 @@ export const ru = {
     },
   },
   buttons: {
+    enter_amount: "Введите сумму",
     swap_coins: "Обменять монеты",
     login_and_swap_coins: "Войти и поменять монеты",
     logout: "Выйти",

@@ -203,10 +203,12 @@ export const SwapTab = (): JSX.Element => {
                 type="primary"
                 htmlType="submit"
                 disabled={
-                  sellAmountErrors.length > 0 || buyAmountErrors.length > 0
+                  sellAmountErrors.length === 0 || buyAmountErrors.length === 0
                 }
               >
-                {sellAmountErrors.length > 0 || buyAmountErrors.length > 0
+                {sellAmountErrors.length === 0 || buyAmountErrors.length === 0
+                  ? counterpart.translate(`buttons.enter_amount`)
+                  : sellAmountErrors.length > 0 || buyAmountErrors.length > 0
                   ? lastChangedField === "sellAsset" &&
                     sellAmountErrors.length > 0
                     ? sellAmountErrors[0]

@@ -951,6 +951,13 @@ export function useSwap(): UseSwapResult {
     handleAssetChange();
   }, [selectedAssetsSymbols]);
 
+  useEffect(() => {
+    const { buyAmount, sellAmount } = swapForm.getFieldsValue();
+    if (!buyAmount && !sellAmount) {
+      setSellAmountErrors([counterpart.translate(`buttons.enter_amount`)]);
+    }
+  }, []);
+
   return {
     swapForm,
     transactionErrorMessage,
