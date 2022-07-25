@@ -6,7 +6,11 @@ import React, {
   useState,
 } from "react";
 
-import { useUserContext, useViewportContext } from "..";
+import {
+  useBrowserHistoryContext,
+  useUserContext,
+  useViewportContext,
+} from "..";
 import { defaultNotifications } from "../../../api/params";
 import { breakpoints } from "../../../ui/src/breakpoints";
 import { useActivity, useFormDate, useLocalStorage } from "../../hooks";
@@ -22,7 +26,7 @@ const DefaultMenuState: MenuProviderContextType = {
   openMenu: function (): void {
     throw new Error(`Function not implemented.`);
   },
-  closeMenu: function (): void {
+  closeAllMenus: function (): void {
     throw new Error(`Function not implemented.`);
   },
   markAllNotificationsRead: function (): void {
@@ -60,6 +64,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
     useState<boolean>(true);
 
   const { localStorageAccount } = useUserContext();
+  const { browserHistory } = useBrowserHistoryContext();
   const { getActivitiesRows } = useActivity();
   const { width } = useViewportContext();
   const { formLocalDate } = useFormDate();
@@ -94,7 +99,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
     ]
   );
 
-  const closeMenu = useCallback(() => {
+  const closeAllMenus = useCallback(() => {
     setNotificationMenuOpen(false);
     setProfileMenuOpen(false);
     setMainMenuOpen(false);
@@ -218,12 +223,16 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
 
   useEffect(() => {
     if (width > breakpoints.sm) {
-      document.addEventListener("click", closeMenu);
+      document.addEventListener("click", closeAllMenus);
       return () => {
-        document.removeEventListener("click", closeMenu);
+        document.removeEventListener("click", closeAllMenus);
       };
     }
   }, [width]);
+
+  useEffect(() => {
+    closeAllMenus();
+  }, [browserHistory, browserHistory.length]);
 
   return (
     <MenuProviderContext.Provider
@@ -232,7 +241,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
         profileMenuOpen,
         mainMenuOpen,
         openMenu,
-        closeMenu,
+        closeAllMenus,
         hasUnreadMessages,
         notifications,
         loadingNotifications,
