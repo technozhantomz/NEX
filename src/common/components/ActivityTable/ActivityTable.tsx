@@ -10,11 +10,13 @@ import { useActivityTable } from "./hooks";
 type Props = {
   userName?: string;
   isWalletActivityTable?: boolean;
+  className?: string;
 };
 
 export const ActivityTable = ({
   userName,
   isWalletActivityTable = false,
+  className,
 }: Props): JSX.Element => {
   const { activitiesRows, loading } = useActivityTable({
     userName,
@@ -63,7 +65,7 @@ export const ActivityTable = ({
               : false
           }
           size="small"
-          className="activity-table"
+          className={`activity-table ${className ? className : ""}`}
         />
       )}
     </>

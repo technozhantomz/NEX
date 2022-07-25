@@ -78,6 +78,13 @@ export const WithdrawFormWrapper = styled.div`
   ${breakpoint.sm} {
     .ant-form {
       margin: 0 35px;
+      .ant-form-item-control-input-content {
+        height: 50px;
+        .ant-input {
+          height: 100%;
+          padding: 15px 30px;
+        }
+      }
     }
   }
 `;

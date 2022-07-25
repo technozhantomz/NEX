@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { ActivityTable, Layout } from "../../../../common/components";
+import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
 //import { useBrowserHistoryContext } from "../../../../common/providers";
@@ -85,7 +85,7 @@ const WalletPage: NextPage = () => {
             tab={counterpart.translate(`pages.wallet.activities`)}
             key="activities"
           >
-            <ActivityTable isWalletActivityTable={true} />
+            <Styled.ActivityTable isWalletActivityTable={true} />
           </TabPane>
         </Styled.Tabs>
       </Styled.WalletCard>

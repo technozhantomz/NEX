@@ -1,3 +1,4 @@
+import { ActivityTable as UiActivityTable } from "../../../../common/components";
 import {
   styled,
   Card as UiCard,
@@ -64,9 +65,6 @@ export const WalletCard = styled(UiCard)`
       justify-content: center;
       width: 100%;
     }
-    .ant-tabs-nav {
-      margin-bottom: 0px;
-    }
     .ant-tabs-nav-operations {
       display: none;
     }
@@ -103,4 +101,8 @@ export const WalletCard = styled(UiCard)`
       }
     }
   }
+`;
+
+export const ActivityTable = styled(UiActivityTable)`
+  margin: 0 35px 20px 35px;
 `;
