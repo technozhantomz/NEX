@@ -232,7 +232,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
 
   useEffect(() => {
     closeAllMenus();
-  }, [browserHistory, browserHistory.length]);
+  }, [browserHistory]);
 
   return (
     <MenuProviderContext.Provider
