@@ -4,7 +4,10 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { Layout } from "../../../../common/components";
-import { useViewportContext } from "../../../../common/providers";
+import {
+  useUserContext,
+  useViewportContext,
+} from "../../../../common/providers";
 import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
 //import { useBrowserHistoryContext } from "../../../../common/providers";
 import { AssetsTable } from "../../components/AssetsTable";
@@ -19,6 +22,7 @@ const WalletPage: NextPage = () => {
   const { tab } = router.query;
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
+  const { localStorageAccount } = useUserContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
       {sm ? (
@@ -85,7 +89,10 @@ const WalletPage: NextPage = () => {
             tab={counterpart.translate(`pages.wallet.activities`)}
             key="activities"
           >
-            <Styled.ActivityTable isWalletActivityTable={true} />
+            <Styled.ActivityTable
+              isWalletActivityTable={true}
+              userName={localStorageAccount}
+            />
           </TabPane>
         </Styled.Tabs>
       </Styled.WalletCard>
