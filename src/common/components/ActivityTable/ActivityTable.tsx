@@ -36,7 +36,7 @@ export const ActivityTable = ({
               ? {
                   showSizeChanger: false,
                   size: "small",
-                  pageSize: 10,
+                  pageSize: 15,
                   showLessItems: true,
                   itemRender: (
                     _page: number,
