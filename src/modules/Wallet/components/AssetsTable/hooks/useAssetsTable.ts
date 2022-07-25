@@ -46,7 +46,7 @@ export function useAssetsTable(): UseAssetsTabResult {
         quoteAsset: defaultToken as string,
         available,
         price: 0,
-        change: "0.0%",
+        change: "0%",
         volume: 0,
       };
     },
