@@ -29,7 +29,7 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)`
     }
     .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
       .ant-select-selector {
-      border-color: white !important;
+      border-color: transparent !important;
     }
   }
 `;
