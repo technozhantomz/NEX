@@ -43,9 +43,7 @@ export const AssetCard = styled(UiCard)`
       .ant-tabs-nav-operations {
         display: flex;
       }
-      .ant-table-wrapper {
-        margin: 0 35px;
-      }
+
       .asset-table {
         max-width: 566px;
       }
@@ -59,7 +57,10 @@ export const AssetCard = styled(UiCard)`
 `;
 
 export const AssetFormWapper = styled.div`
-  margin: 0 20px 39px;
+  margin: 0 20px;
+  ${breakpoint.sm} {
+    margin: 0 37px;
+  }
   max-width: 566px;
 `;
 
@@ -70,6 +71,21 @@ export const WithdrawFormWrapper = styled.div`
   }
   .ant-input {
     font-size: 16px;
+  }
+  .ant-form {
+    margin: 0 20px;
+  }
+  ${breakpoint.sm} {
+    .ant-form {
+      margin: 0 35px;
+      .ant-form-item-control-input-content {
+        height: 50px;
+        .ant-input {
+          height: 100%;
+          padding: 15px 30px;
+        }
+      }
+    }
   }
 `;
 
