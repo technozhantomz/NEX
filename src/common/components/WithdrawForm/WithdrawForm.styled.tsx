@@ -29,7 +29,6 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)`
     }
     .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
       .ant-select-selector {
-      background-color: #fff;
       border-color: white !important;
     }
   }
