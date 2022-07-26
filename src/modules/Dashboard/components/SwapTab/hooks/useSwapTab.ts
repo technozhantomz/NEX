@@ -49,7 +49,9 @@ export function useSwap(): UseSwapResult {
   const [loadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sellAssetBalance, setSellAssetBalance] = useState<number>(0);
   const [buyAssetBalance, setBuyAssetBalance] = useState<number>(0);
-  const [sellAmountErrors, setSellAmountErrors] = useState<string[]>([]);
+  const [sellAmountErrors, setSellAmountErrors] = useState<string[]>([
+    `${counterpart.translate(`buttons.enter_amount`)}`,
+  ]);
   const [buyAmountErrors, setBuyAmountErrors] = useState<string[]>([]);
   const [sellAsset, setSellAsset] = useState<Asset | undefined>();
   const [buyAsset, setBuyAsset] = useState<Asset | undefined>();

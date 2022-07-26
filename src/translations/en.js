@@ -471,6 +471,7 @@ export const en = {
     },
   },
   buttons: {
+    enter_amount: "Enter an amount",
     swap_coins: "Swap coins",
     login_and_swap_coins: "Login & swap coins",
     logout: "Logout",
