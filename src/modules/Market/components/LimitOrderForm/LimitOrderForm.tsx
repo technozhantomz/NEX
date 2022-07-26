@@ -119,6 +119,7 @@ export const LimitOrderForm = ({
                   />
                 }
                 type="number"
+                min={0}
                 step="any"
                 onFocus={(e) => {
                   e.target.select();
@@ -147,6 +148,7 @@ export const LimitOrderForm = ({
                   />
                 }
                 type="number"
+                min={0}
                 step="any"
                 onFocus={(e) => {
                   e.target.select();
@@ -175,6 +177,7 @@ export const LimitOrderForm = ({
                   />
                 }
                 type="number"
+                min={0}
                 step="any"
                 onFocus={(e) => {
                   e.target.select();

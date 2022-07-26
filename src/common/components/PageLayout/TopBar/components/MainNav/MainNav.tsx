@@ -29,9 +29,14 @@ export const MainNav = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { exchanges } = useSettingsContext();
   const { sm } = useViewportContext();
-  const { openMenu, closeMenu } = useMenuContext();
+  const { openMenu } = useMenuContext();
   return (
-    <MenuCard bordered={false}>
+    <MenuCard
+      bordered={false}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <ul>
         {localStorageAccount ? (
           ""
@@ -41,7 +46,6 @@ export const MainNav = (): JSX.Element => {
               href="/login"
               icon={<PoweroffOutlined className={"menu-icon"} />}
               label={counterpart.translate(`pages.login.heading`)}
-              onClick={closeMenu}
             />
           </li>
         )}
@@ -51,7 +55,6 @@ export const MainNav = (): JSX.Element => {
             href="/dashboard"
             icon={<Dashboard className={"menu-icon"} />}
             label={counterpart.translate(`pages.dashboard.heading`)}
-            onClick={closeMenu}
           />
         </li>
         <li>
@@ -59,7 +62,6 @@ export const MainNav = (): JSX.Element => {
             href={`/market/${exchanges.active}`}
             icon={<Market className={"menu-icon"} />}
             label={counterpart.translate(`pages.market.heading`)}
-            onClick={closeMenu}
           />
         </li>
         <li>
@@ -67,7 +69,6 @@ export const MainNav = (): JSX.Element => {
             href="/blockchain"
             icon={<Blockchain className={"menu-icon"} />}
             label={counterpart.translate(`pages.blocks.heading`)}
-            onClick={closeMenu}
           />
         </li>
         {!localStorageAccount ? (
@@ -79,13 +80,15 @@ export const MainNav = (): JSX.Element => {
                 href="/wallet"
                 icon={<DollarOutlined className={"menu-icon"} />}
                 label={counterpart.translate(`pages.wallet.heading`)}
-                onClick={closeMenu}
               />
             </li>
             {sm ? (
               <li>
                 <MenuItem
-                  onClick={() => openMenu("profile")}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openMenu("profile");
+                  }}
                   icon={<UserOutlined className={"menu-icon avitar"} />}
                   label={counterpart.translate(`links.profile`)}
                 />
@@ -98,15 +101,9 @@ export const MainNav = (): JSX.Element => {
                 href="/settings"
                 icon={<SettingOutlined className={"menu-icon"} />}
                 label={counterpart.translate(`pages.settings.heading`)}
-                onClick={closeMenu}
               />
             </li>
-            <li
-              className={"advanced"}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
+            <li className={"advanced"}>
               <Switch
                 size="small"
                 onChange={(checked) => {
@@ -128,7 +125,6 @@ export const MainNav = (): JSX.Element => {
                 href="/voting"
                 icon={<Vote className={"menu-icon"} />}
                 label={counterpart.translate(`pages.voting.heading`)}
-                onClick={closeMenu}
               />
             </li>
           </>
@@ -144,7 +140,6 @@ export const MainNav = (): JSX.Element => {
               href="/logout"
               icon={<PoweroffOutlined className={"menu-icon"} />}
               label={counterpart.translate(`pages.logout.heading`)}
-              onClick={closeMenu}
             />
           </li>
         )}

@@ -7,11 +7,7 @@ import {
   SettingOutlined,
 } from "../../../../../../ui/src";
 import { Vote } from "../../../../../../ui/src/icons";
-import {
-  useMenuContext,
-  useUserContext,
-  useViewportContext,
-} from "../../../../../providers";
+import { useUserContext, useViewportContext } from "../../../../../providers";
 import { MenuItem } from "../MenuItem";
 
 import * as Styled from "./ProfileMenu.styled";
@@ -21,10 +17,14 @@ const { Meta } = Card;
 export const ProfileMenu = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { sm } = useViewportContext();
-  const { closeMenu } = useMenuContext();
 
   return (
-    <Styled.ProfileMenu bordered={false}>
+    <Styled.ProfileMenu
+      bordered={false}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <Meta
         avatar={
           <Styled.ProfileAvatar>
@@ -44,7 +44,6 @@ export const ProfileMenu = (): JSX.Element => {
                 href="/voting"
                 icon={<Vote className={"menu-icon"} />}
                 label={counterpart.translate(`pages.voting.heading`)}
-                onClick={closeMenu}
               />
             </li>
             {/* <li>
@@ -52,13 +51,12 @@ export const ProfileMenu = (): JSX.Element => {
                 href="/contacts"
                 icon={<Contacts className={"menu-icon"} />}
                 label="Contacts"
-                onClick={closeMenu}
               />
             </li> */}
           </>
         ) : (
           <li className={"link"}>
-            <Link href={`/user/${localStorageAccount}`} onClick={closeMenu}>
+            <Link href={`/user/${localStorageAccount}`}>
               {counterpart.translate(`links.see_all_account_activity`)}
             </Link>
           </li>
@@ -69,12 +67,11 @@ export const ProfileMenu = (): JSX.Element => {
             href="/settings"
             icon={<SettingOutlined className={"menu-icon"} />}
             label={counterpart.translate(`pages.settings.heading`)}
-            onClick={closeMenu}
           />
         </li>
         {sm ? (
           <li className={"link"}>
-            <Link href={`/user/${localStorageAccount}`} onClick={closeMenu}>
+            <Link href={`/user/${localStorageAccount}`}>
               <a>{counterpart.translate(`links.see_all_account_activity`)}</a>
             </Link>
           </li>
@@ -86,7 +83,6 @@ export const ProfileMenu = (): JSX.Element => {
             href="/logout"
             icon={<PoweroffOutlined className={"menu-icon"} />}
             label={counterpart.translate(`pages.logout.heading`)}
-            onClick={closeMenu}
           />
         </li>
       </ul>

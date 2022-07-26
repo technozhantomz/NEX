@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { defaultToken } from "../../../../../api/params/networkparams";
 import { useAsset, useMarketPairStats } from "../../../../../common/hooks";
 import {
+  useAssetsContext,
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
@@ -18,15 +19,12 @@ export function useAssetsTable(): UseAssetsTabResult {
   const { assets, localStorageAccount } = useUserContext();
   const { getAssetBySymbol } = useAsset();
   const { getMarketPairStats } = useMarketPairStats();
-
-  useEffect(() => {
-    setTableAssets();
-  }, [assets, localStorageAccount]);
+  const { defaultAsset } = useAssetsContext();
 
   const formAssetRow = useCallback(
     async (baseAsset: Asset): Promise<IAssetRow> => {
       const available = baseAsset.amount as number;
-      const defaultQuoteAsset = await getAssetBySymbol(defaultToken as string);
+      const defaultQuoteAsset = defaultAsset as Asset;
       if (baseAsset.symbol !== defaultQuoteAsset.symbol) {
         const marketPairStats = await getMarketPairStats(
           baseAsset,
@@ -48,15 +46,15 @@ export function useAssetsTable(): UseAssetsTabResult {
         quoteAsset: defaultToken as string,
         available,
         price: 0,
-        change: "0.0%",
+        change: "0%",
         volume: 0,
       };
     },
-    [dbApi, getMarketPairStats, getAssetBySymbol]
+    [dbApi, getMarketPairStats, getAssetBySymbol, defaultAsset]
   );
 
   const setTableAssets = useCallback(async () => {
-    if (assets && assets.length) {
+    if (assets && assets.length && defaultAsset) {
       try {
         setLoading(true);
         const assetsRows = await Promise.all(assets.map(formAssetRow));
@@ -70,7 +68,11 @@ export function useAssetsTable(): UseAssetsTabResult {
     } else {
       setLoading(false);
     }
-  }, [formAssetRow, _setTableAssets, setLoading, assets]);
+  }, [formAssetRow, _setTableAssets, setLoading, assets, defaultAsset]);
+
+  useEffect(() => {
+    setTableAssets();
+  }, [assets, localStorageAccount]);
 
   return { tableAssets, loading };
 }
