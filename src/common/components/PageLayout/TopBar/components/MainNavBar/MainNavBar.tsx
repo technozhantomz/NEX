@@ -22,7 +22,7 @@ export const MainNavBar = (): JSX.Element => {
   const { sm } = useViewportContext();
   const {
     openMenu,
-    closeMenu,
+    closeAllMenus,
     notificationMenuOpen,
     profileMenuOpen,
     mainMenuOpen,
@@ -31,7 +31,11 @@ export const MainNavBar = (): JSX.Element => {
   const CloseButton = (
     <>
       {sm ? (
-        <Styled.CloseButton type="text" className="close" onClick={closeMenu}>
+        <Styled.CloseButton
+          type="text"
+          className="close"
+          onClick={closeAllMenus}
+        >
           X
         </Styled.CloseButton>
       ) : (

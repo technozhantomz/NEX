@@ -39,32 +39,37 @@ export const Page = styled.section`
   }
 `;
 
-export const Layout = styled.main`{
-  &.default {
-    margin: 0;
-  }
-  &.card-layout, &.card-layout__lrg { {
-    margin: 0 5%;
-    padding-bottom: 24px;
-  }
-  &.card-layout__lrg > .ant-card{
-    min-height: 661px;
-  }
-  ${breakpoint.sm} {
-    &.card-layout {
-      margin: 0 auto;
-      max-width: 600px;
+export const Layout = styled.main`
+   {
+    &.default {
+      margin: 0;
     }
+    &.card-layout,
     &.card-layout__lrg {
+      margin: 0 5%;
       padding-bottom: 24px;
-      margin: 0 auto;
-      max-width: 1070px;
     }
-    &.card-layout__lrg > .ant-card{
-      min-height: 856px;
+    &.card-layout__lrg > .ant-card {
+      min-height: 661px;
+    }
+    ${breakpoint.sm} {
+      &.card-layout,
+      &.card-layout__lrg {
+        margin: 0 auto;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      &.card-layout {
+        max-width: 600px;
+      }
+      &.card-layout__lrg {
+        max-width: 1070px;
+      }
+      &.card-layout__lrg > .ant-card {
+        min-height: 856px;
+      }
     }
   }
-}
 `;
 
 export const PageHeading = styled.h1`

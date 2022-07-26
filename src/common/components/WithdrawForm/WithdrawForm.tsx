@@ -84,6 +84,7 @@ export const WithdrawForm = ({
                 placeholder="0.00000"
                 type="number"
                 step="any"
+                min={0}
                 onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
                   if (!utils.isNumberKey(e)) {
                     e.preventDefault();
@@ -157,6 +158,7 @@ export const WithdrawForm = ({
               placeholder={counterpart.translate(`field.placeholder.amount`)}
               type="number"
               step="any"
+              min={0}
               onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
                 if (!utils.isNumberKey(e)) {
                   e.preventDefault();

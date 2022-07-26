@@ -18,7 +18,6 @@ export const NotificationMenu = (): JSX.Element => {
     hasUnreadMessages,
     loadingNotifications,
     markTheNotificationAsReadOrUnread,
-    closeMenu,
   } = useMenuContext();
   const { showUnreadOnly, setShowUnreadOnly, groupedNotificationsByDate } =
     useNotificationMenu({
@@ -33,13 +32,13 @@ export const NotificationMenu = (): JSX.Element => {
   yesterday.setDate(yesterday.getDate() - 1);
 
   return (
-    <Styled.NotificationMenuCard bordered={false}>
-      <Styled.ControlsContainer
-        hasUnread={hasUnreadMessages}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
+    <Styled.NotificationMenuCard
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      bordered={false}
+    >
+      <Styled.ControlsContainer hasUnread={hasUnreadMessages}>
         {hasUnreadMessages ? (
           <span
             className={"mark-all"}
@@ -192,7 +191,7 @@ export const NotificationMenu = (): JSX.Element => {
       </Styled.ListsContainer>
 
       <Styled.AllActivityContainer>
-        <Link href={`/user/${localStorageAccount}`} onClick={closeMenu}>
+        <Link href={`/user/${localStorageAccount}`}>
           <a>{counterpart.translate(`links.see_all_account_activity`)}</a>
         </Link>
       </Styled.AllActivityContainer>
