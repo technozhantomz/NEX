@@ -1,3 +1,4 @@
+import { ActivityTable as UiActivityTable } from "../../../../common/components";
 import {
   styled,
   Card as UiCard,
@@ -52,11 +53,7 @@ export const WalletCard = styled(UiCard)`
     opacity: 1;
     max-width: 1070px;
   }
-  .ant-table-wrapper {
-    margin-top: 20px;
-    margin-left: 35px;
-    margin-right: 35px;
-  }
+
   border-radius: 4pt;
   .ant-card-body {
     padding: 0 0 68px 0;
@@ -67,9 +64,6 @@ export const WalletCard = styled(UiCard)`
     .ant-tabs-tab {
       justify-content: center;
       width: 100%;
-    }
-    .ant-tabs-nav {
-      margin-bottom: 0px;
     }
     .ant-tabs-nav-operations {
       display: none;
@@ -107,4 +101,8 @@ export const WalletCard = styled(UiCard)`
       }
     }
   }
+`;
+
+export const ActivityTable = styled(UiActivityTable)`
+  margin: 0 35px 20px 35px;
 `;

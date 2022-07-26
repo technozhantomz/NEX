@@ -28,7 +28,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         ]);
         if (ticker) {
           latest = roundNum(Number(ticker.latest), base.precision);
-          percentChange = roundNum(Number(ticker.percent_change), 1) || 0.0;
+          percentChange = roundNum(Number(ticker.percent_change), 1) || 0;
           volume = roundNum(Number(ticker.quote_volume), 3);
         }
       } catch (e) {
