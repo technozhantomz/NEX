@@ -75,6 +75,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             <Input
               placeholder={counterpart.translate(`field.placeholder.quantity`)}
               type="number"
+              min={0}
               onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
                 if (!utils.isNumberKey(e)) {
                   e.preventDefault();
