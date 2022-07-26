@@ -99,6 +99,7 @@ export const WithdrawForm = ({
                     />
                   </Styled.WithdrawFormAsset>
                 }
+                disabled={localStorageAccount ? false : true}
               />
             </Styled.WithdrawFormAssetAmount>
             {selectedAsset === "BTC" ? (
@@ -127,6 +128,7 @@ export const WithdrawForm = ({
                 `field.placeholder.withdraw_public_key`
               )}
               className="form-input"
+              disabled={localStorageAccount ? false : true}
             />
           </Form.Item>
         ) : (
@@ -146,6 +148,7 @@ export const WithdrawForm = ({
                   )
             }
             className="form-input"
+            disabled={localStorageAccount ? false : true}
           />
         </Form.Item>
         {!withAssetSelector ? (
@@ -164,6 +167,7 @@ export const WithdrawForm = ({
                   e.preventDefault();
                 }
               }}
+              disabled={localStorageAccount ? false : true}
             />
           </Form.Item>
         ) : (

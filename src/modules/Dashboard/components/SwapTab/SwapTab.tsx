@@ -115,6 +115,7 @@ export const SwapTab = (): JSX.Element => {
                   e.preventDefault();
                 }
               }}
+              disabled={localStorageAccount ? false : true}
               prefix={
                 <Styled.AssetSelectContainer>
                   <LogoSelectOption
@@ -152,6 +153,7 @@ export const SwapTab = (): JSX.Element => {
                   e.preventDefault();
                 }
               }}
+              disabled={localStorageAccount ? false : true}
               prefix={
                 <Styled.AssetSelectContainer>
                   <LogoSelectOption
