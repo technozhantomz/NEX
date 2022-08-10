@@ -12,3 +12,4 @@ export * from "./TradingPairCard";
 export * from "./TransactionModal";
 export * from "./CopyButton";
 export * from "./TableHeading";
+export * from "./LoadingIndicator";
