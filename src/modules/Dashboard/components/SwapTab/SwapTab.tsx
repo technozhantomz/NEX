@@ -115,6 +115,7 @@ export const SwapTab = (): JSX.Element => {
                   e.preventDefault();
                 }
               }}
+              autoComplete="off"
               disabled={localStorageAccount ? false : true}
               prefix={
                 <Styled.AssetSelectContainer>
@@ -153,6 +154,7 @@ export const SwapTab = (): JSX.Element => {
                   e.preventDefault();
                 }
               }}
+              autoComplete="off"
               disabled={localStorageAccount ? false : true}
               prefix={
                 <Styled.AssetSelectContainer>
