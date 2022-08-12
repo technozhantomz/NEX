@@ -11,6 +11,7 @@ import {
   useLimitOrderTransactionBuilder,
   useOrderBook,
   useTransactionBuilder,
+  useUpdateExchanges,
 } from "../../../../../common/hooks";
 import {
   useAssetsContext,
@@ -27,6 +28,7 @@ import {
 } from "./useSwapTab.types";
 
 export function useSwap(): UseSwapResult {
+  const { exchanges, updateExchanges } = useUpdateExchanges();
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
@@ -35,8 +37,8 @@ export function useSwap(): UseSwapResult {
   const { localStorageAccount, assets, id } = useUserContext();
   const [selectedAssetsSymbols, setSelectedAssetsSymbols] =
     useState<SwapAssetPair>({
-      sellAssetSymbol: defaultToken as string,
-      buyAssetSymbol: "BTC",
+      sellAssetSymbol: exchanges.active.split("_")[1] as string,
+      buyAssetSymbol: exchanges.active.split("_")[0] as string,
     });
   const [lastChangedField, setLastChangedField] =
     useState<SwapInputType>("sellAsset");
@@ -544,6 +546,7 @@ export function useSwap(): UseSwapResult {
         setSellAmountErrors(swapForm.getFieldError("sellAmount"));
         setBuyAmountErrors(swapForm.getFieldError("buyAmount"));
       }
+      updateExchanges(`${buyAsset.symbol}_${sellAsset.symbol}`);
       setLoadingSwapData(false);
     }
   }, [
