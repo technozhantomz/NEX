@@ -28,7 +28,7 @@ import {
 } from "./useSwapTab.types";
 
 export function useSwap(): UseSwapResult {
-  const { exchanges, updateExchanges } = useUpdateExchanges();
+  const { exchanges, updateSwapPair } = useUpdateExchanges();
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
@@ -37,8 +37,8 @@ export function useSwap(): UseSwapResult {
   const { localStorageAccount, assets, id } = useUserContext();
   const [selectedAssetsSymbols, setSelectedAssetsSymbols] =
     useState<SwapAssetPair>({
-      sellAssetSymbol: exchanges.active.split("_")[1] as string,
-      buyAssetSymbol: exchanges.active.split("_")[0] as string,
+      sellAssetSymbol: exchanges.swapPair.split("_")[1] as string,
+      buyAssetSymbol: exchanges.swapPair.split("_")[0] as string,
     });
   const [lastChangedField, setLastChangedField] =
     useState<SwapInputType>("sellAsset");
@@ -592,7 +592,7 @@ export function useSwap(): UseSwapResult {
         setSellAmountErrors(swapForm.getFieldError("sellAmount"));
         setBuyAmountErrors(swapForm.getFieldError("buyAmount"));
       }
-      updateExchanges(`${buyAsset.symbol}_${sellAsset.symbol}`);
+      updateSwapPair(`${buyAsset.symbol}_${sellAsset.symbol}`);
       setLoadingSwapData(false);
     }
   }, [

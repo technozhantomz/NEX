@@ -6,10 +6,13 @@ import { Exchanges } from "../types";
 type UseUpdateExchangesResult = {
   updateExchanges: (selectedPair: string) => void;
   exchanges: Exchanges;
+  updateSwapPair: (selectedPair: string) => void;
 };
 
 export function useUpdateExchanges(): UseUpdateExchangesResult {
   const { exchanges, setExchanges } = useSettingsContext();
+
+  //selectedPair in asset1_asset2 format
   const updateExchanges = useCallback(
     (selectedPair: string) => {
       const recentPairs = [...exchanges.list];
@@ -37,5 +40,13 @@ export function useUpdateExchanges(): UseUpdateExchangesResult {
     },
     [exchanges, setExchanges]
   );
-  return { exchanges, updateExchanges };
+
+  //selectedPair in asset1_asset2 format
+  const updateSwapPair = useCallback(
+    (selectedPair: string) => {
+      setExchanges({ ...exchanges, swapPair: selectedPair });
+    },
+    [exchanges, setExchanges]
+  );
+  return { exchanges, updateExchanges, updateSwapPair };
 }
