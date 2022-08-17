@@ -40,7 +40,7 @@ export const TradingPairCard = ({
             <Styled.PercentChange
               theme={changeBackgroundColor ? positiveTheme : negativeTheme}
             >
-              {changeBackgroundColor ? "+" : "-"}
+              {changeBackgroundColor ? "+" : ""}
               {percentChange}
             </Styled.PercentChange>
           )}
