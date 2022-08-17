@@ -10,11 +10,11 @@ export function useAccountHistory(): UseAccountHistoryResult {
 
   const getAccountHistoryById = useCallback(
     async (id: string) => {
-      const history = await historyApi("get_account_history", [
+      const history = await historyApi("get_relative_account_history", [
         id,
-        "1.11.0",
-        100,
-        "1.11.9999999999",
+        0, //Sequence number of earliest operation. 0 is default and will query ‘limit’ number of operations.
+        100, //Maximum number of operations to retrieve (must not exceed 100)
+        0, //Sequence number of the most recent operation to retrieve. 0 is default, which will start querying from the most recent operation.
       ]);
       return history as History[];
     },

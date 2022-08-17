@@ -11,7 +11,7 @@ import {
   roundNum,
   useAccount,
   useFees,
-  useLimitOrderTransactionBuilder,
+  useOrderTransactionBuilder,
   useTransactionBuilder,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
@@ -55,8 +55,7 @@ export function useOrderBook({
 
   const { localStorageAccount, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
-  const { buildCancelLimitOrderTransaction } =
-    useLimitOrderTransactionBuilder();
+  const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
   const { calculateCancelLimitOrderFee } = useFees();
 
   const handleFilterChange = useCallback(

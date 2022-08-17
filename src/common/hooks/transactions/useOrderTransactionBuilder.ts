@@ -4,9 +4,9 @@ import { roundNum } from "..";
 import { useAssetsContext } from "../../providers";
 import { Amount, Asset, Transaction } from "../../types";
 
-import { UseLimitOrderTransactionBuilderResult } from "./useLimitOrderTransactionBuilder.types";
+import { UseOrderTransactionBuilderResult } from "./useOrderTransactionBuilder.types";
 
-export function useLimitOrderTransactionBuilder(): UseLimitOrderTransactionBuilderResult {
+export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
   const { defaultAsset } = useAssetsContext();
 
   const buildCreateLimitOrderTransaction = useCallback(
@@ -91,5 +91,52 @@ export function useLimitOrderTransactionBuilder(): UseLimitOrderTransactionBuild
     [defaultAsset, roundNum]
   );
 
-  return { buildCreateLimitOrderTransaction, buildCancelLimitOrderTransaction };
+  const buildSwapTransaction = useCallback(
+    (
+      sellerId: string,
+      minToReceive: number,
+      amountToSell: number,
+      sellAsset: Asset,
+      buyAsset: Asset
+    ): Transaction => {
+      const amount_to_sell = {
+        amount: roundNum(
+          amountToSell * 10 ** sellAsset.precision,
+          sellAsset.precision
+        ),
+        asset_id: sellAsset.id,
+      } as Amount;
+
+      const min_to_receive = {
+        amount: roundNum(
+          minToReceive * 10 ** buyAsset.precision,
+          buyAsset.precision
+        ),
+        asset_id: buyAsset.id,
+      } as Amount;
+
+      const trx = {
+        type: "limit_order_create",
+        params: {
+          fee: { amount: 0, asset_id: defaultAsset?.id },
+          seller: sellerId,
+          amount_to_sell,
+          min_to_receive,
+          expiration: new Date(
+            new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+          ).toISOString(),
+          fill_or_kill: true,
+          extensions: [],
+        },
+      };
+      return trx;
+    },
+    [defaultAsset, roundNum]
+  );
+
+  return {
+    buildCreateLimitOrderTransaction,
+    buildCancelLimitOrderTransaction,
+    buildSwapTransaction,
+  };
 }

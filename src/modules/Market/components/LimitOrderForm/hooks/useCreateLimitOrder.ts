@@ -6,7 +6,7 @@ import {
   toPrecision,
   useAccount,
   useFees,
-  useLimitOrderTransactionBuilder,
+  useOrderTransactionBuilder,
   useTransactionBuilder,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
@@ -44,8 +44,7 @@ export function useCreateLimitOrder({
   const { localStorageAccount, assets, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
 
-  const { buildCreateLimitOrderTransaction } =
-    useLimitOrderTransactionBuilder();
+  const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
 
   const handleAssetPrecission = useCallback(
     (changedValues) => {

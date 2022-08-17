@@ -104,6 +104,8 @@ export const SwapTab = (): JSX.Element => {
             name="sellAmount"
             rules={formValidation.sellAmount}
             validateFirst={true}
+            help={""}
+            validateStatus={""}
           >
             <Input
               placeholder="0.0"
@@ -143,6 +145,8 @@ export const SwapTab = (): JSX.Element => {
             name="buyAmount"
             rules={formValidation.buyAmount}
             validateFirst={true}
+            help={""}
+            validateStatus={""}
           >
             <Input
               placeholder="0.0"
@@ -189,7 +193,8 @@ export const SwapTab = (): JSX.Element => {
             ) : (
               <>
                 <span>
-                  {`1 ${selectedAssetsSymbols.buyAssetSymbol} = ${price} ${selectedAssetsSymbols.sellAssetSymbol}`}
+                  {`1 ${selectedAssetsSymbols.buyAssetSymbol}`} &#8776;{" "}
+                  {`${price} ${selectedAssetsSymbols.sellAssetSymbol}`}
                 </span>
                 <Styled.Tooltip
                   placement="left"
