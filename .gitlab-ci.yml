@@ -38,4 +38,5 @@ sonarcloud-check:
     - master
     - develop
     - gitlab-ci-updates-sonar
-  tags: sonar-check
+  tags:
+    - sonar-check
