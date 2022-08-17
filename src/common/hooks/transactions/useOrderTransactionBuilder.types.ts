@@ -1,6 +1,6 @@
 import { Asset, Transaction } from "../../types";
 
-export type UseLimitOrderTransactionBuilderResult = {
+export type UseOrderTransactionBuilderResult = {
   buildCreateLimitOrderTransaction: (
     sellerId: string,
     quantity: number,
@@ -15,5 +15,12 @@ export type UseLimitOrderTransactionBuilderResult = {
   buildCancelLimitOrderTransaction: (
     orderId: string,
     feePayingAccount: string
+  ) => Transaction;
+  buildSwapTransaction: (
+    sellerId: string,
+    minToReceive: number,
+    amountToSell: number,
+    sellAsset: Asset,
+    buyAsset: Asset
   ) => Transaction;
 };

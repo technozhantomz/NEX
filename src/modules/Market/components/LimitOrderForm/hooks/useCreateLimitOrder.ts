@@ -3,10 +3,11 @@ import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
+  roundNum,
   toPrecision,
   useAccount,
   useFees,
-  useLimitOrderTransactionBuilder,
+  useOrderTransactionBuilder,
   useTransactionBuilder,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
@@ -44,8 +45,7 @@ export function useCreateLimitOrder({
   const { localStorageAccount, assets, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
 
-  const { buildCreateLimitOrderTransaction } =
-    useLimitOrderTransactionBuilder();
+  const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
 
   const handleAssetPrecission = useCallback(
     (changedValues) => {
@@ -55,34 +55,43 @@ export function useCreateLimitOrder({
         currentQuote !== undefined
       ) {
         if (changedValues.price) {
+          let price = Number(changedValues.price);
           if (
-            changedValues.price > 0 &&
-            changedValues.price.split(".")[1]?.length > currentBase.precision
+            changedValues.price.split(".")[1]?.length >= currentBase.precision
           ) {
+            price =
+              roundNum(price, currentBase.precision) > 0
+                ? roundNum(price, currentBase.precision)
+                : price;
             orderForm.setFieldsValue({
-              price: toPrecision(changedValues.price, currentBase.precision),
+              price: price,
             });
           }
         } else if (changedValues.total) {
+          let total = Number(changedValues.total);
           if (
-            changedValues.total > 0 &&
-            changedValues.total.split(".")[1]?.length > currentBase.precision
+            changedValues.total.split(".")[1]?.length >= currentBase.precision
           ) {
+            total =
+              roundNum(total, currentBase.precision) > 0
+                ? roundNum(total, currentBase.precision)
+                : total;
             orderForm.setFieldsValue({
-              total: toPrecision(changedValues.total, currentBase.precision),
+              total: total,
             });
           }
         } else if (changedValues.quantity) {
+          let quantity = Number(changedValues.quantity);
           if (
-            changedValues.quantity > 0 &&
-            changedValues.quantity.split(".")[1]?.length >
-              currentQuote.precision
+            changedValues.quantity.split(".")[1]?.length >=
+            currentQuote.precision
           ) {
+            quantity =
+              roundNum(quantity, currentQuote.precision) > 0
+                ? roundNum(quantity, currentQuote.precision)
+                : quantity;
             orderForm.setFieldsValue({
-              quantity: toPrecision(
-                changedValues.quantity,
-                currentQuote.precision
-              ),
+              quantity: quantity,
             });
           }
         }

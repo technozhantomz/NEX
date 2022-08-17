@@ -42,18 +42,18 @@ export function useTransferForm(): UseTransferFormResult {
       const selectedAccountAsset = assets.find(
         (asset) => asset.symbol === selectedAsset
       );
-
+      let amount = Number(changedValues.amount);
       if (
         selectedAccountAsset &&
-        changedValues.amount > 0 &&
-        changedValues.amount.split(".")[1]?.length >
+        changedValues.amount.split(".")[1]?.length >=
           selectedAccountAsset.precision
       ) {
+        amount =
+          roundNum(amount, selectedAccountAsset.precision) > 0
+            ? roundNum(amount, selectedAccountAsset.precision)
+            : amount;
         transferForm.setFieldsValue({
-          amount: roundNum(
-            changedValues.amount,
-            selectedAccountAsset.precision
-          ),
+          amount: amount,
         });
       }
     }

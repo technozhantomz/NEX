@@ -98,8 +98,10 @@ export const PriceContainer = styled.div`
   color: ${colors.textColorSecondary};
   margin-bottom: 24px;
   .anticon {
-    color: var(--ant-warning-color);
     margin-left: 16px;
+    svg {
+      color: ${colors.warningColor};
+    }
   }
 `;
 
