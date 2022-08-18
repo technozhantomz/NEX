@@ -740,7 +740,7 @@ export const en = {
       withdraw_public_key: "Withdraw public key",
       withdraw_address: "Withdraw address",
       hive_blockchain_account: "Hive blockchain account",
-      amount: "amount",
+      amount: "Amount",
       quantity: "Quantity",
       to: "To",
       memo: "Memo",

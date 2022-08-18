@@ -37,7 +37,7 @@ export const WithdrawForm = ({
     setTransactionSuccessMessage,
     handleWithdraw,
     loadingTransaction,
-    quantity,
+    amount,
     withdrawAddress,
   } = useWithdrawForm(asset);
 
@@ -229,7 +229,7 @@ export const WithdrawForm = ({
         fee={feeAmount}
         asset={asset}
         withdrawAddress={withdrawAddress}
-        quantity={quantity}
+        amount={amount}
         transactionType="withdraw"
       />
     </Form.Provider>

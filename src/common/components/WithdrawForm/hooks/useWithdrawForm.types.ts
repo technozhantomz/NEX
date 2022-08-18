@@ -15,7 +15,7 @@ export type UseWithdrawFormResult = {
   transactionSuccessMessage: string;
   handleWithdraw: (password: string) => Promise<void>;
   loadingTransaction: boolean;
-  quantity: number;
+  amount: number;
   withdrawAddress: string;
 };
 

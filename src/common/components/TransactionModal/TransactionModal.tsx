@@ -38,7 +38,7 @@ type Props = {
   withdrawalAmount?: number;
   asset?: string;
   to?: string;
-  quantity?: number;
+  amount?: number;
   orderId?: string;
   withdrawAddress?: string;
 };
@@ -64,7 +64,7 @@ export const TransactionModal = ({
   withdrawalAmount,
   asset,
   to,
-  quantity,
+  amount,
   orderId,
   withdrawAddress,
 }: Props): JSX.Element => {
@@ -130,7 +130,7 @@ export const TransactionModal = ({
         fee={fee as number}
         asset={asset as string}
         to={to as string}
-        quantity={quantity as number}
+        amount={amount as number}
       />
     ),
     withdraw: (
@@ -139,7 +139,7 @@ export const TransactionModal = ({
         fee={fee as number}
         asset={asset as string}
         withdrawAddress={withdrawAddress as string}
-        quantity={quantity as number}
+        amount={amount as number}
       />
     ),
   };
