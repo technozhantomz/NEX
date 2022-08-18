@@ -13,17 +13,15 @@ stages:
 - test
 - sonarcloud
 
-dependency-scanning:
+npm-audit_dependency_scanning:
   stage: test
-  image: node:10-alpine
+  image: registry.gitlab.com/jitesoft/open-source/javascript/audit-for-gitlab:1
   script:
-    - npm ci
-    - npm audit --json | npx @codejedi365/gitlab-npm-audit-parser -o
-      gl-dependency-scanning.json
+    - audit-for-gitlab
   artifacts:
     reports:
-      dependency_scanning: gl-dependency-scanning.json
-  
+      dependency_scanning: gl-dependency-scanning-report.json
+
 sast:
   stage: test
 include:
