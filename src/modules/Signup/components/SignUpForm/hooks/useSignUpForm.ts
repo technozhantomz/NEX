@@ -17,24 +17,26 @@ export function useSignUpForm(): ISignUpForm {
   const [isInputTypePassword, setIsInputTypePassword] = useState(true);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [generatedPassword, setGeneratedPassword] = useState<string>("");
+
   const { formAccountAfterConfirmation, getFullAccount } = useAccount();
   const { createAccount } = useCreateAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
   const [validUser, setValidUser] = useState<boolean>(false);
   const { handleLoginRedirect } = useBrowserHistoryContext();
   const [signUpForm] = Form.useForm();
+  const { generatePassword } = useGeneratePassword();
 
   useEffect(() => {
     if (localStorageAccount) {
       handleLoginRedirect();
     } else {
-      const password = useGeneratePassword();
+      const password = generatePassword();
       signUpForm.setFieldsValue({
         password: password,
       });
       setGeneratedPassword(password);
     }
-  }, [localStorageAccount, useGeneratePassword, setGeneratedPassword]);
+  }, [localStorageAccount, generatePassword, setGeneratedPassword]);
 
   const handleSignUp = async (formData: unknown) => {
     setSubmitting(true);

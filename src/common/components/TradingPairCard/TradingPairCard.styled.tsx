@@ -20,10 +20,7 @@ export const Card = styled.div`
     background: transparent
       linear-gradient(
         180deg,
-        ${(props) =>
-          props.theme
-            ? props.theme.backgroundColorCode
-            : props.theme.backgroundColorCode},
+        ${(props) => props.theme.backgroundColorCode},
         ${colors.white} 100%
       )
       0% 0% no-repeat padding-box;
@@ -47,10 +44,7 @@ export const TradingPair = styled.p`
   }
 `;
 export const PercentChange = styled.p`
-  color: ${(props) =>
-    props.theme
-      ? props.theme.percentChangeColor
-      : props.theme.percentChangeColor};
+  color: ${(props) => props.theme.percentChangeColor};
   font-size: 12px;
   margin: 10px 10px 10px 0;
   ${breakpoint.sm} {
@@ -64,8 +58,7 @@ export const Price = styled.p`
   opacity: 1;
   font-size: 16px;
   margin-left: 10px;
-  display: ${(props) =>
-    props.theme ? props.theme.display : props.theme.display};
+  display: ${(props) => props.theme.display};
   ${breakpoint.sm} {
     font-size: 28px;
   }

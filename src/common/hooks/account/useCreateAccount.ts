@@ -10,10 +10,11 @@ export function useCreateAccount(): {
   createAccount: (data: ISignupFormData) => Promise<FullAccount | undefined>;
 } {
   const { getFullAccount } = useAccount();
+  const { formKeys } = useFormKeys();
 
   const createAccount = useCallback(
     async (data: ISignupFormData) => {
-      const keys = useFormKeys(data.username, data.password);
+      const keys = formKeys(data.username, data.password);
       const account = {
         name: data.username,
         active_key: keys?.active,
@@ -41,7 +42,7 @@ export function useCreateAccount(): {
         console.log(e);
       }
     },
-    [useFormKeys, getFullAccount]
+    [formKeys, getFullAccount]
   );
   return {
     createAccount,

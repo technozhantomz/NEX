@@ -98,11 +98,13 @@ export const KeyManagementTab = (): JSX.Element => {
                   </Fragment>
                 );
               } else {
-                <Styled.NoKey>
-                  {counterpart.translate("field.errors.no_key_for_password", {
-                    role: generatedKey.label,
-                  })}
-                </Styled.NoKey>;
+                return (
+                  <Styled.NoKey>
+                    {counterpart.translate("field.errors.no_key_for_password", {
+                      role: generatedKey.label,
+                    })}
+                  </Styled.NoKey>
+                );
               }
             })
           : ""}
