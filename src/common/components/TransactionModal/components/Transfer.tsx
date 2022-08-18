@@ -9,7 +9,7 @@ type Props = {
   account: string;
   asset: string;
   to: string;
-  quantity: number;
+  amount: number;
 };
 
 export const Transfer = ({
@@ -17,7 +17,7 @@ export const Transfer = ({
   fee,
   asset,
   to,
-  quantity,
+  amount,
 }: Props): JSX.Element => {
   return (
     <>
@@ -30,8 +30,8 @@ export const Transfer = ({
         <Link href={`/user/${to}`}>{to}</Link>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
-        <p>{counterpart.translate(`field.placeholder.quantity`)}</p>
-        <p>{quantity}</p>
+        <p>{counterpart.translate(`field.placeholder.amount`)}</p>
+        <p>{amount}</p>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`tableHead.asset`)}</p>

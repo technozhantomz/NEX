@@ -26,7 +26,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  const [quantity, setQuantity] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(0);
   const [withdrawAddress, setWithdrawAddress] = useState<string>("");
   const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
 
@@ -96,7 +96,13 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       } else {
         memo = values.withdrawAddress;
       }
-      const trx = buildTransferTransaction(from, to, memo, asset, quantity);
+      const trx = buildTransferTransaction(
+        from,
+        to,
+        memo,
+        asset,
+        values.amount
+      );
       return trx;
     } catch (e) {
       console.log(e);
@@ -186,7 +192,9 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
             values.amount
           }`
         );
-        withdrawForm.resetFields();
+        withdrawForm.setFieldsValue({
+          amount: 0,
+        });
         setLoadingTransaction(false);
       } else {
         setTransactionErrorMessage(
@@ -209,7 +217,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     const accountDefaultAsset = assets.find(
       (asset) => asset.symbol === defaultToken
     );
-    setQuantity(value);
+    setAmount(value);
 
     if (!accountAsset) {
       return Promise.reject(
@@ -398,7 +406,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     setTransactionSuccessMessage,
     handleWithdraw,
     loadingTransaction,
-    quantity,
+    amount,
     withdrawAddress,
   };
 }

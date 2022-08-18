@@ -29,7 +29,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
     transfer,
     loadingTransaction,
     toAccount,
-    quantity,
+    amount,
   } = useTransferForm();
   const { defaultAsset } = useAssetsContext();
 
@@ -73,7 +73,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
             validateTrigger="onBlur"
           >
             <Input
-              placeholder={counterpart.translate(`field.placeholder.quantity`)}
+              placeholder={counterpart.translate(`field.placeholder.amount`)}
               type="number"
               min={0}
               onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
@@ -145,7 +145,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
         fee={feeAmount}
         asset={asset}
         to={toAccount?.name}
-        quantity={quantity}
+        amount={amount}
         transactionType="transfer"
       />
     </Form.Provider>

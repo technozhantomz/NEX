@@ -9,7 +9,7 @@ type Props = {
   account: string;
   asset: string;
   withdrawAddress: string;
-  quantity: number;
+  amount: number;
 };
 
 export const Withdraw = ({
@@ -17,7 +17,7 @@ export const Withdraw = ({
   fee,
   asset,
   withdrawAddress,
-  quantity,
+  amount,
 }: Props): JSX.Element => {
   return (
     <>
@@ -36,8 +36,8 @@ export const Withdraw = ({
         <span>{withdrawAddress}</span>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
-        <p>{counterpart.translate(`field.placeholder.quantity`)}</p>
-        <p>{quantity}</p>
+        <p>{counterpart.translate(`field.placeholder.amount`)}</p>
+        <p>{amount}</p>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`tableHead.asset`)}</p>

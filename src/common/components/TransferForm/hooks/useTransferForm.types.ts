@@ -15,7 +15,7 @@ export type UseTransferFormResult = {
   transfer: (password: string) => Promise<void>;
   loadingTransaction: boolean;
   toAccount: Account | undefined;
-  quantity: number;
+  amount: number;
 };
 
 export type FormField = {
