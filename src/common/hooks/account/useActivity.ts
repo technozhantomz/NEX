@@ -385,6 +385,9 @@ export function useActivity(): UseActivityResult {
         activity.op[1],
         activity.result[1]
       );
+      const message =
+        operationType === "transfer" ? activity.op[1]?.memo?.message || "" : "";
+      const memo = Buffer.from(message.slice(8), "hex").toString();
 
       return {
         key: activity.id,
@@ -392,9 +395,9 @@ export function useActivity(): UseActivityResult {
         type: operationType,
         info: activityDescription,
         id: activity.id,
-        fee: `${setPrecision(false, fee.amount, feeAsset.precision)} ${
-          feeAsset.symbol
-        }`,
+        fee: `${setPrecision(false, fee.amount, feeAsset.precision)} ${feeAsset.symbol
+          }`,
+        memo: `${memo}`,
       } as ActivityRow;
     },
     [dbApi, defaultAsset, getAssetById, formActivityDescription]

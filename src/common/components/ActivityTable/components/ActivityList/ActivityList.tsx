@@ -83,6 +83,10 @@ export const ActivityList = ({
               <span className="activity-info-value">{item.fee}</span>
             </div>
             <div className="activity-info">
+              <span className="activity-info-title">{columns[5].title()}</span>
+              <span className="activity-info-value">{item.memo}</span>
+            </div>
+            <div className="activity-info">
               <span className="activity-info-title">{columns[1].title()}</span>
               <span className="activity-info-value">
                 <ActivityTag type={item.type} />

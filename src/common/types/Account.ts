@@ -125,4 +125,5 @@ export type ActivityRow = {
   info: string;
   id: string;
   fee: string;
+  memo: string;
 };
