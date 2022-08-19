@@ -72,8 +72,9 @@ deployToQA:
   dependencies:
     - build_qa
   script: 
-    - rm -rf $DEV_DEPLOY_DIR/*
-    - cp -R dist/* $DEV_DEPLOY_DIR
+    - pm2 stop nex
+    - pm2 del nex
+    - pm2 start npm --name nex -- run dev
   when: manual 
   tags:
     - deploy
