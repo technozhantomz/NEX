@@ -30,15 +30,13 @@ build_qa:
     - npm install
     - npm run build
   artifacts:
-    reports:
-      dast: gl-dast-report.json
     paths:
       - .next/
     expire_in: 2 weeks
   only:
     - branches
   tags:
-    - sonar-check
+    - build
 
 sast:
   stage: test
@@ -77,4 +75,5 @@ deployToQA:
     - rm -rf $DEV_DEPLOY_DIR/*
     - cp -R dist/* $DEV_DEPLOY_DIR
   when: manual 
-
+  tags:
+    - deploy
