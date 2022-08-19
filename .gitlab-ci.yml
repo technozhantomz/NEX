@@ -29,12 +29,11 @@ build_qa:
     - echo "BLOCKCHAIN_ENDPOINTS='$DEV_BLOCKCHAIN_ENDPOINTS'" >> .env
     - npm install
     - npm run build
-    - pwd #testing for artifact upload
   artifacts:
     reports:
       dast: gl-dast-report.json
     paths:
-      - dist/
+      - .next/
     expire_in: 2 weeks
   only:
     - branches
