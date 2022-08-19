@@ -140,7 +140,7 @@ const AssetPage: NextPage = () => {
         bitcoinSidechainAccount as SidechainAcccount
       );
     } else {
-      return <HIVEAndHBDDeposit assetSymbol={asset as string} />;
+      return <HIVEAndHBDDeposit assetSymbol={asset} />;
     }
   };
 
