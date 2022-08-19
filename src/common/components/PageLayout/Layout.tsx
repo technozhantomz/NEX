@@ -12,8 +12,8 @@ type Props = {
   children: ReactNode;
   title?: string;
   description?: string;
-  type?: string | undefined;
-  heading?: string | undefined;
+  type?: string;
+  heading?: string;
   dexLayout?: boolean;
   onClick?: () => void;
 };

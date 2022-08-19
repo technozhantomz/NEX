@@ -74,7 +74,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
 
   const handleAssetChange = useCallback(
     (value: string) => {
-      setSelectedAsset(value as string);
+      setSelectedAsset(value);
     },
     [setSelectedAsset]
   );
@@ -91,9 +91,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       const asset = assets.filter((asset) => asset.symbol === selectedAsset)[0];
 
       let memo = "";
-      if (selectedAsset === "BTC") {
-        memo = "";
-      } else {
+      if (selectedAsset !== "BTC") {
         memo = values.withdrawAddress;
       }
       const trx = buildTransferTransaction(
@@ -188,9 +186,8 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         formAccountBalancesByName(localStorageAccount);
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
-          `${counterpart.translate(`field.success.successfully_withdraw`)} ${
+          counterpart.translate(`field.success.successfully_withdraw`) +
             values.amount
-          }`
         );
         withdrawForm.setFieldsValue({
           amount: 0,

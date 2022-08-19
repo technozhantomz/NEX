@@ -175,7 +175,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           baseAsset.precision
         );
         base = roundNum(price * quote, baseAsset.precision);
-        isBuyOrder = false;
       }
 
       return {
@@ -262,7 +261,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       if (pays.asset_id === base.id) {
         baseAmount = setPrecision(false, pays.amount, base.precision);
         quoteAmount = setPrecision(false, receives.amount, quote.precision);
-        isBuyOrder = false;
         //this is buy orders
       } else {
         baseAmount = setPrecision(false, receives.amount, base.precision);
@@ -347,7 +345,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           baseAsset.precision
         );
         price = roundNum(base / quote, baseAsset.precision);
-        isBuyOrder = false;
       }
 
       return { key, price, base, quote, date, isBuyOrder };
@@ -379,7 +376,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           const userHistoryRows = await Promise.all(
             fillOrdersHistoryForThePair.map(
               async (fillOrderHistoryForThePair) => {
-                return await formUserHistoryRow(
+                return formUserHistoryRow(
                   base,
                   quote,
                   fillOrderHistoryForThePair

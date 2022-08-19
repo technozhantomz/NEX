@@ -41,8 +41,8 @@ export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
           asset_id: buyAsset.id,
         };
       } else {
-        const sellAsset = currentQuote as Asset;
-        const buyAsset = currentBase as Asset;
+        const sellAsset = currentQuote;
+        const buyAsset = currentBase;
         amount_to_sell = {
           amount: roundNum(
             quantity * 10 ** sellAsset.precision,

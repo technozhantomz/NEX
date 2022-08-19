@@ -106,8 +106,8 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   }, [setNotificationMenuOpen, setProfileMenuOpen, setMainMenuOpen]);
 
   const setHasUnreadMessages = (notifications: Notification[]) => {
-    for (let index = 0; index < notifications.length; index++) {
-      if (notifications[index].unread) {
+    for (const notification of notifications) {
+      if (notification.unread) {
         _setHasUnreadMessages(true);
         return;
       }

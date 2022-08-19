@@ -96,6 +96,19 @@ export const OrderBook = ({
     </Styled.ThresholdMenu>
   );
 
+  const columns = forUser
+    ? currentQuote && currentBase
+      ? showUserOrderColumns(
+          currentQuote.symbol,
+          currentBase.symbol,
+          (orderId) => {
+            setSelectedOrderId(orderId);
+            showPasswordModal();
+          }
+        )
+      : undefined
+    : orderColumns;
+
   return (
     <>
       {forUser ? (
@@ -144,20 +157,7 @@ export const OrderBook = ({
         <Styled.Table
           loading={forUser ? loadingUserOrderRows : loadingOrderRows}
           pagination={false}
-          columns={
-            forUser
-              ? currentQuote && currentBase
-                ? showUserOrderColumns(
-                    currentQuote.symbol,
-                    currentBase.symbol,
-                    (orderId) => {
-                      setSelectedOrderId(orderId);
-                      showPasswordModal();
-                    }
-                  )
-                : undefined
-              : orderColumns
-          }
+          columns={columns}
           scroll={{ x: true }}
           dataSource={dataSource}
           rowClassName={(record: any) => {

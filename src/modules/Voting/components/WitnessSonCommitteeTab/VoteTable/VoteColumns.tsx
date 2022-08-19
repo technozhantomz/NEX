@@ -5,20 +5,12 @@ import * as Styled from "./VoteTable.styled";
 export const showVotesColumns = (
   approveVote: (voteId: string) => void,
   removeVote: (voteId: string) => void
-): (
-  | {
-      title: string;
-      dataIndex: string;
-      key: string;
-      render?: undefined;
-    }
-  | {
-      title: string;
-      dataIndex: string;
-      key: string;
-      render: (_value: string, _record: any) => JSX.Element;
-    }
-)[] => {
+): {
+  title: string;
+  dataIndex: string;
+  key: string;
+  render?: (_value: string, _record: any) => JSX.Element;
+}[] => {
   const columns = [
     {
       title: counterpart.translate(`tableHead.name`),

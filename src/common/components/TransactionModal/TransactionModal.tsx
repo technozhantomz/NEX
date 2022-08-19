@@ -71,13 +71,11 @@ export const TransactionModal = ({
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
   } = {
-    account_upgrade: (
-      <AccountUpgrade account={account as string} fee={fee as number} />
-    ),
+    account_upgrade: <AccountUpgrade account={account as string} fee={fee} />,
     account_update: (
       <AccountUpdate
         account={account as string}
-        fee={fee as number}
+        fee={fee}
         proxy={proxy}
         desiredMembers={desiredMembers}
         memberType={memberType}
@@ -87,7 +85,7 @@ export const TransactionModal = ({
     limit_order_create: (
       <CreateLimitOrder
         account={account as string}
-        fee={fee as number}
+        fee={fee}
         price={price as string}
         sell={sell as string}
         buy={buy as string}
@@ -97,7 +95,7 @@ export const TransactionModal = ({
     swap_order_create: (
       <CreateSwapOrder
         account={account as string}
-        fee={fee as number}
+        fee={fee}
         price={price as string}
         sell={sell as string}
         buy={buy as string}
@@ -106,7 +104,7 @@ export const TransactionModal = ({
     limit_order_cancel: (
       <CancelLimitOrder
         account={account as string}
-        fee={fee as number}
+        fee={fee}
         orderId={orderId as string}
       />
     ),
@@ -127,7 +125,7 @@ export const TransactionModal = ({
     transfer: (
       <Transfer
         account={account as string}
-        fee={fee as number}
+        fee={fee}
         asset={asset as string}
         to={to as string}
         amount={amount as number}
@@ -136,7 +134,7 @@ export const TransactionModal = ({
     withdraw: (
       <Withdraw
         account={account as string}
-        fee={fee as number}
+        fee={fee}
         asset={asset as string}
         withdrawAddress={withdrawAddress as string}
         amount={amount as number}
@@ -149,6 +147,33 @@ export const TransactionModal = ({
 
   useResetFormOnCloseModal(transactionModalForm, visible);
 
+  const postTransactionButton =
+    transactionErrorMessage !== "" ? (
+      <Button key="back" onClick={onCancel}>
+        {counterpart.translate(`buttons.cancel`)}
+      </Button>
+    ) : (
+      <Button key="back" onClick={onCancel}>
+        {counterpart.translate(`buttons.done`)}
+      </Button>
+    );
+
+  const defaultButtons = [
+    <Button key="back" onClick={onCancel} disabled={loadingTransaction}>
+      {counterpart.translate(`buttons.cancel`)}
+    </Button>,
+    <Button
+      key="submit"
+      type="primary"
+      onClick={() => {
+        transactionModalForm.submit();
+      }}
+      loading={loadingTransaction}
+    >
+      {counterpart.translate(`buttons.confirm`)}
+    </Button>,
+  ];
+
   return (
     <>
       <Styled.TransactionModal
@@ -160,35 +185,9 @@ export const TransactionModal = ({
         onCancel={!loadingTransaction ? onCancel : undefined}
         centered={true}
         footer={
-          transactionErrorMessage !== "" ? (
-            <Button key="back" onClick={onCancel}>
-              {counterpart.translate(`buttons.cancel`)}
-            </Button>
-          ) : transactionSuccessMessage !== "" ? (
-            <Button key="back" onClick={onCancel}>
-              {counterpart.translate(`buttons.done`)}
-            </Button>
-          ) : (
-            [
-              <Button
-                key="back"
-                onClick={onCancel}
-                disabled={loadingTransaction}
-              >
-                {counterpart.translate(`buttons.cancel`)}
-              </Button>,
-              <Button
-                key="submit"
-                type="primary"
-                onClick={() => {
-                  transactionModalForm.submit();
-                }}
-                loading={loadingTransaction}
-              >
-                {counterpart.translate(`buttons.confirm`)}
-              </Button>,
-            ]
-          )
+          transactionErrorMessage !== "" || transactionSuccessMessage !== ""
+            ? postTransactionButton
+            : defaultButtons
         }
       >
         <Styled.TransactionModalForm

@@ -10,7 +10,7 @@ import { AssetActionButton } from "../AssetActionButton";
 import { AssetTitle } from "../AssetTitle";
 
 import * as Styled from "./AssetsTable.styled";
-import { useAssetsTable } from "./hooks";
+import { IAssetRow, useAssetsTable } from "./hooks";
 
 type Props = {
   showActions?: boolean;
@@ -105,6 +105,33 @@ export const AssetsTable = ({
       },
     },
   ];
+
+  const renderAssetsActions = (item: IAssetRow) => {
+    if (sidechainAssets.map((asset) => asset.symbol).includes(item.asset)) {
+      return [
+        <AssetActionButton
+          txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}
+          href={`/wallet/${item.asset}?tab=transfer`}
+        />,
+        <AssetActionButton
+          txt={counterpart.translate(`buttons.withdraw`)}
+          href={`/wallet/${item.asset}?tab=withdraw`}
+        />,
+        <AssetActionButton
+          txt={counterpart.translate(`buttons.deposit`)}
+          href={`/wallet/${item.asset}?tab=deposit`}
+        />,
+      ];
+    } else {
+      return [
+        <AssetActionButton
+          txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}
+          href={`/wallet/${item.asset}?tab=transfer`}
+        />,
+      ];
+    }
+  };
+
   return (
     <>
       {sm ? (
@@ -119,37 +146,7 @@ export const AssetsTable = ({
           renderItem={(item) => (
             <Styled.AssetListItem
               key={item.key}
-              actions={
-                showActions
-                  ? sidechainAssets
-                      .map((asset) => asset.symbol)
-                      .includes(item.asset)
-                    ? [
-                        <AssetActionButton
-                          txt={counterpart.translate(
-                            `transaction.trxTypes.transfer.title`
-                          )}
-                          href={`/wallet/${item.asset}?tab=transfer`}
-                        />,
-                        <AssetActionButton
-                          txt={counterpart.translate(`buttons.withdraw`)}
-                          href={`/wallet/${item.asset}?tab=withdraw`}
-                        />,
-                        <AssetActionButton
-                          txt={counterpart.translate(`buttons.deposit`)}
-                          href={`/wallet/${item.asset}?tab=deposit`}
-                        />,
-                      ]
-                    : [
-                        <AssetActionButton
-                          txt={counterpart.translate(
-                            `transaction.trxTypes.transfer.title`
-                          )}
-                          href={`/wallet/${item.asset}?tab=transfer`}
-                        />,
-                      ]
-                  : []
-              }
+              actions={showActions ? renderAssetsActions(item) : []}
             >
               <AssetTitle symbol={item.asset} />
               <Styled.AssetsItemContent>

@@ -1,7 +1,6 @@
 import counterpart from "counterpart";
 
 import { Proxy } from "../../../../common/types";
-//import { InfoCircleOutlined } from "../../../../ui/src";
 
 import * as Styled from "./ProxyTab.styled";
 import { ProxyForm, ProxyTable } from "./components";
@@ -47,9 +46,6 @@ export const ProxyTab = ({
         <Styled.ProxyTitle>
           {counterpart.translate(`field.labels.vote_for_proxy`)}
         </Styled.ProxyTitle>
-        {/* <Styled.ProxyInfoLink>
-          <InfoCircleOutlined /> <a>See details here</a>
-        </Styled.ProxyInfoLink> */}
       </Styled.ProxyIntroWrapper>
       <ProxyForm
         name={name}

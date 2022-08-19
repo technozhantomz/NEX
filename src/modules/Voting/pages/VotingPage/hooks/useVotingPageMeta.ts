@@ -6,21 +6,16 @@ import { PageMeta } from "../../../../../common/types";
 import { VotingPageMeta } from "./useVotingPageMeta.types";
 
 export function useVotingPageMeta(tab?: string): VotingPageMeta {
-  const [pageMeta, setPageMeta] = useState<PageMeta>({
+  const defaultPageMeta = {
     title: "PeerPlays (GPOS)",
     heading: "PeerPlays (GPOS)",
-    description: "PeerPlays (GPOS) | ",
-  });
+    description: "PeerPlays (GPOS)",
+  } as PageMeta;
+
+  const [pageMeta, setPageMeta] = useState<PageMeta>(defaultPageMeta);
 
   useEffect(() => {
     switch (tab) {
-      case "gpos":
-        setPageMeta({
-          title: "PeerPlays (GPOS)",
-          heading: "PeerPlays (GPOS)",
-          description: "PeerPlays (GPOS)",
-        });
-        break;
       case "witnesses":
         setPageMeta({
           title: "PeerPlays Voting",
@@ -50,11 +45,7 @@ export function useVotingPageMeta(tab?: string): VotingPageMeta {
         });
         break;
       default:
-        setPageMeta({
-          title: "PeerPlays (GPOS)",
-          heading: "PeerPlays (GPOS)",
-          description: "PeerPlays (GPOS)",
-        });
+        setPageMeta(defaultPageMeta);
         break;
     }
   }, [tab]);

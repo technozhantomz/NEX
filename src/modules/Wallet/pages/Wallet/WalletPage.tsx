@@ -9,7 +9,6 @@ import {
   useViewportContext,
 } from "../../../../common/providers";
 import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
-//import { useBrowserHistoryContext } from "../../../../common/providers";
 import { AssetsTable } from "../../components/AssetsTable";
 
 import * as Styled from "./WalletPage.styled";
@@ -17,7 +16,6 @@ import * as Styled from "./WalletPage.styled";
 const { TabPane } = Styled.Tabs;
 
 const WalletPage: NextPage = () => {
-  //const { pageLoading } = useBrowserHistoryContext();
   const router = useRouter();
   const { tab } = router.query;
   const [visible, setVisible] = useState<boolean>(false);

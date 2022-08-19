@@ -15,7 +15,6 @@ import {
 } from "../../../../../../common/providers";
 import {
   AccountOptions,
-  Asset,
   FullAccount,
   Transaction,
   Vote,
@@ -186,7 +185,6 @@ export function useVoteTab({
         setTransactionErrorMessage(
           counterpart.translate(`field.errors.need_to_vest_gpos`)
         );
-        return;
       } else {
         setTransactionErrorMessage("");
         const activeKey = getPrivateKey(password, "active");
@@ -278,7 +276,7 @@ export function useVoteTab({
           const name = votesIds.filter((voteId) => voteId[1] === vote.id)[0][0];
 
           const votesAsset = await formAssetBalanceById(
-            (defaultAsset as Asset).id,
+            defaultAsset.id,
             Number(vote.total_votes)
           );
           return {

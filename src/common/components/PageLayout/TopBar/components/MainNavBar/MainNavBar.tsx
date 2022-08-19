@@ -43,83 +43,89 @@ export const MainNavBar = (): JSX.Element => {
       )}
     </>
   );
+
+  const notificationItem = hasUnreadMessages ? (
+    <>
+      <Badge dot>
+        <Avatar
+          icon={
+            <BellOutlined
+              onMouseOver={() => openMenu("notify")}
+              onClick={(e) => {
+                e.stopPropagation();
+                openMenu("notify");
+              }}
+            />
+          }
+        />
+      </Badge>
+    </>
+  ) : (
+    <>
+      <Avatar
+        icon={
+          <BellOutlined
+            onMouseOver={() => openMenu("notify")}
+            onClick={(e) => {
+              e.stopPropagation();
+              openMenu("notify");
+            }}
+          />
+        }
+      />
+    </>
+  );
+
+  const profileItem = sm ? (
+    ""
+  ) : (
+    <div
+      onMouseOver={() => openMenu("profile")}
+      onClick={(e) => {
+        e.stopPropagation();
+        openMenu("profile");
+      }}
+    >
+      <Styled.MainNavBarAvatar
+        icon={localStorageAccount ? "" : <UserOutlined />}
+      >
+        {localStorageAccount ? localStorageAccount.charAt(0) : ""}
+      </Styled.MainNavBarAvatar>
+    </div>
+  );
+
+  const userItems = (
+    <>
+      {notificationItem}
+      {profileItem}
+    </>
+  );
+
+  const mainMenuItem = sm ? (
+    <MenuOutlined
+      className={"hambuger"}
+      onMouseOver={() => openMenu("main")}
+      onClick={(e) => {
+        e.stopPropagation();
+        openMenu("main");
+      }}
+    />
+  ) : (
+    <MoreOutlined
+      className={"hambuger"}
+      onMouseOver={() => openMenu("main")}
+      onClick={(e) => {
+        e.stopPropagation();
+        openMenu("main");
+      }}
+    />
+  );
+
   return (
     <>
       <Styled.MainNavBar>
-        {localStorageAccount ? (
-          <>
-            {hasUnreadMessages ? (
-              <>
-                <Badge dot>
-                  <Avatar
-                    icon={
-                      <BellOutlined
-                        onMouseOver={() => openMenu("notify")}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openMenu("notify");
-                        }}
-                      />
-                    }
-                  />
-                </Badge>
-              </>
-            ) : (
-              <>
-                <Avatar
-                  icon={
-                    <BellOutlined
-                      onMouseOver={() => openMenu("notify")}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openMenu("notify");
-                      }}
-                    />
-                  }
-                />
-              </>
-            )}
-
-            {sm ? (
-              ""
-            ) : (
-              <div
-                onMouseOver={() => openMenu("profile")}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  openMenu("profile");
-                }}
-              >
-                <Styled.MainNavBarAvatar
-                  icon={localStorageAccount ? "" : <UserOutlined />}
-                >
-                  {localStorageAccount ? localStorageAccount.charAt(0) : ""}
-                </Styled.MainNavBarAvatar>
-              </div>
-            )}
-          </>
-        ) : (
-          ""
-        )}
-        {sm ? (
-          <MenuOutlined
-            className={"hambuger"}
-            onMouseOver={() => openMenu("main")}
-            onClick={(e) => {
-              e.stopPropagation();
-              openMenu("main");
-            }}
-          />
-        ) : (
-          <MoreOutlined
-            className={"hambuger"}
-            onMouseOver={() => openMenu("main")}
-            onClick={(e) => {
-              e.stopPropagation();
-              openMenu("main");
-            }}
-          />
-        )}
+        {localStorageAccount ? userItems : ""}
+        {mainMenuItem}
       </Styled.MainNavBar>
       <Styled.MenuWrapper
         className={`notification-menu-wrapper${
