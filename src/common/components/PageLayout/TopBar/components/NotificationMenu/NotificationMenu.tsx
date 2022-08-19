@@ -31,6 +31,19 @@ export const NotificationMenu = (): JSX.Element => {
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
 
+  const markAllReadLink = hasUnreadMessages ? (
+    <span
+      className={"mark-all"}
+      onClick={() => {
+        markAllNotificationsRead();
+      }}
+    >
+      {counterpart.translate(`links.mark_all_read`)}
+    </span>
+  ) : (
+    ""
+  );
+
   return (
     <Styled.NotificationMenuCard
       onClick={(e) => {
@@ -39,18 +52,7 @@ export const NotificationMenu = (): JSX.Element => {
       bordered={false}
     >
       <Styled.ControlsContainer hasUnread={hasUnreadMessages}>
-        {hasUnreadMessages ? (
-          <span
-            className={"mark-all"}
-            onClick={() => {
-              markAllNotificationsRead();
-            }}
-          >
-            {counterpart.translate(`links.mark_all_read`)}
-          </span>
-        ) : (
-          ""
-        )}
+        {markAllReadLink}
 
         <div className={"unread-switch"}>
           <Switch

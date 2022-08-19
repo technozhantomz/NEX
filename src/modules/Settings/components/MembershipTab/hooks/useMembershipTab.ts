@@ -154,7 +154,6 @@ export function useMembershipTab(): UseMembershipTabResult {
         setTransactionErrorMessage(
           counterpart.translate(`field.errors.balance_not_enough`)
         );
-        return;
       } else {
         setTransactionErrorMessage("");
         const fee = { amount: 0, asset_id: defaultAsset?.id };

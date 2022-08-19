@@ -19,49 +19,47 @@ export const CopyButton = ({
 }: Props): JSX.Element => {
   const { copied, handleClick } = useCopyButton();
 
+  const copyButtonWithText = !copied ? (
+    <Tooltip
+      placement="top"
+      title={`${counterpart.translate(`tooltips.copy`)}`}
+    >
+      <Styled.TextButton type="link" onClick={() => handleClick(copyValue)}>
+        {`${buttonText} `} <CopyIcon />
+      </Styled.TextButton>
+    </Tooltip>
+  ) : (
+    <Tooltip
+      placement="top"
+      title={`${counterpart.translate(`tooltips.copied`)}`}
+    >
+      <Styled.TextButton type="link" onClick={() => handleClick(copyValue)}>
+        {`${buttonText} `} <Styled.Check />
+      </Styled.TextButton>
+    </Tooltip>
+  );
+
+  const copyButtonWithoutText = !copied ? (
+    <Tooltip
+      placement="top"
+      title={`${counterpart.translate(`tooltips.copy`)}`}
+    >
+      <CopyIcon onClick={() => handleClick(copyValue)} />
+    </Tooltip>
+  ) : (
+    <Tooltip
+      placement="top"
+      title={`${counterpart.translate(`tooltips.copied`)}`}
+    >
+      <Styled.Check />
+    </Tooltip>
+  );
+
   return (
     <span className={className}>
-      {buttonText && buttonText !== "" ? (
-        !copied ? (
-          <Tooltip
-            placement="top"
-            title={`${counterpart.translate(`tooltips.copy`)}`}
-          >
-            <Styled.TextButton
-              type="link"
-              onClick={() => handleClick(copyValue)}
-            >
-              {`${buttonText} `} <CopyIcon />
-            </Styled.TextButton>
-          </Tooltip>
-        ) : (
-          <Tooltip
-            placement="top"
-            title={`${counterpart.translate(`tooltips.copied`)}`}
-          >
-            <Styled.TextButton
-              type="link"
-              onClick={() => handleClick(copyValue)}
-            >
-              {`${buttonText} `} <Styled.Check />
-            </Styled.TextButton>
-          </Tooltip>
-        )
-      ) : !copied ? (
-        <Tooltip
-          placement="top"
-          title={`${counterpart.translate(`tooltips.copy`)}`}
-        >
-          <CopyIcon onClick={() => handleClick(copyValue)} />
-        </Tooltip>
-      ) : (
-        <Tooltip
-          placement="top"
-          title={`${counterpart.translate(`tooltips.copied`)}`}
-        >
-          <Styled.Check />
-        </Tooltip>
-      )}
+      {buttonText && buttonText !== ""
+        ? copyButtonWithText
+        : copyButtonWithoutText}
     </span>
   );
 };

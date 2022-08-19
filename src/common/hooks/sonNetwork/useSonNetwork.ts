@@ -27,6 +27,99 @@ export function useSonNetwork(): UseSonNetworkResult {
     }
   }, [dbApi, setSonAccount]);
 
+  const getSons = useCallback(
+    async (
+      gpo: GlobalProperties
+    ): Promise<{
+      sons: SonAccount[];
+      sonIds: string[];
+    }> => {
+      try {
+        if (!gpo.active_sons || gpo.active_sons.length === 0) {
+          return { sons: [], sonIds: [] };
+        }
+        const sonIds = gpo.active_sons.map((active_son) => active_son.son_id);
+        const sons: SonAccount[] = await dbApi("get_sons", [sonIds]);
+        return { sons, sonIds };
+      } catch (e) {
+        console.log(e);
+        return { sons: [], sonIds: [] };
+      }
+    },
+    [dbApi]
+  );
+
+  const getSonsStatistics = useCallback(
+    async (sons: SonAccount[]): Promise<SonStatistics[]> => {
+      try {
+        const sonsStatistics: SonStatistics[] = await dbApi("get_objects", [
+          sons.map((son) => {
+            if (son) {
+              return son.statistics;
+            }
+          }),
+        ]);
+        return sonsStatistics;
+      } catch (e) {
+        console.log(e);
+        return [];
+      }
+    },
+    [dbApi]
+  );
+
+  const getSonStatus = useCallback(
+    (
+      son: SonAccount,
+      sonsStatistics: SonStatistics,
+      gpo: GlobalProperties
+    ): { status: [string, string]; isActive: boolean } => {
+      const now = new Date();
+      const utcNowMS = new Date(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        now.getUTCHours(),
+        now.getUTCMinutes(),
+        now.getUTCSeconds(),
+        now.getUTCMilliseconds()
+      ).getTime();
+      if (
+        new Date(sonsStatistics.last_active_timestamp).getTime() +
+          gpo.parameters.extensions.son_heartbeat_frequency * 1000 >
+        utcNowMS
+      ) {
+        return {
+          status: [son.id, "OK, regular SON heartbeat"],
+          isActive: true,
+        };
+      } else {
+        if (
+          new Date(sonsStatistics.last_active_timestamp).getTime() +
+            gpo.parameters.extensions.son_down_time * 1000 >
+          utcNowMS
+        ) {
+          return {
+            status: [
+              son.id,
+              "OK, irregular SON heartbeat, but not triggering SON down proposal",
+            ],
+            isActive: false,
+          };
+        } else {
+          return {
+            status: [
+              son.id,
+              "NOT OK, irregular SON heartbeat, triggering SON down proposal",
+            ],
+            isActive: false,
+          };
+        }
+      }
+    },
+    []
+  );
+
   const getSonNetworkStatus = useCallback(async () => {
     const result = { status: [], isSonNetworkOk: false } as SonNetworkStatus;
     let activeSons = 0;
@@ -35,54 +128,23 @@ export function useSonNetwork(): UseSonNetworkResult {
       if (!gpo.active_sons || gpo.active_sons.length === 0) {
         return result;
       }
-      const sonIds = gpo.active_sons.map((active_son) => active_son.son_id);
-      const sons: SonAccount[] = await dbApi("get_sons", [sonIds]);
-      const sonsStatistics: SonStatistics[] = await dbApi("get_objects", [
-        sons.map((son) => {
-          if (son) {
-            return son.statistics;
-          }
-        }),
-      ]);
+      const { sons, sonIds } = await getSons(gpo);
+      const sonsStatistics = await getSonsStatistics(sons);
+
       let i = 0;
       for (const son of sons) {
         if (son) {
           const sonStatisticsObject = sonsStatistics.find(
             (sonStatistics) => sonStatistics.owner === son.id
           ) as SonStatistics;
-          const now = new Date();
-          const utcNowMS = new Date(
-            now.getUTCFullYear(),
-            now.getUTCMonth(),
-            now.getUTCDate(),
-            now.getUTCHours(),
-            now.getUTCMinutes(),
-            now.getUTCSeconds(),
-            now.getUTCMilliseconds()
-          ).getTime();
-          if (
-            new Date(sonStatisticsObject.last_active_timestamp).getTime() +
-              gpo.parameters.extensions.son_heartbeat_frequency * 1000 >
-            utcNowMS
-          ) {
-            result.status.push([son.id, "OK, regular SON heartbeat"]);
+          const { status, isActive } = getSonStatus(
+            son,
+            sonStatisticsObject,
+            gpo
+          );
+          result.status.push(status);
+          if (isActive) {
             activeSons = activeSons + 1;
-          } else {
-            if (
-              new Date(sonStatisticsObject.last_active_timestamp).getTime() +
-                gpo.parameters.extensions.son_down_time * 1000 >
-              utcNowMS
-            ) {
-              result.status.push([
-                son.id,
-                "OK, irregular SON heartbeat, but not triggering SON down proposal",
-              ]);
-            } else {
-              result.status.push([
-                son.id,
-                "NOT OK, irregular SON heartbeat, triggering SON down proposal",
-              ]);
-            }
           }
         } else {
           result.status.push([sonIds[i], "NOT OK, invalid SON id"]);
@@ -98,7 +160,7 @@ export function useSonNetwork(): UseSonNetworkResult {
       console.log(e);
       return result;
     }
-  }, [dbApi]);
+  }, [dbApi, getSons, getSonsStatistics, getSonStatus]);
 
   useEffect(() => {
     getSonAccount();

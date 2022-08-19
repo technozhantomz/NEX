@@ -11,6 +11,7 @@ type Props = {
 };
 
 export const InfoBar = ({ password }: Props): JSX.Element => {
+  const { getRecoveryPassword } = useGetRecoveryPassword();
   return (
     <Styled.InfoBar>
       <Styled.InfoDiv>
@@ -21,7 +22,7 @@ export const InfoBar = ({ password }: Props): JSX.Element => {
           <span>
             {counterpart.translate(`field.labels.keep_password_safe`)}
           </span>
-          <a href="#" onClick={() => useGetRecoveryPassword(password)}>
+          <a href="#" onClick={() => getRecoveryPassword(password)}>
             {counterpart.translate(`field.labels.download_recovery_password`)}
           </a>
         </p>

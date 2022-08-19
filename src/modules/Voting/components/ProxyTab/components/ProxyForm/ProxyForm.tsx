@@ -71,21 +71,23 @@ export const ProxyForm = ({
   });
   const { sm } = useViewportContext();
 
+  const alreadyAddedNoAccountError = accountAlreadyAdded
+    ? counterpart.translate(`field.errors.added_account`)
+    : counterpart.translate(`field.errors.no_account`);
+
+  const accountErrors = isSameAccount
+    ? counterpart.translate(`field.errors.same_account`)
+    : alreadyAddedNoAccountError;
+
+  const searchErrorMessage = searchError ? accountErrors : undefined;
+
   return (
     <>
       <Styled.ProxySearchWrapper>
         <Form.Item
           className="search-input"
           validateStatus={searchError ? "error" : undefined}
-          help={
-            searchError
-              ? isSameAccount
-                ? counterpart.translate(`field.errors.same_account`)
-                : accountAlreadyAdded
-                ? counterpart.translate(`field.errors.added_account`)
-                : counterpart.translate(`field.errors.no_account`)
-              : undefined
-          }
+          help={searchErrorMessage}
         >
           <Styled.ProxyFormSearch
             value={searchValue}

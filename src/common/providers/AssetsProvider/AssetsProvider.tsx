@@ -55,12 +55,9 @@ export const AssetsProvider = ({ children }: Props): JSX.Element => {
         "get_global_properties"
       );
 
-      const btcAssetId = globalProperties.parameters.extensions
-        .btc_asset as string;
-      const hbdAssetId = globalProperties.parameters.extensions
-        .hbd_asset as string;
-      const hiveAssetId = globalProperties.parameters.extensions
-        .hive_asset as string;
+      const btcAssetId = globalProperties.parameters.extensions.btc_asset;
+      const hbdAssetId = globalProperties.parameters.extensions.hbd_asset;
+      const hiveAssetId = globalProperties.parameters.extensions.hive_asset;
 
       const sidechainAssetsIds = [btcAssetId, hbdAssetId, hiveAssetId];
 

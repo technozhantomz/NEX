@@ -54,6 +54,57 @@ export const WithdrawForm = ({
     setTransactionSuccessMessage,
   });
 
+  const isLoggedIn = localStorageAccount && localStorageAccount !== "";
+
+  const formDisclamer = isLoggedIn ? (
+    ""
+  ) : (
+    <Styled.FormDisclamer>
+      <span>
+        {counterpart.translate(`buttons.dont_have_peerplays_account`)}
+      </span>
+      <Link href="/signup">
+        <a>{counterpart.translate(`links.create_account`)}</a>
+      </Link>
+    </Styled.FormDisclamer>
+  );
+
+  const submitButton = isLoggedIn ? (
+    <>
+      <Styled.WithdrawFormButton type="primary" htmlType="submit">
+        {counterpart.translate(`buttons.withdraw`)}
+      </Styled.WithdrawFormButton>
+    </>
+  ) : (
+    <>
+      <Styled.WithdrawFormButton
+        type="primary"
+        htmlType="button"
+        onClick={() => {
+          router.push("/login");
+        }}
+      >
+        {counterpart.translate(`buttons.log_in_withdraw`)}
+      </Styled.WithdrawFormButton>
+    </>
+  );
+
+  const withdrawAddressTitle =
+    selectedAsset === "BTC" ? (
+      <p className="label">
+        {counterpart.translate(`field.labels.withdraw_public_key_address`)}
+      </p>
+    ) : (
+      <p className="label">
+        {counterpart.translate(`field.labels.hive_blockchain_account`)}
+      </p>
+    );
+
+  const withdrawAddressPlaceholder =
+    selectedAsset === "BTC"
+      ? counterpart.translate(`field.placeholder.withdraw_address`)
+      : counterpart.translate(`field.placeholder.hive_blockchain_account`);
+
   return (
     <Form.Provider onFormFinish={handleFormFinish}>
       <Styled.WithdrawForm
@@ -73,6 +124,7 @@ export const WithdrawForm = ({
         >
           <Input disabled={true} placeholder="From" />
         </Form.Item>
+
         {withAssetSelector ? (
           <>
             <Styled.WithdrawFormAssetAmount
@@ -99,24 +151,15 @@ export const WithdrawForm = ({
                     />
                   </Styled.WithdrawFormAsset>
                 }
-                disabled={localStorageAccount ? false : true}
+                disabled={!isLoggedIn}
               />
             </Styled.WithdrawFormAssetAmount>
-            {selectedAsset === "BTC" ? (
-              <p className="label">
-                {counterpart.translate(
-                  `field.labels.withdraw_public_key_address`
-                )}
-              </p>
-            ) : (
-              <p className="label">
-                {counterpart.translate(`field.labels.hive_blockchain_account`)}
-              </p>
-            )}
+            {withdrawAddressTitle}
           </>
         ) : (
           ""
         )}
+
         {selectedAsset === "BTC" ? (
           <Form.Item
             name="withdrawPublicKey"
@@ -128,29 +171,25 @@ export const WithdrawForm = ({
                 `field.placeholder.withdraw_public_key`
               )}
               className="form-input"
-              disabled={localStorageAccount ? false : true}
+              disabled={!isLoggedIn}
             />
           </Form.Item>
         ) : (
           ""
         )}
+
         <Form.Item
           name="withdrawAddress"
           validateFirst={true}
           rules={formValdation.withdrawAddress}
         >
           <Input
-            placeholder={
-              selectedAsset === "BTC"
-                ? counterpart.translate(`field.placeholder.withdraw_address`)
-                : counterpart.translate(
-                    `field.placeholder.hive_blockchain_account`
-                  )
-            }
+            placeholder={withdrawAddressPlaceholder}
             className="form-input"
             disabled={localStorageAccount ? false : true}
           />
         </Form.Item>
+
         {!withAssetSelector ? (
           <Form.Item
             name="amount"
@@ -173,47 +212,16 @@ export const WithdrawForm = ({
         ) : (
           ""
         )}
+
         <Styled.Fee>
           {counterpart.translate(`field.labels.fees`, {
             feeAmount: feeAmount,
             defaultAsset: defaultAsset ? defaultAsset.symbol : "",
           })}
         </Styled.Fee>
-
-        <Styled.ButtonFormItem>
-          {localStorageAccount && localStorageAccount !== "" ? (
-            <>
-              <Styled.WithdrawFormButton type="primary" htmlType="submit">
-                {counterpart.translate(`buttons.withdraw`)}
-              </Styled.WithdrawFormButton>
-            </>
-          ) : (
-            <>
-              <Styled.WithdrawFormButton
-                type="primary"
-                htmlType="button"
-                onClick={() => {
-                  router.push("/login");
-                }}
-              >
-                {counterpart.translate(`buttons.log_in_withdraw`)}
-              </Styled.WithdrawFormButton>
-            </>
-          )}
-        </Styled.ButtonFormItem>
+        <Styled.ButtonFormItem>{submitButton}</Styled.ButtonFormItem>
       </Styled.WithdrawForm>
-      {localStorageAccount && localStorageAccount !== "" ? (
-        ""
-      ) : (
-        <Styled.FormDisclamer>
-          <span>
-            {counterpart.translate(`buttons.dont_have_peerplays_account`)}
-          </span>
-          <Link href="/signup">
-            <a>{counterpart.translate(`links.create_account`)}</a>
-          </Link>
-        </Styled.FormDisclamer>
-      )}
+      {formDisclamer}
 
       <PasswordModal
         visible={isPasswordModalVisible}

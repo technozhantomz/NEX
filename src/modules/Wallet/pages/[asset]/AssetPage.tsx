@@ -44,7 +44,6 @@ const AssetPage: NextPage = () => {
     getSidechainAccounts,
   } = useSidechainAccounts();
   const { localStorageAccount } = useUserContext();
-  //const { pageLoading } = useBrowserHistoryContext();
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
   const dropdownItems = [
@@ -95,21 +94,55 @@ const AssetPage: NextPage = () => {
         </Styled.MobileDropdownWrapper>
       ) : (
         <DefaultTabBar {...props}>
-          {(node: any) => (
-            <>
-              {sidechainAssets
-                .map((sideAsset) => sideAsset.symbol)
-                .includes(asset as string)
-                ? node
-                : node.key === "transfer"
-                ? node
-                : ""}
-            </>
-          )}
+          {(node: any) => {
+            return (
+              <>
+                {sidechainAssets
+                  .map((sideAsset) => sideAsset.symbol)
+                  .includes(asset as string)
+                  ? node
+                  : node.key === "transfer"
+                  ? node
+                  : ""}
+              </>
+            );
+          }}
         </DefaultTabBar>
       )}
     </>
   );
+
+  const renderBtcDepositTab = (
+    hasBTCDepositAddress: boolean,
+    bitcoinSidechainAccount: SidechainAcccount
+  ) => {
+    if (hasBTCDepositAddress) {
+      return (
+        <AddressGenerated
+          bitcoinSidechainAccount={bitcoinSidechainAccount}
+          getSidechainAccounts={getSidechainAccounts}
+        />
+      );
+    } else {
+      return (
+        <GenerateBitcoinAddress
+          isLoggedIn={!!localStorageAccount}
+          getSidechainAccounts={getSidechainAccounts}
+        />
+      );
+    }
+  };
+
+  const renderDepositTab = (asset: string) => {
+    if (asset === "BTC") {
+      return renderBtcDepositTab(
+        hasBTCDepositAddress,
+        bitcoinSidechainAccount as SidechainAcccount
+      );
+    } else {
+      return <HIVEAndHBDDeposit assetSymbol={asset} />;
+    }
+  };
 
   return (
     <Layout
@@ -168,23 +201,7 @@ const AssetPage: NextPage = () => {
                   <AssetsTable showActions={false} fillterAsset={`${asset}`} />
                   {!loadingSidechainAccounts ? (
                     <Styled.AssetFormWapper>
-                      {asset === "BTC" ? (
-                        hasBTCDepositAddress ? (
-                          <AddressGenerated
-                            bitcoinSidechainAccount={
-                              bitcoinSidechainAccount as SidechainAcccount
-                            }
-                            getSidechainAccounts={getSidechainAccounts}
-                          />
-                        ) : (
-                          <GenerateBitcoinAddress
-                            isLoggedIn={!!localStorageAccount}
-                            getSidechainAccounts={getSidechainAccounts}
-                          />
-                        )
-                      ) : (
-                        <HIVEAndHBDDeposit assetSymbol={asset as string} />
-                      )}
+                      {renderDepositTab(asset as string)}
                     </Styled.AssetFormWapper>
                   ) : (
                     ""

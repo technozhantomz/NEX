@@ -9,7 +9,7 @@ type Props = {
 };
 export const BlockDetails = ({ block }: Props): JSX.Element => {
   const { blockDetails, hasNextBlock, hasPreviousBlock, loadingSideBlocks } =
-    useBlockDetails(block as string);
+    useBlockDetails(block);
 
   return (
     <Styled.BlockWrapper>

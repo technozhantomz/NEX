@@ -17,7 +17,7 @@ import * as Styled from "./LogoSelectOption.styled";
 
 type LogoSelectionProps = {
   id?: string;
-  onChange?:
+  onChange:
     | ((
         value: unknown,
         option:

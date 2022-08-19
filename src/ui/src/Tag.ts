@@ -4,8 +4,8 @@ import { colors } from "./colors";
 import { mixIns } from "./mixins";
 
 export interface ITag {
-  bgColor?: string | undefined;
-  color?: string | undefined;
+  bgColor?: string;
+  color?: string;
 }
 
 export const Tag = styled.span<ITag>`

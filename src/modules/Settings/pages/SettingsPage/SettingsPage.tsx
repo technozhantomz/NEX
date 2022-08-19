@@ -8,7 +8,6 @@ import {
   useSettingsContext,
   useViewportContext,
 } from "../../../../common/providers";
-//import { useBrowserHistoryContext } from "../../../../common/providers";
 import {
   Button,
   DownOutlined,
@@ -32,7 +31,7 @@ const SettingPage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { tab } = router.query;
   const { settings } = useSettingsContext();
-  //const { pageLoading } = useBrowserHistoryContext();
+
   const { sm } = useViewportContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
