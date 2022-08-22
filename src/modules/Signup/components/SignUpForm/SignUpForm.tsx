@@ -80,7 +80,7 @@ export const SignUpForm: React.FC = () => {
         <Input.Password
           autoComplete="off"
           placeholder={counterpart.translate(
-            `field.placeholder.re_enter_password`
+            `field.placeholder.re_enter_master_password`
           )}
           visibilityToggle={false}
         />
