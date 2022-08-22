@@ -712,7 +712,7 @@ export const ru = {
     },
     placeholder: {
       user_name: "Введите имя пользователя",
-      password: "Введите пароль",
+      master_password: "Введите мастер-пароль",
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
       hive_blockchain_account: "Блокчейн-аккаунт Hive",
@@ -722,8 +722,8 @@ export const ru = {
       memo: "Памятка",
       price: "Цена",
       total: "Общий",
-      re_enter_password:
-        "Повторно введите автоматически сгенерированный пароль",
+      re_enter_master_password:
+        "Повторно введите автоматически сгенерированный мастер-пароль",
       confirm_password: "Подтвердить Пароль",
       opening_balance: "Начальное сальдо:",
       new_balance: "Новый баланс:",
