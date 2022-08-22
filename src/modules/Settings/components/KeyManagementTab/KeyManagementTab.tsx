@@ -38,7 +38,9 @@ export const KeyManagementTab = (): JSX.Element => {
           validateTrigger="onBlur"
         >
           <Styled.PasswordInput
-            placeholder={counterpart.translate(`field.placeholder.password`)}
+            placeholder={counterpart.translate(
+              `field.placeholder.master_password`
+            )}
           />
         </Styled.PasswordFormItem>
 

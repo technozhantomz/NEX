@@ -736,7 +736,7 @@ export const en = {
     },
     placeholder: {
       user_name: "Enter username",
-      password: "Enter password",
+      master_password: "Enter master password",
       withdraw_public_key: "Withdraw public key",
       withdraw_address: "Withdraw address",
       hive_blockchain_account: "Hive blockchain account",
@@ -746,7 +746,7 @@ export const en = {
       memo: "Memo",
       price: "Price",
       total: "Total",
-      re_enter_password: "Re-enter your auto-generated password",
+      re_enter_master_password: "Re-enter your auto-generated master password",
       confirm_password: "Confirm password",
       opening_balance: "Opening Balance:",
       new_balance: "New Balance:",
