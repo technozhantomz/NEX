@@ -12,6 +12,17 @@ variables:
 stages:
 - test
 - sonarcloud
+
+npm-audit_dependency_scanning:
+  stage: test
+  image: registry.gitlab.com/jitesoft/open-source/javascript/audit-for-gitlab:1
+  script:
+    - audit-for-gitlab
+  allow_failure: false
+  artifacts:
+    reports:
+      dependency_scanning: gl-dependency-scanning-report.json
+
 sast:
   stage: test
 include:
