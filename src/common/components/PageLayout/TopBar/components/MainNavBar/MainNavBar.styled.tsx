@@ -53,7 +53,7 @@ export const MenuWrapper = styled.div`{
   height: 100%;
   background: ${colors.white};
   color: ${colors.textColor};
-  z-index: 2;
+  z-index: 3;
   padding-top: 95px;
   &.open{
     display: block;

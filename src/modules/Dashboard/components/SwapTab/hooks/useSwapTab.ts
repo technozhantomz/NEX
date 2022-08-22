@@ -37,8 +37,8 @@ export function useSwap(): UseSwapResult {
   const { localStorageAccount, assets, id } = useUserContext();
   const [selectedAssetsSymbols, setSelectedAssetsSymbols] =
     useState<SwapAssetPair>({
-      sellAssetSymbol: exchanges.swapPair.split("_")[1] as string,
-      buyAssetSymbol: exchanges.swapPair.split("_")[0] as string,
+      sellAssetSymbol: exchanges.swapPair?.split("_")[1] as string,
+      buyAssetSymbol: exchanges.swapPair?.split("_")[0] as string,
     });
   const [lastChangedField, setLastChangedField] =
     useState<SwapInputType>("sellAsset");
