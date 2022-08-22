@@ -19,20 +19,17 @@ export const CopyButton = ({
 }: Props): JSX.Element => {
   const { copied, handleClick } = useCopyButton();
 
+  const copyText = counterpart.translate("tooltips.copy");
+  const copiedText = counterpart.translate("tooltips.copied");
+
   const copyButtonWithText = !copied ? (
-    <Tooltip
-      placement="top"
-      title={`${counterpart.translate(`tooltips.copy`)}`}
-    >
+    <Tooltip placement="top" title={`${copyText}`}>
       <Styled.TextButton type="link" onClick={() => handleClick(copyValue)}>
         {`${buttonText} `} <CopyIcon />
       </Styled.TextButton>
     </Tooltip>
   ) : (
-    <Tooltip
-      placement="top"
-      title={`${counterpart.translate(`tooltips.copied`)}`}
-    >
+    <Tooltip placement="top" title={`${copiedText}`}>
       <Styled.TextButton type="link" onClick={() => handleClick(copyValue)}>
         {`${buttonText} `} <Styled.Check />
       </Styled.TextButton>
@@ -40,17 +37,11 @@ export const CopyButton = ({
   );
 
   const copyButtonWithoutText = !copied ? (
-    <Tooltip
-      placement="top"
-      title={`${counterpart.translate(`tooltips.copy`)}`}
-    >
+    <Tooltip placement="top" title={`${copyText}`}>
       <CopyIcon onClick={() => handleClick(copyValue)} />
     </Tooltip>
   ) : (
-    <Tooltip
-      placement="top"
-      title={`${counterpart.translate(`tooltips.copied`)}`}
-    >
+    <Tooltip placement="top" title={`${copiedText}`}>
       <Styled.Check />
     </Tooltip>
   );
