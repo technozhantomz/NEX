@@ -14,6 +14,7 @@ stages:
 - test
 - sonarcloud
 - deployQA
+- deploy-review
 
 build_qa:
   # node docker image on which this would be run
@@ -54,10 +55,6 @@ include:
 - template: Security/SAST.gitlab-ci.yml
 - template: Security/Dependency-Scanning.gitlab-ci.yml
 
-variables:
-  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-
 sonarcloud-check:
   stage: sonarcloud
   image:
@@ -76,6 +73,36 @@ sonarcloud-check:
     - gitlab-ci-updates-sonar
   tags:
     - sonar-check
+
+deploy_review:
+  stage: deploy-review
+  script:
+    - pm2 del 1 || return
+    - pm2 start npm --name nex-review -- run dev
+    - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
+  only:
+    - branches
+  except:
+    - dev
+  tags:
+    - deploy-review
+
+stop_review_app:
+  stage: deploy-review
+  script: stop-review-app
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  only: 
+    - branches
+  except:
+    - develop
+  tags:
+    - deploy-review
+  when: manual
 
 deployToQA:
   stage: deployQA
