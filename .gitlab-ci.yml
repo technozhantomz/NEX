@@ -77,7 +77,7 @@ sonarcloud-check:
 deploy_review:
   stage: deploy-review
   script:
-    - pm2 del 1 || return
+    - pm2 del 1 || true 
     - pm2 start npm --name nex-review -- run dev
     - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
   environment:
@@ -89,6 +89,7 @@ deploy_review:
     - dev
   tags:
     - deploy-review
+  when: manual
 
 stop_review_app:
   stage: deploy-review
