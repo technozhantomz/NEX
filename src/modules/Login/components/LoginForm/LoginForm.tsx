@@ -32,7 +32,9 @@ export const LoginForm: React.FC = () => {
         validateTrigger="onSubmit"
       >
         <Input.Password
-          placeholder={counterpart.translate(`field.placeholder.password`)}
+          placeholder={counterpart.translate(
+            `field.placeholder.master_password`
+          )}
         />
       </Form.Item>
 
