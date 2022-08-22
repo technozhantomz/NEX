@@ -78,7 +78,7 @@ deploy_review:
   stage: deploy-review
   script:
     - pm2 del 1 || true 
-    - pm2 start npm --name nex-review -- run dev
+    - pm2 start npm --name nex-review --port 3005 -- run dev
     - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
   environment:
     name: review/$CI_COMMIT_REF_NAME
