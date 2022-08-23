@@ -75,7 +75,9 @@ sonarcloud-check:
 deploy_review:
   dependencies:
     - build-review
-    - test
+    - npm-audit_dependency_scanning
+    - sonarcloud-check
+    - sast
   stage: deploy-review
   script:
     - pm2 del nex-review || true
