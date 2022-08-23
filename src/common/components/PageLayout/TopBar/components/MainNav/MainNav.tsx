@@ -52,7 +52,7 @@ export const MainNav = (): JSX.Element => {
 
         <li>
           <MenuItem
-            href="/dashboard"
+            href="/"
             icon={<Dashboard className={"menu-icon"} />}
             label={counterpart.translate(`pages.dashboard.heading`)}
           />

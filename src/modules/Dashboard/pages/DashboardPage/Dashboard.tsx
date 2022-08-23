@@ -16,7 +16,7 @@ const Dashboard: React.FC = () => {
 
   const changeTab = (tab: string) => {
     setActiveTab(tab);
-    router.push(`/dashboard?tab=${tab.toLowerCase()}`);
+    router.push(`/?tab=${tab.toLowerCase()}`);
   };
 
   const Tabs = [
