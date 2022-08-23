@@ -732,6 +732,7 @@ export const ru = {
       from: "из",
     },
     labels: {
+      copy_bitcoin_address: "Скопируйте свой биткойн-адрес",
       fetching_price: "Получение цены",
       withdraw_public_key_address: "Отозвать открытый ключ и адрес",
       hive_blockchain_account: "Блокчейн-аккаунт Hive",

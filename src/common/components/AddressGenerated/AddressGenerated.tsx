@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import { CopyButton } from "..";
 import { InfoCircleOutlined } from "../../../ui/src";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
@@ -25,7 +27,9 @@ export const AddressGenerated = ({
         <Styled.IconDiv>
           <BitcoinIcon height={sm ? "18" : "30"} width={sm ? "18" : "30"} />
         </Styled.IconDiv>
-        <Styled.DepositHeader>Copy your Bitcoin address</Styled.DepositHeader>
+        <Styled.DepositHeader>
+          {counterpart.translate(`field.labels.copy_bitcoin_address`)}
+        </Styled.DepositHeader>
       </Styled.AddressContainer>
       <Styled.GeneratedBitcoinAddress
         size="small"

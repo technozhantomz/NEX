@@ -755,6 +755,7 @@ export const en = {
       from: "From",
     },
     labels: {
+      copy_bitcoin_address: "Copy your Bitcoin address",
       fetching_price: "Fetching price",
       withdraw_public_key_address: "Withdraw Public key & Address",
       hive_blockchain_account: "Hive blockchain account",
