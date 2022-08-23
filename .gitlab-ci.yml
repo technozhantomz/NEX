@@ -76,7 +76,8 @@ deploy_review:
     - build-review
   stage: deploy-review
   script:
-    - pm2 del nex-review || true 
+    - pm2 del nex-review || true
+    - npm install 
     - pm2 start npm --name nex-review -- run dev
     - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
   environment:
