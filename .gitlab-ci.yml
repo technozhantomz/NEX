@@ -100,7 +100,6 @@ deploy_review:
     - main
   tags:
     - deploy-review
-  when: manual
 
 stop_review_app:
   stage: deploy-review
