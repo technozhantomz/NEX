@@ -13,6 +13,7 @@ import {
   Dashboard,
   Market,
   Vote,
+  SignupIcon,
 } from "../../../../../../ui/src/icons";
 import {
   useMenuContext,
@@ -41,15 +42,23 @@ export const MainNav = (): JSX.Element => {
         {localStorageAccount ? (
           ""
         ) : (
-          <li>
-            <MenuItem
-              href="/login"
-              icon={<PoweroffOutlined className={"menu-icon"} />}
-              label={counterpart.translate(`pages.login.heading`)}
-            />
-          </li>
+          <>
+            <li>
+              <MenuItem
+                href="/login"
+                icon={<PoweroffOutlined className={"menu-icon"} />}
+                label={counterpart.translate(`pages.login.heading`)}
+              />
+            </li>
+            <li>
+              <MenuItem
+                href="/signup"
+                icon={<SignupIcon className={"menu-icon"} />}
+                label={counterpart.translate(`pages.signUp.heading`)}
+              />
+            </li>
+          </>
         )}
-
         <li>
           <MenuItem
             href="/dashboard"
