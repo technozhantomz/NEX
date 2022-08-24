@@ -36,6 +36,7 @@ build-review:
     expire_in: 2 weeks
   only:
     - branches
+    - merge_requests
   tags:
     - build
 
