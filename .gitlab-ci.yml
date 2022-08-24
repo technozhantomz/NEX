@@ -95,7 +95,6 @@ deploy_review:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
   only:
-    - branches
     - merge_requests
   except:
     - main
