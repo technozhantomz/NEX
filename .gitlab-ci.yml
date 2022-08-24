@@ -52,6 +52,8 @@ npm-audit:
       dependency_scanning: gl-dependency-scanning-report.json
     paths:
       - gl-dependency-scanning-report.json
+  tags: 
+    - npm-audit
 
 sast:
   stage: test
