@@ -95,8 +95,8 @@ deploy_review:
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
   only:
     - branches
+    - merge_requests
   except:
-    - dev
     - main
   tags:
     - deploy-review
@@ -110,7 +110,7 @@ stop_review_app:
   only: 
     - branches
   except:
-    - develop
+    - dev
   tags:
     - deploy-review
   when: manual
