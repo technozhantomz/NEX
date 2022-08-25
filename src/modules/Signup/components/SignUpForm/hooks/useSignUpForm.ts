@@ -80,6 +80,16 @@ export function useSignUpForm(): UseSignUpFormResult {
         new Error(counterpart.translate(`field.errors.username_taken`))
       );
     }
+    if (
+      !/^[a-z](?!.*([-.])\\1)((?=.*(-))|(?=.*([0-9])))[a-z0-9-.]{2,62}(?<![-.])$/.test(
+        value
+      )
+    ) {
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.username_invalid`))
+      );
+    }
+
     const defaultErrors = ChainValidation.is_account_name_error(value);
     if (defaultErrors) {
       return Promise.reject(new Error(`${defaultErrors}`));
