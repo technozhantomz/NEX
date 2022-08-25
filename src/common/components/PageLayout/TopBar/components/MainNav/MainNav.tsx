@@ -12,8 +12,8 @@ import {
   Blockchain,
   Dashboard,
   Market,
-  Vote,
   SignupIcon,
+  Vote,
 } from "../../../../../../ui/src/icons";
 import {
   useMenuContext,
