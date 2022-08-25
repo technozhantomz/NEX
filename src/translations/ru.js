@@ -814,6 +814,7 @@ export const ru = {
       user_not_found: "Пользователь не найден",
       password_incorrect: "Неверный пароль",
       username_required: "Имя пользователя требуется",
+      username_invalid: "Имя пользователя недействительно",
       password_required: "требуется пароль",
       password_should_be_long: "Пароль должен быть не короче 12 символов",
       password_not_match: "Пароль не совпадает",
