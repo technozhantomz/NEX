@@ -7,13 +7,13 @@ import {
   useBrowserHistoryContext,
   useUserContext,
 } from "../../../../../common/providers";
-import { ISignupFormData } from "../../../../../common/types";
+import { SignupForm } from "../../../../../common/types";
 import { CheckboxChangeEvent, Form } from "../../../../../ui/src";
 
 import { useGeneratePassword } from "./useGeneratePassword";
-import { IFormValidation, ISignUpForm } from "./useSignUpForm.types";
+import { IFormValidation, UseSignUpFormResult } from "./useSignUpForm.types";
 
-export function useSignUpForm(): ISignUpForm {
+export function useSignUpForm(): UseSignUpFormResult {
   const [isInputTypePassword, setIsInputTypePassword] = useState(true);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [generatedPassword, setGeneratedPassword] = useState<string>("");
@@ -23,7 +23,9 @@ export function useSignUpForm(): ISignUpForm {
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
   const [validUser, setValidUser] = useState<boolean>(false);
   const { handleLoginRedirect } = useBrowserHistoryContext();
-  const [signUpForm] = Form.useForm();
+  const [signUpForm] = Form.useForm<SignupForm>();
+  const username = Form.useWatch("username", signUpForm);
+  const password = Form.useWatch("password", signUpForm);
   const { generatePassword } = useGeneratePassword();
 
   useEffect(() => {
@@ -40,7 +42,7 @@ export function useSignUpForm(): ISignUpForm {
 
   const handleSignUp = async (formData: unknown) => {
     setSubmitting(true);
-    const fullAccount = await createAccount(formData as ISignupFormData);
+    const fullAccount = await createAccount(formData as SignupForm);
     if (fullAccount) {
       await formAccountAfterConfirmation(fullAccount);
       setLocalStorageAccount(fullAccount.account.name);
@@ -156,5 +158,7 @@ export function useSignUpForm(): ISignUpForm {
     generatedPassword,
     isInputTypePassword,
     handleInputType,
+    username,
+    password,
   };
 }

@@ -79,13 +79,12 @@ export type AccountOptions = {
   voting_account: string;
 };
 
-export type ISignupFormData = {
+export type SignupForm = {
   username: string;
   password: string;
   passwordCheck: string;
   confirm: boolean;
   saved: boolean;
-  referrer?: string;
 };
 
 export type SidechainAcccount = {
