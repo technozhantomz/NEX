@@ -836,6 +836,7 @@ export const en = {
       user_not_found: "User not found",
       password_incorrect: "Password incorrect",
       username_required: "Username is required",
+      username_invalid: "Username is invalid",
       password_required: "Password is required",
       password_should_be_long: "Password should be at least 12 characters long",
       password_not_match: "Password do not match",
