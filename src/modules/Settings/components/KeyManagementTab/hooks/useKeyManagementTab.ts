@@ -37,7 +37,15 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
   const onGo = useCallback(() => {
     const { password } = keyManagementForm.getFieldsValue();
     if (account) {
-      const roles = selectedKeys.map((key) => key.toString().toLowerCase());
+      const translations: Record<string, string> = {
+        Active: "active",
+        Owner: "owner",
+        Memo: "memo",
+        Активный: "active",
+        Владелец: "owner",
+        Памятка: "memo",
+      };
+      const roles = selectedKeys.map((key) => translations[key.toString()]);
       const keys = Login.generateKeys(account.name, password, roles);
       const generatedKeys = [] as GeneratedKey[];
 
