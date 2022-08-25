@@ -16,7 +16,6 @@ export function useAccountHistory(): UseAccountHistoryResult {
         100, //Maximum number of operations to retrieve (must not exceed 100)
         0, //Sequence number of the most recent operation to retrieve. 0 is default, which will start querying from the most recent operation.
       ]);
-      console.log(history);
       return history as History[];
     },
     [historyApi]

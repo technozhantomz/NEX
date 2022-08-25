@@ -47,14 +47,14 @@ export const MainNav = (): JSX.Element => {
               <MenuItem
                 href="/login"
                 icon={<PoweroffOutlined className={"menu-icon"} />}
-                label={counterpart.translate(`pages.login.heading`)}
+                label={counterpart.translate(`buttons.login`)}
               />
             </li>
             <li>
               <MenuItem
                 href="/signup"
                 icon={<SignupIcon className={"menu-icon"} />}
-                label={counterpart.translate(`pages.signUp.heading`)}
+                label={counterpart.translate(`buttons.create_account`)}
               />
             </li>
           </>
