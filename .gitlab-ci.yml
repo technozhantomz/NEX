@@ -40,15 +40,20 @@ build-review:
   tags:
     - build
 
-npm-audit_dependency_scanning:
+npm-audit:
+  image: "registry.gitlab.com/gitlab-org/security-products/analyzers/npm-audit:1.4.0"
   stage: test
-  image: registry.gitlab.com/jitesoft/open-source/javascript/audit-for-gitlab:1
+  variables:
+    TOOL: npm
   script:
-    - audit-for-gitlab
-  allow_failure: false
+    - /analyzer run
   artifacts:
     reports:
       dependency_scanning: gl-dependency-scanning-report.json
+    paths:
+      - gl-dependency-scanning-report.json
+  tags: 
+    - npm-audit
 
 sast:
   stage: test
@@ -76,7 +81,7 @@ sonarcloud-check:
 deploy_review:
   dependencies:
     - build-review
-    - npm-audit_dependency_scanning
+    - npm-audit
     - sonarcloud-check
     - sast
   stage: deploy-review
