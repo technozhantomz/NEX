@@ -85,7 +85,10 @@ export const SignUpForm: React.FC = () => {
           visibilityToggle={false}
         />
       </Styled.PasswordCheckFormItem>
-      <InfoBar password={generatedPassword} />
+      <InfoBar
+        username={signUpForm.getFieldValue("username")}
+        password={generatedPassword}
+      />
       <Styled.ConfirmFormItem
         name="confirm"
         rules={formValidation.confirm}
