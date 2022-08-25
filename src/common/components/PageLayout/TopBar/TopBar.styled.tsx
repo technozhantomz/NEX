@@ -17,8 +17,9 @@ export const TopBar = styled.nav`
       color: ${colors.white};
     }
     .dex-logo {
+      display: block;
       margin: 0 0 0 5px;
-      font-size: 28px;
+      font-size: 1.25rem;
       font-weight: 200;
       color: #ff903e;
       letter-spacing: 1px;

@@ -16,18 +16,10 @@ export const Page = styled.section`
         #01245f 100%
       )
       0% 0% no-repeat padding-box;
-    .top-bar {
-      .dex-logo {
-        display: none;
-      }
-    }
     &.dex-layout {
       background: #f4f4f4 0% 0% no-repeat padding-box;
       .top-bar {
         background-color: #01245f;
-        .dex-logo {
-          display: flex;
-        }
       }
       .page-heading {
         color: ${colors.textColor};
