@@ -1,6 +1,6 @@
 import { CheckboxChangeEvent, FormInstance, Rule } from "../../../../../ui/src";
 
-export type ISignUpForm = {
+export type UseSignUpFormResult = {
   validUser: boolean;
   handleSignUp: (formData: unknown) => void;
   setCheckboxValue: (e: CheckboxChangeEvent) => void;
@@ -15,6 +15,8 @@ export type ISignUpForm = {
   generatedPassword: string;
   isInputTypePassword: boolean;
   handleInputType: () => void;
+  username: string;
+  password: string;
 };
 
 export type IFormField = {

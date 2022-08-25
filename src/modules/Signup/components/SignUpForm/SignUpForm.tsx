@@ -23,6 +23,8 @@ export const SignUpForm: React.FC = () => {
     generatedPassword,
     isInputTypePassword,
     handleInputType,
+    username,
+    password,
   } = useSignUpForm();
 
   return (
@@ -58,9 +60,7 @@ export const SignUpForm: React.FC = () => {
           type={isInputTypePassword ? "password" : "text"}
           suffix={
             <div>
-              <CopyButton
-                copyValue={signUpForm.getFieldValue("password")}
-              ></CopyButton>
+              <CopyButton copyValue={password}></CopyButton>
               {isInputTypePassword ? (
                 <EyeInvisibleOutlined onClick={handleInputType} />
               ) : (
@@ -85,10 +85,7 @@ export const SignUpForm: React.FC = () => {
           visibilityToggle={false}
         />
       </Styled.PasswordCheckFormItem>
-      <InfoBar
-        username={signUpForm.getFieldValue("username")}
-        password={generatedPassword}
-      />
+      <InfoBar username={username} password={generatedPassword} />
       <Styled.ConfirmFormItem
         name="confirm"
         rules={formValidation.confirm}
