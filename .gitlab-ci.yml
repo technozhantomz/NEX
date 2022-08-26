@@ -144,9 +144,8 @@ dast:
   before_script:
     - if [ "$CI_COMMIT_REF_NAME" != "develop" ]; then export DAST_WEBSITE=$(cat environment_url.txt); else export DAST_WEBSITE=$DAST_WEBSITE; fi
   artifacts:
-    paths: [gl-dast-debug-auth-report.html]
-    reports:
-      dast: gl-dast-report.json
+    paths: 
+      - gl-dast-report.json
   rules:
   - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     when: never
