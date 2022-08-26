@@ -53,7 +53,7 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
       browserHistory[browserHistory.length - 2] === "/signup" ||
       browserHistory[browserHistory.length - 2] === "/login"
     ) {
-      router.push("/dashboard");
+      router.push("/");
     } else {
       router.push(browserHistory[browserHistory.length - 2]);
     }

@@ -760,6 +760,7 @@ export const en = {
       from: "From",
     },
     labels: {
+      copy_bitcoin_address: "Copy your Bitcoin address",
       fetching_price: "Fetching price",
       withdraw_public_key_address: "Withdraw Public key & Address",
       hive_blockchain_account: "Hive blockchain account",
@@ -841,6 +842,7 @@ export const en = {
       user_not_found: "User not found",
       password_incorrect: "Password incorrect",
       username_required: "Username is required",
+      username_invalid: "Username is invalid",
       password_required: "Password is required",
       password_should_be_long: "Password should be at least 12 characters long",
       password_not_match: "Password do not match",
