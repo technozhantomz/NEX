@@ -378,7 +378,10 @@ export function useSwap(): UseSwapResult {
 
         if (inputedAmountType === "sellAsset") {
           // unsuccessful
-          if (numberedInputedAmount > sellLiquidityVolume) {
+          if (
+            numberedInputedAmount > sellLiquidityVolume ||
+            numberedInputedAmount <= 0
+          ) {
             setCalculatedPrice(0);
             swapForm.setFieldsValue({
               buyAmount: "0",
@@ -406,7 +409,10 @@ export function useSwap(): UseSwapResult {
           // inputedAmountType === "buyAsset"
         } else {
           // unsuccessful
-          if (numberedInputedAmount > buyLiquidityVolume) {
+          if (
+            numberedInputedAmount > buyLiquidityVolume ||
+            numberedInputedAmount <= 0
+          ) {
             setCalculatedPrice(0);
             swapForm.setFieldsValue({
               sellAmount: "0",
@@ -502,19 +508,12 @@ export function useSwap(): UseSwapResult {
             sellAmount: sellAmount,
           });
 
-          if (Number(sellAmount) > 0) {
-            await updateSwapFormData(
-              sellAsset,
-              buyAsset,
-              sellAmount,
-              "sellAsset"
-            );
-          } else {
-            swapForm.setFieldsValue({
-              buyAmount: "0",
-            });
-            setCalculatedPrice(0);
-          }
+          await updateSwapFormData(
+            sellAsset,
+            buyAsset,
+            sellAmount,
+            "sellAsset"
+          );
         } else if (changedValues.buyAmount !== undefined) {
           setLastChangedField("buyAsset");
           const buyAmount = limitByPrecision(
@@ -525,19 +524,7 @@ export function useSwap(): UseSwapResult {
             buyAmount: buyAmount,
           });
 
-          if (Number(buyAmount) > 0) {
-            await updateSwapFormData(
-              sellAsset,
-              buyAsset,
-              buyAmount,
-              "buyAsset"
-            );
-          } else {
-            swapForm.setFieldsValue({
-              sellAmount: "0",
-            });
-            setCalculatedPrice(0);
-          }
+          await updateSwapFormData(sellAsset, buyAsset, buyAmount, "buyAsset");
         }
         try {
           await swapForm.validateFields();
