@@ -139,11 +139,17 @@ export function useSwap(): UseSwapResult {
 
       if (availableCoreToSell > 0) {
         if (availableCoreToSell <= availableCoreToBuy) {
+          const limitedAvailableCoreToSell = Number(
+            limitByPrecision(
+              String(availableCoreToSell),
+              defaultAsset?.precision
+            )
+          );
           const { calculatedPrice } = calculateBasePairPriceForBuyAmount(
-            availableCoreToSell,
+            limitedAvailableCoreToSell,
             sellToCoreAsks
           );
-          return calculatedPrice * availableCoreToSell;
+          return calculatedPrice * limitedAvailableCoreToSell;
         } else {
           return calculateBasePairSellLiquidity(sellToCoreAsks);
         }
@@ -151,7 +157,12 @@ export function useSwap(): UseSwapResult {
         return 0;
       }
     },
-    [calculateBasePairPriceForBuyAmount, calculateBasePairSellLiquidity]
+    [
+      calculateBasePairPriceForBuyAmount,
+      calculateBasePairSellLiquidity,
+      limitByPrecision,
+      defaultAsset,
+    ]
   );
   //TODO: needs separation of concerns
   const calculateNonBasePairPriceForSellAmount = useCallback(
@@ -180,7 +191,7 @@ export function useSwap(): UseSwapResult {
       const calculatedPrice = sellAmount / buyAmount;
       return { calculatedPrice, orderPrice: coreToBuyOrderPrice };
     },
-    [calculateBasePairPriceForSellAmount, defaultAsset]
+    [calculateBasePairPriceForSellAmount, defaultAsset, limitByPrecision]
   );
 
   const calculateNonBasePairBuyLiquidity = useCallback(
@@ -195,17 +206,28 @@ export function useSwap(): UseSwapResult {
         if (availableCoreToSell <= availableCoreToBuy) {
           return calculateBasePairBuyLiquidity(coreToBuyAsks);
         } else {
+          const limitedAvailableCoreToBuy = Number(
+            limitByPrecision(
+              String(availableCoreToBuy),
+              defaultAsset?.precision
+            )
+          );
           const { calculatedPrice } = calculateBasePairPriceForSellAmount(
-            availableCoreToBuy,
+            limitedAvailableCoreToBuy,
             coreToBuyAsks
           );
-          return availableCoreToBuy / calculatedPrice;
+          return limitedAvailableCoreToBuy / calculatedPrice;
         }
       } else {
         return 0;
       }
     },
-    [calculateBasePairBuyLiquidity, calculateBasePairPriceForSellAmount]
+    [
+      calculateBasePairBuyLiquidity,
+      calculateBasePairPriceForSellAmount,
+      defaultAsset,
+      limitByPrecision,
+    ]
   );
 
   //TODO: needs separation of concern
@@ -339,12 +361,10 @@ export function useSwap(): UseSwapResult {
           sellAsset,
           defaultAsset as Asset
         );
-        console.log("sellToCore", sellToCoreAsks);
         const { asks: coreToBuyAsks } = await getOrderBook(
           defaultAsset as Asset,
           buyAsset
         );
-        console.log("coreToBuy", coreToBuyAsks);
         const sellLiquidityVolume = calculateNonBasePairSellLiquidity(
           sellToCoreAsks,
           coreToBuyAsks
@@ -800,6 +820,7 @@ export function useSwap(): UseSwapResult {
         sellAsset,
         defaultAsset as Asset
       );
+
       const minToReceive = limitByPrecision(
         String(Number(middleTrxCoreAmount) / orderPrice),
         buyAsset.precision
@@ -931,6 +952,64 @@ export function useSwap(): UseSwapResult {
     ]
   );
 
+  const validateFeeAmount = (userDefaultAsset?: Asset) => {
+    let errorMessage = "";
+    if (!userDefaultAsset) {
+      errorMessage = counterpart.translate(
+        `field.errors.insufficient_balance_for_fee`,
+        {
+          coreAsset: defaultToken,
+        }
+      );
+    } else {
+      if (swapOrderFee > (userDefaultAsset?.amount as number)) {
+        errorMessage = counterpart.translate(
+          `field.errors.insufficient_balance_for_fee`,
+          {
+            coreAsset: defaultToken,
+          }
+        );
+      }
+    }
+    return errorMessage;
+  };
+
+  const validateBalanceForSellAmount = (
+    numberedValue: number,
+    userSellAsset?: Asset
+  ) => {
+    let errorMessage = "";
+    if (!userSellAsset) {
+      errorMessage = counterpart.translate(
+        `field.errors.insufficient_asset_balance`,
+        {
+          asset: selectedAssetsSymbols.sellAssetSymbol,
+        }
+      );
+    } else {
+      if (selectedAssetsSymbols.sellAssetSymbol === defaultToken) {
+        if (numberedValue + swapOrderFee > (userSellAsset?.amount as number)) {
+          errorMessage = counterpart.translate(
+            `field.errors.insufficient_asset_balance`,
+            {
+              asset: selectedAssetsSymbols.sellAssetSymbol,
+            }
+          );
+        }
+      } else {
+        if (numberedValue > (userSellAsset?.amount as number)) {
+          errorMessage = counterpart.translate(
+            `field.errors.insufficient_asset_balance`,
+            {
+              asset: selectedAssetsSymbols.sellAssetSymbol,
+            }
+          );
+        }
+      }
+    }
+    return errorMessage;
+  };
+
   const validateSellAmount = (_: unknown, value: string) => {
     if (allAssets && allAssets.length > 0) {
       const userSellAsset = assets.find(
@@ -950,69 +1029,18 @@ export function useSwap(): UseSwapResult {
       }
 
       // fee check
-      if (!userDefaultAsset) {
-        return Promise.reject(
-          new Error(
-            counterpart.translate(`field.errors.insufficient_balance_for_fee`, {
-              coreAsset: defaultToken,
-            })
-          )
-        );
-      } else {
-        if (swapOrderFee > (userDefaultAsset?.amount as number)) {
-          return Promise.reject(
-            new Error(
-              counterpart.translate(
-                `field.errors.insufficient_balance_for_fee`,
-                {
-                  coreAsset: defaultToken,
-                }
-              )
-            )
-          );
-        }
+      const feeErrorMessage = validateFeeAmount(userDefaultAsset);
+      if (feeErrorMessage !== "") {
+        new Error(feeErrorMessage);
       }
 
       // balance check
-      if (!userSellAsset) {
-        return Promise.reject(
-          new Error(
-            counterpart.translate(`field.errors.insufficient_asset_balance`, {
-              asset: selectedAssetsSymbols.sellAssetSymbol,
-            })
-          )
-        );
-      } else {
-        if (selectedAssetsSymbols.sellAssetSymbol === defaultToken) {
-          if (
-            numberedValue + swapOrderFee >
-            (userSellAsset?.amount as number)
-          ) {
-            return Promise.reject(
-              new Error(
-                counterpart.translate(
-                  `field.errors.insufficient_asset_balance`,
-                  {
-                    asset: selectedAssetsSymbols.sellAssetSymbol,
-                  }
-                )
-              )
-            );
-          }
-        } else {
-          if (numberedValue > (userSellAsset?.amount as number)) {
-            return Promise.reject(
-              new Error(
-                counterpart.translate(
-                  `field.errors.insufficient_asset_balance`,
-                  {
-                    asset: selectedAssetsSymbols.sellAssetSymbol,
-                  }
-                )
-              )
-            );
-          }
-        }
+      const balanceErrorMessage = validateBalanceForSellAmount(
+        numberedValue,
+        userSellAsset
+      );
+      if (balanceErrorMessage !== "") {
+        return Promise.reject(new Error(balanceErrorMessage));
       }
 
       //Liquidity check

@@ -64,9 +64,9 @@ export const SwapTab = (): JSX.Element => {
   });
 
   const [transactionModalSellAmount, setTransactionModalSellAmount] =
-    useState<number>(0);
+    useState<string>("");
   const [transactionModalBuyAmount, setTransactionModalBuyAmount] =
-    useState<number>(0);
+    useState<string>("");
 
   const InfoToolTip = (
     <Styled.TooltipPara>
@@ -78,6 +78,75 @@ export const SwapTab = (): JSX.Element => {
         </span>
       }
     </Styled.TooltipPara>
+  );
+
+  const isLoggedIn = localStorageAccount ? true : false;
+  const renderUserSellAssetBalance = isLoggedIn ? (
+    <Styled.Balance>{`${counterpart.translate(
+      `field.labels.balance`
+    )}: ${sellAssetBalance}`}</Styled.Balance>
+  ) : (
+    ""
+  );
+  const renderUserBuyAssetBalance = localStorageAccount ? (
+    <Styled.Balance>{`${counterpart.translate(
+      `field.labels.balance`
+    )}: ${buyAssetBalance}`}</Styled.Balance>
+  ) : (
+    ""
+  );
+
+  const renderPriceLeftSideEquality =
+    "1 " + selectedAssetsSymbols.buyAssetSymbol;
+  const renderPriceRightSideEquality =
+    `${price} ` + selectedAssetsSymbols.sellAssetSymbol;
+  const renderPriceAmount =
+    price === 0 ? (
+      ""
+    ) : (
+      <>
+        <span>
+          {renderPriceLeftSideEquality} &#8776; {renderPriceRightSideEquality}
+        </span>
+        <Styled.Tooltip placement="left" title={InfoToolTip} color="#E3EBF8">
+          <InfoCircleOutlined />
+        </Styled.Tooltip>
+      </>
+    );
+  const renderPrice = loadingSwapData ? (
+    <>
+      <Styled.PriceLoadingOutlined></Styled.PriceLoadingOutlined>
+      {`${counterpart.translate(`field.labels.fetching_price`)}...`}
+    </>
+  ) : (
+    renderPriceAmount
+  );
+
+  const swapHasError =
+    sellAmountErrors.length > 0 || buyAmountErrors.length > 0;
+  const renderBuyAmountError =
+    buyAmountErrors.length > 0 ? buyAmountErrors[0] : sellAmountErrors[0];
+  const renderSellAmountError =
+    lastChangedField === "sellAsset" && sellAmountErrors.length > 0
+      ? sellAmountErrors[0]
+      : renderBuyAmountError;
+  const renderSwapButtonText = swapHasError
+    ? renderSellAmountError
+    : counterpart.translate(`buttons.swap_coins`);
+  const renderSubmitButton = isLoggedIn ? (
+    <CardFormButton type="primary" htmlType="submit" disabled={swapHasError}>
+      {renderSwapButtonText}
+    </CardFormButton>
+  ) : (
+    <CardFormButton
+      type="primary"
+      htmlType="button"
+      onClick={() => {
+        router.push("/login");
+      }}
+    >
+      {counterpart.translate(`buttons.login_and_swap_coins`)}
+    </CardFormButton>
   );
 
   return (
@@ -118,7 +187,7 @@ export const SwapTab = (): JSX.Element => {
                 }
               }}
               autoComplete="off"
-              disabled={localStorageAccount ? false : true}
+              disabled={!isLoggedIn}
               prefix={
                 <Styled.AssetSelectContainer>
                   <LogoSelectOption
@@ -130,13 +199,7 @@ export const SwapTab = (): JSX.Element => {
                     )}
                     onChange={handleSellAssetChange}
                   />
-                  {localStorageAccount ? (
-                    <Styled.Balance>{`${counterpart.translate(
-                      `field.labels.balance`
-                    )}: ${sellAssetBalance}`}</Styled.Balance>
-                  ) : (
-                    ""
-                  )}
+                  {renderUserSellAssetBalance}
                 </Styled.AssetSelectContainer>
               }
             />
@@ -159,7 +222,7 @@ export const SwapTab = (): JSX.Element => {
                 }
               }}
               autoComplete="off"
-              disabled={localStorageAccount ? false : true}
+              disabled={!isLoggedIn}
               prefix={
                 <Styled.AssetSelectContainer>
                   <LogoSelectOption
@@ -171,70 +234,14 @@ export const SwapTab = (): JSX.Element => {
                     )}
                     onChange={handleBuyAssetChange}
                   />
-                  {localStorageAccount ? (
-                    <Styled.Balance>{`${counterpart.translate(
-                      `field.labels.balance`
-                    )}: ${buyAssetBalance}`}</Styled.Balance>
-                  ) : (
-                    ""
-                  )}
+                  {renderUserBuyAssetBalance}
                 </Styled.AssetSelectContainer>
               }
             />
           </Styled.SwapItem>
-          <Styled.PriceContainer>
-            {loadingSwapData ? (
-              <>
-                <Styled.PriceLoadingOutlined></Styled.PriceLoadingOutlined>
-                {`${counterpart.translate(`field.labels.fetching_price`)}...`}
-              </>
-            ) : price === 0 ? (
-              ""
-            ) : (
-              <>
-                <span>
-                  {`1 ${selectedAssetsSymbols.buyAssetSymbol}`} &#8776;{" "}
-                  {`${price} ${selectedAssetsSymbols.sellAssetSymbol}`}
-                </span>
-                <Styled.Tooltip
-                  placement="left"
-                  title={InfoToolTip}
-                  color="#E3EBF8"
-                >
-                  <InfoCircleOutlined />
-                </Styled.Tooltip>
-              </>
-            )}
-          </Styled.PriceContainer>
+          <Styled.PriceContainer>{renderPrice}</Styled.PriceContainer>
           <Styled.SwapButtonFormItem>
-            {localStorageAccount ? (
-              <CardFormButton
-                type="primary"
-                htmlType="submit"
-                disabled={
-                  sellAmountErrors.length > 0 || buyAmountErrors.length > 0
-                }
-              >
-                {sellAmountErrors.length > 0 || buyAmountErrors.length > 0
-                  ? lastChangedField === "sellAsset" &&
-                    sellAmountErrors.length > 0
-                    ? sellAmountErrors[0]
-                    : buyAmountErrors.length > 0
-                    ? buyAmountErrors[0]
-                    : sellAmountErrors[0]
-                  : counterpart.translate(`buttons.swap_coins`)}
-              </CardFormButton>
-            ) : (
-              <CardFormButton
-                type="primary"
-                htmlType="button"
-                onClick={() => {
-                  router.push("/login");
-                }}
-              >
-                {counterpart.translate(`buttons.login_and_swap_coins`)}
-              </CardFormButton>
-            )}
+            {renderSubmitButton}
           </Styled.SwapButtonFormItem>
         </Styled.SwapForm>
         {!localStorageAccount ? (
