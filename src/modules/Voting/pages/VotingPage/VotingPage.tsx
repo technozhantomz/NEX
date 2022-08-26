@@ -42,18 +42,18 @@ const VotingPage: NextPage = () => {
     getProxyAccount,
   } = useVoting();
   const dropdowItems = [
-    { label: counterpart.translate(`pages.voting.gpos.heading`), key: "gpos" },
+    { label: counterpart.translate(`pages.voting.gpos.tab`), key: "gpos" },
     {
-      label: counterpart.translate(`pages.voting.witnesses.heading`),
+      label: counterpart.translate(`pages.voting.witnesses.tab`),
       key: "witnesses",
     },
-    { label: counterpart.translate(`pages.voting.sons.heading`), key: "sons" },
+    { label: counterpart.translate(`pages.voting.sons.tab`), key: "sons" },
     {
-      label: counterpart.translate(`pages.voting.committees.heading`),
+      label: counterpart.translate(`pages.voting.committees.tab`),
       key: "committees",
     },
     {
-      label: counterpart.translate(`pages.voting.proxy.heading`),
+      label: counterpart.translate(`pages.voting.proxy.tab`),
       key: "proxy",
     },
   ];
@@ -77,8 +77,8 @@ const VotingPage: NextPage = () => {
           >
             <Button type="text" onClick={() => setVisible(!visible)}>
               {tab
-                ? counterpart.translate(`pages.voting.${tab}.heading`)
-                : counterpart.translate(`pages.voting.gpos.heading`)}{" "}
+                ? counterpart.translate(`pages.voting.${tab}.tab`)
+                : counterpart.translate(`pages.voting.gpos.tab`)}{" "}
               {!visible ? <DownOutlined /> : <UpOutlined />}
             </Button>
           </Styled.MobileDropdown>
@@ -112,7 +112,7 @@ const VotingPage: NextPage = () => {
           }}
         >
           <TabPane
-            tab={counterpart.translate(`pages.voting.gpos.heading`)}
+            tab={counterpart.translate(`pages.voting.gpos.tab`)}
             key="gpos"
           >
             <GPOSTab />
@@ -148,7 +148,7 @@ const VotingPage: NextPage = () => {
             );
           })}
           <TabPane
-            tab={counterpart.translate(`pages.voting.proxy.heading`)}
+            tab={counterpart.translate(`pages.voting.proxy.tab`)}
             key="proxy"
           >
             <ProxyTab

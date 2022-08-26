@@ -14,9 +14,9 @@ export function useTransferTransactionBuilder(): UseTransferTransactionBuilderRe
     (
       from: Account,
       to: Account,
-      memo: string,
       asset: Asset,
-      amount: number
+      amount: string,
+      memo?: string
     ): Transaction => {
       let memoFromPublic, memoToPublic;
       if (memo) {
@@ -37,8 +37,8 @@ export function useTransferTransactionBuilder(): UseTransferTransactionBuilderRe
       }
 
       const assetAmount = {
-        amount: amount * 10 ** Number(asset?.precision),
-        asset_id: asset?.id,
+        amount: Math.round(Number(amount) * 10 ** asset.precision),
+        asset_id: asset.id,
       };
 
       const trx = {

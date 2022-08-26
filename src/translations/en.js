@@ -644,7 +644,8 @@ export const en = {
       lower_case_sons: "sons",
       lower_case_committees: "committees",
       gpos: {
-        heading: "GPOS",
+        heading: "PeerPlays GPOS",
+        tab: "GPOS",
         join_gpos:
           "Join GPOS by transferring your %(defaultToken)s to your GPOS balance.",
         consistently_participate:
@@ -699,16 +700,20 @@ export const en = {
         },
       },
       sons: {
-        heading: "Sons",
+        heading: "PeerPlays SONs Voting",
+        tab: "Sons",
       },
       witnesses: {
-        heading: "Witnesses",
+        heading: "PeerPlays Witnesses Voting",
+        tab: "Witnesses",
       },
       proxy: {
-        heading: "Proxy",
+        heading: "PeerPlays Proxy Voting",
+        tab: "Proxy",
       },
       committees: {
-        heading: "Committees",
+        heading: "PeerPlays Committees Voting",
+        tab: "Committees",
       },
     },
     user: {

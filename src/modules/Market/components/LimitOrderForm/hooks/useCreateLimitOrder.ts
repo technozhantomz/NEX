@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { defaultToken } from "../../../../../api/params";
 import {
   roundNum,
-  toPrecision,
   useAccount,
   useFees,
   useOrderTransactionBuilder,
@@ -47,6 +46,28 @@ export function useCreateLimitOrder({
 
   const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
 
+  const handleFieldAssetPrecission = useCallback(
+    (fieldValue: string, fieldName: string, assetPrecission: number) => {
+      let numberedFieldValue = Number(fieldValue);
+
+      if (fieldValue.split(".")[1]?.length >= assetPrecission) {
+        numberedFieldValue =
+          roundNum(numberedFieldValue, assetPrecission) > 0
+            ? roundNum(numberedFieldValue, assetPrecission)
+            : numberedFieldValue;
+
+        const fieldsValueObject: {
+          [fieldName: string]: number;
+        } = {};
+
+        fieldsValueObject[`${fieldName}`] = numberedFieldValue;
+
+        orderForm.setFieldsValue(fieldsValueObject);
+      }
+    },
+    [orderForm]
+  );
+
   const handleAssetPrecission = useCallback(
     (changedValues) => {
       if (
@@ -55,49 +76,27 @@ export function useCreateLimitOrder({
         currentQuote !== undefined
       ) {
         if (changedValues.price) {
-          let price = Number(changedValues.price);
-          if (
-            changedValues.price.split(".")[1]?.length >= currentBase.precision
-          ) {
-            price =
-              roundNum(price, currentBase.precision) > 0
-                ? roundNum(price, currentBase.precision)
-                : price;
-            orderForm.setFieldsValue({
-              price: price,
-            });
-          }
+          handleFieldAssetPrecission(
+            changedValues.price,
+            "price",
+            currentBase.precision
+          );
         } else if (changedValues.total) {
-          let total = Number(changedValues.total);
-          if (
-            changedValues.total.split(".")[1]?.length >= currentBase.precision
-          ) {
-            total =
-              roundNum(total, currentBase.precision) > 0
-                ? roundNum(total, currentBase.precision)
-                : total;
-            orderForm.setFieldsValue({
-              total: total,
-            });
-          }
+          handleFieldAssetPrecission(
+            changedValues.total,
+            "total",
+            currentBase.precision
+          );
         } else if (changedValues.quantity) {
-          let quantity = Number(changedValues.quantity);
-          if (
-            changedValues.quantity.split(".")[1]?.length >=
+          handleFieldAssetPrecission(
+            changedValues.quantity,
+            "quantity",
             currentQuote.precision
-          ) {
-            quantity =
-              roundNum(quantity, currentQuote.precision) > 0
-                ? roundNum(quantity, currentQuote.precision)
-                : quantity;
-            orderForm.setFieldsValue({
-              quantity: quantity,
-            });
-          }
+          );
         }
       }
     },
-    [orderForm, currentBase, currentQuote, loadingSelectedPair, toPrecision]
+    [currentBase, currentQuote, loadingSelectedPair, handleFieldAssetPrecission]
   );
 
   const handleRelationsBetweenInputs = useCallback(
@@ -120,10 +119,7 @@ export function useCreateLimitOrder({
           allValues.quantity > 0
         ) {
           orderForm.setFieldsValue({
-            total: toPrecision(
-              allValues.price * allValues.quantity,
-              baseRoundTo
-            ),
+            total: roundNum(allValues.price * allValues.quantity, baseRoundTo),
           });
         }
       } else if (changedValues.total) {
@@ -134,15 +130,12 @@ export function useCreateLimitOrder({
           allValues.total > 0
         ) {
           orderForm.setFieldsValue({
-            quantity: toPrecision(
-              allValues.total / allValues.price,
-              quoteRoundTo
-            ),
+            quantity: roundNum(allValues.total / allValues.price, quoteRoundTo),
           });
         }
       }
     },
-    [orderForm, currentBase, currentQuote, toPrecision]
+    [orderForm, currentBase, currentQuote, roundNum]
   );
 
   const handleValuesChange = useCallback(
@@ -166,9 +159,15 @@ export function useCreateLimitOrder({
         const userQuoteAsset = assets.find(
           (asset) => asset.symbol === currentQuote.symbol
         );
+        const userBaseAssetAmount = userBaseAsset
+          ? (userBaseAsset.amount as number)
+          : 0;
+        const userQuoteAssetAmount = userQuoteAsset
+          ? (userQuoteAsset.amount as number)
+          : 0;
         isBuyOrder
-          ? _setBalance(userBaseAsset ? (userBaseAsset.amount as number) : 0)
-          : _setBalance(userQuoteAsset ? (userQuoteAsset.amount as number) : 0);
+          ? _setBalance(userBaseAssetAmount)
+          : _setBalance(userQuoteAssetAmount);
       }
     }
   }, [
@@ -289,6 +288,32 @@ export function useCreateLimitOrder({
     return Promise.resolve();
   };
 
+  const validateTotalForBuyOrders = (value: number) => {
+    let errorMessage = "";
+    const userBaseAsset = assets.find(
+      (asset) => asset.symbol === currentBase?.symbol
+    );
+    if (!userBaseAsset) {
+      errorMessage = counterpart.translate(`field.errors.balance_not_enough`);
+    }
+    if (currentBase?.symbol === defaultToken) {
+      if (Number(value) + feeAmount > (userBaseAsset?.amount as number)) {
+        errorMessage = counterpart.translate(`field.errors.balance_not_enough`);
+      }
+    } else {
+      if (Number(value) > (userBaseAsset?.amount as number)) {
+        errorMessage = counterpart.translate(`field.errors.balance_not_enough`);
+      }
+    }
+    if (
+      userBaseAsset === undefined ||
+      Number(value) > (userBaseAsset?.amount as number)
+    ) {
+      errorMessage = counterpart.translate(`field.errors.balance_not_enough`);
+    }
+    return errorMessage;
+  };
+
   const validateTotal = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
       return Promise.reject(
@@ -309,35 +334,10 @@ export function useCreateLimitOrder({
       );
     }
 
-    const userBaseAsset = assets.find(
-      (asset) => asset.symbol === currentBase?.symbol
-    );
     if (isBuyOrder) {
-      if (!userBaseAsset) {
-        return Promise.reject(
-          new Error(counterpart.translate(`field.errors.balance_not_enough`))
-        );
-      }
-      if (currentBase?.symbol === defaultToken) {
-        if (Number(value) + feeAmount > (userBaseAsset?.amount as number)) {
-          return Promise.reject(
-            new Error(counterpart.translate(`field.errors.balance_not_enough`))
-          );
-        }
-      } else {
-        if (Number(value) > (userBaseAsset?.amount as number)) {
-          return Promise.reject(
-            new Error(counterpart.translate(`field.errors.balance_not_enough`))
-          );
-        }
-      }
-      if (
-        userBaseAsset === undefined ||
-        Number(value) > (userBaseAsset?.amount as number)
-      ) {
-        return Promise.reject(
-          new Error(counterpart.translate(`field.errors.balance_not_enough`))
-        );
+      const errorMessage = validateTotalForBuyOrders(value);
+      if (errorMessage !== "") {
+        return Promise.reject(new Error(errorMessage));
       }
     }
     return Promise.resolve();

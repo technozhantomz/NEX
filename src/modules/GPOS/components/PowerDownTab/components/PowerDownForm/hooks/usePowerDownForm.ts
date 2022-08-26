@@ -116,13 +116,9 @@ export function usePowerDownForm({
   const adjustWithdraw = useCallback(
     (direction: string) => {
       const currentAmount = powerDownForm.getFieldValue("withdrawAmount");
+      const minusDirection = currentAmount > 0 ? currentAmount - 1 : 0;
       powerDownForm.setFieldsValue({
-        withdrawAmount:
-          direction === "+"
-            ? currentAmount + 1
-            : currentAmount > 0
-            ? currentAmount - 1
-            : 0,
+        withdrawAmount: direction === "+" ? currentAmount + 1 : minusDirection,
       });
       powerDownForm.validateFields();
     },
@@ -189,12 +185,10 @@ export function usePowerDownForm({
   }, [calculateGposWithdrawFee, setFeeAmount]);
 
   useEffect(() => {
-    //TODO: check that new amount not less then 0 or grater then account balance
     if (gposBalances) {
-      const newBalance =
-        (gposBalances.openingBalance as number) - withdrawAmount;
+      const newBalance = gposBalances.openingBalance - withdrawAmount;
       const newAvailableBalance =
-        (gposBalances.availableBalance as number) - withdrawAmount;
+        gposBalances.availableBalance - withdrawAmount;
       if (newAvailableBalance >= 0) {
         setNewBalance(newBalance);
         setNewAvailableBalance(newAvailableBalance);

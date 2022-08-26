@@ -6,4 +6,5 @@ export type UseAssetResult = {
   getAssetBySymbol: (symbol: string) => Promise<Asset>;
   setPrecision: (roundTo: boolean, amount: number, precision: number) => number;
   getAllAssets: () => Promise<Asset[] | undefined>;
+  limitByPrecision: (value: string, precision?: number) => string;
 };

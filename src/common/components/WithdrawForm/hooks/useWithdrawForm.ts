@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { defaultToken } from "../../../../api/params";
 import { Form } from "../../../../ui/src";
 import {
-  roundNum,
   useAccount,
+  useAsset,
   useFees,
   useSidechainAccounts,
   useSidechainTransactionBuilder,
@@ -13,7 +13,7 @@ import {
   useTransactionBuilder,
   useTransferTransactionBuilder,
 } from "../../../hooks";
-import { useUserContext } from "../../../providers";
+import { useAssetsContext, useUserContext } from "../../../providers";
 import { Account } from "../../../types";
 
 import { UseWithdrawFormResult, WithdrawForm } from "./useWithdrawForm.types";
@@ -30,6 +30,8 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [withdrawAddress, setWithdrawAddress] = useState<string>("");
   const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
 
+  const { limitByPrecision } = useAsset();
+  const { sidechainAssets } = useAssetsContext();
   const { getSonNetworkStatus, sonAccount } = useSonNetwork();
   const {
     bitcoinSidechainAccount,
@@ -52,29 +54,26 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
 
   const handleValuesChange = (changedValues: any) => {
     if (changedValues.amount) {
-      const selectedAccountAsset = assets.find(
+      const selectedSidechainAsset = sidechainAssets.find(
         (asset) => asset.symbol === selectedAsset
       );
-      let amount = Number(changedValues.amount);
-      if (
-        selectedAccountAsset &&
-        changedValues.amount.split(".")[1]?.length >=
-          selectedAccountAsset.precision
-      ) {
-        amount =
-          roundNum(amount, selectedAccountAsset.precision) > 0
-            ? roundNum(amount, selectedAccountAsset.precision)
-            : amount;
-        withdrawForm.setFieldsValue({
-          amount: amount,
-        });
-      }
+
+      const amount = limitByPrecision(
+        changedValues.amount,
+        selectedSidechainAsset?.precision
+      );
+      withdrawForm.setFieldsValue({
+        amount: amount,
+      });
     }
   };
 
   const handleAssetChange = useCallback(
-    (value: string) => {
-      setSelectedAsset(value);
+    (value: unknown) => {
+      setSelectedAsset(String(value));
+      withdrawForm.setFieldsValue({
+        amount: "0",
+      });
     },
     [setSelectedAsset]
   );
@@ -97,9 +96,9 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       const trx = buildTransferTransaction(
         from,
         to,
-        memo,
         asset,
-        values.amount
+        values.amount,
+        memo
       );
       return trx;
     } catch (e) {
@@ -190,7 +189,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
             values.amount
         );
         withdrawForm.setFieldsValue({
-          amount: 0,
+          amount: "0",
         });
         setLoadingTransaction(false);
       } else {
@@ -209,12 +208,12 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     }
   };
 
-  const validateAmount = async (_: unknown, value: number) => {
+  const validateAmount = async (_: unknown, value: string) => {
     const accountAsset = assets.find((asset) => asset.symbol === selectedAsset);
     const accountDefaultAsset = assets.find(
       (asset) => asset.symbol === defaultToken
     );
-    setAmount(value);
+    setAmount(Number(value));
 
     if (!accountAsset) {
       return Promise.reject(

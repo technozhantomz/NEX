@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { defaultToken } from "../../../../api/params/networkparams";
 import { Form } from "../../../../ui/src";
 import {
-  roundNum,
   useAccount,
+  useAsset,
   useFees,
   useSonNetwork,
   useTransactionBuilder,
@@ -14,7 +14,7 @@ import {
 import { useUserContext } from "../../../providers";
 import { Account } from "../../../types";
 
-import { UseTransferFormResult } from "./useTransferForm.types";
+import { TransferForm, UseTransferFormResult } from "./useTransferForm.types";
 
 export function useTransferForm(): UseTransferFormResult {
   const [feeAmount, setFeeAmount] = useState<number>(0);
@@ -29,12 +29,13 @@ export function useTransferForm(): UseTransferFormResult {
   const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
     useAccount();
 
+  const { limitByPrecision } = useAsset();
   const { localStorageAccount, assets } = useUserContext();
   const { buildTrx, getTrxFee } = useTransactionBuilder();
   const { calculateTransferFee } = useFees();
   const { buildTransferTransaction } = useTransferTransactionBuilder();
   const { sonAccount, getSonNetworkStatus } = useSonNetwork();
-  const [transferForm] = Form.useForm();
+  const [transferForm] = Form.useForm<TransferForm>();
 
   const handleValuesChange = (changedValues: any) => {
     if (changedValues.amount) {
@@ -42,20 +43,14 @@ export function useTransferForm(): UseTransferFormResult {
       const selectedAccountAsset = assets.find(
         (asset) => asset.symbol === selectedAsset
       );
-      let amount = Number(changedValues.amount);
-      if (
-        selectedAccountAsset &&
-        changedValues.amount.split(".")[1]?.length >=
-          selectedAccountAsset.precision
-      ) {
-        amount =
-          roundNum(amount, selectedAccountAsset.precision) > 0
-            ? roundNum(amount, selectedAccountAsset.precision)
-            : amount;
-        transferForm.setFieldsValue({
-          amount: amount,
-        });
-      }
+
+      const amount = limitByPrecision(
+        changedValues.amount,
+        selectedAccountAsset?.precision
+      );
+      transferForm.setFieldsValue({
+        amount: amount,
+      });
     }
   };
 
@@ -72,9 +67,9 @@ export function useTransferForm(): UseTransferFormResult {
       const trx = buildTransferTransaction(
         from,
         to,
-        values.memo,
         asset,
-        values.amount
+        values.amount,
+        values.memo
       );
       return trx;
     } catch (e) {
@@ -173,13 +168,13 @@ export function useTransferForm(): UseTransferFormResult {
     return Promise.resolve();
   };
 
-  const validateAmount = async (_: unknown, value: number) => {
+  const validateAmount = async (_: unknown, value: string) => {
     const selectedAsset = transferForm.getFieldValue("asset");
     const isDefaultAsset = selectedAsset === defaultToken;
     const selectedAccountAsset = assets.find(
       (asset) => asset.symbol === selectedAsset
     );
-    setAmount(value);
+    setAmount(Number(value));
 
     if (Number(value) <= 0) {
       return Promise.reject(
@@ -204,7 +199,7 @@ export function useTransferForm(): UseTransferFormResult {
       const accountDefaultAsset = assets.find(
         (asset) => asset.symbol === defaultToken
       );
-      if ((selectedAccountAsset.amount as number) < value) {
+      if ((selectedAccountAsset.amount as number) < Number(value)) {
         return Promise.reject(
           new Error(counterpart.translate(`field.errors.balance_not_enough`))
         );
