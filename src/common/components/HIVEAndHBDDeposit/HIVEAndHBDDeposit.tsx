@@ -6,6 +6,7 @@ import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import { useUserContext } from "../../providers";
 
 import * as Styled from "./HIVEAndHBDDeposit.styled";
+import { HIVEAndHBDDepositInfo } from "./components";
 
 type Props = {
   assetSymbol: string;
@@ -16,6 +17,7 @@ export const HIVEAndHBDDeposit = ({
 }: Props): JSX.Element => {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
+
   return (
     <>
       {localStorageAccount && localStorageAccount !== "" ? (
@@ -24,10 +26,12 @@ export const HIVEAndHBDDeposit = ({
             <HIVEIcon width="20px" height="20px" />
           </Styled.LogoContainer>
           <Styled.DepositInstruction>
-            {counterpart.translate(`field.comments.deposit_hbd`, {
-              assetSymbol: assetSymbol,
-              accountName: localStorageAccount,
-            })}
+            <HIVEAndHBDDepositInfo
+              infoString={counterpart.translate(`field.comments.deposit_hbd`, {
+                assetSymbol: assetSymbol,
+                accountName: `[userlink = ${localStorageAccount}]`,
+              })}
+            />
           </Styled.DepositInstruction>
         </Styled.Container>
       ) : (

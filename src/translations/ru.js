@@ -789,7 +789,7 @@ export const ru = {
     },
     comments: {
       deposit_hbd:
-        "Чтобы перевести %(assetSymbol)s на %(accountName)s, отправьте свои средства на son-account в блокчейне Hive с памяткой %(accountName)s",
+        "Чтобы перевести, %(assetSymbol)s , на , %(accountName)s, отправьте свои средства на , son-account, в блокчейне Hive с памяткой , %(accountName)s",
       public_memo: "Эта памятка общедоступна",
     },
     checkBoxes: {

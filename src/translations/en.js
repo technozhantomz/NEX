@@ -811,7 +811,7 @@ export const en = {
     },
     comments: {
       deposit_hbd:
-        "To deposit %(assetSymbol)s to %(accountName)s please send your funds to son-account on the Hive blockchain with the memo %(accountName)s",
+        "To deposit, %(assetSymbol)s , to , %(accountName)s, please send your funds to , son-account, on the Hive blockchain with the memo , %(accountName)s",
       public_memo: "This memo is public",
     },
     checkBoxes: {
