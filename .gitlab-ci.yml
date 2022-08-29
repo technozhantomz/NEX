@@ -102,6 +102,9 @@ deploy_review:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
+  artifacts:
+    paths:
+      - environment_url.txt
   only:
     - nex-docker-dast-cleanup
     - merge_requests
