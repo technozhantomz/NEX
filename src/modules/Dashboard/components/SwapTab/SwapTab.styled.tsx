@@ -50,16 +50,23 @@ export const SwapItem = styled(swapForm.Item)`
     background: ${colors.white} 0% 0% no-repeat padding-box;
     ${mixIns.borderRadius}
     height: 65px;
-    ${breakpoint.sm} {
-      height: 85px;
-    }
     .ant-input-prefix {
       min-width: 135px;
-      width: 40%;
+      width: fit-content;
+      .ant-select-selection-item {
+        padding-right: 30px;
+      }
     }
     .ant-input {
       text-align: right;
       direction: ltr;
+    }
+    ${breakpoint.sm} {
+      height: 85px;
+      .ant-input-prefix {
+        min-width: 135px;
+        width: 50%;
+      }
     }
   }
   z-index: 1;

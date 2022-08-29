@@ -1,5 +1,6 @@
 import React from "react";
 
+import { utils } from "../../../api/utils/utils";
 import { BaseOptionType, DefaultOptionType } from "../../../ui/src";
 import BitcoinCashIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinCashIcon.svg";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
@@ -72,7 +73,9 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
               ? icons[props.value]
               : icons["Default"]}
           </Styled.IconContainer>
-          <Styled.AssetName>{props.value}</Styled.AssetName>
+          <Styled.AssetName>{`${utils.getAssetNameFromSymbol(props.value)} (${
+            props.value
+          })`}</Styled.AssetName>
         </Styled.OptionDiv>
       </Styled.SelectOptionContainer>
       {props.assets &&
@@ -91,7 +94,9 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
                     ? icons[asset.symbol]
                     : icons["Default"]}
                 </Styled.IconContainer>
-                <Styled.AssetName>{asset.symbol}</Styled.AssetName>
+                <Styled.AssetName>{`${utils.getAssetNameFromSymbol(
+                  asset.symbol
+                )} (${asset.symbol})`}</Styled.AssetName>
               </Styled.OptionDiv>
             </Styled.SelectOptionContainer>
           ))}

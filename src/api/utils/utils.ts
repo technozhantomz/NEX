@@ -35,4 +35,16 @@ export const utils = {
     }
     return false;
   },
+  getAssetNameFromSymbol: (symbol: string): string => {
+    const assetNames: Record<string, string> = {
+      BTC: "Bitcoin",
+      HIVE: "HIVE",
+      HBD: "Hive Dollar",
+      PBTC: "pTokens BTC",
+      PEOS: "pEOS",
+      PETH: "PumpETH",
+
+    };
+    return assetNames[symbol] || symbol;
+  },
 };
