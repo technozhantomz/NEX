@@ -116,7 +116,7 @@ export const SwapTab = (): JSX.Element => {
   const renderPrice = loadingSwapData ? (
     <>
       <Styled.PriceLoadingOutlined></Styled.PriceLoadingOutlined>
-      {`${counterpart.translate(`field.labels.fetching_price`)}...`}
+      {counterpart.translate(`field.labels.fetching_price`) + "..."}
     </>
   ) : (
     renderPriceAmount

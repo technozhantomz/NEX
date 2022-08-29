@@ -120,7 +120,7 @@ export function useAsset(): UseAssetResult {
       return value;
     } else {
       const limitedValue =
-        splitString[0] + "." + splitString[1].substr(0, precision);
+        splitString[0] + "." + splitString[1].slice(0, precision);
       return limitedValue;
     }
   };

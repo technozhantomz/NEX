@@ -816,7 +816,7 @@ export function useSwap(): UseSwapResult {
         id,
         Number(minToReceive) > 0
           ? minToReceive
-          : String(1 / 10 ** (buyAsset as Asset).precision),
+          : String(1 / 10 ** buyAsset.precision),
         String(middleTrxCoreAmount),
         defaultAsset as Asset,
         buyAsset
@@ -1018,7 +1018,7 @@ export function useSwap(): UseSwapResult {
       // fee check
       const feeErrorMessage = validateFeeAmount(userDefaultAsset);
       if (feeErrorMessage !== "") {
-        new Error(feeErrorMessage);
+        return Promise.reject(new Error(feeErrorMessage));
       }
 
       // balance check
