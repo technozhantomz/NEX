@@ -87,7 +87,6 @@ sonarcloud-check:
 deploy_review:
   dependencies:
     - build-review
-    - npm-audit
     - sonarcloud-check
     - sast
   stage: deploy-review
