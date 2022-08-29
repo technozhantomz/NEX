@@ -103,6 +103,7 @@ deploy_review:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
   only:
+    - nex-docker-dast-cleanup
     - merge_requests
   except:
     - main
@@ -148,7 +149,10 @@ dast:
   artifacts:
     paths: 
       - gl-dast-report.json
-  only:
-    - branches
-    - merge_requests
+  rules:
+  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    when: always
+  - if: $CI_COMMIT_REF_NAME == "develop"
+    when: manual
+  - when: always
   
