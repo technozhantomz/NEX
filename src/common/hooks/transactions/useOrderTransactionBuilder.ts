@@ -94,24 +94,18 @@ export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
   const buildSwapTransaction = useCallback(
     (
       sellerId: string,
-      minToReceive: number,
-      amountToSell: number,
+      minToReceive: string,
+      amountToSell: string,
       sellAsset: Asset,
       buyAsset: Asset
     ): Transaction => {
       const amount_to_sell = {
-        amount: roundNum(
-          amountToSell * 10 ** sellAsset.precision,
-          sellAsset.precision
-        ),
+        amount: Math.round(Number(amountToSell) * 10 ** sellAsset.precision),
         asset_id: sellAsset.id,
       } as Amount;
 
       const min_to_receive = {
-        amount: roundNum(
-          minToReceive * 10 ** buyAsset.precision,
-          buyAsset.precision
-        ),
+        amount: Math.round(Number(minToReceive) * 10 ** buyAsset.precision),
         asset_id: buyAsset.id,
       } as Amount;
 
@@ -131,7 +125,7 @@ export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
       };
       return trx;
     },
-    [defaultAsset, roundNum]
+    [defaultAsset]
   );
 
   return {

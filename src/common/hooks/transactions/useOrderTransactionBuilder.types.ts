@@ -18,8 +18,8 @@ export type UseOrderTransactionBuilderResult = {
   ) => Transaction;
   buildSwapTransaction: (
     sellerId: string,
-    minToReceive: number,
-    amountToSell: number,
+    minToReceive: string,
+    amountToSell: string,
     sellAsset: Asset,
     buyAsset: Asset
   ) => Transaction;

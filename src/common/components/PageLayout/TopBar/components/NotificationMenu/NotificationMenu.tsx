@@ -1,3 +1,4 @@
+import { PaginationConfig } from "antd/lib/pagination";
 import counterpart from "counterpart";
 import Link from "next/link";
 import { CSSProperties, ReactNode } from "react";
@@ -44,6 +45,67 @@ export const NotificationMenu = (): JSX.Element => {
     ""
   );
 
+  const hasGroupedNotificationsByDate =
+    groupedNotificationsByDate &&
+    Object.keys(groupedNotificationsByDate).length > 0;
+
+  const renderTimeLabel = (time: string) => {
+    const renderYesterdayOrOlder =
+      yesterday.toDateString() === new Date(formLocalDate(time)).toDateString()
+        ? counterpart.translate(`field.labels.yesterday`)
+        : formLocalDate(time);
+    const renderTodayOrOlder =
+      today.toDateString() === new Date(formLocalDate(time)).toDateString()
+        ? counterpart.translate(`field.labels.today`)
+        : renderYesterdayOrOlder;
+    return (
+      <Styled.TimeSpecification>{renderTodayOrOlder}</Styled.TimeSpecification>
+    );
+  };
+
+  const notificationPagination = {
+    position: "bottom",
+    showSizeChanger: false,
+    size: "small",
+    pageSize: 2,
+    hideOnSinglePage: true,
+    showLessItems: true,
+    itemRender: (
+      _page: number,
+      type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
+      element: ReactNode
+    ) => {
+      if (type === "prev") {
+        return (
+          <>
+            {" "}
+            {_page > 0 ? (
+              <a
+                style={
+                  {
+                    marginRight: "8px",
+                  } as CSSProperties
+                }
+              >
+                {counterpart.translate(`buttons.previous`)}
+              </a>
+            ) : (
+              ""
+            )}
+          </>
+        );
+      }
+      if (type === "next") {
+        return (
+          <a style={{ marginLeft: "8px" } as CSSProperties}>
+            {counterpart.translate(`buttons.next`)}
+          </a>
+        );
+      }
+      return element;
+    },
+  } as PaginationConfig;
+
   return (
     <Styled.NotificationMenuCard
       onClick={(e) => {
@@ -68,82 +130,18 @@ export const NotificationMenu = (): JSX.Element => {
           e.stopPropagation();
         }}
       >
-        {groupedNotificationsByDate &&
-        Object.keys(groupedNotificationsByDate).length > 0 &&
-        !loadingNotifications ? (
+        {hasGroupedNotificationsByDate && !loadingNotifications ? (
           <>
             {Object.keys(groupedNotificationsByDate).map((time) => {
               const dataSource = groupedNotificationsByDate[time];
 
               return (
                 <div key={time}>
-                  <Styled.TimeSpecification>
-                    {today.toDateString() ===
-                    new Date(formLocalDate(time)).toDateString()
-                      ? counterpart.translate(`field.labels.today`)
-                      : yesterday.toDateString() ===
-                        new Date(formLocalDate(time)).toDateString()
-                      ? counterpart.translate(`field.labels.yesterday`)
-                      : formLocalDate(time)}
-                  </Styled.TimeSpecification>
+                  {renderTimeLabel(time)}
                   <List
                     loading={loadingNotifications}
                     pagination={
-                      !loadingNotifications
-                        ? {
-                            position: "bottom",
-                            showSizeChanger: false,
-                            size: "small",
-                            pageSize: 2,
-                            hideOnSinglePage: true,
-                            showLessItems: true,
-                            itemRender: (
-                              _page: number,
-                              type:
-                                | "page"
-                                | "prev"
-                                | "next"
-                                | "jump-prev"
-                                | "jump-next",
-                              element: ReactNode
-                            ) => {
-                              if (type === "prev") {
-                                return (
-                                  <>
-                                    {" "}
-                                    {_page > 0 ? (
-                                      <a
-                                        style={
-                                          {
-                                            marginRight: "8px",
-                                          } as CSSProperties
-                                        }
-                                      >
-                                        {counterpart.translate(
-                                          `buttons.previous`
-                                        )}
-                                      </a>
-                                    ) : (
-                                      ""
-                                    )}
-                                  </>
-                                );
-                              }
-                              if (type === "next") {
-                                return (
-                                  <a
-                                    style={
-                                      { marginLeft: "8px" } as CSSProperties
-                                    }
-                                  >
-                                    {counterpart.translate(`buttons.next`)}
-                                  </a>
-                                );
-                              }
-                              return element;
-                            },
-                          }
-                        : false
+                      !loadingNotifications ? notificationPagination : false
                     }
                     itemLayout="vertical"
                     dataSource={dataSource}

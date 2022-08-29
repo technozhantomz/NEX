@@ -63,6 +63,11 @@ export const PowerUpForm = ({
   });
   const { sm } = useViewportContext();
 
+  const mobileOpeningBalancePrefix = gposBalances
+    ? `${gposBalances.openingBalance}`
+    : "";
+  const mobileNewBalancePrefix = gposBalances ? `${newBalance}` : "";
+
   return (
     <>
       <Form.Provider onFormFinish={handleFormFinish}>
@@ -89,9 +94,7 @@ export const PowerUpForm = ({
             <Input
               prefix={
                 sm
-                  ? gposBalances
-                    ? `${gposBalances.openingBalance}`
-                    : ""
+                  ? mobileOpeningBalancePrefix
                   : counterpart.translate(`field.placeholder.opening_balance`)
               }
               disabled={true}
@@ -135,9 +138,7 @@ export const PowerUpForm = ({
             <Input
               prefix={
                 sm
-                  ? gposBalances
-                    ? `${newBalance}`
-                    : ""
+                  ? mobileNewBalancePrefix
                   : counterpart.translate(`field.placeholder.new_balance`)
               }
               disabled={true}

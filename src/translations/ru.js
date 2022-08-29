@@ -618,7 +618,8 @@ export const ru = {
       lower_case_sons: "sons",
       lower_case_committees: "комитеты",
       gpos: {
-        heading: "GPOS",
+        heading: "PeerPlays GPOS",
+        tab: "GPOS",
         join_gpos:
           "Присоединяйтесь к GPOS, переведя свои %(defaultToken)s на баланс GPOS.",
         consistently_participate:
@@ -675,16 +676,20 @@ export const ru = {
         },
       },
       sons: {
-        heading: "Sons",
+        heading: "Голосование SONs PeerPlays",
+        tab: "Sons",
       },
       witnesses: {
-        heading: "Свидетели",
+        heading: "Голосование свидетелей PeerPlays",
+        tab: "Свидетели",
       },
       proxy: {
-        heading: "Прокси",
+        heading: "Голосование за прокси PeerPlays",
+        tab: "Прокси",
       },
       committees: {
-        heading: "Комитеты",
+        heading: "Голосование комитетов PeerPlays",
+        tab: "Комитеты",
       },
     },
     user: {

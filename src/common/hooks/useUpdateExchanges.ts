@@ -27,12 +27,14 @@ export function useUpdateExchanges(): UseUpdateExchangesResult {
           ...recentPairsWithoutSelectedPair,
         ];
         setExchanges({
+          ...exchanges,
           active: selectedPair,
           list: [...newRecentPairs],
         } as Exchanges);
       } else {
         recentPairs.unshift(selectedPair.split("_").join("/"));
         setExchanges({
+          ...exchanges,
           active: selectedPair,
           list: [...recentPairs],
         } as Exchanges);

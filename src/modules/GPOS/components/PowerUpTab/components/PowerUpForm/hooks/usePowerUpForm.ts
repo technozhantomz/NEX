@@ -44,13 +44,9 @@ export function usePowerUpForm({
   const adjustDeposit = useCallback(
     (direction: string) => {
       const currentAmount = powerUpForm.getFieldValue("depositAmount");
+      const minusDirection = currentAmount >= 1 ? currentAmount - 1 : 0;
       powerUpForm.setFieldsValue({
-        depositAmount:
-          direction === "+"
-            ? currentAmount + 1
-            : currentAmount >= 1
-            ? currentAmount - 1
-            : 0,
+        depositAmount: direction === "+" ? currentAmount + 1 : minusDirection,
       });
       powerUpForm.validateFields();
     },
@@ -176,7 +172,6 @@ export function usePowerUpForm({
   }, [calculateGposVestingFee, setFeeAmount]);
 
   useEffect(() => {
-    //TODO: check that new amount not less then 0 or grater then account balance
     if (gposBalances) {
       const newBalance = gposBalances?.openingBalance + depositAmount;
       setNewBalance(newBalance);

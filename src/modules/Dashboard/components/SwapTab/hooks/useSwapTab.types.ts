@@ -38,8 +38,8 @@ export type FormValidation = {
 };
 
 export type SwapForm = {
-  sellAmount: number;
-  buyAmount: number;
+  sellAmount: string;
+  buyAmount: string;
 };
 
 export type SwapAssetPair = {

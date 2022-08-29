@@ -63,6 +63,14 @@ export const PowerDownForm = ({
     setTransactionSuccessMessage,
   });
   const { sm } = useViewportContext();
+  const mobileOpeningBalancePrefix = gposBalances
+    ? `${gposBalances.openingBalance}`
+    : "";
+  const mobileAvailableBalancePrefix = gposBalances
+    ? `${newAvailableBalance}`
+    : "";
+  const mobileNewBalancePrefix = gposBalances ? `${newBalance}` : "";
+
   return (
     <>
       <Form.Provider onFormFinish={handleFormFinish}>
@@ -90,9 +98,7 @@ export const PowerDownForm = ({
             <Input
               prefix={
                 sm
-                  ? gposBalances
-                    ? `${gposBalances.openingBalance}`
-                    : ""
+                  ? mobileOpeningBalancePrefix
                   : counterpart.translate(`field.placeholder.opening_balance`)
               }
               disabled={true}
@@ -109,9 +115,7 @@ export const PowerDownForm = ({
             <Input
               prefix={
                 sm
-                  ? gposBalances
-                    ? `${newAvailableBalance}`
-                    : ""
+                  ? mobileAvailableBalancePrefix
                   : counterpart.translate(`field.placeholder.available_balance`)
               }
               disabled={true}
@@ -155,9 +159,7 @@ export const PowerDownForm = ({
             <Input
               prefix={
                 sm
-                  ? gposBalances
-                    ? `${newBalance}`
-                    : ""
+                  ? mobileNewBalancePrefix
                   : counterpart.translate(`field.placeholder.new_balance`)
               }
               disabled={true}

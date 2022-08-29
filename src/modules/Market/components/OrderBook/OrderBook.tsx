@@ -96,8 +96,8 @@ export const OrderBook = ({
     </Styled.ThresholdMenu>
   );
 
-  const columns = forUser
-    ? currentQuote && currentBase
+  const userOrderColumns =
+    currentQuote && currentBase
       ? showUserOrderColumns(
           currentQuote.symbol,
           currentBase.symbol,
@@ -106,8 +106,9 @@ export const OrderBook = ({
             showPasswordModal();
           }
         )
-      : undefined
-    : orderColumns;
+      : undefined;
+
+  const columns = forUser ? userOrderColumns : orderColumns;
 
   return (
     <>

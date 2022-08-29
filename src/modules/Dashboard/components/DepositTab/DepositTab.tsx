@@ -21,6 +21,50 @@ export const DepositTab = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { sidechainAssets } = useAssetsContext();
   const { handleAssetChange, selectedAsset } = useDepositTab();
+
+  const isLoggedIn = localStorageAccount && localStorageAccount !== "";
+
+  const loggedInUserBTCDeposit = hasBTCDepositAddress ? (
+    <Styled.AddressGeneratedContainer>
+      <AddressGenerated
+        bitcoinSidechainAccount={bitcoinSidechainAccount}
+        getSidechainAccounts={getSidechainAccounts}
+      />
+    </Styled.AddressGeneratedContainer>
+  ) : (
+    <>
+      <GenerateBitcoinAddress
+        isLoggedIn={!!localStorageAccount}
+        getSidechainAccounts={getSidechainAccounts}
+      />
+    </>
+  );
+
+  const loggedInUserBTCDepositWithLoading = loadingSidechainAccounts
+    ? ""
+    : loggedInUserBTCDeposit;
+
+  const nonLoggedInUserBTCDeposit = (
+    <>
+      <GenerateBitcoinAddress
+        isLoggedIn={false}
+        getSidechainAccounts={getSidechainAccounts}
+      />
+    </>
+  );
+
+  const BTCDeposit = isLoggedIn
+    ? loggedInUserBTCDepositWithLoading
+    : nonLoggedInUserBTCDeposit;
+
+  const HIVEDeposit = (
+    <Styled.HIVEDepositContainer>
+      <HIVEAndHBDDeposit assetSymbol={selectedAsset} />
+    </Styled.HIVEDepositContainer>
+  );
+
+  const deposit = selectedAsset === "BTC" ? BTCDeposit : HIVEDeposit;
+
   return (
     <Styled.DepositFormContainer>
       <Styled.LogoSelect
@@ -29,38 +73,7 @@ export const DepositTab = (): JSX.Element => {
         onChange={handleAssetChange}
       />
 
-      {selectedAsset === "BTC" ? (
-        localStorageAccount && localStorageAccount !== "" ? (
-          loadingSidechainAccounts ? (
-            ""
-          ) : hasBTCDepositAddress ? (
-            <Styled.AddressGeneratedContainer>
-              <AddressGenerated
-                bitcoinSidechainAccount={bitcoinSidechainAccount}
-                getSidechainAccounts={getSidechainAccounts}
-              />
-            </Styled.AddressGeneratedContainer>
-          ) : (
-            <>
-              <GenerateBitcoinAddress
-                isLoggedIn={!!localStorageAccount}
-                getSidechainAccounts={getSidechainAccounts}
-              />
-            </>
-          )
-        ) : (
-          <>
-            <GenerateBitcoinAddress
-              isLoggedIn={false}
-              getSidechainAccounts={getSidechainAccounts}
-            />
-          </>
-        )
-      ) : (
-        <Styled.HIVEDepositContainer>
-          <HIVEAndHBDDeposit assetSymbol={selectedAsset} />
-        </Styled.HIVEDepositContainer>
-      )}
+      {deposit}
     </Styled.DepositFormContainer>
   );
 };

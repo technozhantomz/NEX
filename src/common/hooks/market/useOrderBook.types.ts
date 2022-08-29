@@ -8,5 +8,9 @@ export type UseOrderBookResult = {
     asks: BookedOrder[];
     bids: BookedOrder[];
   }>;
-  reduceBookedOrdersByPrice: (orders: BookedOrder[]) => BookedOrder[];
+  reduceBookedOrdersByPrice: (
+    orders: BookedOrder[],
+    base: Asset,
+    quote: Asset
+  ) => BookedOrder[];
 };
