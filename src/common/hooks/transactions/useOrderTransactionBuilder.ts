@@ -125,7 +125,7 @@ export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
       };
       return trx;
     },
-    [defaultAsset, roundNum]
+    [defaultAsset]
   );
 
   return {

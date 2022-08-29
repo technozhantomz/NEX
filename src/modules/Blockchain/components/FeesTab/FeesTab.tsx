@@ -59,6 +59,105 @@ export const FeesTab = (): JSX.Element => {
     setGameFull,
   ];
 
+  const renderShowMoreLink = (
+    showMore: boolean,
+    setShowMore: (value: SetStateAction<boolean>) => void
+  ) => {
+    return showMore ? (
+      <a onClick={() => setShowMore(false)}>
+        {counterpart.translate(`pages.blocks.fees.show_less`)}
+      </a>
+    ) : (
+      <a onClick={() => setShowMore(true)}>
+        {counterpart.translate(`pages.blocks.fees.show_more`)}
+      </a>
+    );
+  };
+
+  const renderFeesGroupAsList = (
+    showMore: boolean,
+    feesRows: FeesTableRow[],
+    setShowMore: (value: SetStateAction<boolean>) => void
+  ) => {
+    return (
+      <>
+        <List
+          itemLayout="vertical"
+          dataSource={showMore ? feesRows : feesRows.slice(0, 3)}
+          loading={loading}
+          renderItem={(item) => (
+            <Styled.FeeListItem key={item.operation}>
+              <Styled.FeeItemContent>
+                {item.operation === "" ? (
+                  ""
+                ) : (
+                  <div className="fee-info">
+                    <span className="fee-info-title">
+                      {FeesColumns[0].title()}
+                    </span>
+                    <span className="fee-info-value">
+                      <Tag key={item.operation} bgColor={colors.assetTag}>
+                        {item.operation}
+                      </Tag>
+                    </span>
+                  </div>
+                )}
+                <div className="fee-info">
+                  <span className="fee-info-title">
+                    {FeesColumns[1].title()}
+                  </span>
+                  <Styled.FeeTypeOrValueContainer>
+                    {item.types.map((type) => (
+                      <span
+                        key={`${item.operation}-${type}`}
+                        className="fee-info-value"
+                      >
+                        {type}
+                      </span>
+                    ))}
+                  </Styled.FeeTypeOrValueContainer>
+                </div>
+                <div className="fee-info">
+                  <span className="fee-info-title">
+                    {FeesColumns[2].title()}
+                  </span>
+                  <Styled.FeeTypeOrValueContainer>
+                    {item.fees.map((fee, index) => (
+                      <span
+                        key={`${item.operation}-${item.types[index]}-${fee}`}
+                        className="fee-info-value"
+                      >
+                        {fee}
+                      </span>
+                    ))}
+                  </Styled.FeeTypeOrValueContainer>
+                </div>
+              </Styled.FeeItemContent>
+            </Styled.FeeListItem>
+          )}
+        />
+        {loading ? "" : renderShowMoreLink(showMore, setShowMore)}
+      </>
+    );
+  };
+  const renderFeesGroupAsTable = (
+    showMore: boolean,
+    feesRows: FeesTableRow[],
+    setShowMore: (value: SetStateAction<boolean>) => void
+  ) => {
+    return (
+      <>
+        <Styled.FeesTable
+          bordered={false}
+          dataSource={showMore ? feesRows : feesRows.slice(0, 3)}
+          columns={FeesColumns}
+          loading={loading}
+          pagination={false}
+        />
+        {renderShowMoreLink(showMore, setShowMore)}
+      </>
+    );
+  };
   const renderFeesGroup = (
     groupHeading: string,
     feesRows: FeesTableRow[],
@@ -68,107 +167,9 @@ export const FeesTab = (): JSX.Element => {
     return (
       <Styled.Section>
         <Styled.FeeSpecificHeader>{groupHeading}</Styled.FeeSpecificHeader>
-        {sm ? (
-          <>
-            <List
-              itemLayout="vertical"
-              dataSource={
-                showMore
-                  ? feesRows
-                  : feesRows.filter((item, index) => {
-                      if (index < 3) return item;
-                    })
-              }
-              loading={loading}
-              renderItem={(item) => (
-                <Styled.FeeListItem key={item.operation}>
-                  <Styled.FeeItemContent>
-                    {item.operation === "" ? (
-                      ""
-                    ) : (
-                      <div className="fee-info">
-                        <span className="fee-info-title">
-                          {FeesColumns[0].title()}
-                        </span>
-                        <span className="fee-info-value">
-                          <Tag key={item.operation} bgColor={colors.assetTag}>
-                            {item.operation}
-                          </Tag>
-                        </span>
-                      </div>
-                    )}
-                    <div className="fee-info">
-                      <span className="fee-info-title">
-                        {FeesColumns[1].title()}
-                      </span>
-                      <Styled.FeeTypeOrValueContainer>
-                        {item.types.map((type) => (
-                          <span
-                            key={`${item.operation}-${type}`}
-                            className="fee-info-value"
-                          >
-                            {type}
-                          </span>
-                        ))}
-                      </Styled.FeeTypeOrValueContainer>
-                    </div>
-                    <div className="fee-info">
-                      <span className="fee-info-title">
-                        {FeesColumns[2].title()}
-                      </span>
-                      <Styled.FeeTypeOrValueContainer>
-                        {item.fees.map((fee, index) => (
-                          <span
-                            key={`${item.operation}-${item.types[index]}-${fee}`}
-                            className="fee-info-value"
-                          >
-                            {fee}
-                          </span>
-                        ))}
-                      </Styled.FeeTypeOrValueContainer>
-                    </div>
-                  </Styled.FeeItemContent>
-                </Styled.FeeListItem>
-              )}
-            />
-            {loading ? (
-              ""
-            ) : showMore ? (
-              <a onClick={() => setShowMore(false)}>
-                {counterpart.translate(`pages.blocks.fees.show_less`)}
-              </a>
-            ) : (
-              <a onClick={() => setShowMore(true)}>
-                {counterpart.translate(`pages.blocks.fees.show_more`)}
-              </a>
-            )}
-          </>
-        ) : (
-          <>
-            <Styled.FeesTable
-              bordered={false}
-              dataSource={
-                showMore
-                  ? feesRows
-                  : feesRows.filter((item, index) => {
-                      if (index < 3) return item;
-                    })
-              }
-              columns={FeesColumns}
-              loading={loading}
-              pagination={false}
-            />
-            {showMore ? (
-              <a onClick={() => setShowMore(false)}>
-                {counterpart.translate(`pages.blocks.fees.show_less`)}
-              </a>
-            ) : (
-              <a onClick={() => setShowMore(true)}>
-                {counterpart.translate(`pages.blocks.fees.show_more`)}
-              </a>
-            )}
-          </>
-        )}
+        {sm
+          ? renderFeesGroupAsList(showMore, feesRows, setShowMore)
+          : renderFeesGroupAsTable(showMore, feesRows, setShowMore)}
       </Styled.Section>
     );
   };
