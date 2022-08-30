@@ -5,6 +5,12 @@
 # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+include: 
+- template: DAST.gitlab-ci.yml
+- template: Security/SAST.gitlab-ci.yml
+- template: Security/Dependency-Scanning.gitlab-ci.yml
+- template: Security/Container-Scanning.gitlab-ci.yml
+
 variables:
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
   GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
@@ -14,7 +20,7 @@ stages:
 - test
 - deploy-review
 - deployQA
-
+- dast
 
 build-review:
   # node docker image on which this would be run
@@ -40,26 +46,24 @@ build-review:
   tags:
     - build
 
-npm-audit:
-  image: "registry.gitlab.com/gitlab-org/security-products/analyzers/npm-audit:1.4.0"
-  stage: test
+docker_build:
+  image: docker:stable
+  stage: build
+  services:
+    - docker:19.03.12-dind
   variables:
-    TOOL: npm
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
   script:
-    - /analyzer run
-  artifacts:
-    reports:
-      dependency_scanning: gl-dependency-scanning-report.json
-    paths:
-      - gl-dependency-scanning-report.json
-  tags: 
-    - npm-audit
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker build -f dev.Dockerfile -t $IMAGE .
+    - docker push $IMAGE
+  only:
+    - branches
+    - merge_requests
 
 sast:
   stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
-- template: Security/Dependency-Scanning.gitlab-ci.yml
 
 sonarcloud-check:
   stage: test
@@ -81,7 +85,6 @@ sonarcloud-check:
 deploy_review:
   dependencies:
     - build-review
-    - npm-audit
     - sonarcloud-check
     - sast
   stage: deploy-review
@@ -99,7 +102,11 @@ deploy_review:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
+  artifacts:
+    paths:
+      - environment_url.txt
   only:
+    - nex-docker-dast-cleanup
     - merge_requests
   except:
     - main
@@ -112,10 +119,10 @@ stop_review_app:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
-  only: 
-    - branches
+  only:
+    - merge_requests
   except:
-    - dev
+    - main
   tags:
     - deploy-review
   when: manual
@@ -137,3 +144,18 @@ deployToQA:
   when: manual 
   tags:
     - deploy
+
+dast:
+  stage: dast
+  before_script:
+    - if [ "$CI_COMMIT_REF_NAME" != "develop" ]; then export DAST_WEBSITE=$(cat environment_url.txt); else export DAST_WEBSITE=$DAST_WEBSITE; fi
+  artifacts:
+    paths: 
+      - gl-dast-report.json
+  rules:
+  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    when: always
+  - if: $CI_COMMIT_REF_NAME == "develop"
+    when: manual
+  - when: always
+  
