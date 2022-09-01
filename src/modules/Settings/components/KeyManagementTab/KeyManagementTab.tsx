@@ -89,9 +89,13 @@ export const KeyManagementTab = (): JSX.Element => {
                               copyValue={`${generatedKey.key}`}
                             ></CopyButton>
                             {visible ? (
-                              <EyeOutlined />
+                              <EyeOutlined
+                                onClick={(e) => e.preventDefault()}
+                              />
                             ) : (
-                              <EyeInvisibleOutlined />
+                              <EyeInvisibleOutlined
+                                onClick={(e) => e.preventDefault()}
+                              />
                             )}
                           </div>
                         )}
