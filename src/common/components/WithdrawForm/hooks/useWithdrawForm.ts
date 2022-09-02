@@ -2,6 +2,7 @@ import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
+import { utils } from "../../../../api/utils";
 import { Form } from "../../../../ui/src";
 import {
   useAccount,
@@ -280,6 +281,13 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       }
       return Promise.reject(new Error(""));
     } else {
+      if (!utils.validateGrapheneAccountName(value)) {
+        return Promise.reject(
+          new Error(
+            counterpart.translate(`field.errors.invalid_withdraw_hive_address`)
+          )
+        );
+      }
       await setWithdrawFeeWithMemo();
       return Promise.resolve();
     }
