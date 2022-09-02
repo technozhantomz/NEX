@@ -676,19 +676,19 @@ export const ru = {
         },
       },
       sons: {
-        heading: "Голосование SONs PeerPlays",
+        heading: "PeerPlays SONs Голосование",
         tab: "Sons",
       },
       witnesses: {
-        heading: "Голосование свидетелей PeerPlays",
+        heading: "PeerPlays Свидетели Голосование",
         tab: "Свидетели",
       },
       proxy: {
-        heading: "Голосование за прокси PeerPlays",
+        heading: "PeerPlays Голосование по доверенности",
         tab: "Прокси",
       },
       committees: {
-        heading: "Голосование комитетов PeerPlays",
+        heading: "PeerPlays Комитеты Голосование",
         tab: "Комитеты",
       },
     },
