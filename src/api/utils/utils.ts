@@ -35,4 +35,19 @@ export const utils = {
     }
     return false;
   },
+  getBlockchainFromSymbol: (symbol: string): string => {
+    const blockchains: Record<string, string> = {
+      BTC: "Bitcoin",
+      PBTC: "Bitcoin",
+      HIVE: "Hive",
+      HBD: "Hive",
+      PEOS: "EOSIO",
+      EOS: "EOSIO",
+      PETH: "Ethereum",
+      ETH: "Ethereum",
+      TEST: "PeerPlays",
+      PPY: "PeerPlays",
+    };
+    return blockchains[symbol] || symbol;
+  },
 };

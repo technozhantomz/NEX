@@ -15,8 +15,11 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)`
   .ant-input-affix-wrapper {
     padding: 0;
     .ant-input-prefix {
-      min-width: 135px;
-      width: 33%;
+      min-width: 200px;
+      ${breakpoint.sm} {
+        min-width: 240px;
+      }
+      width: fit-content;
     }
     .ant-input {
       text-align: right;
