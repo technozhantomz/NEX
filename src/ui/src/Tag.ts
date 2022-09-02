@@ -15,4 +15,5 @@ export const Tag = styled.span<ITag>`
   border: none;
   ${mixIns.borderRadius}
   padding: 5px 21px;
+  white-space: nowrap;
 `;
