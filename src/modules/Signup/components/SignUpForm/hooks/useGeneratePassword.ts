@@ -6,12 +6,16 @@ type UseGeneratePasswordResult = {
 
 export const useGeneratePassword = (): UseGeneratePasswordResult => {
   const generatePassword = useCallback((): string => {
-    let password = "";
     const characterList =
       "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     const characterListLength = characterList.length;
+    const randomArray = new Uint8Array(characterListLength);
+    crypto.getRandomValues(randomArray);
+    let password = "";
+
     for (let i = 0; i < 52; i++) {
-      const characterIndex = Math.round(Math.random() * characterListLength);
+      const randomNumber = randomArray[i] / 256;
+      const characterIndex = Math.round(randomNumber * characterListLength);
       password += characterList.charAt(characterIndex);
     }
     return password;

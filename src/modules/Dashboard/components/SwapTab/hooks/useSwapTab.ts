@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
-  roundNum,
   useAccount,
   useAsset,
   useFees,
@@ -37,8 +36,8 @@ export function useSwap(): UseSwapResult {
   const { localStorageAccount, assets, id } = useUserContext();
   const [selectedAssetsSymbols, setSelectedAssetsSymbols] =
     useState<SwapAssetPair>({
-      sellAssetSymbol: exchanges.swapPair?.split("_")[1] as string,
-      buyAssetSymbol: exchanges.swapPair?.split("_")[0] as string,
+      sellAssetSymbol: exchanges.swapPair?.split("_")[1],
+      buyAssetSymbol: exchanges.swapPair?.split("_")[0],
     });
   const [lastChangedField, setLastChangedField] =
     useState<SwapInputType>("sellAsset");
@@ -53,7 +52,7 @@ export function useSwap(): UseSwapResult {
   const [sellAssetBalance, setSellAssetBalance] = useState<number>(0);
   const [buyAssetBalance, setBuyAssetBalance] = useState<number>(0);
   const [sellAmountErrors, setSellAmountErrors] = useState<string[]>([
-    `${counterpart.translate(`buttons.enter_amount`)}`,
+    counterpart.translate(`buttons.enter_amount`),
   ]);
   const [buyAmountErrors, setBuyAmountErrors] = useState<string[]>([]);
   const [sellAsset, setSellAsset] = useState<Asset | undefined>();
@@ -67,43 +66,34 @@ export function useSwap(): UseSwapResult {
   const { buildSwapTransaction } = useOrderTransactionBuilder();
   const { calculateCreateLimitOrderFee } = useFees();
   const { getAllAssets } = useAsset();
-  const { getOrderBook, reduceBookedOrdersByPrice } = useOrderBook();
+  const { getOrderBook } = useOrderBook();
   const { defaultAsset } = useAssetsContext();
+  const { limitByPrecision } = useAsset();
 
-  const calculateBasePairSellLiquidity = useCallback(
-    (reducedAsks: BookedOrder[]) => {
-      const sellLiquidityVolume = sum(
-        reducedAsks.map((ask) => Number(ask.base))
-      );
-      return sellLiquidityVolume;
-    },
-    []
-  );
+  const calculateBasePairSellLiquidity = useCallback((asks: BookedOrder[]) => {
+    const sellLiquidityVolume = sum(asks.map((ask) => Number(ask.base)));
+    return sellLiquidityVolume;
+  }, []);
 
-  const calculateBasePairBuyLiquidity = useCallback(
-    (reducedAsks: BookedOrder[]) => {
-      const buyLiquidityVolume = sum(
-        reducedAsks.map((ask) => Number(ask.quote))
-      );
-      return buyLiquidityVolume;
-    },
-    []
-  );
+  const calculateBasePairBuyLiquidity = useCallback((asks: BookedOrder[]) => {
+    const buyLiquidityVolume = sum(asks.map((ask) => Number(ask.quote)));
+    return buyLiquidityVolume;
+  }, []);
 
   const calculateBasePairPriceForSellAmount = useCallback(
-    (sellAmount: number, reducedAsks: BookedOrder[]) => {
+    (sellAmount: number, asks: BookedOrder[]) => {
       const initialValue = sellAmount;
       const usedOrders = [] as { price: number; buyAmount: number }[];
       let i = 0;
       while (sellAmount > 0) {
         usedOrders.push({
-          price: Number(reducedAsks[i].price),
+          price: Number(asks[i].price),
           buyAmount:
-            sellAmount < Number(reducedAsks[i].base)
-              ? sellAmount / Number(reducedAsks[i].price)
-              : Number(reducedAsks[i].quote),
+            sellAmount < Number(asks[i].base)
+              ? sellAmount / Number(asks[i].price)
+              : Number(asks[i].quote),
         });
-        sellAmount = sellAmount - Number(reducedAsks[i].base);
+        sellAmount = sellAmount - Number(asks[i].base);
         i = i + 1;
       }
       const buyAmount = sum(usedOrders.map((order) => order.buyAmount));
@@ -115,19 +105,19 @@ export function useSwap(): UseSwapResult {
   );
 
   const calculateBasePairPriceForBuyAmount = useCallback(
-    (buyAmount: number, reducedAsks: BookedOrder[]) => {
+    (buyAmount: number, asks: BookedOrder[]) => {
       const initialValue = buyAmount;
       const usedOrders = [] as { price: number; sellAmount: number }[];
       let i = 0;
       while (buyAmount > 0) {
         usedOrders.push({
-          price: Number(reducedAsks[i].price),
+          price: Number(asks[i].price),
           sellAmount:
-            buyAmount < Number(reducedAsks[i].quote)
-              ? buyAmount * Number(reducedAsks[i].price)
-              : Number(reducedAsks[i].base),
+            buyAmount < Number(asks[i].quote)
+              ? buyAmount * Number(asks[i].price)
+              : Number(asks[i].base),
         });
-        buyAmount = buyAmount - Number(reducedAsks[i].quote);
+        buyAmount = buyAmount - Number(asks[i].quote);
         i = i + 1;
       }
       const sellAmount = sum(usedOrders.map((order) => order.sellAmount));
@@ -139,285 +129,212 @@ export function useSwap(): UseSwapResult {
   );
 
   const calculateNonBasePairSellLiquidity = useCallback(
-    (
-      sellToCoreReducedAsks: BookedOrder[],
-      coreToBuyReducedAsks: BookedOrder[]
-    ) => {
+    (sellToCoreAsks: BookedOrder[], coreToBuyAsks: BookedOrder[]) => {
       const availableCoreToBuy = sum(
-        sellToCoreReducedAsks.map((ask) => Number(ask.quote))
+        sellToCoreAsks.map((ask) => Number(ask.quote))
       );
       const availableCoreToSell = sum(
-        coreToBuyReducedAsks.map((ask) => Number(ask.base))
+        coreToBuyAsks.map((ask) => Number(ask.base))
       );
 
       if (availableCoreToSell > 0) {
         if (availableCoreToSell <= availableCoreToBuy) {
-          const { calculatedPrice } = calculateBasePairPriceForBuyAmount(
-            availableCoreToSell,
-            sellToCoreReducedAsks
+          const limitedAvailableCoreToSell = Number(
+            limitByPrecision(
+              String(availableCoreToSell),
+              defaultAsset?.precision
+            )
           );
-          return calculatedPrice * availableCoreToSell;
+          const { calculatedPrice } = calculateBasePairPriceForBuyAmount(
+            limitedAvailableCoreToSell,
+            sellToCoreAsks
+          );
+          return calculatedPrice * limitedAvailableCoreToSell;
         } else {
-          return calculateBasePairSellLiquidity(sellToCoreReducedAsks);
+          return calculateBasePairSellLiquidity(sellToCoreAsks);
         }
       } else {
         return 0;
       }
     },
-    [calculateBasePairPriceForBuyAmount, calculateBasePairSellLiquidity]
+    [
+      calculateBasePairPriceForBuyAmount,
+      calculateBasePairSellLiquidity,
+      limitByPrecision,
+      defaultAsset,
+    ]
   );
   //TODO: needs separation of concerns
   const calculateNonBasePairPriceForSellAmount = useCallback(
     (
       sellAmount: number,
-      sellToCoreReducedAsks: BookedOrder[],
-      coreToBuyReducedAsks: BookedOrder[]
+      sellToCoreAsks: BookedOrder[],
+      coreToBuyAsks: BookedOrder[]
     ) => {
       const {
         calculatedPrice: sellToCorePrice,
         orderPrice: sellToCoreOrderPrice,
-      } = calculateBasePairPriceForSellAmount(
-        sellAmount,
-        sellToCoreReducedAsks
-      );
+      } = calculateBasePairPriceForSellAmount(sellAmount, sellToCoreAsks);
       const coreAmount = sellAmount / sellToCorePrice;
-
-      setMiddleTrxCoreAmount(coreAmount);
+      const limitedCoreAmount = Number(
+        limitByPrecision(String(coreAmount), defaultAsset?.precision)
+      );
+      setMiddleTrxCoreAmount(limitedCoreAmount);
       setMiddleTrxOrderPrice(sellToCoreOrderPrice);
 
       const {
         calculatedPrice: coreToBuyPrice,
         orderPrice: coreToBuyOrderPrice,
-      } = calculateBasePairPriceForSellAmount(coreAmount, coreToBuyReducedAsks);
+      } = calculateBasePairPriceForSellAmount(limitedCoreAmount, coreToBuyAsks);
 
       const buyAmount = coreAmount / coreToBuyPrice;
       const calculatedPrice = sellAmount / buyAmount;
       return { calculatedPrice, orderPrice: coreToBuyOrderPrice };
     },
-    [calculateBasePairPriceForSellAmount]
+    [calculateBasePairPriceForSellAmount, defaultAsset, limitByPrecision]
   );
 
   const calculateNonBasePairBuyLiquidity = useCallback(
-    (
-      sellToCoreReducedAsks: BookedOrder[],
-      coreToBuyReducedAsks: BookedOrder[]
-    ) => {
+    (sellToCoreAsks: BookedOrder[], coreToBuyAsks: BookedOrder[]) => {
       const availableCoreToBuy = sum(
-        sellToCoreReducedAsks.map((ask) => Number(ask.quote))
+        sellToCoreAsks.map((ask) => Number(ask.quote))
       );
       const availableCoreToSell = sum(
-        coreToBuyReducedAsks.map((ask) => Number(ask.base))
+        coreToBuyAsks.map((ask) => Number(ask.base))
       );
       if (availableCoreToSell > 0) {
         if (availableCoreToSell <= availableCoreToBuy) {
-          return calculateBasePairBuyLiquidity(coreToBuyReducedAsks);
+          return calculateBasePairBuyLiquidity(coreToBuyAsks);
         } else {
-          const { calculatedPrice } = calculateBasePairPriceForSellAmount(
-            availableCoreToBuy,
-            coreToBuyReducedAsks
+          const limitedAvailableCoreToBuy = Number(
+            limitByPrecision(
+              String(availableCoreToBuy),
+              defaultAsset?.precision
+            )
           );
-          return availableCoreToBuy / calculatedPrice;
+          const { calculatedPrice } = calculateBasePairPriceForSellAmount(
+            limitedAvailableCoreToBuy,
+            coreToBuyAsks
+          );
+          return limitedAvailableCoreToBuy / calculatedPrice;
         }
       } else {
         return 0;
       }
     },
-    [calculateBasePairBuyLiquidity, calculateBasePairPriceForSellAmount]
+    [
+      calculateBasePairBuyLiquidity,
+      calculateBasePairPriceForSellAmount,
+      defaultAsset,
+      limitByPrecision,
+    ]
   );
 
   //TODO: needs separation of concern
   const calculateNonBasePairPriceForBuyAmount = useCallback(
     (
       buyAmount: number,
-      sellToCoreReducedAsks: BookedOrder[],
-      coreToBuyReducedAsks: BookedOrder[]
+      sellToCoreAsks: BookedOrder[],
+      coreToBuyAsks: BookedOrder[]
     ) => {
       const {
         calculatedPrice: buyToCorePrice,
         orderPrice: buyToCoreOrderPrice,
-      } = calculateBasePairPriceForBuyAmount(buyAmount, coreToBuyReducedAsks);
+      } = calculateBasePairPriceForBuyAmount(buyAmount, coreToBuyAsks);
       const coreAmount = buyAmount * buyToCorePrice;
-      setMiddleTrxCoreAmount(coreAmount);
+      const limitedCoreAmount = Number(
+        limitByPrecision(String(coreAmount), defaultAsset?.precision)
+      );
+      setMiddleTrxCoreAmount(limitedCoreAmount);
 
       const {
         calculatedPrice: coreToSellPrice,
         orderPrice: coreToSellOrderPrice,
-      } = calculateBasePairPriceForBuyAmount(coreAmount, sellToCoreReducedAsks);
+      } = calculateBasePairPriceForBuyAmount(limitedCoreAmount, sellToCoreAsks);
       setMiddleTrxOrderPrice(coreToSellOrderPrice);
 
       const sellAmount = coreToSellPrice * coreAmount;
       const calculatedPrice = sellAmount / buyAmount;
       return { calculatedPrice, orderPrice: buyToCoreOrderPrice };
     },
-    [calculateBasePairPriceForBuyAmount]
+    [calculateBasePairPriceForBuyAmount, defaultAsset]
   );
 
-  //TODO: needs separation of concerns
-  const updateSwapFormData = useCallback(
+  const updateBasePairSwapForm = useCallback(
     async (
       sellAsset: Asset,
       buyAsset: Asset,
-      inputedAmount: number,
+      inputedAmount: string,
       inputedAmountType: SwapInputType
     ) => {
-      if (
-        sellAsset.symbol === defaultToken ||
-        buyAsset.symbol === defaultToken
-      ) {
-        try {
-          const { asks } = await getOrderBook(sellAsset, buyAsset);
-          const reducedAsks = reduceBookedOrdersByPrice(asks);
-          const buyLiquidityVolume = calculateBasePairBuyLiquidity(reducedAsks);
-          const sellLiquidityVolume =
-            calculateBasePairSellLiquidity(reducedAsks);
-          setBuyLiquidityVolume(buyLiquidityVolume);
-          setSellLiquidityVolume(sellLiquidityVolume);
+      try {
+        const { asks } = await getOrderBook(sellAsset, buyAsset);
+        const numberedInputedAmount = Number(inputedAmount);
+        const buyLiquidityVolume = calculateBasePairBuyLiquidity(asks);
+        const sellLiquidityVolume = calculateBasePairSellLiquidity(asks);
+        setBuyLiquidityVolume(buyLiquidityVolume);
+        setSellLiquidityVolume(sellLiquidityVolume);
 
-          if (inputedAmountType === "sellAsset") {
-            // unsuccessful
-            if (inputedAmount > sellLiquidityVolume) {
-              setCalculatedPrice(0);
-              swapForm.setFieldsValue({
-                buyAmount: 0,
-              });
-            } else {
-              const { calculatedPrice, orderPrice } =
-                calculateBasePairPriceForSellAmount(inputedAmount, reducedAsks);
-              setCalculatedPrice(
-                roundNum(calculatedPrice, sellAsset.precision)
-              );
-              swapForm.setFieldsValue({
-                buyAmount: roundNum(
-                  inputedAmount / calculatedPrice,
-                  buyAsset.precision
-                ),
-              });
-              setOrderPrice(orderPrice);
-            }
-            // inputedAmountType = "buyAsset"
+        if (inputedAmountType === "sellAsset") {
+          // unsuccessful
+          if (numberedInputedAmount > sellLiquidityVolume) {
+            setCalculatedPrice(0);
+            swapForm.setFieldsValue({
+              buyAmount: "0",
+            });
           } else {
-            //unsuccessful
-            if (inputedAmount > buyLiquidityVolume) {
-              setCalculatedPrice(0);
-              swapForm.setFieldsValue({
-                sellAmount: 0,
-              });
-            } else {
-              const { calculatedPrice, orderPrice } =
-                calculateBasePairPriceForBuyAmount(inputedAmount, reducedAsks);
-              setCalculatedPrice(
-                roundNum(calculatedPrice, sellAsset.precision)
-              );
-              swapForm.setFieldsValue({
-                sellAmount: roundNum(
-                  inputedAmount * calculatedPrice,
-                  buyAsset.precision
-                ),
-              });
-              setOrderPrice(orderPrice);
-            }
+            const { calculatedPrice, orderPrice } =
+              calculateBasePairPriceForSellAmount(numberedInputedAmount, asks);
+            setCalculatedPrice(
+              Number(
+                limitByPrecision(String(calculatedPrice), sellAsset.precision)
+              )
+            );
+            swapForm.setFieldsValue({
+              buyAmount: limitByPrecision(
+                String(numberedInputedAmount / calculatedPrice),
+                buyAsset.precision
+              ),
+            });
+            setOrderPrice(orderPrice);
           }
-        } catch (e) {
-          console.log(e);
-          setCalculatedPrice(0);
-          swapForm.setFieldsValue({
-            buyAmount: 0,
-            sellAmount: 0,
-          });
-          setOrderPrice(0);
-        }
-      } else {
-        try {
-          const { asks: sellToCoreAsks } = await getOrderBook(
-            sellAsset,
-            defaultAsset as Asset
-          );
-          const sellToCoreReducedAsks =
-            reduceBookedOrdersByPrice(sellToCoreAsks);
-          const { asks: coreToBuyAsks } = await getOrderBook(
-            defaultAsset as Asset,
-            buyAsset
-          );
-          const coreToBuyReducedAsks = reduceBookedOrdersByPrice(coreToBuyAsks);
-          const sellLiquidityVolume = calculateNonBasePairSellLiquidity(
-            sellToCoreReducedAsks,
-            coreToBuyReducedAsks
-          );
-          setSellLiquidityVolume(sellLiquidityVolume);
-          const buyLiquidityVolume = calculateNonBasePairBuyLiquidity(
-            sellToCoreReducedAsks,
-            coreToBuyReducedAsks
-          );
-          setBuyLiquidityVolume(buyLiquidityVolume);
-
-          if (inputedAmountType === "sellAsset") {
-            // unsuccessful
-            if (inputedAmount > sellLiquidityVolume) {
-              setCalculatedPrice(0);
-              swapForm.setFieldsValue({
-                buyAmount: 0,
-              });
-            } else {
-              const { calculatedPrice, orderPrice } =
-                calculateNonBasePairPriceForSellAmount(
-                  inputedAmount,
-                  sellToCoreReducedAsks,
-                  coreToBuyReducedAsks
-                );
-              setCalculatedPrice(
-                roundNum(calculatedPrice, sellAsset.precision)
-              );
-              swapForm.setFieldsValue({
-                buyAmount: roundNum(
-                  inputedAmount / calculatedPrice,
-                  buyAsset.precision
-                ),
-              });
-              setOrderPrice(orderPrice);
-            }
-            // inputedAmountType === "buyAsset"
+          // inputedAmountType = "buyAsset"
+        } else {
+          //unsuccessful
+          if (numberedInputedAmount > buyLiquidityVolume) {
+            setCalculatedPrice(0);
+            swapForm.setFieldsValue({
+              sellAmount: "0",
+            });
           } else {
-            // unsuccessful
-            if (inputedAmount > buyLiquidityVolume) {
-              setCalculatedPrice(0);
-              swapForm.setFieldsValue({
-                sellAmount: 0,
-              });
-            } else {
-              const { calculatedPrice, orderPrice } =
-                calculateNonBasePairPriceForBuyAmount(
-                  inputedAmount,
-                  sellToCoreReducedAsks,
-                  coreToBuyReducedAsks
-                );
-              setCalculatedPrice(
-                roundNum(calculatedPrice, sellAsset.precision)
-              );
-              swapForm.setFieldsValue({
-                sellAmount: roundNum(
-                  inputedAmount * calculatedPrice,
-                  sellAsset.precision
-                ),
-              });
-              setOrderPrice(orderPrice);
-            }
+            const { calculatedPrice, orderPrice } =
+              calculateBasePairPriceForBuyAmount(numberedInputedAmount, asks);
+            setCalculatedPrice(
+              Number(
+                limitByPrecision(String(calculatedPrice), sellAsset.precision)
+              )
+            );
+            swapForm.setFieldsValue({
+              sellAmount: limitByPrecision(
+                String(numberedInputedAmount * calculatedPrice),
+                sellAsset.precision
+              ),
+            });
+            setOrderPrice(orderPrice);
           }
-        } catch (e) {
-          console.log(e);
-          setCalculatedPrice(0);
-          swapForm.setFieldsValue({
-            buyAmount: 0,
-            sellAmount: 0,
-          });
-          setOrderPrice(0);
         }
+      } catch (e) {
+        console.log(e);
+        setCalculatedPrice(0);
+        swapForm.setFieldsValue({
+          buyAmount: "0",
+          sellAmount: "0",
+        });
+        setOrderPrice(0);
       }
     },
     [
-      defaultToken,
-      defaultAsset,
       getOrderBook,
-      reduceBookedOrdersByPrice,
       calculateBasePairBuyLiquidity,
       calculateBasePairSellLiquidity,
       setBuyLiquidityVolume,
@@ -426,12 +343,154 @@ export function useSwap(): UseSwapResult {
       swapForm,
       calculateBasePairPriceForSellAmount,
       calculateBasePairPriceForBuyAmount,
-      calculateNonBasePairSellLiquidity,
-      calculateNonBasePairBuyLiquidity,
-      calculateNonBasePairPriceForSellAmount,
-      calculateNonBasePairPriceForBuyAmount,
-      roundNum,
+      setOrderPrice,
+      limitByPrecision,
     ]
+  );
+
+  const updateNonBasePairSwapForm = useCallback(
+    async (
+      sellAsset: Asset,
+      buyAsset: Asset,
+      inputedAmount: string,
+      inputedAmountType: SwapInputType
+    ) => {
+      const numberedInputedAmount = Number(inputedAmount);
+      try {
+        const { asks: sellToCoreAsks } = await getOrderBook(
+          sellAsset,
+          defaultAsset as Asset
+        );
+        const { asks: coreToBuyAsks } = await getOrderBook(
+          defaultAsset as Asset,
+          buyAsset
+        );
+        const sellLiquidityVolume = calculateNonBasePairSellLiquidity(
+          sellToCoreAsks,
+          coreToBuyAsks
+        );
+        setSellLiquidityVolume(sellLiquidityVolume);
+        const buyLiquidityVolume = calculateNonBasePairBuyLiquidity(
+          sellToCoreAsks,
+          coreToBuyAsks
+        );
+        setBuyLiquidityVolume(buyLiquidityVolume);
+
+        if (inputedAmountType === "sellAsset") {
+          // unsuccessful
+          if (
+            numberedInputedAmount > sellLiquidityVolume ||
+            numberedInputedAmount <= 0
+          ) {
+            setCalculatedPrice(0);
+            swapForm.setFieldsValue({
+              buyAmount: "0",
+            });
+          } else {
+            const { calculatedPrice, orderPrice } =
+              calculateNonBasePairPriceForSellAmount(
+                numberedInputedAmount,
+                sellToCoreAsks,
+                coreToBuyAsks
+              );
+            setCalculatedPrice(
+              Number(
+                limitByPrecision(String(calculatedPrice), sellAsset.precision)
+              )
+            );
+            swapForm.setFieldsValue({
+              buyAmount: limitByPrecision(
+                String(numberedInputedAmount / calculatedPrice),
+                buyAsset.precision
+              ),
+            });
+            setOrderPrice(orderPrice);
+          }
+          // inputedAmountType === "buyAsset"
+        } else {
+          // unsuccessful
+          if (
+            numberedInputedAmount > buyLiquidityVolume ||
+            numberedInputedAmount <= 0
+          ) {
+            setCalculatedPrice(0);
+            swapForm.setFieldsValue({
+              sellAmount: "0",
+            });
+          } else {
+            const { calculatedPrice, orderPrice } =
+              calculateNonBasePairPriceForBuyAmount(
+                numberedInputedAmount,
+                sellToCoreAsks,
+                coreToBuyAsks
+              );
+            setCalculatedPrice(
+              Number(
+                limitByPrecision(String(calculatedPrice), sellAsset.precision)
+              )
+            );
+            swapForm.setFieldsValue({
+              sellAmount: limitByPrecision(
+                String(numberedInputedAmount * calculatedPrice),
+                sellAsset.precision
+              ),
+            });
+            setOrderPrice(orderPrice);
+          }
+        }
+      } catch (e) {
+        console.log(e);
+        setCalculatedPrice(0);
+        swapForm.setFieldsValue({
+          buyAmount: "0",
+          sellAmount: "0",
+        });
+        setOrderPrice(0);
+      }
+    },
+    [
+      getOrderBook,
+      defaultAsset,
+      calculateNonBasePairSellLiquidity,
+      setSellLiquidityVolume,
+      calculateNonBasePairBuyLiquidity,
+      setBuyLiquidityVolume,
+      setCalculatedPrice,
+      swapForm,
+      calculateNonBasePairPriceForSellAmount,
+      setOrderPrice,
+      calculateNonBasePairPriceForBuyAmount,
+      limitByPrecision,
+    ]
+  );
+
+  const updateSwapFormData = useCallback(
+    async (
+      sellAsset: Asset,
+      buyAsset: Asset,
+      inputedAmount: string,
+      inputedAmountType: SwapInputType
+    ) => {
+      if (
+        sellAsset.symbol === defaultToken ||
+        buyAsset.symbol === defaultToken
+      ) {
+        await updateBasePairSwapForm(
+          sellAsset,
+          buyAsset,
+          inputedAmount,
+          inputedAmountType
+        );
+      } else {
+        await updateNonBasePairSwapForm(
+          sellAsset,
+          buyAsset,
+          inputedAmount,
+          inputedAmountType
+        );
+      }
+    },
+    [defaultToken, updateBasePairSwapForm, updateNonBasePairSwapForm]
   );
 
   const handleValuesChange = useCallback(
@@ -441,60 +500,31 @@ export function useSwap(): UseSwapResult {
 
         if (changedValues.sellAmount !== undefined) {
           setLastChangedField("sellAsset");
-          let sellAmount = Number(changedValues.sellAmount);
-          if (
-            changedValues.sellAmount.split(".")[1]?.length >=
+          const sellAmount = limitByPrecision(
+            changedValues.sellAmount,
             sellAsset.precision
-          ) {
-            sellAmount =
-              roundNum(sellAmount, sellAsset.precision) > 0
-                ? roundNum(sellAmount, sellAsset.precision)
-                : sellAmount;
-            swapForm.setFieldsValue({
-              sellAmount: sellAmount,
-            });
-          }
-          if (sellAmount > 0) {
-            await updateSwapFormData(
-              sellAsset,
-              buyAsset,
-              sellAmount,
-              "sellAsset"
-            );
-          } else {
-            swapForm.setFieldsValue({
-              buyAmount: 0,
-            });
-            setCalculatedPrice(0);
-          }
+          );
+          swapForm.setFieldsValue({
+            sellAmount: sellAmount,
+          });
+
+          await updateSwapFormData(
+            sellAsset,
+            buyAsset,
+            sellAmount,
+            "sellAsset"
+          );
         } else if (changedValues.buyAmount !== undefined) {
           setLastChangedField("buyAsset");
-          let buyAmount = Number(changedValues.buyAmount);
+          const buyAmount = limitByPrecision(
+            changedValues.buyAmount,
+            buyAsset.precision
+          );
+          swapForm.setFieldsValue({
+            buyAmount: buyAmount,
+          });
 
-          if (
-            changedValues.buyAmount.split(".")[1]?.length >= buyAsset.precision
-          ) {
-            buyAmount =
-              roundNum(buyAmount, buyAsset.precision) > 0
-                ? roundNum(buyAmount, buyAsset.precision)
-                : buyAmount;
-            swapForm.setFieldsValue({
-              buyAmount: buyAmount,
-            });
-          }
-          if (buyAmount > 0) {
-            await updateSwapFormData(
-              sellAsset,
-              buyAsset,
-              buyAmount,
-              "buyAsset"
-            );
-          } else {
-            swapForm.setFieldsValue({
-              sellAmount: 0,
-            });
-            setCalculatedPrice(0);
-          }
+          await updateSwapFormData(sellAsset, buyAsset, buyAmount, "buyAsset");
         }
         try {
           await swapForm.validateFields();
@@ -578,8 +608,8 @@ export function useSwap(): UseSwapResult {
         await updateSwapFormData(sellAsset, buyAsset, buyAmount, "buyAsset");
       } else {
         swapForm.setFieldsValue({
-          buyAmount: 0,
-          sellAmount: 0,
+          buyAmount: "0",
+          sellAmount: "0",
         });
         setCalculatedPrice(0);
       }
@@ -682,6 +712,174 @@ export function useSwap(): UseSwapResult {
     setSellAsset,
   ]);
 
+  const handleBasePairSwapSubmit = useCallback(
+    async (
+      sellAmount: string,
+      buyAmount: string,
+      sellAsset: Asset,
+      buyAsset: Asset,
+      activeKey: any
+    ) => {
+      const minToReceive = limitByPrecision(
+        String(Number(sellAmount) / orderPrice),
+        buyAsset.precision
+      );
+      const trx = buildSwapTransaction(
+        id,
+        Number(minToReceive) > 0
+          ? minToReceive
+          : String(1 / 10 ** buyAsset.precision),
+        sellAmount,
+        sellAsset,
+        buyAsset
+      );
+      let trxResult;
+      try {
+        setLoadingTransaction(true);
+        trxResult = await buildTrx([trx], [activeKey]);
+      } catch (e) {
+        console.log(e);
+        swapForm.resetFields();
+        setCalculatedPrice(0);
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.transaction_unable`)
+        );
+        setLoadingTransaction(false);
+      }
+      if (trxResult) {
+        formAccountBalancesByName(localStorageAccount);
+        swapForm.resetFields();
+        setCalculatedPrice(0);
+        setTransactionErrorMessage("");
+        setTransactionSuccessMessage(
+          counterpart.translate(`field.success.swap_order_successfully`, {
+            sellAmount: sellAmount,
+            buyAmount: buyAmount,
+            sellAssetSymbol: selectedAssetsSymbols.sellAssetSymbol,
+            buyAssetSymbol: selectedAssetsSymbols.buyAssetSymbol,
+          })
+        );
+        setLoadingTransaction(false);
+      } else {
+        swapForm.resetFields();
+        setCalculatedPrice(0);
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.unable_transaction`)
+        );
+        setLoadingTransaction(false);
+      }
+    },
+    [
+      buildSwapTransaction,
+      id,
+      limitByPrecision,
+      orderPrice,
+      setLoadingTransaction,
+      buildTrx,
+      swapForm,
+      setCalculatedPrice,
+      setTransactionErrorMessage,
+      formAccountBalancesByName,
+      localStorageAccount,
+      setTransactionSuccessMessage,
+      selectedAssetsSymbols,
+    ]
+  );
+
+  const handleNonBasePairSwapSubmit = useCallback(
+    async (
+      sellAmount: string,
+      buyAmount: string,
+      sellAsset: Asset,
+      buyAsset: Asset,
+      activeKey: any
+    ) => {
+      const coreMinToReceive = limitByPrecision(
+        String(Number(sellAmount) / middleTrxOrderPrice),
+        defaultAsset?.precision
+      );
+      const buyCoreAssetTrx = buildSwapTransaction(
+        id,
+        Number(coreMinToReceive) > 0
+          ? coreMinToReceive
+          : String(1 / 10 ** (defaultAsset as Asset).precision),
+        sellAmount,
+        sellAsset,
+        defaultAsset as Asset
+      );
+
+      const minToReceive = limitByPrecision(
+        String(Number(middleTrxCoreAmount) / orderPrice),
+        buyAsset.precision
+      );
+      const sellCoreAssetTrx = buildSwapTransaction(
+        id,
+        Number(minToReceive) > 0
+          ? minToReceive
+          : String(1 / 10 ** buyAsset.precision),
+        String(middleTrxCoreAmount),
+        defaultAsset as Asset,
+        buyAsset
+      );
+
+      let swapTrxResult;
+      try {
+        setLoadingTransaction(true);
+        swapTrxResult = await buildTrx(
+          [buyCoreAssetTrx, sellCoreAssetTrx],
+          [activeKey]
+        );
+        if (swapTrxResult) {
+          formAccountBalancesByName(localStorageAccount);
+          swapForm.resetFields();
+          setCalculatedPrice(0);
+          setTransactionErrorMessage("");
+          setTransactionSuccessMessage(
+            counterpart.translate(`field.success.swap_order_successfully`, {
+              sellAmount: sellAmount,
+              buyAmount: buyAmount,
+              sellAssetSymbol: selectedAssetsSymbols.sellAssetSymbol,
+              buyAssetSymbol: selectedAssetsSymbols.buyAssetSymbol,
+            })
+          );
+          setLoadingTransaction(false);
+        } else {
+          swapForm.resetFields();
+          setCalculatedPrice(0);
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.unable_transaction`)
+          );
+          setLoadingTransaction(false);
+        }
+      } catch (e) {
+        console.log(e);
+        swapForm.resetFields();
+        setCalculatedPrice(0);
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.transaction_unable`)
+        );
+        setLoadingTransaction(false);
+      }
+    },
+    [
+      middleTrxOrderPrice,
+      middleTrxCoreAmount,
+      orderPrice,
+      buildSwapTransaction,
+      id,
+      defaultAsset,
+      setLoadingTransaction,
+      buildTrx,
+      formAccountBalancesByName,
+      localStorageAccount,
+      swapForm,
+      setCalculatedPrice,
+      setTransactionErrorMessage,
+      setTransactionSuccessMessage,
+      selectedAssetsSymbols,
+    ]
+  );
+
   const handleSwapSubmit = useCallback(
     async (password: string) => {
       if (allAssets && allAssets.length) {
@@ -698,101 +896,21 @@ export function useSwap(): UseSwapResult {
           selectedAssetsSymbols.sellAssetSymbol === defaultToken ||
           selectedAssetsSymbols.buyAssetSymbol === defaultToken
         ) {
-          const trx = buildSwapTransaction(
-            id,
-            sellAmount / orderPrice,
+          await handleBasePairSwapSubmit(
             sellAmount,
+            buyAmount,
             sellAsset,
-            buyAsset
+            buyAsset,
+            activeKey
           );
-          let trxResult;
-          try {
-            setLoadingTransaction(true);
-            trxResult = await buildTrx([trx], [activeKey]);
-          } catch (e) {
-            console.log(e);
-            swapForm.resetFields();
-            setCalculatedPrice(0);
-            setTransactionErrorMessage(
-              counterpart.translate(`field.errors.transaction_unable`)
-            );
-            setLoadingTransaction(false);
-          }
-          if (trxResult) {
-            formAccountBalancesByName(localStorageAccount);
-            swapForm.resetFields();
-            setCalculatedPrice(0);
-            setTransactionErrorMessage("");
-            setTransactionSuccessMessage(
-              counterpart.translate(`field.success.swap_order_successfully`, {
-                sellAmount: sellAmount,
-                buyAmount: buyAmount,
-                sellAssetSymbol: selectedAssetsSymbols.sellAssetSymbol,
-                buyAssetSymbol: selectedAssetsSymbols.buyAssetSymbol,
-              })
-            );
-            setLoadingTransaction(false);
-          } else {
-            swapForm.resetFields();
-            setCalculatedPrice(0);
-            setTransactionErrorMessage(
-              counterpart.translate(`field.errors.unable_transaction`)
-            );
-            setLoadingTransaction(false);
-          }
         } else {
-          const buyCoreAssetTrx = buildSwapTransaction(
-            id,
-            sellAmount / middleTrxOrderPrice,
+          await handleNonBasePairSwapSubmit(
             sellAmount,
+            buyAmount,
             sellAsset,
-            defaultAsset as Asset
+            buyAsset,
+            activeKey
           );
-          const sellCoreAssetTrx = buildSwapTransaction(
-            id,
-            middleTrxCoreAmount / orderPrice,
-            middleTrxCoreAmount,
-            defaultAsset as Asset,
-            buyAsset
-          );
-          let swapTrxResult;
-          try {
-            setLoadingTransaction(true);
-            swapTrxResult = await buildTrx(
-              [buyCoreAssetTrx, sellCoreAssetTrx],
-              [activeKey]
-            );
-            if (swapTrxResult) {
-              formAccountBalancesByName(localStorageAccount);
-              swapForm.resetFields();
-              setCalculatedPrice(0);
-              setTransactionErrorMessage("");
-              setTransactionSuccessMessage(
-                counterpart.translate(`field.success.swap_order_successfully`, {
-                  sellAmount: sellAmount,
-                  buyAmount: buyAmount,
-                  sellAssetSymbol: selectedAssetsSymbols.sellAssetSymbol,
-                  buyAssetSymbol: selectedAssetsSymbols.buyAssetSymbol,
-                })
-              );
-              setLoadingTransaction(false);
-            } else {
-              swapForm.resetFields();
-              setCalculatedPrice(0);
-              setTransactionErrorMessage(
-                counterpart.translate(`field.errors.unable_transaction`)
-              );
-              setLoadingTransaction(false);
-            }
-          } catch (e) {
-            console.log(e);
-            swapForm.resetFields();
-            setCalculatedPrice(0);
-            setTransactionErrorMessage(
-              counterpart.translate(`field.errors.transaction_unable`)
-            );
-            setLoadingTransaction(false);
-          }
         }
       }
     },
@@ -803,6 +921,8 @@ export function useSwap(): UseSwapResult {
       selectedAssetsSymbols,
       getPrivateKey,
       defaultToken,
+      handleBasePairSwapSubmit,
+      handleNonBasePairSwapSubmit,
       buildSwapTransaction,
       id,
       setLoadingTransaction,
@@ -818,6 +938,64 @@ export function useSwap(): UseSwapResult {
       middleTrxOrderPrice,
     ]
   );
+
+  const validateFeeAmount = (userDefaultAsset?: Asset) => {
+    let errorMessage = "";
+    if (!userDefaultAsset) {
+      errorMessage = counterpart.translate(
+        `field.errors.insufficient_balance_for_fee`,
+        {
+          coreAsset: defaultToken,
+        }
+      );
+    } else {
+      if (swapOrderFee > (userDefaultAsset?.amount as number)) {
+        errorMessage = counterpart.translate(
+          `field.errors.insufficient_balance_for_fee`,
+          {
+            coreAsset: defaultToken,
+          }
+        );
+      }
+    }
+    return errorMessage;
+  };
+
+  const validateBalanceForSellAmount = (
+    numberedValue: number,
+    userSellAsset?: Asset
+  ) => {
+    let errorMessage = "";
+    if (!userSellAsset) {
+      errorMessage = counterpart.translate(
+        `field.errors.insufficient_asset_balance`,
+        {
+          asset: selectedAssetsSymbols.sellAssetSymbol,
+        }
+      );
+    } else {
+      if (selectedAssetsSymbols.sellAssetSymbol === defaultToken) {
+        if (numberedValue + swapOrderFee > (userSellAsset?.amount as number)) {
+          errorMessage = counterpart.translate(
+            `field.errors.insufficient_asset_balance`,
+            {
+              asset: selectedAssetsSymbols.sellAssetSymbol,
+            }
+          );
+        }
+      } else {
+        if (numberedValue > (userSellAsset?.amount as number)) {
+          errorMessage = counterpart.translate(
+            `field.errors.insufficient_asset_balance`,
+            {
+              asset: selectedAssetsSymbols.sellAssetSymbol,
+            }
+          );
+        }
+      }
+    }
+    return errorMessage;
+  };
 
   const validateSellAmount = (_: unknown, value: string) => {
     if (allAssets && allAssets.length > 0) {
@@ -838,69 +1016,18 @@ export function useSwap(): UseSwapResult {
       }
 
       // fee check
-      if (!userDefaultAsset) {
-        return Promise.reject(
-          new Error(
-            counterpart.translate(`field.errors.insufficient_balance_for_fee`, {
-              coreAsset: defaultToken,
-            })
-          )
-        );
-      } else {
-        if (swapOrderFee > (userDefaultAsset?.amount as number)) {
-          return Promise.reject(
-            new Error(
-              counterpart.translate(
-                `field.errors.insufficient_balance_for_fee`,
-                {
-                  coreAsset: defaultToken,
-                }
-              )
-            )
-          );
-        }
+      const feeErrorMessage = validateFeeAmount(userDefaultAsset);
+      if (feeErrorMessage !== "") {
+        return Promise.reject(new Error(feeErrorMessage));
       }
 
       // balance check
-      if (!userSellAsset) {
-        return Promise.reject(
-          new Error(
-            counterpart.translate(`field.errors.insufficient_asset_balance`, {
-              asset: selectedAssetsSymbols.sellAssetSymbol,
-            })
-          )
-        );
-      } else {
-        if (selectedAssetsSymbols.sellAssetSymbol === defaultToken) {
-          if (
-            numberedValue + swapOrderFee >
-            (userSellAsset?.amount as number)
-          ) {
-            return Promise.reject(
-              new Error(
-                counterpart.translate(
-                  `field.errors.insufficient_asset_balance`,
-                  {
-                    asset: selectedAssetsSymbols.sellAssetSymbol,
-                  }
-                )
-              )
-            );
-          }
-        } else {
-          if (numberedValue > (userSellAsset?.amount as number)) {
-            return Promise.reject(
-              new Error(
-                counterpart.translate(
-                  `field.errors.insufficient_asset_balance`,
-                  {
-                    asset: selectedAssetsSymbols.sellAssetSymbol,
-                  }
-                )
-              )
-            );
-          }
-        }
+      const balanceErrorMessage = validateBalanceForSellAmount(
+        numberedValue,
+        userSellAsset
+      );
+      if (balanceErrorMessage !== "") {
+        return Promise.reject(new Error(balanceErrorMessage));
       }
 
       //Liquidity check

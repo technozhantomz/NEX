@@ -71,7 +71,7 @@ export const VoteForm = ({
     <Styled.VoteFormWrapper>
       <Styled.Title>
         {counterpart.translate(`field.labels.vote_for`, {
-          tab: capitalize(tab),
+          tab: capitalize(counterpart.translate(`pages.voting.${tab}.heading`)),
         })}
       </Styled.Title>
 

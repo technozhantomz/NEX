@@ -4,8 +4,8 @@ export type UseTransferTransactionBuilderResult = {
   buildTransferTransaction: (
     from: Account,
     to: Account,
-    memo: string,
     asset: Asset,
-    amount: number
+    amount: string,
+    memo?: string | undefined
   ) => Transaction;
 };

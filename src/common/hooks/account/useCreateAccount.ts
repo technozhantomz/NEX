@@ -1,19 +1,19 @@
 import { useCallback } from "react";
 
 import { faucetUrl } from "../../../api/params";
-import { FullAccount, ISignupFormData } from "../../types";
+import { FullAccount, SignupForm } from "../../types";
 import { useFormKeys } from "../useFormKeys";
 
 import { useAccount } from "./useAccount";
 
 export function useCreateAccount(): {
-  createAccount: (data: ISignupFormData) => Promise<FullAccount | undefined>;
+  createAccount: (data: SignupForm) => Promise<FullAccount | undefined>;
 } {
   const { getFullAccount } = useAccount();
   const { formKeys } = useFormKeys();
 
   const createAccount = useCallback(
-    async (data: ISignupFormData) => {
+    async (data: SignupForm) => {
       const keys = formKeys(data.username, data.password);
       const account = {
         name: data.username,
@@ -21,7 +21,6 @@ export function useCreateAccount(): {
         memo_key: keys.memo,
         owner_key: keys.owner,
         refcode: null,
-        referrer: data.referrer || null,
       };
       try {
         const newUser = await fetch(faucetUrl as string, {

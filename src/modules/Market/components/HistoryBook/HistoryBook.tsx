@@ -39,18 +39,17 @@ export const HistoryBook = ({
     getUserHistory,
   });
   const dataSource = forUser ? userOrderHistoryRows : orderHistoryRows;
+  const desktopScroll =
+    dataSource.length > 24
+      ? { scrollToFirstRowOnChange: false, y: 540, x: true }
+      : { scrollToFirstRowOnChange: false, x: true };
+  const scroll = md ? { x: true } : desktopScroll;
 
   return (
     <>
       <Styled.TableContainer>
         <Styled.Table
-          scroll={
-            md
-              ? { x: true }
-              : dataSource.length > 24
-              ? { scrollToFirstRowOnChange: false, y: 540, x: true }
-              : { scrollToFirstRowOnChange: false, x: true }
-          }
+          scroll={scroll}
           loading={forUser ? loadingUserHistoryRows : loadingOrderHistoryRows}
           pagination={false}
           columns={columns}

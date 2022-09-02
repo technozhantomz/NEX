@@ -80,6 +80,14 @@ export const LimitOrderForm = ({
     setTransactionSuccessMessage,
   });
 
+  const isLoggedIn = localStorageAccount !== null && localStorageAccount !== "";
+  const buyOrSellText = isBuyOrder
+    ? counterpart.translate(`buttons.buy`)
+    : counterpart.translate(`buttons.sell`);
+  const loggedInSubmitButton = buyOrSellText + " " + activePair.split("_")[0];
+  const nonLoggedInSubmitButton =
+    counterpart.translate(`buttons.login`) + " & " + loggedInSubmitButton;
+
   return (
     <>
       <Styled.FormContainer>
@@ -218,13 +226,9 @@ export const LimitOrderForm = ({
               </Styled.OrderInfo>
             </Styled.FormItem>
             <Styled.FormItem>
-              {localStorageAccount !== null && localStorageAccount !== "" ? (
+              {isLoggedIn ? (
                 <Styled.FormButton type="primary" htmlType="submit">
-                  {`${
-                    isBuyOrder
-                      ? counterpart.translate(`buttons.buy`)
-                      : counterpart.translate(`buttons.sell`)
-                  } ${activePair.split("_")[0]}`}
+                  {loggedInSubmitButton}
                 </Styled.FormButton>
               ) : (
                 <Styled.FormButton
@@ -234,16 +238,12 @@ export const LimitOrderForm = ({
                     router.push("/login");
                   }}
                 >
-                  {`${counterpart.translate(`buttons.login`)} & ${
-                    isBuyOrder
-                      ? counterpart.translate(`buttons.buy`)
-                      : counterpart.translate(`buttons.sell`)
-                  } ${activePair.split("_")[0]}`}
+                  {nonLoggedInSubmitButton}
                 </Styled.FormButton>
               )}
             </Styled.FormItem>
           </Styled.Form>
-          {localStorageAccount !== null && localStorageAccount !== "" ? (
+          {isLoggedIn ? (
             ""
           ) : (
             <FormDisclamer>

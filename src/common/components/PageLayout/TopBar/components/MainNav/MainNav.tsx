@@ -12,6 +12,7 @@ import {
   Blockchain,
   Dashboard,
   Market,
+  SignupIcon,
   Vote,
 } from "../../../../../../ui/src/icons";
 import {
@@ -41,18 +42,26 @@ export const MainNav = (): JSX.Element => {
         {localStorageAccount ? (
           ""
         ) : (
-          <li>
-            <MenuItem
-              href="/login"
-              icon={<PoweroffOutlined className={"menu-icon"} />}
-              label={counterpart.translate(`pages.login.heading`)}
-            />
-          </li>
+          <>
+            <li>
+              <MenuItem
+                href="/login"
+                icon={<PoweroffOutlined className={"menu-icon"} />}
+                label={counterpart.translate(`buttons.login`)}
+              />
+            </li>
+            <li>
+              <MenuItem
+                href="/signup"
+                icon={<SignupIcon className={"menu-icon"} />}
+                label={counterpart.translate(`buttons.create_account`)}
+              />
+            </li>
+          </>
         )}
-
         <li>
           <MenuItem
-            href="/dashboard"
+            href="/"
             icon={<Dashboard className={"menu-icon"} />}
             label={counterpart.translate(`pages.dashboard.heading`)}
           />

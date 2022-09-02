@@ -48,10 +48,9 @@ export function useBlockchainTab(
     getDynamic,
     getRecentBlocks,
     getAvgBlockTime,
-    getBlocks,
+    getBlock,
   } = useBlockchain();
   const { formDate } = useFormDate();
-  const MAX_BLOCKS_LIMIT = 100;
 
   const getBlockchainData = useCallback(async () => {
     try {
@@ -123,43 +122,26 @@ export function useBlockchainTab(
   ]);
 
   const handleSearch = useCallback(
-    async (value: string) => {
-      if (value && value !== "") {
+    async (blockID: string) => {
+      if (blockID && blockID !== "") {
         setLoading(true);
-        setSearchValue(value);
+        setSearchValue(blockID);
         try {
-          let blocks = await getBlocks(
-            Number(value),
-            Number(value) + MAX_BLOCKS_LIMIT,
-            MAX_BLOCKS_LIMIT
-          );
-          if (blocks && blocks.length) {
-            let blockCounter = Number(value) - 1;
-            blocks = blocks
-              .map((block) => {
-                blockCounter = blockCounter + 1;
-                return {
-                  ...block,
-                  id: blockCounter,
-                };
-              })
-              .filter((block) => block.id.toString().startsWith(value));
-
-            const searchResult = blocks.map((block) => {
-              return {
-                key: String(block.id),
-                blockID: String(block.id),
-                time: formDate(block.timestamp, [
-                  "month",
-                  "date",
-                  "year",
-                  "time",
-                ]),
-                witness: block.witness_account_name,
-                transaction: block.transactions.length,
-              } as BlockTableRow;
-            });
-            setSearchResult(searchResult);
+          const block = await getBlock(Number(blockID));
+          if (block) {
+            const searchResult = {
+              key: blockID,
+              blockID: blockID,
+              time: formDate(block.timestamp, [
+                "month",
+                "date",
+                "year",
+                "time",
+              ]),
+              witness: block.witness_account_name,
+              transaction: block.transactions.length,
+            } as BlockTableRow;
+            setSearchResult([searchResult]);
             setLoading(false);
           } else {
             setSearchResult([]);

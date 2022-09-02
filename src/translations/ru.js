@@ -86,7 +86,7 @@ export const ru = {
       asset_issue: {
         title: "Выпустить актив",
         description:
-          "%(issuer)s, изданный %(assetAmount)s %(symbol) к, %(receiver)s",
+          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к, %(receiver)s",
       },
       asset_publish_feed: {
         title: "Опубликовать фид",
@@ -618,7 +618,8 @@ export const ru = {
       lower_case_sons: "sons",
       lower_case_committees: "комитеты",
       gpos: {
-        heading: "GPOS",
+        heading: "PeerPlays GPOS",
+        tab: "GPOS",
         join_gpos:
           "Присоединяйтесь к GPOS, переведя свои %(defaultToken)s на баланс GPOS.",
         consistently_participate:
@@ -675,16 +676,20 @@ export const ru = {
         },
       },
       sons: {
-        heading: "Sons",
+        heading: "PeerPlays SONs Голосование",
+        tab: "Sons",
       },
       witnesses: {
-        heading: "Свидетели",
+        heading: "PeerPlays Свидетели Голосование",
+        tab: "Свидетели",
       },
       proxy: {
-        heading: "Прокси",
+        heading: "PeerPlays Голосование по доверенности",
+        tab: "Прокси",
       },
       committees: {
-        heading: "Комитеты",
+        heading: "PeerPlays Комитеты Голосование",
+        tab: "Комитеты",
       },
     },
     user: {
@@ -732,6 +737,7 @@ export const ru = {
       from: "из",
     },
     labels: {
+      copy_bitcoin_address: "Скопируйте свой биткойн-адрес",
       fetching_price: "Получение цены",
       withdraw_public_key_address: "Отозвать открытый ключ и адрес",
       hive_blockchain_account: "Блокчейн-аккаунт Hive",
@@ -783,7 +789,7 @@ export const ru = {
     },
     comments: {
       deposit_hbd:
-        "Чтобы перевести %(assetSymbol)s на %(accountName)s, отправьте свои средства на son-account в блокчейне Hive с памяткой %(accountName)s",
+        "Чтобы перевести, %(assetSymbol)s , на , %(accountName)s, отправьте свои средства на , son-account, в блокчейне Hive с памяткой , %(accountName)s",
       public_memo: "Эта памятка общедоступна",
     },
     checkBoxes: {
@@ -814,6 +820,7 @@ export const ru = {
       user_not_found: "Пользователь не найден",
       password_incorrect: "Неверный пароль",
       username_required: "Имя пользователя требуется",
+      username_invalid: "Имя пользователя недействительно",
       password_required: "требуется пароль",
       password_should_be_long: "Пароль должен быть не короче 12 символов",
       password_not_match: "Пароль не совпадает",

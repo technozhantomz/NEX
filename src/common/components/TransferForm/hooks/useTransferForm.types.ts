@@ -34,9 +34,9 @@ export type FormValidation = {
 };
 
 export type TransferForm = {
-  form: string;
+  from: string;
   to: string;
-  amount: number;
+  amount: string;
   asset: string;
-  memo: string;
+  memo?: string;
 };

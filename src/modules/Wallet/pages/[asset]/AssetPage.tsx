@@ -46,7 +46,12 @@ const AssetPage: NextPage = () => {
   const { localStorageAccount } = useUserContext();
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
-  const dropdownItems = [
+
+  const isSidechainAsset = sidechainAssets
+    .map((sideAsset) => sideAsset.symbol)
+    .includes(asset as string);
+
+  const sidechainAssetsTabBarItems = [
     {
       label: counterpart.translate(`buttons.transfer`),
       key: "transfer",
@@ -54,61 +59,66 @@ const AssetPage: NextPage = () => {
     { label: counterpart.translate(`buttons.withdraw`), key: "withdraw" },
     { label: counterpart.translate(`buttons.deposit`), key: "deposit" },
   ];
+
+  const tabBarItems = isSidechainAsset
+    ? sidechainAssetsTabBarItems
+    : [
+        {
+          label: counterpart.translate(`buttons.transfer`),
+          key: "transfer",
+        },
+      ];
+
+  const selectedTabText = tab
+    ? counterpart.translate(`buttons.${tab}`)
+    : counterpart.translate(`buttons.transfer`);
+
+  const dropdownIcon = !visible ? <DownOutlined /> : <UpOutlined />;
+
+  const renderMobileTabBar = (props: any) => (
+    <Styled.MobileDropdownWrapper>
+      <Styled.MobileDropdown
+        visible={visible}
+        overlay={
+          <Styled.MobileTabsWrapper>
+            <Menu
+              onClick={(item: any) => {
+                props.onTabClick(item.key);
+              }}
+              items={tabBarItems}
+              selectedKeys={tab ? [tab as string] : ["transfer"]}
+            />
+          </Styled.MobileTabsWrapper>
+        }
+      >
+        <Button type="text" onClick={() => setVisible(!visible)}>
+          {selectedTabText} {dropdownIcon}
+        </Button>
+      </Styled.MobileDropdown>
+      {props.extra}
+    </Styled.MobileDropdownWrapper>
+  );
+
+  const nonSidechainAssetsSelectedTabKey = (node: any) =>
+    node.key === "transfer" ? node : "";
+
+  const renderDesktopTabBar = (props: any, DefaultTabBar: any) => (
+    <DefaultTabBar {...props}>
+      {(node: any) => {
+        return (
+          <>
+            {isSidechainAsset ? node : nonSidechainAssetsSelectedTabKey(node)}
+          </>
+        );
+      }}
+    </DefaultTabBar>
+  );
+
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
-      {sm ? (
-        <Styled.MobileDropdownWrapper>
-          <Styled.MobileDropdown
-            visible={visible}
-            overlay={
-              <Styled.MobileTabsWrapper>
-                <Menu
-                  onClick={(item: any) => {
-                    props.onTabClick(item.key);
-                  }}
-                  items={
-                    sidechainAssets
-                      .map((sideAsset) => sideAsset.symbol)
-                      .includes(asset as string)
-                      ? dropdownItems
-                      : [
-                          {
-                            label: counterpart.translate(`buttons.transfer`),
-                            key: "transfer",
-                          },
-                        ]
-                  }
-                  selectedKeys={tab ? [tab as string] : ["transfer"]}
-                />
-              </Styled.MobileTabsWrapper>
-            }
-          >
-            <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab
-                ? counterpart.translate(`buttons.${tab}`)
-                : counterpart.translate(`buttons.transfer`)}{" "}
-              {!visible ? <DownOutlined /> : <UpOutlined />}
-            </Button>
-          </Styled.MobileDropdown>
-          {props.extra}
-        </Styled.MobileDropdownWrapper>
-      ) : (
-        <DefaultTabBar {...props}>
-          {(node: any) => {
-            return (
-              <>
-                {sidechainAssets
-                  .map((sideAsset) => sideAsset.symbol)
-                  .includes(asset as string)
-                  ? node
-                  : node.key === "transfer"
-                  ? node
-                  : ""}
-              </>
-            );
-          }}
-        </DefaultTabBar>
-      )}
+      {sm
+        ? renderMobileTabBar(props)
+        : renderDesktopTabBar(props, DefaultTabBar)}
     </>
   );
 
@@ -181,9 +191,7 @@ const AssetPage: NextPage = () => {
               <AssetsTable showActions={false} fillterAsset={`${asset}`} />
               <TransferForm asset={`${asset}`} />
             </TabPane>
-            {sidechainAssets
-              .map((sideAsset) => sideAsset.symbol)
-              .includes(asset as string) ? (
+            {isSidechainAsset ? (
               <>
                 <TabPane
                   tab={counterpart.translate(`buttons.withdraw`)}

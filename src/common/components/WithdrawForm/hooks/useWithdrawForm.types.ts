@@ -34,9 +34,8 @@ export type FormValidation = {
 };
 
 export type WithdrawForm = {
-  //asset: string;
   from: string;
-  amount: number;
+  amount: string;
   withdrawAddress: string;
   withdrawPublicKey: string;
 };

@@ -9,6 +9,7 @@ import { ITransactionBuilder } from "./useTransactionBuilder.types";
 export function useTransactionBuilder(): ITransactionBuilder {
   const { setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
+
   const buildTrx = useCallback(async (trx, keys) => {
     const tr = new TransactionBuilder();
 

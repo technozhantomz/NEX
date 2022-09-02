@@ -96,18 +96,19 @@ export const OrderBook = ({
     </Styled.ThresholdMenu>
   );
 
-  const columns = forUser
-    ? currentQuote && currentBase
+  const userOrderColumns =
+    currentQuote && currentBase
       ? showUserOrderColumns(
           currentQuote.symbol,
           currentBase.symbol,
           (orderId) => {
-            setSelectedOrderId(orderId);
+            setSelectedOrderId(orderId.split(".")[2]);
             showPasswordModal();
           }
         )
-      : undefined
-    : orderColumns;
+      : undefined;
+
+  const columns = forUser ? userOrderColumns : orderColumns;
 
   return (
     <>
@@ -174,7 +175,7 @@ export const OrderBook = ({
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
           fee={cancelOrderfeeAmount}
-          orderId={selectedOrderId.split(".")[2]}
+          orderId={selectedOrderId}
           transactionType="limit_order_cancel"
         />
         <PasswordModal

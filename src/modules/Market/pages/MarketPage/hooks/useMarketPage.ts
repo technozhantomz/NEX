@@ -112,6 +112,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           quote.symbol,
           50,
         ]);
+        console.log("asks", asks);
+        console.log("bids", bids);
         setAsks(
           asks.map((ask: Order) => {
             return { ...ask, isBuyOrder: false };

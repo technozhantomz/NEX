@@ -91,7 +91,7 @@ export const en = {
       asset_issue: {
         title: "Issue asset",
         description:
-          "%(issuer)s, issued %(assetAmount)s %(symbol) to, %(receiver)s",
+          "%(issuer)s, issued %(assetAmount)s %(symbol)s to, %(receiver)s",
       },
       asset_publish_feed: {
         title: "Publish feed",
@@ -644,7 +644,8 @@ export const en = {
       lower_case_sons: "sons",
       lower_case_committees: "committees",
       gpos: {
-        heading: "GPOS",
+        heading: "PeerPlays GPOS",
+        tab: "GPOS",
         join_gpos:
           "Join GPOS by transferring your %(defaultToken)s to your GPOS balance.",
         consistently_participate:
@@ -699,16 +700,20 @@ export const en = {
         },
       },
       sons: {
-        heading: "Sons",
+        heading: "PeerPlays SONs Voting",
+        tab: "Sons",
       },
       witnesses: {
-        heading: "Witnesses",
+        heading: "PeerPlays Witnesses Voting",
+        tab: "Witnesses",
       },
       proxy: {
-        heading: "Proxy",
+        heading: "PeerPlays Proxy Voting",
+        tab: "Proxy",
       },
       committees: {
-        heading: "Committees",
+        heading: "PeerPlays Committees Voting",
+        tab: "Committees",
       },
     },
     user: {
@@ -755,6 +760,7 @@ export const en = {
       from: "From",
     },
     labels: {
+      copy_bitcoin_address: "Copy your Bitcoin address",
       fetching_price: "Fetching price",
       withdraw_public_key_address: "Withdraw Public key & Address",
       hive_blockchain_account: "Hive blockchain account",
@@ -805,7 +811,7 @@ export const en = {
     },
     comments: {
       deposit_hbd:
-        "To deposit %(assetSymbol)s to %(accountName)s please send your funds to son-account on the Hive blockchain with the memo %(accountName)s",
+        "To deposit, %(assetSymbol)s , to , %(accountName)s, please send your funds to , son-account, on the Hive blockchain with the memo , %(accountName)s",
       public_memo: "This memo is public",
     },
     checkBoxes: {
@@ -836,6 +842,7 @@ export const en = {
       user_not_found: "User not found",
       password_incorrect: "Password incorrect",
       username_required: "Username is required",
+      username_invalid: "Username is invalid",
       password_required: "Password is required",
       password_should_be_long: "Password should be at least 12 characters long",
       password_not_match: "Password do not match",
