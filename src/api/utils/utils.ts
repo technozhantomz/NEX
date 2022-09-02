@@ -50,4 +50,9 @@ export const utils = {
     };
     return blockchains[symbol] || symbol;
   },
+  validateGrapheneAccountName: (name: string): boolean => {
+    return /^[a-z](?!.*([-.])\\1)((?=.*(-))|(?=.*(\d)))[a-z0-9-.]{2,62}(?<![-.])$/.test(
+      name
+    );
+  },
 };

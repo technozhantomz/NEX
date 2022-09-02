@@ -840,6 +840,7 @@ export const ru = {
       from_required: "От требуется",
       to_required: "Требуется",
       amount_required: "Требуется сумма",
+      invalid_withdraw_hive_address: "Адрес вывода Hive недействителен",
       withdraw_add_required: "Требуется адрес для вывода",
       withdraw_pub_key_required: "Требуется отозвать открытый ключ",
       sons_not_available_try_again:
