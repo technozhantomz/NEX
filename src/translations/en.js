@@ -863,7 +863,7 @@ export const en = {
       to_required: "To is required",
       amount_required: "Amount is required",
       withdraw_add_required: "Withdraw address is required",
-      withdraw_HIVE_address_invalid: "Withdraw address is invalid",
+      invalid_withdraw_hive_address: "Hive withdraw address is invalid",
       withdraw_pub_key_required: "Withdraw public key is required",
       sons_not_available_try_again:
         "SONs network is not available now. Please try again later!",

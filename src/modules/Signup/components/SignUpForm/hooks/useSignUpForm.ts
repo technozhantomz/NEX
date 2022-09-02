@@ -2,6 +2,7 @@ import counterpart from "counterpart";
 import { ChainValidation } from "peerplaysjs-lib";
 import { useEffect, useState } from "react";
 
+import { utils } from "../../../../../api/utils";
 import { useAccount, useCreateAccount } from "../../../../../common/hooks";
 import {
   useBrowserHistoryContext,
@@ -80,11 +81,7 @@ export function useSignUpForm(): UseSignUpFormResult {
         new Error(counterpart.translate(`field.errors.username_taken`))
       );
     }
-    if (
-      !/^[a-z](?!.*([-.])\\1)((?=.*(-))|(?=.*([0-9])))[a-z0-9-.]{2,62}(?<![-.])$/.test(
-        value
-      )
-    ) {
+    if (!utils.validateGrapheneAccountName(value)) {
       return Promise.reject(
         new Error(counterpart.translate(`field.errors.username_invalid`))
       );
