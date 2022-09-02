@@ -49,24 +49,20 @@ export const SwapItem = styled(swapForm.Item)`
   .ant-input-affix-wrapper {
     background: ${colors.white} 0% 0% no-repeat padding-box;
     ${mixIns.borderRadius}
-    height: 65px;
+    min-height: 65px;
     .ant-input-prefix {
-      min-width: 135px;
-      width: fit-content;
-      .ant-select-selection-item {
-        padding-right: 30px;
+      min-width: 200px;
+      ${breakpoint.sm} {
+        min-width: 240px;
       }
+      width: fit-content;
     }
     .ant-input {
       text-align: right;
       direction: ltr;
     }
     ${breakpoint.sm} {
-      height: 85px;
-      .ant-input-prefix {
-        min-width: 135px;
-        width: 50%;
-      }
+      min-height: 85px;
     }
   }
   z-index: 1;

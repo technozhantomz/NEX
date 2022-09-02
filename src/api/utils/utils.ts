@@ -35,16 +35,19 @@ export const utils = {
     }
     return false;
   },
-  getAssetNameFromSymbol: (symbol: string): string => {
-    const assetNames: Record<string, string> = {
+  getBlockchainFromSymbol: (symbol: string): string => {
+    const blockchains: Record<string, string> = {
       BTC: "Bitcoin",
-      HIVE: "HIVE",
-      HBD: "Hive Dollar",
-      PBTC: "pTokens BTC",
-      PEOS: "pEOS",
-      PETH: "PumpETH",
-
+      PBTC: "Bitcoin",
+      HIVE: "Hive",
+      HBD: "Hive",
+      PEOS: "EOSIO",
+      EOS: "EOSIO",
+      PETH: "Ethereum",
+      ETH: "Ethereum",
+      TEST: "PeerPlays",
+      PPY: "PeerPlays",
     };
-    return assetNames[symbol] || symbol;
+    return blockchains[symbol] || symbol;
   },
 };

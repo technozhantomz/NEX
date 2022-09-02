@@ -73,9 +73,10 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
               ? icons[props.value]
               : icons["Default"]}
           </Styled.IconContainer>
-          <Styled.AssetName>{`${utils.getAssetNameFromSymbol(props.value)} (${
-            props.value
-          })`}</Styled.AssetName>
+          <Styled.AssetName>
+            {`${utils.getBlockchainFromSymbol(props.value)}`}{" "}
+            {`(${props.value})`}
+          </Styled.AssetName>
         </Styled.OptionDiv>
       </Styled.SelectOptionContainer>
       {props.assets &&
@@ -94,9 +95,10 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
                     ? icons[asset.symbol]
                     : icons["Default"]}
                 </Styled.IconContainer>
-                <Styled.AssetName>{`${utils.getAssetNameFromSymbol(
-                  asset.symbol
-                )} (${asset.symbol})`}</Styled.AssetName>
+                <Styled.AssetName>
+                  {`${utils.getBlockchainFromSymbol(asset.symbol)}`}{" "}
+                  {`(${asset.symbol})`}
+                </Styled.AssetName>
               </Styled.OptionDiv>
             </Styled.SelectOptionContainer>
           ))}
