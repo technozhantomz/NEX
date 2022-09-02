@@ -27,7 +27,6 @@ build-review:
   image: node:16.17.0-alpine3.16
   stage: build
   script:
-    - apk update && apk add g++ make nasm git libtool autoconf automake libpng-dev pkgconfig
     - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
     - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
@@ -155,7 +154,12 @@ dast:
   rules:
   - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     when: always
-  - if: $CI_COMMIT_REF_NAME == "develop"
-    when: manual
-  - when: always
+  - if: '$CI_COMMIT_REF_NAME == "develop"'
+    when: always
+  - if: '$CI_COMMIT_REF_NAME == "main"'
+    when: always
+  - if: '$CI_COMMIT_REF_NAME != "develop"'
+    when: never
+  - if: '$CI_COMMIT_REF_NAME != "main"'
+    when: never
   
