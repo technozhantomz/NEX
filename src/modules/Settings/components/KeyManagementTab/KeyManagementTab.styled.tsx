@@ -65,7 +65,7 @@ export const PasswordInput = styled(UiInput.Password)`
   height: 50px;
 `;
 
-export const GeneratedKeyInput = styled(UiInput.Password)`
+export const GeneratedKeyInput = styled(UiInput)`
   height: 50px;
   width: 100%;
   margin-top: 24px;

@@ -8,6 +8,8 @@ export type UseKeyManagementTabResult = {
   handleCheckboxChange: (checkedValues: CheckboxValueType[]) => void;
   selectedKeys: CheckboxValueType[];
   onGo: () => void;
+  isInputTypePassword: boolean;
+  handleInputType: () => void;
 };
 
 export type FormValidation = {
