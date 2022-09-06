@@ -5,11 +5,14 @@
 # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-include: 
-- template: DAST.gitlab-ci.yml
-- template: Security/SAST.gitlab-ci.yml
-- template: Security/Dependency-Scanning.gitlab-ci.yml
-- template: Security/Container-Scanning.gitlab-ci.yml
+include:
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: License-Scanning.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
+  - template: Secret-Detection.gitlab-ci.yml
+  - template: Container-Scanning.gitlab-ci.yml
+  - template: DAST.gitlab-ci.yml
+
 
 variables:
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -21,6 +24,9 @@ stages:
 - deploy-review
 - deployQA
 - dast
+
+sast:
+  stage: test
 
 build-review:
   # node docker image on which this would be run
@@ -60,9 +66,6 @@ docker_build:
   only:
     - branches
     - merge_requests
-
-sast:
-  stage: test
 
 sonarcloud-check:
   stage: test
@@ -105,7 +108,6 @@ deploy_review:
     paths:
       - environment_url.txt
   only:
-    - nex-docker-dast-cleanup
     - merge_requests
   except:
     - main
