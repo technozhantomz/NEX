@@ -14,9 +14,11 @@ export const UsernameFormItem = styled(CardForm.Item)`
   }
 `;
 export const Label = styled.p`
+  margin-top: 20px;
   margin-bottom: 15px;
   ${breakpoint.sm} {
     margin-bottom: 24px;
+    margin-top: 20px;
   }
 `;
 export const GeneratedPassordInput = styled(UIInput)`
