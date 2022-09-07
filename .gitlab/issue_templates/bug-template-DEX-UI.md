@@ -27,14 +27,18 @@
 <!-- If applicable provide the list of multiple operating systems -->
 <!-- Ideally DEX-UI must be tested on Firefox, Google Chrome (stable) & Brave -->
 <!-- logs must be provided in all cases -->
-- 
 
 OS :
 Browser (Google Chrome):
+
 Browser (Firefox): 
+
 DEX-UI release or git commit hash:
+
 Bitcoin version: <!-- mandaotory for environments with Bitcoin SONs -->
-Hive version :   <!-- mandaotory for environments with Hive SONs>
+
+Hive version :   <!-- mandaotory for environments with Hive SONs -->
+
 <!-- git commit hash must be used only if a release version is not available due to special cases>
 
 <!--- Provide a general summary of the issue in the Title above -->
@@ -44,4 +48,17 @@ Hive version :   <!-- mandaotory for environments with Hive SONs>
 
 ## Possible Implementation
 <!--- Not obligatory, but suggest an idea for implementing addition or change -->
+
+
+## Logs
+
+<!-- Upload logs files and provide links as opposed to adding large files  -->
+<!-- Including log aggreation tool's link is suggested -->
+
+## Test Data
+
+<!-- include test data -->
+
+### Severity
+### Priority
 
