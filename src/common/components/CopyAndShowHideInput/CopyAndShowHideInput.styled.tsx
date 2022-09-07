@@ -26,4 +26,10 @@ export const GeneratedKeyInput = styled(UiInput)`
       font-size: 14px;
     }
   }
+  span.anticon {
+    margin-right: 10px;
+    ${breakpoint.sm} {
+      margin-right: 15px;
+    }
+  }
 `;
