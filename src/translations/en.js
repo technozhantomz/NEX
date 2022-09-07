@@ -808,6 +808,7 @@ export const en = {
       desired_witnesses: "Desired witnesses",
       desired_committees: "Desired committees",
       desired_sons: "Desired sons",
+      desired_proxy: "Desired Proxy",
     },
     comments: {
       deposit_hbd:
