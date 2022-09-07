@@ -32,4 +32,7 @@ export const CardForm = styled(AntdForm)`
   .ant-form-item-has-error {
     margin-bottom: 10px;
   }
+  .ant-form-item .ant-form-item-margin-offset {
+    margin-bottom: 0 !important;
+  }
 `;
