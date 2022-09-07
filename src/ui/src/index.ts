@@ -14,11 +14,11 @@ export { TableSearch } from "./TableSearch";
 export { ListItem } from "./ListItem";
 export { Tabs } from "./Tabs";
 export { Input } from "./Input";
+export { Form } from "./Form";
 
 export {
   Badge,
   Row,
-  Form,
   InputNumber,
   Menu,
   Modal,
