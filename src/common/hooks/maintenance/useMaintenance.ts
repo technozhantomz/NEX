@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { useFormDate } from "..";
 import { usePeerplaysApiContext } from "../../providers";
 import { BlockData, GlobalProperties } from "../../types";
 
@@ -11,6 +12,7 @@ export function useMaintenance(): UseMaintenanceResult {
   const [loading, setLoading] = useState<boolean>(true);
 
   const { dbApi } = usePeerplaysApiContext();
+  const { formLocalDate } = useFormDate();
 
   const getMaintenance = useCallback(async () => {
     try {
@@ -20,7 +22,14 @@ export function useMaintenance(): UseMaintenanceResult {
         const lastBlockData = blocksData[0];
         const gpo: GlobalProperties = await dbApi("get_global_properties");
         setMaintenanceInterval(gpo.parameters.maintenance_interval);
-        setNextMaintenanceTime(lastBlockData.next_maintenance_time);
+        setNextMaintenanceTime(
+          formLocalDate(lastBlockData.next_maintenance_time, [
+            "month",
+            "date",
+            "year",
+            "time",
+          ])
+        );
         setLoading(false);
       } else {
         setLoading(false);
