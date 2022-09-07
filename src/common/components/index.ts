@@ -12,4 +12,4 @@ export * from "./TradingPairCard";
 export * from "./TransactionModal";
 export * from "./CopyButton";
 export * from "./TableHeading";
-export * from "./CopyAndShowHideInput";
+export * from "./KeyInput";

@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 import React, { Fragment } from "react";
 
-import { CopyAndShowHideInput } from "../../../../common/components";
+import { KeyInput } from "../../../../common/components";
 import { Checkbox } from "../../../../ui/src";
 
 import * as Styled from "./KeyManagementTab.styled";
@@ -77,7 +77,7 @@ export const KeyManagementTab = (): JSX.Element => {
                       })}
                     </Styled.Label>
                     <div>
-                      <CopyAndShowHideInput inputValue={generatedKey} />
+                      <KeyInput keyValue={generatedKey.key} />
                     </div>
                   </Fragment>
                 );
