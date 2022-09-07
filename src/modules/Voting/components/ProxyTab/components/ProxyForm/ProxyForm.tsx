@@ -154,7 +154,7 @@ export const ProxyForm = ({
           fee={updateAccountFee}
           transactionType="account_update"
           proxy={proxy}
-          memberType="Proxy"
+          memberType="proxy"
           desiredMembers={1}
         />
       </Form.Provider>

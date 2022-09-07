@@ -786,7 +786,7 @@ export const ru = {
       desired_witnesses: "Желаемые свидетели",
       desired_committees: "Желаемые комитеты",
       desired_sons: "Желаемые сыновья",
-      desired_Proxy: "Желаемый прокси",
+      desired_proxy: "Желаемый прокси",
     },
     comments: {
       deposit_hbd:
