@@ -20,7 +20,6 @@ import {
 export function useKeyManagementTab(): UseKeyManagementTabResult {
   // These states should go to upper hook
 
-  const [isInputTypePassword, setIsInputTypePassword] = useState(true);
   const [generatedKeys, setGeneratedKeys] = useState<GeneratedKey[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [keyManagementForm] = Form.useForm();
@@ -34,10 +33,6 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     },
     [setSelectedKeys]
   );
-
-  const handleInputType = () => {
-    setIsInputTypePassword(!isInputTypePassword);
-  };
 
   const onGo = useCallback(() => {
     const { password } = keyManagementForm.getFieldsValue();
@@ -126,7 +121,5 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     handleCheckboxChange,
     selectedKeys,
     onGo,
-    isInputTypePassword,
-    handleInputType,
   };
 }

@@ -15,8 +15,6 @@ export const KeyManagementTab = (): JSX.Element => {
     handleCheckboxChange,
     selectedKeys,
     onGo,
-    // isInputTypePassword,
-    // handleInputType,
   } = useKeyManagementTab();
 
   return (
@@ -79,22 +77,6 @@ export const KeyManagementTab = (): JSX.Element => {
                       })}
                     </Styled.Label>
                     <div>
-                      {/* <Styled.GeneratedKeyInput
-                        value={generatedKey.key}
-                        type={isInputTypePassword ? "password" : "text"}
-                        suffix={
-                          <div>
-                            <CopyButton
-                              copyValue={`${generatedKey.key}`}
-                            ></CopyButton>
-                            {isInputTypePassword ? (
-                              <EyeOutlined onClick={handleInputType} />
-                            ) : (
-                              <EyeInvisibleOutlined onClick={handleInputType} />
-                            )}
-                          </div>
-                        }
-                      /> */}
                       <CopyAndShowHideInput inputValue={generatedKey} />
                     </div>
                   </Fragment>
