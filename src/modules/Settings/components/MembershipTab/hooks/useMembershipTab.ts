@@ -64,7 +64,7 @@ export function useMembershipTab(): UseMembershipTabResult {
         let expirationDate = fullAccount.account.membership_expiration_date;
         if (expirationDate === "1970-01-01T00:00:00") {
           expirationDate = "N/A";
-        } else if (expirationDate === "1969-12-31T23:59:59") {
+        } else {
           expirationDate = "Never";
         }
         const lifetimeReferrerName = fullAccount.lifetime_referrer_name;
