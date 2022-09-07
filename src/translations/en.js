@@ -612,7 +612,7 @@ export const en = {
         heading: "Membership",
         upgrade_title: "Upgrade for %(feesCashback)s%%  Cashback",
         upgrade_description:
-          "Every transaction on the Peerplays network is divided between the network and referrers. By registering to a Lifetime Membership the account will receive %(feesCashback)s cashback on every transaction fee paid. As a bonus it will also qualify to earn referral income from users registered with or referred to the network.",
+          "Every transaction on the Peerplays network is divided between the network and referrers. By registering to a Lifetime Membership the account will receive %(feesCashback)s%% cashback on every transaction fee paid. As a bonus it will also qualify to earn referral income from users registered with or referred to the network.",
         membership_price:
           "A Lifetime Membership price will change over time, right now it is only %(membershipPrice)s %(defaultToken)s.",
         fee_allocation: "Fee Allocation",
