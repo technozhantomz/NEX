@@ -1,12 +1,8 @@
 import counterpart from "counterpart";
 import React, { Fragment } from "react";
 
-import { CopyButton } from "../../../../common/components";
-import {
-  Checkbox,
-  EyeInvisibleOutlined,
-  EyeOutlined,
-} from "../../../../ui/src";
+import { CopyAndShowHideInput } from "../../../../common/components";
+import { Checkbox } from "../../../../ui/src";
 
 import * as Styled from "./KeyManagementTab.styled";
 import { useKeyManagementTab } from "./hooks";
@@ -19,8 +15,8 @@ export const KeyManagementTab = (): JSX.Element => {
     handleCheckboxChange,
     selectedKeys,
     onGo,
-    isInputTypePassword,
-    handleInputType,
+    // isInputTypePassword,
+    // handleInputType,
   } = useKeyManagementTab();
 
   return (
@@ -83,7 +79,7 @@ export const KeyManagementTab = (): JSX.Element => {
                       })}
                     </Styled.Label>
                     <div>
-                      <Styled.GeneratedKeyInput
+                      {/* <Styled.GeneratedKeyInput
                         value={generatedKey.key}
                         type={isInputTypePassword ? "password" : "text"}
                         suffix={
@@ -98,7 +94,8 @@ export const KeyManagementTab = (): JSX.Element => {
                             )}
                           </div>
                         }
-                      />
+                      /> */}
+                      <CopyAndShowHideInput inputValue={generatedKey} />
                     </div>
                   </Fragment>
                 );
