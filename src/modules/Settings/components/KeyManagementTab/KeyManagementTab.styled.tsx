@@ -1,3 +1,4 @@
+import { KeyInput } from "../../../../common/components";
 import {
   CardFormButton,
   Form,
@@ -72,7 +73,9 @@ export const NoKey = styled.div`
 
 export const SubmitButton = styled(CardFormButton)``;
 
-export const GeneratedKeyInput = styled.div`
+export const GeneratedKeyInput = styled(KeyInput)`
+  height: 50px;
+  width: 100%;
   margin-top: 24px;
   margin-bottom: 24px;
   span.anticon {
@@ -86,5 +89,8 @@ export const GeneratedKeyInput = styled.div`
     ${breakpoint.sm} {
       font-size: 14px;
     }
+  }
+  ${breakpoint.sm} {
+    width: 50%;
   }
 `;

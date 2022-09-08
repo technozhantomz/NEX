@@ -1,7 +1,6 @@
 import counterpart from "counterpart";
 import React, { Fragment } from "react";
 
-import { KeyInput } from "../../../../common/components";
 import { Checkbox } from "../../../../ui/src";
 
 import * as Styled from "./KeyManagementTab.styled";
@@ -76,9 +75,7 @@ export const KeyManagementTab = (): JSX.Element => {
                         generatedKeyLabel: generatedKey.label,
                       })}
                     </Styled.Label>
-                    <Styled.GeneratedKeyInput>
-                      <KeyInput keyValue={generatedKey.key} />
-                    </Styled.GeneratedKeyInput>
+                    <Styled.GeneratedKeyInput keyValue={generatedKey.key} />
                   </Fragment>
                 );
               } else {

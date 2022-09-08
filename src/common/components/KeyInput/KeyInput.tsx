@@ -6,14 +6,16 @@ import { useKeyInput } from "./hooks";
 
 type Props = {
   keyValue: string;
+  className?: string;
 };
 
-export const KeyInput = ({ keyValue }: Props): JSX.Element => {
+export const KeyInput = ({ keyValue, className }: Props): JSX.Element => {
   const { isVisible, toggleVisibility } = useKeyInput();
 
   return (
     <div>
       <Styled.KeyInput
+        className={className}
         value={keyValue}
         type={!isVisible ? "password" : "text"}
         suffix={
