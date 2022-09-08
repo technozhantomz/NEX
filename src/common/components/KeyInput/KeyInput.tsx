@@ -13,7 +13,7 @@ export const KeyInput = ({ keyValue }: Props): JSX.Element => {
 
   return (
     <div>
-      <Styled.GeneratedKeyInput
+      <Styled.KeyInput
         value={keyValue}
         type={!isVisible ? "password" : "text"}
         suffix={

@@ -76,9 +76,9 @@ export const KeyManagementTab = (): JSX.Element => {
                         generatedKeyLabel: generatedKey.label,
                       })}
                     </Styled.Label>
-                    <div>
+                    <Styled.GeneratedKeyInput>
                       <KeyInput keyValue={generatedKey.key} />
-                    </div>
+                    </Styled.GeneratedKeyInput>
                   </Fragment>
                 );
               } else {
