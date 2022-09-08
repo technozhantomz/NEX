@@ -241,6 +241,11 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       );
     }
 
+    if (Number(value) <= 0) {
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.amount_should_greater`))
+      );
+    }
     return Promise.resolve();
   };
 
