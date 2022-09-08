@@ -186,8 +186,10 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         formAccountBalancesByName(localStorageAccount);
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
-          counterpart.translate(`field.success.successfully_withdraw`) +
-            values.amount
+          counterpart.translate(`field.success.successfully_withdrawn`, {
+            symbol: selectedAsset,
+            withdrawAmount: amount,
+          })
         );
         withdrawForm.setFieldsValue({
           amount: "0",

@@ -22,6 +22,7 @@ const defaultUserState: UserContextType = {
   name: "",
   assets: [],
   password: "",
+  account: undefined,
   updateAccount: function (id: string, name: string, assets: Asset[]): void {
     throw new Error(`Function not implemented. ${id},${name}, ${assets}`);
   },
