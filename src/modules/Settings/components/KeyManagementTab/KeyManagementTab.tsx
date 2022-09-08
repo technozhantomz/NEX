@@ -1,12 +1,7 @@
 import counterpart from "counterpart";
 import React, { Fragment } from "react";
 
-import { CopyButton } from "../../../../common/components";
-import {
-  Checkbox,
-  EyeInvisibleOutlined,
-  EyeOutlined,
-} from "../../../../ui/src";
+import { Checkbox } from "../../../../ui/src";
 
 import * as Styled from "./KeyManagementTab.styled";
 import { useKeyManagementTab } from "./hooks";
@@ -80,23 +75,7 @@ export const KeyManagementTab = (): JSX.Element => {
                         generatedKeyLabel: generatedKey.label,
                       })}
                     </Styled.Label>
-                    <div>
-                      <Styled.GeneratedKeyInput
-                        value={generatedKey.key}
-                        iconRender={(visible = true) => (
-                          <div>
-                            <CopyButton
-                              copyValue={`${generatedKey.key}`}
-                            ></CopyButton>
-                            {visible ? (
-                              <EyeOutlined />
-                            ) : (
-                              <EyeInvisibleOutlined />
-                            )}
-                          </div>
-                        )}
-                      />
-                    </div>
+                    <Styled.GeneratedKeyInput keyValue={generatedKey.key} />
                   </Fragment>
                 );
               } else {
