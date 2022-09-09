@@ -1,6 +1,6 @@
 <!--- Provide 1 Sentance Definition of Done -->
 ## Definition of Done
-"Delete this sample message and wright a sentance that defines the definition of done."
+"Delete this sample message and write a sentance that defines the [definition of done](https://www.leadingagile.com/2017/02/definition-of-done/)."
 
 <!--- Provide List of Acceptance Criteria-->
 ## Acceptance Criteria
