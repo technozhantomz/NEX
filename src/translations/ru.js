@@ -544,6 +544,7 @@ export const ru = {
       fees: {
         heading: "Комиссия PeerPlays",
         fees: "Сборы",
+        search_fees: "Плата за поиск",
         general: "Общий",
         asset_specific: "Конкретный объект",
         market_specific: "Конкретный рынок",
@@ -920,6 +921,7 @@ export const ru = {
     website: "Веб-сайт",
     action: "Действие",
     votes: "Голоса",
+    category: "категория",
   },
   tooltips: {
     copy: "копировать",

@@ -1,7 +1,9 @@
 import {
   styled,
+  Dropdown as UiDropdown,
   ListItem as UiListItem,
   Table as UiTable,
+  TableSearch as UiTableSearch,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
@@ -19,6 +21,8 @@ export const Section = styled.section`
   ${mixIns.hairline}
 `;
 
+export const FeesSearch = styled(UiTableSearch)``;
+
 export const FeesTable = styled(UiTable)`
   max-width: 700px;
   ${breakpoint.sm} {
@@ -27,7 +31,7 @@ export const FeesTable = styled(UiTable)`
   .ant-table-thead > tr > th {
     color: ${colors.textColorSecondary};
     background: ${colors.white};
-    border: none;
+    // border: none;
     font-size: 0.9em;
     font-weight: 300;
     &:before {
@@ -41,7 +45,7 @@ export const FeesTable = styled(UiTable)`
     }
   }
   .ant-table-tbody > tr > td {
-    border: none;
+    // border: none;
     vertical-align: baseline;
     div:not(:last-child) {
       margin-bottom: 15px;
@@ -71,7 +75,7 @@ export const FeesTable = styled(UiTable)`
   }
 `;
 
-export const FeeSpecificHeader = styled.h3`
+export const FeesHeader = styled.h3`
   margin-top: 25px;
   margin-bottom: 25px;
   ${breakpoint.sm} {
@@ -79,6 +83,8 @@ export const FeeSpecificHeader = styled.h3`
     margin-bottom: 15px;
   }
 `;
+
+export const FeesDropdown = styled(UiDropdown);
 
 export const FeeListItem = styled(UiListItem)``;
 

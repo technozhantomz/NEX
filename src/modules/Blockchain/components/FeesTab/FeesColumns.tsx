@@ -4,6 +4,16 @@ import { colors } from "../../../../ui/src/colors";
 
 export const FeesColumns = [
   {
+    title: (): JSX.Element => <TableHeading heading={"category"} />,
+    dataIndex: "category",
+    key: "category",
+    render: (category: string): JSX.Element => (
+      <>
+        <div>{category}</div>
+      </>
+    ),
+  },
+  {
     title: (): JSX.Element => <TableHeading heading={"operation"} />,
     dataIndex: "operation",
     key: "operation",

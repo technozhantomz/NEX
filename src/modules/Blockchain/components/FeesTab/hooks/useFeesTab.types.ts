@@ -8,10 +8,13 @@ export type UseFeesTabResult = {
   businessFeesRows: FeesTableRow[];
   gameFeesRows: FeesTableRow[];
   marketFeesRows: FeesTableRow[];
+  searchValue: string;
+  handleSearch: (name: string) => void;
 };
 
 export type FeesTableRow = {
   key: string;
+  category: string;
   operation: string;
   types: string[];
   fees: string[];
