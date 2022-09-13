@@ -1,57 +1,61 @@
+import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchTableInput } from "ant-table-extensions";
 import counterpart from "counterpart";
-// import { SetStateAction, useState } from "react";
+import { useRef } from "react";
+import { CSVLink } from "react-csv";
+import { useReactToPrint } from "react-to-print";
 
 import { useViewportContext } from "../../../../common/providers";
 import { InfoCircleOutlined, List, Tag } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
 import { FeesColumns } from "./FeesColumns";
-// import { FeesMenu } from "./FeesMenu";
 import * as Styled from "./FeesTab.styled";
 import { FeesTableRow, useFeesTab } from "./hooks";
 
 export const FeesTab = (): JSX.Element => {
-  const {
-    loading,
-    generalFeesRows,
-    assetFeesRows,
-    accountFeesRows,
-    businessFeesRows,
-    gameFeesRows,
-    marketFeesRows,
-    // searchValue,
-    handleSearch,
-  } = useFeesTab();
+  const { loading, searchDataSource, fullFeesRows, setSearchDataSource } =
+    useFeesTab();
   const { sm } = useViewportContext();
-  const fullFeesRows = [].concat(
-    generalFeesRows,
-    assetFeesRows,
-    accountFeesRows,
-    businessFeesRows,
-    gameFeesRows,
-    marketFeesRows
-  );
+  const componentRef = useRef<any>();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   return (
     <Styled.FeesTabWrapper>
-      <div>
+      <Styled.FeesHeaderBar>
         <Styled.FeesHeader>
-          {counterpart.translate(`pages.blocks.fees.fees`)}{" "}
+          {counterpart.translate(`pages.blocks.fees.fees`)}
           <InfoCircleOutlined />
         </Styled.FeesHeader>
-        {/* <Styled.FeesDropdown overlay={FeesMenu}></Styled.FeesDropdown> */}
-        <Styled.FeesSearch
-          size="large"
-          placeholder={counterpart.translate(`pages.blocks.fees.search_fees`)}
-          onSearch={handleSearch}
-          loading={loading}
+        <SearchTableInput
+          columns={FeesColumns}
+          dataSource={fullFeesRows}
+          setDataSource={setSearchDataSource}
+          inputProps={{
+            placeholder: counterpart.translate(`pages.blocks.fees.search_fees`),
+            suffix: <SearchOutlined />,
+          }}
         />
-      </div>
+        <Styled.DownloadLinks>
+          <DownloadOutlined />
+          <a onClick={handlePrint}>{counterpart.translate(`links.pdf`)}</a>
+          {` / `}
+          <CSVLink
+            filename={"FeesTable.csv"}
+            data={fullFeesRows}
+            className="btn btn-primary"
+          >
+            {counterpart.translate(`links.csv`)}
+          </CSVLink>
+        </Styled.DownloadLinks>
+      </Styled.FeesHeaderBar>
       <Styled.Section>
         {sm ? (
           <List
             itemLayout="vertical"
-            dataSource={fullFeesRows}
+            dataSource={searchDataSource}
             pagination={{
               pageSize: 10,
             }}
@@ -118,12 +122,14 @@ export const FeesTab = (): JSX.Element => {
             )}
           />
         ) : (
-          <Styled.FeesTable
-            // bordered={true}
-            dataSource={fullFeesRows}
-            columns={FeesColumns}
-            loading={loading}
-          />
+          <div ref={componentRef}>
+            <Styled.FeesTable
+              // bordered={true}
+              dataSource={searchDataSource}
+              columns={FeesColumns}
+              loading={loading}
+            />
+          </div>
         )}
       </Styled.Section>
     </Styled.FeesTabWrapper>

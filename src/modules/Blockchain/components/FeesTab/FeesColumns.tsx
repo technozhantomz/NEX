@@ -2,6 +2,8 @@ import { TableHeading } from "../../../../common/components";
 import { Tag } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
+import { FeesTableRow } from "./hooks";
+
 export const FeesColumns = [
   {
     title: (): JSX.Element => <TableHeading heading={"category"} />,
@@ -12,6 +14,36 @@ export const FeesColumns = [
         <div>{category}</div>
       </>
     ),
+    filters: [
+      {
+        text: "General",
+        value: "General",
+      },
+      {
+        text: "Asset Specific",
+        value: "Asset Specific",
+      },
+      {
+        text: "Account Specific",
+        value: "Account Specific",
+      },
+      {
+        text: "Market Specific",
+        value: "Market Specific",
+      },
+      {
+        text: "Business Administration",
+        value: "Business Administration",
+      },
+      {
+        text: "Game Specific",
+        value: "Game Specific",
+      },
+    ],
+    filterMode: "tree",
+    filterSearch: false,
+    onFilter: (value: string, record: FeesTableRow): boolean =>
+      record.category.includes(value),
   },
   {
     title: (): JSX.Element => <TableHeading heading={"operation"} />,
@@ -33,7 +65,7 @@ export const FeesColumns = [
     title: (): JSX.Element => <TableHeading heading={"fee_type"} />,
     dataIndex: "types",
     key: "types",
-    render: (types: string[], record: any): JSX.Element => (
+    render: (types: string[], record: FeesTableRow): JSX.Element => (
       <>
         {types.map((type, index) => (
           <div key={`${record.key}-${index}`}>{type}</div>
@@ -45,7 +77,7 @@ export const FeesColumns = [
     title: (): JSX.Element => <TableHeading heading={"standard_fee"} />,
     dataIndex: "fees",
     key: "fees",
-    render: (fees: string[], record: any): JSX.Element => (
+    render: (fees: string[], record: FeesTableRow): JSX.Element => (
       <>
         {fees.map((fee, index) => (
           <div

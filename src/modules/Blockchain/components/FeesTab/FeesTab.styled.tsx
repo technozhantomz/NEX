@@ -1,9 +1,9 @@
+import { Table as UiTable } from "ant-table-extensions";
+
 import {
   styled,
   Dropdown as UiDropdown,
   ListItem as UiListItem,
-  Table as UiTable,
-  TableSearch as UiTableSearch,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
@@ -21,10 +21,51 @@ export const Section = styled.section`
   ${mixIns.hairline}
 `;
 
-export const FeesSearch = styled(UiTableSearch)``;
+export const FeesHeaderBar = styled.div`
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  .ant-input-group-wrapper {
+    margin: 0;
+  }
+  .ant-input-affix-wrapper {
+    width: 40%;
+    height: 50px;
+    max-width: 341px;
+    margin-right: 15px;
+  }
+  ${breakpoint.sm} {
+    .ant-input-affix-wrapper {
+      width: 50%;
+      margin-right: 25px;
+    }
+  }
+`;
+
+export const FeesHeader = styled.h3`
+  margin-left: 15px;
+  .anticon-info-circle {
+    margin: 0 15px;
+    color: ${colors.warningColor};
+  }
+  ${breakpoint.sm} {
+    margin: 0 20px;
+  }
+`;
+
+export const DownloadLinks = styled.span`
+  .anticon-download {
+    margin-right: 15px;
+    height: 17px;
+    color: #b9b9b9;
+  }
+`;
 
 export const FeesTable = styled(UiTable)`
-  max-width: 700px;
+  .ant-table {
+    max-width: 727px;
+  }
   ${breakpoint.sm} {
     margin-bottom: 14px;
   }
@@ -72,15 +113,6 @@ export const FeesTable = styled(UiTable)`
   }
   .standard-fee {
     text-align: right;
-  }
-`;
-
-export const FeesHeader = styled.h3`
-  margin-top: 25px;
-  margin-bottom: 25px;
-  ${breakpoint.sm} {
-    margin-top: 25px;
-    margin-bottom: 15px;
   }
 `;
 

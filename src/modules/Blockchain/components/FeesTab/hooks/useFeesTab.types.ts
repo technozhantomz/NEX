@@ -1,15 +1,12 @@
+import { Dispatch, SetStateAction } from "react";
+
 import { FeeParameter } from "../../../../../common/types";
 
 export type UseFeesTabResult = {
   loading: boolean;
-  generalFeesRows: FeesTableRow[];
-  assetFeesRows: FeesTableRow[];
-  accountFeesRows: FeesTableRow[];
-  businessFeesRows: FeesTableRow[];
-  gameFeesRows: FeesTableRow[];
-  marketFeesRows: FeesTableRow[];
-  searchValue: string;
-  handleSearch: (name: string) => void;
+  searchDataSource: FeesTableRow[];
+  fullFeesRows: FeesTableRow[];
+  setSearchDataSource: Dispatch<SetStateAction<FeesTableRow[]>>;
 };
 
 export type FeesTableRow = {

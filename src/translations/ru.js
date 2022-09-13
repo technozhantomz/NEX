@@ -711,6 +711,8 @@ export const ru = {
     see_all_account_activity: "Просмотреть всю активность аккаунта",
     profile: "профиль",
     mark_all_read: "отметить все как прочитанное",
+    pdf: "PDF",
+    csv: "CSV",
   },
   field: {
     options: {
