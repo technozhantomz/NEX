@@ -567,6 +567,12 @@ export const en = {
         search_witnesses: "Search Witnesses",
         witnesses: "Witnesses",
       },
+      sons: {
+        heading: "PeerPlays Sons",
+        active_sons: "Active Sons",
+        search_sons: "Search Sons",
+        sons: "Sons",
+      },
       fees: {
         heading: "PeerPlays Fees",
         fees: "Fees",
@@ -949,6 +955,7 @@ export const en = {
     action: "Action",
     votes: "Votes",
     category: "Category",
+    active: "Active",
   },
   tooltips: {
     copy: "copy",

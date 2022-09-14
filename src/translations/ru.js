@@ -541,6 +541,12 @@ export const ru = {
         search_witnesses: "Поиск свидетелей",
         witnesses: "Свидетели",
       },
+      sons: {
+        heading: "Пирплейс Сыновья",
+        active_sons: "Активные сыновья",
+        search_sons: "Поиск сыновей",
+        sons: "сыновья",
+      },
       fees: {
         heading: "Комиссия PeerPlays",
         fees: "Сборы",
@@ -924,6 +930,7 @@ export const ru = {
     action: "Действие",
     votes: "Голоса",
     category: "категория",
+    active: "Активный",
   },
   tooltips: {
     copy: "копировать",
