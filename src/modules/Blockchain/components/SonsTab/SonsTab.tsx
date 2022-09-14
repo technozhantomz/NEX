@@ -15,7 +15,6 @@ import {
 import { StatsCard } from "../StatsCard";
 
 import { SonsColumns } from "./SonsColumns";
-import * as ListStyled from "./SonsColumns.styled";
 import * as Styled from "./SonsTab.styled";
 import { SonsPrintTable } from "./SonstPrintTable";
 import { useSonsTab } from "./hooks";
@@ -84,43 +83,43 @@ export const SonsTab = (): JSX.Element => {
           renderItem={(item) => (
             <Styled.SonListItem key={item.key}>
               <Styled.SonItemContent>
-                <div className="son-info">
-                  <span className="son-info-title">
+                <div className="item-info">
+                  <span className="item-info-title">
                     {SonsColumns[0].title()}
                   </span>
-                  <span className="son-info-value">{item.rank}</span>
+                  <span className="item-info-value">{item.rank}</span>
                 </div>
-                <div className="son-info">
-                  <span className="son-info-title">
+                <div className="item-info">
+                  <span className="item-info-title">
                     {SonsColumns[1].title()}
                   </span>
-                  <span className="son-info-value">
+                  <span className="item-info-value">
                     <Link href={`/user/${item.name}`}>{item.name}</Link>
                   </span>
                 </div>
-                <div className="son-info">
-                  <span className="son-info-title">
+                <div className="item-info">
+                  <span className="item-info-title">
                     {SonsColumns[2].title()}
                   </span>
-                  <span className="son-info-value">
-                    {item.active === true ? <ListStyled.ActiveIcon /> : ``}
+                  <span className="item-info-value">
+                    {item.active === true ? <Styled.ActiveIcon /> : ``}
                   </span>
                 </div>
-                <div className="son-info">
-                  <span className="son-info-title">
+                <div className="item-info">
+                  <span className="item-info-title">
                     {SonsColumns[3].title()}
                   </span>
-                  <span className="son-info-value">
+                  <span className="item-info-value">
                     <Link href={`${item.url}`} passHref>
-                      <ListStyled.urlIcon rotate={45} />
+                      <Styled.urlIcon rotate={45} />
                     </Link>
                   </span>
                 </div>
-                <div className="son-info">
-                  <span className="son-info-title">
+                <div className="item-info">
+                  <span className="item-info-title">
                     {SonsColumns[4].title()}
                   </span>
-                  <span className="son-info-value">{item.totalVotes}</span>
+                  <span className="item-info-value">{item.totalVotes}</span>
                 </div>
               </Styled.SonItemContent>
             </Styled.SonListItem>
