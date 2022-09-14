@@ -88,10 +88,10 @@ export const SonListItem = styled(UiListItem)``;
 
 export const SonItemContent = styled.div`
   margin: 18px 0 25px;
-  .witness-info {
+  .son-info {
     margin: 5px 0;
     display: flex;
-    .witness-info-title {
+    .son-info-title {
       font-weight: 300;
       width: 120px;
       min-width: 120px;
@@ -99,7 +99,7 @@ export const SonItemContent = styled.div`
       margin-right: 5px;
       color: ${colors.textColorSecondary};
     }
-    .witness-info-value {
+    .son-info-value {
       font-weight: 500;
     }
   }

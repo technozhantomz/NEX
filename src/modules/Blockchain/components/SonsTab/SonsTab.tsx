@@ -99,7 +99,9 @@ export const SonsTab = (): JSX.Element => {
                   <span className="son-info-title">
                     {SonsColumns[2].title()}
                   </span>
-                  <span className="son-info-value">{item.active}</span>
+                  <span className="son-info-value">
+                    {item.active === true ? <ListStyled.ActiveIcon /> : ``}
+                  </span>
                 </div>
                 <div className="son-info">
                   <span className="son-info-title">
