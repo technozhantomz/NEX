@@ -27,34 +27,50 @@ const renders = [
   ),
   undefined,
 ];
+const filters = [
+  undefined,
+  undefined,
+  [
+    {
+      text: "Avtive",
+      value: true,
+    },
+    {
+      text: "Inactive",
+      value: false,
+    },
+  ],
+  undefined,
+  undefined,
+];
+const filterModes = [undefined, undefined, "menu", undefined, undefined];
+const filterSearch = [undefined, undefined, false, undefined, undefined];
+const onFilters = [
+  undefined,
+  undefined,
+  (value: boolean, record: SonsTableRow): boolean => record.active === value,
+  undefined,
+  undefined,
+];
+const sorters = [
+  (a: { rank: number }, b: { rank: number }) => a.rank - b.rank,
+  undefined,
+  undefined,
+  undefined,
+  (a: { totalVotes: string }, b: { totalVotes: string }) =>
+    parseFloat(a.totalVotes) - parseFloat(b.totalVotes),
+];
 
 export const SonsColumns = headings.map((heading, index) => {
-  if (heading === "active") {
-    return {
-      title: (): JSX.Element => <TableHeading heading={heading} />,
-      dataIndex: keys[index],
-      key: keys[index],
-      render: renders[index],
-      filters: [
-        {
-          text: "Avtive",
-          value: true,
-        },
-        {
-          text: "Inactive",
-          value: false,
-        },
-      ],
-      filterMode: "tree",
-      filterSearch: false,
-      onFilter: (value: boolean, record: SonsTableRow): boolean =>
-        record.active === value,
-    };
-  }
   return {
     title: (): JSX.Element => <TableHeading heading={heading} />,
     dataIndex: keys[index],
     key: keys[index],
     render: renders[index],
+    filters: filters[index],
+    filterMode: filterModes[index],
+    filterSearch: filterSearch[index],
+    onFilter: onFilters[index],
+    sorter: sorters[index],
   };
 });
