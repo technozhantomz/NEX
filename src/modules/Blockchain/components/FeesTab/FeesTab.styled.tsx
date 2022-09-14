@@ -2,8 +2,8 @@ import { Table as UiTable } from "ant-table-extensions";
 
 import {
   styled,
-  Dropdown as UiDropdown,
   ListItem as UiListItem,
+  PrintTable as UiPrintTable,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
@@ -58,7 +58,7 @@ export const DownloadLinks = styled.span`
   .anticon-download {
     margin-right: 15px;
     height: 17px;
-    color: #b9b9b9;
+    color: ${colors.lightText};
   }
 `;
 
@@ -116,8 +116,6 @@ export const FeesTable = styled(UiTable)`
   }
 `;
 
-export const FeesDropdown = styled(UiDropdown);
-
 export const FeeListItem = styled(UiListItem)``;
 
 export const FeeItemContent = styled.div`
@@ -152,3 +150,5 @@ export const FeeTypeOrValueContainer = styled.div`
     margin-bottom: 5px;
   }
 `;
+
+export const PrintTable = styled(UiPrintTable)``;

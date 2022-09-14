@@ -1,15 +1,21 @@
-import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { SearchTableInput } from "ant-table-extensions";
 import counterpart from "counterpart";
 import { useRef } from "react";
 import { CSVLink } from "react-csv";
-import { useReactToPrint } from "react-to-print";
+import ReactToPrint from "react-to-print";
 
 import { useViewportContext } from "../../../../common/providers";
-import { InfoCircleOutlined, List, Tag } from "../../../../ui/src";
+import {
+  DownloadOutlined,
+  InfoCircleOutlined,
+  List,
+  SearchOutlined,
+  Tag,
+} from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
 import { FeesColumns } from "./FeesColumns";
+import { FeesPrintTable } from "./FeesPrintTable";
 import * as Styled from "./FeesTab.styled";
 import { FeesTableRow, useFeesTab } from "./hooks";
 
@@ -17,10 +23,7 @@ export const FeesTab = (): JSX.Element => {
   const { loading, searchDataSource, fullFeesRows, setSearchDataSource } =
     useFeesTab();
   const { sm } = useViewportContext();
-  const componentRef = useRef<any>();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
+  const componentRef = useRef();
 
   return (
     <Styled.FeesTabWrapper>
@@ -40,7 +43,10 @@ export const FeesTab = (): JSX.Element => {
         />
         <Styled.DownloadLinks>
           <DownloadOutlined />
-          <a onClick={handlePrint}>{counterpart.translate(`links.pdf`)}</a>
+          <ReactToPrint
+            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
+            content={() => componentRef.current}
+          />
           {` / `}
           <CSVLink
             filename={"FeesTable.csv"}
@@ -122,16 +128,24 @@ export const FeesTab = (): JSX.Element => {
             )}
           />
         ) : (
-          <div ref={componentRef}>
-            <Styled.FeesTable
-              // bordered={true}
-              dataSource={searchDataSource}
-              columns={FeesColumns}
-              loading={loading}
-            />
-          </div>
+          <Styled.FeesTable
+            dataSource={searchDataSource}
+            columns={FeesColumns}
+            loading={loading}
+          />
         )}
+        <Styled.PrintTable ref={componentRef}>
+          <Styled.FeesTable
+            dataSource={fullFeesRows}
+            columns={FeesColumns}
+            loading={loading}
+            pagination={false}
+          />
+        </Styled.PrintTable>
       </Styled.Section>
+      <Styled.PrintTable>
+        <FeesPrintTable ref={componentRef} />
+      </Styled.PrintTable>
     </Styled.FeesTabWrapper>
   );
 };
