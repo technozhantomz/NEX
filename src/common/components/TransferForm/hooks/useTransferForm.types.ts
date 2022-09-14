@@ -16,6 +16,7 @@ export type UseTransferFormResult = {
   loadingTransaction: boolean;
   toAccount: Account | undefined;
   amount: number;
+  transferFee: number;
 };
 
 export type FormField = {
