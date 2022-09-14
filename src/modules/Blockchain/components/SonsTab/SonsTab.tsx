@@ -78,6 +78,9 @@ export const SonsTab = (): JSX.Element => {
           itemLayout="vertical"
           dataSource={searchDataSource}
           loading={loading}
+          pagination={{
+            pageSize: 10,
+          }}
           renderItem={(item) => (
             <Styled.SonListItem key={item.key}>
               <Styled.SonItemContent>
