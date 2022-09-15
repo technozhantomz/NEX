@@ -6,11 +6,13 @@ export type UseSonsTabResult = {
   searchDataSource: SonsTableRow[];
   sonsStats: SonsStats;
   activeSons: number;
+  nextVote: number;
   setSearchDataSource: Dispatch<SetStateAction<SonsTableRow[]>>;
 };
 
 export type SonsStats = {
   active: number[];
+  nextVote: number[];
 };
 
 export type SonsTableRow = {

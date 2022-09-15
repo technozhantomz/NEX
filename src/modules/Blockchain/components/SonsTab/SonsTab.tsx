@@ -26,6 +26,7 @@ export const SonsTab = (): JSX.Element => {
     searchDataSource,
     sonsStats,
     activeSons,
+    nextVote,
     setSearchDataSource,
   } = useSonsTab();
   const { sm } = useViewportContext();
@@ -39,6 +40,12 @@ export const SonsTab = (): JSX.Element => {
           title={counterpart.translate(`pages.blocks.sons.active_sons`)}
           data={`${activeSons}`}
           statsData={sonsStats.active}
+        />
+        <StatsCard
+          noData={activeSons === 0}
+          title={counterpart.translate(`pages.blocks.stats_cards.next_vote`)}
+          data={`${nextVote}`}
+          statsData={sonsStats.nextVote}
         />
       </Styled.StatsCardsDeck>
       <Styled.SonsHeaderBar>

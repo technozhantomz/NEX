@@ -532,6 +532,9 @@ export const en = {
     blocks: {
       heading: "Blocks",
       no_data: "No Data",
+      stats_cards: {
+        next_vote: "Next Vote Update",
+      },
       blockchain: {
         blockchain: "Blockchain",
         heading: "PeerPlays Blockchain",
