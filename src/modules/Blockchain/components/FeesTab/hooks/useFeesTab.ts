@@ -17,12 +17,8 @@ import {
 
 export function useFeesTab(): UseFeesTabResult {
   const [loading, setLoading] = useState<boolean>(false);
-  const [generalFeesRows, setGeneralFeesRows] = useState<FeesTableRow[]>([]);
-  const [assetFeesRows, setAssetFeesRows] = useState<FeesTableRow[]>([]);
-  const [accountFeesRows, setAccountFeesRows] = useState<FeesTableRow[]>([]);
-  const [businessFeesRows, setBusinessFeesRows] = useState<FeesTableRow[]>([]);
-  const [gameFeesRows, setGameFeesRows] = useState<FeesTableRow[]>([]);
-  const [marketFeesRows, setMarketFeesRows] = useState<FeesTableRow[]>([]);
+  const [searchDataSource, setSearchDataSource] = useState<FeesTableRow[]>([]);
+  const [fullFeesRows, setFullFeesRows] = useState<FeesTableRow[]>([]);
   const { feeParameters } = useFeesContext();
   const { setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
@@ -117,31 +113,46 @@ export function useFeesTab(): UseFeesTabResult {
         (gameOperation) => Object.keys(gameOperation.feeParameter[1]).length > 0
       );
 
-      setGeneralFeesRows(generalOperations.map(formFeeRow));
-      setAssetFeesRows(assetOperations.map(formFeeRow));
-      setAccountFeesRows(accountOperations.map(formFeeRow));
-      setBusinessFeesRows(businessOperations.map(formFeeRow));
-      setGameFeesRows(gameOperations.map(formFeeRow));
-      setMarketFeesRows(marketOperations.map(formFeeRow));
+      const generalRows = generalOperations.map((operation) =>
+        formFeeRow(operation, "General")
+      );
+      const assetRows = assetOperations.map((operation) =>
+        formFeeRow(operation, "Asset Specific")
+      );
+      const accountRows = accountOperations.map((operation) =>
+        formFeeRow(operation, "Account Specific")
+      );
+      const marketRows = marketOperations.map((operation) =>
+        formFeeRow(operation, "Market Specific")
+      );
+      const businessRows = businessOperations.map((operation) =>
+        formFeeRow(operation, "Business Administration")
+      );
+      const gameRows = gameOperations.map((operation) =>
+        formFeeRow(operation, "Game Specific")
+      );
+      const fullRows = generalRows.concat(
+        assetRows,
+        accountRows,
+        marketRows,
+        businessRows,
+        gameRows
+      );
+
+      setFullFeesRows(fullRows);
+      setSearchDataSource(fullRows);
       setLoading(false);
     }
-  }, [
-    feeParameters,
-    defaultAsset,
-    setPrecision,
-    setLoading,
-    setGeneralFeesRows,
-    setAssetFeesRows,
-    setAccountFeesRows,
-    setGameFeesRows,
-    setBusinessFeesRows,
-    setMarketFeesRows,
-  ]);
+  }, [feeParameters, defaultAsset, setPrecision, setLoading, setFullFeesRows]);
 
   const formFeeRow = useCallback(
-    (operationWithFeeParameter: OperationWithFeeParameter): FeesTableRow => {
+    (
+      operationWithFeeParameter: OperationWithFeeParameter,
+      category: string
+    ): FeesTableRow => {
       return {
         key: operationWithFeeParameter.type,
+        category,
         operation: counterpart.translate(
           `transaction.trxTypes.${operationWithFeeParameter.type}.title`
         ),
@@ -173,11 +184,8 @@ export function useFeesTab(): UseFeesTabResult {
 
   return {
     loading,
-    generalFeesRows,
-    assetFeesRows,
-    accountFeesRows,
-    businessFeesRows,
-    gameFeesRows,
-    marketFeesRows,
+    searchDataSource,
+    fullFeesRows,
+    setSearchDataSource,
   };
 }

@@ -532,6 +532,9 @@ export const en = {
     blocks: {
       heading: "Blocks",
       no_data: "No Data",
+      stats_cards: {
+        next_vote: "Next Vote Update",
+      },
       blockchain: {
         blockchain: "Blockchain",
         heading: "PeerPlays Blockchain",
@@ -567,9 +570,16 @@ export const en = {
         search_witnesses: "Search Witnesses",
         witnesses: "Witnesses",
       },
+      sons: {
+        heading: "PeerPlays Sons",
+        active_sons: "Active Sons",
+        search_sons: "Search Sons",
+        sons: "Sons",
+      },
       fees: {
         heading: "PeerPlays Fees",
         fees: "Fees",
+        search_fees: "Search Fees",
         general: "General",
         asset_specific: "Asset Specific",
         market_specific: "Market Specific",
@@ -734,6 +744,8 @@ export const en = {
     see_all_account_activity: "See all account activity",
     profile: "profile",
     mark_all_read: "Mark all as read",
+    pdf: "PDF",
+    csv: "CSV",
   },
   field: {
     options: {
@@ -945,6 +957,8 @@ export const en = {
     website: "Website",
     action: "Action",
     votes: "Votes",
+    category: "Category",
+    active: "Active",
   },
   tooltips: {
     copy: "copy",

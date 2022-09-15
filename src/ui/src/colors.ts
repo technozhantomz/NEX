@@ -15,5 +15,5 @@ export const colors = {
   assetTag: `#FDBA86`,
   missedColor: `#D01721`,
   inactiveColor: `#f0f0f0`,
-  activeColor: ``,
+  lightText: `#B9B9B9`,
 };
