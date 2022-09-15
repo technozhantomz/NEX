@@ -100,7 +100,6 @@ export const PriceContainer = styled.div`
   font-size: 14px;
   color: ${colors.textColorSecondary};
   margin-bottom: 24px;
-  min-height: 22px;
   .anticon {
     margin-left: 16px;
     svg {
