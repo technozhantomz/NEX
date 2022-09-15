@@ -15,7 +15,10 @@ export function useSonsTab(): UseSonsTabResult {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchDataSource, setSearchDataSource] = useState<SonsTableRow[]>([]);
   const [sonsTableRows, setSonsTableRows] = useState<SonsTableRow[]>([]);
-  const [sonsStats, setSonsStats] = useState<SonsStats>({ active: [] });
+  const [sonsStats, setSonsStats] = useState<SonsStats>({
+    active: [],
+    nextVote: [],
+  });
   const [activeSons, setActiveSons] = useState<number>(0);
   const [nextVote, setNextVote] = useState<string>("");
 
@@ -38,6 +41,11 @@ export function useSonsTab(): UseSonsTabResult {
         const blockData = await getBlockData();
         if (chain && blockData) {
           const { sons, sonsIds } = await getSons();
+          const now = new Date().getTime();
+          const nextVoteTime = new Date(
+            blockData.next_maintenance_time
+          ).getTime();
+          const nextVoteDistance = nextVoteTime - now;
           if (sons && sons.length > 0) {
             sons.sort((a, b) => b.total_votes - a.total_votes);
             const sonsRows: SonsTableRow[] = [];
@@ -76,6 +84,11 @@ export function useSonsTab(): UseSonsTabResult {
                 activeSones.length,
                 99
               ),
+              nextVote: updateArrayWithLimit(
+                sonsStats.nextVote,
+                nextVoteDistance,
+                99
+              ),
             });
             setLoading(false);
           }
@@ -99,7 +112,7 @@ export function useSonsTab(): UseSonsTabResult {
   ]);
 
   useEffect(() => {
-    const sonsInterval = setInterval(() => getSonsData(), 1000);
+    const sonsInterval = setInterval(() => getSonsData(), 3000);
     return () => {
       clearInterval(sonsInterval);
     };

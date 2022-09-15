@@ -12,6 +12,7 @@ export type UseSonsTabResult = {
 
 export type SonsStats = {
   active: number[];
+  nextVote: number[];
 };
 
 export type SonsTableRow = {
