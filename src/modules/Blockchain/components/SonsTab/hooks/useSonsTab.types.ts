@@ -6,7 +6,7 @@ export type UseSonsTabResult = {
   searchDataSource: SonsTableRow[];
   sonsStats: SonsStats;
   activeSons: number;
-  nextVote: number;
+  nextVote: string;
   setSearchDataSource: Dispatch<SetStateAction<SonsTableRow[]>>;
 };
 
