@@ -44,7 +44,7 @@ export const SonsTab = (): JSX.Element => {
         <StatsCard
           noData={activeSons === 0}
           title={counterpart.translate(`pages.blocks.stats_cards.next_vote`)}
-          data={`${nextVote}`}
+          data={nextVote}
           statsData={sonsStats.nextVote}
         />
       </Styled.StatsCardsDeck>
