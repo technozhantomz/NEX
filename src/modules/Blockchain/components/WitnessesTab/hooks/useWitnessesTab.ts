@@ -4,12 +4,14 @@ import {
   useArrayLimiter,
   useAsset,
   useBlockchain,
+  useFormDate,
   useMembers,
 } from "../../../../../common/hooks";
 import {
   useAssetsContext,
   usePeerplaysApiContext,
 } from "../../../../../common/providers";
+import { GlobalProperties } from "../../../../../common/types";
 
 import {
   UseWitnessesTabResult,
@@ -19,7 +21,9 @@ import {
 
 export function useWitnessesTab(): UseWitnessesTabResult {
   const [loading, setLoading] = useState<boolean>(true);
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchDataSource, setSearchDataSource] = useState<WitnessTableRow[]>(
+    []
+  );
   const [witnessTableRows, setWitnessTableRows] = useState<WitnessTableRow[]>(
     []
   );
@@ -27,17 +31,20 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     active: [],
     reward: [],
     earnings: [],
+    nextVote: [],
   });
   const [activeWitnesses, setActiveWitnesses] = useState<number>(0);
   const [reward, setReward] = useState<number>(0);
   const [earnings, setEarnings] = useState<number>(0);
+  const [nextVote, setNextVote] = useState<string>("");
 
+  const { dbApi } = usePeerplaysApiContext();
   const { getWitnesses } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
-  const { dbApi } = usePeerplaysApiContext();
   const { formAssetBalanceById, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
-  const { getChain, getAvgBlockTime } = useBlockchain();
+  const { getChain, getAvgBlockTime, getBlockData } = useBlockchain();
+  const { formDate } = useFormDate();
 
   const getDaysInThisMonth = useCallback(() => {
     const now = new Date();
@@ -47,15 +54,21 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const getWitnessData = useCallback(async () => {
     if (defaultAsset) {
       try {
+        const gpo: GlobalProperties = await dbApi("get_global_properties");
         const chain = await getChain();
-        if (chain) {
+        const blockData = await getBlockData();
+        if (chain && blockData) {
           const rewardAmount = setPrecision(
             false,
             chain.parameters.witness_pay_per_block,
             defaultAsset.precision
           );
           const { witnesses, witnessesIds } = await getWitnesses();
-
+          const now = new Date().getTime();
+          const nextVoteTime = new Date(
+            blockData.next_maintenance_time
+          ).getTime();
+          const nextVoteDistance = nextVoteTime - now;
           if (witnesses && witnesses.length > 0) {
             witnesses.sort((a, b) => b.total_votes - a.total_votes);
             const witnessesRows: WitnessTableRow[] = [];
@@ -71,14 +84,21 @@ export function useWitnessesTab(): UseWitnessesTabResult {
                 name: witnessesIds.filter(
                   (witnessId) => witnessId[1] === witness.id
                 )[0][0],
-                totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+                active:
+                  gpo["active_witnesses"].indexOf(witness.id) >= 0
+                    ? true
+                    : false,
+                url: witness.url,
                 lastBlock: witness.last_confirmed_block_num,
                 missedBlocks: witness.total_missed,
-                url: witness.url,
+                totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+                publicKey: witness.signing_key,
               } as WitnessTableRow);
               index = index + 1;
             }
-
+            const activeWitnesses = witnessesRows.filter(
+              (witness) => witness.active === true
+            );
             const blocksPerMonth =
               (60 / getAvgBlockTime()) * 60 * 24 * getDaysInThisMonth();
             const earnings = (
@@ -86,13 +106,22 @@ export function useWitnessesTab(): UseWitnessesTabResult {
               rewardAmount
             ).toFixed(defaultAsset.precision);
             setWitnessTableRows(witnessesRows);
-            setActiveWitnesses(witnessesRows.length);
+            setSearchDataSource(witnessesRows);
+            setActiveWitnesses(activeWitnesses.length);
             setReward(rewardAmount);
             setEarnings(Number(earnings));
+            setNextVote(
+              formDate(blockData.next_maintenance_time, [
+                "month",
+                "date",
+                "year",
+                "time",
+              ])
+            );
             setWitnessStats({
               active: updateArrayWithLimit(
                 witnessStats.active,
-                witnessesRows.length,
+                activeWitnesses.length,
                 99
               ),
               reward: updateArrayWithLimit(
@@ -103,6 +132,11 @@ export function useWitnessesTab(): UseWitnessesTabResult {
               earnings: updateArrayWithLimit(
                 witnessStats.earnings,
                 Number(earnings),
+                99
+              ),
+              nextVote: updateArrayWithLimit(
+                witnessStats.nextVote,
+                nextVoteDistance,
                 99
               ),
             });
@@ -129,15 +163,6 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     setLoading,
   ]);
 
-  const handleSearch = useCallback(
-    async (name: string) => {
-      setLoading(true);
-      setSearchValue(name);
-      setLoading(false);
-    },
-    [setLoading, setSearchValue, dbApi]
-  );
-
   useEffect(() => {
     const witnessInterval = setInterval(() => getWitnessData(), 3000);
     return () => {
@@ -150,9 +175,10 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     witnessTableRows,
     witnessStats,
     activeWitnesses,
-    searchValue,
     reward,
     earnings,
-    handleSearch,
+    nextVote,
+    searchDataSource,
+    setSearchDataSource,
   };
 }

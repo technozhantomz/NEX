@@ -959,6 +959,7 @@ export const en = {
     votes: "Votes",
     category: "Category",
     active: "Active",
+    key: "key",
   },
   tooltips: {
     copy: "copy",

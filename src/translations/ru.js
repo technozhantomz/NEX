@@ -934,6 +934,7 @@ export const ru = {
     votes: "Голоса",
     category: "категория",
     active: "Активный",
+    key: "ключ",
   },
   tooltips: {
     copy: "копировать",
