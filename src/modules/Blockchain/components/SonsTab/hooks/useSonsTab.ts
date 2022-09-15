@@ -4,6 +4,7 @@ import {
   useArrayLimiter,
   useAsset,
   useBlockchain,
+  useFormDate,
   useMembers,
 } from "../../../../../common/hooks";
 import { useAssetsContext } from "../../../../../common/providers";
@@ -16,12 +17,14 @@ export function useSonsTab(): UseSonsTabResult {
   const [sonsTableRows, setSonsTableRows] = useState<SonsTableRow[]>([]);
   const [sonsStats, setSonsStats] = useState<SonsStats>({ active: [] });
   const [activeSons, setActiveSons] = useState<number>(0);
+  const [nextVote, setNextVote] = useState<string>("");
 
   const { getSons } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { formAssetBalanceById, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
-  const { getChain, getAvgBlockTime } = useBlockchain();
+  const { getChain, getAvgBlockTime, getBlockData } = useBlockchain();
+  const { formDate } = useFormDate();
 
   const getDaysInThisMonth = useCallback(() => {
     const now = new Date();
@@ -32,9 +35,9 @@ export function useSonsTab(): UseSonsTabResult {
     if (defaultAsset) {
       try {
         const chain = await getChain();
-        if (chain) {
+        const blockData = await getBlockData();
+        if (chain && blockData) {
           const { sons, sonsIds } = await getSons();
-
           if (sons && sons.length > 0) {
             sons.sort((a, b) => b.total_votes - a.total_votes);
             const sonsRows: SonsTableRow[] = [];
@@ -59,6 +62,14 @@ export function useSonsTab(): UseSonsTabResult {
             setSonsTableRows(sonsRows);
             setSearchDataSource(sonsRows);
             setActiveSons(activeSones.length);
+            setNextVote(
+              formDate(blockData.next_maintenance_time, [
+                "month",
+                "date",
+                "year",
+                "time",
+              ])
+            );
             setSonsStats({
               active: updateArrayWithLimit(
                 sonsStats.active,
@@ -88,7 +99,7 @@ export function useSonsTab(): UseSonsTabResult {
   ]);
 
   useEffect(() => {
-    const sonsInterval = setInterval(() => getSonsData(), 3000);
+    const sonsInterval = setInterval(() => getSonsData(), 1000);
     return () => {
       clearInterval(sonsInterval);
     };
@@ -100,6 +111,7 @@ export function useSonsTab(): UseSonsTabResult {
     searchDataSource,
     sonsStats,
     activeSons,
+    nextVote,
     setSearchDataSource,
   };
 }

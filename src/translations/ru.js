@@ -506,6 +506,9 @@ export const ru = {
     blocks: {
       heading: "Блоки",
       no_data: "Нет данных",
+      stats_cards: {
+        next_vote: "Следующее обновление голосования",
+      },
       blockchain: {
         blockchain: "Блокчейн",
         heading: "Блокчейн PeerPlays",
