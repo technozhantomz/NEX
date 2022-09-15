@@ -17,7 +17,9 @@ import {
 
 export function useCommitteeTab(): UseCommitteeTabResult {
   const [loading, setLoading] = useState<boolean>(true);
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchDataSource, setSearchDataSource] = useState<CommitteeTableRow[]>(
+    []
+  );
   const [activeCommittee, setActiveCommittee] = useState<number>(0);
   const [committeeStats, setCommitteeStats] = useState<number[]>([]);
   const [committeeTableRows, setCommitteeTableRows] = useState<
@@ -49,16 +51,20 @@ export function useCommitteeTab(): UseCommitteeTabResult {
                 name: committeesIds.filter(
                   (committeeId) => committeeId[1] === committee.id
                 )[0][0],
-                totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+                active: (votesAsset.amount as number) > 0 ? true : false,
                 url: committee.url,
+                totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
               } as CommitteeTableRow;
             })
           );
-
+          const activeCommittee = committeeRows.filter(
+            (committee) => committee.active == true
+          );
           setCommitteeTableRows(committeeRows);
-          setActiveCommittee(committees.length);
+          setSearchDataSource(committeeRows);
+          setActiveCommittee(activeCommittee.length);
           setCommitteeStats(
-            updateArrayWithLimit(committeeStats, committees.length, 99)
+            updateArrayWithLimit(committeeStats, activeCommittee.length, 99)
           );
           setLoading(false);
         }
@@ -78,15 +84,6 @@ export function useCommitteeTab(): UseCommitteeTabResult {
     setLoading,
   ]);
 
-  const handleSearch = useCallback(
-    (name: string) => {
-      setLoading(true);
-      setSearchValue(name);
-      setLoading(false);
-    },
-    [setLoading, setSearchValue]
-  );
-
   useEffect(() => {
     const committeeInterval = setInterval(() => getCommitteesTableRows(), 3000);
     return () => {
@@ -99,7 +96,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
     activeCommittee,
     committeeStats,
     committeeTableRows,
-    searchValue,
-    handleSearch,
+    searchDataSource,
+    setSearchDataSource,
   };
 }
