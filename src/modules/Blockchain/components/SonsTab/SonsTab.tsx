@@ -1,7 +1,7 @@
 import { SearchTableInput } from "ant-table-extensions";
 import counterpart from "counterpart";
 import Link from "next/link";
-import { useRef } from "react";
+import { CSSProperties, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
@@ -77,9 +77,6 @@ export const SonsTab = (): JSX.Element => {
           itemLayout="vertical"
           dataSource={searchDataSource}
           loading={loading}
-          pagination={{
-            pageSize: 10,
-          }}
           renderItem={(item) => (
             <Styled.SonListItem key={item.key}>
               <Styled.SonItemContent>
@@ -130,6 +127,37 @@ export const SonsTab = (): JSX.Element => {
           dataSource={searchDataSource}
           columns={SonsColumns}
           loading={loading}
+          pagination={
+            !loading
+              ? {
+                  showSizeChanger: false,
+                  size: "small",
+                  pageSize: 15,
+                  showLessItems: true,
+                  itemRender: (
+                    _page: number,
+                    type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
+                    element: ReactNode
+                  ) => {
+                    if (type === "prev") {
+                      return (
+                        <a style={{ marginRight: "8px" } as CSSProperties}>
+                          {counterpart.translate(`buttons.previous`)}
+                        </a>
+                      );
+                    }
+                    if (type === "next") {
+                      return (
+                        <a style={{ marginLeft: "8px" } as CSSProperties}>
+                          {counterpart.translate(`buttons.next`)}
+                        </a>
+                      );
+                    }
+                    return element;
+                  },
+                }
+              : false
+          }
         />
       )}
       <Styled.PrintTable>
