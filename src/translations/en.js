@@ -569,6 +569,7 @@ export const en = {
         monthly_earnings: "Monthly Earnings",
         search_witnesses: "Search Witnesses",
         witnesses: "Witnesses",
+        current_witness: "Current Witness",
       },
       sons: {
         heading: "PeerPlays Sons",

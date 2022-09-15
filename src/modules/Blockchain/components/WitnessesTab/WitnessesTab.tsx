@@ -29,6 +29,7 @@ export const WitnessesTab = (): JSX.Element => {
     reward,
     earnings,
     nextVote,
+    currentWitness,
     searchDataSource,
     setSearchDataSource,
   } = useWitnessesTab();
@@ -67,6 +68,13 @@ export const WitnessesTab = (): JSX.Element => {
           title={counterpart.translate(`pages.blocks.stats_cards.next_vote`)}
           data={nextVote}
           statsData={witnessStats.nextVote}
+        />
+        <StatsCard
+          noData={currentWitness === ""}
+          title={counterpart.translate(
+            `pages.blocks.witnesses.current_witness`
+          )}
+          data={currentWitness}
         />
       </Styled.StatsCardsDeck>
       <Styled.WitnessesHeaderBar>

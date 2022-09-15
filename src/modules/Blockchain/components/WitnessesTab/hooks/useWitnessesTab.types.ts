@@ -8,6 +8,7 @@ export type UseWitnessesTabResult = {
   reward: number;
   earnings: number;
   nextVote: string;
+  currentWitness: string;
   searchDataSource: WitnessTableRow[];
   setSearchDataSource: Dispatch<SetStateAction<WitnessTableRow[]>>;
 };

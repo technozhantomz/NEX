@@ -543,6 +543,7 @@ export const ru = {
         monthly_earnings: "Ежемесячный доход",
         search_witnesses: "Поиск свидетелей",
         witnesses: "Свидетели",
+        current_witness: "Текущий свидетель",
       },
       sons: {
         heading: "Пирплейс Сыновья",

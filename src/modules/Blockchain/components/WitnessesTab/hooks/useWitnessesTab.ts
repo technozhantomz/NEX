@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import {
+  useAccount,
   useArrayLimiter,
   useAsset,
   useBlockchain,
@@ -34,11 +35,13 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     nextVote: [],
   });
   const [activeWitnesses, setActiveWitnesses] = useState<number>(0);
+  const [currentWitness, setCurrentWitness] = useState<string>("");
   const [reward, setReward] = useState<number>(0);
   const [earnings, setEarnings] = useState<number>(0);
   const [nextVote, setNextVote] = useState<string>("");
 
   const { dbApi } = usePeerplaysApiContext();
+  const { getUserNameById } = useAccount();
   const { getWitnesses } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { formAssetBalanceById, setPrecision } = useAsset();
@@ -69,6 +72,9 @@ export function useWitnessesTab(): UseWitnessesTabResult {
             blockData.next_maintenance_time
           ).getTime();
           const nextVoteDistance = nextVoteTime - now;
+          const currentWitness = await getUserNameById(
+            blockData.current_witness as string
+          );
           if (witnesses && witnesses.length > 0) {
             witnesses.sort((a, b) => b.total_votes - a.total_votes);
             const witnessesRows: WitnessTableRow[] = [];
@@ -118,6 +124,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
                 "time",
               ])
             );
+            setCurrentWitness(currentWitness);
             setWitnessStats({
               active: updateArrayWithLimit(
                 witnessStats.active,
@@ -178,6 +185,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     reward,
     earnings,
     nextVote,
+    currentWitness,
     searchDataSource,
     setSearchDataSource,
   };
