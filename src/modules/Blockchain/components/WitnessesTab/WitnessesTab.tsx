@@ -15,9 +15,8 @@ import {
 import { Key } from "../../../../ui/src/icons";
 import { StatsCard } from "../StatsCard";
 
-import { WitnessesColumns } from "./WitnessesColumns";
-import { WitnessesPrintTable } from "./WitnessesPrintTable";
 import * as Styled from "./WitnessesTab.styled";
+import { WitnessesColumns, WitnessesPrintTable } from "./components";
 import { useWitnessesTab } from "./hooks";
 
 export const WitnessesTab = (): JSX.Element => {
