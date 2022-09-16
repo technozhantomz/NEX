@@ -32,6 +32,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     active: [],
     reward: [],
     earnings: [],
+    budget: [],
     nextVote: [],
   });
   const [activeWitnesses, setActiveWitnesses] = useState<number>(0);
@@ -39,6 +40,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const [reward, setReward] = useState<number>(0);
   const [earnings, setEarnings] = useState<number>(0);
   const [nextVote, setNextVote] = useState<string>("");
+  const [budget, setBudget] = useState<number>(0);
 
   const { dbApi } = usePeerplaysApiContext();
   const { getUserNameById } = useAccount();
@@ -64,6 +66,11 @@ export function useWitnessesTab(): UseWitnessesTabResult {
           const rewardAmount = setPrecision(
             false,
             chain.parameters.witness_pay_per_block,
+            defaultAsset.precision
+          );
+          const budgetAmount = setPrecision(
+            false,
+            blockData.witness_budget,
             defaultAsset.precision
           );
           const { witnesses, witnessesIds } = await getWitnesses();
@@ -116,11 +123,11 @@ export function useWitnessesTab(): UseWitnessesTabResult {
             setActiveWitnesses(activeWitnesses.length);
             setReward(rewardAmount);
             setEarnings(Number(earnings));
+            setBudget(budgetAmount);
             setNextVote(
               formDate(blockData.next_maintenance_time, [
                 "month",
                 "date",
-                "year",
                 "time",
               ])
             );
@@ -139,6 +146,11 @@ export function useWitnessesTab(): UseWitnessesTabResult {
               earnings: updateArrayWithLimit(
                 witnessStats.earnings,
                 Number(earnings),
+                99
+              ),
+              budget: updateArrayWithLimit(
+                witnessStats.budget,
+                budgetAmount,
                 99
               ),
               nextVote: updateArrayWithLimit(
@@ -184,6 +196,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     activeWitnesses,
     reward,
     earnings,
+    budget,
     nextVote,
     currentWitness,
     searchDataSource,

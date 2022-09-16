@@ -28,6 +28,7 @@ export const WitnessesTab = (): JSX.Element => {
     activeWitnesses,
     reward,
     earnings,
+    budget,
     nextVote,
     currentWitness,
     searchDataSource,
@@ -62,6 +63,13 @@ export const WitnessesTab = (): JSX.Element => {
           )}
           data={`${earnings}`}
           statsData={witnessStats.earnings}
+        />
+        <StatsCard
+          isRewardCard
+          noData={budget === 0}
+          title={counterpart.translate(`pages.blocks.stats_cards.budget`)}
+          data={`${budget}`}
+          statsData={witnessStats.budget}
         />
         <StatsCard
           noData={nextVote === ""}

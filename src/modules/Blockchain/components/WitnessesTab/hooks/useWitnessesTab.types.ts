@@ -7,6 +7,7 @@ export type UseWitnessesTabResult = {
   activeWitnesses: number;
   reward: number;
   earnings: number;
+  budget: number;
   nextVote: string;
   currentWitness: string;
   searchDataSource: WitnessTableRow[];
@@ -17,6 +18,7 @@ export type WitnessStats = {
   active: number[];
   reward: number[];
   earnings: number[];
+  budget: number[];
   nextVote: number[];
 };
 

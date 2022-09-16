@@ -7,7 +7,7 @@ import { colors } from "../colors";
 
 export const BlockchainTable = styled(UiTable)`
   .ant-table {
-    max-width: 727px;
+    max-width: 876px;
   }
   ${breakpoint.sm} {
     margin-bottom: 14px;

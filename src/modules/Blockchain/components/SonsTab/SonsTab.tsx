@@ -26,6 +26,7 @@ export const SonsTab = (): JSX.Element => {
     searchDataSource,
     sonsStats,
     activeSons,
+    budget,
     nextVote,
     setSearchDataSource,
   } = useSonsTab();
@@ -40,6 +41,13 @@ export const SonsTab = (): JSX.Element => {
           title={counterpart.translate(`pages.blocks.sons.active_sons`)}
           data={`${activeSons}`}
           statsData={sonsStats.active}
+        />
+        <StatsCard
+          isRewardCard
+          noData={budget === 0}
+          title={counterpart.translate(`pages.blocks.stats_cards.budget`)}
+          data={`${budget}`}
+          statsData={sonsStats.budget}
         />
         <StatsCard
           noData={nextVote === ""}

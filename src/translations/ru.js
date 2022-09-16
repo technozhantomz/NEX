@@ -508,6 +508,7 @@ export const ru = {
       no_data: "Нет данных",
       stats_cards: {
         next_vote: "Следующее обновление голосования",
+        budget: "Остаток бюджета (почасовой)",
       },
       blockchain: {
         blockchain: "Блокчейн",

@@ -534,6 +534,7 @@ export const en = {
       no_data: "No Data",
       stats_cards: {
         next_vote: "Next Vote Update",
+        budget: "Remaining budget (hourly)",
       },
       blockchain: {
         blockchain: "Blockchain",
