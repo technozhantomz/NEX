@@ -570,6 +570,7 @@ export const en = {
       fees: {
         heading: "PeerPlays Fees",
         fees: "Fees",
+        search_fees: "Search Fees",
         general: "General",
         asset_specific: "Asset Specific",
         market_specific: "Market Specific",
@@ -734,6 +735,8 @@ export const en = {
     see_all_account_activity: "See all account activity",
     profile: "profile",
     mark_all_read: "Mark all as read",
+    pdf: "PDF",
+    csv: "CSV",
   },
   field: {
     options: {
@@ -945,6 +948,7 @@ export const en = {
     website: "Website",
     action: "Action",
     votes: "Votes",
+    category: "Category",
   },
   tooltips: {
     copy: "copy",
