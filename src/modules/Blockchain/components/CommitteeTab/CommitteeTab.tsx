@@ -12,7 +12,7 @@ import {
   List,
   SearchOutlined,
 } from "../../../../ui/src";
-import { StatsCard } from "../StatsCard";
+import { StatsCard } from "../../common";
 
 import * as Styled from "./CommitteeTab.styled";
 import { CommitteeColumns, CommitteePrintTable } from "./components";
@@ -67,7 +67,7 @@ export const CommitteeTab = (): JSX.Element => {
 
           {` / `}
           <CSVLink
-            filename={"SonsTable.csv"}
+            filename={"CommitteeTable.csv"}
             data={committeeTableRows}
             className="btn btn-primary"
           >

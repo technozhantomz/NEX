@@ -2,7 +2,7 @@ import { TinyAreaConfig } from "@ant-design/charts";
 import { TinyArea } from "@ant-design/plots";
 import counterpart from "counterpart";
 
-import { useAssetsContext } from "../../../../common/providers";
+import { useAssetsContext } from "../../../../../common/providers";
 
 import * as Styled from "./StatsCard.styled";
 
