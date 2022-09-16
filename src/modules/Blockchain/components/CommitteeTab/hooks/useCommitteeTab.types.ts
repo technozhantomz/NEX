@@ -1,16 +1,20 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type UseCommitteeTabResult = {
   loading: boolean;
   committeeTableRows: CommitteeTableRow[];
   activeCommittee: number;
   committeeStats: number[];
   searchValue: string;
-  handleSearch: (name: string) => void;
+  searchDataSource: CommitteeTableRow[];
+  setSearchDataSource: Dispatch<SetStateAction<CommitteeTableRow[]>>;
 };
 
 export type CommitteeTableRow = {
   key: number;
   rank: number;
   name: string;
-  totalVotes: string;
+  active: boolean;
   url: string;
+  totalVotes: string;
 };
