@@ -33,7 +33,7 @@ Browser (Google Chrome):
 
 Browser (Firefox): 
 
-DEX-UI release or git commit hash:
+NEX release or git commit hash:
 
 Bitcoin version: <!-- mandaotory for environments with Bitcoin SONs -->
 
