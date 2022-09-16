@@ -1,4 +1,10 @@
 import {
+  styled,
+  ListItem as UiListItem,
+  PrintTable as UiPrintTable,
+  StatsCardsDeck as UIStatsCardsDeck,
+} from "../../../../ui/src";
+import {
   BlockchainDownloadLinks,
   BlockchainHeader,
   BlockchainHeaderBar,
@@ -9,11 +15,7 @@ import {
   BlockchainTableMissedBlocks,
   BlockchainTableUrlIcon,
   BlockchainTabWrapper,
-  styled,
-  ListItem as UiListItem,
-  PrintTable as UiPrintTable,
-  StatsCardsDeck as UIStatsCardsDeck,
-} from "../../../../ui/src";
+} from "../../common";
 
 export const WitnessesTabWrapper = styled(BlockchainTabWrapper)``;
 

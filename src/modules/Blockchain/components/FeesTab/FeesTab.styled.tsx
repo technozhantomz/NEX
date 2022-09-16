@@ -44,7 +44,6 @@ export const FeesHeaderBar = styled.div`
 `;
 
 export const FeesHeader = styled.h3`
-  margin-left: 15px;
   .anticon-info-circle {
     margin: 0 15px;
     color: ${colors.warningColor};

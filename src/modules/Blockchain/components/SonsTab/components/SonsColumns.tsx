@@ -1,10 +1,9 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { TableHeading } from "../../../../common/components";
-
-import * as Styled from "./SonsTab.styled";
-import { SonsTableRow } from "./hooks/useSonsTab.types";
+import { TableHeading } from "../../../../../common/components";
+import * as Styled from "../SonsTab.styled";
+import { SonsTableRow } from "../hooks";
 
 const headings = ["rank", "name", "active", "url", "total_votes"];
 const keys = ["rank", "name", "active", "url", "totalVotes"];

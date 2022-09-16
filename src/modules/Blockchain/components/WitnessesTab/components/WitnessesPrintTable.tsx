@@ -1,8 +1,9 @@
 import React from "react";
 
+import * as Styled from "../WitnessesTab.styled";
+import { useWitnessesTab } from "../hooks";
+
 import { WitnessesColumns } from "./WitnessesColumns";
-import * as Styled from "./WitnessesTab.styled";
-import { useWitnessesTab } from "./hooks";
 
 export const WitnessesPrintTable = React.forwardRef((_props, ref) => {
   const { loading, witnessTableRows } = useWitnessesTab();

@@ -49,7 +49,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const { formAssetBalanceById, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { getChain, getAvgBlockTime, getBlockData } = useBlockchain();
-  const { formDate } = useFormDate();
+  const { formLocalDate } = useFormDate();
 
   const getDaysInThisMonth = useCallback(() => {
     const now = new Date();
@@ -125,7 +125,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
             setEarnings(Number(earnings));
             setBudget(budgetAmount);
             setNextVote(
-              formDate(blockData.next_maintenance_time, [
+              formLocalDate(blockData.next_maintenance_time, [
                 "month",
                 "date",
                 "time",

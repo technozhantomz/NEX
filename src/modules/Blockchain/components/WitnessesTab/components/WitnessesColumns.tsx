@@ -1,11 +1,10 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { TableHeading } from "../../../../common/components";
-import { Key } from "../../../../ui/src/icons";
-
-import * as Styled from "./WitnessesTab.styled";
-import { WitnessTableRow } from "./hooks/useWitnessesTab.types";
+import { TableHeading } from "../../../../../common/components";
+import { Key } from "../../../../../ui/src/icons";
+import * as Styled from "../WitnessesTab.styled";
+import { WitnessTableRow } from "../hooks";
 
 const headings = [
   "rank",

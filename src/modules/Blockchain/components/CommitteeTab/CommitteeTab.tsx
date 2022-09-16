@@ -14,9 +14,8 @@ import {
 } from "../../../../ui/src";
 import { StatsCard } from "../StatsCard";
 
-import { CommitteeColumns } from "./CommitteeColumns";
-import { CommitteePrintTable } from "./CommitteePrintTable";
 import * as Styled from "./CommitteeTab.styled";
+import { CommitteeColumns, CommitteePrintTable } from "./components";
 import { useCommitteeTab } from "./hooks";
 
 export const CommitteeTab = (): JSX.Element => {

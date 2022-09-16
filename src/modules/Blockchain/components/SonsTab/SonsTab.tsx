@@ -14,9 +14,8 @@ import {
 } from "../../../../ui/src";
 import { StatsCard } from "../StatsCard";
 
-import { SonsColumns } from "./SonsColumns";
 import * as Styled from "./SonsTab.styled";
-import { SonsPrintTable } from "./SonstPrintTable";
+import { SonsColumns, SonsPrintTable } from "./components";
 import { useSonsTab } from "./hooks";
 
 export const SonsTab = (): JSX.Element => {

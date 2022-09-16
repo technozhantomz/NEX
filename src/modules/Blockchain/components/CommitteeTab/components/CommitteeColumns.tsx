@@ -1,10 +1,9 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { TableHeading } from "../../../../common/components";
-
-import * as Styled from "./CommitteeTab.styled";
-import { CommitteeTableRow } from "./hooks/useCommitteeTab.types";
+import { TableHeading } from "../../../../../common/components";
+import * as Styled from "../CommitteeTab.styled";
+import { CommitteeTableRow } from "../hooks";
 
 const headings = ["rank", "name", "active", "url", "total_votes"];
 const keys = ["rank", "name", "active", "url", "totalVotes"];
