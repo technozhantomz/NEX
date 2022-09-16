@@ -77,7 +77,7 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
-    - sonar-scanner -X
+    - sonar-scanner
   only:
     - merge_requests
     - branches
