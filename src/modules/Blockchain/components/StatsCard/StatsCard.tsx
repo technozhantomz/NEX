@@ -1,3 +1,4 @@
+import { TinyAreaConfig } from "@ant-design/charts";
 import { TinyArea } from "@ant-design/plots";
 import counterpart from "counterpart";
 
@@ -8,7 +9,7 @@ import * as Styled from "./StatsCard.styled";
 type Props = {
   isRewardCard?: boolean;
   isTimeCard?: boolean;
-  statsData: number[];
+  statsData?: number[];
   noData: boolean;
   title: string;
   data: string;
@@ -46,7 +47,11 @@ export const StatsCard = ({
         {isTimeCard && !noData ? <span> seconds</span> : ""}
         {isRewardCard && !noData ? <span> {defaultAsset?.symbol}</span> : ""}
       </Styled.StatsCardValue>
-      <TinyArea {...config} />
+      {statsData != undefined ? (
+        <TinyArea {...(config as TinyAreaConfig)} />
+      ) : (
+        ""
+      )}
     </Styled.StatsCard>
   );
 };
