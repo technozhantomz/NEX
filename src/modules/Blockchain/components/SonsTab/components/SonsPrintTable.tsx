@@ -1,8 +1,9 @@
 import React from "react";
 
+import * as Styled from "../SonsTab.styled";
+import { useSonsTab } from "../hooks";
+
 import { SonsColumns } from "./SonsColumns";
-import * as Styled from "./SonsTab.styled";
-import { useSonsTab } from "./hooks";
 
 export const SonsPrintTable = React.forwardRef((_props, ref) => {
   const { loading, sonsTableRows } = useSonsTab();

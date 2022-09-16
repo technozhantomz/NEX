@@ -551,6 +551,12 @@ export const ru = {
         search_sons: "Поиск сыновей",
         sons: "сыновья",
       },
+      sons: {
+        heading: "Пирплейс Сыновья",
+        active_sons: "Активные сыновья",
+        search_sons: "Поиск сыновей",
+        sons: "сыновья",
+      },
       fees: {
         heading: "Комиссия PeerPlays",
         fees: "Сборы",

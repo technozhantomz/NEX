@@ -27,7 +27,7 @@ export function useSonsTab(): UseSonsTabResult {
   const { formAssetBalanceById, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { getChain, getAvgBlockTime, getBlockData } = useBlockchain();
-  const { formDate } = useFormDate();
+  const { formLocalDate } = useFormDate();
 
   const getDaysInThisMonth = useCallback(() => {
     const now = new Date();
@@ -50,18 +50,19 @@ export function useSonsTab(): UseSonsTabResult {
             sons.sort((a, b) => b.total_votes - a.total_votes);
             const sonsRows: SonsTableRow[] = [];
             let index = 0;
+            const sonsVotesAsset = await Promise.all(
+              sons.map((son) => {
+                return formAssetBalanceById(defaultAsset.id, son.total_votes);
+              })
+            );
             for (const son of sons) {
-              const votesAsset = await formAssetBalanceById(
-                defaultAsset.id,
-                Number(son.total_votes)
-              );
               sonsRows.push({
                 key: index,
                 rank: index + 1,
                 name: sonsIds.filter((sonId) => sonId[1] === son.id)[0][0],
                 active: son.status === "active" ? true : false,
                 url: son.url,
-                totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+                totalVotes: `${sonsVotesAsset[index].amount} ${sonsVotesAsset[index].symbol}`,
               } as SonsTableRow);
               index = index + 1;
             }
@@ -71,7 +72,7 @@ export function useSonsTab(): UseSonsTabResult {
             setSearchDataSource(sonsRows);
             setActiveSons(activeSones.length);
             setNextVote(
-              formDate(blockData.next_maintenance_time, [
+              formLocalDate(blockData.next_maintenance_time, [
                 "month",
                 "date",
                 "year",

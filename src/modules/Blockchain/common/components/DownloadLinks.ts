@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { colors } from "../colors";
+import { colors } from "../../../../ui/src/colors";
 
 export const BlockchainDownloadLinks = styled.span`
   .anticon-download {

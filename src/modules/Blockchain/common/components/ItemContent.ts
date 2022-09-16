@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { colors } from "../colors";
+import { colors } from "../../../../ui/src/colors";
 
 export const BlockchainItemContent = styled.div`
   margin: 18px 0 25px;
