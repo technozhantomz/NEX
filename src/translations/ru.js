@@ -506,6 +506,9 @@ export const ru = {
     blocks: {
       heading: "Блоки",
       no_data: "Нет данных",
+      stats_cards: {
+        next_vote: "Следующее обновление голосования",
+      },
       blockchain: {
         blockchain: "Блокчейн",
         heading: "Блокчейн PeerPlays",
@@ -540,6 +543,12 @@ export const ru = {
         monthly_earnings: "Ежемесячный доход",
         search_witnesses: "Поиск свидетелей",
         witnesses: "Свидетели",
+      },
+      sons: {
+        heading: "Пирплейс Сыновья",
+        active_sons: "Активные сыновья",
+        search_sons: "Поиск сыновей",
+        sons: "сыновья",
       },
       fees: {
         heading: "Комиссия PeerPlays",
@@ -924,6 +933,7 @@ export const ru = {
     action: "Действие",
     votes: "Голоса",
     category: "категория",
+    active: "Активный",
   },
   tooltips: {
     copy: "копировать",

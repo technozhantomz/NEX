@@ -18,6 +18,7 @@ import {
   BlockDetails,
   CommitteeTab,
   FeesTab,
+  SonsTab,
   WitnessesTab,
 } from "../../components";
 
@@ -117,6 +118,12 @@ const Blockchain: NextPage = () => {
             key="committees"
           >
             <CommitteeTab />
+          </TabPane>
+          <TabPane
+            tab={counterpart.translate("pages.blocks.sons.sons")}
+            key="sons"
+          >
+            <SonsTab />
           </TabPane>
           <TabPane
             tab={counterpart.translate(`pages.blocks.fees.fees`)}
