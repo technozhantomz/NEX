@@ -17,6 +17,7 @@ import { Account } from "../../../types";
 import { TransferForm, UseTransferFormResult } from "./useTransferForm.types";
 
 export function useTransferForm(): UseTransferFormResult {
+  const [transferFee, setTransferFee] = useState<number>(0);
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [toAccount, setToAccount] = useState<Account>();
   const [fromAccount, setFromAccount] = useState<Account>();
@@ -90,9 +91,10 @@ export function useTransferForm(): UseTransferFormResult {
       const fee = await getTrxFee([trx]);
       if (fee !== undefined) {
         setFeeAmount(fee);
+        setTransferFee(fee);
       }
     }
-  }, [buildTransferFormTransaction, getTrxFee, setFeeAmount]);
+  }, [buildTransferFormTransaction, getTrxFee, setFeeAmount, setTransferFee]);
 
   const transfer = async (password: string) => {
     setTransactionErrorMessage("");
@@ -261,7 +263,7 @@ export function useTransferForm(): UseTransferFormResult {
   useEffect(() => {
     const transferFee = calculateTransferFee("");
     if (transferFee) {
-      setFeeAmount(transferFee);
+      setTransferFee(transferFee);
     }
     transferForm.setFieldsValue({ from: localStorageAccount });
   }, [localStorageAccount, calculateTransferFee, assets]);
@@ -279,5 +281,6 @@ export function useTransferForm(): UseTransferFormResult {
     loadingTransaction,
     toAccount,
     amount,
+    transferFee,
   };
 }

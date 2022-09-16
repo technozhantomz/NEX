@@ -30,6 +30,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
     loadingTransaction,
     toAccount,
     amount,
+    transferFee,
   } = useTransferForm();
   const { defaultAsset } = useAssetsContext();
 
@@ -120,7 +121,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
         </Styled.MemoFormItem>
         <p>
           {counterpart.translate(`field.labels.fees`, {
-            feeAmount: feeAmount,
+            feeAmount: transferFee,
             defaultAsset: defaultAsset ? defaultAsset.symbol : "",
           })}
         </p>

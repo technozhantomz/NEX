@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { breakpoint } from "../breakpoints";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 
 export const BlockchainHeaderBar = styled.div`
   margin-top: 25px;
