@@ -81,6 +81,8 @@ sonarcloud-check:
   only:
     - merge_requests
     - branches
+  tags:
+    - sonar-check
 
 deploy_review:
   dependencies:
