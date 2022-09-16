@@ -7,7 +7,7 @@
 
 ## Current Behavior
 
-<!-- Describe the current behaviour 
+<!-- Describe the current behaviour -->
 - Include screenshots or videos or both if applicable
 <!--- Tell us what happens instead of the expected behavior -->
 
@@ -35,9 +35,9 @@ Browser (Firefox):
 
 NEX release or git commit hash:
 
-Bitcoin version: <!-- mandaotory for environments with Bitcoin SONs -->
+Bitcoin version: <!-- mandatory for environments with Bitcoin SONs -->
 
-Hive version :   <!-- mandaotory for environments with Hive SONs -->
+Hive version :   <!-- mandatory for environments with Hive SONs -->
 
 <!-- git commit hash must be used only if a release version is not available due to special cases>
 
@@ -53,7 +53,7 @@ Hive version :   <!-- mandaotory for environments with Hive SONs -->
 ## Logs
 
 <!-- Upload logs files and provide links as opposed to adding large files  -->
-<!-- Including log aggreation tool's link is suggested -->
+<!-- Including log aggregation tool's link is suggested -->
 
 ## Test Data
 
