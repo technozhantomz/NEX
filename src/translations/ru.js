@@ -628,7 +628,7 @@ export const ru = {
       lower_case_sons: "sons",
       lower_case_committees: "комитеты",
       gpos: {
-        heading: "PeerPlays GPOS",
+        heading: "геймифицированное доказательство доли (GPOS)",
         tab: "GPOS",
         join_gpos:
           "Присоединяйтесь к GPOS, переведя свои %(defaultToken)s на баланс GPOS.",
