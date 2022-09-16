@@ -690,6 +690,7 @@ export const en = {
           heading: "GPOS - Power up",
           power_up_description:
             "When you Power Up your %(defaultToken)s on the Peerplays blockchain you are taking your first steps into participating in the Decentralized Autonomous Cooperative (DAC) that is the magic in blockchain tech. This means you will:",
+          power_up_description_heading: "Notice",
           power_up_lists: {
             first: "Become a big part of something special on a global scale",
             second: "Earn participation rewards for your efforts",
