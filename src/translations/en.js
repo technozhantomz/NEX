@@ -577,12 +577,6 @@ export const en = {
         search_sons: "Search Sons",
         sons: "Sons",
       },
-      sons: {
-        heading: "PeerPlays Sons",
-        active_sons: "Active Sons",
-        search_sons: "Search Sons",
-        sons: "Sons",
-      },
       fees: {
         heading: "PeerPlays Fees",
         fees: "Fees",
