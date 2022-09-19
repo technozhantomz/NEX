@@ -156,12 +156,7 @@ dast:
   rules:
   - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     when: always
-  - if: '$CI_COMMIT_REF_NAME == "develop"'
+  - if: $CI_COMMIT_REF_NAME == "develop"
     when: always
-  - if: '$CI_COMMIT_REF_NAME == "main"'
-    when: always
-  - if: '$CI_COMMIT_REF_NAME != "develop"'
-    when: never
-  - if: '$CI_COMMIT_REF_NAME != "main"'
-    when: never
+
   
