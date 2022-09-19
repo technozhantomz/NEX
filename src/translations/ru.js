@@ -508,6 +508,7 @@ export const ru = {
       no_data: "Нет данных",
       stats_cards: {
         next_vote: "Следующее обновление голосования",
+        budget: "Остаток бюджета (почасовой)",
       },
       blockchain: {
         blockchain: "Блокчейн",
@@ -543,6 +544,7 @@ export const ru = {
         monthly_earnings: "Ежемесячный доход",
         search_witnesses: "Поиск свидетелей",
         witnesses: "Свидетели",
+        current_witness: "Текущий свидетель",
       },
       sons: {
         heading: "Пирплейс Сыновья",
@@ -938,6 +940,7 @@ export const ru = {
     votes: "Голоса",
     category: "категория",
     active: "Активный",
+    key: "ключ",
   },
   tooltips: {
     copy: "копировать",
