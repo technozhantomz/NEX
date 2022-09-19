@@ -10,3 +10,4 @@ export {
   BlockchainTableActiveIcon,
 } from "./Table";
 export { BlockchainTabWrapper } from "./TabWrapper";
+export { StatsCard } from "./StatsCard";

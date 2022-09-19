@@ -39,4 +39,3 @@ export const LastBlock = styled(BlockchainTableLastBlock)``;
 export const MissedBlocks = styled(BlockchainTableMissedBlocks)``;
 export const urlIcon = styled(BlockchainTableUrlIcon)``;
 export const ActiveIcon = styled(BlockchainTableActiveIcon)``;
-// export const KeyIcon = styled(Key);

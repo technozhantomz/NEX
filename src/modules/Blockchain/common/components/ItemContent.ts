@@ -17,6 +17,12 @@ export const BlockchainItemContent = styled.div`
     }
     .item-info-value {
       font-weight: 500;
+      .ant-tag {
+        padding: 5px 15px;
+        background: ${colors.assetTag};
+        border: none;
+        color: ${colors.textColor};
+      }
     }
   }
 `;

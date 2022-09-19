@@ -13,7 +13,7 @@ import {
   SearchOutlined,
 } from "../../../../ui/src";
 import { Key } from "../../../../ui/src/icons";
-import { StatsCard } from "../StatsCard";
+import { StatsCard } from "../../common";
 
 import * as Styled from "./WitnessesTab.styled";
 import { WitnessesColumns, WitnessesPrintTable } from "./components";
@@ -109,7 +109,7 @@ export const WitnessesTab = (): JSX.Element => {
 
           {` / `}
           <CSVLink
-            filename={"SonsTable.csv"}
+            filename={"WitnessesTable.csv"}
             data={witnessTableRows}
             className="btn btn-primary"
           >

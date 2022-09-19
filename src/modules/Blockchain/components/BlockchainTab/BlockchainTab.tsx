@@ -2,7 +2,7 @@ import { ParsedUrlQuery } from "querystring";
 
 import counterpart from "counterpart";
 
-import { StatsCard } from "../StatsCard";
+import { StatsCard } from "../../common";
 
 import * as Styled from "./BlockchainTab.styled";
 import { BlockTable } from "./components";
