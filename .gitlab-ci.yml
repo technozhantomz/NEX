@@ -27,6 +27,11 @@ stages:
 
 sast:
   stage: test
+  when: always
+
+dependency_scanning:
+   stage: test
+   when: always
 
 build-review:
   # node docker image on which this would be run
