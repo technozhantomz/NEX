@@ -696,7 +696,7 @@ export const ru = {
         tab: "Sons",
       },
       witnesses: {
-        heading: "PeerPlays Свидетели Голосование",
+        heading: "Свидетели",
         tab: "Свидетели",
       },
       proxy: {

@@ -1,5 +1,6 @@
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
+import Link from "next/link";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 import { DEFAULT_PROXY_ID } from "../../../../../api/params";
@@ -9,7 +10,7 @@ import {
 } from "../../../../../common/components";
 import { useHandleTransactionForm } from "../../../../../common/hooks";
 import { Proxy } from "../../../../../common/types";
-import { Form, Tooltip } from "../../../../../ui/src";
+import { Form, InfoCircleOutlined, Tooltip } from "../../../../../ui/src";
 
 import * as Styled from "./VoteForm.styled";
 import { useVoteForm } from "./hooks";
@@ -73,6 +74,8 @@ export const VoteForm = ({
         {counterpart.translate(`field.labels.vote_for`, {
           tab: capitalize(counterpart.translate(`pages.voting.${tab}.heading`)),
         })}
+        <InfoCircleOutlined />
+        <Link href={''}>Learn More</Link>
       </Styled.Title>
 
       <Form.Item

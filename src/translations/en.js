@@ -720,7 +720,7 @@ export const en = {
         tab: "Sons",
       },
       witnesses: {
-        heading: "PeerPlays Witnesses Voting",
+        heading: "Witnesses",
         tab: "Witnesses",
       },
       proxy: {
