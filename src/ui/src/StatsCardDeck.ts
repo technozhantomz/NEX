@@ -11,6 +11,11 @@ export const StatsCardsDeck = styled.div`
     margin-right: 15px;
   }
   ${breakpoint.sm} {
-    margin: 25px 0 35px;
+    margin: 15px 0 25px;
+    max-width: 876px;
+    flex-wrap: wrap;
+    .stats-card {
+      margin: 10px 7.5px 10px;
+    }
   }
 `;

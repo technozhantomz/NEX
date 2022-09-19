@@ -14,9 +14,8 @@ import {
 } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
-import { FeesColumns } from "./FeesColumns";
-import { FeesPrintTable } from "./FeesPrintTable";
 import * as Styled from "./FeesTab.styled";
+import { FeesColumns, FeesPrintTable } from "./components";
 import { FeesTableRow, useFeesTab } from "./hooks";
 
 export const FeesTab = (): JSX.Element => {
