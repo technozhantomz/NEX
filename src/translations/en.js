@@ -534,6 +534,7 @@ export const en = {
       no_data: "No Data",
       stats_cards: {
         next_vote: "Next Vote Update",
+        budget: "Remaining budget (hourly)",
       },
       blockchain: {
         blockchain: "Blockchain",
@@ -569,6 +570,7 @@ export const en = {
         monthly_earnings: "Monthly Earnings",
         search_witnesses: "Search Witnesses",
         witnesses: "Witnesses",
+        current_witness: "Current Witness",
       },
       sons: {
         heading: "PeerPlays Sons",
@@ -959,6 +961,7 @@ export const en = {
     votes: "Votes",
     category: "Category",
     active: "Active",
+    key: "key",
   },
   tooltips: {
     copy: "copy",

@@ -1,8 +1,9 @@
 import React from "react";
 
+import * as Styled from "../FeesTab.styled";
+import { useFeesTab } from "../hooks";
+
 import { FeesColumns } from "./FeesColumns";
-import * as Styled from "./FeesTab.styled";
-import { useFeesTab } from "./hooks";
 
 export const FeesPrintTable = React.forwardRef((_props, ref) => {
   const { loading, fullFeesRows } = useFeesTab();
