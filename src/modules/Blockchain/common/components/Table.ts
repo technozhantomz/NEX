@@ -22,11 +22,18 @@ export const BlockchainTable = styled(UiTable)`
       display: none;
     }
   }
-  .ant-table-tbody > tr > td {
-    border: none;
-  }
   .anticon-link {
     color: ${colors.linkColor};
+  }
+  .ant-tag {
+    padding: 5px 15px;
+    background: ${colors.assetTag};
+    border: none;
+    color: ${colors.textColor};
+    text-transform: capitalize;
+  }
+  .standard-fee {
+    text-align: right;
   }
 `;
 

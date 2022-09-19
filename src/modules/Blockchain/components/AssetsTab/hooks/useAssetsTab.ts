@@ -1,16 +1,19 @@
+import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 
 import { useArrayLimiter } from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Account, Asset } from "../../../../../common/types";
+import { AssetsColumns } from "../components";
 
 import { AssetTableRow, UseAssetsTabResult } from "./useAssetsTab.types";
 
 export function useAssetsTab(): UseAssetsTabResult {
   const [loading, setLoading] = useState<boolean>(true);
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchDataSource, setSearchDataSource] = useState<AssetTableRow[]>([]);
   const [assetTableRows, setAssetTableRows] = useState<AssetTableRow[]>([]);
   const [assetsStats, setAssetsStats] = useState<number[]>([]);
+  const [assetsColumns, setAssetsColumns] = useState<ColumnsType<unknown>>([]);
   const { dbApi } = usePeerplaysApiContext();
   const { updateArrayWithLimit } = useArrayLimiter();
 
@@ -27,6 +30,7 @@ export function useAssetsTab(): UseAssetsTabResult {
               key: asset.id,
               id: asset.id,
               symbol: asset.symbol,
+              // name: "", //TODO:: add name here
               maxSupply: Number(asset.options.max_supply),
               precision: asset.precision,
               issuer: issuer && issuer.length > 0 ? issuer[0].name : "",
@@ -34,7 +38,34 @@ export function useAssetsTab(): UseAssetsTabResult {
             } as AssetTableRow;
           })
         );
+        const symbols = rawAssets.map((asset) => asset.symbol);
+        const allIssuers = await Promise.all(
+          rawAssets.map(async (asset) => {
+            const issuer: Account[] = await dbApi("get_accounts", [
+              [asset.issuer],
+            ]);
+            return issuer && issuer.length > 0 ? issuer[0].name : "";
+          })
+        );
+        const uniqIssuers = [...new Set(allIssuers)];
+        const updatedColumns = AssetsColumns.map((column) => {
+          switch (true) {
+            case column.key === "symbol":
+              column.filters = symbols.map((symbol) => {
+                return { text: symbol, value: symbol };
+              });
+              break;
+            case column.key === "issuer":
+              column.filters = uniqIssuers.map((issuer) => {
+                return { text: issuer, value: issuer };
+              });
+              break;
+          }
+          return { ...column };
+        }) as ColumnsType<unknown>;
+        setAssetsColumns(updatedColumns);
         setAssetTableRows(assetsRows);
+        setSearchDataSource(assetsRows);
         setAssetsStats(
           updateArrayWithLimit(assetsStats, assetsRows.length, 99)
         );
@@ -52,15 +83,6 @@ export function useAssetsTab(): UseAssetsTabResult {
     setLoading,
   ]);
 
-  const handleSearch = useCallback(
-    (symbol: string) => {
-      setLoading(true);
-      setSearchValue(symbol);
-      setLoading(false);
-    },
-    [setLoading, setSearchValue]
-  );
-
   useEffect(() => {
     const assetInterval = setInterval(() => getAssetRows(), 3000);
     return () => {
@@ -68,5 +90,12 @@ export function useAssetsTab(): UseAssetsTabResult {
     };
   }, []);
 
-  return { loading, assetTableRows, searchValue, handleSearch, assetsStats };
+  return {
+    loading,
+    assetsColumns,
+    assetTableRows,
+    assetsStats,
+    searchDataSource,
+    setSearchDataSource,
+  };
 }
