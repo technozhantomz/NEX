@@ -6,7 +6,10 @@ import { CSSProperties, ReactNode } from "react";
 import { AvtivityInfo } from "../../../..";
 import { Checkbox, List, Switch, Tooltip } from "../../../../../../ui/src";
 import { useFormDate } from "../../../../../hooks";
-import { useMenuContext, useUserContext } from "../../../../../providers";
+import {
+  useUserContext,
+  useUserSettingsContext,
+} from "../../../../../providers";
 import { Notification } from "../../../../../types";
 
 import * as Styled from "./NotificationMenu.styled";
@@ -19,7 +22,7 @@ export const NotificationMenu = (): JSX.Element => {
     hasUnreadMessages,
     loadingNotifications,
     markTheNotificationAsReadOrUnread,
-  } = useMenuContext();
+  } = useUserSettingsContext();
   const { showUnreadOnly, setShowUnreadOnly, groupedNotificationsByDate } =
     useNotificationMenu({
       notifications,

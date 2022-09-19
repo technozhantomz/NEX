@@ -1,7 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import React from "react";
 
-import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
+import { usePeerplaysApiContext } from "../../providers/PeerplaysApiProvider";
 
 type Props = {
   children: React.ReactNode;

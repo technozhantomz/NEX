@@ -1,8 +1,8 @@
 import { Login } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
-import { defaultToken } from "../../api/params";
-import { UserPermissions } from "../types";
+import { defaultToken } from "../../../api/params";
+import { UserPermissions } from "../../types";
 
 type UseFormKeysResult = {
   formKeys: (name: string, password: string) => UserPermissions;

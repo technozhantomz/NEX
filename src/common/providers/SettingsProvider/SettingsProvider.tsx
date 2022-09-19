@@ -7,13 +7,21 @@ import React, {
 } from "react";
 
 import {
+  defaultApiSettings,
   defaultExchanges,
   defaultLocales,
   defaultSettings,
 } from "../../../api/params";
 import { getPassedTime } from "../../../api/utils";
 import { useLocalStorage } from "../../hooks";
-import { Cache, Exchanges, Settings } from "../../types";
+import {
+  ApiLatencies,
+  ApiSettings,
+  Cache,
+  Exchanges,
+  LatencyPreferences,
+  Settings,
+} from "../../types";
 
 export type SettingsContextType = {
   settings: Settings;
@@ -23,6 +31,10 @@ export type SettingsContextType = {
   cache: Cache;
   setCache: (value: Cache) => void;
   setLocale: (selectedLang: string) => void;
+  apiSettings: ApiSettings;
+  setLatencyChecks: (latencyChecks: number) => void;
+  updateLatencies: (apiLatencies: ApiLatencies) => void;
+  setLatencyPreferences: (preferences: LatencyPreferences) => void;
 };
 
 const settingsContext = createContext<SettingsContextType>(
@@ -38,20 +50,21 @@ export function SettingsProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
+  const [cache, setCache] = useLocalStorage("cache") as [
+    Cache,
+    (value: Cache) => void
+  ];
   const [settings, setSettings] = useLocalStorage("settings") as [
     Settings,
     (value: Settings) => void
   ];
-
-  // should add chain id
   const [exchanges, setExchanges] = useLocalStorage("exchanges") as [
     Exchanges,
     (value: Exchanges) => void
   ];
-  // should add chain id
-  const [cache, setCache] = useLocalStorage("cache") as [
-    Cache,
-    (value: Cache) => void
+  const [apiSettings, setApiSettings] = useLocalStorage("api_settings") as [
+    ApiSettings,
+    (value: ApiSettings) => void
   ];
 
   const initCache = useCallback(() => {
@@ -71,6 +84,33 @@ export function SettingsProvider({
       setExchanges(defaultExchanges);
     }
   }, [settings, exchanges, setSettings, setExchanges]);
+
+  const initApiSettings = useCallback(() => {
+    if (!apiSettings) {
+      setApiSettings(defaultApiSettings);
+    }
+  }, [apiSettings, setApiSettings]);
+
+  const setLatencyChecks = useCallback(
+    (latencyChecks: number) => {
+      setApiSettings({ ...apiSettings, latencyChecks });
+    },
+    [setApiSettings, apiSettings]
+  );
+
+  const updateLatencies = useCallback(
+    (apiLatencies: ApiLatencies) => {
+      setApiSettings({ ...apiSettings, apiLatencies });
+    },
+    [setApiSettings, apiSettings]
+  );
+
+  const setLatencyPreferences = useCallback(
+    (preferences: LatencyPreferences) => {
+      setApiSettings({ ...apiSettings, latencyPreferences: preferences });
+    },
+    [setApiSettings, apiSettings]
+  );
 
   const setLocale = useCallback(
     (selectedLang: string) => {
@@ -108,6 +148,7 @@ export function SettingsProvider({
   useEffect(() => {
     initCache();
     initSettings();
+    initApiSettings();
     initLocale();
   }, []);
   return (
@@ -120,6 +161,10 @@ export function SettingsProvider({
         cache,
         setCache,
         setLocale,
+        apiSettings,
+        setLatencyChecks,
+        updateLatencies,
+        setLatencyPreferences,
       }}
     >
       {children}

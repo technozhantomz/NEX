@@ -1,4 +1,20 @@
 export const en = {
+  app_init: {
+    check_latency: "Running latency checks...",
+    check_latency_feedback:
+      "Running latency checks (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_country:
+      "Latency check in best country (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_last:
+      "Latency check for last connected node (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_region:
+      "Latency check in best region (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_rest:
+      "Latency check for remaining nodes (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_world:
+      "Latency check in each region (%(pinged)s/%(totalToPing)s nodes)",
+    connecting: "Connecting to API server: %(server)s",
+  },
   transaction: {
     feeTypes: {
       _none: "Free of Charge",
@@ -645,6 +661,7 @@ export const en = {
         referral_link:
           "Give this link to people you want to refer to Peerplays: %(link)s/signup/?r=%(name)s",
       },
+      api_closest: "Choose closest automatically",
     },
     voting: {
       heading: "Voting",

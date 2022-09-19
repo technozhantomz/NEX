@@ -100,7 +100,6 @@ export function PeerplaysApiProvider({ children }: Props): JSX.Element {
   }, []);
 
   const dbApi = useCallback(getApi("_db"), [instance]);
-
   const historyApi = useCallback(getApi("_hist"), [instance]);
 
   useEffect(() => {

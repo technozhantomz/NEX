@@ -1,14 +1,15 @@
 import type { AppProps } from "next/app";
 
+import { ConnectionManager } from "../common/components";
 import {
   AssetsProvider,
   BrowserHistoryProvider,
-  ConnectionManager,
   FeesProvider,
   MenuProvider,
   PeerplaysApiProvider,
   SettingsProvider,
   UserProvider,
+  UserSettingsProvider,
   ViewportProvider,
 } from "../common/providers";
 import "../ui/src/ui.less";
@@ -23,9 +24,11 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
               <UserProvider>
                 <FeesProvider>
                   <BrowserHistoryProvider>
-                    <MenuProvider>
-                      <Component {...pageProps} />
-                    </MenuProvider>
+                    <UserSettingsProvider>
+                      <MenuProvider>
+                        <Component {...pageProps} />
+                      </MenuProvider>
+                    </UserSettingsProvider>
                   </BrowserHistoryProvider>
                 </FeesProvider>
               </UserProvider>

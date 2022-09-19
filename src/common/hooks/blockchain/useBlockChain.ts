@@ -1,7 +1,7 @@
 import { ChainStore } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
-import { usePeerplaysApiContext } from "../providers";
+import { usePeerplaysApiContext } from "../../providers";
 import {
   Account,
   Block,
@@ -9,7 +9,7 @@ import {
   Dynamic,
   GlobalProperties,
   WitnessAccount,
-} from "../types";
+} from "../../types";
 
 import { UseBlockchainResult } from "./useBlockChain.types";
 

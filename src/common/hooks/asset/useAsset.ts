@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from "react";
 
-import { usePeerplaysApiContext, useSettingsContext } from "../providers";
-import { Asset, Cache } from "../types";
+import { roundNum } from "..";
+import { usePeerplaysApiContext, useSettingsContext } from "../../providers";
+import { Asset, Cache } from "../../types";
 
 import { UseAssetResult } from "./useAsset.types";
-import { roundNum } from "./useRoundNum";
 
 export function useAsset(): UseAssetResult {
   const { dbApi } = usePeerplaysApiContext();

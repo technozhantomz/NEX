@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 
+import { useFormKeys } from "..";
 import { faucetUrl } from "../../../api/params";
 import { FullAccount, SignupForm } from "../../types";
-import { useFormKeys } from "../useFormKeys";
 
 import { useAccount } from "./useAccount";
 

@@ -23,7 +23,7 @@ export const initNode = async (
   const start = new Date();
 
   let instance: InstanceType;
-
+  console.log("Apis", Apis);
   if (actualNode) {
     if (Apis.instance().chain_id) {
       await Apis.instance().close();
@@ -36,6 +36,7 @@ export const initNode = async (
 
   try {
     await instance.init_promise;
+    console.log("instance", instance);
     return {
       instance,
       connectTime: getPassedTime(start),

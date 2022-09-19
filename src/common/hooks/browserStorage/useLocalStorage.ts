@@ -1,7 +1,14 @@
 import { isNil } from "lodash";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { Cache, Exchanges, Notification, Settings } from "../types";
+import {
+  ApiSettings,
+  Cache,
+  Exchanges,
+  Notification,
+  Settings,
+  UserSettings,
+} from "../../types";
 
 type Value =
   | string
@@ -11,9 +18,11 @@ type Value =
   | JSON
   | Exchanges
   | Settings
+  | UserSettings
   | Cache
   | undefined
   | Notification[]
+  | ApiSettings
   | null;
 
 type Result = [Value, (value?: Value) => void];
@@ -25,9 +34,19 @@ export const useLocalStorage = (key: string): Result => {
     localStorageItem && JSON.parse(localStorageItem)
   );
 
+  const setUserItem = useCallback((key: string, value: Value) => {
+    if (key.includes("_")) {
+      if (key.split("_")[1] !== "") {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+    } else {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  }, []);
+
   useEffect(() => {
     if (!isNil(value) && value !== null && value !== "") {
-      localStorage.setItem(key, JSON.stringify(value));
+      setUserItem(key, value);
     } else {
       localStorage.removeItem(key);
     }
