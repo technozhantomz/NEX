@@ -11,11 +11,13 @@ import {
 } from "../../../../../../common/hooks";
 import {
   useAssetsContext,
+  usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../../common/providers";
 import {
   AccountOptions,
   FullAccount,
+  GlobalProperties,
   Transaction,
   Vote,
   VoteType,
@@ -66,6 +68,7 @@ export function useVoteTab({
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
   const { getTrxFee, buildTrx } = useTransactionBuilder();
+  const { dbApi } = usePeerplaysApiContext();
 
   const getUpdateAccountTrx = useCallback(() => {
     const membersIdentifiers: {
@@ -258,6 +261,7 @@ export function useVoteTab({
       action: "add" | "remove" | ""
     ): Promise<VoteRow> => {
       try {
+        const gpo: GlobalProperties = await dbApi("get_global_properties");
         if (defaultAsset !== undefined) {
           let voteType: VoteType;
           switch (parseInt(vote.vote_id.charAt(0))) {
@@ -279,14 +283,18 @@ export function useVoteTab({
             defaultAsset.id,
             Number(vote.total_votes)
           );
+          const index = 0;
           return {
             id: vote.vote_id,
-            key: vote.vote_id,
+            key: index,
+            rank: index + 1,
             type: voteType,
             name: name,
             website: vote.url,
             votes: `${votesAsset.amount} ${votesAsset.symbol}`,
             action: action,
+            active:
+              gpo["active_witnesses"].indexOf(vote.id) >= 0 ? true : false,
           } as VoteRow;
         } else {
           return {} as VoteRow;
