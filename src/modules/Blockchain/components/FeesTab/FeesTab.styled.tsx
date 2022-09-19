@@ -4,9 +4,9 @@ import {
   PrintTable as UiPrintTable,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { colors } from "../../../../ui/src/colors";
 import {
   BlockchainDownloadLinks,
-  BlockchainHeader,
   BlockchainHeaderBar,
   BlockchainItemContent,
   BlockchainTable,
@@ -17,7 +17,15 @@ export const FeesTabWrapper = styled(BlockchainTabWrapper)``;
 
 export const FeesHeaderBar = styled(BlockchainHeaderBar)``;
 
-export const FeesHeader = styled(BlockchainHeader)``;
+export const FeesHeader = styled.h3`
+  .anticon-info-circle {
+    margin: 0 15px;
+    color: ${colors.warningColor};
+  }
+  ${breakpoint.sm} {
+    margin: 0 20px;
+  }
+`;
 
 export const DownloadLinks = styled(BlockchainDownloadLinks)``;
 

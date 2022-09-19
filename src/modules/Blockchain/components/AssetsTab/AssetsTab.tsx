@@ -54,7 +54,7 @@ export const AssetsTab = (): JSX.Element => {
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
-              `pages.blocks.witnesses.search_assets`
+              `pages.blocks.assets.search_assets`
             ),
             suffix: <SearchOutlined />,
           }}

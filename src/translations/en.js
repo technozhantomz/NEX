@@ -656,7 +656,7 @@ export const en = {
       lower_case_sons: "sons",
       lower_case_committees: "committees",
       gpos: {
-        heading: "PeerPlays GPOS",
+        heading: "Gamified Proof of Stake (GPOS)",
         tab: "GPOS",
         join_gpos:
           "Join GPOS by transferring your %(defaultToken)s to your GPOS balance.",
