@@ -12,7 +12,7 @@ import {
   List,
   SearchOutlined,
 } from "../../../../ui/src";
-import { StatsCard } from "../StatsCard";
+import { StatsCard } from "../../common";
 
 import * as Styled from "./SonsTab.styled";
 import { SonsColumns, SonsPrintTable } from "./components";
