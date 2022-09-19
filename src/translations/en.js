@@ -703,6 +703,7 @@ export const en = {
           heading: "GPOS - Power down",
           power_down_description:
             "When you Power Down it will take 30 days for you to withdraw your %(defaultToken)s balance in full. You will continue to receive participation rewards during that time so long as you have been participating. After Power Down you can then use your %(defaultToken)s like any other cryptocurrency. This means you will:",
+          power_down_description_heading: "Notice",
           power_down_lists: {
             first: "Still be a part of something special, just not as much",
             second: "No longer helping secure the Peerplays blockchain",
