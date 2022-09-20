@@ -27,7 +27,7 @@ export const VoteTable = ({
 }: Props): JSX.Element => {
   const { sm } = useViewportContext();
   const { localStorageAccount } = useUserContext();
-  const columns = showVotesColumns(approveVote, removeVote);
+  // const columns = showVotesColumns(approveVote, removeVote);
   return (
     <Styled.VoteTableWrapper>
       <Styled.Title>
@@ -96,33 +96,41 @@ export const VoteTable = ({
               <Styled.VoteListItem key={(item as VoteRow).key}>
                 <Styled.VoteItemContent>
                   <div className="vote-info">
-                    <span className="vote-info-title">{columns[0].title}</span>
+                    <span className="vote-info-title">
+                      {showVotesColumns[0].title}
+                    </span>
                     <span className="vote-info-value">
                       {(item as VoteRow).name}
                     </span>
                   </div>
                   <div className="vote-info">
-                    <span className="vote-info-title">{columns[1].title}</span>
+                    <span className="vote-info-title">
+                      {showVotesColumns[1].title}
+                    </span>
                     <span className="vote-info-value">
-                      {(item as VoteRow).website == "" ? (
+                      {(item as VoteRow).url == "" ? (
                         <span>
                           {counterpart.translate(`field.labels.not_available`)}
                         </span>
                       ) : (
-                        <a target="_blank" href={(item as VoteRow).website}>
-                          {(item as VoteRow).website}
+                        <a target="_blank" href={(item as VoteRow).url}>
+                          {(item as VoteRow).url}
                         </a>
                       )}
                     </span>
                   </div>
                   <div className="vote-info">
-                    <span className="vote-info-title">{columns[2].title}</span>
+                    <span className="vote-info-title">
+                      {showVotesColumns[2].title}
+                    </span>
                     <span className="vote-info-value">
                       {(item as VoteRow).votes}
                     </span>
                   </div>
                   <div className="vote-info">
-                    <span className="vote-info-title">{columns[3].title}</span>
+                    <span className="vote-info-title">
+                      {showVotesColumns[3].title}
+                    </span>
                     <span className="vote-info-value">
                       {type === "approved" ? (
                         <Styled.VoteActionButton
@@ -145,7 +153,7 @@ export const VoteTable = ({
           />
         ) : (
           <Styled.VoteTable
-            columns={columns}
+            columns={showVotesColumns}
             dataSource={votes}
             loading={loading}
             pagination={{

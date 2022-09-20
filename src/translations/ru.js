@@ -941,6 +941,7 @@ export const ru = {
     category: "категория",
     active: "Активный",
     key: "ключ",
+    status: "Статус",
   },
   tooltips: {
     copy: "копировать",

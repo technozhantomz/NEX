@@ -966,6 +966,7 @@ export const en = {
     category: "Category",
     active: "Active",
     key: "key",
+    status: "Status",
   },
   tooltips: {
     copy: "copy",

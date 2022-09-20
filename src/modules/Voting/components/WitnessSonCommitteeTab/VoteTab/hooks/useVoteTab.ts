@@ -283,14 +283,13 @@ export function useVoteTab({
             defaultAsset.id,
             Number(vote.total_votes)
           );
-          const index = 0;
           return {
             id: vote.vote_id,
-            key: index,
-            rank: index + 1,
+            key: vote.vote_id,
+            rank: vote.vote_id,
             type: voteType,
             name: name,
-            website: vote.url,
+            url: vote.url,
             votes: `${votesAsset.amount} ${votesAsset.symbol}`,
             action: action,
             active:

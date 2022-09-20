@@ -75,7 +75,7 @@ export const VoteForm = ({
           tab: capitalize(counterpart.translate(`pages.voting.${tab}.heading`)),
         })}
         <InfoCircleOutlined />
-        <Link href={''}>Learn More</Link>
+        <Link href={""}>Learn More</Link>
       </Styled.Title>
 
       <Form.Item
