@@ -1,1 +1,2 @@
-export * from "./BlockTable";
+export * from "./BlockColumns";
+export * from "./BlockPrintTable";
