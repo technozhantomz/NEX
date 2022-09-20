@@ -135,7 +135,10 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
                     <span className="item-info-title">
                       {blockColumns[2].title()}
                     </span>
-                    <span className="item-info-value">{item.witness}</span>
+                    <span className="item-info-value">
+                      {" "}
+                      <Link href={`/user/${item.witness}`}>{item.witness}</Link>
+                    </span>
                   </div>
                   <div className="item-info">
                     <span className="item-info-title">

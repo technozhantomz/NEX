@@ -1,9 +1,18 @@
+import Link from "next/link";
+
 import { TableHeading } from "../../../../../common/components";
 import { BlockchainTableRow } from "../hooks/useBlockchainTab.types";
 
 const headings = ["block_id", "time", "witness", "transaction"];
 const keys = ["blockID", "time", "witness", "transaction"];
-const renders = [undefined, undefined, undefined, undefined];
+const renders = [
+  undefined,
+  undefined,
+  (witness: string): JSX.Element => (
+    <Link href={`/user/${witness}`}>{witness}</Link>
+  ),
+  undefined,
+];
 const filters = [undefined, undefined, undefined, undefined];
 const filterModes = [undefined, undefined, "menu", undefined];
 const filterSearch = [undefined, undefined, true, undefined];
