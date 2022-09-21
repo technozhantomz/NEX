@@ -1,18 +1,26 @@
-import React from "react";
+import { ApiLatencies, ApiServer } from "../../types";
 
-import { InstanceType } from "../../../api/services/initNode";
+export type NodeTransitionCallbackType = (
+  status:
+    | string
+    | boolean
+    | {
+        background: boolean;
+        key: string;
+      }
+) => void;
 
-export interface PeerplaysApi {
-  instance: InstanceType;
-  isLoadingConnection: boolean;
-  isConnectionError: boolean;
-  dbApi: unknown;
-  historyApi: unknown;
-}
-export interface Props {
-  children: React.ReactNode;
-}
-
-export interface PeerplaysApiProvider {
-  PeerplaysApi: PeerplaysApi;
-}
+export type NodeTransitionerContextType = {
+  getNodes: (
+    latenciesMap?: ApiLatencies,
+    latencies?: boolean,
+    hidden?: boolean,
+    unsuitableSecurity?: boolean
+  ) => ApiServer[];
+  willTransitionTo: (
+    appInit?: any,
+    _statusCallback?: NodeTransitionCallbackType | undefined
+  ) => Promise<void>;
+  dbApi: (request: string, data?: never[]) => Promise<any> | undefined;
+  historyApi: (request: string, data?: never[]) => Promise<any> | undefined;
+};

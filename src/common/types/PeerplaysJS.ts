@@ -57,6 +57,13 @@ export type GrapheneApiType = {
   init: () => Promise<GrapheneApiType>;
   exec: (method: string, params: any[]) => Promise<any>;
 };
+
+export type AvailableGrapheneApis =
+  | "_db"
+  | "_hist"
+  | "_net"
+  | "_crypto"
+  | "_bookie";
 //Done
 export type ApisInstanceType = {
   chain_id: string;
@@ -71,6 +78,7 @@ export type ApisInstanceType = {
   >;
   statusCb: (value?: string) => void;
   url: string;
+
   ws_rpc: ChainWebSocketType | null;
   _db: GrapheneApiType;
   _net: GrapheneApiType;
@@ -93,13 +101,13 @@ export type ApisType = {
   reset: (
     cs: string,
     connect: boolean,
-    connectTimeout: number
+    connectTimeout?: number
   ) => ApisInstanceType;
   instance: (
-    cs: string,
-    connect: boolean,
-    connectTimeout: number
-  ) => ApisInstanceType;
+    cs?: string,
+    connect?: boolean,
+    connectTimeout?: number
+  ) => ApisInstanceType | undefined;
   chainId: () => string;
   close: () => void;
 };

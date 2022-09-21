@@ -2,9 +2,11 @@ import { isNil } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
 import {
+  ApiLatencies,
   ApiSettings,
   Cache,
   Exchanges,
+  LatencyPreferences,
   Notification,
   Settings,
   UserSettings,
@@ -23,6 +25,8 @@ type Value =
   | undefined
   | Notification[]
   | ApiSettings
+  | ApiLatencies
+  | LatencyPreferences
   | null;
 
 type Result = [Value, (value?: Value) => void];

@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type UseConnectionManagerResult = {
   apiConnected: boolean;
   apiError: boolean;
@@ -5,4 +7,5 @@ export type UseConnectionManagerResult = {
   status: string;
   nodeFilterHasChanged: boolean;
   showNodeFilter: boolean;
+  setNodeFilterHasChanged: Dispatch<SetStateAction<boolean>>;
 };

@@ -85,4 +85,4 @@ const prodNodes: Node[] = [
   },
 ];
 
-export const defaultNodesList = testnetCheck ? testnetNodes : prodNodes;
+export const defaultNodesList = !testnetCheck ? testnetNodes : prodNodes;

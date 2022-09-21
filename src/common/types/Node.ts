@@ -36,11 +36,8 @@ export type LatencyPreferences = {
 };
 
 export type ApiSettings = {
-  activeUrl?: string;
+  selectedNode: string;
   // could be region or url
   filteredApiServers: string[];
-  apiLatencies: ApiLatencies;
   apiServers: ApiServer[];
-  latencyPreferences: LatencyPreferences;
-  latencyChecks: number;
 };

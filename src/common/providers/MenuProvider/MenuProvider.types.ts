@@ -1,4 +1,4 @@
-export type MenuProviderContextType = {
+export type MenuContextType = {
   openMenu: (menuName: string) => void;
   closeAllMenus: () => void;
   notificationMenuOpen: boolean;

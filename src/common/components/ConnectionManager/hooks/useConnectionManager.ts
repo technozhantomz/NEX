@@ -1,55 +1,64 @@
-// import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-// import { UseConnectionManagerResult } from "./useConnectionManager.types";
+import { usePeerplaysApiContext, useSettingsContext } from "../../../providers";
 
-// export function useConnectionManager(): UseConnectionManagerResult {
-//   const [apiConnected, setApiConnected] = useState<boolean>(false);
-//   const [apiError, setApiError] = useState<boolean>(false);
-//   const [syncError, setSyncError] = useState<boolean | null>(null);
-//   const [status, setStatus] = useState<string>("");
-//   const [nodeFilterHasChanged, setNodeFilterHasChanged] = useState(false);
-//   const [showNodeFilter, setShowNodeFilter] = useState(false);
+import { UseConnectionManagerResult } from "./useConnectionManager.types";
 
-//   const statusCallback = useCallback(
-//     (status: string) => {
-//       setStatus(status);
-//     },
-//     [setStatus]
-//   );
+export function useConnectionManager(): UseConnectionManagerResult {
+  const [apiConnected, setApiConnected] = useState<boolean>(false);
+  const [apiError, setApiError] = useState<boolean>(false);
+  const [syncError, setSyncError] = useState<boolean | null>(null);
+  const [status, setStatus] = useState<string>("");
+  const [nodeFilterHasChanged, setNodeFilterHasChanged] = useState(false);
+  const [showNodeFilter, setShowNodeFilter] = useState(false);
 
-//   const willTransitionTo = useCallback(async () => {
-//     try {
-//       await _willTransitionTo(true, statusCallback);
-//       setApiConnected(true);
-//       setApiError(false);
-//       setSyncError(false);
-//     } catch (e: any) {
-//       console.log("willTransitionTo err:", e);
-//       setApiConnected(false);
-//       setApiError(true);
-//       const syncError = !e
-//         ? null
-//         : (e && e.message).indexOf("ChainStore sync error") !== -1;
-//       setSyncError(syncError);
-//     }
-//   }, [_willTransitionTo, setApiConnected, setApiError, setSyncError]);
+  const { willTransitionTo: _willTransitionTo } = usePeerplaysApiContext();
+  const { initiationSettings } = useSettingsContext();
+  console.log("status", status);
+  const statusCallback = useCallback(
+    (status: string) => {
+      setStatus(status);
+    },
+    [setStatus]
+  );
 
-//   useEffect(() => {
-//     setTimeout(() => {
-//       setShowNodeFilter(true);
-//     }, 5000);
-//   }, [setShowNodeFilter]);
+  const willTransitionTo = useCallback(async () => {
+    try {
+      await _willTransitionTo(true, statusCallback);
+      setApiConnected(true);
+      setApiError(false);
+      setSyncError(false);
+    } catch (e: any) {
+      console.log("willTransitionTo err:", e);
+      setApiConnected(false);
+      setApiError(true);
+      const syncError = !e
+        ? null
+        : (e && e.message).indexOf("ChainStore sync error") !== -1;
+      setSyncError(syncError);
+    }
+  }, [_willTransitionTo, setApiConnected, setApiError, setSyncError]);
 
-//   useEffect(() => {
-//     willTransitionTo();
-//   }, [willTransitionTo]);
+  useEffect(() => {
+    setTimeout(() => {
+      setShowNodeFilter(true);
+    }, 5000);
+  }, [setShowNodeFilter]);
 
-//   return {
-//     apiConnected,
-//     apiError,
-//     syncError,
-//     status,
-//     nodeFilterHasChanged,
-//     showNodeFilter,
-//   };
-// }
+  useEffect(() => {
+    if (!initiationSettings) {
+      console.log("mohammad");
+      willTransitionTo();
+    }
+  }, [willTransitionTo, initiationSettings]);
+
+  return {
+    apiConnected,
+    apiError,
+    syncError,
+    status,
+    nodeFilterHasChanged,
+    showNodeFilter,
+    setNodeFilterHasChanged,
+  };
+}

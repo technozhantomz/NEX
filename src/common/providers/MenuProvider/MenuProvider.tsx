@@ -9,13 +9,13 @@ import React, {
 import { useBrowserHistoryContext, useViewportContext } from "..";
 import { breakpoints } from "../../../ui/src/breakpoints";
 
-import { MenuProviderContextType } from "./MenuProvider.types";
+import { MenuContextType } from "./MenuProvider.types";
 
 interface Props {
   children: React.ReactNode;
 }
 
-const DefaultMenuState: MenuProviderContextType = {
+const DefaultMenuState: MenuContextType = {
   openMenu: function (): void {
     throw new Error(`Function not implemented.`);
   },
@@ -28,8 +28,7 @@ const DefaultMenuState: MenuProviderContextType = {
   mainMenuOpen: false,
 };
 
-const MenuProviderContext =
-  createContext<MenuProviderContextType>(DefaultMenuState);
+const MenuContext = createContext<MenuContextType>(DefaultMenuState);
 
 export const MenuProvider = ({ children }: Props): JSX.Element => {
   const [notificationMenuOpen, setNotificationMenuOpen] =
@@ -90,7 +89,7 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
   }, [browserHistory]);
 
   return (
-    <MenuProviderContext.Provider
+    <MenuContext.Provider
       value={{
         notificationMenuOpen,
         profileMenuOpen,
@@ -100,10 +99,10 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
       }}
     >
       {children}
-    </MenuProviderContext.Provider>
+    </MenuContext.Provider>
   );
 };
 
-export const useMenuContext = (): MenuProviderContextType => {
-  return useContext<MenuProviderContextType>(MenuProviderContext);
+export const useMenuContext = (): MenuContextType => {
+  return useContext<MenuContextType>(MenuContext);
 };

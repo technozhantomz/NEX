@@ -1,6 +1,6 @@
 import type { AppProps } from "next/app";
 
-import { ConnectionManager } from "../common/components";
+import { ConnectionManager2 } from "../common/components";
 import {
   AssetsProvider,
   BrowserHistoryProvider,
@@ -19,7 +19,7 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
     <ViewportProvider>
       <SettingsProvider>
         <PeerplaysApiProvider>
-          <ConnectionManager>
+          <ConnectionManager2>
             <AssetsProvider>
               <UserProvider>
                 <FeesProvider>
@@ -33,7 +33,7 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
                 </FeesProvider>
               </UserProvider>
             </AssetsProvider>
-          </ConnectionManager>
+          </ConnectionManager2>
         </PeerplaysApiProvider>
       </SettingsProvider>
     </ViewportProvider>

@@ -1,14 +1,18 @@
 import counterpart from "counterpart";
+import { cloneDeep } from "lodash";
 import React, {
   createContext,
   useCallback,
   useContext,
   useEffect,
+  useState,
 } from "react";
 
 import {
+  defaultApiLatencies,
   defaultApiSettings,
   defaultExchanges,
+  defaultLatencyPreferences,
   defaultLocales,
   defaultSettings,
 } from "../../../api/params";
@@ -31,10 +35,17 @@ export type SettingsContextType = {
   cache: Cache;
   setCache: (value: Cache) => void;
   setLocale: (selectedLang: string) => void;
+  setApiSettings: (value: ApiSettings) => void;
   apiSettings: ApiSettings;
   setLatencyChecks: (latencyChecks: number) => void;
-  updateLatencies: (apiLatencies: ApiLatencies) => void;
+  latencyChecks: number;
+  setApiLatencies: (apiLatencies: ApiLatencies) => void;
+  apiLatencies: ApiLatencies;
+  latencyPreferences: LatencyPreferences;
   setLatencyPreferences: (preferences: LatencyPreferences) => void;
+  connectedNode: string;
+  setConnectedNode: (connectedNode: string) => void;
+  initiationSettings: boolean;
 };
 
 const settingsContext = createContext<SettingsContextType>(
@@ -50,6 +61,7 @@ export function SettingsProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
+  const [initiationSettings, setInitiationSettings] = useState<boolean>(true);
   const [cache, setCache] = useLocalStorage("cache") as [
     Cache,
     (value: Cache) => void
@@ -66,6 +78,25 @@ export function SettingsProvider({
     ApiSettings,
     (value: ApiSettings) => void
   ];
+  const [apiLatencies, setApiLatencies] = useLocalStorage("api_Latencies") as [
+    ApiLatencies,
+    (value: ApiLatencies) => void
+  ];
+  const [latencyPreferences, setLatencyPreferences] = useLocalStorage(
+    "latency_preferences"
+  ) as [LatencyPreferences, (value: LatencyPreferences) => void];
+  const [latencyChecks, setLatencyChecks] = useLocalStorage(
+    "latency_checks"
+  ) as [number, (value: number) => void];
+
+  const [connectedNode, _setConnectedNode] = useState<string>("");
+
+  const setConnectedNode = useCallback(
+    (connectedNode: string) => {
+      _setConnectedNode(connectedNode);
+    },
+    [_setConnectedNode]
+  );
 
   const initCache = useCallback(() => {
     if (
@@ -86,31 +117,29 @@ export function SettingsProvider({
   }, [settings, exchanges, setSettings, setExchanges]);
 
   const initApiSettings = useCallback(() => {
+    console.log("ghasem");
     if (!apiSettings) {
       setApiSettings(defaultApiSettings);
     }
-  }, [apiSettings, setApiSettings]);
-
-  const setLatencyChecks = useCallback(
-    (latencyChecks: number) => {
-      setApiSettings({ ...apiSettings, latencyChecks });
-    },
-    [setApiSettings, apiSettings]
-  );
-
-  const updateLatencies = useCallback(
-    (apiLatencies: ApiLatencies) => {
-      setApiSettings({ ...apiSettings, apiLatencies });
-    },
-    [setApiSettings, apiSettings]
-  );
-
-  const setLatencyPreferences = useCallback(
-    (preferences: LatencyPreferences) => {
-      setApiSettings({ ...apiSettings, latencyPreferences: preferences });
-    },
-    [setApiSettings, apiSettings]
-  );
+    if (!apiLatencies) {
+      setApiLatencies(defaultApiLatencies);
+    }
+    if (!latencyPreferences) {
+      setLatencyPreferences(defaultLatencyPreferences);
+    }
+    if (!latencyChecks) {
+      setLatencyChecks(0);
+    }
+  }, [
+    apiSettings,
+    setApiSettings,
+    apiLatencies,
+    setApiLatencies,
+    latencyPreferences,
+    setLatencyPreferences,
+    latencyChecks,
+    setLatencyChecks,
+  ]);
 
   const setLocale = useCallback(
     (selectedLang: string) => {
@@ -144,12 +173,15 @@ export function SettingsProvider({
     );
     setLocale(localeFromStorage());
   }, [setLocale, localeFromStorage]);
-
+  console.log("abbas");
+  console.log("inita", initiationSettings);
   useEffect(() => {
+    setInitiationSettings(true);
     initCache();
     initSettings();
     initApiSettings();
     initLocale();
+    setInitiationSettings(false);
   }, []);
   return (
     <settingsContext.Provider
@@ -161,10 +193,17 @@ export function SettingsProvider({
         cache,
         setCache,
         setLocale,
+        setApiSettings,
         apiSettings,
         setLatencyChecks,
-        updateLatencies,
+        latencyChecks,
+        apiLatencies: cloneDeep(apiLatencies),
+        setApiLatencies,
+        latencyPreferences: cloneDeep(latencyPreferences),
         setLatencyPreferences,
+        connectedNode,
+        setConnectedNode,
+        initiationSettings,
       }}
     >
       {children}
