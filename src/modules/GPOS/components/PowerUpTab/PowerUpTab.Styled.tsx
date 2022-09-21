@@ -23,7 +23,6 @@ export const PowerUpTabIntro = styled.div`
     margin: 0 auto 0;
     padding: 20px 35px;
   }
-  p,
   ul {
     font-size: 12px;
   }
@@ -37,4 +36,13 @@ export const PowerUpTabFormWrapper = styled.div`
     max-width: 610px;
     border: none;
   }
+`;
+
+export const PowerUpTabIntroHeading = styled.p`
+  font-size: 16px;
+  color: ${colors.textColor};
+`;
+
+export const PowerUpTabIntroParagraph = styled.p`
+  font-size: 12px;
 `;

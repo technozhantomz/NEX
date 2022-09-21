@@ -20,14 +20,19 @@ export const PowerUpTab = ({
   return (
     <Styled.PowerUpTabWrapper>
       <Styled.PowerUpTabIntro>
-        <p>
+        <Styled.PowerUpTabIntroHeading>
+          {counterpart.translate(
+            `pages.voting.gpos.powerUp.power_up_description_heading`
+          )}
+        </Styled.PowerUpTabIntroHeading>
+        <Styled.PowerUpTabIntroParagraph>
           {counterpart.translate(
             `pages.voting.gpos.powerUp.power_up_description`,
             {
               defaultToken: defaultToken,
             }
           )}
-        </p>
+        </Styled.PowerUpTabIntroParagraph>
         <ul>
           <li>
             {counterpart.translate(
