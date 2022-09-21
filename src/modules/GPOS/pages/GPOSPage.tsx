@@ -68,7 +68,11 @@ const GPOSPage: NextPage = () => {
     <Layout
       title="Peerplays (GPOS)"
       type="card-lrg"
-      heading={counterpart.translate(`pages.voting.peerplays_gpos`)}
+      heading={counterpart.translate(
+        `pages.voting.gpos.${
+          tab === "power-up" ? "powerUp" : "powerDown"
+        }.heading`
+      )}
       description="Peerplays (GPOS)"
       dexLayout={true}
       onClick={() => {

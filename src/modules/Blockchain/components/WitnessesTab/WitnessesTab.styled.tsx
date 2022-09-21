@@ -1,61 +1,41 @@
 import {
   styled,
   ListItem as UiListItem,
+  PrintTable as UiPrintTable,
   StatsCardsDeck as UIStatsCardsDeck,
-  Table as UiTable,
-  TableSearch as UiTableSearch,
 } from "../../../../ui/src";
-import { breakpoint } from "../../../../ui/src/breakpoints";
-import { colors } from "../../../../ui/src/colors";
+import {
+  BlockchainDownloadLinks,
+  BlockchainHeader,
+  BlockchainHeaderBar,
+  BlockchainItemContent,
+  BlockchainTable,
+  BlockchainTableActiveIcon,
+  BlockchainTableLastBlock,
+  BlockchainTableMissedBlocks,
+  BlockchainTableUrlIcon,
+  BlockchainTabWrapper,
+} from "../../common";
 
-export const WitnessesTabWrapper = styled.div`
-  margin: 0 15px;
-  ${breakpoint.sm} {
-    margin: 0 25px;
-  }
-`;
+export const WitnessesTabWrapper = styled(BlockchainTabWrapper)``;
 
 export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
 
-export const WitnessesSearch = styled(UiTableSearch)``;
+export const WitnessesHeaderBar = styled(BlockchainHeaderBar)``;
 
-export const WitnessesTable = styled(UiTable)`
-  max-width: 798px;
-  .ant-table-thead > tr > th {
-    color: ${colors.textColorSecondary};
-    background: ${colors.white};
-    border: none;
-    font-size: 0.9em;
-    font-weight: 300;
-    &:before {
-      display: none;
-    }
-  }
-  .ant-table-tbody > tr > td {
-    border: none;
-  }
-  .anticon-link {
-    color: ${colors.linkColor};
-  }
-`;
+export const WitnessesHeader = styled(BlockchainHeader)``;
+
+export const DownloadLinks = styled(BlockchainDownloadLinks)``;
+
+export const WitnessesTable = styled(BlockchainTable)``;
 
 export const WitnessListItem = styled(UiListItem)``;
 
-export const WitnessItemContent = styled.div`
-  margin: 18px 0 25px;
-  .witness-info {
-    margin: 5px 0;
-    display: flex;
-    .witness-info-title {
-      font-weight: 300;
-      width: 120px;
-      min-width: 120px;
-      word-break: break-word;
-      margin-right: 5px;
-      color: ${colors.textColorSecondary};
-    }
-    .witness-info-value {
-      font-weight: 500;
-    }
-  }
-`;
+export const WitnessesItemContent = styled(BlockchainItemContent)``;
+
+export const PrintTable = styled(UiPrintTable)``;
+
+export const LastBlock = styled(BlockchainTableLastBlock)``;
+export const MissedBlocks = styled(BlockchainTableMissedBlocks)``;
+export const urlIcon = styled(BlockchainTableUrlIcon)``;
+export const ActiveIcon = styled(BlockchainTableActiveIcon)``;

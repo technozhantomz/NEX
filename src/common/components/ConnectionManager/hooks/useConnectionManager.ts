@@ -13,7 +13,6 @@ export function useConnectionManager(): UseConnectionManagerResult {
   const [showNodeFilter, setShowNodeFilter] = useState(false);
 
   const { willTransitionTo: _willTransitionTo } = usePeerplaysApiContext();
-  console.log("status", status);
   const statusCallback = useCallback(
     (status: string) => {
       setStatus(status);
@@ -45,9 +44,8 @@ export function useConnectionManager(): UseConnectionManagerResult {
   }, [setShowNodeFilter]);
 
   useEffect(() => {
-    console.log("salam");
     willTransitionTo();
-  }, [willTransitionTo]);
+  }, []);
 
   return {
     apiConnected,

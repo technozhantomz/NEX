@@ -55,7 +55,7 @@ export function useBlockchain(): UseBlockchainResult {
       (a, b) => (b.id as number) - (a.id as number)
     );
     return recentBlocks;
-  }, []);
+  }, [ChainStore, dbApi]);
 
   const getAvgBlockTime = useCallback(() => {
     const recentBlocks = getRecentBlocks();

@@ -1,2 +1,2 @@
 // export * from "./ConnectionManager";
-export * from "./ConnectionManager2";
+export * from "./ConnectionManager";

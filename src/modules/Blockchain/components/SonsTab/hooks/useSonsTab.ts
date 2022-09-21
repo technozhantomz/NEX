@@ -17,9 +17,11 @@ export function useSonsTab(): UseSonsTabResult {
   const [sonsTableRows, setSonsTableRows] = useState<SonsTableRow[]>([]);
   const [sonsStats, setSonsStats] = useState<SonsStats>({
     active: [],
+    budget: [],
     nextVote: [],
   });
   const [activeSons, setActiveSons] = useState<number>(0);
+  const [budget, setBudget] = useState<number>(0);
   const [nextVote, setNextVote] = useState<string>("");
 
   const { getSons } = useMembers();
@@ -41,6 +43,11 @@ export function useSonsTab(): UseSonsTabResult {
         const blockData = await getBlockData();
         if (chain && blockData) {
           const { sons, sonsIds } = await getSons();
+          const budgetAmount = setPrecision(
+            false,
+            blockData.son_budget,
+            defaultAsset.precision
+          );
           const now = new Date().getTime();
           const nextVoteTime = new Date(
             blockData.next_maintenance_time
@@ -71,11 +78,11 @@ export function useSonsTab(): UseSonsTabResult {
             setSonsTableRows(sonsRows);
             setSearchDataSource(sonsRows);
             setActiveSons(activeSones.length);
+            setBudget(budgetAmount);
             setNextVote(
               formLocalDate(blockData.next_maintenance_time, [
                 "month",
                 "date",
-                "year",
                 "time",
               ])
             );
@@ -85,6 +92,7 @@ export function useSonsTab(): UseSonsTabResult {
                 activeSones.length,
                 99
               ),
+              budget: updateArrayWithLimit(sonsStats.budget, budgetAmount, 99),
               nextVote: updateArrayWithLimit(
                 sonsStats.nextVote,
                 nextVoteDistance,
@@ -125,6 +133,7 @@ export function useSonsTab(): UseSonsTabResult {
     searchDataSource,
     sonsStats,
     activeSons,
+    budget,
     nextVote,
     setSearchDataSource,
   };

@@ -1,10 +1,16 @@
 import counterpart from "counterpart";
 import hirestime from "hirestime";
 import { shuffle } from "lodash";
-import { Apis, ChainStore, ConnectionManager } from "peerplaysjs-lib";
+import {
+  Apis,
+  ChainConfig,
+  ChainStore,
+  ConnectionManager,
+} from "peerplaysjs-lib";
 import React, { createContext, useCallback, useContext, useRef } from "react";
 
 import { useSettingsContext } from "../";
+import { defaultToken } from "../../../api/params";
 import {
   ApiLatencies,
   ApiServer,
@@ -579,7 +585,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   ) => void = useCallback(
     (mapOfPings, force = true, container = undefined) => {
       const _apiLatencies = apiLatencies;
-      console.log("mapOfPings", mapOfPings);
       for (const node in mapOfPings) {
         if (!force && node in _apiLatencies) {
           continue;
@@ -589,7 +594,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
           container[`${node}`] = mapOfPings[node];
         }
       }
-      console.log("_apiLatencies", _apiLatencies);
       setApiLatencies(_apiLatencies);
     },
     [apiLatencies, setApiLatencies]
@@ -1094,7 +1098,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     // this.updateTransitionTarget(counterpart.translate("app_init.database"));
     const _apiInstance = (Apis as ApisType).instance();
     if (_apiInstance) {
-      console.log("_apiInstance", _apiInstance);
       let currentUrl = _apiInstance.ws_rpc?.ws.url as string;
       currentUrl =
         currentUrl[currentUrl.length - 1] !== "/"
@@ -1114,6 +1117,8 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     connectInProgress.current = false;
     setConnectedNode(connectionManager.current.url);
     apiInstance.current = _apiInstance as ApisInstanceType;
+    ChainConfig.setPrefix(defaultToken);
+    ChainStore.init();
     transitionDone();
   }, [
     connectInProgress,
@@ -1342,7 +1347,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   const dbApi = useCallback(getApi("_db"), [getApi]);
   const historyApi = useCallback(getApi("_hist"), [getApi]);
-  console.log("dbApi", dbApi);
   return (
     <NodeTransitionerContext.Provider
       value={{ getNodes, willTransitionTo, dbApi, historyApi }}

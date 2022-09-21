@@ -524,11 +524,13 @@ export const ru = {
       no_data: "Нет данных",
       stats_cards: {
         next_vote: "Следующее обновление голосования",
+        budget: "Остаток бюджета (почасовой)",
       },
       blockchain: {
         blockchain: "Блокчейн",
         heading: "Блокчейн PeerPlays",
         current_block: "Текущий блок",
+        last_irreversible_block: "Последний необратимый блок",
         supply: "Поставлять (%(symbol)s)",
         active_witness: "Активный свидетель",
         confirmation_time: "Время подтверждения",
@@ -559,6 +561,7 @@ export const ru = {
         monthly_earnings: "Ежемесячный доход",
         search_witnesses: "Поиск свидетелей",
         witnesses: "Свидетели",
+        current_witness: "Текущий свидетель",
       },
       sons: {
         heading: "Пирплейс Сыновья",
@@ -645,7 +648,7 @@ export const ru = {
       lower_case_sons: "sons",
       lower_case_committees: "комитеты",
       gpos: {
-        heading: "PeerPlays GPOS",
+        heading: "геймифицированное доказательство доли (GPOS)",
         tab: "GPOS",
         join_gpos:
           "Присоединяйтесь к GPOS, переведя свои %(defaultToken)s на баланс GPOS.",
@@ -678,8 +681,10 @@ export const ru = {
           no_rewards: "Нет наград",
         },
         powerUp: {
+          heading: "GPOS - Включите питание",
           power_up_description:
             "Когда вы активируете свои %(defaultToken)s в блокчейне Peerplays, вы делаете свои первые шаги к участию в Децентрализованном автономном кооперативе (DAC), который является волшебством в технологии блокчейна. Это означает, что вы будете:",
+          power_up_description_heading: "Уведомление",
           power_up_lists: {
             first:
               "Станьте большой частью чего-то особенного в глобальном масштабе",
@@ -690,8 +695,10 @@ export const ru = {
           },
         },
         powerDown: {
+          heading: "GPOS - Выключить",
           power_down_description:
             "Когда вы отключите питание, вам потребуется 30 дней, чтобы полностью снять баланс %(defaultToken)s. Вы будете продолжать получать вознаграждения за участие в течение этого времени, пока вы участвуете. После отключения питания вы можете использовать свои %(defaultToken)s как любую другую криптовалюту. Это означает, что вы будете:",
+          power_down_description_heading: "Уведомление",
           power_down_lists: {
             first:
               "Все еще быть частью чего-то особенного, просто не так много",
@@ -951,6 +958,7 @@ export const ru = {
     votes: "Голоса",
     category: "категория",
     active: "Активный",
+    key: "ключ",
   },
   tooltips: {
     copy: "копировать",

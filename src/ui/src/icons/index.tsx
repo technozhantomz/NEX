@@ -5,6 +5,7 @@ export { default as Dashboard } from "./DashboardIcon";
 export { default as Logo } from "./LogoIcon";
 export { default as Market } from "./MarketIcon";
 export { default as Vote } from "./VoteIcon";
+export { default as Key } from "./KeyIcon";
 export { default as Info } from "./InfoIcon";
 export { default as Reset } from "./ResetIcon";
 export { default as Check } from "./CheckIcon";

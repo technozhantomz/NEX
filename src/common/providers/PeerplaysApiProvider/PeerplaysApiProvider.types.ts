@@ -21,6 +21,6 @@ export type NodeTransitionerContextType = {
     appInit?: any,
     _statusCallback?: NodeTransitionCallbackType | undefined
   ) => Promise<void>;
-  dbApi: (request: string, data?: never[]) => Promise<any> | undefined;
-  historyApi: (request: string, data?: never[]) => Promise<any> | undefined;
+  dbApi: (request: string, data?: any) => Promise<any> | undefined;
+  historyApi: (request: string, data?: any) => Promise<any> | undefined;
 };
