@@ -39,10 +39,8 @@ export const PowerUpTabFormWrapper = styled.div`
 `;
 
 export const PowerUpTabIntroHeading = styled.p`
-  font: normal normal medium 16px/20px Inter;
-  letter-spacing: 0px;
+  font-size: 16px;
   color: ${colors.textColor};
-  opacity: 1;
 `;
 
 export const PowerUpTabIntroParagraph = styled.p`
