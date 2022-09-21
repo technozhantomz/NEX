@@ -19,7 +19,7 @@ export function useConnectionManager(): UseConnectionManagerResult {
     },
     [setStatus]
   );
-
+  console.log("status", status);
   const willTransitionTo = useCallback(async () => {
     try {
       await _willTransitionTo(true, statusCallback);

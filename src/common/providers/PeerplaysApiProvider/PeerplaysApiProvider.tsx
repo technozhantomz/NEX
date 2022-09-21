@@ -27,7 +27,7 @@ import {
 
 import {
   NodeTransitionCallbackType,
-  NodeTransitionerContextType,
+  PeerPlaysApiContextType,
 } from "./PeerplaysApiProvider.types";
 
 type Props = {
@@ -36,12 +36,14 @@ type Props = {
 
 const REFRESHING_CONNECTION_ATTEMPTS_LIMIT = 8;
 
-const NodeTransitionerContext = createContext<NodeTransitionerContextType>(
-  {} as NodeTransitionerContextType
+const PeerPlaysApiContext = createContext<PeerPlaysApiContextType>(
+  {} as PeerPlaysApiContextType
 );
 
 ChainStore.setDispatchFrequency(60);
 
+/** PeerplaysApiProvider is a helper context that facilitates connecting, switching, reconnecting, and using Peerplays api
+ */
 export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   const willTransitionToInProgress = useRef<
     boolean | string | { background: boolean; key: string }
@@ -323,23 +325,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       const _connectionManager: ConnectionManagerType = new ConnectionManager({
         url: connectionString,
         urls: urls,
-        // closeCb: this._onConnectionClose.bind(this),
-        // optionalApis: { enableOrders: true },
-        // urlChangeCallback: (url) => {
-        //   console.log("fallback to new url:", url);
-        //   if (!!url) {
-        //     // Update connection status
-        //     this.updateTransitionTarget(
-        //       counterpart.translate("app_init.connecting", {
-        //         server: url,
-        //       })
-        //     );
-        //   }
-        //   SettingsActions.changeSetting({
-        //     setting: "activeNode",
-        //     value: url,
-        //   });
-        // },
       });
       connectionManager.current = _connectionManager;
     },
@@ -497,22 +482,19 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       const latencyPromise = checkURL(directPingerUrls.current[i].url);
       latencyPromises.push(latencyPromise);
     }
-    try {
-      const latencies = await Promise.all(latencyPromises);
 
-      directPingerUrls.current = directPingerUrls.current.map((url, index) => {
-        return {
-          url: url.url,
-          latency: latencies[index],
-        };
-      });
-      directPingerUrls.current.sort((a, b) => {
-        return Number(a.latency) - Number(b.latency);
-      });
-      return directPingerUrls.current.slice();
-    } catch (e) {
-      console.log(e);
-    }
+    const latencies = await Promise.all(latencyPromises);
+
+    directPingerUrls.current = directPingerUrls.current.map((url, index) => {
+      return {
+        url: url.url,
+        latency: latencies[index],
+      };
+    });
+    directPingerUrls.current.sort((a, b) => {
+      return Number(a.latency) - Number(b.latency);
+    });
+    return directPingerUrls.current.slice();
   }, [
     directPingerUrls,
     directPingerUrls.current,
@@ -626,11 +608,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         );
       }
       if (callback.current) {
-        try {
-          callback.current();
-        } catch (e) {
-          console.log(e);
-        }
+        callback.current();
       }
     }
 
@@ -712,11 +690,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       callback.current = callbackFunc;
       // defaults
       range.current = 3;
-      try {
-        await pingNodesInBatches();
-      } catch (e) {
-        console.log(e);
-      }
+      await pingNodesInBatches();
     },
     [addPingerNodes, pingNodesInBatches]
   );
@@ -759,11 +733,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       false,
       "app_init.check_latency_feedback_rest"
     );
-    try {
-      await pingNodes(pingerStrategyCallback.current);
-    } catch (e) {
-      console.log(e);
-    }
+    await pingNodes(pingerStrategyCallback.current);
   }, [
     addPingerNodes,
     pingNodes,
@@ -831,11 +801,8 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
           "app_init.check_latency_feedback_region"
         );
       }
-      try {
-        await pingNodes(pingTheRest);
-      } catch (e) {
-        console.log(e);
-      }
+
+      await pingNodes(pingTheRest);
     },
     [
       getNodes,
@@ -864,11 +831,8 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
           "app_init.check_latency_feedback_country"
         );
       }
-      try {
-        await pingNodes(pingAllFromOneRegion);
-      } catch (e) {
-        console.log(e);
-      }
+
+      await pingNodes(pingAllFromOneRegion);
     },
     [
       getNodes,
@@ -910,11 +874,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       false,
       "app_init.check_latency_feedback_world"
     );
-    try {
-      await pingNodes(pingAllFromOneCountry);
-    } catch (e) {
-      console.log(e);
-    }
+    await pingNodes(pingAllFromOneCountry);
   }, [addPingerNodes, getFromEachRegion, pingNodes, pingAllFromOneCountry]);
 
   const decideNext = useCallback(async () => {
@@ -942,19 +902,16 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   ) => Promise<void> = useCallback(
     async (firstURL, _preferences = {} as LatencyPreferences) => {
       preferences.current = _preferences;
-      try {
-        if (firstURL) {
-          addPingerNodes(
-            [firstURL],
-            false,
-            "app_init.check_latency_feedback_last"
-          );
-          await pingNodes(decideNext);
-        } else {
-          await decideNext();
-        }
-      } catch (e) {
-        console.log(e);
+
+      if (firstURL) {
+        addPingerNodes(
+          [firstURL],
+          false,
+          "app_init.check_latency_feedback_last"
+        );
+        await pingNodes(decideNext);
+      } else {
+        await decideNext();
       }
     },
     [preferences, preferences.current, addPingerNodes, pingNodes, decideNext]
@@ -995,7 +952,9 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       if (discardOldLatencies) {
         clearLatencies();
       }
+
       const originalURL = connectionManager.current.url;
+
       updateBeSatisfiedWith(pingAll);
       sortNodesToTree(nodeList);
 
@@ -1051,7 +1010,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       }
       pingerStrategyCallback.current = donePinging;
 
-      ping(
+      await ping(
         isAutoSelection.current ? undefined : getSelectedNode(),
         latencyPreferences
       );
@@ -1089,7 +1048,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     [apiSettings, setApiSettings]
   );
 
-  const onConnect = useCallback(async () => {
+  const onConnect = useCallback(() => {
     if (connectInProgress.current) {
       console.error("MULTIPLE CONNECT IN PROGRESS");
       return;
@@ -1153,12 +1112,9 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     const _apiLatencies = apiLatencies;
     delete _apiLatencies[failingNodeUrl];
     setApiLatencies(apiLatencies);
-    try {
-      Apis.close();
-      await willTransitionTo(true);
-    } catch (e) {
-      console.log(e);
-    }
+
+    Apis.close();
+    await willTransitionTo(true);
   };
 
   const attemptReconnect = useCallback(async () => {
@@ -1171,11 +1127,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       await apiInstance.init_promise;
       onConnect();
     } catch (e: any) {
-      try {
-        await onResetError(connectionManager.current.url, e);
-      } catch (e) {
-        console.log(e);
-      }
+      await onResetError(connectionManager.current.url, e);
     }
   }, [connectionManager, connectionManager.current, onConnect, onResetError]);
 
@@ -1212,6 +1164,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
           } else {
             transitionDone();
           }
+          throw new Error();
         }
       } else {
         // in case switches manually, reset the settings so we don't connect to
@@ -1219,11 +1172,8 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         if (!isAutoSelection.current) {
           setSelectedNode("");
         }
-        try {
-          await attemptReconnect();
-        } catch (e) {
-          console.log(e);
-        }
+
+        await attemptReconnect();
       }
     },
     [
@@ -1254,8 +1204,10 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       }
       statusCallback.current = _statusCallback;
       willTransitionToInProgress.current = true;
+
       const _apiLatencies = apiLatencies;
       let latenciesEstablished = Object.keys(_apiLatencies).length > 0;
+
       const _latencyChecks = latencyChecks;
       if (_latencyChecks >= REFRESHING_CONNECTION_ATTEMPTS_LIMIT) {
         // every x connect attempts we refresh the api latency list
@@ -1273,9 +1225,8 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       const selectedNode = getSelectedNode();
 
       // set auto selection flag
-      const _isAutoSelection =
+      isAutoSelection.current =
         selectedNode.indexOf("fake.automatic-selection") !== -1;
-      isAutoSelection.current = _isAutoSelection;
 
       initConnectionManager(urls);
 
@@ -1283,16 +1234,13 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         console.log("do latency update");
         try {
           await doLatencyUpdate();
-          await initiateConnection(appInit);
-        } catch (err) {
-          console.log("catch doLatency", err);
-        }
-      } else {
-        try {
-          await initiateConnection(appInit);
         } catch (e) {
-          console.log(e);
+          console.log("catch doLatency", e);
         }
+
+        await initiateConnection(appInit);
+      } else {
+        await initiateConnection(appInit);
       }
     },
     [
@@ -1347,15 +1295,16 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   const dbApi = useCallback(getApi("_db"), [getApi]);
   const historyApi = useCallback(getApi("_hist"), [getApi]);
+
   return (
-    <NodeTransitionerContext.Provider
+    <PeerPlaysApiContext.Provider
       value={{ getNodes, willTransitionTo, dbApi, historyApi }}
     >
       {children}
-    </NodeTransitionerContext.Provider>
+    </PeerPlaysApiContext.Provider>
   );
 };
 
-export const usePeerplaysApiContext = (): NodeTransitionerContextType => {
-  return useContext<NodeTransitionerContextType>(NodeTransitionerContext);
+export const usePeerplaysApiContext = (): PeerPlaysApiContextType => {
+  return useContext<PeerPlaysApiContextType>(PeerPlaysApiContext);
 };

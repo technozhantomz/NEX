@@ -17,6 +17,7 @@ import {
   defaultSettings,
 } from "../../../api/params";
 import { getPassedTime } from "../../../api/utils";
+import { colors } from "../../../ui/src/colors";
 import { useLocalStorage } from "../../hooks";
 import {
   ApiLatencies,
@@ -204,7 +205,21 @@ export function SettingsProvider({
         loading,
       }}
     >
-      {loading ? <div>loading</div> : children}
+      {loading ? (
+        //TODO: center this
+        <h1
+          style={{
+            height: "50px",
+            position: "absolute",
+            color: colors.textColor,
+            fontSize: "44px",
+          }}
+        >
+          Loading...
+        </h1>
+      ) : (
+        children
+      )}
     </settingsContext.Provider>
   );
 }

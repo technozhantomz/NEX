@@ -1,7 +1,8 @@
-//import counterpart from "counterpart";
+import counterpart from "counterpart";
 import React from "react";
 
-//import { LoadingIndicator } from "..";
+import { LoadingIndicator } from "..";
+import { automaticSelection } from "../../../api/params";
 import { useSettingsContext } from "../../providers";
 
 import { useConnectionManager } from "./hooks";
@@ -16,37 +17,37 @@ export const ConnectionManager = ({ children }: Props): JSX.Element => {
     apiConnected,
     apiError,
     syncError,
-    //status,
+    status,
     showNodeFilter,
     nodeFilterHasChanged,
   } = useConnectionManager();
   const renderLoadingScreen = () => {
     let server = apiSettings.selectedNode;
-    if (!server) {
+    if (!server || server === automaticSelection) {
       server = "";
     }
     return (
       <React.Fragment>
-        {/* <LoadingIndicator
+        <LoadingIndicator
           loadingText={
             status ||
             counterpart.translate("app_init.connecting", {
               server: server,
             })
           }
-        > */}
-        {showNodeFilter && (
-          <div>
-            <span>Node selector</span>
-            {/* <NodeSelector onChange={this._onNodeFilterChange.bind(this)} /> */}
-            {nodeFilterHasChanged && (
-              <div style={{ marginTop: "1rem" }}>
-                Please reload for the changes to take effect
-              </div>
-            )}
-          </div>
-        )}
-        {/* </LoadingIndicator> */}
+        >
+          {showNodeFilter && (
+            <div>
+              <span>Node selector</span>
+              {/* <NodeSelector onChange={this._onNodeFilterChange.bind(this)} /> */}
+              {nodeFilterHasChanged && (
+                <div style={{ marginTop: "1rem" }}>
+                  Please reload for the changes to take effect
+                </div>
+              )}
+            </div>
+          )}
+        </LoadingIndicator>
       </React.Fragment>
     );
   };

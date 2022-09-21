@@ -10,7 +10,7 @@ export type NodeTransitionCallbackType = (
       }
 ) => void;
 
-export type NodeTransitionerContextType = {
+export type PeerPlaysApiContextType = {
   getNodes: (
     latenciesMap?: ApiLatencies,
     latencies?: boolean,

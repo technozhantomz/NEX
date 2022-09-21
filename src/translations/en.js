@@ -947,6 +947,8 @@ export const en = {
   },
   settings: {
     api_closest: "Choose closest automatically",
+    connection_error:
+      "Unable to connect to API node %(url)s, falling back to known working nodes. Error was: %(error)s",
   },
   tableHead: {
     block_id: "Block ID",

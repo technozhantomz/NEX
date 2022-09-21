@@ -1,28 +1,31 @@
 import React from "react";
 
+import * as Styled from "./LoadingIndicator.styled";
+
 type Props = {
-  type?: string;
+  type?: "three-bounce" | "circle" | "circle-small";
   loadingText?: string;
-  children?: React.ReactNode;
+  children?: React.ReactNode | React.ReactNode[];
 };
 //TODO: styling
 export const LoadingIndicator = ({
   type,
   loadingText,
+
   children,
 }: Props): JSX.Element => {
   switch (type) {
     case "three-bounce":
       return (
-        <div className="three-bounce">
+        <Styled.ThreeBounceWrpper>
           <div className="bounce1" />
           <div className="bounce2" />
           <div className="bounce3" />
-        </div>
+        </Styled.ThreeBounceWrpper>
       );
     case "circle":
       return (
-        <div className="circle-wrapper">
+        <Styled.CircleWrapper>
           <div className="circle1 circle" />
           <div className="circle2 circle" />
           <div className="circle3 circle" />
@@ -35,14 +38,11 @@ export const LoadingIndicator = ({
           <div className="circle10 circle" />
           <div className="circle11 circle" />
           <div className="circle12 circle" />
-        </div>
+        </Styled.CircleWrapper>
       );
     case "circle-small":
       return (
-        <div
-          className="circle-wrapper"
-          style={{ height: "15px", minHeight: "15px" }}
-        >
+        <Styled.CircleWrapper isSmall={true}>
           <div className="circle1 circle" />
           <div className="circle2 circle" />
           <div className="circle3 circle" />
@@ -55,29 +55,23 @@ export const LoadingIndicator = ({
           <div className="circle10 circle" />
           <div className="circle11 circle" />
           <div className="circle12 circle" />
-        </div>
+        </Styled.CircleWrapper>
       );
     default:
-      //TODO: progress removed
       return (
-        <div className="loading-overlay">
-          <div className="loading-panel">
+        <Styled.LoadingOverlay>
+          <Styled.LoadingPanel>
             {loadingText && (
-              <div
-                className="text-center"
-                style={{ paddingTop: "10px", color: "black" }}
-              >
-                {loadingText}
-              </div>
+              <Styled.LoadingText>{loadingText}</Styled.LoadingText>
             )}
-            <div className="spinner">
+            <Styled.Spinner>
               <div className="bounce1" />
               <div className="bounce2" />
               <div className="bounce3" />
-            </div>
-          </div>
+            </Styled.Spinner>
+          </Styled.LoadingPanel>
           {children && <div className="loading-panel--child">{children}</div>}
-        </div>
+        </Styled.LoadingOverlay>
       );
   }
 };

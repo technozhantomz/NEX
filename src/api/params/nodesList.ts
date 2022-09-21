@@ -85,4 +85,6 @@ const prodNodes: Node[] = [
   },
 ];
 
+export const automaticSelection = "wss://fake.automatic-selection.com";
+
 export const defaultNodesList = testnetCheck ? testnetNodes : prodNodes;
