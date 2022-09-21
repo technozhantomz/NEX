@@ -19,7 +19,7 @@ export const VoteSearch = styled(TableSearch)`
 `;
 
 export const VoteForm = styled(Form)`
-  max-width: 705px;
+  max-width: 100%;
 `;
 
 export const ActionsContainer = styled.div`

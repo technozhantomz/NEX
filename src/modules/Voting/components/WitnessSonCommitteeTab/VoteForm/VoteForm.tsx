@@ -68,25 +68,6 @@ export const VoteForm = ({
   });
   return (
     <Styled.VoteFormWrapper>
-      <Form.Item
-        className="search-input"
-        validateStatus={searchError ? "error" : undefined}
-        help={
-          searchError
-            ? counterpart.translate(`field.errors.no_account`)
-            : undefined
-        }
-      >
-        <Styled.VoteSearch
-          size="large"
-          placeholder={counterpart.translate(
-            `field.placeholder.search_accounts`
-          )}
-          onSearch={handleVoteSearch}
-          loading={loading}
-          onChange={searchChange}
-        />
-      </Form.Item>
       <Styled.VoteForm.Provider onFormFinish={handleFormFinish}>
         <Styled.VoteForm
           form={voteForm}
@@ -151,6 +132,25 @@ export const VoteForm = ({
           />
         </Styled.VoteForm>
       </Styled.VoteForm.Provider>
+      <Form.Item
+        className="search-input"
+        validateStatus={searchError ? "error" : undefined}
+        help={
+          searchError
+            ? counterpart.translate(`field.errors.no_account`)
+            : undefined
+        }
+      >
+        <Styled.VoteSearch
+          size="large"
+          placeholder={counterpart.translate(
+            `pages.blocks.${tab}.search_${tab}`
+          )}
+          onSearch={handleVoteSearch}
+          loading={loading}
+          onChange={searchChange}
+        />
+      </Form.Item>
     </Styled.VoteFormWrapper>
   );
 };
