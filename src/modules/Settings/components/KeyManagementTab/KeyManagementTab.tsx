@@ -1,7 +1,8 @@
 import counterpart from "counterpart";
 import React, { Fragment } from "react";
 
-import { Checkbox } from "../../../../ui/src";
+import { CopyButton } from "../../../../common/components";
+import { Checkbox, InfoCircleOutlined } from "../../../../ui/src";
 
 import * as Styled from "./KeyManagementTab.styled";
 import { useKeyManagementTab } from "./hooks";
@@ -10,6 +11,7 @@ export const KeyManagementTab = (): JSX.Element => {
   const {
     formValidation,
     keyManagementForm,
+    publicKeys,
     generatedKeys,
     handleCheckboxChange,
     selectedKeys,
@@ -42,6 +44,7 @@ export const KeyManagementTab = (): JSX.Element => {
         <Styled.LabelWrapper>
           <Styled.Label strong>
             {counterpart.translate(`field.labels.select_keys`)}
+            <InfoCircleOutlined />
           </Styled.Label>
         </Styled.LabelWrapper>
         <Styled.CheckBoxGroup
@@ -65,30 +68,61 @@ export const KeyManagementTab = (): JSX.Element => {
           </Styled.SubmitButton>
         </Styled.ButtonFormItem>
 
-        {generatedKeys && generatedKeys.length > 0
-          ? generatedKeys.map((generatedKey) => {
-              if (generatedKey.key && generatedKey.key !== "") {
-                return (
-                  <Fragment key={`${generatedKey.label}`}>
-                    <Styled.Label>
-                      {counterpart.translate(`field.labels.generated_key`, {
-                        generatedKeyLabel: generatedKey.label,
-                      })}
-                    </Styled.Label>
-                    <Styled.GeneratedKeyInput keyValue={generatedKey.key} />
-                  </Fragment>
-                );
-              } else {
-                return (
-                  <Styled.NoKey>
-                    {counterpart.translate("field.errors.no_key_for_password", {
-                      role: generatedKey.label,
-                    })}
-                  </Styled.NoKey>
-                );
-              }
+        <Styled.Label strong>Account Public Keys</Styled.Label>
+        {publicKeys && publicKeys.length > 0
+          ? publicKeys.map((publicKey) => {
+              return (
+                <Styled.PublicKeyWrapper key={`${publicKey.type}`}>
+                  <Styled.Label>
+                    {counterpart.translate(
+                      `field.labels.public_key_${publicKey.type}`
+                    )}
+                  </Styled.Label>
+                  <Styled.PublicKey>
+                    {publicKey.key}
+                    <CopyButton
+                      className="copy-publickey"
+                      copyValue={`${publicKey.key}`}
+                    ></CopyButton>
+                  </Styled.PublicKey>
+                </Styled.PublicKeyWrapper>
+              );
             })
           : ""}
+        {generatedKeys && generatedKeys.length > 0 ? (
+          <>
+            <Styled.Label strong>Account Private Keys</Styled.Label>
+            <div>
+              {generatedKeys.map((generatedKey) => {
+                if (generatedKey.key && generatedKey.key !== "") {
+                  return (
+                    <Fragment key={`${generatedKey.label}`}>
+                      <Styled.Label>
+                        {counterpart.translate(`field.labels.generated_key`, {
+                          generatedKeyLabel: generatedKey.label,
+                        })}
+                      </Styled.Label>
+                      <Styled.GeneratedKeyInput keyValue={generatedKey.key} />
+                    </Fragment>
+                  );
+                } else {
+                  return (
+                    <Styled.NoKey>
+                      {counterpart.translate(
+                        "field.errors.no_key_for_password",
+                        {
+                          role: generatedKey.label,
+                        }
+                      )}
+                    </Styled.NoKey>
+                  );
+                }
+              })}
+            </div>
+          </>
+        ) : (
+          ""
+        )}
       </Styled.KeyManagementForm>
     </Styled.KeyManagementCard>
   );
