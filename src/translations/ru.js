@@ -514,6 +514,7 @@ export const ru = {
         blockchain: "Блокчейн",
         heading: "Блокчейн PeerPlays",
         current_block: "Текущий блок",
+        last_irreversible_block: "Последний необратимый блок",
         supply: "Поставлять (%(symbol)s)",
         active_witness: "Активный свидетель",
         confirmation_time: "Время подтверждения",
