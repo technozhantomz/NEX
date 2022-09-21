@@ -157,7 +157,6 @@ export function UserSettingsProvider({
 
   const initUserSettings = useCallback(() => {
     if (localStorageAccount && localStorageAccount !== "" && !userSettings) {
-      console.log("ghasem");
       setUserSettings(defaultUserSettings);
     }
   }, [userSettings, setUserSettings, localStorageAccount]);

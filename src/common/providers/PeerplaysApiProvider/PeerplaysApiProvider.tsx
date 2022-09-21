@@ -308,7 +308,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   const initConnectionManager: (urls?: string[]) => void = useCallback(
     (urls) => {
-      console.log("initConnectionManager");
       if (!urls) {
         urls = getNodesToConnectTo(true) as string[];
       }
@@ -580,6 +579,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   ) => void = useCallback(
     (mapOfPings, force = true, container = undefined) => {
       const _apiLatencies = apiLatencies;
+      console.log("mapOfPings", mapOfPings);
       for (const node in mapOfPings) {
         if (!force && node in _apiLatencies) {
           continue;
@@ -589,6 +589,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
           container[`${node}`] = mapOfPings[node];
         }
       }
+      console.log("_apiLatencies", _apiLatencies);
       setApiLatencies(_apiLatencies);
     },
     [apiLatencies, setApiLatencies]
@@ -730,7 +731,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   const sortNodesToTree = useCallback((nodesToPing: ApiServer[]) => {
     const _nodeTree = {} as NodeTree;
-    console.log("nodesToPing", nodesToPing);
     nodesToPing.forEach((_node) => {
       const region = _node.node.region as string;
       const country = _node.node.country as string;
@@ -1093,8 +1093,13 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     connectInProgress.current = true;
     // this.updateTransitionTarget(counterpart.translate("app_init.database"));
     const _apiInstance = (Apis as ApisType).instance();
-    if (_apiInstance !== undefined) {
-      const currentUrl = _apiInstance.url;
+    if (_apiInstance) {
+      console.log("_apiInstance", _apiInstance);
+      let currentUrl = _apiInstance.ws_rpc?.ws.url as string;
+      currentUrl =
+        currentUrl[currentUrl.length - 1] !== "/"
+          ? currentUrl
+          : currentUrl.slice(0, currentUrl.length - 1);
       if (!isAutoSelection.current) {
         setSelectedNode(currentUrl);
       }
@@ -1109,7 +1114,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     connectInProgress.current = false;
     setConnectedNode(connectionManager.current.url);
     apiInstance.current = _apiInstance as ApisInstanceType;
-    console.log("instance.current", apiInstance.current);
     transitionDone();
   }, [
     connectInProgress,
@@ -1279,7 +1283,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
           console.log("catch doLatency", err);
         }
       } else {
-        console.log("initiate connection");
         try {
           await initiateConnection(appInit);
         } catch (e) {
@@ -1291,7 +1294,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       isTransitionInProgress,
       apiLatencies,
       latencyChecks,
-      REFRESHING_CONNECTION_ATTEMPTS_LIMIT,
       setLatencyChecks,
       getNodesToConnectTo,
       getSelectedNode,
@@ -1303,7 +1305,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   const getApi = useCallback(
     (type: AvailableGrapheneApis) => {
-      return (request: string, data = []) => {
+      return (request: string, data: any = []) => {
         if (
           apiInstance.current &&
           Object.keys(apiInstance.current).length > 0
@@ -1340,7 +1342,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   const dbApi = useCallback(getApi("_db"), [getApi]);
   const historyApi = useCallback(getApi("_hist"), [getApi]);
-
+  console.log("dbApi", dbApi);
   return (
     <NodeTransitionerContext.Provider
       value={{ getNodes, willTransitionTo, dbApi, historyApi }}

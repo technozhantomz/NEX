@@ -45,7 +45,7 @@ export type SettingsContextType = {
   setLatencyPreferences: (preferences: LatencyPreferences) => void;
   connectedNode: string;
   setConnectedNode: (connectedNode: string) => void;
-  initiationSettings: boolean;
+  loading: boolean;
 };
 
 const settingsContext = createContext<SettingsContextType>(
@@ -61,7 +61,7 @@ export function SettingsProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const [initiationSettings, setInitiationSettings] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [cache, setCache] = useLocalStorage("cache") as [
     Cache,
     (value: Cache) => void
@@ -117,7 +117,6 @@ export function SettingsProvider({
   }, [settings, exchanges, setSettings, setExchanges]);
 
   const initApiSettings = useCallback(() => {
-    console.log("ghasem");
     if (!apiSettings) {
       setApiSettings(defaultApiSettings);
     }
@@ -173,16 +172,15 @@ export function SettingsProvider({
     );
     setLocale(localeFromStorage());
   }, [setLocale, localeFromStorage]);
-  console.log("abbas");
-  console.log("inita", initiationSettings);
   useEffect(() => {
-    setInitiationSettings(true);
+    setLoading(true);
     initCache();
     initSettings();
     initApiSettings();
     initLocale();
-    setInitiationSettings(false);
+    setLoading(false);
   }, []);
+
   return (
     <settingsContext.Provider
       value={{
@@ -203,10 +201,10 @@ export function SettingsProvider({
         setLatencyPreferences,
         connectedNode,
         setConnectedNode,
-        initiationSettings,
+        loading,
       }}
     >
-      {children}
+      {loading ? <div>loading</div> : children}
     </settingsContext.Provider>
   );
 }

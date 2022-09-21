@@ -20,6 +20,7 @@ export const ConnectionManager2 = ({ children }: Props): JSX.Element => {
     showNodeFilter,
     nodeFilterHasChanged,
   } = useConnectionManager();
+  console.log("apiConnected", apiConnected);
   const renderLoadingScreen = () => {
     let server = apiSettings.selectedNode;
     if (!server) {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext, useSettingsContext } from "../../../providers";
+import { usePeerplaysApiContext } from "../../../providers";
 
 import { UseConnectionManagerResult } from "./useConnectionManager.types";
 
@@ -13,7 +13,6 @@ export function useConnectionManager(): UseConnectionManagerResult {
   const [showNodeFilter, setShowNodeFilter] = useState(false);
 
   const { willTransitionTo: _willTransitionTo } = usePeerplaysApiContext();
-  const { initiationSettings } = useSettingsContext();
   console.log("status", status);
   const statusCallback = useCallback(
     (status: string) => {
@@ -46,11 +45,9 @@ export function useConnectionManager(): UseConnectionManagerResult {
   }, [setShowNodeFilter]);
 
   useEffect(() => {
-    if (!initiationSettings) {
-      console.log("mohammad");
-      willTransitionTo();
-    }
-  }, [willTransitionTo, initiationSettings]);
+    console.log("salam");
+    willTransitionTo();
+  }, [willTransitionTo]);
 
   return {
     apiConnected,
