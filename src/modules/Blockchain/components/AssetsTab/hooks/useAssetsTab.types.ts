@@ -1,15 +1,20 @@
+import { ColumnsType } from "antd/lib/table";
+import { Dispatch, SetStateAction } from "react";
+
 export type UseAssetsTabResult = {
   loading: boolean;
+  assetsColumns: ColumnsType<unknown>;
   assetTableRows: AssetTableRow[];
   assetsStats: number[];
-  searchValue: string;
-  handleSearch: (symbol: string) => void;
+  searchDataSource: AssetTableRow[];
+  setSearchDataSource: Dispatch<SetStateAction<AssetTableRow[]>>;
 };
 
 export type AssetTableRow = {
   key: string;
   id: string;
   symbol: string;
+  // name: string;
   maxSupply: number;
   precision: number;
   issuer: string;

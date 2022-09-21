@@ -1,6 +1,6 @@
-import { styled } from "../../../../ui/src";
-import { colors } from "../../../../ui/src/colors";
-import { mixIns } from "../../../../ui/src/mixins";
+import { styled } from "../../../../../ui/src";
+import { colors } from "../../../../../ui/src/colors";
+import { mixIns } from "../../../../../ui/src/mixins";
 
 export const StatsCard = styled.div`
   height: 120px;

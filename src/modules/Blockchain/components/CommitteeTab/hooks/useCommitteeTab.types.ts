@@ -5,7 +5,6 @@ export type UseCommitteeTabResult = {
   committeeTableRows: CommitteeTableRow[];
   activeCommittee: number;
   committeeStats: number[];
-  searchValue: string;
   searchDataSource: CommitteeTableRow[];
   setSearchDataSource: Dispatch<SetStateAction<CommitteeTableRow[]>>;
 };
