@@ -827,6 +827,7 @@ export const en = {
       desired_committees: "Desired committees",
       desired_sons: "Desired sons",
       desired_proxy: "Desired Proxy",
+      pending_changes: "Pending changes",
     },
     comments: {
       deposit_hbd:

@@ -20,20 +20,6 @@ export const VoteTableWrapper = styled.div``;
 export const VoteTable = styled(BlockchainTable)`
   margin: 0 35px;
   max-width: 100%;
-  ${mixIns.hairline}
-  .ant-table-thead > tr > th {
-    background: transparent;
-    color: ${colors.textColorSecondary};
-    font-weight: 300;
-    border: none;
-    &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
-      display: none;
-    }
-  }
-  .ant-table-tbody > tr > td {
-    border: none;
-    font-weight: 500;
-  }
 `;
 
 export const VoteList = styled(UiList)`

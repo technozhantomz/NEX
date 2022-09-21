@@ -1,5 +1,10 @@
+import counterpart from "counterpart";
+import { capitalize } from "lodash";
+import Link from "next/link";
+
 import { VoteForm, VoteTable } from "..";
 import { FullAccount, Proxy, Vote } from "../../../../../common/types";
+import { InfoCircleOutlined } from "../../../../../ui/src";
 
 import * as Styled from "./VoteTab.styled";
 import { useVoteTab } from "./hooks";
@@ -61,7 +66,30 @@ export const VoteTab = ({
   });
   return (
     <Styled.Container>
+      <Styled.Title>
+        {counterpart.translate(`field.labels.vote_for`, {
+          tab: capitalize(counterpart.translate(`pages.voting.${tab}.heading`)),
+        })}
+        <InfoCircleOutlined />
+        <Link href={""}>Learn More</Link>
+      </Styled.Title>
       <Styled.VoteTabCard>
+        <VoteTable
+          tab={tab}
+          type="pendingChanges"
+          loading={votesLoading || loading}
+          votes={
+            voteSearchValue === ""
+              ? localApprovedRows
+              : localApprovedRows.filter((approvedVote) =>
+                  approvedVote.name
+                    .toLowerCase()
+                    .startsWith(voteSearchValue.toLowerCase())
+                )
+          }
+          approveVote={approveVote}
+          removeVote={removeVote}
+        />
         <VoteForm
           tab={tab}
           loading={loading}
@@ -84,22 +112,8 @@ export const VoteTab = ({
           searchValue={searchValue}
         />
         <VoteTable
-          type="approved"
-          loading={votesLoading || loading}
-          votes={
-            voteSearchValue === ""
-              ? localApprovedRows
-              : localApprovedRows.filter((approvedVote) =>
-                  approvedVote.name
-                    .toLowerCase()
-                    .startsWith(voteSearchValue.toLowerCase())
-                )
-          }
-          approveVote={approveVote}
-          removeVote={removeVote}
-        />
-        <VoteTable
-          type="notApproved"
+          tab={tab}
+          type="allVotes"
           loading={votesLoading || loading}
           votes={
             voteSearchValue === ""

@@ -805,6 +805,7 @@ export const ru = {
       desired_committees: "Желаемые комитеты",
       desired_sons: "Желаемые сыновья",
       desired_proxy: "Желаемый прокси",
+      pending_changes: "Ожидающие изменения",
     },
     comments: {
       deposit_hbd:

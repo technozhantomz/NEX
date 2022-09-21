@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import { capitalize } from "lodash";
 import { CSSProperties, ReactNode } from "react";
 
 import {
@@ -11,14 +12,16 @@ import { showVotesColumns } from "./VoteColumns";
 import * as Styled from "./VoteTable.styled";
 
 type Props = {
+  tab: string;
   votes: VoteRow[];
-  type: "approved" | "notApproved";
+  type: "pendingChanges" | "allVotes";
   loading: boolean;
   approveVote: (voteId: string) => void;
   removeVote: (voteId: string) => void;
 };
 
 export const VoteTable = ({
+  tab,
   votes,
   type,
   loading,
@@ -31,14 +34,11 @@ export const VoteTable = ({
   return (
     <Styled.VoteTableWrapper>
       <Styled.Title>
-        {type === "approved"
-          ? counterpart.translate(`field.labels.approved_by`, {
+        {type === "pendingChanges"
+          ? counterpart.translate(`field.labels.pending_changes`, {
               localStorageAccount,
             })
-          : counterpart.translate(`field.labels.not_approved_by`, {
-              localStorageAccount,
-            })}
-        {type === "approved" ? <Styled.Check /> : <Styled.Xmark />}
+          : capitalize(counterpart.translate(`pages.voting.${tab}.heading`))}
       </Styled.Title>
       <Styled.Container>
         {sm ? (
@@ -124,7 +124,7 @@ export const VoteTable = ({
                   <div className="vote-info">
                     <span className="vote-info-title">{columns[3].title}</span>
                     <span className="vote-info-value">
-                      {type === "approved" ? (
+                      {type === "pendingChanges" ? (
                         <Styled.VoteActionButton
                           onClick={() => removeVote((item as VoteRow).id)}
                         >
