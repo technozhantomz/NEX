@@ -103,7 +103,12 @@ export const VoteTab = ({
           loading={votesLoading || loading}
           votes={
             voteSearchValue === ""
-              ? allMembersRows
+              ? allMembersRows.filter(
+                  (vote) =>
+                    !localApprovedRows
+                      .map((approvedVote) => approvedVote.id)
+                      .includes(vote.id)
+                )
               : allMembersRows
                   .filter(
                     (vote) =>

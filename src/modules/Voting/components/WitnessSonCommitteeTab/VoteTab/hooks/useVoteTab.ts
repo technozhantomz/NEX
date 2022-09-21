@@ -212,7 +212,7 @@ export function useVoteTab({
           );
           setLoadingTransaction(false);
           setServerApprovedRows([...localApprovedRows]);
-          setLocalApprovedRows([...localApprovedRows]);
+          setLocalApprovedRows([]);
         } else {
           setTransactionErrorMessage(
             counterpart.translate(`field.errors.unable_transaction`)
@@ -321,7 +321,6 @@ export function useVoteTab({
         })
       );
       setServerApprovedRows(sortVotesRows([...serverApprovedRows]));
-      setLocalApprovedRows(sortVotesRows([...serverApprovedRows]));
       setLoading(false);
     } catch (e) {
       console.log(e);
@@ -399,7 +398,7 @@ export function useVoteTab({
   );
 
   const resetChanges = useCallback(() => {
-    setLocalApprovedRows([...serverApprovedRows]);
+    setLocalApprovedRows([]);
     setIsVotesChanged(false);
   }, [serverApprovedRows, setLocalApprovedRows, setIsVotesChanged]);
 
