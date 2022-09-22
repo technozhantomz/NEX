@@ -1,7 +1,7 @@
-import { BlockTableRow } from "../../../types";
+import { BlockchainTableRow } from "../../BlockchainTab/hooks/useBlockchainTab.types";
 
 export type UseBlockDetailsResult = {
-  blockDetails: BlockTableRow;
+  blockDetails: BlockchainTableRow;
   loading: boolean;
   hasNextBlock: boolean;
   hasPreviousBlock: boolean;

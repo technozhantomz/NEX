@@ -1,45 +1,49 @@
 import { ParsedUrlQuery } from "querystring";
 
+import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 
 import {
   useArrayLimiter,
+  useAsset,
   useBlockchain,
   useFormDate,
 } from "../../../../../common/hooks";
 import { useAssetsContext } from "../../../../../common/providers";
-import { BlockTableRow } from "../../../types";
+import { BlockColumns } from "../components";
 
 import {
-  BlockChainData,
+  BlockchainStats,
+  BlockchainSupply,
+  BlockchainTableRow,
   UseBlockchainTabResult,
 } from "./useBlockchainTab.types";
 
-const defaultData: BlockChainData = {
-  currentBlock: 0,
-  supply: {
-    amount: 0,
-    symbol: "",
-  },
-  activeWitnesses: [],
-  avgTime: 0,
-  recentBlocks: [],
-  stats: {
-    blocks: [],
-    supply: [],
-    witnesses: [],
-    times: [],
-  },
-};
-
 export function useBlockchainTab(
-  routerQuery: ParsedUrlQuery
+  routerQuery?: ParsedUrlQuery
 ): UseBlockchainTabResult {
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [blockchainData, setBlockchainData] =
-    useState<BlockChainData>(defaultData);
-  const [searchResult, setSearchResult] = useState<BlockTableRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [searchDataSource, setSearchDataSource] = useState<
+    BlockchainTableRow[]
+  >([]);
+  const [currentBlock, setCurrentBlock] = useState<number>(0);
+  const [lastIrreversibleBlock, setLastIrreversibleBlock] =
+    useState<string>("");
+  const [avgTime, setAvgTime] = useState<number>(0);
+  const [supply, setSupply] = useState<BlockchainSupply>({
+    amount: 0,
+    symbol: "TEST",
+  });
+  const [blockchainTableRows, setBlockchainTableRows] = useState<
+    BlockchainTableRow[]
+  >([]);
+  const [blockchainStats, setBlockchainStats] = useState<BlockchainStats>({
+    currentBlock: [],
+    lastIrreversible: [],
+    avgTime: [],
+    supply: [],
+  });
+  const [blockColumns, setBlockColumns] = useState<ColumnsType<unknown>>([]);
   const { defaultAsset } = useAssetsContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const {
@@ -48,8 +52,8 @@ export function useBlockchainTab(
     getDynamic,
     getRecentBlocks,
     getAvgBlockTime,
-    getBlock,
   } = useBlockchain();
+  const { setPrecision } = useAsset();
   const { formDate } = useFormDate();
 
   const getBlockchainData = useCallback(async () => {
@@ -64,47 +68,67 @@ export function useBlockchainTab(
 
       const blockRows = recentBlocks.map((block) => {
         return {
-          key: (block.id as number).toString(),
-          blockID: (block.id as number).toString(),
+          key: block.id as number,
+          blockID: block.id as number,
           time: formDate(block.timestamp, ["month", "date", "year", "time"]),
           witness: block.witness_account_name,
           transaction: block.transactions.length,
         };
       });
-
+      const allWitnesses = blockRows.map((block) => block.witness);
+      const witnesses = [...new Set(allWitnesses)];
+      const updateBlockColumns = BlockColumns.map((column) => {
+        if (column.key === "witness") {
+          column.filters = witnesses.map((witness) => {
+            return { text: witness, value: witness };
+          });
+        }
+        return { ...column };
+      }) as ColumnsType<unknown>;
+      setBlockColumns(updateBlockColumns);
       if (defaultAsset && chain && blockData && dynamic) {
-        setBlockchainData({
-          currentBlock: blockData.head_block_number,
-          supply: {
-            amount:
-              Number(dynamic.current_supply) / 10 ** defaultAsset.precision,
-            symbol: defaultAsset.symbol,
-          },
-          activeWitnesses: chain.active_witnesses,
-          avgTime: Number(chainAvgTime.toFixed(0)),
-          recentBlocks: blockRows,
-          stats: {
-            blocks: updateArrayWithLimit(
-              blockchainData.stats.blocks,
-              blockData.head_block_number,
-              99
-            ),
-            supply: updateArrayWithLimit(
-              blockchainData.stats.supply,
-              Number(dynamic.current_supply) / 10 ** defaultAsset.precision,
-              99
-            ),
-            witnesses: updateArrayWithLimit(
-              blockchainData.stats.witnesses,
-              chain.active_witnesses.length,
-              99
-            ),
-            times: updateArrayWithLimit(
-              blockchainData.stats.times,
-              Number(chainAvgTime.toFixed(0)),
-              99
-            ),
-          },
+        const distance_form_irreversible =
+          blockData.head_block_number - blockData.last_irreversible_block_num;
+        const supplyAmount = setPrecision(
+          false,
+          parseInt(dynamic.current_supply),
+          defaultAsset.precision
+        );
+        setCurrentBlock(blockData.head_block_number);
+        setLastIrreversibleBlock(
+          blockData.last_irreversible_block_num +
+            " (-" +
+            distance_form_irreversible +
+            ")"
+        );
+        setAvgTime(Number(chainAvgTime.toFixed(0)));
+        setSupply({
+          amount: supplyAmount,
+          symbol: defaultAsset.symbol,
+        });
+        setBlockchainTableRows(blockRows);
+        setSearchDataSource(blockRows);
+        setBlockchainStats({
+          currentBlock: updateArrayWithLimit(
+            blockchainStats.currentBlock,
+            blockData.head_block_number,
+            99
+          ),
+          lastIrreversible: updateArrayWithLimit(
+            blockchainStats.lastIrreversible,
+            distance_form_irreversible,
+            99
+          ),
+          avgTime: updateArrayWithLimit(
+            blockchainStats.avgTime,
+            Number(chainAvgTime.toFixed(0)),
+            99
+          ),
+          supply: updateArrayWithLimit(
+            blockchainStats.supply,
+            supplyAmount,
+            99
+          ),
         });
         setLoading(false);
       }
@@ -113,55 +137,21 @@ export function useBlockchainTab(
       console.log(e);
     }
   }, [
+    defaultAsset,
     getChain,
     getBlockData,
     getDynamic,
-    setBlockchainData,
-    defaultAsset,
+    setCurrentBlock,
+    setLastIrreversibleBlock,
+    setAvgTime,
+    setSupply,
+    setBlockchainTableRows,
+    setBlockchainStats,
     setLoading,
   ]);
 
-  const handleSearch = useCallback(
-    async (blockID: string) => {
-      if (blockID && blockID !== "") {
-        setLoading(true);
-        setSearchValue(blockID);
-        try {
-          const block = await getBlock(Number(blockID));
-          if (block) {
-            const searchResult = {
-              key: blockID,
-              blockID: blockID,
-              time: formDate(block.timestamp, [
-                "month",
-                "date",
-                "year",
-                "time",
-              ]),
-              witness: block.witness_account_name,
-              transaction: block.transactions.length,
-            } as BlockTableRow;
-            setSearchResult([searchResult]);
-            setLoading(false);
-          } else {
-            setSearchResult([]);
-            setLoading(false);
-          }
-        } catch (e) {
-          console.log(e);
-          setSearchResult([]);
-          setLoading(false);
-        }
-      } else {
-        setSearchValue("");
-      }
-    },
-    [setLoading, setSearchValue, setSearchResult]
-  );
-
   useEffect(() => {
-    const intervalTime =
-      blockchainData.avgTime > 0 ? blockchainData.avgTime * 1000 : 3000;
+    const intervalTime = avgTime > 0 ? avgTime * 1000 : 3000;
     const blockchainInterval = setInterval(
       () => getBlockchainData(),
       intervalTime
@@ -173,9 +163,14 @@ export function useBlockchainTab(
 
   return {
     loading,
-    blockchainData,
-    searchValue,
-    searchResult,
-    handleSearch,
+    blockColumns,
+    blockchainTableRows,
+    blockchainStats,
+    currentBlock,
+    lastIrreversibleBlock,
+    avgTime,
+    supply,
+    searchDataSource,
+    setSearchDataSource,
   };
 }
