@@ -44,7 +44,7 @@ export const PowerUpForm = ({
     feeAmount,
     depositAmount,
     newBalance,
-    newAvailableBalance,
+    userAvailableBalance,
   } = usePowerUpForm({
     gposBalances,
     loading,
@@ -69,7 +69,7 @@ export const PowerUpForm = ({
     : "";
   const mobileNewBalancePrefix = gposBalances ? `${newBalance}` : "";
   const mobileAvailableBalancePrefix = gposBalances
-    ? `${newAvailableBalance}`
+    ? `${userAvailableBalance}`
     : "";
 
   return (

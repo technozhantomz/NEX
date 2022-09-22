@@ -1,6 +1,7 @@
 import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
+import { defaultToken } from "../../../../../../../api/params";
 import {
   useAccount,
   useFees,
@@ -31,7 +32,7 @@ export function usePowerUpForm({
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [newBalance, setNewBalance] = useState<number>(0);
-  const [newAvailableBalance, setNewAvailableBalance] = useState<number>(0);
+  const [userAvailableBalance, _setUserAvailableBalance] = useState<number>(0);
 
   const [powerUpForm] = Form.useForm();
   const depositAmount: number = Form.useWatch("depositAmount", powerUpForm);
@@ -113,6 +114,18 @@ export function usePowerUpForm({
     ]
   );
 
+  const setUserAvailableBalance = useCallback(() => {
+    if (assets && assets.length > 0) {
+      const userDefaultAsset = assets.find(
+        (asset) => asset.symbol === defaultToken
+      );
+      const userAvailableBalance = userDefaultAsset
+        ? (userDefaultAsset.amount as number)
+        : 0;
+      _setUserAvailableBalance(userAvailableBalance);
+    }
+  }, [assets, defaultToken, _setUserAvailableBalance]);
+
   const validateDepositAmount = async (_: unknown, value: number) => {
     const accountAsset = assets.find(
       (asset) => asset.symbol === gposBalances?.asset.symbol
@@ -175,15 +188,14 @@ export function usePowerUpForm({
   useEffect(() => {
     if (gposBalances) {
       const newBalance = gposBalances?.openingBalance + depositAmount;
-      const newAvailableBalance = gposBalances.availableBalance + depositAmount;
-      if (newAvailableBalance >= 0) {
+      if (userAvailableBalance >= 0) {
         setNewBalance(newBalance);
-        setNewAvailableBalance(newAvailableBalance);
+        setUserAvailableBalance();
         if (!sm) {
           powerUpForm.setFieldsValue({
             newBalance: newBalance + " " + gposBalances?.asset.symbol,
             availableBalance:
-              newAvailableBalance + " " + gposBalances.asset.symbol,
+              userAvailableBalance + " " + gposBalances.asset.symbol,
           });
         } else {
           powerUpForm.setFieldsValue({
@@ -199,7 +211,8 @@ export function usePowerUpForm({
     powerUpForm,
     sm,
     setNewBalance,
-    setNewAvailableBalance,
+    setUserAvailableBalance,
+    userAvailableBalance,
   ]);
 
   return {
@@ -215,6 +228,6 @@ export function usePowerUpForm({
     feeAmount,
     depositAmount,
     newBalance,
-    newAvailableBalance,
+    userAvailableBalance,
   };
 }
