@@ -1,5 +1,12 @@
 import counterpart from "counterpart";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useRef,
+} from "react";
+import { CSVLink } from "react-csv";
+import ReactToPrint from "react-to-print";
 
 import { DEFAULT_PROXY_ID } from "../../../../../api/params";
 import {
@@ -8,7 +15,8 @@ import {
 } from "../../../../../common/components";
 import { useHandleTransactionForm } from "../../../../../common/hooks";
 import { Proxy } from "../../../../../common/types";
-import { Form, Tooltip } from "../../../../../ui/src";
+import { DownloadOutlined, Form, Tooltip } from "../../../../../ui/src";
+import { VoteRow } from "../../../types";
 
 import * as Styled from "./VoteForm.styled";
 import { useVoteForm } from "./hooks";
@@ -31,6 +39,7 @@ type Props = {
   desiredMembers: number;
   searchError: boolean;
   searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => void;
+  votes: VoteRow[];
 };
 
 export const VoteForm = ({
@@ -51,6 +60,7 @@ export const VoteForm = ({
   desiredMembers,
   searchChange,
   searchError,
+  votes,
 }: Props): JSX.Element => {
   const { voteForm } = useVoteForm();
 
@@ -66,6 +76,8 @@ export const VoteForm = ({
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
   });
+  const componentRef = useRef();
+
   return (
     <Styled.VoteFormWrapper>
       <Styled.VoteForm.Provider onFormFinish={handleFormFinish}>
@@ -150,7 +162,27 @@ export const VoteForm = ({
           loading={loading}
           onChange={searchChange}
         />
+
+        <Styled.DownloadLinks>
+          <DownloadOutlined />
+          <ReactToPrint
+            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
+            content={() => componentRef.current}
+          />
+
+          {` / `}
+          <CSVLink
+            filename={"WitnessesTable.csv"}
+            data={votes}
+            className="btn btn-primary"
+          >
+            {counterpart.translate(`links.csv`)}
+          </CSVLink>
+        </Styled.DownloadLinks>
       </Form.Item>
+      <Styled.PrintTable>
+        {/* <VotePrintTable ref={componentRef} columns={votes} loading={loading}/> */}
+      </Styled.PrintTable>
     </Styled.VoteFormWrapper>
   );
 };

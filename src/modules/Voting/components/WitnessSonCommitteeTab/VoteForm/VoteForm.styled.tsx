@@ -1,8 +1,15 @@
-import { Button, Form, styled, TableSearch } from "../../../../../ui/src";
+import {
+  Button,
+  Form,
+  styled,
+  TableSearch,
+  PrintTable as UiPrintTable,
+} from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 import { Reset as UiReset } from "../../../../../ui/src/icons";
 import { mixIns } from "../../../../../ui/src/mixins";
+import { BlockchainDownloadLinks } from "../../../../Blockchain/common";
 
 export const VoteFormWrapper = styled.div`
   margin-bottom: 25px;
@@ -66,3 +73,7 @@ export const Reset = styled(UiReset)`
   color: #b9b9b9;
   margin-right: 4px;
 `;
+
+export const DownloadLinks = styled(BlockchainDownloadLinks)``;
+
+export const PrintTable = styled(UiPrintTable)``;

@@ -110,6 +110,12 @@ export const VoteTab = ({
           searchError={searchError}
           isSameAccount={isSameAccount}
           searchValue={searchValue}
+          votes={allMembersRows.filter(
+            (vote) =>
+              !localApprovedRows
+                .map((approvedVote) => approvedVote.id)
+                .includes(vote.id)
+          )}
         />
         <VoteTable
           tab={tab}
