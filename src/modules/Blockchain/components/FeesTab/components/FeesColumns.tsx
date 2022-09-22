@@ -1,8 +1,7 @@
-import { TableHeading } from "../../../../common/components";
-import { Tag } from "../../../../ui/src";
-import { colors } from "../../../../ui/src/colors";
-
-import { FeesTableRow } from "./hooks";
+import { TableHeading } from "../../../../../common/components";
+import { Tag } from "../../../../../ui/src";
+import { colors } from "../../../../../ui/src/colors";
+import { FeesTableRow } from "../hooks";
 
 const headings = ["category", "operation", "fee_type", "standard_fee"];
 const keys = ["category", "operation", "types", "fees"];

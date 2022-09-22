@@ -508,11 +508,13 @@ export const ru = {
       no_data: "Нет данных",
       stats_cards: {
         next_vote: "Следующее обновление голосования",
+        budget: "Остаток бюджета (почасовой)",
       },
       blockchain: {
         blockchain: "Блокчейн",
         heading: "Блокчейн PeerPlays",
         current_block: "Текущий блок",
+        last_irreversible_block: "Последний необратимый блок",
         supply: "Поставлять (%(symbol)s)",
         active_witness: "Активный свидетель",
         confirmation_time: "Время подтверждения",
@@ -543,6 +545,7 @@ export const ru = {
         monthly_earnings: "Ежемесячный доход",
         search_witnesses: "Поиск свидетелей",
         witnesses: "Свидетели",
+        current_witness: "Текущий свидетель",
       },
       sons: {
         heading: "Пирплейс Сыновья",
@@ -675,8 +678,10 @@ export const ru = {
           },
         },
         powerDown: {
+          heading: "GPOS - Выключить",
           power_down_description:
             "Когда вы отключите питание, вам потребуется 30 дней, чтобы полностью снять баланс %(defaultToken)s. Вы будете продолжать получать вознаграждения за участие в течение этого времени, пока вы участвуете. После отключения питания вы можете использовать свои %(defaultToken)s как любую другую криптовалюту. Это означает, что вы будете:",
+          power_down_description_heading: "Уведомление",
           power_down_lists: {
             first:
               "Все еще быть частью чего-то особенного, просто не так много",
@@ -936,6 +941,7 @@ export const ru = {
     votes: "Голоса",
     category: "категория",
     active: "Активный",
+    key: "ключ",
   },
   tooltips: {
     copy: "копировать",

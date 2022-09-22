@@ -5,7 +5,7 @@ import * as Styled from "./BlockDetails.styled";
 import { useBlockDetails } from "./hooks";
 
 type Props = {
-  block: string;
+  block: number;
 };
 export const BlockDetails = ({ block }: Props): JSX.Element => {
   const { blockDetails, hasNextBlock, hasPreviousBlock, loadingSideBlocks } =

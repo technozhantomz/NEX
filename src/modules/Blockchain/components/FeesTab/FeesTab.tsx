@@ -14,9 +14,8 @@ import {
 } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
-import { FeesColumns } from "./FeesColumns";
-import { FeesPrintTable } from "./FeesPrintTable";
 import * as Styled from "./FeesTab.styled";
+import { FeesColumns, FeesPrintTable } from "./components";
 import { FeesTableRow, useFeesTab } from "./hooks";
 
 export const FeesTab = (): JSX.Element => {
@@ -57,125 +56,111 @@ export const FeesTab = (): JSX.Element => {
           </CSVLink>
         </Styled.DownloadLinks>
       </Styled.FeesHeaderBar>
-      <Styled.Section>
-        {sm ? (
-          <List
-            itemLayout="vertical"
-            dataSource={searchDataSource}
-            loading={loading}
-            renderItem={(item: FeesTableRow) => (
-              <Styled.FeeListItem key={item.operation}>
-                <Styled.FeeItemContent>
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[0].title()}
+
+      {sm ? (
+        <List
+          itemLayout="vertical"
+          dataSource={searchDataSource}
+          loading={loading}
+          renderItem={(item: FeesTableRow) => (
+            <Styled.FeeListItem key={item.operation}>
+              <Styled.FeeItemContent>
+                <div className="item-info">
+                  <span className="item-info-title">
+                    {FeesColumns[0].title()}
+                  </span>
+                  <Styled.FeeTypeOrValueContainer>
+                    <span key={`${item.category}`} className="item-info-value">
+                      {item.category}
                     </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      <span key={`${item.category}`} className="fee-info-value">
-                        {item.category}
-                      </span>
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                  {item.operation === "" ? (
-                    ""
-                  ) : (
-                    <div className="fee-info">
-                      <span className="fee-info-title">
-                        {FeesColumns[1].title()}
-                      </span>
-                      <span className="fee-info-value">
-                        <Tag key={item.operation} bgColor={colors.assetTag}>
-                          {item.operation}
-                        </Tag>
-                      </span>
-                    </div>
-                  )}
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[2].title()}
+                  </Styled.FeeTypeOrValueContainer>
+                </div>
+                {item.operation === "" ? (
+                  ""
+                ) : (
+                  <div className="item-info">
+                    <span className="item-info-title">
+                      {FeesColumns[1].title()}
                     </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.types.map((type) => (
-                        <span
-                          key={`${item.operation}-${type}`}
-                          className="fee-info-value"
-                        >
-                          {type}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
-                  </div>
-                  <div className="fee-info">
-                    <span className="fee-info-title">
-                      {FeesColumns[3].title()}
+                    <span className="item-info-value">
+                      <Tag key={item.operation} bgColor={colors.assetTag}>
+                        {item.operation}
+                      </Tag>
                     </span>
-                    <Styled.FeeTypeOrValueContainer>
-                      {item.fees.map((fee, index) => (
-                        <span
-                          key={`${item.operation}-${item.types[index]}-${fee}`}
-                          className="fee-info-value"
-                        >
-                          {fee}
-                        </span>
-                      ))}
-                    </Styled.FeeTypeOrValueContainer>
                   </div>
-                </Styled.FeeItemContent>
-              </Styled.FeeListItem>
-            )}
-          />
-        ) : (
-          <Styled.FeesTable
-            dataSource={searchDataSource}
-            columns={FeesColumns}
-            loading={loading}
-            pagination={
-              !loading
-                ? {
-                    showSizeChanger: false,
-                    size: "small",
-                    pageSize: 15,
-                    showLessItems: true,
-                    itemRender: (
-                      _page: number,
-                      type:
-                        | "page"
-                        | "prev"
-                        | "next"
-                        | "jump-prev"
-                        | "jump-next",
-                      element: ReactNode
-                    ) => {
-                      if (type === "prev") {
-                        return (
-                          <a style={{ marginRight: "8px" } as CSSProperties}>
-                            {counterpart.translate(`buttons.previous`)}
-                          </a>
-                        );
-                      }
-                      if (type === "next") {
-                        return (
-                          <a style={{ marginLeft: "8px" } as CSSProperties}>
-                            {counterpart.translate(`buttons.next`)}
-                          </a>
-                        );
-                      }
-                      return element;
-                    },
-                  }
-                : false
-            }
-          />
-        )}
-        <Styled.PrintTable ref={componentRef}>
-          <Styled.FeesTable
-            dataSource={fullFeesRows}
-            columns={FeesColumns}
-            loading={loading}
-            pagination={false}
-          />
-        </Styled.PrintTable>
-      </Styled.Section>
+                )}
+                <div className="item-info">
+                  <span className="item-info-title">
+                    {FeesColumns[2].title()}
+                  </span>
+                  <Styled.FeeTypeOrValueContainer>
+                    {item.types.map((type) => (
+                      <span
+                        key={`${item.operation}-${type}`}
+                        className="item-info-value"
+                      >
+                        {type}
+                      </span>
+                    ))}
+                  </Styled.FeeTypeOrValueContainer>
+                </div>
+                <div className="item-info">
+                  <span className="item-info-title">
+                    {FeesColumns[3].title()}
+                  </span>
+                  <Styled.FeeTypeOrValueContainer>
+                    {item.fees.map((fee, index) => (
+                      <span
+                        key={`${item.operation}-${item.types[index]}-${fee}`}
+                        className="item-info-value"
+                      >
+                        {fee}
+                      </span>
+                    ))}
+                  </Styled.FeeTypeOrValueContainer>
+                </div>
+              </Styled.FeeItemContent>
+            </Styled.FeeListItem>
+          )}
+        />
+      ) : (
+        <Styled.FeesTable
+          dataSource={searchDataSource}
+          columns={FeesColumns}
+          loading={loading}
+          pagination={
+            !loading
+              ? {
+                  showSizeChanger: false,
+                  size: "small",
+                  pageSize: 15,
+                  showLessItems: true,
+                  itemRender: (
+                    _page: number,
+                    type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
+                    element: ReactNode
+                  ) => {
+                    if (type === "prev") {
+                      return (
+                        <a style={{ marginRight: "8px" } as CSSProperties}>
+                          {counterpart.translate(`buttons.previous`)}
+                        </a>
+                      );
+                    }
+                    if (type === "next") {
+                      return (
+                        <a style={{ marginLeft: "8px" } as CSSProperties}>
+                          {counterpart.translate(`buttons.next`)}
+                        </a>
+                      );
+                    }
+                    return element;
+                  },
+                }
+              : false
+          }
+        />
+      )}
       <Styled.PrintTable>
         <FeesPrintTable ref={componentRef} />
       </Styled.PrintTable>

@@ -534,11 +534,13 @@ export const en = {
       no_data: "No Data",
       stats_cards: {
         next_vote: "Next Vote Update",
+        budget: "Remaining budget (hourly)",
       },
       blockchain: {
         blockchain: "Blockchain",
         heading: "PeerPlays Blockchain",
         current_block: "Current Block",
+        last_irreversible_block: "Last irreversible block",
         supply: "Supply (%(symbol)s)",
         active_witness: "Active Witness",
         confirmation_time: "Confirmation Time",
@@ -569,6 +571,7 @@ export const en = {
         monthly_earnings: "Monthly Earnings",
         search_witnesses: "Search Witnesses",
         witnesses: "Witnesses",
+        current_witness: "Current Witness",
       },
       sons: {
         heading: "PeerPlays Sons",
@@ -700,8 +703,10 @@ export const en = {
           },
         },
         powerDown: {
+          heading: "GPOS - Power down",
           power_down_description:
             "When you Power Down it will take 30 days for you to withdraw your %(defaultToken)s balance in full. You will continue to receive participation rewards during that time so long as you have been participating. After Power Down you can then use your %(defaultToken)s like any other cryptocurrency. This means you will:",
+          power_down_description_heading: "Notice",
           power_down_lists: {
             first: "Still be a part of something special, just not as much",
             second: "No longer helping secure the Peerplays blockchain",
@@ -961,6 +966,7 @@ export const en = {
     votes: "Votes",
     category: "Category",
     active: "Active",
+    key: "key",
   },
   tooltips: {
     copy: "copy",

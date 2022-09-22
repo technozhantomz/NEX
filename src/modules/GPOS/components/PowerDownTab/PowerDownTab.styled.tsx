@@ -23,7 +23,6 @@ export const PowerDownTabIntro = styled.div`
     margin: 0 auto 0;
     padding: 20px 35px;
   }
-  p,
   ul {
     font-size: 12px;
   }
@@ -37,4 +36,13 @@ export const PowerDownTabFormWrapper = styled.div`
     max-width: 610px;
     border: none;
   }
+`;
+
+export const PowerDownTabIntroHeading = styled.p`
+  font-size: 16px;
+  color: ${colors.textColor};
+`;
+
+export const PowerDownTabIntroParagraph = styled.p`
+  font-size: 12px;
 `;
