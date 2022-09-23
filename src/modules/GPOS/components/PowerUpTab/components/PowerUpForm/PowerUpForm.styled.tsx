@@ -61,10 +61,10 @@ export const PowerUpForm = styled(CardForm)`
     }
   }
   .ant-form-item:nth-child(3) {
-    margin-bottom: 45px;
+    margin-bottom: 24px;
   }
   .ant-form-item:nth-child(4) {
-    margin-bottom: 10px;
+    margin-bottom: 45px;
   }
 `;
 

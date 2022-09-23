@@ -44,6 +44,7 @@ export const PowerUpForm = ({
     feeAmount,
     depositAmount,
     newBalance,
+    userAvailableBalance,
   } = usePowerUpForm({
     gposBalances,
     loading,
@@ -67,6 +68,9 @@ export const PowerUpForm = ({
     ? `${gposBalances.openingBalance}`
     : "";
   const mobileNewBalancePrefix = gposBalances ? `${newBalance}` : "";
+  const mobileAvailableBalancePrefix = gposBalances
+    ? `${userAvailableBalance}`
+    : "";
 
   return (
     <>
@@ -96,6 +100,23 @@ export const PowerUpForm = ({
                 sm
                   ? mobileOpeningBalancePrefix
                   : counterpart.translate(`field.placeholder.opening_balance`)
+              }
+              disabled={true}
+            />
+          </Form.Item>
+          <Form.Item
+            name="availableBalance"
+            label={
+              sm
+                ? counterpart.translate(`field.placeholder.available_balance`)
+                : ""
+            }
+          >
+            <Input
+              prefix={
+                sm
+                  ? mobileAvailableBalancePrefix
+                  : counterpart.translate(`field.placeholder.available_balance`)
               }
               disabled={true}
             />
