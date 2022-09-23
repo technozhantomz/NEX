@@ -100,7 +100,6 @@ export const ChainStoreProvider = ({ children }: Props): JSX.Element => {
 
   const updateRpcConnectionStatus = useCallback(
     (status: string) => {
-      console.log("rpc Callback", status);
       setRpcConnectionStatus(status);
     },
     [setRpcConnectionStatus]

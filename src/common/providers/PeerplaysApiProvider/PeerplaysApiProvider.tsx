@@ -1249,6 +1249,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
           await doLatencyUpdate();
         } catch (e) {
           console.log("catch doLatency", e);
+          throw new Error();
         }
 
         await initiateConnection(appInit);

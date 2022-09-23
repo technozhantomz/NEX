@@ -8,3 +8,4 @@ export * from "./AssetsProvider";
 export * from "./FeesProvider";
 export * from "./UserSettingsProvider";
 export * from "./ChainStoreProvider";
+export * from "./ConnectionManagerProvider";

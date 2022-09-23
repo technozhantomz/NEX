@@ -48,9 +48,12 @@ export const Layout: FunctionComponent<Props> = ({
         <meta name="description" content={description} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Styled.Page className={dexLayout ? "dex-layout" : ""} onClick={onClick}>
-        <TopBar />
-        <ConfigProvider>
+      <ConfigProvider>
+        <Styled.Page
+          className={dexLayout ? "dex-layout" : ""}
+          onClick={onClick}
+        >
+          <TopBar />
           <Styled.Layout className={`${getStyles()}`}>
             {heading != undefined ? (
               <Styled.PageHeading className={"page-heading"}>
@@ -60,10 +63,10 @@ export const Layout: FunctionComponent<Props> = ({
               ""
             )}
             {children}
-            <Footer />
           </Styled.Layout>
-        </ConfigProvider>
-      </Styled.Page>
+          <Footer />
+        </Styled.Page>
+      </ConfigProvider>
     </>
   );
 };

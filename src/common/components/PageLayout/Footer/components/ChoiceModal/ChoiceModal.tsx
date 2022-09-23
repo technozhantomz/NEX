@@ -30,7 +30,7 @@ export const ChoiceModal = ({
       e.preventDefault();
       setTimeout(() => {
         hideModal();
-      }, 500);
+      }, 800);
       callback();
     },
     [hideModal]

@@ -14,4 +14,3 @@ export * from "./CopyButton";
 export * from "./TableHeading";
 export * from "./KeyInput";
 export * from "./LoadingIndicator";
-export * from "./ConnectionManager";

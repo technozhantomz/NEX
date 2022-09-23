@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useConnectionManager } from "../../../../hooks";
+//import { useConnectionManager } from "../../../../hooks";
 import {
   useChainStoreContext,
+  useConnectionManagerContext,
   usePeerplaysApiContext,
 } from "../../../../providers";
 
@@ -22,8 +23,7 @@ export function useFooter(): UseFooterResult {
     willTransitionTo,
     setSuccessConnectionStates,
     setFailureConnectionStates,
-  } = useConnectionManager();
-  console.log("rpcConnectionStatus", rpcConnectionStatus);
+  } = useConnectionManagerContext();
   const showOutOfSyncModal = useCallback(() => {
     setIsOutOfSyncModalVisible(true);
   }, [setIsOutOfSyncModalVisible]);
@@ -45,10 +45,8 @@ export function useFooter(): UseFooterResult {
           // reconnect to anythin
           try {
             await willTransitionTo(false);
-            setSuccessConnectionStates();
           } catch (e) {
-            console.log(e);
-            setFailureConnectionStates(e);
+            console.log("ghasem", e);
           }
         }
       },
@@ -75,7 +73,6 @@ export function useFooter(): UseFooterResult {
     const connected = !(rpcConnectionStatus === "closed");
 
     if (!connected) {
-      console.log("Your connection was lost");
       setTimeout(() => {
         triggerReconnect();
       }, 50);

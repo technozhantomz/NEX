@@ -2,11 +2,11 @@ import { styled } from "../../../../ui/src/";
 import { colors } from "../../../../ui/src/colors";
 
 export const Footer = styled.div`
-  // position: fixed;
-  // bottom: 0;
-  // left: 0;
-  // width: 100%;
-  // height: 36px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 36px;
 `;
 
 export const ConnectionStatusWrapper = styled.div`
@@ -19,5 +19,5 @@ export const NoSync = styled.span`
 `;
 
 export const NotConnected = styled.span`
-  color: ${colors.white};
+  color: ${colors.textColorSecondary};
 `;

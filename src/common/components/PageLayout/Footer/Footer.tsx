@@ -41,41 +41,42 @@ export const Footer = (): JSX.Element => {
       )}
     </div>
   );
-  console.log("connected", connected);
   return (
-    <Styled.Footer>
+    <>
       {isTransitionInProgress() && (
         <LoadingIndicator
           loadingText={getTransitionTarget() as string | boolean}
         />
       )}
-      <ChoiceModal
-        hideModal={hideOutOfSyncModal}
-        visible={isOutOfSyncModalVisible}
-        choices={[
-          {
-            translationKey: "connection.manual_reconnect",
-            callback: () => {
-              if (!synced) {
-                triggerReconnect(false);
-              }
+      <Styled.Footer>
+        <ChoiceModal
+          hideModal={hideOutOfSyncModal}
+          visible={isOutOfSyncModalVisible}
+          choices={[
+            {
+              translationKey: "connection.manual_reconnect",
+              callback: () => {
+                if (!synced) {
+                  triggerReconnect(false);
+                }
+              },
             },
-          },
-        ]}
-        content={choiceModalContent}
-      />
-      <Styled.ConnectionStatusWrapper>
-        {synced ? null : (
-          <Styled.NoSync>
-            {counterpart.translate(`footer.nosync`)}
-          </Styled.NoSync>
-        )}
-        {!connected ? (
-          <Styled.NotConnected className="grid-block shrink txtlabel error">
-            {counterpart.translate(`footer.no_connection`)}
-          </Styled.NotConnected>
-        ) : null}
-      </Styled.ConnectionStatusWrapper>
-    </Styled.Footer>
+          ]}
+          content={choiceModalContent}
+        />
+        <Styled.ConnectionStatusWrapper>
+          {synced ? null : (
+            <Styled.NoSync>
+              {counterpart.translate(`footer.nosync`)}
+            </Styled.NoSync>
+          )}
+          {!connected ? (
+            <Styled.NotConnected className="grid-block shrink txtlabel error">
+              {counterpart.translate(`footer.no_connection`)}
+            </Styled.NotConnected>
+          ) : null}
+        </Styled.ConnectionStatusWrapper>
+      </Styled.Footer>
+    </>
   );
 };
