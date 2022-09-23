@@ -7,3 +7,4 @@ export * from "./MenuProvider";
 export * from "./AssetsProvider";
 export * from "./FeesProvider";
 export * from "./UserSettingsProvider";
+export * from "./ChainStoreProvider";

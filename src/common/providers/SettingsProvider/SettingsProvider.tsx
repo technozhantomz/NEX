@@ -210,9 +210,11 @@ export function SettingsProvider({
         <h1
           style={{
             height: "50px",
+            margin: "0",
             position: "absolute",
-            color: colors.textColor,
-            fontSize: "44px",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
           }}
         >
           Loading...

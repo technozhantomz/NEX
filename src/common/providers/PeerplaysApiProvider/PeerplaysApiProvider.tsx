@@ -49,7 +49,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     boolean | string | { background: boolean; key: string }
   >(false);
   // boolean flag if the lowest latency node should be autoselected
-  const isAutoSelection = useRef<boolean>(false);
+  const _isAutoSelection = useRef<boolean>(false);
   // function that can be provided to willTransitionTo
   const statusCallback = useRef<NodeTransitionCallbackType>();
   const connectionManager = useRef<ConnectionManagerType>(
@@ -107,12 +107,33 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     setConnectedNode,
   } = useSettingsContext();
 
+  const isAutoSelection = useCallback(() => {
+    return _isAutoSelection.current;
+  }, [_isAutoSelection, _isAutoSelection.current]);
+
   const isTransitionInProgress = useCallback(() => {
     return (
       !!willTransitionToInProgress.current &&
       typeof willTransitionToInProgress.current !== "object"
     );
   }, [willTransitionToInProgress, willTransitionToInProgress.current]);
+
+  const isBackgroundPingingInProgress = useCallback(() => {
+    return (
+      !!willTransitionToInProgress.current &&
+      typeof willTransitionToInProgress.current === "object"
+    );
+  }, [willTransitionToInProgress, willTransitionToInProgress.current]);
+
+  const getTransitionTarget = useCallback(() => {
+    if (isTransitionInProgress()) {
+      return willTransitionToInProgress.current;
+    }
+  }, [
+    isTransitionInProgress,
+    willTransitionToInProgress,
+    willTransitionToInProgress.current,
+  ]);
 
   const apiUrlSecuritySuitable = useCallback((apiNodeUrl: string) => {
     if (
@@ -290,7 +311,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
       // ... if auto selection is on (is also ensured in initConnection, but we don't want to ping
       //     a unreachable url)
-      if (isAutoSelection.current) {
+      if (isAutoSelection()) {
         tryThisNode = urls[0];
         console.log("auto selecting to " + tryThisNode);
       }
@@ -306,12 +327,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
       return tryThisNode;
     },
-    [
-      getSelectedNode,
-      isAutoSelection,
-      isAutoSelection.current,
-      apiUrlSecuritySuitable,
-    ]
+    [getSelectedNode, isAutoSelection, apiUrlSecuritySuitable]
   );
 
   const initConnectionManager: (urls?: string[]) => void = useCallback(
@@ -973,7 +989,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         } as LatencyPreferences);
 
         if (
-          isAutoSelection.current &&
+          isAutoSelection() &&
           originalURL !== connectionManager.current.urls[0]
         ) {
           connectionManager.current.url = connectionManager.current.urls[0];
@@ -1011,7 +1027,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       pingerStrategyCallback.current = donePinging;
 
       await ping(
-        isAutoSelection.current ? undefined : getSelectedNode(),
+        isAutoSelection() ? undefined : getSelectedNode(),
         latencyPreferences
       );
     },
@@ -1026,7 +1042,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       sortNodesToTree,
       setLatencyPreferences,
       isAutoSelection,
-      isAutoSelection.current,
       transitionDone,
       willTransitionToInProgress,
       willTransitionToInProgress.current,
@@ -1062,7 +1077,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         currentUrl[currentUrl.length - 1] !== "/"
           ? currentUrl
           : currentUrl.slice(0, currentUrl.length - 1);
-      if (!isAutoSelection.current) {
+      if (!isAutoSelection()) {
         setSelectedNode(currentUrl);
       }
 
@@ -1083,7 +1098,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     connectInProgress,
     connectInProgress.current,
     isAutoSelection,
-    isAutoSelection.current,
     setSelectedNode,
     _updateLatencies,
     setConnectedNode,
@@ -1147,7 +1161,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         );
         try {
           await connectionManager.current.connectWithFallback(true);
-          if (!isAutoSelection.current) {
+          if (!isAutoSelection()) {
             setSelectedNode(connectionManager.current.url);
           }
           onConnect();
@@ -1169,7 +1183,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       } else {
         // in case switches manually, reset the settings so we don't connect to
         // a faulty node twice. If connection is established, onConnect sets the settings again
-        if (!isAutoSelection.current) {
+        if (!isAutoSelection()) {
           setSelectedNode("");
         }
 
@@ -1181,7 +1195,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       connectionManager.current,
       updateTransitionTarget,
       isAutoSelection,
-      isAutoSelection.current,
       setSelectedNode,
       onConnect,
       transitionDone,
@@ -1225,7 +1238,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       const selectedNode = getSelectedNode();
 
       // set auto selection flag
-      isAutoSelection.current =
+      _isAutoSelection.current =
         selectedNode.indexOf("fake.automatic-selection") !== -1;
 
       initConnectionManager(urls);
@@ -1298,7 +1311,16 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   return (
     <PeerPlaysApiContext.Provider
-      value={{ getNodes, willTransitionTo, dbApi, historyApi }}
+      value={{
+        getNodes,
+        willTransitionTo,
+        dbApi,
+        historyApi,
+        isTransitionInProgress,
+        getTransitionTarget,
+        isAutoSelection,
+        isBackgroundPingingInProgress,
+      }}
     >
       {children}
     </PeerPlaysApiContext.Provider>

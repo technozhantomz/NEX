@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { usePeerplaysApiContext } from "../../../providers";
+import { usePeerplaysApiContext } from "../../providers";
 
 import { UseConnectionManagerResult } from "./useConnectionManager.types";
 
@@ -9,8 +9,6 @@ export function useConnectionManager(): UseConnectionManagerResult {
   const [apiError, setApiError] = useState<boolean>(false);
   const [syncError, setSyncError] = useState<boolean | null>(null);
   const [status, setStatus] = useState<string>("");
-  const [nodeFilterHasChanged, setNodeFilterHasChanged] = useState(false);
-  const [showNodeFilter, setShowNodeFilter] = useState(false);
 
   const { willTransitionTo: _willTransitionTo } = usePeerplaysApiContext();
   const statusCallback = useCallback(
@@ -19,29 +17,36 @@ export function useConnectionManager(): UseConnectionManagerResult {
     },
     [setStatus]
   );
-  console.log("status", status);
-  const willTransitionTo = useCallback(async () => {
-    try {
-      await _willTransitionTo(true, statusCallback);
-      setApiConnected(true);
-      setApiError(false);
-      setSyncError(false);
-    } catch (e: any) {
-      console.log("willTransitionTo err:", e);
+
+  const setSuccessConnectionStates = useCallback(() => {
+    setApiConnected(true);
+    setApiError(false);
+    setSyncError(false);
+  }, [setApiConnected, setApiError, setSyncError]);
+  const setFailureConnectionStates = useCallback(
+    (e: any) => {
       setApiConnected(false);
       setApiError(true);
       const syncError = !e
         ? null
         : (e && e.message).indexOf("ChainStore sync error") !== -1;
       setSyncError(syncError);
-    }
-  }, [_willTransitionTo, setApiConnected, setApiError, setSyncError]);
+    },
+    [setApiConnected, setApiError, setSyncError]
+  );
 
-  useEffect(() => {
-    setTimeout(() => {
-      setShowNodeFilter(true);
-    }, 5000);
-  }, [setShowNodeFilter]);
+  const willTransitionTo: (appInit?: boolean) => Promise<void> = useCallback(
+    async (appInit = true) => {
+      try {
+        await _willTransitionTo(appInit, statusCallback);
+        setSuccessConnectionStates();
+      } catch (e: any) {
+        console.log("willTransitionTo err:", e);
+        setFailureConnectionStates(e);
+      }
+    },
+    [_willTransitionTo, setSuccessConnectionStates, setFailureConnectionStates]
+  );
 
   useEffect(() => {
     willTransitionTo();
@@ -52,8 +57,8 @@ export function useConnectionManager(): UseConnectionManagerResult {
     apiError,
     syncError,
     status,
-    nodeFilterHasChanged,
-    showNodeFilter,
-    setNodeFilterHasChanged,
+    willTransitionTo,
+    setFailureConnectionStates,
+    setSuccessConnectionStates,
   };
 }

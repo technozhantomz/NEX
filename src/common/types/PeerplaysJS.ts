@@ -1,4 +1,4 @@
-type Status = {
+export type RPCConnectionStatusType = {
   CLOSED: "closed";
   ERROR: "error";
   OPEN: "open";
@@ -35,7 +35,7 @@ export type ChainWebSocketType = {
   on_reconnect: null | (() => void);
   reconnectTimeout: NodeJS.Timeout | null;
   serverAddress: string;
-  status: Status;
+  status: RPCConnectionStatusType;
   statusCb: (value?: string) => void;
   subs: { [requestId: number]: any };
   unsub: { [requestId: number]: number };

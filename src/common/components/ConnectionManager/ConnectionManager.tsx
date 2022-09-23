@@ -3,9 +3,8 @@ import React from "react";
 
 import { LoadingIndicator } from "..";
 import { automaticSelection } from "../../../api/params";
-import { useSettingsContext } from "../../providers";
-
-import { useConnectionManager } from "./hooks";
+import { useConnectionManager } from "../../hooks";
+import { ChainStoreProvider, useSettingsContext } from "../../providers";
 
 type Props = {
   children: React.ReactNode;
@@ -13,14 +12,12 @@ type Props = {
 
 export const ConnectionManager = ({ children }: Props): JSX.Element => {
   const { apiSettings } = useSettingsContext();
-  const {
-    apiConnected,
-    apiError,
-    syncError,
-    status,
-    showNodeFilter,
-    nodeFilterHasChanged,
-  } = useConnectionManager();
+  const { apiConnected, apiError, syncError, status } = useConnectionManager();
+  console.log("apiConnected", apiConnected);
+  console.log("apiError", apiError);
+  console.log("syncError", syncError);
+  console.log("status", status);
+
   const renderLoadingScreen = () => {
     let server = apiSettings.selectedNode;
     if (!server || server === automaticSelection) {
@@ -35,19 +32,7 @@ export const ConnectionManager = ({ children }: Props): JSX.Element => {
               server: server,
             })
           }
-        >
-          {showNodeFilter && (
-            <div>
-              <span>Node selector</span>
-              {/* <NodeSelector onChange={this._onNodeFilterChange.bind(this)} /> */}
-              {nodeFilterHasChanged && (
-                <div style={{ marginTop: "1rem" }}>
-                  Please reload for the changes to take effect
-                </div>
-              )}
-            </div>
-          )}
-        </LoadingIndicator>
+        ></LoadingIndicator>
       </React.Fragment>
     );
   };
@@ -67,5 +52,5 @@ export const ConnectionManager = ({ children }: Props): JSX.Element => {
       </div>
     );
   }
-  return <>{children}</>;
+  return <ChainStoreProvider>{children}</ChainStoreProvider>;
 };

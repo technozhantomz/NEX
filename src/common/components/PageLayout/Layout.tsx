@@ -3,6 +3,7 @@ import moment from "moment";
 import Head from "next/head";
 import React, { FunctionComponent, ReactNode } from "react";
 
+import { Footer } from "./Footer";
 import * as Styled from "./Layout.styled";
 import { TopBar } from "./TopBar";
 
@@ -59,6 +60,7 @@ export const Layout: FunctionComponent<Props> = ({
               ""
             )}
             {children}
+            <Footer />
           </Styled.Layout>
         </ConfigProvider>
       </Styled.Page>

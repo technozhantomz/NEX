@@ -525,6 +525,21 @@ export const en = {
     next: "Next",
     show_only_unread: "Show only unread",
   },
+  connection: {
+    automatic_reconnect:
+      " After %(reconnect_in_seconds)s seconds a reconnection attempt will be made automatically.",
+    manual_reconnect: "Try reconnecting now",
+    manual_ping_and_narrow_down: "Narrow down nodes and ping",
+    title_out_of_sync: "Connection out of sync",
+    out_of_sync:
+      "Your connection has been out of sync for %(out_of_sync_seconds)s seconds.",
+    want_to_reconnect:
+      "If the connection can be recovered this message will disappear automatically.",
+  },
+  footer: {
+    no_connection: "No Blockchain connection",
+    nosync: "Your active node is out of sync",
+  },
   pages: {
     logout: {
       heading: "Logout",
@@ -754,6 +769,7 @@ export const en = {
       discription: "Profile Page",
     },
     modal: {
+      cancel: "Cancel",
       transaction_modal: {
         heading: "Please confirm the transaction",
       },

@@ -4,7 +4,7 @@ import * as Styled from "./LoadingIndicator.styled";
 
 type Props = {
   type?: "three-bounce" | "circle" | "circle-small";
-  loadingText?: string;
+  loadingText?: string | boolean;
   children?: React.ReactNode | React.ReactNode[];
 };
 //TODO: styling
