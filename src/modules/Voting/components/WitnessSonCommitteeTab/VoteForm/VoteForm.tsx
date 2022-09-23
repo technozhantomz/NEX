@@ -1,10 +1,5 @@
 import counterpart from "counterpart";
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useRef,
-} from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
