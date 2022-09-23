@@ -1,19 +1,31 @@
 import counterpart from "counterpart";
+import { cloneDeep } from "lodash";
 import React, {
   createContext,
   useCallback,
   useContext,
   useEffect,
+  useState,
 } from "react";
 
 import {
+  defaultApiLatencies,
+  defaultApiSettings,
   defaultExchanges,
+  defaultLatencyPreferences,
   defaultLocales,
   defaultSettings,
 } from "../../../api/params";
 import { getPassedTime } from "../../../api/utils";
 import { useLocalStorage } from "../../hooks";
-import { Cache, Exchanges, Settings } from "../../types";
+import {
+  ApiLatencies,
+  ApiSettings,
+  Cache,
+  Exchanges,
+  LatencyPreferences,
+  Settings,
+} from "../../types";
 
 export type SettingsContextType = {
   settings: Settings;
@@ -23,6 +35,17 @@ export type SettingsContextType = {
   cache: Cache;
   setCache: (value: Cache) => void;
   setLocale: (selectedLang: string) => void;
+  setApiSettings: (value: ApiSettings) => void;
+  apiSettings: ApiSettings;
+  setLatencyChecks: (latencyChecks: number) => void;
+  latencyChecks: number;
+  setApiLatencies: (apiLatencies: ApiLatencies) => void;
+  apiLatencies: ApiLatencies;
+  latencyPreferences: LatencyPreferences;
+  setLatencyPreferences: (preferences: LatencyPreferences) => void;
+  connectedNode: string;
+  setConnectedNode: (connectedNode: string) => void;
+  loading: boolean;
 };
 
 const settingsContext = createContext<SettingsContextType>(
@@ -38,21 +61,42 @@ export function SettingsProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const [settings, setSettings] = useLocalStorage("settings") as [
-    Settings,
-    (value: Settings) => void
-  ];
-
-  // should add chain id
-  const [exchanges, setExchanges] = useLocalStorage("exchanges") as [
-    Exchanges,
-    (value: Exchanges) => void
-  ];
-  // should add chain id
+  const [loading, setLoading] = useState<boolean>(true);
   const [cache, setCache] = useLocalStorage("cache") as [
     Cache,
     (value: Cache) => void
   ];
+  const [settings, setSettings] = useLocalStorage("settings") as [
+    Settings,
+    (value: Settings) => void
+  ];
+  const [exchanges, setExchanges] = useLocalStorage("exchanges") as [
+    Exchanges,
+    (value: Exchanges) => void
+  ];
+  const [apiSettings, setApiSettings] = useLocalStorage("api_settings") as [
+    ApiSettings,
+    (value: ApiSettings) => void
+  ];
+  const [apiLatencies, setApiLatencies] = useLocalStorage("api_Latencies") as [
+    ApiLatencies,
+    (value: ApiLatencies) => void
+  ];
+  const [latencyPreferences, setLatencyPreferences] = useLocalStorage(
+    "latency_preferences"
+  ) as [LatencyPreferences, (value: LatencyPreferences) => void];
+  const [latencyChecks, setLatencyChecks] = useLocalStorage(
+    "latency_checks"
+  ) as [number, (value: number) => void];
+
+  const [connectedNode, _setConnectedNode] = useState<string>("");
+
+  const setConnectedNode = useCallback(
+    (connectedNode: string) => {
+      _setConnectedNode(connectedNode);
+    },
+    [_setConnectedNode]
+  );
 
   const initCache = useCallback(() => {
     if (
@@ -71,6 +115,30 @@ export function SettingsProvider({
       setExchanges(defaultExchanges);
     }
   }, [settings, exchanges, setSettings, setExchanges]);
+
+  const initApiSettings = useCallback(() => {
+    if (!apiSettings) {
+      setApiSettings(defaultApiSettings);
+    }
+    if (!apiLatencies) {
+      setApiLatencies(defaultApiLatencies);
+    }
+    if (!latencyPreferences) {
+      setLatencyPreferences(defaultLatencyPreferences);
+    }
+    if (!latencyChecks) {
+      setLatencyChecks(0);
+    }
+  }, [
+    apiSettings,
+    setApiSettings,
+    apiLatencies,
+    setApiLatencies,
+    latencyPreferences,
+    setLatencyPreferences,
+    latencyChecks,
+    setLatencyChecks,
+  ]);
 
   const setLocale = useCallback(
     (selectedLang: string) => {
@@ -104,12 +172,15 @@ export function SettingsProvider({
     );
     setLocale(localeFromStorage());
   }, [setLocale, localeFromStorage]);
-
   useEffect(() => {
+    setLoading(true);
     initCache();
     initSettings();
+    initApiSettings();
     initLocale();
+    setLoading(false);
   }, []);
+
   return (
     <settingsContext.Provider
       value={{
@@ -120,9 +191,36 @@ export function SettingsProvider({
         cache,
         setCache,
         setLocale,
+        setApiSettings,
+        apiSettings,
+        setLatencyChecks,
+        latencyChecks,
+        apiLatencies: cloneDeep(apiLatencies),
+        setApiLatencies,
+        latencyPreferences: cloneDeep(latencyPreferences),
+        setLatencyPreferences,
+        connectedNode,
+        setConnectedNode,
+        loading,
       }}
     >
-      {children}
+      {loading ? (
+        //TODO: center this
+        <h1
+          style={{
+            height: "50px",
+            margin: "0",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          Loading...
+        </h1>
+      ) : (
+        <>{children}</>
+      )}
     </settingsContext.Provider>
   );
 }

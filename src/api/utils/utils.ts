@@ -55,4 +55,12 @@ export const utils = {
       name
     );
   },
+  //TODO: This should be completed
+  isUrlsEqual: (url1: string, url2: string): boolean => {
+    const trimedUrl1 =
+      url1[url1.length - 1] !== "/" ? url1 : url1.slice(0, url1.length - 1);
+    const trimedUrl2 =
+      url2[url2.length - 1] !== "/" ? url2 : url2.slice(0, url2.length - 1);
+    return trimedUrl1 === trimedUrl2;
+  },
 };

@@ -41,7 +41,7 @@ const UserContext = createContext<UserContextType>(defaultUserState);
 
 export const UserProvider = ({ children }: Props): JSX.Element => {
   const [localStorageAccount, setLocalStorageAccount] = useLocalStorage(
-    "currentAccount"
+    "current_account"
   ) as [string, (value: string) => void];
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();

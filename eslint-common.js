@@ -37,6 +37,7 @@ module.exports = {
     debug: true,
     window: true,
     module: true,
+    NodeJS: true,
   },
 
   ignorePatterns: ["**/*.codegen.ts"],
