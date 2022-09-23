@@ -17,12 +17,8 @@ export const Footer = (): JSX.Element => {
     synced,
     connected,
   } = useFooter();
-  const {
-    isTransitionInProgress,
-    getTransitionTarget,
-    isAutoSelection,
-    isBackgroundPingingInProgress,
-  } = usePeerplaysApiContext();
+  const { isTransitionInProgress, getTransitionTarget, isAutoSelection } =
+    usePeerplaysApiContext();
 
   const choiceModalContent = (
     <div>

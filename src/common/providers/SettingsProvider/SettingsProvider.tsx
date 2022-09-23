@@ -17,7 +17,6 @@ import {
   defaultSettings,
 } from "../../../api/params";
 import { getPassedTime } from "../../../api/utils";
-import { colors } from "../../../ui/src/colors";
 import { useLocalStorage } from "../../hooks";
 import {
   ApiLatencies,
