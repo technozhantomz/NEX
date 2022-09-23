@@ -7,6 +7,7 @@ export type VoteRow = {
   name: string;
   url: string;
   votes: string;
-  action: "add" | "remove" | "cancel" | "";
+  action: "add" | "remove" | "pending add" | "pending remove" | "cancel" | "";
+  status: "approved" | "unapproved";
   active: boolean;
 };

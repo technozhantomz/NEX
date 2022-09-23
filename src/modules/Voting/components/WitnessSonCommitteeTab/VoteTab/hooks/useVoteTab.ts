@@ -260,24 +260,43 @@ export function useVoteTab({
     async (
       vote: Vote,
       votesIds: [string, string][],
-      action: "add" | "remove" | ""
+      action:
+        | "add"
+        | "remove"
+        | "pending add"
+        | "pending remove"
+        | "cancel"
+        | ""
     ): Promise<VoteRow> => {
       try {
         const gpo: GlobalProperties = await dbApi("get_global_properties");
         if (defaultAsset !== undefined) {
           let voteType: VoteType;
+          let voteActive: boolean;
           switch (parseInt(vote.vote_id.charAt(0))) {
             case 0:
               voteType = "committees";
+              voteActive =
+                gpo["active_committee_members"].indexOf(vote.id) >= 0
+                  ? true
+                  : false;
               break;
             case 1:
               voteType = "witnesses";
+              voteActive =
+                gpo["active_witnesses"].indexOf(vote.id) >= 0 ? true : false;
               break;
             case 3:
               voteType = "sons";
+              voteActive =
+                gpo.active_sons.find((son) => son.son_id === vote.id) !== undefined
+                  ? true
+                  : false;
               break;
             default:
               voteType = "witnesses";
+              voteActive =
+                gpo["active_witnesses"].indexOf(vote.id) >= 0 ? true : false;
           }
           const name = votesIds.filter((voteId) => voteId[1] === vote.id)[0][0];
 
@@ -285,6 +304,7 @@ export function useVoteTab({
             defaultAsset.id,
             Number(vote.total_votes)
           );
+
           return {
             id: vote.vote_id,
             key: vote.vote_id,
@@ -294,9 +314,8 @@ export function useVoteTab({
             url: vote.url,
             votes: `${votesAsset.amount} ${votesAsset.symbol}`,
             action: action,
-            active:
-              gpo["active_witnesses"].indexOf(vote.id) >= 0 ? true : false,
-            status: action,
+            active: voteActive,
+            status: action === "remove" ? "approved" : "unapproved",
           } as VoteRow;
         } else {
           return {} as VoteRow;
@@ -363,7 +382,13 @@ export function useVoteTab({
     (voteId: string) => {
       if (pendingChanges.find((vote) => vote.id === voteId) === undefined) {
         const selectedRow = allMembersRows.find((vote) => vote.id === voteId);
+        const selectedRowIndex = allMembersRows.findIndex(
+          (vote) => vote.id === voteId
+        );
+        allMembersRows[selectedRowIndex].action =
+          selectedRow?.action === "add" ? "pending add" : "pending remove";
         if (selectedRow !== undefined) {
+          setAllMembersRows(allMembersRows);
           setLocalApprovedRows(
             sortVotesRows([
               { ...selectedRow, action: "cancel" },
@@ -397,6 +422,13 @@ export function useVoteTab({
   const removeVote = useCallback(
     (voteId: string) => {
       if (localApprovedRows.find((vote) => vote.id === voteId) !== undefined) {
+        const selectedRow = allMembersRows.find((vote) => vote.id === voteId);
+        const selectedRowIndex = allMembersRows.findIndex(
+          (vote) => vote.id === voteId
+        );
+        allMembersRows[selectedRowIndex].action =
+          selectedRow?.action === "pending add" ? "add" : "remove";
+        setAllMembersRows(allMembersRows);
         setLocalApprovedRows(
           sortVotesRows(localApprovedRows.filter((vote) => vote.id !== voteId))
         );

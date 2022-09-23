@@ -44,14 +44,14 @@ export const showVotesColumns = (
     (_value: string, _record: any): JSX.Element => (
       <>
         {_record.action === "cancel" ? (
-          _value === "add" ? (
+          _value === "unapproved" ? (
             <Styled.ApprovedStatus>voting to approve</Styled.ApprovedStatus>
           ) : (
             <Styled.NotApprovedStatus>
               voting to remove approval
             </Styled.NotApprovedStatus>
           )
-        ) : _value === "add" ? (
+        ) : _value === "unapproved" ? (
           <>
             <Styled.Xmark></Styled.Xmark>
             <Styled.NotApprovedStatus>Not Approved</Styled.NotApprovedStatus>
@@ -66,17 +66,21 @@ export const showVotesColumns = (
     ),
     (_value: string, _record: any): JSX.Element => (
       <>
-        <Styled.VoteActionButton
-          onClick={() => {
-            if (_value === "add" || _value === "remove") {
-              approveVote(_record.id as string);
-            } else {
-              removeVote(_record.id as string);
-            }
-          }}
-        >
-          {_value.toUpperCase()}
-        </Styled.VoteActionButton>
+        {_value === "add" || _value === "remove" || _value === "cancel" ? (
+          <Styled.VoteActionButton
+            onClick={() => {
+              if (_value === "cancel") {
+                removeVote(_record.id as string);
+              } else {
+                approveVote(_record.id as string);
+              }
+            }}
+          >
+            {_value.toUpperCase()}
+          </Styled.VoteActionButton>
+        ) : (
+          <span>{_value.toUpperCase()}</span>
+        )}
       </>
     ),
   ];
@@ -96,8 +100,16 @@ export const showVotesColumns = (
     ],
     undefined,
     undefined,
-    undefined,
-    undefined,
+    [
+      { text: "Approved", value: "approved" },
+      { text: "Not Approved", value: "unapproved" },
+    ],
+    [
+      { text: "Add", value: "add" },
+      { text: "Remove", value: "remove" },
+      { text: "Pending Add", value: "pending add" },
+      { text: "Pending Remove", value: "pending remove" },
+    ],
   ];
   const filterModes = [
     undefined,
@@ -105,8 +117,8 @@ export const showVotesColumns = (
     "menu",
     undefined,
     undefined,
-    undefined,
-    undefined,
+    "menu",
+    "menu",
   ];
   const filterSearch = [
     undefined,
@@ -114,8 +126,8 @@ export const showVotesColumns = (
     false,
     undefined,
     undefined,
-    undefined,
-    undefined,
+    false,
+    false,
   ];
   const onFilters = [
     undefined,
@@ -123,8 +135,8 @@ export const showVotesColumns = (
     (value: boolean, record: VoteRow): boolean => record.active === value,
     undefined,
     undefined,
-    undefined,
-    undefined,
+    (value: string, record: VoteRow): boolean => record.status === value,
+    (value: string, record: VoteRow): boolean => record.action === value,
   ];
   const sorters = [
     (a: { rank: number }, b: { rank: number }) => a.rank - b.rank,
