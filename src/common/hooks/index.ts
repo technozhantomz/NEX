@@ -10,4 +10,3 @@ export * from "./browserStorage";
 export * from "./blockchain";
 export * from "./asset";
 export * from "./utils";
-export * from "./connectionManager";
