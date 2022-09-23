@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
 import { Login } from "peerplaysjs-lib";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import { useAccount } from "../../../../../common/hooks";
@@ -9,6 +9,7 @@ import {
   Account,
   GeneratedKey,
   Permissions,
+  PublicKeys,
 } from "../../../../../common/types";
 import { CheckboxValueType, Form } from "../../../../../ui/src";
 
@@ -19,7 +20,7 @@ import {
 
 export function useKeyManagementTab(): UseKeyManagementTabResult {
   // These states should go to upper hook
-
+  const [publicKeys, setPublicKeys] = useState<PublicKeys[]>([]);
   const [generatedKeys, setGeneratedKeys] = useState<GeneratedKey[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [keyManagementForm] = Form.useForm();
@@ -34,15 +35,35 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     [setSelectedKeys]
   );
 
+  const getPublicKeys = useCallback(async () => {
+    if (account) {
+      const keys = [
+        {
+          type: "owner",
+          key: account.owner.key_auths[0][0],
+        },
+        {
+          type: "active",
+          key: account.active.key_auths[0][0],
+        },
+        {
+          type: "memo",
+          key: account.options.memo_key,
+        },
+      ];
+      setPublicKeys(keys);
+    }
+  }, [account, setPublicKeys]);
+
   const onGo = useCallback(() => {
     const { password } = keyManagementForm.getFieldsValue();
     if (account) {
       const translations: Record<string, string> = {
-        Active: "active",
         Owner: "owner",
+        Active: "active",
         Memo: "memo",
-        Активный: "active",
         Владелец: "owner",
+        Активный: "active",
         Памятка: "memo",
       };
       const roles = selectedKeys.map((key) => translations[key.toString()]);
@@ -114,9 +135,14 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     roles: [{ validator: validateSelectKeys }],
   };
 
+  useEffect(() => {
+    getPublicKeys();
+  }, [account, setPublicKeys]);
+
   return {
     formValidation,
     keyManagementForm,
+    publicKeys,
     generatedKeys,
     handleCheckboxChange,
     selectedKeys,

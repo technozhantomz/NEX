@@ -54,6 +54,8 @@ export type LimitOrder = {
   seller: string;
 };
 
+export type PublicKeys = { type: string; key: string };
+
 export type GeneratedKey = { label: string; key: string };
 
 export type Permissions = {
