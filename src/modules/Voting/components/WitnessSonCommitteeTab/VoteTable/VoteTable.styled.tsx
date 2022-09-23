@@ -131,3 +131,11 @@ export const Xmark = styled(xmark)`
 
 export const urlIcon = styled(BlockchainTableUrlIcon)``;
 export const ActiveIcon = styled(BlockchainTableActiveIcon)``;
+
+export const ApprovedStatus = styled.span`
+  color: ${colors.successColor};
+`;
+
+export const NotApprovedStatus = styled.span`
+  color: ${colors.missedColor};
+`;

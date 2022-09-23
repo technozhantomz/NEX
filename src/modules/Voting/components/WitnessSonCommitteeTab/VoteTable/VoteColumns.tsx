@@ -41,12 +41,34 @@ export const showVotesColumns = (
       </>
     ),
     undefined,
-    undefined,
+    (_value: string, _record: any): JSX.Element => (
+      <>
+        {_record.action === "cancel" ? (
+          _value === "add" ? (
+            <Styled.ApprovedStatus>voting to approve</Styled.ApprovedStatus>
+          ) : (
+            <Styled.NotApprovedStatus>
+              voting to remove approval
+            </Styled.NotApprovedStatus>
+          )
+        ) : _value === "add" ? (
+          <>
+            <Styled.Xmark></Styled.Xmark>
+            <Styled.NotApprovedStatus>Not Approved</Styled.NotApprovedStatus>
+          </>
+        ) : (
+          <>
+            <Styled.Check></Styled.Check>
+            <Styled.ApprovedStatus>Approved</Styled.ApprovedStatus>
+          </>
+        )}
+      </>
+    ),
     (_value: string, _record: any): JSX.Element => (
       <>
         <Styled.VoteActionButton
           onClick={() => {
-            if (_value === "add") {
+            if (_value === "add" || _value === "remove") {
               approveVote(_record.id as string);
             } else {
               removeVote(_record.id as string);

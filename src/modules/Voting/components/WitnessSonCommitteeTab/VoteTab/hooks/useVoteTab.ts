@@ -296,6 +296,7 @@ export function useVoteTab({
             action: action,
             active:
               gpo["active_witnesses"].indexOf(vote.id) >= 0 ? true : false,
+            status: action,
           } as VoteRow;
         } else {
           return {} as VoteRow;
@@ -360,12 +361,12 @@ export function useVoteTab({
 
   const approveVote = useCallback(
     (voteId: string) => {
-      if (localApprovedRows.find((vote) => vote.id === voteId) === undefined) {
+      if (pendingChanges.find((vote) => vote.id === voteId) === undefined) {
         const selectedRow = allMembersRows.find((vote) => vote.id === voteId);
         if (selectedRow !== undefined) {
           setLocalApprovedRows(
             sortVotesRows([
-              { ...selectedRow, action: "remove" },
+              { ...selectedRow, action: "cancel" },
               ...localApprovedRows,
             ])
           );
@@ -376,7 +377,7 @@ export function useVoteTab({
             ])
           );
           checkVotesChanged(serverApprovedRows, [
-            { ...selectedRow, action: "remove" } as VoteRow,
+            { ...selectedRow, action: "cancel" } as VoteRow,
             ...localApprovedRows,
           ]);
         }

@@ -7,6 +7,6 @@ export type VoteRow = {
   name: string;
   url: string;
   votes: string;
-  action: "add" | "remove" | "";
+  action: "add" | "remove" | "cancel" | "";
   active: boolean;
 };
