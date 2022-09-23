@@ -23,7 +23,6 @@ export const initNode = async (
   const start = new Date();
 
   let instance: InstanceType;
-
   if (actualNode) {
     if (Apis.instance().chain_id) {
       await Apis.instance().close();

@@ -1,4 +1,4 @@
-import { Block, BlockData, Dynamic, GlobalProperties } from "../types";
+import { Block, BlockData, Dynamic, GlobalProperties } from "../../types";
 
 export type UseBlockchainResult = {
   getChain: () => Promise<GlobalProperties | undefined>;

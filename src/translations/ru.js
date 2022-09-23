@@ -1,4 +1,20 @@
 export const ru = {
+  app_init: {
+    check_latency: "Запуск проверки задержки...",
+    check_latency_feedback:
+      "Запуск проверки задержки (%(pinged)s/%(totalToPing)s узлов)",
+    check_latency_feedback_country:
+      "Проверка задержки в лучшей стране (узлы %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_last:
+      "Проверка задержки для последнего подключенного узла (узлов %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_region:
+      "Проверка задержки в лучшем регионе (узлы %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_rest:
+      "Проверка задержки для оставшихся узлов (узлов %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_world:
+      "Проверка задержки в каждом регионе (узлы %(pinged)s/%(totalToPing)s)",
+    connecting: "Подключение к серверу API: %(server)s",
+  },
   transaction: {
     feeTypes: {
       _none: "Бесплатно",
@@ -622,6 +638,7 @@ export const ru = {
         referral_link:
           "Дайте ссылку на людей, которых вы хотите порекомендовать в Peerplays: %(link)s/signup/?r=%(name)s",
       },
+      api_closest: "Выбрать ближайший автоматически",
     },
     voting: {
       heading: "Голосование",

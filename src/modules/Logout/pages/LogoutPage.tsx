@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 import { FormDisclamer, Layout } from "../../../common/components";
 import { useAccount } from "../../../common/hooks";
@@ -11,7 +11,7 @@ import * as Styled from "./LogoutPage.styled";
 const LogoutPage: NextPage = () => {
   const { removeAccount } = useAccount();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     removeAccount();
   }, []);
 
