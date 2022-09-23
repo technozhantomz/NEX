@@ -791,7 +791,11 @@ export const ru = {
       copy_url: "Скопировать URL",
       setting_saved: "Настройка сохранена",
       lock_wallet: "Заблокировать кошелек",
-      select_keys: "Выберите ключи для генерации:",
+      select_keys: "Выберите ключи для генерации",
+      public_key_owner: "Открытый ключ Владелец",
+      public_key_active: "Открытый ключ Активный",
+      public_key_memo: "Открытый ключ Памятка",
+      private_key: "Закрытый ключ",
       generated_key:
         "Запрошенный вами ключ %(generatedKeyLabel)s выглядит следующим образом:",
       advanced_settings: "Расширенные настройки",
@@ -834,7 +838,7 @@ export const ru = {
         "Я понимаю, что Peerplays не может восстановить мой утерянный пароль",
       securely_saved_my_password: "Я надежно сохранил свой пароль",
       enable_notifications: "Включить уведомления",
-      key_management_group: ["Активный", "Владелец", "Памятка"],
+      key_management_group: ["Владелец", "Активный", "Памятка"],
     },
     errors: {
       enter_amount: "Введите сумму",

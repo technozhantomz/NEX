@@ -828,7 +828,11 @@ export const en = {
       copy_url: "Copy URL",
       setting_saved: "Setting Saved",
       lock_wallet: "Lock Wallet",
-      select_keys: "Select keys to be generated:",
+      select_keys: "Select keys to be generated",
+      public_key_owner: "Owner Public Key",
+      public_key_active: "Active Public Key",
+      public_key_memo: "Memo Public Key",
+      private_key: "Private Key",
       generated_key:
         "The %(generatedKeyLabel)s key you requested is as follows:",
       advanced_settings: "Advanced Settings",
@@ -871,7 +875,7 @@ export const en = {
         "I understand Peerplays cannot recover my lost password",
       securely_saved_my_password: "I have securely saved my password",
       enable_notifications: "Enable Notifications",
-      key_management_group: ["Active", "Owner", "Memo"],
+      key_management_group: ["Owner", "Active", "Memo"],
     },
     errors: {
       enter_amount: "Enter amount",
