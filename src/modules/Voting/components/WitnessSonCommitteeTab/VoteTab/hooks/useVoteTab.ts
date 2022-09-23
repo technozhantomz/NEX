@@ -289,7 +289,8 @@ export function useVoteTab({
             case 3:
               voteType = "sons";
               voteActive =
-                gpo.active_sons.find((son) => son.son_id === vote.id) !== undefined
+                gpo.active_sons.find((son) => son.son_id === vote.id) !==
+                undefined
                   ? true
                   : false;
               break;
