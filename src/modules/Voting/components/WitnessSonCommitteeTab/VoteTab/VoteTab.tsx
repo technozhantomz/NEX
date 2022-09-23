@@ -54,6 +54,7 @@ export const VoteTab = ({
     searchError,
     isSameAccount,
     searchValue,
+    pendingChanges,
   } = useVoteTab({
     tab,
     votesLoading,
@@ -80,7 +81,7 @@ export const VoteTab = ({
           loading={votesLoading || loading}
           votes={
             voteSearchValue === ""
-              ? localApprovedRows
+              ? pendingChanges
               : localApprovedRows.filter((approvedVote) =>
                   approvedVote.name
                     .toLowerCase()
@@ -125,7 +126,7 @@ export const VoteTab = ({
             voteSearchValue === ""
               ? allMembersRows.filter(
                   (vote) =>
-                    !localApprovedRows
+                    !pendingChanges
                       .map((approvedVote) => approvedVote.id)
                       .includes(vote.id)
                 )

@@ -23,4 +23,5 @@ export type UseVoteTabResult = {
   loadingTransaction: boolean;
   searchError: boolean;
   searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => void;
+  pendingChanges: VoteRow[];
 };

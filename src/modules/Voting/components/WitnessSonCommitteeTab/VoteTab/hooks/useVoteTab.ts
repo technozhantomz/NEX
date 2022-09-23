@@ -46,6 +46,7 @@ export function useVoteTab({
   getVotes,
   totalGpos,
 }: Args): UseVoteTabResult {
+  const [pendingChanges, setPendingChanges] = useState<VoteRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [allMembersRows, setAllMembersRows] = useState<VoteRow[]>([]);
   const [serverApprovedRows, setServerApprovedRows] = useState<VoteRow[]>([]);
@@ -212,7 +213,8 @@ export function useVoteTab({
           );
           setLoadingTransaction(false);
           setServerApprovedRows([...localApprovedRows]);
-          setLocalApprovedRows([]);
+          setLocalApprovedRows([...localApprovedRows]);
+          setPendingChanges([]);
         } else {
           setTransactionErrorMessage(
             counterpart.translate(`field.errors.unable_transaction`)
@@ -311,7 +313,13 @@ export function useVoteTab({
       setLoading(true);
       const allMembersRows = await Promise.all(
         allMembers.map((member) => {
-          return formVoteRow(member, allMembersIds, "add");
+          return formVoteRow(
+            member,
+            allMembersIds,
+            fullAccount?.votes.some((vote) => vote.id === member.id)
+              ? "remove"
+              : "add"
+          );
         })
       );
       setAllMembersRows(sortVotesRows(allMembersRows));
@@ -321,6 +329,7 @@ export function useVoteTab({
         })
       );
       setServerApprovedRows(sortVotesRows([...serverApprovedRows]));
+      setLocalApprovedRows(sortVotesRows([...serverApprovedRows]));
       setLoading(false);
     } catch (e) {
       console.log(e);
@@ -360,6 +369,12 @@ export function useVoteTab({
               ...localApprovedRows,
             ])
           );
+          setPendingChanges(
+            sortVotesRows([
+              { ...selectedRow, action: "cancel" },
+              ...pendingChanges,
+            ])
+          );
           checkVotesChanged(serverApprovedRows, [
             { ...selectedRow, action: "remove" } as VoteRow,
             ...localApprovedRows,
@@ -373,6 +388,8 @@ export function useVoteTab({
       setLocalApprovedRows,
       checkVotesChanged,
       tab,
+      setPendingChanges,
+      pendingChanges,
     ]
   );
 
@@ -381,6 +398,9 @@ export function useVoteTab({
       if (localApprovedRows.find((vote) => vote.id === voteId) !== undefined) {
         setLocalApprovedRows(
           sortVotesRows(localApprovedRows.filter((vote) => vote.id !== voteId))
+        );
+        setPendingChanges(
+          sortVotesRows(pendingChanges.filter((vote) => vote.id !== voteId))
         );
         checkVotesChanged(
           serverApprovedRows,
@@ -394,11 +414,14 @@ export function useVoteTab({
       sortVotesRows,
       checkVotesChanged,
       serverApprovedRows,
+      setPendingChanges,
+      pendingChanges,
     ]
   );
 
   const resetChanges = useCallback(() => {
-    setLocalApprovedRows([]);
+    setLocalApprovedRows([...serverApprovedRows]);
+    setPendingChanges([]);
     setIsVotesChanged(false);
   }, [serverApprovedRows, setLocalApprovedRows, setIsVotesChanged]);
 
@@ -468,5 +491,6 @@ export function useVoteTab({
     loadingTransaction,
     searchChange,
     searchError,
+    pendingChanges,
   };
 }
