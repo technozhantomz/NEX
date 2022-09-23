@@ -1,6 +1,5 @@
 import type { AppProps } from "next/app";
 
-//import { ConnectionManager } from "../common/components";
 import {
   AssetsProvider,
   BrowserHistoryProvider,

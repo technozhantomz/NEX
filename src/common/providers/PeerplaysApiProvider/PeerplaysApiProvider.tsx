@@ -1127,12 +1127,12 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     delete _apiLatencies[failingNodeUrl];
     setApiLatencies(apiLatencies);
 
-    Apis.close();
+    await Apis.instance().close();
     await willTransitionTo(true);
   };
 
   const attemptReconnect = useCallback(async () => {
-    const apiInstance = (Apis as ApisType).reset(
+    const apiInstance = await (Apis as ApisType).reset(
       connectionManager.current.url,
       true,
       undefined

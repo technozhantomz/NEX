@@ -219,7 +219,7 @@ export function SettingsProvider({
           Loading...
         </h1>
       ) : (
-        children
+        <>{children}</>
       )}
     </settingsContext.Provider>
   );
