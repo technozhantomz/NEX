@@ -32,7 +32,8 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
   const [status, setStatus] = useState<string>("");
 
   const { apiSettings } = useSettingsContext();
-  const { willTransitionTo: _willTransitionTo } = usePeerplaysApiContext();
+  const { willTransitionTo: _willTransitionTo, apiInstance } =
+    usePeerplaysApiContext();
   const statusCallback = useCallback(
     (status: string) => {
       setStatus(status);
@@ -146,7 +147,9 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
       {!apiConnected ? (
         renderUnsuccessfulConnection
       ) : (
-        <ChainStoreProvider>{children}</ChainStoreProvider>
+        <ChainStoreProvider apiInstance={apiInstance}>
+          {children}
+        </ChainStoreProvider>
       )}
     </ConnectionManagerContext.Provider>
   );

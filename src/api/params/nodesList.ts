@@ -31,6 +31,8 @@ export const nodeRegions = [
   "South America",
 ];
 
+// node location could be the city name
+
 const testnetNodes: Node[] = [
   {
     url: "wss://fake.automatic-selection.com",

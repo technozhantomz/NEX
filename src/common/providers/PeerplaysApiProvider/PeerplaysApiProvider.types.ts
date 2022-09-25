@@ -1,4 +1,4 @@
-import { ApiLatencies, ApiServer } from "../../types";
+import { ApiLatencies, ApiServer, ApisInstanceType } from "../../types";
 
 export type NodeTransitionCallbackType = (
   status:
@@ -34,4 +34,5 @@ export type PeerPlaysApiContextType = {
     | undefined;
   isAutoSelection: () => boolean;
   isBackgroundPingingInProgress: () => boolean;
+  apiInstance: ApisInstanceType | undefined;
 };

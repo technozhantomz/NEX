@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 //import { useConnectionManager } from "../../../../hooks";
 import {
@@ -12,9 +12,13 @@ import { UseFooterResult } from "./useFooter.types";
 export function useFooter(): UseFooterResult {
   const [isOutOfSyncModalVisible, setIsOutOfSyncModalVisible] =
     useState<boolean>(false);
-  const [connected, _setConnected] = useState<boolean>(true);
+  const [connected, _setConnected] = useState<boolean>(() => {
+    return !(rpcConnectionStatus === "closed");
+  });
   const [hasOutOfSyncModalBeenShownOnce, setHasOutOfSyncModalBeenShownOnce] =
     useState<boolean>(false);
+  const connectionTimeout = useRef<NodeJS.Timeout>();
+  const syncTimeout = useRef<NodeJS.Timeout>();
 
   const { isTransitionInProgress, isAutoSelection } = usePeerplaysApiContext();
   const { getBlockTimeDelta, synced, rpcConnectionStatus } =
@@ -38,6 +42,14 @@ export function useFooter(): UseFooterResult {
         if (honorManualSelection && !isAutoSelection()) {
           return;
         }
+        if (connectionTimeout.current !== undefined) {
+          clearTimeout(connectionTimeout.current);
+          connectionTimeout.current = undefined;
+        }
+        if (syncTimeout.current !== undefined) {
+          clearTimeout(syncTimeout.current);
+          syncTimeout.current = undefined;
+        }
         if (!isTransitionInProgress()) {
           hideOutOfSyncModal();
           console.log("Trying to reconnect ...");
@@ -46,7 +58,7 @@ export function useFooter(): UseFooterResult {
           try {
             await willTransitionTo(false);
           } catch (e) {
-            console.log("ghasem", e);
+            console.log(e);
           }
         }
       },
@@ -57,11 +69,17 @@ export function useFooter(): UseFooterResult {
         willTransitionTo,
         setSuccessConnectionStates,
         setFailureConnectionStates,
+        synced,
+        connected,
+        connectionTimeout,
+        connectionTimeout.current,
+        syncTimeout,
+        syncTimeout.current,
       ]
     );
 
   const getForceReconnectAfterSeconds = useCallback(() => {
-    return 60;
+    return 30;
   }, []);
 
   const setConnected = useCallback(() => {
@@ -72,8 +90,8 @@ export function useFooter(): UseFooterResult {
   const ensureConnectivity = useCallback(() => {
     const connected = !(rpcConnectionStatus === "closed");
 
-    if (!connected) {
-      setTimeout(() => {
+    if (!connected && !connectionTimeout.current) {
+      connectionTimeout.current = setTimeout(() => {
         triggerReconnect();
       }, 50);
     } else if (!synced) {
@@ -83,14 +101,14 @@ export function useFooter(): UseFooterResult {
       const askToReconnectAfterSeconds = 10;
 
       // Trigger automatic reconnect after X seconds
-      setTimeout(() => {
-        if (!synced) {
+      if (!syncTimeout.current) {
+        syncTimeout.current = setTimeout(() => {
           triggerReconnect();
-        }
-      }, forceReconnectAfterSeconds * 1000);
+        }, forceReconnectAfterSeconds * 1000);
+      }
 
       // Still out of sync?
-      if (getBlockTimeDelta() > 3) {
+      if (getBlockTimeDelta() > 5) {
         console.log(
           "Your node is out of sync since " +
             getBlockTimeDelta() +
@@ -101,7 +119,7 @@ export function useFooter(): UseFooterResult {
         setTimeout(() => {
           // Only ask the user once, and only continue if still out of sync
           if (
-            getBlockTimeDelta() > 3 &&
+            getBlockTimeDelta() > 5 &&
             hasOutOfSyncModalBeenShownOnce === false
           ) {
             setHasOutOfSyncModalBeenShownOnce(true);
@@ -133,7 +151,7 @@ export function useFooter(): UseFooterResult {
 
   useEffect(() => {
     ensureConnectivity();
-  });
+  }, [connected, synced]);
 
   return {
     isOutOfSyncModalVisible,

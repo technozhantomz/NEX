@@ -57,6 +57,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   );
   const connectionStart = useRef<number>();
   const connectInProgress = useRef<boolean>(false);
+  const oldChain = useRef<string>();
 
   // Pinger
   const pingerBeSatisfiedWith = useRef<{
@@ -93,8 +94,8 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   const pingerStrategyCallback = useRef<(() => Promise<void>) | (() => void)>();
   const nodeTree = useRef<NodeTree>({});
   const preferences = useRef<LatencyPreferences>({} as LatencyPreferences);
+  const apiInstance = useRef<ApisInstanceType>();
 
-  const apiInstance = useRef<ApisInstanceType>({} as ApisInstanceType);
   const {
     setApiSettings,
     apiSettings,
@@ -1063,7 +1064,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     [apiSettings, setApiSettings]
   );
 
-  const onConnect = useCallback(() => {
+  const onConnect = useCallback(async () => {
     if (connectInProgress.current) {
       console.error("MULTIPLE CONNECT IN PROGRESS");
       return;
@@ -1088,12 +1089,29 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         new Date().getTime() - (connectionStart.current as number);
       _updateLatencies(mapOfPings, false);
     }
-    connectInProgress.current = false;
-    setConnectedNode(connectionManager.current.url);
-    apiInstance.current = _apiInstance as ApisInstanceType;
-    ChainConfig.setPrefix(defaultToken);
-    ChainStore.init();
-    transitionDone();
+
+    const currentChain = _apiInstance?.chain_id;
+    const chainChanged = oldChain.current !== currentChain;
+    oldChain.current = currentChain;
+
+    const chainStoreResetPromise: Promise<void> = chainChanged
+      ? ChainStore.resetCache(false)
+      : Promise.resolve();
+    try {
+      await chainStoreResetPromise;
+      connectInProgress.current = false;
+      setConnectedNode(connectionManager.current.url);
+      apiInstance.current = _apiInstance as ApisInstanceType;
+      if (chainChanged) {
+        ChainConfig.setPrefix(defaultToken);
+      }
+      transitionDone();
+    } catch (e) {
+      console.log(e);
+      connectInProgress.current = false;
+      transitionDone();
+      throw new Error();
+    }
   }, [
     connectInProgress,
     connectInProgress.current,
@@ -1104,12 +1122,13 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     connectionManager,
     connectionManager.current,
     transitionDone,
+    oldChain,
+    oldChain.current,
   ]);
 
   const onResetError = async (failingNodeUrl: string, err: any) => {
     console.error("onResetError:", err, failingNodeUrl);
-    willTransitionToInProgress.current = false;
-    statusCallback.current = undefined;
+    oldChain.current = "old";
     console.log(
       counterpart.translate("settings.connection_error", {
         url: failingNodeUrl || "",
@@ -1128,10 +1147,12 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     setApiLatencies(apiLatencies);
 
     await Apis.instance().close();
+    transitionDone();
     await willTransitionTo(true);
   };
 
   const attemptReconnect = useCallback(async () => {
+    oldChain.current = "old";
     const apiInstance = await (Apis as ApisType).reset(
       connectionManager.current.url,
       true,
@@ -1139,10 +1160,10 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     );
     try {
       await apiInstance.init_promise;
-      onConnect();
     } catch (e: any) {
       await onResetError(connectionManager.current.url, e);
     }
+    await onConnect();
   }, [connectionManager, connectionManager.current, onConnect, onResetError]);
 
   const initiateConnection = useCallback(
@@ -1164,7 +1185,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
           if (!isAutoSelection()) {
             setSelectedNode(connectionManager.current.url);
           }
-          onConnect();
+          await onConnect();
         } catch (error: any) {
           console.error(
             "----- App.willTransitionTo error ----->",
@@ -1249,6 +1270,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
           await doLatencyUpdate();
         } catch (e) {
           console.log("catch doLatency", e);
+          transitionDone();
           throw new Error();
         }
 
@@ -1267,6 +1289,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       initConnectionManager,
       doLatencyUpdate,
       initiateConnection,
+      transitionDone,
     ]
   );
 
@@ -1313,6 +1336,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   return (
     <PeerPlaysApiContext.Provider
       value={{
+        apiInstance: apiInstance.current,
         getNodes,
         willTransitionTo,
         dbApi,

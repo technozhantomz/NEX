@@ -9,12 +9,13 @@ import React, {
 } from "react";
 
 import { useBlockchain } from "../../hooks";
-import { BlockData } from "../../types";
+import { ApisInstanceType, BlockData } from "../../types";
 
 import { ChainStoreContextType } from "./ChainStoreProvider.types";
 
 interface Props {
   children: React.ReactNode;
+  apiInstance: ApisInstanceType | undefined;
 }
 
 const defaultChainStoreState: ChainStoreContextType =
@@ -24,7 +25,10 @@ const ChainStoreContext = createContext<ChainStoreContextType>(
   defaultChainStoreState
 );
 
-export const ChainStoreProvider = ({ children }: Props): JSX.Element => {
+export const ChainStoreProvider = ({
+  children,
+  apiInstance,
+}: Props): JSX.Element => {
   const [syncFail, setSyncFail] = useState<boolean>(() => {
     return ChainStore.subError &&
       ChainStore.subError.message ===
@@ -33,8 +37,9 @@ export const ChainStoreProvider = ({ children }: Props): JSX.Element => {
       : false;
   });
   const [synced, setSynced] = useState<boolean>(true);
-  const [rpcConnectionStatus, setRpcConnectionStatus] =
-    useState<string>("open");
+  const [rpcConnectionStatus, setRpcConnectionStatus] = useState<
+    string | undefined
+  >("open");
   const dynGlobalObject = useRef<BlockData>();
 
   const { getBlockData } = useBlockchain();
@@ -62,7 +67,7 @@ export const ChainStoreProvider = ({ children }: Props): JSX.Element => {
       console.log(e);
       return -1;
     }
-  }, [ChainStore, getBlockTime]);
+  }, [getBlockTime, apiInstance]);
 
   const syncStatus: (setState?: boolean) => boolean = useCallback(
     (setState = true) => {
@@ -96,10 +101,10 @@ export const ChainStoreProvider = ({ children }: Props): JSX.Element => {
     } catch (e) {
       console.error("e:", e);
     }
-  }, [ChainStore, chainStoreSub]);
+  }, [ChainStore, chainStoreSub, apiInstance]);
 
   const updateRpcConnectionStatus = useCallback(
-    (status: string) => {
+    (status?: string) => {
       setRpcConnectionStatus(status);
     },
     [setRpcConnectionStatus]
@@ -111,11 +116,11 @@ export const ChainStoreProvider = ({ children }: Props): JSX.Element => {
     return () => {
       clearInterval(syncCheckInterval as NodeJS.Timer);
     };
-  }, []);
+  }, [setListeners]);
 
   useEffect(() => {
-    Apis.setRpcConnectionStatusCallback(updateRpcConnectionStatus);
-  }, [Apis, updateRpcConnectionStatus]);
+    apiInstance?.setRpcConnectionStatusCallback(updateRpcConnectionStatus);
+  }, [Apis, updateRpcConnectionStatus, apiInstance]);
 
   const update = async () => {
     try {
@@ -135,7 +140,7 @@ export const ChainStoreProvider = ({ children }: Props): JSX.Element => {
     return () => {
       ChainStore.unsubscribe(update);
     };
-  }, []);
+  }, [apiInstance]);
 
   return (
     <ChainStoreContext.Provider
