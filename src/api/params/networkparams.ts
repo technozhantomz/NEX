@@ -1,7 +1,10 @@
+import { utils } from "../utils";
+
 import { config as Config } from "./config";
 
 export const testnetCheck =
-  typeof window !== "undefined" && window.location.origin !== Config.dexUrl;
+  typeof window !== "undefined" &&
+  !utils.isUrlsEqual(window.location.origin, Config.dexUrl as string);
 
 export const defaultToken = Config.defaultToken;
 export const defaultNetwork = "Peerplays";

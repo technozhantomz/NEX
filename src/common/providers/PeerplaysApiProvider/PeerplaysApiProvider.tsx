@@ -660,7 +660,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       } catch (err) {
         console.error("doLatencyUpdate error", err);
       } finally {
-        //TODO: check this part
         currentNode.current = currentNode.current + pingNow.length;
         setTimeout(pingNodesInBatches, 500);
       }

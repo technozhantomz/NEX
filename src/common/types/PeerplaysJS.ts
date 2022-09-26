@@ -7,7 +7,6 @@ export type RPCConnectionStatusType = {
 
 export type ChainWebSocketType = {
   cbId: number;
-  //TODO: check this
   cbs: {
     [requestId: string]: {
       time: Date;

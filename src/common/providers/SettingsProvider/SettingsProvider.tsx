@@ -205,7 +205,6 @@ export function SettingsProvider({
       }}
     >
       {loading ? (
-        //TODO: center this
         <h1
           style={{
             height: "50px",
