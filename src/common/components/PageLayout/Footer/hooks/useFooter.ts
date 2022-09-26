@@ -28,6 +28,7 @@ export function useFooter(): UseFooterResult {
     setSuccessConnectionStates,
     setFailureConnectionStates,
   } = useConnectionManagerContext();
+
   const showOutOfSyncModal = useCallback(() => {
     setIsOutOfSyncModalVisible(true);
   }, [setIsOutOfSyncModalVisible]);
@@ -152,6 +153,13 @@ export function useFooter(): UseFooterResult {
   useEffect(() => {
     ensureConnectivity();
   }, [connected, synced]);
+
+  useEffect(() => {
+    if (synced && syncTimeout.current !== undefined) {
+      clearTimeout(syncTimeout.current);
+      syncTimeout.current = undefined;
+    }
+  }, [synced]);
 
   return {
     isOutOfSyncModalVisible,

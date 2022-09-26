@@ -115,7 +115,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     if (localStorageAccount) {
       formInitialAccountByName(localStorageAccount);
     }
-  }, []);
+  }, [localStorageAccount]);
 
   return (
     <UserContext.Provider

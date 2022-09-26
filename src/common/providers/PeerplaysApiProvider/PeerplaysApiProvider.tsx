@@ -1160,10 +1160,10 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     );
     try {
       await apiInstance.init_promise;
+      await onConnect();
     } catch (e: any) {
       await onResetError(connectionManager.current.url, e);
     }
-    await onConnect();
   }, [connectionManager, connectionManager.current, onConnect, onResetError]);
 
   const initiateConnection = useCallback(
