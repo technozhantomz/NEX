@@ -158,6 +158,8 @@ export function UserSettingsProvider({
   const initUserSettings = useCallback(() => {
     if (localStorageAccount && localStorageAccount !== "" && !userSettings) {
       setUserSettings(defaultUserSettings);
+    } else {
+      setUserSettings(null);
     }
   }, [userSettings, setUserSettings, localStorageAccount]);
 
@@ -168,6 +170,8 @@ export function UserSettingsProvider({
   useEffect(() => {
     if (localStorageAccount && localStorageAccount !== "") {
       updateNotifications();
+    } else {
+      setNotifications(null);
     }
   }, [localStorageAccount]);
 
