@@ -30,6 +30,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [amount, setAmount] = useState<number>(0);
   const [withdrawAddress, setWithdrawAddress] = useState<string>("");
   const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
+  const [userBalance, _setUserBalance] = useState<number>(0);
 
   const { limitByPrecision } = useAsset();
   const { sidechainAssets } = useAssetsContext();
@@ -210,6 +211,18 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       setLoadingTransaction(false);
     }
   };
+
+  const setUserBalance = useCallback(() => {
+    if (assets && assets.length > 0) {
+      const userAsset = assets.find((asset) => asset.symbol === selectedAsset);
+
+      if (userAsset) {
+        _setUserBalance(userAsset.amount as number);
+      } else {
+        _setUserBalance(0);
+      }
+    }
+  }, [assets, selectedAsset, _setUserBalance]);
 
   const validateAmount = async (_: unknown, value: string) => {
     const accountAsset = assets.find((asset) => asset.symbol === selectedAsset);
@@ -399,6 +412,10 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     selectedAsset,
   ]);
 
+  useEffect(() => {
+    setUserBalance();
+  }, [setUserBalance]);
+
   return {
     feeAmount,
     withdrawForm,
@@ -414,5 +431,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     loadingTransaction,
     amount,
     withdrawAddress,
+    userBalance,
   };
 }

@@ -26,10 +26,21 @@ export const WithdrawContainer = styled.div`
     }
   }
   .ant-form {
-    .ant-input {
-      height: 50px;
+    .ant-form-item {
+      .ant-input-affix-wrapper-status-error .ant-input-prefix {
+        color: ${colors.textColor};
+      }
+      .ant-input {
+        height: 50px;
+        ${breakpoint.sm} {
+          height: 65px;
+        }
+      }
+    }
+    .ant-form-item:nth-child(2) .ant-input {
+      height: 70px !important;
       ${breakpoint.sm} {
-        height: 65px;
+        height: 85px !important;
       }
     }
   }
