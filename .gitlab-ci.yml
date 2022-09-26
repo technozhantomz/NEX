@@ -51,6 +51,30 @@ build-review:
   tags:
     - build
 
+build-QA:
+  # node docker image on which this would be run
+  image: node:16.17.0-alpine3.16
+  stage: build
+  script:
+    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
+    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
+    - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
+    - echo "NEXT_PUBLIC_DEX_URL='$DEV_DEX_URL'" >> .env
+    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
+    - echo "NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS='$DEV_BLOCKCHAIN_ENDPOINTS'" >> .env
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - .next/
+    expire_in: 2 weeks
+  only:
+    - tags
+    - branches
+    - merge_requests
+  tags:
+    - build
+
 docker_build:
   image: docker:stable
   stage: build
@@ -131,7 +155,7 @@ stop_review_app:
 deployToQA:
   stage: deployQA
   dependencies:
-    - build-review
+    - build-QA
   script: 
     - pm2 del nex-QA || true
     - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
