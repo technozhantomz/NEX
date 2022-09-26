@@ -11,7 +11,11 @@ export const WithdrawForm = styled(CardForm)`
   }
 `;
 
-export const WithdrawFormAssetAmount = styled(CardForm.Item)`
+type AssetAmountProps = {
+  withAssetSelector: boolean;
+};
+
+export const WithdrawFormAssetAmount = styled(CardForm.Item)<AssetAmountProps>`
   .ant-input-affix-wrapper {
     padding: 0;
     .ant-input-prefix {
@@ -28,6 +32,10 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)`
       font-size: 16px;
       ${breakpoint.sm} {
         font-size: 20px;
+      }
+      height: ${(props) => (props.withAssetSelector ? "70px" : "50px")};
+      ${breakpoint.sm} {
+        height: ${(props) => (props.withAssetSelector ? "85px" : "65px")};
       }
     }
     .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
@@ -78,4 +86,10 @@ export const FormDisclamer = styled(UiFormDisclamer)`
   ${breakpoint.sm} {
     margin-top: 35px;
   }
+`;
+
+export const Balance = styled.div`
+  text-align: left;
+  padding-left: 50px;
+  font-size: 14px;
 `;
