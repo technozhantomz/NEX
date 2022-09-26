@@ -222,7 +222,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         _setUserBalance(0);
       }
     }
-  }, [assets, selectedAsset]);
+  }, [assets, selectedAsset, _setUserBalance]);
 
   const validateAmount = async (_: unknown, value: string) => {
     const accountAsset = assets.find((asset) => asset.symbol === selectedAsset);
