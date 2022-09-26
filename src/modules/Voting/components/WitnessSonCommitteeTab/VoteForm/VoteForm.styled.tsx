@@ -1,4 +1,5 @@
 import {
+  BlockchainDownloadLinks,
   Button,
   Form,
   styled,
@@ -9,7 +10,6 @@ import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 import { Reset as UiReset } from "../../../../../ui/src/icons";
 import { mixIns } from "../../../../../ui/src/mixins";
-import { BlockchainDownloadLinks } from "../../../../Blockchain/common";
 
 export const VoteFormWrapper = styled.div`
   margin-bottom: 25px;

@@ -1,15 +1,20 @@
+import { SearchTableInput } from "ant-table-extensions";
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
-import { CSSProperties, ReactNode } from "react";
+import { CSSProperties, ReactNode, useRef } from "react";
+import { CSVLink } from "react-csv";
+import ReactToPrint from "react-to-print";
 
 import {
   useUserContext,
   useViewportContext,
 } from "../../../../../common/providers";
+import { DownloadOutlined, SearchOutlined } from "../../../../../ui/src";
 import { VoteRow } from "../../../types";
 
-import { showVotesColumns } from "./VoteColumns";
 import * as Styled from "./VoteTable.styled";
+import { showVotesColumns } from "./components";
+import { useVoteTable } from "./hooks";
 
 type Props = {
   tab: string;
@@ -28,23 +33,62 @@ export const VoteTable = ({
   approveVote,
   removeVote,
 }: Props): JSX.Element => {
+  const { searchDataSource, setSearchDataSource } = useVoteTable({ votes });
   const { sm } = useViewportContext();
   const { localStorageAccount } = useUserContext();
   const columns = showVotesColumns(approveVote, removeVote);
+  const componentRef = useRef();
+
   return (
     <Styled.VoteTableWrapper>
-      <Styled.Title>
-        {type === "pendingChanges"
-          ? counterpart.translate(`field.labels.pending_changes`, {
-              localStorageAccount,
-            })
-          : capitalize(counterpart.translate(`pages.voting.${tab}.heading`))}
-      </Styled.Title>
+      <Styled.VoteHeaderBar>
+        <Styled.Title>
+          {type === "pendingChanges"
+            ? counterpart.translate(`field.labels.pending_changes`, {
+                localStorageAccount,
+              })
+            : capitalize(counterpart.translate(`pages.voting.${tab}.heading`))}
+        </Styled.Title>
+        {type === "allVotes" ? (
+          <>
+            <SearchTableInput
+              columns={columns}
+              dataSource={votes}
+              setDataSource={setSearchDataSource}
+              inputProps={{
+                placeholder: counterpart.translate(
+                  `pages.blocks.${tab}.search_${tab}`
+                ),
+                suffix: <SearchOutlined />,
+              }}
+            />
+            <Styled.DownloadLinks>
+              <DownloadOutlined />
+              <ReactToPrint
+                trigger={() => (
+                  <a href="#">{counterpart.translate(`links.pdf`)}</a>
+                )}
+                content={() => componentRef.current}
+              />
+              {` / `}
+              <CSVLink
+                filename={"WitnessesTable.csv"}
+                data={votes}
+                className="btn btn-primary"
+              >
+                {counterpart.translate(`links.csv`)}
+              </CSVLink>
+            </Styled.DownloadLinks>
+          </>
+        ) : (
+          ""
+        )}
+      </Styled.VoteHeaderBar>
       <Styled.Container>
         {sm ? (
           <Styled.VoteList
             itemLayout="vertical"
-            dataSource={votes}
+            dataSource={searchDataSource}
             loading={loading}
             pagination={
               !loading
@@ -146,7 +190,7 @@ export const VoteTable = ({
         ) : (
           <Styled.VoteTable
             columns={columns}
-            dataSource={votes}
+            dataSource={searchDataSource}
             loading={loading}
             pagination={{
               position: ["bottomRight"],
@@ -178,6 +222,20 @@ export const VoteTable = ({
           />
         )}
       </Styled.Container>
+      {type === "allVotes" ? (
+        <Styled.PrintTable>
+          <div ref={componentRef}>
+            <Styled.VoteTable
+              dataSource={votes}
+              columns={columns}
+              loading={loading}
+              pagination={false}
+            />
+          </div>
+        </Styled.PrintTable>
+      ) : (
+        ""
+      )}
     </Styled.VoteTableWrapper>
   );
 };

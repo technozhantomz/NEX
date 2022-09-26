@@ -1,7 +1,5 @@
 import counterpart from "counterpart";
-import { ChangeEvent, Dispatch, SetStateAction, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 import { DEFAULT_PROXY_ID } from "../../../../../api/params";
 import {
@@ -10,7 +8,7 @@ import {
 } from "../../../../../common/components";
 import { useHandleTransactionForm } from "../../../../../common/hooks";
 import { Proxy } from "../../../../../common/types";
-import { DownloadOutlined, Form, Tooltip } from "../../../../../ui/src";
+import { Tooltip } from "../../../../../ui/src";
 import { VoteRow } from "../../../types";
 
 import * as Styled from "./VoteForm.styled";
@@ -39,10 +37,8 @@ type Props = {
 
 export const VoteForm = ({
   tab,
-  loading,
   isVotesChanged,
   resetChanges,
-  handleVoteSearch,
   setTransactionErrorMessage,
   setTransactionSuccessMessage,
   handlePublishChanges,
@@ -53,9 +49,6 @@ export const VoteForm = ({
   updateAccountFee,
   proxy,
   desiredMembers,
-  searchChange,
-  searchError,
-  votes,
 }: Props): JSX.Element => {
   const { voteForm } = useVoteForm();
 
@@ -71,7 +64,6 @@ export const VoteForm = ({
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
   });
-  const componentRef = useRef();
 
   return (
     <Styled.VoteFormWrapper>
@@ -139,45 +131,6 @@ export const VoteForm = ({
           />
         </Styled.VoteForm>
       </Styled.VoteForm.Provider>
-      <Form.Item
-        className="search-input"
-        validateStatus={searchError ? "error" : undefined}
-        help={
-          searchError
-            ? counterpart.translate(`field.errors.no_account`)
-            : undefined
-        }
-      >
-        <Styled.VoteSearch
-          size="large"
-          placeholder={counterpart.translate(
-            `pages.blocks.${tab}.search_${tab}`
-          )}
-          onSearch={handleVoteSearch}
-          loading={loading}
-          onChange={searchChange}
-        />
-
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"WitnessesTable.csv"}
-            data={votes}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
-      </Form.Item>
-      <Styled.PrintTable>
-        {/* <VotePrintTable ref={componentRef} columns={votes} loading={loading}/> */}
-      </Styled.PrintTable>
     </Styled.VoteFormWrapper>
   );
 };

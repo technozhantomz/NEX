@@ -1,19 +1,20 @@
 import {
+  BlockchainDownloadLinks,
+  BlockchainHeaderBar,
+  BlockchainTable,
+  BlockchainTableActiveIcon,
+  BlockchainTableUrlIcon,
   Col as col,
   Row as row,
   styled,
   Button as UiButton,
   List as UiList,
+  PrintTable as UiPrintTable,
 } from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 import { Check as check, Xmark as xmark } from "../../../../../ui/src/icons";
 import { mixIns } from "../../../../../ui/src/mixins";
-import {
-  BlockchainTable,
-  BlockchainTableActiveIcon,
-  BlockchainTableUrlIcon,
-} from "../../../../Blockchain/common";
 
 export const VoteTableWrapper = styled.div``;
 
@@ -129,6 +130,9 @@ export const Xmark = styled(xmark)`
   margin-left: 15px;
 `;
 
+export const VoteHeaderBar = styled(BlockchainHeaderBar)``;
+export const DownloadLinks = styled(BlockchainDownloadLinks)``;
+export const PrintTable = styled(UiPrintTable)``;
 export const urlIcon = styled(BlockchainTableUrlIcon)``;
 export const ActiveIcon = styled(BlockchainTableActiveIcon)``;
 

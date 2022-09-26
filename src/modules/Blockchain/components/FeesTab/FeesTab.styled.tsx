@@ -1,17 +1,15 @@
 import {
+  BlockchainDownloadLinks,
+  BlockchainHeaderBar,
+  BlockchainItemContent,
+  BlockchainTable,
+  BlockchainTabWrapper,
   styled,
   ListItem as UiListItem,
   PrintTable as UiPrintTable,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
-import {
-  BlockchainDownloadLinks,
-  BlockchainHeaderBar,
-  BlockchainItemContent,
-  BlockchainTable,
-  BlockchainTabWrapper,
-} from "../../common";
 
 export const FeesTabWrapper = styled(BlockchainTabWrapper)``;
 

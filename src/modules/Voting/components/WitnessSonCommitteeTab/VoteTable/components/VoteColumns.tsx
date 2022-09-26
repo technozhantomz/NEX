@@ -2,10 +2,9 @@ import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { TableHeading } from "../../../../../common/components";
-import { VoteRow } from "../../../types";
-
-import * as Styled from "./VoteTable.styled";
+import { TableHeading } from "../../../../../../common/components";
+import { VoteRow } from "../../../../types";
+import * as Styled from "../VoteTable.styled";
 
 export const showVotesColumns = (
   approveVote: (voteId: string) => void,
