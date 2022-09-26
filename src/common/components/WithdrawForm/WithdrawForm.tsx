@@ -140,7 +140,7 @@ export const WithdrawForm = ({
               name="amount"
               validateFirst={true}
               rules={formValdation.amount}
-              withassetSelector={withAssetSelector}
+              withassetselector={withAssetSelector}
             >
               <Input
                 placeholder="0.0"
