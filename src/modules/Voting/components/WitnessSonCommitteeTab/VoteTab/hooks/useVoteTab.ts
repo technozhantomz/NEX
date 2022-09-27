@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../../api/params";
 import { isArrayEqual } from "../../../../../../api/utils";
@@ -11,11 +11,13 @@ import {
 } from "../../../../../../common/hooks";
 import {
   useAssetsContext,
+  usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../../common/providers";
 import {
   AccountOptions,
   FullAccount,
+  GlobalProperties,
   Transaction,
   Vote,
   VoteType,
@@ -44,12 +46,12 @@ export function useVoteTab({
   getVotes,
   totalGpos,
 }: Args): UseVoteTabResult {
+  const [pendingChanges, setPendingChanges] = useState<VoteRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [allMembersRows, setAllMembersRows] = useState<VoteRow[]>([]);
   const [serverApprovedRows, setServerApprovedRows] = useState<VoteRow[]>([]);
   const [localApprovedRows, setLocalApprovedRows] = useState<VoteRow[]>([]);
   const [isVotesChanged, setIsVotesChanged] = useState<boolean>(false);
-  const [voteSearchValue, setVoteSearchValue] = useState<string>("");
   const [updateAccountFee, setUpdateAccountFee] = useState<number>(0);
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
@@ -57,15 +59,14 @@ export function useVoteTab({
     useState<string>("");
   const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  const [searchError, setSearchError] = useState<boolean>(false);
   const { formAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
-  const { getPrivateKey, formAccountBalancesByName, getAccountByName } =
-    useAccount();
+  const { getPrivateKey, formAccountBalancesByName } = useAccount();
   const { id, assets, name, localStorageAccount } = useUserContext();
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
   const { getTrxFee, buildTrx } = useTransactionBuilder();
+  const { dbApi } = usePeerplaysApiContext();
 
   const getUpdateAccountTrx = useCallback(() => {
     const membersIdentifiers: {
@@ -210,6 +211,7 @@ export function useVoteTab({
           setLoadingTransaction(false);
           setServerApprovedRows([...localApprovedRows]);
           setLocalApprovedRows([...localApprovedRows]);
+          setPendingChanges([]);
         } else {
           setTransactionErrorMessage(
             counterpart.translate(`field.errors.unable_transaction`)
@@ -236,42 +238,58 @@ export function useVoteTab({
     ]
   );
 
-  const handleVoteSearch = useCallback(
-    (name: string) => {
-      setLoading(true);
-      setVoteSearchValue(name);
-      setLoading(false);
-    },
-    [setVoteSearchValue, setLoading]
-  );
-
   const sortVotesRows = useCallback((votes: VoteRow[]) => {
-    return votes.sort(
-      (a, b) => Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0])
-    );
+    return votes
+      .sort(
+        (a, b) => Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0])
+      )
+      .map((vote, index) => {
+        return { ...vote, rank: index + 1 };
+      });
   }, []);
 
   const formVoteRow = useCallback(
     async (
       vote: Vote,
       votesIds: [string, string][],
-      action: "add" | "remove" | ""
+      action:
+        | "add"
+        | "remove"
+        | "pending add"
+        | "pending remove"
+        | "cancel"
+        | ""
     ): Promise<VoteRow> => {
       try {
+        const gpo: GlobalProperties = await dbApi("get_global_properties");
         if (defaultAsset !== undefined) {
           let voteType: VoteType;
+          let voteActive: boolean;
           switch (parseInt(vote.vote_id.charAt(0))) {
             case 0:
               voteType = "committees";
+              voteActive =
+                gpo["active_committee_members"].indexOf(vote.id) >= 0
+                  ? true
+                  : false;
               break;
             case 1:
               voteType = "witnesses";
+              voteActive =
+                gpo["active_witnesses"].indexOf(vote.id) >= 0 ? true : false;
               break;
             case 3:
               voteType = "sons";
+              voteActive =
+                gpo.active_sons.find((son) => son.son_id === vote.id) !==
+                undefined
+                  ? true
+                  : false;
               break;
             default:
               voteType = "witnesses";
+              voteActive =
+                gpo["active_witnesses"].indexOf(vote.id) >= 0 ? true : false;
           }
           const name = votesIds.filter((voteId) => voteId[1] === vote.id)[0][0];
 
@@ -279,14 +297,18 @@ export function useVoteTab({
             defaultAsset.id,
             Number(vote.total_votes)
           );
+
           return {
             id: vote.vote_id,
             key: vote.vote_id,
+            rank: 0,
             type: voteType,
             name: name,
-            website: vote.url,
+            url: vote.url,
             votes: `${votesAsset.amount} ${votesAsset.symbol}`,
             action: action,
+            active: voteActive,
+            status: action === "remove" ? "approved" : "unapproved",
           } as VoteRow;
         } else {
           return {} as VoteRow;
@@ -304,7 +326,13 @@ export function useVoteTab({
       setLoading(true);
       const allMembersRows = await Promise.all(
         allMembers.map((member) => {
-          return formVoteRow(member, allMembersIds, "add");
+          return formVoteRow(
+            member,
+            allMembersIds,
+            fullAccount?.votes.some((vote) => vote.id === member.id)
+              ? "remove"
+              : "add"
+          );
         })
       );
       setAllMembersRows(sortVotesRows(allMembersRows));
@@ -345,17 +373,29 @@ export function useVoteTab({
 
   const approveVote = useCallback(
     (voteId: string) => {
-      if (localApprovedRows.find((vote) => vote.id === voteId) === undefined) {
+      if (pendingChanges.find((vote) => vote.id === voteId) === undefined) {
         const selectedRow = allMembersRows.find((vote) => vote.id === voteId);
+        const selectedRowIndex = allMembersRows.findIndex(
+          (vote) => vote.id === voteId
+        );
+        allMembersRows[selectedRowIndex].action =
+          selectedRow?.action === "add" ? "pending add" : "pending remove";
         if (selectedRow !== undefined) {
+          setAllMembersRows(allMembersRows);
           setLocalApprovedRows(
             sortVotesRows([
-              { ...selectedRow, action: "remove" },
+              { ...selectedRow, action: "cancel" },
               ...localApprovedRows,
             ])
           );
+          setPendingChanges(
+            sortVotesRows([
+              { ...selectedRow, action: "cancel" },
+              ...pendingChanges,
+            ])
+          );
           checkVotesChanged(serverApprovedRows, [
-            { ...selectedRow, action: "remove" } as VoteRow,
+            { ...selectedRow, action: "cancel" } as VoteRow,
             ...localApprovedRows,
           ]);
         }
@@ -367,14 +407,26 @@ export function useVoteTab({
       setLocalApprovedRows,
       checkVotesChanged,
       tab,
+      setPendingChanges,
+      pendingChanges,
     ]
   );
 
   const removeVote = useCallback(
     (voteId: string) => {
       if (localApprovedRows.find((vote) => vote.id === voteId) !== undefined) {
+        const selectedRow = allMembersRows.find((vote) => vote.id === voteId);
+        const selectedRowIndex = allMembersRows.findIndex(
+          (vote) => vote.id === voteId
+        );
+        allMembersRows[selectedRowIndex].action =
+          selectedRow?.action === "pending add" ? "add" : "remove";
+        setAllMembersRows(allMembersRows);
         setLocalApprovedRows(
           sortVotesRows(localApprovedRows.filter((vote) => vote.id !== voteId))
+        );
+        setPendingChanges(
+          sortVotesRows(pendingChanges.filter((vote) => vote.id !== voteId))
         );
         checkVotesChanged(
           serverApprovedRows,
@@ -388,48 +440,16 @@ export function useVoteTab({
       sortVotesRows,
       checkVotesChanged,
       serverApprovedRows,
+      setPendingChanges,
+      pendingChanges,
     ]
   );
 
   const resetChanges = useCallback(() => {
     setLocalApprovedRows([...serverApprovedRows]);
+    setPendingChanges([]);
     setIsVotesChanged(false);
   }, [serverApprovedRows, setLocalApprovedRows, setIsVotesChanged]);
-
-  const getWitnessSonCommitteeAccountByName = useCallback(
-    (name: string) => {
-      try {
-        const account: VoteRow | undefined = allMembersRows.find(
-          (account) => account.name == name
-        );
-        return account;
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    [allMembersRows]
-  );
-
-  const searchChange = useCallback(
-    (inputEvent: ChangeEvent<HTMLInputElement>) => {
-      setVoteSearchValue(inputEvent.target.value);
-
-      const account = getWitnessSonCommitteeAccountByName(
-        inputEvent.target.value
-      );
-      if (account) {
-        setSearchError(false);
-      } else {
-        setSearchError(true);
-      }
-    },
-    [
-      getAccountByName,
-      setSearchError,
-      setVoteSearchValue,
-      getWitnessSonCommitteeAccountByName,
-    ]
-  );
 
   useEffect(() => {
     if (isArrayEqual(serverApprovedRows, localApprovedRows)) {
@@ -448,8 +468,6 @@ export function useVoteTab({
     serverApprovedRows,
     localApprovedRows,
     isVotesChanged,
-    handleVoteSearch,
-    voteSearchValue,
     approveVote,
     removeVote,
     resetChanges,
@@ -460,7 +478,6 @@ export function useVoteTab({
     setTransactionSuccessMessage,
     handlePublishChanges,
     loadingTransaction,
-    searchChange,
-    searchError,
+    pendingChanges,
   };
 }

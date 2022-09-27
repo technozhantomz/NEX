@@ -752,7 +752,7 @@ export const en = {
         tab: "Sons",
       },
       witnesses: {
-        heading: "PeerPlays Witnesses Voting",
+        heading: "Witnesses",
         tab: "Witnesses",
       },
       proxy: {
@@ -864,6 +864,7 @@ export const en = {
       desired_committees: "Desired committees",
       desired_sons: "Desired sons",
       desired_proxy: "Desired Proxy",
+      pending_changes: "Pending changes",
     },
     comments: {
       deposit_hbd:
@@ -1008,6 +1009,7 @@ export const en = {
     category: "Category",
     active: "Active",
     key: "key",
+    status: "Status",
   },
   tooltips: {
     copy: "copy",

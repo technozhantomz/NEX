@@ -714,7 +714,7 @@ export const ru = {
         tab: "Sons",
       },
       witnesses: {
-        heading: "PeerPlays Свидетели Голосование",
+        heading: "Свидетели",
         tab: "Свидетели",
       },
       proxy: {
@@ -827,6 +827,7 @@ export const ru = {
       desired_committees: "Желаемые комитеты",
       desired_sons: "Желаемые сыновья",
       desired_proxy: "Желаемый прокси",
+      pending_changes: "Ожидающие изменения",
     },
     comments: {
       deposit_hbd:
@@ -963,6 +964,7 @@ export const ru = {
     category: "категория",
     active: "Активный",
     key: "ключ",
+    status: "Статус",
   },
   tooltips: {
     copy: "копировать",

@@ -1,6 +1,5 @@
 import counterpart from "counterpart";
-import { capitalize } from "lodash";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import { DEFAULT_PROXY_ID } from "../../../../../api/params";
 import {
@@ -9,7 +8,8 @@ import {
 } from "../../../../../common/components";
 import { useHandleTransactionForm } from "../../../../../common/hooks";
 import { Proxy } from "../../../../../common/types";
-import { Form, Tooltip } from "../../../../../ui/src";
+import { Tooltip } from "../../../../../ui/src";
+import { VoteRow } from "../../../types";
 
 import * as Styled from "./VoteForm.styled";
 import { useVoteForm } from "./hooks";
@@ -19,7 +19,6 @@ type Props = {
   loading: boolean;
   isVotesChanged: boolean;
   resetChanges: () => void;
-  handleVoteSearch: (name: string) => void;
   handlePublishChanges: (password: string) => Promise<void>;
   loadingTransaction: boolean;
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
@@ -30,16 +29,13 @@ type Props = {
   updateAccountFee: number;
   proxy: Proxy;
   desiredMembers: number;
-  searchError: boolean;
-  searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => void;
+  votes: VoteRow[];
 };
 
 export const VoteForm = ({
   tab,
-  loading,
   isVotesChanged,
   resetChanges,
-  handleVoteSearch,
   setTransactionErrorMessage,
   setTransactionSuccessMessage,
   handlePublishChanges,
@@ -50,8 +46,6 @@ export const VoteForm = ({
   updateAccountFee,
   proxy,
   desiredMembers,
-  searchChange,
-  searchError,
 }: Props): JSX.Element => {
   const { voteForm } = useVoteForm();
 
@@ -67,33 +61,9 @@ export const VoteForm = ({
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
   });
+
   return (
     <Styled.VoteFormWrapper>
-      <Styled.Title>
-        {counterpart.translate(`field.labels.vote_for`, {
-          tab: capitalize(counterpart.translate(`pages.voting.${tab}.heading`)),
-        })}
-      </Styled.Title>
-
-      <Form.Item
-        className="search-input"
-        validateStatus={searchError ? "error" : undefined}
-        help={
-          searchError
-            ? counterpart.translate(`field.errors.no_account`)
-            : undefined
-        }
-      >
-        <Styled.VoteSearch
-          size="large"
-          placeholder={counterpart.translate(
-            `field.placeholder.search_accounts`
-          )}
-          onSearch={handleVoteSearch}
-          loading={loading}
-          onChange={searchChange}
-        />
-      </Form.Item>
       <Styled.VoteForm.Provider onFormFinish={handleFormFinish}>
         <Styled.VoteForm
           form={voteForm}

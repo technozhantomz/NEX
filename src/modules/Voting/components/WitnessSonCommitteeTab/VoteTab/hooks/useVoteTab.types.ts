@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import { VoteRow } from "../../../../types";
 
@@ -9,8 +9,6 @@ export type UseVoteTabResult = {
   serverApprovedRows: VoteRow[];
   localApprovedRows: VoteRow[];
   isVotesChanged: boolean;
-  handleVoteSearch: (name: string) => void;
-  voteSearchValue: string;
   approveVote: (voteId: string) => void;
   removeVote: (voteId: string) => void;
   resetChanges: () => void;
@@ -21,6 +19,5 @@ export type UseVoteTabResult = {
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   handlePublishChanges: (password: string) => Promise<void>;
   loadingTransaction: boolean;
-  searchError: boolean;
-  searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => void;
+  pendingChanges: VoteRow[];
 };

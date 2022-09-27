@@ -2,8 +2,8 @@ import { CheckCircleFilled, LinkOutlined } from "@ant-design/icons";
 import { Table as UiTable } from "ant-table-extensions";
 import styled from "styled-components";
 
-import { breakpoint } from "../../../../ui/src/breakpoints";
-import { colors } from "../../../../ui/src/colors";
+import { breakpoint } from "../breakpoints";
+import { colors } from "../colors";
 
 export const BlockchainTable = styled(UiTable)`
   .ant-table {

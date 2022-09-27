@@ -1,10 +1,15 @@
 import {
+  BlockchainDownloadLinks,
+  BlockchainHeaderBar,
+  BlockchainTable,
+  BlockchainTableActiveIcon,
+  BlockchainTableUrlIcon,
   Col as col,
   Row as row,
   styled,
   Button as UiButton,
   List as UiList,
-  Table as UiTable,
+  PrintTable as UiPrintTable,
 } from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
@@ -13,23 +18,9 @@ import { mixIns } from "../../../../../ui/src/mixins";
 
 export const VoteTableWrapper = styled.div``;
 
-export const VoteTable = styled(UiTable)`
+export const VoteTable = styled(BlockchainTable)`
   margin: 0 35px;
   max-width: 100%;
-  ${mixIns.hairline}
-  .ant-table-thead > tr > th {
-    background: transparent;
-    color: ${colors.textColorSecondary};
-    font-weight: 300;
-    border: none;
-    &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
-      display: none;
-    }
-  }
-  .ant-table-tbody > tr > td {
-    border: none;
-    font-weight: 500;
-  }
 `;
 
 export const VoteList = styled(UiList)`
@@ -137,4 +128,18 @@ export const Check = styled(check)`
 export const Xmark = styled(xmark)`
   color: #d01721;
   margin-left: 15px;
+`;
+
+export const VoteHeaderBar = styled(BlockchainHeaderBar)``;
+export const DownloadLinks = styled(BlockchainDownloadLinks)``;
+export const PrintTable = styled(UiPrintTable)``;
+export const urlIcon = styled(BlockchainTableUrlIcon)``;
+export const ActiveIcon = styled(BlockchainTableActiveIcon)``;
+
+export const ApprovedStatus = styled.span`
+  color: ${colors.successColor};
+`;
+
+export const NotApprovedStatus = styled.span`
+  color: ${colors.missedColor};
 `;

@@ -1,30 +1,19 @@
 import {
-  styled,
-  ListItem as UiListItem,
-  PrintTable as UiPrintTable,
-  StatsCardsDeck as UIStatsCardsDeck,
-  // TableSearch as UiTableSearch,
-} from "../../../../ui/src";
-// import { breakpoint } from "../../../../ui/src/breakpoints";
-import {
   BlockchainDownloadLinks,
   BlockchainHeader,
   BlockchainHeaderBar,
   BlockchainItemContent,
   BlockchainTable,
   BlockchainTabWrapper,
-} from "../../common";
+  styled,
+  ListItem as UiListItem,
+  PrintTable as UiPrintTable,
+  StatsCardsDeck as UIStatsCardsDeck,
+} from "../../../../ui/src";
 
 export const BlockTabWrapper = styled(BlockchainTabWrapper)``;
 
 export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
-
-// export const BlockSearch = styled(UiTableSearch)`
-//   margin-bottom: 25px;
-//   ${breakpoint.sm} {
-//     margin-bottom: 35px;
-//   }
-// `;
 
 export const BlockHeaderBar = styled(BlockchainHeaderBar)``;
 
