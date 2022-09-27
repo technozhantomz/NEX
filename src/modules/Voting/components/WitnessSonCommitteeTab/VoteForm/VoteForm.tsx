@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import { DEFAULT_PROXY_ID } from "../../../../../api/params";
 import {
@@ -19,7 +19,6 @@ type Props = {
   loading: boolean;
   isVotesChanged: boolean;
   resetChanges: () => void;
-  handleVoteSearch: (name: string) => void;
   handlePublishChanges: (password: string) => Promise<void>;
   loadingTransaction: boolean;
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
@@ -30,8 +29,6 @@ type Props = {
   updateAccountFee: number;
   proxy: Proxy;
   desiredMembers: number;
-  searchError: boolean;
-  searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => void;
   votes: VoteRow[];
 };
 

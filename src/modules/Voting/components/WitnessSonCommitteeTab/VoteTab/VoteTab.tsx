@@ -37,8 +37,6 @@ export const VoteTab = ({
     allMembersRows,
     localApprovedRows,
     isVotesChanged,
-    handleVoteSearch,
-    voteSearchValue,
     approveVote,
     removeVote,
     resetChanges,
@@ -50,10 +48,6 @@ export const VoteTab = ({
     transactionSuccessMessage,
     name,
     updateAccountFee,
-    searchChange,
-    searchError,
-    isSameAccount,
-    searchValue,
     pendingChanges,
   } = useVoteTab({
     tab,
@@ -81,15 +75,7 @@ export const VoteTab = ({
               tab={tab}
               type="pendingChanges"
               loading={votesLoading || loading}
-              votes={
-                voteSearchValue === ""
-                  ? pendingChanges
-                  : localApprovedRows.filter((approvedVote) =>
-                      approvedVote.name
-                        .toLowerCase()
-                        .startsWith(voteSearchValue.toLowerCase())
-                    )
-              }
+              votes={pendingChanges}
               approveVote={approveVote}
               removeVote={removeVote}
             />
@@ -97,7 +83,6 @@ export const VoteTab = ({
               tab={tab}
               loading={loading}
               isVotesChanged={isVotesChanged}
-              handleVoteSearch={handleVoteSearch}
               resetChanges={resetChanges}
               name={name}
               handlePublishChanges={handlePublishChanges}
@@ -109,10 +94,6 @@ export const VoteTab = ({
               updateAccountFee={updateAccountFee}
               proxy={proxy}
               desiredMembers={localApprovedRows.length}
-              searchChange={searchChange}
-              searchError={searchError}
-              isSameAccount={isSameAccount}
-              searchValue={searchValue}
               votes={allMembersRows.filter(
                 (vote) =>
                   !localApprovedRows
