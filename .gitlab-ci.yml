@@ -155,14 +155,11 @@ deployToQA:
     - build-qa
   script: 
     - pm2 del nex-QA || true
-    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
-    - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
-    - echo "NEXT_PUBLIC_DEX_URL='$DEV_DEX_URL'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
-    - echo "NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS='$DEV_BLOCKCHAIN_ENDPOINTS'" >> .env
     - npm install 
     - pm2 start npm --name nex-QA -- run start
+  environment:
+    name: QA
+    url: https://nex-cicd.peerplays.download
   when: manual 
   tags:
     - deploy
@@ -173,14 +170,11 @@ deployToStaging:
     - build-production
   script: 
     - pm2 del nex-staging || true
-    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
-    - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
-    - echo "NEXT_PUBLIC_DEX_URL='$DEV_DEX_URL'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
-    - echo "NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS='$DEV_BLOCKCHAIN_ENDPOINTS'" >> .env
     - npm install 
-    - pm2 start npm --name nex-QA -- run start
+    - pm2 start npm --name nex-staging -- run start
+  environment:
+    name: staging
+    url: https://nex-staging.peerplays.download
   when: manual 
   tags:
     - staging
