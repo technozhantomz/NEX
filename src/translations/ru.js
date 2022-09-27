@@ -754,6 +754,8 @@ export const ru = {
     placeholder: {
       user_name: "Введите имя пользователя",
       master_password: "Введите мастер-пароль",
+      master_password_private_key:
+        "Мастер-пароль или закрытый ключ (мы рекомендуем использовать кошелек Whalevault web 3.0)",
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
       hive_blockchain_account: "Блокчейн-аккаунт Hive",
@@ -827,6 +829,8 @@ export const ru = {
       desired_committees: "Желаемые комитеты",
       desired_sons: "Желаемые сыновья",
       desired_proxy: "Желаемый прокси",
+      wallet_lock: "Блокировка кошелька (минуты)",
+      use_whalevault: "Используйте расширение WhaleVault",
     },
     comments: {
       deposit_hbd:

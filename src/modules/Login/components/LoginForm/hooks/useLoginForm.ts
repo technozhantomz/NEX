@@ -7,16 +7,18 @@ import {
   useUserContext,
 } from "../../../../../common/providers";
 import { FullAccount } from "../../../../../common/types";
-import { Form } from "../../../../../ui/src";
+import { CheckboxChangeEvent, Form } from "../../../../../ui/src";
 
-import { ILoginForm } from "./useLoginForm.types";
+import { LoginForm, UseLoginFormResult } from "./useLoginForm.types";
 
-export function useLoginForm(): ILoginForm {
+export function useLoginForm(): UseLoginFormResult {
   const [submitting, setSubmitting] = useState(false);
   const [validUser, setValidUser] = useState(false);
   const [temporaryFullAccount, setTemporaryFullAccount] = useState<
     FullAccount | undefined
   >(undefined);
+  const [useWhalevault, setUseWhalevault] = useState<boolean>(false);
+
   const {
     getFullAccount,
     formAccountAfterConfirmation,
@@ -24,13 +26,7 @@ export function useLoginForm(): ILoginForm {
   } = useAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
   const { handleLoginRedirect } = useBrowserHistoryContext();
-  const [loginForm] = Form.useForm();
-
-  useEffect(() => {
-    if (localStorageAccount) {
-      handleLoginRedirect();
-    }
-  }, [localStorageAccount]);
+  const [loginForm] = Form.useForm<LoginForm>();
 
   const handleLogin = async () => {
     setSubmitting(true);
@@ -46,6 +42,10 @@ export function useLoginForm(): ILoginForm {
       .catch(() => {
         setSubmitting(false);
       });
+  };
+
+  const onChangeUseWhalevault = (e: CheckboxChangeEvent) => {
+    setUseWhalevault(e.target.checked);
   };
 
   const validateUsername = async (_: unknown, value: string) => {
@@ -97,11 +97,19 @@ export function useLoginForm(): ILoginForm {
     ],
   };
 
+  useEffect(() => {
+    if (localStorageAccount) {
+      handleLoginRedirect();
+    }
+  }, [localStorageAccount]);
+
   return {
     validUser,
     loginForm,
     handleLogin,
     formValdation,
     submitting,
+    useWhalevault,
+    onChangeUseWhalevault,
   };
 }
