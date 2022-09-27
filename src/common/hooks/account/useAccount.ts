@@ -9,6 +9,7 @@ import {
   Asset,
   FullAccount,
   Permissions,
+  WhaleVaultPubKeys,
   WitnessAccount,
 } from "../../types";
 
@@ -139,6 +140,36 @@ export function useAccount(): UseAccountResult {
         ];
   }, []);
 
+  const validateWhaleVaultPubKeys = useCallback(
+    (pubkeys: WhaleVaultPubKeys, account: Account) => {
+      let isValid = false;
+
+      let { activePubkey, memoPubkey } = pubkeys;
+      if (activePubkey) {
+        activePubkey = activePubkey.slice(0, 4).includes(defaultToken as string)
+          ? activePubkey
+          : activePubkey.replace("PPY", defaultToken as string);
+        const accountActiveKey = account.active.key_auths[0][0];
+        if (accountActiveKey === activePubkey) {
+          isValid = true;
+          return isValid;
+        }
+      }
+      if (memoPubkey) {
+        memoPubkey = memoPubkey.slice(0, 4).includes(defaultToken as string)
+          ? memoPubkey
+          : memoPubkey.replace("PPY", defaultToken as string);
+        const accountMemoKey = account.options.memo_key;
+        if (accountMemoKey === memoPubkey) {
+          isValid = true;
+          return isValid;
+        }
+      }
+      return isValid;
+    },
+    [defaultToken]
+  );
+
   const validateAccountPassword = useCallback(
     (password: string, account: Account) => {
       const roles = ["active", "owner", "memo"];
@@ -207,5 +238,6 @@ export function useAccount(): UseAccountResult {
     removeAccount,
     validateAccountPassword,
     getUserNameById,
+    validateWhaleVaultPubKeys,
   };
 }

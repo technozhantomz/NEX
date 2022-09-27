@@ -8,6 +8,9 @@ export const LoginForm = styled(CardForm)`
   .ant-form-item-control-input-content {
     height: 40px;
   }
+  .ant-form-item.checkbox .ant-form-item-control-input-content {
+    height: 24px;
+  }
   .ant-input,
   .ant-input-affix-wrapper,
   .ant-select,
@@ -28,6 +31,9 @@ export const LoginForm = styled(CardForm)`
     padding-top: 16px;
     .ant-form-item-control-input-content {
       height: 50px;
+    }
+    .ant-form-item.checkbox .ant-form-item-control-input-content {
+      height: 24px;
     }
     .ant-input,
     .ant-input-affix-wrapper {

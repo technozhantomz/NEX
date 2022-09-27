@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "../../../../../common/hooks";
 import {
   useBrowserHistoryContext,
+  usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
 import { FullAccount } from "../../../../../common/types";
@@ -17,15 +18,17 @@ export function useLoginForm(): UseLoginFormResult {
   const [temporaryFullAccount, setTemporaryFullAccount] = useState<
     FullAccount | undefined
   >(undefined);
-  const [useWhalevault, setUseWhalevault] = useState<boolean>(false);
+  const [useWhaleVault, setUseWhaleVault] = useState<boolean>(false);
 
   const {
     getFullAccount,
     formAccountAfterConfirmation,
     validateAccountPassword,
+    validateWhaleVaultPubKeys,
   } = useAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
   const { handleLoginRedirect } = useBrowserHistoryContext();
+  const { whaleVaultInstance } = usePeerplaysApiContext();
   const [loginForm] = Form.useForm<LoginForm>();
 
   const handleLogin = async () => {
@@ -44,8 +47,8 @@ export function useLoginForm(): UseLoginFormResult {
       });
   };
 
-  const onChangeUseWhalevault = (e: CheckboxChangeEvent) => {
-    setUseWhalevault(e.target.checked);
+  const onChangeUseWhaleVault = (e: CheckboxChangeEvent) => {
+    setUseWhaleVault(e.target.checked);
   };
 
   const validateUsername = async (_: unknown, value: string) => {
@@ -76,6 +79,73 @@ export function useLoginForm(): UseLoginFormResult {
     }
   };
 
+  const validateUseWhalevault = async () => {
+    if (temporaryFullAccount) {
+      const account = temporaryFullAccount.account;
+      if (useWhaleVault) {
+        if (whaleVaultInstance) {
+          try {
+            const res = await whaleVaultInstance.promiseRequestPubKeys(
+              "peerplays-dex",
+              `ppy:${account.name}`
+            );
+            if (res.success) {
+              const pubKeys = res.result[`ppy:${account.name}`];
+              if (Object.keys(pubKeys).length) {
+                const isValidKeys = validateWhaleVaultPubKeys(pubKeys, account);
+                if (!isValidKeys) {
+                  return Promise.reject(
+                    new Error(
+                      counterpart.translate(
+                        `field.errors.wrong_whalevault_keys`
+                      )
+                    )
+                  );
+                }
+              } else {
+                return Promise.reject(
+                  new Error(
+                    counterpart.translate(
+                      `field.errors.not_added_to_whalevault`
+                    )
+                  )
+                );
+              }
+            } else {
+              return Promise.reject(
+                new Error(
+                  counterpart.translate(
+                    `field.errors.whalevault_connection_error`
+                  )
+                )
+              );
+            }
+          } catch (e) {
+            console.log(e);
+            return Promise.reject(
+              new Error(
+                counterpart.translate(
+                  `field.errors.whalevault_connection_error`
+                )
+              )
+            );
+          }
+        } else {
+          return Promise.reject(
+            new Error(
+              counterpart.translate(`field.errors.whalevault_not_installed`)
+            )
+          );
+        }
+      }
+      return Promise.resolve();
+    } else {
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.user_name_first`))
+      );
+    }
+  };
+
   const formValdation = {
     username: [
       {
@@ -95,6 +165,7 @@ export function useLoginForm(): UseLoginFormResult {
       },
       { validator: validatePassword },
     ],
+    useWhaleVault: [{ validator: validateUseWhalevault }],
   };
 
   useEffect(() => {
@@ -109,7 +180,7 @@ export function useLoginForm(): UseLoginFormResult {
     handleLogin,
     formValdation,
     submitting,
-    useWhalevault,
-    onChangeUseWhalevault,
+    useWhaleVault,
+    onChangeUseWhaleVault,
   };
 }

@@ -11,9 +11,9 @@ export const LoginForm: React.FC = () => {
     loginForm,
     handleLogin,
     formValdation,
-    onChangeUseWhalevault,
+    onChangeUseWhaleVault,
     submitting,
-    useWhalevault,
+    useWhaleVault,
   } = useLoginForm();
   const walletLockInMinutes = ["0", "30", "60", "90", "180", "210"];
 
@@ -27,7 +27,7 @@ export const LoginForm: React.FC = () => {
         username: "",
         password: "",
         walletLock: 0,
-        useWhalevault: false,
+        useWhaleVault: false,
       }}
     >
       <Form.Item
@@ -37,10 +37,11 @@ export const LoginForm: React.FC = () => {
         validateTrigger={["onChange", "onSubmit"]}
       >
         <Input
+          autoComplete="new-password"
           placeholder={counterpart.translate(`field.placeholder.user_name`)}
         />
       </Form.Item>
-      {!useWhalevault ? (
+      {!useWhaleVault ? (
         <>
           <Form.Item
             name="password"
@@ -49,6 +50,7 @@ export const LoginForm: React.FC = () => {
             validateTrigger="onSubmit"
           >
             <Input.Password
+              autoComplete="new-password"
               placeholder={counterpart.translate(
                 `field.placeholder.master_password_private_key`
               )}
@@ -60,7 +62,9 @@ export const LoginForm: React.FC = () => {
           <Form.Item name="walletLock">
             <Select>
               {walletLockInMinutes.map((min) => (
-                <Option value={min}>{min}</Option>
+                <Option key={min} value={min}>
+                  {min}
+                </Option>
               ))}
             </Select>
           </Form.Item>
@@ -68,9 +72,15 @@ export const LoginForm: React.FC = () => {
       ) : (
         ""
       )}
-      <Form.Item name="useWhalevault">
-        <Checkbox onChange={onChangeUseWhalevault}>
-          Use WhaleVault extension
+      <Form.Item
+        rules={formValdation.useWhaleVault}
+        validateFirst={true}
+        validateTrigger={["onChange", "onSubmit"]}
+        name="useWhaleVault"
+        className="checkbox"
+      >
+        <Checkbox onChange={onChangeUseWhaleVault}>
+          {counterpart.translate(`field.labels.use_whalevault`)}
         </Checkbox>
       </Form.Item>
 

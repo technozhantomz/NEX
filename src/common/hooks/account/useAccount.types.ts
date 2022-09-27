@@ -1,4 +1,4 @@
-import { Account, FullAccount } from "../../types";
+import { Account, FullAccount, WhaleVaultPubKeys } from "../../types";
 
 export type UseAccountResult = {
   formAccountByName: (name: string, subscription: boolean) => Promise<void>;
@@ -14,4 +14,8 @@ export type UseAccountResult = {
   removeAccount: () => void;
   validateAccountPassword: (password: string, account: Account) => boolean;
   getUserNameById: (id: string) => Promise<string>;
+  validateWhaleVaultPubKeys: (
+    pubkeys: WhaleVaultPubKeys,
+    account: Account
+  ) => boolean;
 };

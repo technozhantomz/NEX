@@ -910,6 +910,11 @@ export const ru = {
       asset_required: "Требуется актив",
       cannot_send_yourself: "Не могу отправить себе",
       unable_transaction: "Невозможно обработать транзакцию!",
+      not_added_to_whalevault: "Эта учетная запись не добавлена в WhaleVault",
+      whalevault_connection_error: "Не удается отправить запрос в WhaleVault.",
+      whalevault_not_installed:
+        "WhaleVault не установлен. Пожалуйста, установите расширение WhaleVault и перезагрузите приложение.",
+      wrong_whalevault_keys: "Добавленные ключи в WhaleVault неверны",
     },
     success: {
       successfully_transferred:

@@ -6,15 +6,15 @@ export type UseLoginFormResult = {
   formValdation: IFormValidation;
   loginForm: FormInstance<LoginForm>;
   submitting: boolean;
-  useWhalevault: boolean;
-  onChangeUseWhalevault: (e: CheckboxChangeEvent) => void;
+  useWhaleVault: boolean;
+  onChangeUseWhaleVault: (e: CheckboxChangeEvent) => void;
 };
 
 export type LoginForm = {
   username: string;
   password?: string;
   walletLock?: number;
-  useWhalvault: boolean;
+  useWhalVault: boolean;
 };
 export type IFormField = {
   field: string;
@@ -26,4 +26,5 @@ export type IFormField = {
 export type IFormValidation = {
   username: Rule[];
   password: Rule[];
+  useWhaleVault: Rule[];
 };

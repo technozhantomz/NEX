@@ -49,7 +49,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const [id, setId] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [assets, _setAssets] = useState<Asset[]>([]);
-  // should add lock time functionality
   const [password, _setPassword] = useState<string>("");
   const [account, setAccount] = useState<Account | undefined>();
 
@@ -75,7 +74,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     [_setAssets]
   );
 
-  // should implement lock time functionality
   const setPassword = useCallback(
     (password: string) => {
       _setPassword(password);

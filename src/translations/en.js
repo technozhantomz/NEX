@@ -946,8 +946,14 @@ export const en = {
         "These keys are already in used for %(role)s permissions",
       need_to_vest_gpos: "You need to Vest some GPOS balance first",
       asset_required: "Asset is required",
-      cannot_send_yourself: "Can not send to yourself",
+      cannot_send_yourself: "Can not send to yourself!",
       unable_transaction: "Unable to process the transaction!",
+
+      not_added_to_whalevault: "This account is not added to WhaleVault",
+      whalevault_connection_error: "Can not Send Request to whaleVault.",
+      whalevault_not_installed:
+        "WhaleVault is not installed. Please install WhaleVault extension and reload the app",
+      wrong_whalevault_keys: "Added keys to WhaleVault are not correct",
     },
     success: {
       successfully_transferred:
