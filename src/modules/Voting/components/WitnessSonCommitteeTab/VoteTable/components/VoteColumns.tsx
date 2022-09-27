@@ -1,4 +1,3 @@
-import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
 
@@ -10,7 +9,29 @@ export const showVotesColumns = (
   approveVote: (voteId: string) => void,
 
   removeVote: (voteId: string) => void
-): ColumnsType<unknown> => {
+): {
+  title: () => JSX.Element;
+  dataIndex: string;
+  key: string;
+  render:
+    | ((active: boolean) => JSX.Element)
+    | ((_value: string, _record: any) => JSX.Element)
+    | undefined;
+  filters:
+    | { text: string; value: boolean }[]
+    | { text: string; value: string }[]
+    | undefined;
+  filterMode: string | undefined;
+  filterSearch: boolean | undefined;
+  onFilter:
+    | ((value: boolean, record: VoteRow) => boolean)
+    | ((value: string, record: VoteRow) => boolean)
+    | undefined;
+  sorter:
+    | ((a: { rank: number }, b: { rank: number }) => number)
+    | ((a: { votes: string }, b: { votes: string }) => number)
+    | undefined;
+}[] => {
   const headings = [
     "rank",
     "name",
@@ -160,5 +181,5 @@ export const showVotesColumns = (
       onFilter: onFilters[index],
       sorter: sorters[index],
     };
-  }) as ColumnsType<unknown>;
+  });
 };

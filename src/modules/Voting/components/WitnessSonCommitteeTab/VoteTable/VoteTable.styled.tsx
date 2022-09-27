@@ -1,6 +1,8 @@
 import {
   BlockchainDownloadLinks,
+  BlockchainHeader,
   BlockchainHeaderBar,
+  BlockchainItemContent,
   BlockchainTable,
   BlockchainTableActiveIcon,
   BlockchainTableUrlIcon,
@@ -9,6 +11,7 @@ import {
   styled,
   Button as UiButton,
   List as UiList,
+  ListItem as UiListItem,
   PrintTable as UiPrintTable,
 } from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
@@ -16,7 +19,12 @@ import { colors } from "../../../../../ui/src/colors";
 import { Check as check, Xmark as xmark } from "../../../../../ui/src/icons";
 import { mixIns } from "../../../../../ui/src/mixins";
 
-export const VoteTableWrapper = styled.div``;
+export const VoteTableWrapper = styled.div`
+  margin: 0 25px;
+  ${breakpoint.sm} {
+    margin: 0 35px;
+  }
+`;
 
 export const VoteTable = styled(BlockchainTable)`
   margin: 0 35px;
@@ -41,34 +49,9 @@ export const VoteList = styled(UiList)`
   }
 `;
 
-export const VoteListItem = styled(UiList.Item)`
-  padding: 27px 0 0;
-  &.ant-list-item,
-  &.ant-list-item:last-child {
-    border-bottom: none;
-  }
-`;
+export const VoteListItem = styled(UiListItem)``;
 
-export const VoteItemContent = styled.div`
-  padding: 0;
-  margin: 0;
-  .vote-info {
-    margin: 5px 0;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    .vote-info-title {
-      font-weight: 300;
-      color: ${colors.textColorSecondary};
-      width: 80px;
-      min-width: 80px;
-      margin-right: 10px;
-    }
-    .vote-info-value {
-      font-weight: 500;
-    }
-  }
-`;
+export const VoteItemContent = styled(BlockchainItemContent)``;
 
 export const VoteActionButton = styled(UiButton)`
   margin: 0px;
@@ -88,13 +71,7 @@ export const Container = styled.div`
   margin-bottom: 25px;
 `;
 
-export const Title = styled.h3`
-  padding: 0 25px;
-  ${breakpoint.sm} {
-    margin-bottom: 25px;
-    padding: 0 35px;
-  }
-`;
+export const Title = styled(BlockchainHeader)``;
 
 export const ColHeader = styled(col)`
   width: 25%;
@@ -122,12 +99,16 @@ export const RowMessage = styled(row)`
 /** ICONS */
 export const Check = styled(check)`
   color: #11b881;
-  margin-left: 15px;
+  ${breakpoint.sm} {
+    margin-left: 15px;
+  }
 `;
 
 export const Xmark = styled(xmark)`
   color: #d01721;
-  margin-left: 15px;
+  ${breakpoint.sm} {
+    margin-left: 15px;
+  }
 `;
 
 export const VoteHeaderBar = styled(BlockchainHeaderBar)``;
