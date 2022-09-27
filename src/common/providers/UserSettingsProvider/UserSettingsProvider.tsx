@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 
-import { useUserContext } from "..";
+import { useSettingsContext, useUserContext } from "..";
 import { defaultUserSettings } from "../../../api/params";
 import { useActivity, useFormDate, useLocalStorage } from "../../hooks";
 import { Notification, UserSettings } from "../../types";
@@ -37,9 +37,10 @@ export function UserSettingsProvider({
   const { localStorageAccount } = useUserContext();
   const { getActivitiesRows } = useActivity();
   const { formLocalDate } = useFormDate();
+  const { chainId } = useSettingsContext();
 
   const [notifications, setNotifications] = useLocalStorage(
-    `notifications_${localStorageAccount}`
+    `${chainId.slice(0, 8)}_notifications_${localStorageAccount}`
   ) as [Notification[], (value: Notification[]) => void];
   const [hasUnreadMessages, _setHasUnreadMessages] = useState<boolean>(false);
   const [loadingNotifications, setLoadingNotifications] =
@@ -158,8 +159,6 @@ export function UserSettingsProvider({
   const initUserSettings = useCallback(() => {
     if (localStorageAccount && localStorageAccount !== "" && !userSettings) {
       setUserSettings(defaultUserSettings);
-    } else {
-      setUserSettings(null);
     }
   }, [userSettings, setUserSettings, localStorageAccount]);
 

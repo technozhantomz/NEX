@@ -11,12 +11,14 @@ import React, {
 import {
   defaultApiLatencies,
   defaultApiSettings,
+  defaultChainId,
   defaultExchanges,
   defaultLatencyPreferences,
   defaultLocales,
+  defaultNodesList,
   defaultSettings,
 } from "../../../api/params";
-import { getPassedTime } from "../../../api/utils";
+import { getPassedTime, isArrayEqual } from "../../../api/utils";
 import { useLocalStorage } from "../../hooks";
 import {
   ApiLatencies,
@@ -46,6 +48,7 @@ export type SettingsContextType = {
   connectedNode: string;
   setConnectedNode: (connectedNode: string) => void;
   loading: boolean;
+  chainId: string;
 };
 
 const settingsContext = createContext<SettingsContextType>(
@@ -62,6 +65,10 @@ export function SettingsProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true);
+  const [chainId, _setChainId] = useLocalStorage("chain_id") as [
+    string,
+    (value: string) => void
+  ];
   const [cache, setCache] = useLocalStorage("cache") as [
     Cache,
     (value: Cache) => void
@@ -98,46 +105,60 @@ export function SettingsProvider({
     [_setConnectedNode]
   );
 
+  const setChainId = useCallback(() => {
+    if (chainId !== defaultChainId) {
+      _setChainId(defaultChainId as string);
+    }
+  }, [chainId, _setChainId, defaultChainId]);
+
   const initCache = useCallback(() => {
     if (
+      chainId !== defaultChainId ||
       !cache ||
       !cache.created ||
       getPassedTime(new Date(cache.created)) > 24 * 60 * 60 * 1000
     )
       setCache({ created: new Date().getTime(), assets: [] } as Cache);
-  }, [cache, setCache]);
+  }, [cache, setCache, chainId, defaultChainId]);
 
   const initSettings = useCallback(() => {
-    if (!settings) {
+    if (chainId !== defaultChainId) {
       setSettings(defaultSettings);
-    }
-    if (!exchanges) {
       setExchanges(defaultExchanges);
     }
-  }, [settings, exchanges, setSettings, setExchanges]);
+  }, [defaultChainId, chainId, setSettings, setExchanges]);
 
   const initApiSettings = useCallback(() => {
-    if (!apiSettings) {
+    if (chainId !== defaultChainId) {
       setApiSettings(defaultApiSettings);
-    }
-    if (!apiLatencies) {
       setApiLatencies(defaultApiLatencies);
-    }
-    if (!latencyPreferences) {
       setLatencyPreferences(defaultLatencyPreferences);
-    }
-    if (!latencyChecks) {
       setLatencyChecks(0);
+      setChainId();
+    } else {
+      if (
+        !defaultNodesList
+          .map((node) => node.url)
+          .includes(apiSettings.selectedNode) ||
+        !isArrayEqual(
+          defaultNodesList.map((node) => node.url),
+          apiSettings.apiServers.map((apiServer) => apiServer.node.url)
+        )
+      ) {
+        console.log("test");
+        setApiSettings(defaultApiSettings);
+        setApiLatencies(defaultApiLatencies);
+        setLatencyPreferences(defaultLatencyPreferences);
+        setLatencyChecks(0);
+      }
     }
   }, [
-    apiSettings,
+    chainId,
+    defaultChainId,
     setApiSettings,
-    apiLatencies,
     setApiLatencies,
-    latencyPreferences,
-    setLatencyPreferences,
-    latencyChecks,
     setLatencyChecks,
+    setChainId,
   ]);
 
   const setLocale = useCallback(
@@ -172,6 +193,7 @@ export function SettingsProvider({
     );
     setLocale(localeFromStorage());
   }, [setLocale, localeFromStorage]);
+
   useEffect(() => {
     setLoading(true);
     initCache();
@@ -202,6 +224,7 @@ export function SettingsProvider({
         connectedNode,
         setConnectedNode,
         loading,
+        chainId,
       }}
     >
       {loading ? (
