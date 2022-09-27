@@ -4,7 +4,9 @@ import React from "react";
 
 import { defaultToken } from "../../../../api/params";
 import { PasswordModal, TransactionModal } from "../../../../common/components";
+import { HIVEAndHBDDepositInfo } from "../../../../common/components/HIVEAndHBDDeposit/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
+import { InfoCircleOutlined } from "../../../../ui/src";
 
 import * as Styled from "./MembershipTab.styled";
 import { useMembershipTab } from "./hooks/useMembershipTab";
@@ -83,6 +85,7 @@ export const MembershipTab = (): JSX.Element => {
                     `pages.settings.membership.membership_price`,
                     { membershipPrice, defaultToken }
                   )}
+                  <InfoCircleOutlined />
                 </Styled.Paragraph>
                 <Styled.ButtonContainer>
                   <Styled.Button
@@ -96,12 +99,12 @@ export const MembershipTab = (): JSX.Element => {
               </>
             ) : (
               <>
-                <Styled.Label>
+                <Styled.Heading>
                   {" "}
                   {counterpart.translate(
                     `pages.settings.membership.referral_link_title`
                   )}
-                </Styled.Label>
+                </Styled.Heading>
                 <Styled.RefferalParagraph>
                   {counterpart.translate(
                     `pages.settings.membership.referral_link`,
@@ -117,19 +120,22 @@ export const MembershipTab = (): JSX.Element => {
               {counterpart.translate(
                 `pages.settings.membership.fee_allocation`
               )}
+              <InfoCircleOutlined />
             </Styled.Heading>
             <Styled.Paragraph>
-              {counterpart.translate(
-                `pages.settings.membership.fee_allocation_description`,
-                {
-                  name,
-                  networkFee,
-                  lifetimeFee,
-                  referrerTotalFee,
-                  referrerFee,
-                  registrarFee,
-                }
-              )}
+              <HIVEAndHBDDepositInfo
+                infoString={counterpart.translate(
+                  `pages.settings.membership.fee_allocation_description`,
+                  {
+                    name: `[userlink = ${name}]`,
+                    networkFee,
+                    lifetimeFee,
+                    referrerTotalFee,
+                    referrerFee,
+                    registrarFee,
+                  }
+                )}
+              />
             </Styled.Paragraph>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
@@ -215,10 +221,16 @@ export const MembershipTab = (): JSX.Element => {
               {counterpart.translate(`pages.settings.membership.pending_fees`)}
             </Styled.Heading>
             <Styled.Paragraph>
-              {counterpart.translate(
-                `pages.settings.membership.pending_fee_description`,
-                { name, maintenanceInterval, nextMaintenanceTime }
-              )}
+              <HIVEAndHBDDepositInfo
+                infoString={counterpart.translate(
+                  `pages.settings.membership.pending_fee_description`,
+                  {
+                    name: `[userlink = ${name}]`,
+                    maintenanceInterval,
+                    nextMaintenanceTime,
+                  }
+                )}
+              />
             </Styled.Paragraph>
             <Styled.Heading>
               {counterpart.translate(`pages.settings.membership.vesting_fees`)}

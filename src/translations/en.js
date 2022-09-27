@@ -661,7 +661,7 @@ export const en = {
           "A Lifetime Membership price will change over time, right now it is only %(membershipPrice)s %(defaultToken)s.",
         fee_allocation: "Fee Allocation",
         fee_allocation_description:
-          "Every time %(name)s pays a transaction fee, that fee is divided among several different accounts. The network takes a %(networkFee)s%% cut, and the Lifetime Member who referred %(name)s gets a %(lifetimeFee)s%% cut. The registrar is the account that paid the transaction fee to register %(name)s with the network. The registrar gets to decide how to divide the remaining %(referrerTotalFee)s%% between themselves and their own Affiliate Referrer program. %(name)s's registrar chose to share %(referrerFee)s%% of the total fee with the Affiliate Referrer and keep %(registrarFee)s%% of the total fee for themselves.",
+          "Every time , %(name)s, pays a transaction fee, that fee is divided among several different accounts. The network takes a %(networkFee)s%% cut, and the Lifetime Member who referred , %(name)s, gets a %(lifetimeFee)s%% cut. The registrar is the account that paid the transaction fee to register , %(name)s, with the network. The registrar gets to decide how to divide the remaining %(referrerTotalFee)s%% between themselves and their own Affiliate Referrer program., %(name)s's, registrar chose to share %(referrerFee)s%% of the total fee with the Affiliate Referrer and keep %(registrarFee)s%% of the total fee for themselves.",
         network: "Network",
         lifetime_reviewer: "Lifetime Referrer",
         registrar: "Registrar",
@@ -671,7 +671,7 @@ export const en = {
         total_fee_paid: "Total Fees Paid",
         pending_fees: "Pending Fees",
         pending_fee_description:
-          "Fees paid by %(name)s are divided among the network, referrers, and registrars once every maintenance interval %(maintenanceInterval)s seconds). The next maintenance time is %(nextMaintenanceTime)s",
+          "Fees paid by , %(name)s, are divided among the network, referrers, and registrars once every maintenance interval %(maintenanceInterval)s seconds). The next maintenance time is %(nextMaintenanceTime)s",
         vesting_fees: "Vesting Fees",
         vesting_description:
           "Most fees are made available immediately, but fees over %(vestingThreshold)s %(defaultToken)s (such as those paid to upgrade your membership or register a premium account name) must vest for a total of %(vestingPeriod)s days.",
