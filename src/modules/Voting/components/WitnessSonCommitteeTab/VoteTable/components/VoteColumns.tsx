@@ -6,9 +6,9 @@ import { VoteRow } from "../../../../types";
 import * as Styled from "../VoteTable.styled";
 
 export const showVotesColumns = (
-  approveVote: (voteId: string) => void,
-
-  removeVote: (voteId: string) => void
+  addChange: (voteId: string) => void,
+  cancelChange: (voteId: string) => void,
+  getActionString: (action: string) => string
 ): {
   title: () => JSX.Element;
   dataIndex: string;
@@ -65,41 +65,55 @@ export const showVotesColumns = (
       <>
         {_record.action === "cancel" ? (
           _value === "unapproved" ? (
-            <Styled.ApprovedStatus>voting to approve</Styled.ApprovedStatus>
+            <Styled.ApprovedStatus>
+              {counterpart.translate(`pages.voting.status.pending_add`)}
+            </Styled.ApprovedStatus>
           ) : (
             <Styled.NotApprovedStatus>
-              voting to remove approval
+              {counterpart.translate(`pages.voting.status.pending_remove`)}
             </Styled.NotApprovedStatus>
           )
         ) : _value === "unapproved" ? (
           <>
             <Styled.Xmark></Styled.Xmark>
-            <Styled.NotApprovedStatus>Not Approved</Styled.NotApprovedStatus>
+            <Styled.NotApprovedStatus>
+              {counterpart.translate(`pages.voting.status.not_approved`)}
+            </Styled.NotApprovedStatus>
           </>
         ) : (
           <>
             <Styled.Check></Styled.Check>
-            <Styled.ApprovedStatus>Approved</Styled.ApprovedStatus>
+            <Styled.ApprovedStatus>
+              {counterpart.translate(`pages.voting.status.approved`)}
+            </Styled.ApprovedStatus>
           </>
         )}
       </>
     ),
-    (_value: string, _record: any): JSX.Element => (
+    (value: string, record: any): JSX.Element => (
       <>
-        {_value === "add" || _value === "remove" || _value === "cancel" ? (
+        {value === "add" || value === "remove" || value === "cancel" ? (
           <Styled.VoteActionButton
             onClick={() => {
-              if (_value === "cancel") {
-                removeVote(_record.id as string);
+              if (value === "cancel") {
+                cancelChange(record.id as string);
               } else {
-                approveVote(_record.id as string);
+                addChange(record.id as string);
               }
             }}
           >
-            {_value.toUpperCase()}
+            {getActionString(value).toUpperCase()}
           </Styled.VoteActionButton>
         ) : (
-          <span>{_value.toUpperCase()}</span>
+          <span>
+            {value === "pending add"
+              ? counterpart
+                  .translate(`pages.voting.actions.pending_add`)
+                  .toUpperCase()
+              : counterpart
+                  .translate(`pages.voting.actions.pending_remove`)
+                  .toUpperCase()}
+          </span>
         )}
       </>
     ),
@@ -110,25 +124,37 @@ export const showVotesColumns = (
     undefined,
     [
       {
-        text: "Avtive",
+        text: counterpart.translate(`tableFilters.avtive`),
         value: true,
       },
       {
-        text: "Inactive",
+        text: counterpart.translate(`tableFilters.inactive`),
         value: false,
       },
     ],
     undefined,
     undefined,
     [
-      { text: "Approved", value: "approved" },
-      { text: "Not Approved", value: "unapproved" },
+      {
+        text: counterpart.translate(`tableFilters.approved`),
+        value: "approved",
+      },
+      {
+        text: counterpart.translate(`tableFilters.not_approved`),
+        value: "unapproved",
+      },
     ],
     [
-      { text: "Add", value: "add" },
-      { text: "Remove", value: "remove" },
-      { text: "Pending Add", value: "pending add" },
-      { text: "Pending Remove", value: "pending remove" },
+      { text: counterpart.translate(`tableFilters.add`), value: "add" },
+      { text: counterpart.translate(`tableFilters.remove`), value: "remove" },
+      {
+        text: counterpart.translate(`tableFilters.pending_add`),
+        value: "pending add",
+      },
+      {
+        text: counterpart.translate(`tableFilters.pending_remove`),
+        value: "pending remove",
+      },
     ],
   ];
   const filterModes = [

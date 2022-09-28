@@ -22,8 +22,8 @@ type Props = {
   votes: VoteRow[];
   type: "pendingChanges" | "allVotes";
   loading: boolean;
-  approveVote: (voteId: string) => void;
-  removeVote: (voteId: string) => void;
+  addChange: (voteId: string) => void;
+  cancelChange: (voteId: string) => void;
 };
 
 export const VoteTable = ({
@@ -31,13 +31,14 @@ export const VoteTable = ({
   votes,
   type,
   loading,
-  approveVote,
-  removeVote,
+  addChange,
+  cancelChange,
 }: Props): JSX.Element => {
-  const { searchDataSource, setSearchDataSource } = useVoteTable({ votes });
+  const { searchDataSource, setSearchDataSource, getActionString } =
+    useVoteTable({ votes });
   const { sm } = useViewportContext();
   const { localStorageAccount } = useUserContext();
-  const columns = showVotesColumns(approveVote, removeVote);
+  const columns = showVotesColumns(addChange, cancelChange, getActionString);
   const componentRef = useRef();
 
   return (
@@ -152,25 +153,33 @@ export const VoteTable = ({
                       {(item as VoteRow).action === "cancel" ? (
                         (item as VoteRow).status === "unapproved" ? (
                           <Styled.ApprovedStatus>
-                            voting to approve
+                            {counterpart.translate(
+                              `pages.voting.status.pending_add`
+                            )}
                           </Styled.ApprovedStatus>
                         ) : (
                           <Styled.NotApprovedStatus>
-                            voting to remove approval
+                            {counterpart.translate(
+                              `pages.voting.status.pending_remove`
+                            )}
                           </Styled.NotApprovedStatus>
                         )
                       ) : (item as VoteRow).status === "unapproved" ? (
                         <>
                           <Styled.Xmark></Styled.Xmark>
                           <Styled.NotApprovedStatus>
-                            Not Approved
+                            {counterpart.translate(
+                              `pages.voting.status.not_approved`
+                            )}
                           </Styled.NotApprovedStatus>
                         </>
                       ) : (
                         <>
                           <Styled.Check></Styled.Check>
                           <Styled.ApprovedStatus>
-                            Approved
+                            {counterpart.translate(
+                              `pages.voting.status.approved`
+                            )}
                           </Styled.ApprovedStatus>
                         </>
                       )}
@@ -187,16 +196,28 @@ export const VoteTable = ({
                         <Styled.VoteActionButton
                           onClick={() => {
                             if ((item as VoteRow).action === "cancel") {
-                              removeVote((item as VoteRow).id as string);
+                              cancelChange((item as VoteRow).id as string);
                             } else {
-                              approveVote((item as VoteRow).id as string);
+                              addChange((item as VoteRow).id as string);
                             }
                           }}
                         >
-                          {(item as VoteRow).action.toUpperCase()}
+                          {getActionString(
+                            (item as VoteRow).action
+                          ).toUpperCase()}
                         </Styled.VoteActionButton>
                       ) : (
-                        <span>{(item as VoteRow).action.toUpperCase()}</span>
+                        <span>
+                          {(item as VoteRow).action === "pending add"
+                            ? counterpart
+                                .translate(`pages.voting.actions.pending_add`)
+                                .toUpperCase()
+                            : counterpart
+                                .translate(
+                                  `pages.voting.actions.pending_remove`
+                                )
+                                .toUpperCase()}
+                        </span>
                       )}
                     </span>
                   </div>

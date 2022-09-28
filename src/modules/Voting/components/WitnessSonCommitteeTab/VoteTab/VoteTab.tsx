@@ -37,8 +37,8 @@ export const VoteTab = ({
     allMembersRows,
     localApprovedRows,
     isVotesChanged,
-    approveVote,
-    removeVote,
+    addChange,
+    cancelChange,
     resetChanges,
     handlePublishChanges,
     loadingTransaction,
@@ -66,7 +66,7 @@ export const VoteTab = ({
           tab: capitalize(counterpart.translate(`pages.voting.${tab}.heading`)),
         })}
         <InfoCircleOutlined />
-        <Link href={""}>Learn More</Link>
+        <Link href={""}>{counterpart.translate(`links.learn_more`)}</Link>
       </Styled.Title>
       <Styled.VoteTabCard>
         {pendingChanges.length > 0 ? (
@@ -76,8 +76,8 @@ export const VoteTab = ({
               type="pendingChanges"
               loading={votesLoading || loading}
               votes={pendingChanges}
-              approveVote={approveVote}
-              removeVote={removeVote}
+              addChange={addChange}
+              cancelChange={cancelChange}
             />
             <VoteForm
               tab={tab}
@@ -111,8 +111,8 @@ export const VoteTab = ({
           type="allVotes"
           loading={votesLoading || loading}
           votes={allMembersRows}
-          approveVote={approveVote}
-          removeVote={removeVote}
+          addChange={addChange}
+          cancelChange={cancelChange}
         />
       </Styled.VoteTabCard>
     </Styled.Container>

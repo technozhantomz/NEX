@@ -630,6 +630,19 @@ export const ru = {
       lower_case_witnesses: "свидетели",
       lower_case_sons: "sons",
       lower_case_committees: "комитеты",
+      status: {
+        approved: "Утверждено",
+        not_approved: "Не одобрено",
+        pending_add: "голосование за одобрение",
+        pending_remove: "голосование за снятие одобрения",
+      },
+      actions: {
+        add: "Добавлять",
+        remove: "Удалить",
+        cancel: "Отмена",
+        pending_add: "Ожидание добавления",
+        pending_remove: "Ожидание удаления",
+      },
       gpos: {
         heading: "геймифицированное доказательство доли (GPOS)",
         tab: "GPOS",
@@ -729,6 +742,7 @@ export const ru = {
     mark_all_read: "отметить все как прочитанное",
     pdf: "PDF",
     csv: "CSV",
+    learn_more: "Учить больше",
   },
   field: {
     options: {
@@ -944,6 +958,16 @@ export const ru = {
     active: "Активный",
     key: "ключ",
     status: "Статус",
+  },
+  tableFilters:{
+    avtive: "Активный",
+    inactive: "Неактивно",
+    approved: "Утверждено",
+    not_approved: "Не одобрено",
+    add: "Добавить",
+    remove: "Удалить",
+    pending_add: "Ожидание добавления",
+    pending_remove: "Ожидание удаления",
   },
   tooltips: {
     copy: "копировать",
