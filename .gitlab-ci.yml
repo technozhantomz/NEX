@@ -29,16 +29,16 @@ build-qa:
   image: node:16.17.0-alpine3.16
   stage: build
   script:
-    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
-    - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
+    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env.local
+    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env.local
+    - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env.local
+    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env.local
     - npm install
     - npm run build
   artifacts:
     paths:
       - .next/
-      - .env
+      - .env.local
     expire_in: 2 weeks
   only:
     - tags
@@ -56,16 +56,16 @@ build-production:
     - echo $PROD_QUOTE
     - echo $PROD_FAUCET
     - echo $PROD_CHAIN_ID
-    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$PROD_TOKEN'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$PROD_QUOTE'" >> .env
-    - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env
+    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$PROD_TOKEN'" >> .env.local
+    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$PROD_QUOTE'" >> .env.local
+    - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env.local
+    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env.local
     - npm install
     - npm run build
   artifacts:
     paths:
       - .next/
-      - .env
+      - .env.local
     expire_in: 2 weeks
   only:
     - tags
