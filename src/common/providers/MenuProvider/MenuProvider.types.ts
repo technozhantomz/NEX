@@ -1,14 +1,7 @@
-import { Notification } from "../../types";
-
-export type MenuProviderContextType = {
+export type MenuContextType = {
   openMenu: (menuName: string) => void;
   closeAllMenus: () => void;
   notificationMenuOpen: boolean;
   profileMenuOpen: boolean;
   mainMenuOpen: boolean;
-  hasUnreadMessages: boolean;
-  notifications: Notification[];
-  loadingNotifications: boolean;
-  markAllNotificationsRead: () => void;
-  markTheNotificationAsReadOrUnread: (id: string, unread: boolean) => void;
 };

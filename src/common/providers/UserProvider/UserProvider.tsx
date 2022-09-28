@@ -6,9 +6,9 @@ import React, {
   useState,
 } from "react";
 
+import { usePeerplaysApiContext } from "..";
 import { useAsset, useLocalStorage } from "../../hooks";
 import { Account, Asset, FullAccount } from "../../types";
-import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
 import { UserContextType } from "./UserProvider.types";
 
@@ -41,7 +41,7 @@ const UserContext = createContext<UserContextType>(defaultUserState);
 
 export const UserProvider = ({ children }: Props): JSX.Element => {
   const [localStorageAccount, setLocalStorageAccount] = useLocalStorage(
-    "currentAccount"
+    "current_account"
   ) as [string, (value: string) => void];
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
@@ -103,6 +103,8 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
             assets,
             fullAccount.account
           );
+        } else {
+          setLocalStorageAccount("");
         }
       } catch (e) {
         console.log(e);
@@ -115,7 +117,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     if (localStorageAccount) {
       formInitialAccountByName(localStorageAccount);
     }
-  }, []);
+  }, [localStorageAccount]);
 
   return (
     <UserContext.Provider

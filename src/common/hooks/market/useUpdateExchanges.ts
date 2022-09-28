@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
-import { useSettingsContext } from "../providers";
-import { Exchanges } from "../types";
+import { useSettingsContext } from "../../providers";
+import { Exchanges } from "../../types";
 
 type UseUpdateExchangesResult = {
   updateExchanges: (selectedPair: string) => void;

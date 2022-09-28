@@ -43,15 +43,14 @@ NEXT_PUBLIC_DEFAULT_QUOTE=''
 # Full URL to the blockchain's faucet
 NEXT_PUBLIC_FAUCET_URL=''
 
-# Full URL to your DEX instance
-NEXT_PUBLIC_DEX_URL=''
-
 # Chain ID of the blockchain
 NEXT_PUBLIC_DEFAULT_CHAIN_ID=''
-
-# Blockchain API endpoints (websocket)
-NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS=''
 ```
+If the NEXT_PUBLIC_DEFAULT_CHAIN_ID is not equalt to main net chain id (6b6b5f0ce7a36d323768e534f3edb41c6d6332a541a95725b98e28d140850134) the app will use testnet nodes
+
+## Nodes list
+put the list of nodes inside the /src/api/params/nodesList.ts file
+
 
 ## Mannual Starting after installation and ENV configuration
 ### Development

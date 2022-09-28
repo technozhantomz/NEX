@@ -16,7 +16,7 @@ export type UsePowerUpFormResult = {
   feeAmount: number;
   depositAmount: number;
   newBalance: number;
-  newAvailableBalance: number;
+  userAvailableBalance: number;
 };
 
 export type UsePowerUpFormArgs = {

@@ -1,7 +1,7 @@
 import { isNil } from "lodash";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { Cache, Exchanges, Settings } from "../types";
+import { Cache, Exchanges, Settings, UserSettings } from "../../types";
 
 type Value =
   | string
@@ -11,8 +11,10 @@ type Value =
   | JSON
   | Exchanges
   | Settings
+  | UserSettings
   | Cache
   | undefined
+  | Notification[]
   | null;
 
 type Result = [Value, (value?: Value) => void];
@@ -24,9 +26,19 @@ export const useSessionStorage = (key: string): Result => {
     sessionStorageItem && JSON.parse(sessionStorageItem)
   );
 
+  const setUserItem = useCallback((key: string, value: Value) => {
+    if (key.includes("_")) {
+      if (key.split("_")[1] !== "") {
+        sessionStorage.setItem(key, JSON.stringify(value));
+      }
+    } else {
+      sessionStorage.setItem(key, JSON.stringify(value));
+    }
+  }, []);
+
   useEffect(() => {
     if (!isNil(value) && value !== null && value !== "") {
-      sessionStorage.setItem(key, JSON.stringify(value));
+      setUserItem(key, value);
     } else {
       sessionStorage.removeItem(key);
     }

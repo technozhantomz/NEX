@@ -1,4 +1,20 @@
 export const ru = {
+  app_init: {
+    check_latency: "Запуск проверки задержки...",
+    check_latency_feedback:
+      "Запуск проверки задержки (%(pinged)s/%(totalToPing)s узлов)",
+    check_latency_feedback_country:
+      "Проверка задержки в лучшей стране (узлы %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_last:
+      "Проверка задержки для последнего подключенного узла (узлов %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_region:
+      "Проверка задержки в лучшем регионе (узлы %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_rest:
+      "Проверка задержки для оставшихся узлов (узлов %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_world:
+      "Проверка задержки в каждом регионе (узлы %(pinged)s/%(totalToPing)s)",
+    connecting: "Подключение к серверу API: %(server)s",
+  },
   transaction: {
     feeTypes: {
       _none: "Бесплатно",
@@ -622,6 +638,7 @@ export const ru = {
         referral_link:
           "Дайте ссылку на людей, которых вы хотите порекомендовать в Peerplays: %(link)s/signup/?r=%(name)s",
       },
+      api_closest: "Выбрать ближайший автоматически",
     },
     voting: {
       heading: "Голосование",
@@ -788,7 +805,11 @@ export const ru = {
       copy_url: "Скопировать URL",
       setting_saved: "Настройка сохранена",
       lock_wallet: "Заблокировать кошелек",
-      select_keys: "Выберите ключи для генерации:",
+      select_keys: "Выберите ключи для генерации",
+      public_key_owner: "Открытый ключ Владелец",
+      public_key_active: "Открытый ключ Активный",
+      public_key_memo: "Открытый ключ Памятка",
+      private_key: "Закрытый ключ",
       generated_key:
         "Запрошенный вами ключ %(generatedKeyLabel)s выглядит следующим образом:",
       advanced_settings: "Расширенные настройки",
@@ -832,7 +853,7 @@ export const ru = {
         "Я понимаю, что Peerplays не может восстановить мой утерянный пароль",
       securely_saved_my_password: "Я надежно сохранил свой пароль",
       enable_notifications: "Включить уведомления",
-      key_management_group: ["Активный", "Владелец", "Памятка"],
+      key_management_group: ["Владелец", "Активный", "Памятка"],
     },
     errors: {
       enter_amount: "Введите сумму",

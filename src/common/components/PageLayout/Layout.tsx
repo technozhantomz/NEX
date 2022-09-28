@@ -3,6 +3,7 @@ import moment from "moment";
 import Head from "next/head";
 import React, { FunctionComponent, ReactNode } from "react";
 
+import { Footer } from "./Footer";
 import * as Styled from "./Layout.styled";
 import { TopBar } from "./TopBar";
 
@@ -47,9 +48,12 @@ export const Layout: FunctionComponent<Props> = ({
         <meta name="description" content={description} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Styled.Page className={dexLayout ? "dex-layout" : ""} onClick={onClick}>
-        <TopBar />
-        <ConfigProvider>
+      <ConfigProvider>
+        <Styled.Page
+          className={dexLayout ? "dex-layout" : ""}
+          onClick={onClick}
+        >
+          <TopBar />
           <Styled.Layout className={`${getStyles()}`}>
             {heading != undefined ? (
               <Styled.PageHeading className={"page-heading"}>
@@ -60,8 +64,9 @@ export const Layout: FunctionComponent<Props> = ({
             )}
             {children}
           </Styled.Layout>
-        </ConfigProvider>
-      </Styled.Page>
+          <Footer />
+        </Styled.Page>
+      </ConfigProvider>
     </>
   );
 };

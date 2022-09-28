@@ -49,7 +49,12 @@ export const LabelWrapper = styled.div`
   margin-bottom: 25px;
 `;
 
-export const Label = styled(UiText)``;
+export const Label = styled(UiText)`
+  .anticon-info-circle {
+    margin: 0 15px;
+    color: ${colors.warningColor};
+  }
+`;
 
 export const CheckBoxGroup = styled(Form.Item)`
   margin-bottom: 50px;
@@ -71,7 +76,21 @@ export const NoKey = styled.div`
   margin-top: 8px;
 `;
 
-export const SubmitButton = styled(CardFormButton)``;
+export const SubmitButton = styled(CardFormButton)`
+  margin: 0;
+`;
+
+export const PublicKeyWrapper = styled.div`
+  margin: 25px 0;
+`;
+
+export const PublicKey = styled.span`
+  display: block;
+  .copy-publickey {
+    margin-left: 15px;
+    color: ${colors.lightText};
+  }
+`;
 
 export const GeneratedKeyInput = styled(KeyInput)`
   height: 50px;

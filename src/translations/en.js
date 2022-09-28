@@ -1,4 +1,20 @@
 export const en = {
+  app_init: {
+    check_latency: "Running latency checks...",
+    check_latency_feedback:
+      "Running latency checks (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_country:
+      "Latency check in best country (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_last:
+      "Latency check for last connected node (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_region:
+      "Latency check in best region (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_rest:
+      "Latency check for remaining nodes (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_world:
+      "Latency check in each region (%(pinged)s/%(totalToPing)s nodes)",
+    connecting: "Connecting to API server: %(server)s",
+  },
   transaction: {
     feeTypes: {
       _none: "Free of Charge",
@@ -509,6 +525,21 @@ export const en = {
     next: "Next",
     show_only_unread: "Show only unread",
   },
+  connection: {
+    automatic_reconnect:
+      " After %(reconnect_in_seconds)s seconds a reconnection attempt will be made automatically.",
+    manual_reconnect: "Try reconnecting now",
+    manual_ping_and_narrow_down: "Narrow down nodes and ping",
+    title_out_of_sync: "Connection out of sync",
+    out_of_sync:
+      "Your connection has been out of sync for %(out_of_sync_seconds)s seconds.",
+    want_to_reconnect:
+      "If the connection can be recovered this message will disappear automatically.",
+  },
+  footer: {
+    no_connection: "No Blockchain connection",
+    nosync: "Your active node is out of sync",
+  },
   pages: {
     logout: {
       heading: "Logout",
@@ -751,6 +782,7 @@ export const en = {
       discription: "Profile Page",
     },
     modal: {
+      cancel: "Cancel",
       transaction_modal: {
         heading: "Please confirm the transaction",
       },
@@ -810,7 +842,11 @@ export const en = {
       copy_url: "Copy URL",
       setting_saved: "Setting Saved",
       lock_wallet: "Lock Wallet",
-      select_keys: "Select keys to be generated:",
+      select_keys: "Select keys to be generated",
+      public_key_owner: "Owner Public Key",
+      public_key_active: "Active Public Key",
+      public_key_memo: "Memo Public Key",
+      private_key: "Private Key",
       generated_key:
         "The %(generatedKeyLabel)s key you requested is as follows:",
       advanced_settings: "Advanced Settings",
@@ -854,7 +890,7 @@ export const en = {
         "I understand Peerplays cannot recover my lost password",
       securely_saved_my_password: "I have securely saved my password",
       enable_notifications: "Enable Notifications",
-      key_management_group: ["Active", "Owner", "Memo"],
+      key_management_group: ["Owner", "Active", "Memo"],
     },
     errors: {
       enter_amount: "Enter amount",
@@ -943,6 +979,11 @@ export const en = {
       canceled_limit_order:
         "You have successfully canceled #%(selectedOrderId)s order",
     },
+  },
+  settings: {
+    api_closest: "Choose closest automatically",
+    connection_error:
+      "Unable to connect to API node %(url)s, falling back to known working nodes. Error was: %(error)s",
   },
   tableHead: {
     block_id: "Block ID",
