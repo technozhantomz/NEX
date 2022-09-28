@@ -371,7 +371,7 @@ export function useVoteTab({
     [setIsVotesChanged]
   );
 
-  const approveVote = useCallback(
+  const addChange = useCallback(
     (voteId: string) => {
       if (pendingChanges.find((vote) => vote.id === voteId) === undefined) {
         const selectedRow = allMembersRows.find((vote) => vote.id === voteId);
@@ -412,7 +412,7 @@ export function useVoteTab({
     ]
   );
 
-  const removeVote = useCallback(
+  const cancelChange = useCallback(
     (voteId: string) => {
       if (localApprovedRows.find((vote) => vote.id === voteId) !== undefined) {
         const selectedRow = allMembersRows.find((vote) => vote.id === voteId);
@@ -468,8 +468,8 @@ export function useVoteTab({
     serverApprovedRows,
     localApprovedRows,
     isVotesChanged,
-    approveVote,
-    removeVote,
+    addChange,
+    cancelChange,
     resetChanges,
     updateAccountFee,
     transactionErrorMessage,

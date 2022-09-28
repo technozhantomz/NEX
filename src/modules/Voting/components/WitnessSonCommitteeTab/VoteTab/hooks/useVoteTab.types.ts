@@ -9,8 +9,8 @@ export type UseVoteTabResult = {
   serverApprovedRows: VoteRow[];
   localApprovedRows: VoteRow[];
   isVotesChanged: boolean;
-  approveVote: (voteId: string) => void;
-  removeVote: (voteId: string) => void;
+  addChange: (voteId: string) => void;
+  cancelChange: (voteId: string) => void;
   resetChanges: () => void;
   updateAccountFee: number;
   transactionErrorMessage: string;
