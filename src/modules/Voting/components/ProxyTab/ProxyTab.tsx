@@ -1,6 +1,8 @@
 import counterpart from "counterpart";
+import Link from "next/link";
 
 import { Proxy } from "../../../../common/types";
+import { InfoCircleOutlined } from "../../../../ui/src";
 
 import * as Styled from "./ProxyTab.styled";
 import { ProxyForm, ProxyTable } from "./components";
@@ -27,13 +29,14 @@ export const ProxyTab = ({
     loadingTransaction,
     transactionErrorMessage,
     transactionSuccessMessage,
-    addProxy,
-    removeProxy,
+    addChange,
+    cancelChange,
     searchChange,
     handlePublishChanges,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
     localProxy,
+    pendingChanges,
     isPublishable,
     resetChanges,
     searchValue,
@@ -45,34 +48,51 @@ export const ProxyTab = ({
       <Styled.ProxyIntroWrapper>
         <Styled.ProxyTitle>
           {counterpart.translate(`field.labels.vote_for_proxy`)}
+          <InfoCircleOutlined />
+          <Link href={""}>{counterpart.translate(`links.learn_more`)}</Link>
         </Styled.ProxyTitle>
       </Styled.ProxyIntroWrapper>
-      <ProxyForm
-        name={name}
-        proxy={localProxy}
-        loading={loading}
-        searchError={searchError}
-        searchedAccount={searchedAccount}
-        updateAccountFee={updateAccountFee}
-        loadingTransaction={loadingTransaction}
-        transactionErrorMessage={transactionErrorMessage}
-        transactionSuccessMessage={transactionSuccessMessage}
-        addProxy={addProxy}
-        removeProxy={removeProxy}
-        searchChange={searchChange}
-        handlePublishChanges={handlePublishChanges}
-        setTransactionErrorMessage={setTransactionErrorMessage}
-        setTransactionSuccessMessage={setTransactionSuccessMessage}
-        isPublishable={isPublishable}
-        resetChanges={resetChanges}
-        searchValue={searchValue}
-        isSameAccount={isSameAccount}
-        accountAlreadyAdded={accountAlreadyAdded}
-      />
+      {pendingChanges.length > 0 ? (
+        <>
+          <ProxyTable
+            loading={loading}
+            proxyVotes={pendingChanges}
+            type="pendingChanges"
+            addChange={addChange}
+            cancelChange={cancelChange}
+          />
+          <ProxyForm
+            name={name}
+            proxy={localProxy}
+            loading={loading}
+            searchError={searchError}
+            searchedAccount={searchedAccount}
+            updateAccountFee={updateAccountFee}
+            loadingTransaction={loadingTransaction}
+            transactionErrorMessage={transactionErrorMessage}
+            transactionSuccessMessage={transactionSuccessMessage}
+            addChange={addChange}
+            cancelChange={cancelChange}
+            searchChange={searchChange}
+            handlePublishChanges={handlePublishChanges}
+            setTransactionErrorMessage={setTransactionErrorMessage}
+            setTransactionSuccessMessage={setTransactionSuccessMessage}
+            isPublishable={isPublishable}
+            resetChanges={resetChanges}
+            searchValue={searchValue}
+            isSameAccount={isSameAccount}
+            accountAlreadyAdded={accountAlreadyAdded}
+          />
+        </>
+      ) : (
+        ""
+      )}
       <ProxyTable
         loading={loading}
-        proxy={localProxy}
-        removeProxy={removeProxy}
+        proxyVotes={[]}
+        type="allVotes"
+        addChange={addChange}
+        cancelChange={cancelChange}
       />
     </Styled.ProxyTabWrapper>
   );

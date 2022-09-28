@@ -22,8 +22,8 @@ type Props = {
   loadingTransaction: boolean;
   transactionErrorMessage: string;
   transactionSuccessMessage: string;
-  addProxy: (account: Account) => void;
-  removeProxy: () => void;
+  addChange: (account: Account) => void;
+  cancelChange: () => void;
   searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => Promise<void>;
   handlePublishChanges: (password: string) => Promise<void>;
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
@@ -45,7 +45,7 @@ export const ProxyForm = ({
   loadingTransaction,
   transactionErrorMessage,
   transactionSuccessMessage,
-  addProxy,
+  addChange,
   searchValue,
   searchChange,
   handlePublishChanges,
@@ -96,7 +96,7 @@ export const ProxyForm = ({
             )}
             onChange={searchChange}
             onPressEnter={() => {
-              addProxy(searchedAccount as Account);
+              addChange(searchedAccount as Account);
             }}
             loading={loading}
             size="large"
@@ -105,7 +105,7 @@ export const ProxyForm = ({
         <Form.Item>
           <Styled.ProxyFormButton
             type="primary"
-            onClick={() => addProxy(searchedAccount as Account)}
+            onClick={() => addChange(searchedAccount as Account)}
             disabled={searchError || searchedAccount === undefined}
           >
             {counterpart.translate(`buttons.add`)}

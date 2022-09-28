@@ -6,11 +6,8 @@ import { CSSProperties, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
-import {
-  useUserContext,
-  useViewportContext,
-} from "../../../../../common/providers";
-import { DownloadOutlined, SearchOutlined } from "../../../../../ui/src";
+import { useViewportContext } from "../../../../../common/providers";
+import { DownloadOutlined, List, SearchOutlined } from "../../../../../ui/src";
 import { VoteRow } from "../../../types";
 
 import * as Styled from "./VoteTable.styled";
@@ -37,8 +34,12 @@ export const VoteTable = ({
   const { searchDataSource, setSearchDataSource, getActionString } =
     useVoteTable({ votes });
   const { sm } = useViewportContext();
-  const { localStorageAccount } = useUserContext();
-  const columns = showVotesColumns(addChange, cancelChange, getActionString);
+  const columns = showVotesColumns(
+    addChange,
+    cancelChange,
+    getActionString,
+    type
+  );
   const componentRef = useRef();
 
   return (
@@ -46,9 +47,7 @@ export const VoteTable = ({
       <Styled.VoteHeaderBar>
         <Styled.Title>
           {type === "pendingChanges"
-            ? counterpart.translate(`field.labels.pending_changes`, {
-                localStorageAccount,
-              })
+            ? counterpart.translate(`field.labels.pending_changes`)
             : capitalize(counterpart.translate(`pages.voting.${tab}.heading`))}
         </Styled.Title>
         {type === "allVotes" ? (
@@ -74,7 +73,7 @@ export const VoteTable = ({
               />
               {` / `}
               <CSVLink
-                filename={"WitnessesTable.csv"}
+                filename={`${tab}VotesTable.csv`}
                 data={votes}
                 className="btn btn-primary"
               >
@@ -88,7 +87,7 @@ export const VoteTable = ({
       </Styled.VoteHeaderBar>
       <Styled.Container>
         {sm ? (
-          <Styled.VoteList
+          <List
             itemLayout="vertical"
             dataSource={searchDataSource}
             loading={loading}

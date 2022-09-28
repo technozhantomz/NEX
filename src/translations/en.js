@@ -854,7 +854,7 @@ export const en = {
       approved_by: "Approved by %(localStorageAccount)s",
       not_approved_by: "Approved by %(localStorageAccount)s",
       vote_for: "Vote for %(tab)s",
-      vote_for_proxy: "Proxy your vote to other accounts",
+      vote_for_proxy: "Vote by proxy",
       not_available: "Not available",
       account_name: "Account name",
       true: "True",
@@ -879,6 +879,7 @@ export const en = {
       desired_sons: "Desired sons",
       desired_proxy: "Desired Proxy",
       pending_changes: "Pending changes",
+      peerplays_accounts: "Peerplays accounts",
     },
     comments: {
       deposit_hbd:
@@ -1024,6 +1025,11 @@ export const en = {
     active: "Active",
     key: "key",
     status: "Status",
+    witness_votes: "Witness votes",
+    sons_votes: "SONs votes",
+    committee_votes: "Committee votes",
+    last_voted: "Last Voted",
+    pending_changes: "Pending Changes",
   },
   tableFilters: {
     avtive: "Avtive",

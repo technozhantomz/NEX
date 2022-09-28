@@ -9,6 +9,7 @@ import {
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
 import { Account, Proxy, Transaction } from "../../../../../common/types";
+import { ProxyRow } from "../components/ProxyTable/hooks/useProxyTable.types";
 
 import { UseProxyTab } from "./useProxyTab.types";
 
@@ -23,6 +24,7 @@ export function useProxyTab({
   totalGpos,
   getProxyAccount,
 }: Args): UseProxyTab {
+  const [pendingChanges, setPendingChanges] = useState<ProxyRow[]>([]);
   const [localProxy, setLocalProxy] = useState<Proxy>({ ...serverProxy });
   const [searchError, setSearchError] = useState<boolean>(false);
   const [updateAccountFee, setUpdateAccountFee] = useState<number>(0);
@@ -201,7 +203,7 @@ export function useProxyTab({
     ]
   );
 
-  const addProxy = useCallback(
+  const addChange = useCallback(
     (account: Account) => {
       if (account) {
         const localProxy: Proxy = { name: account.name, id: account.id };
@@ -217,7 +219,7 @@ export function useProxyTab({
     [setSearchError, setLocalProxy, serverProxy, serverProxy.id, setSearchValue]
   );
 
-  const removeProxy = useCallback(() => {
+  const cancelChange = useCallback(() => {
     const localProxy: Proxy = {
       name: "",
       id: DEFAULT_PROXY_ID,
@@ -236,6 +238,7 @@ export function useProxyTab({
   }, [getUpdateAccountFee]);
 
   useEffect(() => {
+    setPendingChanges([]);
     setLocalProxy({ ...serverProxy });
   }, [serverProxy, serverProxy.id, serverProxy.name]);
 
@@ -247,12 +250,13 @@ export function useProxyTab({
     loadingTransaction,
     transactionErrorMessage,
     transactionSuccessMessage,
-    addProxy,
-    removeProxy,
+    addChange,
+    cancelChange,
     searchChange,
     handlePublishChanges,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    pendingChanges,
     localProxy,
     isPublishable,
     resetChanges,

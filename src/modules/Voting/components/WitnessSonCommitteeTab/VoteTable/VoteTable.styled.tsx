@@ -34,9 +34,6 @@ export const VoteTable = styled(BlockchainTable)`
 export const VoteList = styled(UiList)`
   padding: 0 25px 25px;
   ${mixIns.hairline}
-  &.ant-list-split.ant-list-something-after-last-item .ant-spin-container > .ant-list-items > .ant-list-item:last-child {
-    border-bottom: none;
-  }
   .ant-list-pagination {
     margin-top: 0;
   }

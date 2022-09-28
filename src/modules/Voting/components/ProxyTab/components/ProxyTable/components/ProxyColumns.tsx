@@ -2,45 +2,41 @@ import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { TableHeading } from "../../../../../../common/components";
-import { VoteRow } from "../../../../types";
-import * as Styled from "../VoteTable.styled";
+import { TableHeading } from "../../../../../../../common/components";
+import * as Styled from "../ProxyTable.styled";
+import { ProxyRow } from "../hooks/useProxyTable.types";
 
-export const showVotesColumns = (
+export const ProxyColumns = (
   addChange: (voteId: string) => void,
   cancelChange: (voteId: string) => void,
   getActionString: (action: string) => string,
   tableType: string
-): ColumnsType<VoteRow> => {
+): ColumnsType<ProxyRow> => {
   const headings = [
-    "rank",
     "name",
-    "active",
-    "url",
-    "votes",
+    "witness_votes",
+    "sons_votes",
+    "committee_votes",
+    "last_voted",
     tableType === "allVotes" ? "status" : "pending_changes",
     "action",
   ];
-  const keys = ["rank", "name", "active", "url", "votes", "status", "action"];
+  const keys = [
+    "name",
+    "witnessVotes",
+    "sonsVotes",
+    "committeeVotes",
+    "lastVoted",
+    "status",
+    "action",
+  ];
   const renders = [
-    undefined,
     (name: string): JSX.Element => <Link href={`/user/${name}`}>{name}</Link>,
-    (active: boolean): JSX.Element => (
-      <span>{active === true ? <Styled.ActiveIcon /> : ``}</span>
-    ),
-    (url: string): JSX.Element => (
-      <>
-        {!url || url === "" ? (
-          <span>{counterpart.translate(`field.labels.not_available`)}</span>
-        ) : (
-          <Link href={`${url}`} passHref>
-            <Styled.urlIcon rotate={45} />
-          </Link>
-        )}
-      </>
-    ),
     undefined,
-    (value: string, record: VoteRow): JSX.Element => (
+    undefined,
+    undefined,
+    undefined,
+    (value: string, record: ProxyRow): JSX.Element => (
       <>
         {record.action === "cancel" ? (
           value === "unapproved" ? (
@@ -69,10 +65,10 @@ export const showVotesColumns = (
         )}
       </>
     ),
-    (value: string, record: VoteRow): JSX.Element => (
+    (value: string, record: ProxyRow): JSX.Element => (
       <>
         {value === "add" || value === "remove" || value === "cancel" ? (
-          <Styled.VoteActionButton
+          <Styled.ProxyTableActionButton
             onClick={() => {
               if (value === "cancel") {
                 cancelChange(record.id as string);
@@ -82,7 +78,7 @@ export const showVotesColumns = (
             }}
           >
             {getActionString(value).toUpperCase()}
-          </Styled.VoteActionButton>
+          </Styled.ProxyTableActionButton>
         ) : (
           <span>
             {value === "pending add"
@@ -100,16 +96,7 @@ export const showVotesColumns = (
   const filters = [
     undefined,
     undefined,
-    [
-      {
-        text: counterpart.translate(`tableFilters.avtive`),
-        value: true,
-      },
-      {
-        text: counterpart.translate(`tableFilters.inactive`),
-        value: false,
-      },
-    ],
+    undefined,
     undefined,
     undefined,
     [
@@ -138,7 +125,7 @@ export const showVotesColumns = (
   const filterModes = [
     undefined,
     undefined,
-    "menu",
+    undefined,
     undefined,
     undefined,
     "menu",
@@ -147,7 +134,7 @@ export const showVotesColumns = (
   const filterSearch = [
     undefined,
     undefined,
-    false,
+    undefined,
     undefined,
     undefined,
     false,
@@ -156,22 +143,22 @@ export const showVotesColumns = (
   const onFilters = [
     undefined,
     undefined,
-    (value: boolean, record: VoteRow): boolean => record.active === value,
     undefined,
     undefined,
-    (value: string, record: VoteRow): boolean => record.status === value,
-    (value: string, record: VoteRow): boolean => record.action === value,
+    undefined,
+    (value: string, record: ProxyRow): boolean => record.status === value,
+    (value: string, record: ProxyRow): boolean => record.action === value,
   ];
   const sorters = [
-    (a: { rank: number }, b: { rank: number }) => a.rank - b.rank,
+    undefined,
+    (a: { witness: number }, b: { witness: number }) => a.witness - b.witness,
+    (a: { sons: number }, b: { sons: number }) => a.sons - b.sons,
+    (a: { committee: number }, b: { committee: number }) =>
+      a.committee - b.committee,
     undefined,
     undefined,
     undefined,
-    (a: { votes: string }, b: { votes: string }) =>
-      parseFloat(a.votes) - parseFloat(b.votes),
-    undefined,
-    undefined,
-  ];
+  ]; //TODO: sort by date
 
   return headings.map((heading, index) => {
     return {
@@ -185,5 +172,5 @@ export const showVotesColumns = (
       onFilter: onFilters[index],
       sorter: sorters[index],
     };
-  }) as ColumnsType<VoteRow>;
+  }) as ColumnsType<ProxyRow>;
 };

@@ -1,25 +1,29 @@
-import { Button, List, styled, Table } from "../../../../../../ui/src";
+import {
+  BlockchainDownloadLinks,
+  BlockchainHeader,
+  BlockchainHeaderBar,
+  BlockchainItemContent,
+  BlockchainTable,
+  styled,
+  Button as UiButton,
+  List as UiList,
+  ListItem as UiListItem,
+  PrintTable as UiPrintTable,
+} from "../../../../../../ui/src";
+import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
+import { Check as check, Xmark as xmark } from "../../../../../../ui/src/icons";
 import { mixIns } from "../../../../../../ui/src/mixins";
 
-export const ProxyTable = styled(Table)`
-  padding: 0 35px 25px;
-  max-width: 100%;
-  .ant-table-thead > tr > th {
-    background: transparent;
-    color: ${colors.textColorSecondary};
-    font-weight: 300;
-    border: none;
-    &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
-      display: none;
-    }
-  }
-  .ant-table-tbody > tr > td {
-    border: none;
-    font-weight: 500;
+export const ProxyTableWrapper = styled.div`
+  margin: 0 25px;
+  ${breakpoint.sm} {
+    margin: 0 35px;
   }
 `;
-export const ProxyList = styled(List)`
+
+export const ProxyTable = styled(BlockchainTable)``;
+export const ProxyList = styled(UiList)`
   ${mixIns.hairlineTop}
   padding: 25px 0;
   &.ant-list-split.ant-list-something-after-last-item
@@ -30,33 +34,32 @@ export const ProxyList = styled(List)`
   }
 `;
 
-export const ProxyListItem = styled(List.Item)`
+export const ProxyListItem = styled(UiListItem)`
   padding: 15px 25px;
   border-bottom: none;
 `;
 
-export const ProxyListItemContent = styled.div`
-  width: 100%;
-  margin: 18px 0 25px;
-  .vote-info {
-    margin: 5px 0;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    .vote-info-title {
-      font-weight: 300;
-      width: 80px;
-      min-width: 80px;
-      color: ${colors.textColorSecondary};
-      margin-right: 10px;
-    }
-    .vote-info-value {
-      font-weight: 500;
-    }
+export const Check = styled(check)`
+  color: #11b881;
+  ${breakpoint.sm} {
+    margin-left: 15px;
   }
 `;
 
-export const ProxyTableActionButton = styled(Button)`
+export const Xmark = styled(xmark)`
+  color: #d01721;
+  ${breakpoint.sm} {
+    margin-left: 15px;
+  }
+`;
+
+export const ProxyListItemContent = styled(BlockchainItemContent)``;
+export const ProxyHeaderBar = styled(BlockchainHeaderBar)``;
+export const ProxyHeader = styled(BlockchainHeader)``;
+export const DownloadLinks = styled(BlockchainDownloadLinks)``;
+export const PrintTable = styled(UiPrintTable)``;
+
+export const ProxyTableActionButton = styled(UiButton)`
   margin: 0px;
   border: none;
   background: none;
@@ -68,4 +71,12 @@ export const ProxyTableActionButton = styled(Button)`
   &:hover {
     background: #fafafa;
   }
+`;
+
+export const ApprovedStatus = styled.span`
+  color: ${colors.successColor};
+`;
+
+export const NotApprovedStatus = styled.span`
+  color: ${colors.missedColor};
 `;

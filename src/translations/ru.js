@@ -817,7 +817,7 @@ export const ru = {
       approved_by: "Одобрено %(localStorageAccount)s",
       not_approved_by: "не одобрено %(localStorageAccount)s",
       vote_for: "Проголосовать за %(tab)s",
-      vote_for_proxy: "Проксируйте свой голос на другие аккаунты",
+      vote_for_proxy: "Голосовать по доверенности",
       not_available: "Нет в наличии",
       account_name: "Название аккаунта",
       true: "Истинный",
@@ -842,6 +842,7 @@ export const ru = {
       desired_sons: "Желаемые сыновья",
       desired_proxy: "Желаемый прокси",
       pending_changes: "Ожидающие изменения",
+      peerplays_accounts: "Перепрыстные аккаунты",
     },
     comments: {
       deposit_hbd:
@@ -979,6 +980,12 @@ export const ru = {
     active: "Активный",
     key: "ключ",
     status: "Статус",
+    witness_votes: "голоса свидетелей",
+    sons_votes: "голосов SONs",
+    committee_votes: "голоса комитета",
+    last_voted: "Последнее голосование",
+    pending_changes: "Ожидающие изменения",
+    peerplays_accounts: "Peerplays accounts",
   },
   tableFilters: {
     avtive: "Активный",
