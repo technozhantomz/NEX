@@ -166,6 +166,7 @@ deployToStaging:
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env.local
     - npm install
     - npm run build
+    - pm2 start npm --name nex-staging -- run start
   environment:
     name: staging
     url: https://nex-staging.peerplays.download
