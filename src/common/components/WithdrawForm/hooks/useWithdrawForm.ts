@@ -20,6 +20,7 @@ import { Account } from "../../../types";
 import { UseWithdrawFormResult, WithdrawForm } from "./useWithdrawForm.types";
 
 export function useWithdrawForm(asset: string): UseWithdrawFormResult {
+  const [withdrawFee, setWithdrawFee] = useState<number>(0);
   const [selectedAsset, setSelectedAsset] = useState<string>(asset);
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [transactionErrorMessage, setTransactionErrorMessage] =
@@ -124,12 +125,13 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         const fee = await getTrxFee([trx]);
         if (fee !== undefined) {
           setFeeAmount(fee);
+          setWithdrawFee(fee);
         }
       }
     } catch (e) {
       console.log(e);
     }
-  }, [buildWithdrawFormTransaction, getTrxFee, setFeeAmount]);
+  }, [buildWithdrawFormTransaction, getTrxFee, setFeeAmount, setWithdrawFee]);
 
   const handleWithdraw = async (password: string) => {
     setTransactionErrorMessage("");
@@ -385,7 +387,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   useEffect(() => {
     const withdrawFee = calculateTransferFee("");
     if (withdrawFee) {
-      setFeeAmount(withdrawFee);
+      setWithdrawFee(withdrawFee);
     }
   }, [assets, calculateTransferFee]);
 
@@ -432,5 +434,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     amount,
     withdrawAddress,
     userBalance,
+    withdrawFee,
   };
 }
