@@ -35,11 +35,6 @@ build-qa:
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env.local
     - npm install
     - npm run build
-  artifacts:
-    paths:
-      - .next/
-      - .env.local
-    expire_in: 2 weeks
   only:
     - tags
     - branches
@@ -58,11 +53,6 @@ build-production:
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env.local
     - npm install
     - npm run build
-  artifacts:
-    paths:
-      - .next/
-      - .env.local
-    expire_in: 2 weeks
   only:
     - tags
     - branches
@@ -167,6 +157,7 @@ deployToStaging:
     - npm install
     - npm run build
     - pm2 start npm --name nex-staging -- run start
+  dependencies: []
   environment:
     name: staging
     url: https://nex-staging.peerplays.download
