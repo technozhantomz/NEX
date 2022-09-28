@@ -8,6 +8,7 @@ import {
   Account,
   Asset,
   FullAccount,
+  KeyType,
   Permissions,
   WhaleVaultPubKeys,
   WitnessAccount,
@@ -20,7 +21,8 @@ export function useAccount(): UseAccountResult {
     localStorageAccount,
     updateAccount,
     setAssets,
-    setPassword,
+    savePassword,
+    removePassword,
     setLocalStorageAccount,
   } = useUserContext();
   const [loading, setLoading] = useState<boolean>(true);
@@ -56,12 +58,12 @@ export function useAccount(): UseAccountResult {
 
   const removeAccount = useCallback(() => {
     updateAccount("", "", [], undefined);
-    setPassword("");
+    removePassword();
     setLocalStorageAccount("");
-  }, [updateAccount, setPassword, setLocalStorageAccount]);
+  }, [updateAccount, removePassword, setLocalStorageAccount]);
 
   const formAccountAfterConfirmation = useCallback(
-    async (fullAccount: FullAccount) => {
+    async (fullAccount: FullAccount, password: string, keyType: KeyType) => {
       try {
         setLoading(true);
         const assets: Asset[] = await Promise.all(
@@ -75,13 +77,14 @@ export function useAccount(): UseAccountResult {
           assets,
           fullAccount.account
         );
+        savePassword(password, keyType);
         setLoading(false);
       } catch (e) {
         console.log(e);
         setLoading(false);
       }
     },
-    [updateAccount, formAssetBalanceById, setLoading]
+    [updateAccount, formAssetBalanceById, setLoading, savePassword]
   );
 
   const formAccountByName = useCallback(
@@ -174,6 +177,7 @@ export function useAccount(): UseAccountResult {
     (password: string, account: Account) => {
       const roles = ["active", "owner", "memo"];
       let checkPassword = false;
+      let keyType: KeyType = "";
       let fromWif = "";
 
       try {
@@ -188,7 +192,6 @@ export function useAccount(): UseAccountResult {
         const privKey = fromWif ? fromWif : keys.privKeys[role];
         const pubKey = privKey.toPublicKey().toString(defaultToken);
         let userKeys: string[] = [];
-
         if (role !== "memo") {
           const permission = account[role as keyof Account] as Permissions;
           userKeys = permission.key_auths.map((key_auth) => key_auth[0]);
@@ -197,10 +200,11 @@ export function useAccount(): UseAccountResult {
         }
         if (userKeys.includes(pubKey)) {
           checkPassword = true;
+          keyType = fromWif ? (role as KeyType) : "password";
           break;
         }
       }
-      return checkPassword;
+      return { checkPassword, keyType };
     },
     []
   );

@@ -37,7 +37,7 @@ export function usePasswordForm(): IUsePasswordForm {
       );
     }
     if (account) {
-      checkPassword = validateAccountPassword(value, account);
+      checkPassword = validateAccountPassword(value, account).checkPassword;
     }
     if (!checkPassword)
       return Promise.reject(

@@ -5,9 +5,10 @@ import { useAccount } from "../../../../../common/hooks";
 import {
   useBrowserHistoryContext,
   usePeerplaysApiContext,
+  useSettingsContext,
   useUserContext,
 } from "../../../../../common/providers";
-import { FullAccount } from "../../../../../common/types";
+import { FullAccount, KeyType } from "../../../../../common/types";
 import { CheckboxChangeEvent, Form } from "../../../../../ui/src";
 
 import { LoginForm, UseLoginFormResult } from "./useLoginForm.types";
@@ -19,6 +20,7 @@ export function useLoginForm(): UseLoginFormResult {
     FullAccount | undefined
   >(undefined);
   const [useWhaleVault, setUseWhaleVault] = useState<boolean>(false);
+  const [loggedInKeyType, setLoggedInKeyType] = useState<KeyType>("");
 
   const {
     getFullAccount,
@@ -27,17 +29,33 @@ export function useLoginForm(): UseLoginFormResult {
     validateWhaleVaultPubKeys,
   } = useAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
+  const { setSettings, settings } = useSettingsContext();
   const { handleLoginRedirect } = useBrowserHistoryContext();
   const { whaleVaultInstance } = usePeerplaysApiContext();
   const [loginForm] = Form.useForm<LoginForm>();
 
   const handleLogin = async () => {
     setSubmitting(true);
+
     loginForm
       .validateFields()
       .then(async () => {
         if (temporaryFullAccount) {
-          await formAccountAfterConfirmation(temporaryFullAccount);
+          // key loggin
+          if (!useWhaleVault) {
+            await formAccountAfterConfirmation(
+              temporaryFullAccount,
+              loginForm.getFieldValue("password"),
+              loggedInKeyType
+            );
+            //WhaleVault loggin
+          } else {
+            await formAccountAfterConfirmation(
+              temporaryFullAccount,
+              "",
+              "whaleVault"
+            );
+          }
           setLocalStorageAccount(temporaryFullAccount.account.name);
         }
         setSubmitting(false);
@@ -45,6 +63,10 @@ export function useLoginForm(): UseLoginFormResult {
       .catch(() => {
         setSubmitting(false);
       });
+  };
+
+  const onChangeWalletLock = (value: number) => {
+    setSettings({ ...settings, walletLock: value });
   };
 
   const onChangeUseWhaleVault = (e: CheckboxChangeEvent) => {
@@ -66,11 +88,15 @@ export function useLoginForm(): UseLoginFormResult {
   const validatePassword = (_: unknown, value: string) => {
     if (temporaryFullAccount) {
       const account = temporaryFullAccount.account;
-      const checkPassword = validateAccountPassword(value, account);
+      const { checkPassword, keyType } = validateAccountPassword(
+        value,
+        account
+      );
       if (!checkPassword)
         return Promise.reject(
           new Error(counterpart.translate(`field.errors.password_incorrect`))
         );
+      setLoggedInKeyType(keyType);
       return Promise.resolve();
     } else {
       return Promise.reject(
@@ -182,5 +208,6 @@ export function useLoginForm(): UseLoginFormResult {
     submitting,
     useWhaleVault,
     onChangeUseWhaleVault,
+    onChangeWalletLock,
   };
 }

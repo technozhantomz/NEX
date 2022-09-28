@@ -3,18 +3,19 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
-import { usePeerplaysApiContext } from "..";
+import { usePeerplaysApiContext, useSettingsContext } from "..";
 import { useAsset, useLocalStorage } from "../../hooks";
-import { Account, Asset, FullAccount } from "../../types";
+import { Account, Asset, FullAccount, KeyType } from "../../types";
 
 import { UserContextType } from "./UserProvider.types";
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 const defaultUserState: UserContextType = {
   localStorageAccount: "",
@@ -23,6 +24,7 @@ const defaultUserState: UserContextType = {
   assets: [],
   password: "",
   account: undefined,
+  keyType: "",
   updateAccount: function (id: string, name: string, assets: Asset[]): void {
     throw new Error(`Function not implemented. ${id},${name}, ${assets}`);
   },
@@ -35,6 +37,12 @@ const defaultUserState: UserContextType = {
   setLocalStorageAccount: function (value: string): void {
     throw new Error(`Function not implemented. ${value}`);
   },
+  savePassword: function (password: string, keyType: KeyType) {
+    throw new Error(`Function not implemented. ${password} ${keyType}`);
+  },
+  removePassword: function () {
+    throw new Error(`Function not implemented.`);
+  },
 };
 
 const UserContext = createContext<UserContextType>(defaultUserState);
@@ -45,11 +53,14 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   ) as [string, (value: string) => void];
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
+  const { settings } = useSettingsContext();
 
   const [id, setId] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [assets, _setAssets] = useState<Asset[]>([]);
-  const [password, _setPassword] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [keyType, setKeyType] = useState<KeyType>("");
+  const passwordTimeout = useRef<NodeJS.Timeout>();
   const [account, setAccount] = useState<Account | undefined>();
 
   const updateAccount = useCallback(
@@ -74,11 +85,41 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     [_setAssets]
   );
 
-  const setPassword = useCallback(
-    (password: string) => {
-      _setPassword(password);
+  const removePassword = useCallback(() => {
+    if (passwordTimeout.current) {
+      clearTimeout(passwordTimeout.current);
+      passwordTimeout.current = undefined;
+    }
+    setPassword("");
+    setKeyType("");
+  }, [passwordTimeout, passwordTimeout.current, setPassword, setKeyType]);
+
+  const savePassword = useCallback(
+    (password: string, keyType: KeyType) => {
+      const expires = settings.walletLock;
+      setKeyType(keyType);
+      if (passwordTimeout.current) {
+        clearTimeout(passwordTimeout.current);
+        passwordTimeout.current = undefined;
+      }
+      if (!expires) {
+        return;
+      }
+
+      const passwordExpiration = expires * 60000;
+
+      setPassword(password);
+      passwordTimeout.current = setTimeout(removePassword, passwordExpiration);
     },
-    [_setPassword]
+    [
+      setPassword,
+      setKeyType,
+      settings,
+      settings.walletLock,
+      passwordTimeout,
+      passwordTimeout.current,
+      removePassword,
+    ]
   );
 
   const formInitialAccountByName = useCallback(
@@ -127,9 +168,12 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         localStorageAccount,
         setLocalStorageAccount,
         password,
+        keyType,
         updateAccount,
         setAssets,
         setPassword,
+        savePassword,
+        removePassword,
       }}
     >
       {children}

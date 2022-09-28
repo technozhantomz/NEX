@@ -127,3 +127,11 @@ export type ActivityRow = {
   id: string;
   fee: string;
 };
+
+export type KeyType =
+  | "password"
+  | "active"
+  | "memo"
+  | "owner"
+  | "whaleVault"
+  | "";

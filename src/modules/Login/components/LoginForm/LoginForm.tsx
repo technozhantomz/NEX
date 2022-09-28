@@ -1,6 +1,7 @@
 import counterpart from "counterpart";
 import React from "react";
 
+import { useSettingsContext } from "../../../../common/providers";
 import { Checkbox, Form, Input, Option, Select } from "../../../../ui/src";
 
 import * as Styled from "./LoginForm.styled";
@@ -12,9 +13,11 @@ export const LoginForm: React.FC = () => {
     handleLogin,
     formValdation,
     onChangeUseWhaleVault,
+    onChangeWalletLock,
     submitting,
     useWhaleVault,
   } = useLoginForm();
+  const { settings } = useSettingsContext();
   const walletLockInMinutes = ["0", "30", "60", "90", "180", "210"];
 
   return (
@@ -26,7 +29,7 @@ export const LoginForm: React.FC = () => {
       initialValues={{
         username: "",
         password: "",
-        walletLock: 0,
+        walletLock: settings.walletLock,
         useWhaleVault: false,
       }}
     >
@@ -60,7 +63,7 @@ export const LoginForm: React.FC = () => {
             {counterpart.translate(`field.labels.wallet_lock`)}
           </Styled.WalletLockLabel>
           <Form.Item name="walletLock">
-            <Select>
+            <Select onChange={onChangeWalletLock}>
               {walletLockInMinutes.map((min) => (
                 <Option key={min} value={min}>
                   {min}

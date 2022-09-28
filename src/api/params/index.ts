@@ -5,5 +5,4 @@ export * from "./defaultExchanges";
 export * from "./defaultLocales";
 export * from "./defaultNotifications";
 export * from "./nodesList";
-export * from "./defaultUserSettings";
 export * from "./defaultApiSettings";
