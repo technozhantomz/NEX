@@ -149,7 +149,11 @@ deployToQA:
 deployToStaging:
   stage: deploy
   script: 
+    - sudo su - bunker
+    - git clone -b cd-deployments https://gitlab.com/PBSA/NEX.git
+    - cd NEX
     - pm2 del nex-staging || true
+    - sudo rm -rf NEX/
     - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$PROD_TOKEN'" >> .env.local
     - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$PROD_QUOTE'" >> .env.local
     - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env.local
