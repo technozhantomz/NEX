@@ -984,7 +984,7 @@ export const en = {
     key: "key",
     status: "Status",
   },
-  tableFilters:{
+  tableFilters: {
     avtive: "Avtive",
     inactive: "Inactive",
     approved: "Approved",

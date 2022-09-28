@@ -959,7 +959,7 @@ export const ru = {
     key: "ключ",
     status: "Статус",
   },
-  tableFilters:{
+  tableFilters: {
     avtive: "Активный",
     inactive: "Неактивно",
     approved: "Утверждено",
