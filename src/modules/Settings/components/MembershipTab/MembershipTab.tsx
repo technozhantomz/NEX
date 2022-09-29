@@ -4,11 +4,11 @@ import React from "react";
 
 import { defaultToken } from "../../../../api/params";
 import { PasswordModal, TransactionModal } from "../../../../common/components";
-import { HIVEAndHBDDepositInfo } from "../../../../common/components/HIVEAndHBDDeposit/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
 import { InfoCircleOutlined } from "../../../../ui/src";
 
 import * as Styled from "./MembershipTab.styled";
+import { MembershipInfo } from "./components";
 import { useMembershipTab } from "./hooks/useMembershipTab";
 
 export const MembershipTab = (): JSX.Element => {
@@ -99,7 +99,7 @@ export const MembershipTab = (): JSX.Element => {
               <InfoCircleOutlined />
             </Styled.Heading>
             <Styled.Paragraph>
-              <HIVEAndHBDDepositInfo
+              <MembershipInfo
                 infoString={counterpart.translate(
                   `pages.settings.membership.fee_allocation_description`,
                   {
@@ -197,7 +197,7 @@ export const MembershipTab = (): JSX.Element => {
               {counterpart.translate(`pages.settings.membership.pending_fees`)}
             </Styled.Heading>
             <Styled.Paragraph>
-              <HIVEAndHBDDepositInfo
+              <MembershipInfo
                 infoString={counterpart.translate(
                   `pages.settings.membership.pending_fee_description`,
                   {
