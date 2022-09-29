@@ -54,9 +54,6 @@ export const MembershipTab = (): JSX.Element => {
     setTransactionSuccessMessage,
   });
 
-  const { origin } = window.location;
-  const link = origin;
-
   return (
     <Styled.MembershipCard>
       <Styled.MembershipForm.Provider onFormFinish={handleFormFinish}>
@@ -66,56 +63,35 @@ export const MembershipTab = (): JSX.Element => {
           onFinish={showPasswordModal}
         >
           <Styled.InfoContainer>
-            {!isLifetimeMember ? (
-              <>
-                <Styled.Heading>
-                  {counterpart.translate(
-                    `pages.settings.membership.upgrade_title`,
-                    { feesCashback }
-                  )}
-                </Styled.Heading>
-                <Styled.Paragraph>
-                  {counterpart.translate(
-                    `pages.settings.membership.upgrade_description`,
-                    { feesCashback }
-                  )}
-                </Styled.Paragraph>
-                <Styled.Paragraph>
-                  {counterpart.translate(
-                    `pages.settings.membership.membership_price`,
-                    { membershipPrice, defaultToken }
-                  )}
-                  <InfoCircleOutlined />
-                </Styled.Paragraph>
-                <Styled.ButtonContainer>
-                  <Styled.Button
-                    type="primary"
-                    htmlType="submit"
-                    disabled={loadingAccountMembership}
-                  >
-                    {counterpart.translate(`buttons.buy_membership`)}
-                  </Styled.Button>
-                </Styled.ButtonContainer>
-              </>
-            ) : (
-              <>
-                <Styled.Heading>
-                  {" "}
-                  {counterpart.translate(
-                    `pages.settings.membership.referral_link_title`
-                  )}
-                </Styled.Heading>
-                <Styled.RefferalParagraph>
-                  {counterpart.translate(
-                    `pages.settings.membership.referral_link`,
-                    {
-                      link,
-                      name,
-                    }
-                  )}
-                </Styled.RefferalParagraph>
-              </>
-            )}
+            <>
+              <Styled.Heading>
+                {counterpart.translate(
+                  `pages.settings.membership.upgrade_title`,
+                  { feesCashback }
+                )}
+              </Styled.Heading>
+              <Styled.Paragraph>
+                {counterpart.translate(
+                  `pages.settings.membership.upgrade_description`,
+                  { feesCashback, membershipPrice, defaultToken }
+                )}
+                <InfoCircleOutlined />
+              </Styled.Paragraph>
+              <Styled.ButtonContainer>
+                <Styled.Button
+                  type="primary"
+                  htmlType="submit"
+                  disabled={
+                    isLifetimeMember
+                      ? isLifetimeMember
+                      : loadingAccountMembership
+                  }
+                >
+                  {counterpart.translate(`buttons.buy_membership`)}
+                </Styled.Button>
+              </Styled.ButtonContainer>
+            </>
+
             <Styled.Heading>
               {counterpart.translate(
                 `pages.settings.membership.fee_allocation`

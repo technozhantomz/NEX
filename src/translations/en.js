@@ -656,9 +656,7 @@ export const en = {
         heading: "Membership",
         upgrade_title: "Upgrade for %(feesCashback)s%%  Cashback",
         upgrade_description:
-          "Every transaction on the Peerplays network is divided between the network and referrers. By registering to a Lifetime Membership the account will receive %(feesCashback)s%% cashback on every transaction fee paid. As a bonus it will also qualify to earn referral income from users registered with or referred to the network.",
-        membership_price:
-          "A Lifetime Membership price will change over time, right now it is only %(membershipPrice)s %(defaultToken)s.",
+          "Lifetime Members get %(feesCashback)s%% cashback on every transaction fee they pay and qualify to earn referral income from users they register with or refer to the network. A Lifetime Membership is just  %(membershipPrice)s %(defaultToken)s.",
         fee_allocation: "Fee Allocation",
         fee_allocation_description:
           "Every time , %(name)s, pays a transaction fee, that fee is divided among several different accounts. The network takes a %(networkFee)s%% cut, and the Lifetime Member who referred , %(name)s, gets a %(lifetimeFee)s%% cut. The registrar is the account that paid the transaction fee to register , %(name)s, with the network. The registrar gets to decide how to divide the remaining %(referrerTotalFee)s%% between themselves and their own Affiliate Referrer program., %(name)s's, registrar chose to share %(referrerFee)s%% of the total fee with the Affiliate Referrer and keep %(registrarFee)s%% of the total fee for themselves.",
@@ -675,9 +673,6 @@ export const en = {
         vesting_fees: "Vesting Fees",
         vesting_description:
           "Most fees are made available immediately, but fees over %(vestingThreshold)s %(defaultToken)s (such as those paid to upgrade your membership or register a premium account name) must vest for a total of %(vestingPeriod)s days.",
-        referral_link_title: "Your referral link",
-        referral_link:
-          "Give this link to people you want to refer to Peerplays: %(link)s/signup/?r=%(name)s",
       },
     },
     voting: {
