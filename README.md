@@ -1,4 +1,6 @@
 
+[![pipeline status](https://gitlab.com/PBSA/NEX/badges/dev/pipeline.svg)](https://gitlab.com/PBSA/NEX/-/commits/dev)
+
 Project to build moderen DEX-UI for the Peerplays on chain DEX
 
 # Peerplays DEX
