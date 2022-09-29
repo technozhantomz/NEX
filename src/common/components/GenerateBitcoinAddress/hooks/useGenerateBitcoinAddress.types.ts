@@ -1,12 +1,16 @@
+import { Dispatch, SetStateAction } from "react";
+
+import { SignerKey } from "../../../types";
+
 export type UseGenerateBitcoinAddressResult = {
-  isPasswordModalVisible: boolean;
   bitcoinSidechainAccounts: BitcoinSidechainAccounts | undefined;
-  status: string;
-  submittingPassword: boolean;
   setBitcoinSidechainAccounts: (value: BitcoinSidechainAccounts) => void;
-  onFormFinish: (name: string, info: { values: any; forms: any }) => void;
-  handlePasswordModalCancel: () => void;
-  confirm: () => void;
+  transactionErrorMessage: string;
+  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
+  transactionSuccessMessage: string;
+  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  loadingTransaction: boolean;
+  generateBitcoinAddresses: (signerKey: SignerKey) => Promise<void>;
 };
 
 export type BitcoinSidechainAccounts =

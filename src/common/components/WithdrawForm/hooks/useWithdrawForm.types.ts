@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 import { FormInstance, Rule } from "../../../../ui/src";
+import { SignerKey } from "../../../types";
 
 export type UseWithdrawFormResult = {
   feeAmount: number;
@@ -13,7 +14,7 @@ export type UseWithdrawFormResult = {
   transactionErrorMessage: string;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   transactionSuccessMessage: string;
-  handleWithdraw: (password: string) => Promise<void>;
+  handleWithdraw: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   amount: number;
   withdrawAddress: string;

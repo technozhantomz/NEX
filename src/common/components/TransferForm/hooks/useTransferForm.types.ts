@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 import { FormInstance, Rule } from "../../../../ui/src";
-import { Account } from "../../../types";
+import { Account, SignerKey } from "../../../types";
 
 export type UseTransferFormResult = {
   feeAmount: number;
@@ -12,7 +12,7 @@ export type UseTransferFormResult = {
   transactionErrorMessage: string;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   transactionSuccessMessage: string;
-  transfer: (password: string) => Promise<void>;
+  transfer: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   toAccount: Account | undefined;
   amount: number;

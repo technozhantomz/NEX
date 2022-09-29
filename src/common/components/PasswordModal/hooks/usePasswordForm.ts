@@ -1,19 +1,25 @@
 import counterpart from "counterpart";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { Form, FormInstance } from "../../../../ui/src";
+import { CheckboxChangeEvent, Form, FormInstance } from "../../../../ui/src";
 import { useAccount } from "../../../hooks";
 import { useUserContext } from "../../../providers";
+import { KeyType } from "../../../types";
 
-import { IPasswordForm, IUsePasswordForm } from "./usePasswordForm.types";
+import { IUsePasswordForm, PasswordForm } from "./usePasswordForm.types";
 
-export function usePasswordForm(): IUsePasswordForm {
+type Props = {
+  neededKeyType: KeyType;
+};
+
+export function usePasswordForm({ neededKeyType }: Props): IUsePasswordForm {
   const { account } = useUserContext();
-  const [passwordModalForm] = Form.useForm();
-  const { validateAccountPassword } = useAccount();
+  const [passwordModalForm] = Form.useForm<PasswordForm>();
+  const { validateAccountPassword, _validateUseWhaleVault } = useAccount();
+  const [useWhaleVault, setUseWhaleVault] = useState<boolean>(false);
 
   const useResetFormOnCloseModal = (
-    form: FormInstance<IPasswordForm>,
+    form: FormInstance<PasswordForm>,
     visible: boolean
   ) => {
     const prevVisibleRef = useRef<boolean>();
@@ -29,21 +35,54 @@ export function usePasswordForm(): IUsePasswordForm {
     }, [visible]);
   };
 
+  const onChangeUseWhaleVault = (e: CheckboxChangeEvent) => {
+    setUseWhaleVault(e.target.checked);
+  };
+
   const validatePassword = async (_: unknown, value: string) => {
-    let checkPassword = false;
     if (value.length < 12) {
       return Promise.reject(
         new Error(counterpart.translate(`field.errors.password_should_be_long`))
       );
     }
     if (account) {
-      checkPassword = validateAccountPassword(value, account).checkPassword;
+      const { checkPassword, keyType: inputedKeyType } =
+        validateAccountPassword(value, account);
+      if (
+        !checkPassword ||
+        (inputedKeyType !== "password" && inputedKeyType !== neededKeyType)
+      ) {
+        return Promise.reject(
+          new Error(counterpart.translate(`field.errors.password_incorrect`))
+        );
+      } else {
+        passwordModalForm.setFieldValue("keyType", inputedKeyType);
+        return Promise.resolve();
+      }
     }
-    if (!checkPassword)
+    return Promise.reject(new Error(``));
+  };
+
+  const validateUseWhalevault = async () => {
+    if (account) {
+      if (useWhaleVault) {
+        const { response, isValid } = await _validateUseWhaleVault(
+          account,
+          neededKeyType
+        );
+        if (isValid) {
+          passwordModalForm.setFieldValue("keyType", "whaleVault");
+          return Promise.resolve();
+        } else {
+          return Promise.reject(new Error(counterpart.translate(response)));
+        }
+      }
+      return Promise.resolve();
+    } else {
       return Promise.reject(
-        new Error(counterpart.translate(`field.errors.password_incorrect`))
+        new Error(counterpart.translate(`field.errors.user_name_first`))
       );
-    return Promise.resolve();
+    }
   };
 
   const formValidation = {
@@ -54,11 +93,14 @@ export function usePasswordForm(): IUsePasswordForm {
       },
       { validator: validatePassword },
     ],
+    useWhaleVault: [{ validator: validateUseWhalevault }],
   };
 
   return {
     passwordModalForm,
     formValidation,
     useResetFormOnCloseModal,
+    onChangeUseWhaleVault,
+    useWhaleVault,
   };
 }

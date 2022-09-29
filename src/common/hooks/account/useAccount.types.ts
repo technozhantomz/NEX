@@ -28,4 +28,11 @@ export type UseAccountResult = {
     pubkeys: WhaleVaultPubKeys,
     account: Account
   ) => boolean;
+  _validateUseWhaleVault: (
+    account: Account,
+    keyType?: KeyType | undefined
+  ) => Promise<{
+    response: string;
+    isValid: boolean;
+  }>;
 };

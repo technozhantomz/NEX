@@ -15,7 +15,7 @@ import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
-import { GlobalProperties } from "../../../../../common/types";
+import { GlobalProperties, SignerKey } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 
 import { UseMembershipTabResult } from "./useMembershipTab.types";
@@ -25,8 +25,7 @@ export function useMembershipTab(): UseMembershipTabResult {
   const { defaultAsset } = useAssetsContext();
   const { name, id, assets, localStorageAccount } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
-  const { getPrivateKey, getFullAccount, formAccountBalancesByName } =
-    useAccount();
+  const { getFullAccount, formAccountBalancesByName } = useAccount();
   const { dbApi } = usePeerplaysApiContext();
   const { calculateAccountUpgradeFee } = useFees();
   const { maintenanceInterval, nextMaintenanceTime } = useMaintenance();
@@ -142,7 +141,7 @@ export function useMembershipTab(): UseMembershipTabResult {
   ]);
 
   const handleMembershipUpgrade = useCallback(
-    async (password: string) => {
+    async (signerKey: SignerKey) => {
       if (
         !defaultAsset ||
         !assets ||
@@ -157,8 +156,6 @@ export function useMembershipTab(): UseMembershipTabResult {
       } else {
         setTransactionErrorMessage("");
         const fee = { amount: 0, asset_id: defaultAsset?.id };
-        const activeKey = getPrivateKey(password, "active");
-
         const trx = {
           type: "account_upgrade",
           params: {
@@ -171,7 +168,7 @@ export function useMembershipTab(): UseMembershipTabResult {
 
         try {
           setLoadingTransaction(true);
-          trxResult = await buildTrx([trx], [activeKey]);
+          trxResult = await buildTrx([trx], [signerKey]);
         } catch (error) {
           console.log(error);
           setTransactionErrorMessage(
@@ -201,7 +198,6 @@ export function useMembershipTab(): UseMembershipTabResult {
       defaultAsset,
       membershipPrice,
       id,
-      getPrivateKey,
       setLoadingTransaction,
       buildTrx,
       setTransactionErrorMessage,

@@ -735,7 +735,7 @@ export const ru = {
         heading: "Пожалуйста, подтвердите транзакцию",
       },
       password_modal: {
-        heading: "Пароль",
+        heading: "Требуется ваш пароль или ключ %(neededKeyType)s",
       },
     },
   },
@@ -775,6 +775,7 @@ export const ru = {
       from: "из",
     },
     labels: {
+      sidechain: "Боковая цепь",
       copy_bitcoin_address: "Скопируйте свой биткойн-адрес",
       fetching_price: "Получение цены",
       withdraw_public_key_address: "Отозвать открытый ключ и адрес",
@@ -932,6 +933,8 @@ export const ru = {
       published_proxy: "Вы успешно опубликовали свой прокси",
       published_votes: "Вы успешно опубликовали свои голоса",
       canceled_limit_order: "Вы успешно отменили заказ #%(selectedOrderId)s",
+      successfully_generate_btc_addresses:
+        "Вы успешно сгенерировали адреса ввода и вывода биткойнов",
     },
   },
   tableHead: {

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useAccount } from "../../../../../common/hooks";
 import {
   useBrowserHistoryContext,
-  usePeerplaysApiContext,
   useSettingsContext,
   useUserContext,
 } from "../../../../../common/providers";
@@ -26,12 +25,11 @@ export function useLoginForm(): UseLoginFormResult {
     getFullAccount,
     formAccountAfterConfirmation,
     validateAccountPassword,
-    validateWhaleVaultPubKeys,
+    _validateUseWhaleVault,
   } = useAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
   const { setSettings, settings } = useSettingsContext();
   const { handleLoginRedirect } = useBrowserHistoryContext();
-  const { whaleVaultInstance } = usePeerplaysApiContext();
   const [loginForm] = Form.useForm<LoginForm>();
 
   const handleLogin = async () => {
@@ -109,59 +107,11 @@ export function useLoginForm(): UseLoginFormResult {
     if (temporaryFullAccount) {
       const account = temporaryFullAccount.account;
       if (useWhaleVault) {
-        if (whaleVaultInstance) {
-          try {
-            const res = await whaleVaultInstance.promiseRequestPubKeys(
-              "peerplays-dex",
-              `ppy:${account.name}`
-            );
-            if (res.success) {
-              const pubKeys = res.result[`ppy:${account.name}`];
-              if (Object.keys(pubKeys).length) {
-                const isValidKeys = validateWhaleVaultPubKeys(pubKeys, account);
-                if (!isValidKeys) {
-                  return Promise.reject(
-                    new Error(
-                      counterpart.translate(
-                        `field.errors.wrong_whalevault_keys`
-                      )
-                    )
-                  );
-                }
-              } else {
-                return Promise.reject(
-                  new Error(
-                    counterpart.translate(
-                      `field.errors.not_added_to_whalevault`
-                    )
-                  )
-                );
-              }
-            } else {
-              return Promise.reject(
-                new Error(
-                  counterpart.translate(
-                    `field.errors.whalevault_connection_error`
-                  )
-                )
-              );
-            }
-          } catch (e) {
-            console.log(e);
-            return Promise.reject(
-              new Error(
-                counterpart.translate(
-                  `field.errors.whalevault_connection_error`
-                )
-              )
-            );
-          }
+        const { response, isValid } = await _validateUseWhaleVault(account);
+        if (isValid) {
+          return Promise.resolve();
         } else {
-          return Promise.reject(
-            new Error(
-              counterpart.translate(`field.errors.whalevault_not_installed`)
-            )
-          );
+          return Promise.reject(new Error(counterpart.translate(response)));
         }
       }
       return Promise.resolve();

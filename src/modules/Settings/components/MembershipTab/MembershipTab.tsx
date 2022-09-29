@@ -50,6 +50,7 @@ export const MembershipTab = (): JSX.Element => {
     handleTransactionConfirmation: handleMembershipUpgrade,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
 
   const { origin } = window.location;
@@ -233,6 +234,7 @@ export const MembershipTab = (): JSX.Element => {
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={hidePasswordModal}
+            neededKeyType="active"
           />
           <TransactionModal
             visible={isTransactionModalVisible}

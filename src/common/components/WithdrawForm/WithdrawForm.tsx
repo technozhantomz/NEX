@@ -53,6 +53,7 @@ export const WithdrawForm = ({
     handleTransactionConfirmation: handleWithdraw,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
 
   const isLoggedIn = localStorageAccount && localStorageAccount !== "";
@@ -235,6 +236,7 @@ export const WithdrawForm = ({
       {formDisclamer}
 
       <PasswordModal
+        neededKeyType="active"
         visible={isPasswordModalVisible}
         onCancel={hidePasswordModal}
       />

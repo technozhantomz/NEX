@@ -47,8 +47,6 @@ export const VoteTab = ({
     updateAccountFee,
     searchChange,
     searchError,
-    isSameAccount,
-    searchValue,
   } = useVoteTab({
     tab,
     votesLoading,
@@ -80,8 +78,6 @@ export const VoteTab = ({
           desiredMembers={localApprovedRows.length}
           searchChange={searchChange}
           searchError={searchError}
-          isSameAccount={isSameAccount}
-          searchValue={searchValue}
         />
         <VoteTable
           type="approved"

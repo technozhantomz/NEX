@@ -31,9 +31,6 @@ const defaultUserState: UserContextType = {
   setAssets: function (assets: Asset[]): void {
     throw new Error(`Function not implemented. ${assets}`);
   },
-  setPassword: function (password: string) {
-    throw new Error(`Function not implemented. ${password}`);
-  },
   setLocalStorageAccount: function (value: string): void {
     throw new Error(`Function not implemented. ${value}`);
   },
@@ -97,7 +94,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const savePassword = useCallback(
     (password: string, keyType: KeyType) => {
       const expires = settings.walletLock;
-      setKeyType(keyType);
       if (passwordTimeout.current) {
         clearTimeout(passwordTimeout.current);
         passwordTimeout.current = undefined;
@@ -108,6 +104,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
 
       const passwordExpiration = expires * 60000;
 
+      setKeyType(keyType);
       setPassword(password);
       passwordTimeout.current = setTimeout(removePassword, passwordExpiration);
     },
@@ -152,11 +149,21 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     [dbApi, updateAccount, formAssetBalanceById]
   );
 
+  const handleWalletLockChange = useCallback(() => {
+    if (password !== "" && keyType !== "") {
+      savePassword(password, keyType);
+    }
+  }, [password, keyType, savePassword]);
+
   useEffect(() => {
     if (localStorageAccount) {
       formInitialAccountByName(localStorageAccount);
     }
   }, [localStorageAccount]);
+
+  useEffect(() => {
+    handleWalletLockChange();
+  }, [settings.walletLock]);
 
   return (
     <UserContext.Provider
@@ -171,7 +178,6 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         keyType,
         updateAccount,
         setAssets,
-        setPassword,
         savePassword,
         removePassword,
       }}

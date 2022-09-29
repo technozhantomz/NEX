@@ -27,7 +27,7 @@ export function useAccount(): UseAccountResult {
   } = useUserContext();
   const [loading, setLoading] = useState<boolean>(true);
   const { formAssetBalanceById } = useAsset();
-  const { dbApi } = usePeerplaysApiContext();
+  const { dbApi, whaleVaultInstance } = usePeerplaysApiContext();
 
   const getFullAccount = useCallback(
     async (name: string, subscription: boolean) => {
@@ -143,36 +143,6 @@ export function useAccount(): UseAccountResult {
         ];
   }, []);
 
-  const validateWhaleVaultPubKeys = useCallback(
-    (pubkeys: WhaleVaultPubKeys, account: Account) => {
-      let isValid = false;
-
-      let { activePubkey, memoPubkey } = pubkeys;
-      if (activePubkey) {
-        activePubkey = activePubkey.slice(0, 4).includes(defaultToken as string)
-          ? activePubkey
-          : activePubkey.replace("PPY", defaultToken as string);
-        const accountActiveKey = account.active.key_auths[0][0];
-        if (accountActiveKey === activePubkey) {
-          isValid = true;
-          return isValid;
-        }
-      }
-      if (memoPubkey) {
-        memoPubkey = memoPubkey.slice(0, 4).includes(defaultToken as string)
-          ? memoPubkey
-          : memoPubkey.replace("PPY", defaultToken as string);
-        const accountMemoKey = account.options.memo_key;
-        if (accountMemoKey === memoPubkey) {
-          isValid = true;
-          return isValid;
-        }
-      }
-      return isValid;
-    },
-    [defaultToken]
-  );
-
   const validateAccountPassword = useCallback(
     (password: string, account: Account) => {
       const roles = ["active", "owner", "memo"];
@@ -231,6 +201,89 @@ export function useAccount(): UseAccountResult {
     [dbApi]
   );
 
+  const validateWhaleVaultPubKeys = useCallback(
+    (pubkeys: WhaleVaultPubKeys, account: Account, keyType?: KeyType) => {
+      let isValid = false;
+
+      let { activePubkey, memoPubkey } = pubkeys;
+      if (!keyType || keyType === "active") {
+        if (activePubkey) {
+          activePubkey = activePubkey
+            .slice(0, 4)
+            .includes(defaultToken as string)
+            ? activePubkey
+            : activePubkey.replace("PPY", defaultToken as string);
+          const accountActiveKey = account.active.key_auths[0][0];
+          if (accountActiveKey === activePubkey) {
+            isValid = true;
+            return isValid;
+          }
+        }
+      }
+      if (!keyType || keyType === "memo") {
+        if (memoPubkey) {
+          memoPubkey = memoPubkey.slice(0, 4).includes(defaultToken as string)
+            ? memoPubkey
+            : memoPubkey.replace("PPY", defaultToken as string);
+          const accountMemoKey = account.options.memo_key;
+          if (accountMemoKey === memoPubkey) {
+            isValid = true;
+            return isValid;
+          }
+        }
+      }
+      return isValid;
+    },
+    [defaultToken]
+  );
+
+  const _validateUseWhaleVault = useCallback(
+    async (account: Account, keyType?: KeyType) => {
+      let response = "";
+      let isValid = false;
+      if (whaleVaultInstance) {
+        try {
+          const res = await whaleVaultInstance.promiseRequestPubKeys(
+            "peerplays-dex",
+            `ppy:${account.name}`
+          );
+          if (res.success) {
+            const pubKeys = res.result[`ppy:${account.name}`];
+            if (Object.keys(pubKeys).length) {
+              const isValidKeys = validateWhaleVaultPubKeys(
+                pubKeys,
+                account,
+                keyType
+              );
+              if (!isValidKeys) {
+                response = "field.errors.wrong_whalevault_keys";
+                isValid = false;
+              } else {
+                response = "";
+                isValid = true;
+              }
+            } else {
+              response = "field.errors.not_added_to_whalevault";
+              isValid = false;
+            }
+          } else {
+            response = "field.errors.whalevault_connection_error";
+            isValid = false;
+          }
+        } catch (e) {
+          console.log(e);
+          response = "field.errors.whalevault_connection_error";
+          isValid = false;
+        }
+      } else {
+        response = "field.errors.whalevault_not_installed";
+        isValid = false;
+      }
+      return { response, isValid };
+    },
+    [whaleVaultInstance, validateWhaleVaultPubKeys]
+  );
+
   return {
     formAccountByName,
     loading,
@@ -243,5 +296,6 @@ export function useAccount(): UseAccountResult {
     validateAccountPassword,
     getUserNameById,
     validateWhaleVaultPubKeys,
+    _validateUseWhaleVault,
   };
 }

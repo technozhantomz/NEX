@@ -12,7 +12,11 @@ import {
   useUserContext,
   useViewportContext,
 } from "../../../../../../../common/providers";
-import { Asset, VestingBalance } from "../../../../../../../common/types";
+import {
+  Asset,
+  SignerKey,
+  VestingBalance,
+} from "../../../../../../../common/types";
 import { Form } from "../../../../../../../ui/src";
 
 import {
@@ -40,12 +44,12 @@ export function usePowerDownForm({
   const { dbApi } = usePeerplaysApiContext();
   const { buildVestingWithdrawTransaction } = useGPOSTransactionBuilder();
   const { buildTrx } = useTransactionBuilder();
-  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { formAccountBalancesByName } = useAccount();
   const { calculateGposWithdrawFee } = useFees();
   const { sm } = useViewportContext();
 
   const handleWithdraw = useCallback(
-    async (password: string) => {
+    async (signerKey: SignerKey) => {
       setTransactionErrorMessage("");
       const values = powerDownForm.getFieldsValue();
       try {
@@ -67,8 +71,8 @@ export function usePowerDownForm({
           gposVestingBalances,
           id
         );
-        const activeKey = getPrivateKey(password, "active");
-        const trxResult = await buildTrx([trx], [activeKey]);
+
+        const trxResult = await buildTrx([trx], [signerKey]);
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await getGposInfo();
@@ -99,7 +103,6 @@ export function usePowerDownForm({
     },
     [
       powerDownForm,
-      getPrivateKey,
       setLoadingTransaction,
       dbApi,
       id,

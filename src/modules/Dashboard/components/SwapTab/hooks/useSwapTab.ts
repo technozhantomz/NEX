@@ -16,7 +16,7 @@ import {
   useAssetsContext,
   useUserContext,
 } from "../../../../../common/providers";
-import { Asset, BookedOrder } from "../../../../../common/types";
+import { Asset, BookedOrder, SignerKey } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 
 import {
@@ -62,7 +62,7 @@ export function useSwap(): UseSwapResult {
 
   const [swapForm] = Form.useForm<SwapForm>();
   const { buildTrx } = useTransactionBuilder();
-  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { formAccountBalancesByName } = useAccount();
   const { buildSwapTransaction } = useOrderTransactionBuilder();
   const { calculateCreateLimitOrderFee } = useFees();
   const { getAllAssets } = useAsset();
@@ -718,7 +718,7 @@ export function useSwap(): UseSwapResult {
       buyAmount: string,
       sellAsset: Asset,
       buyAsset: Asset,
-      activeKey: any
+      signerKey: SignerKey
     ) => {
       const minToReceive = limitByPrecision(
         String(Number(sellAmount) / orderPrice),
@@ -736,7 +736,7 @@ export function useSwap(): UseSwapResult {
       let trxResult;
       try {
         setLoadingTransaction(true);
-        trxResult = await buildTrx([trx], [activeKey]);
+        trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
         swapForm.resetFields();
@@ -792,7 +792,7 @@ export function useSwap(): UseSwapResult {
       buyAmount: string,
       sellAsset: Asset,
       buyAsset: Asset,
-      activeKey: any
+      signerKey: SignerKey
     ) => {
       const coreMinToReceive = limitByPrecision(
         String(Number(sellAmount) / middleTrxOrderPrice),
@@ -827,7 +827,7 @@ export function useSwap(): UseSwapResult {
         setLoadingTransaction(true);
         swapTrxResult = await buildTrx(
           [buyCoreAssetTrx, sellCoreAssetTrx],
-          [activeKey]
+          [signerKey]
         );
         if (swapTrxResult) {
           formAccountBalancesByName(localStorageAccount);
@@ -881,7 +881,7 @@ export function useSwap(): UseSwapResult {
   );
 
   const handleSwapSubmit = useCallback(
-    async (password: string) => {
+    async (signerKey: SignerKey) => {
       if (allAssets && allAssets.length) {
         const { sellAmount, buyAmount } = swapForm.getFieldsValue();
         const sellAsset = allAssets.find(
@@ -890,7 +890,6 @@ export function useSwap(): UseSwapResult {
         const buyAsset = allAssets.find(
           (asset) => asset.symbol === selectedAssetsSymbols.buyAssetSymbol
         ) as Asset;
-        const activeKey = getPrivateKey(password, "active");
 
         if (
           selectedAssetsSymbols.sellAssetSymbol === defaultToken ||
@@ -901,7 +900,7 @@ export function useSwap(): UseSwapResult {
             buyAmount,
             sellAsset,
             buyAsset,
-            activeKey
+            signerKey
           );
         } else {
           await handleNonBasePairSwapSubmit(
@@ -909,7 +908,7 @@ export function useSwap(): UseSwapResult {
             buyAmount,
             sellAsset,
             buyAsset,
-            activeKey
+            signerKey
           );
         }
       }
@@ -919,7 +918,6 @@ export function useSwap(): UseSwapResult {
       allAssets.length,
       swapForm,
       selectedAssetsSymbols,
-      getPrivateKey,
       defaultToken,
       handleBasePairSwapSubmit,
       handleNonBasePairSwapSubmit,

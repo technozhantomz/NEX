@@ -135,3 +135,12 @@ export type KeyType =
   | "owner"
   | "whaleVault"
   | "";
+
+export type SignerKey =
+  | string
+  | {
+      whaleVaultInfo: {
+        keyType: KeyType;
+        account: string;
+      };
+    };
