@@ -17,6 +17,8 @@ export type UseWithdrawFormResult = {
   loadingTransaction: boolean;
   amount: number;
   withdrawAddress: string;
+  userBalance: number;
+  withdrawFee: number;
 };
 
 export type FormField = {

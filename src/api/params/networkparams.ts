@@ -1,7 +1,9 @@
 import { config as Config } from "./config";
 
-export const testnetCheck =
-  typeof window !== "undefined" && window.location.origin !== Config.dexUrl;
+const MAIN_NET_CHAIN_ID =
+  "6b6b5f0ce7a36d323768e534f3edb41c6d6332a541a95725b98e28d140850134";
+
+export const testnetCheck = MAIN_NET_CHAIN_ID !== Config.defaultChainID;
 
 export const defaultToken = Config.defaultToken;
 export const defaultNetwork = "Peerplays";

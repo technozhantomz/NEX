@@ -22,3 +22,5 @@ export * from "./GPOS";
 export * from "./VestingBalance";
 export * from "./Notification";
 export * from "./BookedOrder";
+export * from "./Node";
+export * from "./PeerplaysJS";

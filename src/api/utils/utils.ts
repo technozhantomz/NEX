@@ -55,4 +55,19 @@ export const utils = {
       name
     );
   },
+  isUrlsEqual: (url1: string, url2: string): boolean => {
+    let trimedUrl1 =
+      url1[url1.length - 1] !== "/" ? url1 : url1.slice(0, url1.length - 1);
+    trimedUrl1 = trimedUrl1.includes("//")
+      ? trimedUrl1.split("//")[1]
+      : trimedUrl1;
+
+    let trimedUrl2 =
+      url2[url2.length - 1] !== "/" ? url2 : url2.slice(0, url2.length - 1);
+    trimedUrl2 = trimedUrl2.includes("//")
+      ? trimedUrl2.split("//")[1]
+      : trimedUrl2;
+
+    return trimedUrl1 === trimedUrl2;
+  },
 };

@@ -1,4 +1,4 @@
-import { Asset } from "../types";
+import { Asset } from "../../types";
 
 export type UseAssetResult = {
   formAssetBalanceById: (id: string, amount: number) => Promise<Asset>;

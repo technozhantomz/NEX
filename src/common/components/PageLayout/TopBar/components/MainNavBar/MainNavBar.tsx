@@ -9,6 +9,7 @@ import {
 import {
   useMenuContext,
   useUserContext,
+  useUserSettingsContext,
   useViewportContext,
 } from "../../../../../providers";
 import { MainNav } from "../MainNav";
@@ -26,8 +27,9 @@ export const MainNavBar = (): JSX.Element => {
     notificationMenuOpen,
     profileMenuOpen,
     mainMenuOpen,
-    hasUnreadMessages,
   } = useMenuContext();
+  const { hasUnreadMessages } = useUserSettingsContext();
+
   const CloseButton = (
     <>
       {sm ? (

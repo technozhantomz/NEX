@@ -8,7 +8,9 @@ export const NotificationMenuCard = styled(MenuCard)`
   }
 `;
 
-export const ControlsContainer = styled.div`
+export const ControlsContainer = styled.div<{
+  hasUnread: boolean;
+}>`
   display: flex;
 
   justify-content: ${(props) =>

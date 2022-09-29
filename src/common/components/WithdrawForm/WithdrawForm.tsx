@@ -39,6 +39,8 @@ export const WithdrawForm = ({
     loadingTransaction,
     amount,
     withdrawAddress,
+    userBalance,
+    withdrawFee,
   } = useWithdrawForm(asset);
 
   const {
@@ -55,6 +57,14 @@ export const WithdrawForm = ({
   });
 
   const isLoggedIn = localStorageAccount && localStorageAccount !== "";
+
+  const renderUserBalance = isLoggedIn ? (
+    <Styled.Balance>{`${counterpart.translate(
+      `field.labels.balance`
+    )}: ${userBalance}`}</Styled.Balance>
+  ) : (
+    ""
+  );
 
   const formDisclamer = isLoggedIn ? (
     ""
@@ -131,9 +141,10 @@ export const WithdrawForm = ({
               name="amount"
               validateFirst={true}
               rules={formValdation.amount}
+              withassetselector={withAssetSelector}
             >
               <Input
-                placeholder="0.00000"
+                placeholder="0.0"
                 type="number"
                 step="any"
                 min={0}
@@ -149,6 +160,7 @@ export const WithdrawForm = ({
                       value={selectedAsset}
                       onChange={handleAssetChange}
                     />
+                    {renderUserBalance}
                   </Styled.WithdrawFormAsset>
                 }
                 disabled={!isLoggedIn}
@@ -215,7 +227,7 @@ export const WithdrawForm = ({
 
         <Styled.Fee>
           {counterpart.translate(`field.labels.fees`, {
-            feeAmount: feeAmount,
+            feeAmount: withdrawFee,
             defaultAsset: defaultAsset ? defaultAsset.symbol : "",
           })}
         </Styled.Fee>

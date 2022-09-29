@@ -83,6 +83,8 @@ export const AssetSelectContainer = styled.div`
 
 export const Balance = styled.div`
   text-align: left;
+  padding-left: 40px;
+  font-size: 14px;
 `;
 
 export const SwapButton = styled(Button)`

@@ -1,4 +1,20 @@
 export const ru = {
+  app_init: {
+    check_latency: "Запуск проверки задержки...",
+    check_latency_feedback:
+      "Запуск проверки задержки (%(pinged)s/%(totalToPing)s узлов)",
+    check_latency_feedback_country:
+      "Проверка задержки в лучшей стране (узлы %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_last:
+      "Проверка задержки для последнего подключенного узла (узлов %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_region:
+      "Проверка задержки в лучшем регионе (узлы %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_rest:
+      "Проверка задержки для оставшихся узлов (узлов %(pinged)s/%(totalToPing)s)",
+    check_latency_feedback_world:
+      "Проверка задержки в каждом регионе (узлы %(pinged)s/%(totalToPing)s)",
+    connecting: "Подключение к серверу API: %(server)s",
+  },
   transaction: {
     feeTypes: {
       _none: "Бесплатно",
@@ -622,6 +638,7 @@ export const ru = {
         referral_link:
           "Дайте ссылку на людей, которых вы хотите порекомендовать в Peerplays: %(link)s/signup/?r=%(name)s",
       },
+      api_closest: "Выбрать ближайший автоматически",
     },
     voting: {
       heading: "Голосование",
@@ -664,8 +681,10 @@ export const ru = {
           no_rewards: "Нет наград",
         },
         powerUp: {
+          heading: "GPOS - Включите питание",
           power_up_description:
             "Когда вы активируете свои %(defaultToken)s в блокчейне Peerplays, вы делаете свои первые шаги к участию в Децентрализованном автономном кооперативе (DAC), который является волшебством в технологии блокчейна. Это означает, что вы будете:",
+          power_up_description_heading: "Уведомление",
           power_up_lists: {
             first:
               "Станьте большой частью чего-то особенного в глобальном масштабе",
@@ -676,8 +695,10 @@ export const ru = {
           },
         },
         powerDown: {
+          heading: "GPOS - Выключить",
           power_down_description:
             "Когда вы отключите питание, вам потребуется 30 дней, чтобы полностью снять баланс %(defaultToken)s. Вы будете продолжать получать вознаграждения за участие в течение этого времени, пока вы участвуете. После отключения питания вы можете использовать свои %(defaultToken)s как любую другую криптовалюту. Это означает, что вы будете:",
+          power_down_description_heading: "Уведомление",
           power_down_lists: {
             first:
               "Все еще быть частью чего-то особенного, просто не так много",

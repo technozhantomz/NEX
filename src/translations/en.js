@@ -1,4 +1,20 @@
 export const en = {
+  app_init: {
+    check_latency: "Running latency checks...",
+    check_latency_feedback:
+      "Running latency checks (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_country:
+      "Latency check in best country (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_last:
+      "Latency check for last connected node (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_region:
+      "Latency check in best region (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_rest:
+      "Latency check for remaining nodes (%(pinged)s/%(totalToPing)s nodes)",
+    check_latency_feedback_world:
+      "Latency check in each region (%(pinged)s/%(totalToPing)s nodes)",
+    connecting: "Connecting to API server: %(server)s",
+  },
   transaction: {
     feeTypes: {
       _none: "Free of Charge",
@@ -509,6 +525,21 @@ export const en = {
     next: "Next",
     show_only_unread: "Show only unread",
   },
+  connection: {
+    automatic_reconnect:
+      " After %(reconnect_in_seconds)s seconds a reconnection attempt will be made automatically.",
+    manual_reconnect: "Try reconnecting now",
+    manual_ping_and_narrow_down: "Narrow down nodes and ping",
+    title_out_of_sync: "Connection out of sync",
+    out_of_sync:
+      "Your connection has been out of sync for %(out_of_sync_seconds)s seconds.",
+    want_to_reconnect:
+      "If the connection can be recovered this message will disappear automatically.",
+  },
+  footer: {
+    no_connection: "No Blockchain connection",
+    nosync: "Your active node is out of sync",
+  },
   pages: {
     logout: {
       heading: "Logout",
@@ -690,8 +721,10 @@ export const en = {
           no_rewards: "No Rewards",
         },
         powerUp: {
+          heading: "GPOS - Power up",
           power_up_description:
             "When you Power Up your %(defaultToken)s on the Peerplays blockchain you are taking your first steps into participating in the Decentralized Autonomous Cooperative (DAC) that is the magic in blockchain tech. This means you will:",
+          power_up_description_heading: "Notice",
           power_up_lists: {
             first: "Become a big part of something special on a global scale",
             second: "Earn participation rewards for your efforts",
@@ -701,8 +734,10 @@ export const en = {
           },
         },
         powerDown: {
+          heading: "GPOS - Power down",
           power_down_description:
             "When you Power Down it will take 30 days for you to withdraw your %(defaultToken)s balance in full. You will continue to receive participation rewards during that time so long as you have been participating. After Power Down you can then use your %(defaultToken)s like any other cryptocurrency. This means you will:",
+          power_down_description_heading: "Notice",
           power_down_lists: {
             first: "Still be a part of something special, just not as much",
             second: "No longer helping secure the Peerplays blockchain",
@@ -734,6 +769,7 @@ export const en = {
       discription: "Profile Page",
     },
     modal: {
+      cancel: "Cancel",
       transaction_modal: {
         heading: "Please confirm the transaction",
       },
@@ -928,6 +964,11 @@ export const en = {
       canceled_limit_order:
         "You have successfully canceled #%(selectedOrderId)s order",
     },
+  },
+  settings: {
+    api_closest: "Choose closest automatically",
+    connection_error:
+      "Unable to connect to API node %(url)s, falling back to known working nodes. Error was: %(error)s",
   },
   tableHead: {
     block_id: "Block ID",
