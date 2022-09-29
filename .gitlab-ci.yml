@@ -149,7 +149,7 @@ deployToQA:
 deployToStaging:
   stage: deploy
   script: 
-    - killall node
+    - killall node || true
     - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$PROD_TOKEN'" >> .env.local
     - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$PROD_QUOTE'" >> .env.local
     - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env.local
