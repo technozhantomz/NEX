@@ -40,6 +40,7 @@ export const WithdrawForm = ({
     amount,
     withdrawAddress,
     userBalance,
+    withdrawFee,
   } = useWithdrawForm(asset);
 
   const {
@@ -226,7 +227,7 @@ export const WithdrawForm = ({
 
         <Styled.Fee>
           {counterpart.translate(`field.labels.fees`, {
-            feeAmount: feeAmount,
+            feeAmount: withdrawFee,
             defaultAsset: defaultAsset ? defaultAsset.symbol : "",
           })}
         </Styled.Fee>

@@ -2,7 +2,7 @@ const isDev = process.env.NEXT_PUBLIC_NODE_ENV === "development";
 const DEFAULT_TOKEN = process.env.NEXT_PUBLIC_DEFAULT_TOKEN;
 const DEFAULT_QUOTE = process.env.NEXT_PUBLIC_DEFAULT_QUOTE;
 const FAUCET_URL = process.env.NEXT_PUBLIC_FAUCET_URL;
-const DEX_URL = process.env.NEXT_PUBLIC_DEX_URL;
+const DEFAULT_CHAIN_ID = process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID;
 
 /**
  * @namespace Config
@@ -13,13 +13,6 @@ export const config = {
    * @memberof Config
    */
   isDev,
-
-  /**
-   * If set to true the app will use a set of dummy data. Use this when APIs are not working.
-   *
-   * @type {boolean}
-   */
-  useDummy: false,
 
   /**
    * The default token - PPY/TEST.
@@ -46,10 +39,10 @@ export const config = {
   faucetUrl: FAUCET_URL,
 
   /**
-   * Represents the dex url.
+   * The default chain ID.
    *
    * @type {string}
    * @memberof Config
    */
-  dexUrl: DEX_URL,
+  defaultChainID: DEFAULT_CHAIN_ID,
 };

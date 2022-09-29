@@ -6,9 +6,9 @@ import React, {
   useState,
 } from "react";
 
+import { usePeerplaysApiContext } from "..";
 import { useAsset, useLocalStorage } from "../../hooks";
 import { Account, Asset, FullAccount } from "../../types";
-import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
 import { UserContextType } from "./UserProvider.types";
 
@@ -103,6 +103,8 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
             assets,
             fullAccount.account
           );
+        } else {
+          setLocalStorageAccount("");
         }
       } catch (e) {
         console.log(e);
