@@ -14,6 +14,7 @@ export const KeyManagementTab = (): JSX.Element => {
     publicKeys,
     generatedKeys,
     handleCheckboxChange,
+    downloadPrivateKeys,
     selectedKeys,
     onGo,
   } = useKeyManagementTab();
@@ -54,9 +55,11 @@ export const KeyManagementTab = (): JSX.Element => {
           validateTrigger="onChange"
         >
           <Checkbox.Group
-            options={counterpart.translate(
-              `field.checkBoxes.key_management_group`
-            )}
+            options={
+              counterpart.translate(
+                `field.checkBoxes.key_management_group`
+              ) as unknown as string[]
+            }
             onChange={handleCheckboxChange}
             value={selectedKeys}
           ></Checkbox.Group>
@@ -68,30 +71,19 @@ export const KeyManagementTab = (): JSX.Element => {
           </Styled.SubmitButton>
         </Styled.ButtonFormItem>
 
-        <Styled.Label strong>Account Public Keys</Styled.Label>
-        {publicKeys && publicKeys.length > 0
-          ? publicKeys.map((publicKey) => {
-              return (
-                <Styled.PublicKeyWrapper key={`${publicKey.type}`}>
-                  <Styled.Label>
-                    {counterpart.translate(
-                      `field.labels.public_key_${publicKey.type}`
-                    )}
-                  </Styled.Label>
-                  <Styled.PublicKey>
-                    {publicKey.key}
-                    <CopyButton
-                      className="copy-publickey"
-                      copyValue={`${publicKey.key}`}
-                    ></CopyButton>
-                  </Styled.PublicKey>
-                </Styled.PublicKeyWrapper>
-              );
-            })
-          : ""}
+        <Styled.Label strong>
+          {counterpart.translate(
+            `pages.settings.key_management.publickey_title`
+          )}
+        </Styled.Label>
+
         {generatedKeys && generatedKeys.length > 0 ? (
           <>
-            <Styled.Label strong>Account Private Keys</Styled.Label>
+            <Styled.Label strong>
+              {counterpart.translate(
+                `pages.settings.key_management.privatekey_title`
+              )}
+            </Styled.Label>
             <div>
               {generatedKeys.map((generatedKey) => {
                 if (generatedKey.key && generatedKey.key !== "") {
@@ -119,9 +111,45 @@ export const KeyManagementTab = (): JSX.Element => {
                 }
               })}
             </div>
+            <Styled.DownloadWraper>
+              <Styled.DownloadLink href="#" onClick={downloadPrivateKeys}>
+                {counterpart.translate(
+                  `pages.settings.key_management.download_link`
+                )}
+              </Styled.DownloadLink>
+              <Styled.DownloadInfo>
+                <InfoCircleOutlined />
+                <Styled.DownloadInfoText>
+                  {counterpart.translate(
+                    `pages.settings.key_management.download_warning`
+                  )}
+                </Styled.DownloadInfoText>
+              </Styled.DownloadInfo>
+            </Styled.DownloadWraper>
           </>
         ) : (
-          ""
+          <>
+            {publicKeys && publicKeys.length > 0
+              ? publicKeys.map((publicKey) => {
+                  return (
+                    <Styled.PublicKeyWrapper key={`${publicKey.type}`}>
+                      <Styled.Label>
+                        {counterpart.translate(
+                          `field.labels.public_key_${publicKey.type}`
+                        )}
+                      </Styled.Label>
+                      <Styled.PublicKey>
+                        {publicKey.key}
+                        <CopyButton
+                          className="copy-publickey"
+                          copyValue={`${publicKey.key}`}
+                        ></CopyButton>
+                      </Styled.PublicKey>
+                    </Styled.PublicKeyWrapper>
+                  );
+                })
+              : ""}
+          </>
         )}
       </Styled.KeyManagementForm>
     </Styled.KeyManagementCard>

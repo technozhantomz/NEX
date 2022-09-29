@@ -55,6 +55,36 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     }
   }, [account, setPublicKeys]);
 
+  const downloadPrivateKeys = useCallback(() => {
+    const translations: Record<string, string> = {
+      Owner: "owner",
+      Active: "active",
+      Memo: "memo",
+      Владелец: "owner",
+      Активный: "active",
+      Памятка: "memo",
+    };
+    const roles = selectedKeys.map((key) => translations[key.toString()]);
+    const keyFileContentBlocks = [];
+    for (const role of roles) {
+      const keyIndex = generatedKeys.findIndex((key) => key.label === role);
+      const block = `
+      \n ###### ${role} ###### 
+      \n ${generatedKeys[keyIndex].key} 
+      `;
+      keyFileContentBlocks.push(block);
+    }
+    const element = document.createElement("a");
+    const fileContents = keyFileContentBlocks.join().replace(/,/g, "\n");
+    const file = new Blob([fileContents], {
+      type: "text/plain",
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = `Peerplays_account_private_keys`;
+    document.body.appendChild(element);
+    element.click();
+  }, [selectedKeys, generatedKeys]);
+
   const onGo = useCallback(() => {
     const { password } = keyManagementForm.getFieldsValue();
     if (account) {
@@ -145,6 +175,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     publicKeys,
     generatedKeys,
     handleCheckboxChange,
+    downloadPrivateKeys,
     selectedKeys,
     onGo,
   };

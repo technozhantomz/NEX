@@ -648,6 +648,11 @@ export const en = {
       },
       key_management: {
         heading: "key Management",
+        publickey_title: "Account Public Keys",
+        privatekey_title: "Account Private Keys",
+        download_link: "Download Generated Keys",
+        download_warning:
+          "The private keys must be daved securely as it will be shown just once during the deposit address creation.",
       },
       security: {
         heading: "Security",

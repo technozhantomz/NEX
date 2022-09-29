@@ -7,6 +7,7 @@ export type UseKeyManagementTabResult = {
   publicKeys: PublicKeys[];
   generatedKeys: GeneratedKey[];
   handleCheckboxChange: (checkedValues: CheckboxValueType[]) => void;
+  downloadPrivateKeys: () => void;
   selectedKeys: CheckboxValueType[];
   onGo: () => void;
 };

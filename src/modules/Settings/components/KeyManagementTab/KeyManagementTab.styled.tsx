@@ -113,3 +113,23 @@ export const GeneratedKeyInput = styled(KeyInput)`
     width: 50%;
   }
 `;
+
+export const DownloadWraper = styled.div`
+  max-width: 539px;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const DownloadLink = styled.a`
+  margin: 0 auto 18px;
+`;
+export const DownloadInfo = styled.p`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .anticon {
+    margin-right: 10px;
+    color: ${colors.warningColor};
+  }
+`;
+export const DownloadInfoText = styled.span``;
