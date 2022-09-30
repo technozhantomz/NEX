@@ -30,6 +30,7 @@ export type PowerUpForm = {
   openingBalance: string;
   depositAmount: number;
   newBalance: string;
+  availableBalance: string;
 };
 
 export type FormValidation = {
