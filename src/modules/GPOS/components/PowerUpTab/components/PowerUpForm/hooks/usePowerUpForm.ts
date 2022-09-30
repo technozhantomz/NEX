@@ -198,6 +198,7 @@ export function usePowerUpForm({
       if (userAvailableBalance >= 0) {
         setNewBalance(newBalance);
         setUserAvailableBalance();
+
         if (!sm) {
           powerUpForm.setFieldsValue({
             depositAmount: Number(

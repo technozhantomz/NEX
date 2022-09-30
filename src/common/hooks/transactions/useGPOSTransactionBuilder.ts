@@ -53,6 +53,10 @@ export function useGPOSTransactionBuilder(): UseGPOSTransactionBuilderResult {
       vestingBalances: VestingBalance[],
       accountId: string
     ): Transaction => {
+      const amount = {
+        amount: Math.round(Number(withdrawAmount) * 10 ** gposAsset.precision),
+        asset_id: gposAsset.id,
+      };
       const trx = {
         type: "vesting_balance_withdraw",
         params: {
@@ -62,10 +66,7 @@ export function useGPOSTransactionBuilder(): UseGPOSTransactionBuilderResult {
           },
           vesting_balance: vestingBalances[0].id,
           owner: accountId,
-          amount: {
-            amount: withdrawAmount,
-            asset_id: gposAsset.id,
-          },
+          amount: amount,
         },
       };
       return trx;

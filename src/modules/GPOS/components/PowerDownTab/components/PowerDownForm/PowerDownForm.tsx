@@ -12,7 +12,7 @@ import {
   useUserContext,
   useViewportContext,
 } from "../../../../../../common/providers";
-import { Button, Form, Input, InputNumber } from "../../../../../../ui/src";
+import { Button, Form, Input } from "../../../../../../ui/src";
 import { GPOSBalances } from "../../../../types";
 
 import * as Styled from "./PowerDownForm.styled";
@@ -128,8 +128,7 @@ export const PowerDownForm = ({
             validateFirst={true}
             validateTrigger="onChange"
           >
-            <InputNumber
-              controls={false}
+            <Input
               addonBefore={
                 <Button type="text" onClick={() => adjustWithdraw("+")}>
                   +
