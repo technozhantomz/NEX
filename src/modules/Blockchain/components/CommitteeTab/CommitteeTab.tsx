@@ -1,7 +1,8 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
-import { CSSProperties, ReactNode, useRef } from "react";
+import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
@@ -48,7 +49,7 @@ export const CommitteeTab = (): JSX.Element => {
           <InfoCircleOutlined />
         </Styled.CommitteeHeader>
         <SearchTableInput
-          columns={CommitteeColumns}
+          columns={CommitteeColumns as ColumnsType<unknown>}
           dataSource={committeeTableRows}
           setDataSource={setSearchDataSource}
           inputProps={{
@@ -62,7 +63,7 @@ export const CommitteeTab = (): JSX.Element => {
           <DownloadOutlined />
           <ReactToPrint
             trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current}
+            content={() => componentRef.current as unknown as ReactInstance}
           />
 
           {` / `}
@@ -128,7 +129,7 @@ export const CommitteeTab = (): JSX.Element => {
       ) : (
         <Styled.CommitteeTable
           dataSource={searchDataSource}
-          columns={CommitteeColumns}
+          columns={CommitteeColumns as ColumnsType<unknown>}
           loading={loading}
           pagination={
             !loading

@@ -140,7 +140,6 @@ export function useFeesTab(): UseFeesTabResult {
       );
 
       setFullFeesRows(fullRows);
-      setSearchDataSource(fullRows);
       setLoading(false);
     }
   }, [feeParameters, defaultAsset, setPrecision, setLoading, setFullFeesRows]);
@@ -181,6 +180,12 @@ export function useFeesTab(): UseFeesTabResult {
   useEffect(() => {
     getFees();
   }, [feeParameters, defaultAsset]);
+
+  useEffect(() => {
+    if (searchDataSource.length === 0) {
+      setSearchDataSource(fullFeesRows);
+    }
+  }, [fullFeesRows]);
 
   return {
     loading,

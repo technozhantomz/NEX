@@ -119,7 +119,6 @@ export function useWitnessesTab(): UseWitnessesTabResult {
               rewardAmount
             ).toFixed(defaultAsset.precision);
             setWitnessTableRows(witnessesRows);
-            setSearchDataSource(witnessesRows);
             setActiveWitnesses(activeWitnesses.length);
             setReward(rewardAmount);
             setEarnings(Number(earnings));
@@ -188,6 +187,12 @@ export function useWitnessesTab(): UseWitnessesTabResult {
       clearInterval(witnessInterval);
     };
   }, [defaultAsset]);
+
+  useEffect(() => {
+    if (searchDataSource.length === 0) {
+      setSearchDataSource(witnessTableRows);
+    }
+  }, [witnessTableRows]);
 
   return {
     loading,

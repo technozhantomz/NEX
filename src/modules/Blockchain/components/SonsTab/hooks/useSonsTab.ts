@@ -76,7 +76,7 @@ export function useSonsTab(): UseSonsTabResult {
 
             const activeSones = sonsRows.filter((son) => son.active === true);
             setSonsTableRows(sonsRows);
-            setSearchDataSource(sonsRows);
+
             setActiveSons(activeSones.length);
             setBudget(budgetAmount);
             setNextVote(
@@ -109,6 +109,7 @@ export function useSonsTab(): UseSonsTabResult {
     }
   }, [
     defaultAsset,
+    searchDataSource,
     getChain,
     setPrecision,
     formAssetBalanceById,
@@ -126,6 +127,12 @@ export function useSonsTab(): UseSonsTabResult {
       clearInterval(sonsInterval);
     };
   }, [defaultAsset]);
+
+  useEffect(() => {
+    if (searchDataSource.length === 0) {
+      setSearchDataSource(sonsTableRows);
+    }
+  }, [sonsTableRows]);
 
   return {
     loading,
