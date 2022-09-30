@@ -182,7 +182,7 @@ export function useMembershipTab(): UseMembershipTabResult {
 
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
-          setIsLifetimeMember(true);
+          getAccountMembership();
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
             counterpart.translate(`field.success.account_upgraded_successfully`)

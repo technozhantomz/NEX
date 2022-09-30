@@ -64,32 +64,53 @@ export const MembershipTab = (): JSX.Element => {
         >
           <Styled.InfoContainer>
             <>
-              <Styled.Heading>
-                {counterpart.translate(
-                  `pages.settings.membership.upgrade_title`,
-                  { feesCashback }
-                )}
-              </Styled.Heading>
-              <Styled.Paragraph>
-                {counterpart.translate(
-                  `pages.settings.membership.upgrade_description`,
-                  { feesCashback, membershipPrice, defaultToken }
-                )}
-                <InfoCircleOutlined />
-              </Styled.Paragraph>
-              <Styled.ButtonContainer>
-                <Styled.Button
-                  type="primary"
-                  htmlType="submit"
-                  disabled={
-                    isLifetimeMember
-                      ? isLifetimeMember
-                      : loadingAccountMembership
-                  }
-                >
-                  {counterpart.translate(`buttons.buy_membership`)}
-                </Styled.Button>
-              </Styled.ButtonContainer>
+              {!isLifetimeMember ? (
+                <>
+                  {" "}
+                  <Styled.Heading>
+                    {counterpart.translate(
+                      `pages.settings.membership.upgrade_title`,
+                      { feesCashback }
+                    )}
+                  </Styled.Heading>
+                  <Styled.Paragraph>
+                    {counterpart.translate(
+                      `pages.settings.membership.upgrade_description`,
+                      { feesCashback, membershipPrice, defaultToken }
+                    )}
+                    {/* <InfoCircleOutlined /> */}
+                  </Styled.Paragraph>
+                  <Styled.ButtonContainer>
+                    <Styled.Button
+                      type="primary"
+                      htmlType="submit"
+                      disabled={
+                        isLifetimeMember
+                          ? isLifetimeMember
+                          : loadingAccountMembership
+                      }
+                    >
+                      {counterpart.translate(`buttons.buy_membership`)}
+                    </Styled.Button>
+                  </Styled.ButtonContainer>
+                </>
+              ) : (
+                <>
+                  <Styled.Heading>
+                    {counterpart.translate(
+                      `pages.settings.membership.upgraded_title`,
+                      { feesCashback }
+                    )}
+                  </Styled.Heading>
+                  <Styled.Paragraph>
+                    {counterpart.translate(
+                      `pages.settings.membership.upgraded_description`,
+                      { feesCashback }
+                    )}
+                    {/* <InfoCircleOutlined /> */}
+                  </Styled.Paragraph>
+                </>
+              )}
             </>
 
             <Styled.Heading>
