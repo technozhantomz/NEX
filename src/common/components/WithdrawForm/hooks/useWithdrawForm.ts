@@ -232,7 +232,11 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       (asset) => asset.symbol === defaultToken
     );
     setAmount(Number(value));
-
+    if (Number(value) <= 0) {
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.amount_should_greater`))
+      );
+    }
     if (!accountAsset) {
       return Promise.reject(
         new Error(counterpart.translate(`field.errors.balance_not_enough`))
