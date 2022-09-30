@@ -86,9 +86,11 @@ const sorters = [
   undefined,
   undefined,
   undefined,
-  (a: { fees: string }, b: { fees: string }) =>
-    parseFloat(a.fees === "Free of Charge" ? "0" : a.fees) -
-    parseFloat(b.fees === "Free of Charge" ? "0" : b.fees),
+  (a: { fees: string }, b: { fees: string }) => {
+    const aFloat = a.fees[0] === "Free of Charge" ? 0 : parseFloat(a.fees[0]);
+    const bFloat = b.fees[0] === "Free of Charge" ? 0 : parseFloat(b.fees[0]);
+    return aFloat - bFloat;
+  },
 ];
 
 export const FeesColumns = headings.map((heading, index) => {
