@@ -49,7 +49,7 @@ export const FeesTab = (): JSX.Element => {
           {` / `}
           <CSVLink
             filename={"FeesTable.csv"}
-            data={searchDataSource}
+            data={fullFeesRows}
             className="btn btn-primary"
           >
             {counterpart.translate(`links.csv`)}
@@ -162,7 +162,7 @@ export const FeesTab = (): JSX.Element => {
         />
       )}
       <Styled.PrintTable>
-        <FeesPrintTable ref={searchDataSource} />
+        <FeesPrintTable ref={componentRef} />
       </Styled.PrintTable>
     </Styled.FeesTabWrapper>
   );
