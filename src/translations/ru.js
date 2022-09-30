@@ -738,7 +738,7 @@ export const ru = {
         heading: "Пожалуйста, подтвердите транзакцию",
       },
       password_modal: {
-        heading: "Пароль",
+        heading: "Требуется ваш пароль или ключ %(neededKeyType)s",
       },
     },
   },
@@ -757,6 +757,8 @@ export const ru = {
     placeholder: {
       user_name: "Введите имя пользователя",
       master_password: "Введите мастер-пароль",
+      master_password_private_key:
+        "Мастер-пароль или закрытый ключ (мы рекомендуем использовать кошелек Whalevault web 3.0)",
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
       hive_blockchain_account: "Блокчейн-аккаунт Hive",
@@ -776,6 +778,7 @@ export const ru = {
       from: "из",
     },
     labels: {
+      sidechain: "Боковая цепь",
       copy_bitcoin_address: "Скопируйте свой биткойн-адрес",
       fetching_price: "Получение цены",
       withdraw_public_key_address: "Отозвать открытый ключ и адрес",
@@ -830,6 +833,8 @@ export const ru = {
       desired_committees: "Желаемые комитеты",
       desired_sons: "Желаемые сыновья",
       desired_proxy: "Желаемый прокси",
+      wallet_lock: "Блокировка кошелька (минуты)",
+      use_whalevault: "Используйте расширение WhaleVault",
     },
     comments: {
       deposit_hbd:
@@ -909,6 +914,11 @@ export const ru = {
       asset_required: "Требуется актив",
       cannot_send_yourself: "Не могу отправить себе",
       unable_transaction: "Невозможно обработать транзакцию!",
+      not_added_to_whalevault: "Эта учетная запись не добавлена в WhaleVault",
+      whalevault_connection_error: "Не удается отправить запрос в WhaleVault.",
+      whalevault_not_installed:
+        "WhaleVault не установлен. Пожалуйста, установите расширение WhaleVault и перезагрузите приложение.",
+      wrong_whalevault_keys: "Добавленные ключи в WhaleVault неверны",
     },
     success: {
       successfully_transferred:
@@ -926,6 +936,8 @@ export const ru = {
       published_proxy: "Вы успешно опубликовали свой прокси",
       published_votes: "Вы успешно опубликовали свои голоса",
       canceled_limit_order: "Вы успешно отменили заказ #%(selectedOrderId)s",
+      successfully_generate_btc_addresses:
+        "Вы успешно сгенерировали адреса ввода и вывода биткойнов",
     },
   },
   tableHead: {

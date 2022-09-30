@@ -8,7 +8,7 @@ import {
   TransactionModal,
 } from "../../../../../common/components";
 import { useHandleTransactionForm } from "../../../../../common/hooks";
-import { Proxy } from "../../../../../common/types";
+import { Proxy, SignerKey } from "../../../../../common/types";
 import { Form, Tooltip } from "../../../../../ui/src";
 
 import * as Styled from "./VoteForm.styled";
@@ -20,7 +20,7 @@ type Props = {
   isVotesChanged: boolean;
   resetChanges: () => void;
   handleVoteSearch: (name: string) => void;
-  handlePublishChanges: (password: string) => Promise<void>;
+  handlePublishChanges: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
@@ -66,6 +66,7 @@ export const VoteForm = ({
     handleTransactionConfirmation: handlePublishChanges,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
   return (
     <Styled.VoteFormWrapper>
@@ -142,6 +143,7 @@ export const VoteForm = ({
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={hidePasswordModal}
+            neededKeyType="active"
           />
           <TransactionModal
             visible={isTransactionModalVisible}

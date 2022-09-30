@@ -80,6 +80,7 @@ export const OrderBook = ({
     handleTransactionConfirmation: handleCancelLimitOrder,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
 
   const { localStorageAccount } = useUserContext();
@@ -181,6 +182,7 @@ export const OrderBook = ({
         <PasswordModal
           visible={isPasswordModalVisible}
           onCancel={hidePasswordModal}
+          neededKeyType="active"
         />
       </Form.Provider>
     </>

@@ -6,8 +6,16 @@ import {
   ChainConfig,
   ChainStore,
   ConnectionManager,
+  WhaleVaultConfig,
 } from "peerplaysjs-lib";
-import React, { createContext, useCallback, useContext, useRef } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { useSettingsContext } from "../";
 import { defaultToken } from "../../../api/params";
@@ -23,6 +31,7 @@ import {
   Node,
   NodeTree,
   NodeTreeBranch,
+  WhaleVaultType,
 } from "../../types";
 
 import {
@@ -45,6 +54,8 @@ ChainStore.setDispatchFrequency(60);
 /** PeerplaysApiProvider is a helper context that facilitates connecting, switching, reconnecting, and using Peerplays api
  */
 export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
+  const [whaleVaultInstance, setWhaleVaultInstance] =
+    useState<WhaleVaultType>();
   const willTransitionToInProgress = useRef<
     boolean | string | { background: boolean; key: string }
   >(false);
@@ -1332,6 +1343,13 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   const dbApi = useCallback(getApi("_db"), [getApi]);
   const historyApi = useCallback(getApi("_hist"), [getApi]);
 
+  useEffect(() => {
+    if (window.whalevault) {
+      WhaleVaultConfig.setWhaleVault(window.whalevault);
+      setWhaleVaultInstance(window.whalevault as WhaleVaultType);
+    }
+  }, []);
+
   return (
     <PeerPlaysApiContext.Provider
       value={{
@@ -1344,6 +1362,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         getTransitionTarget,
         isAutoSelection,
         isBackgroundPingingInProgress,
+        whaleVaultInstance,
       }}
     >
       {children}

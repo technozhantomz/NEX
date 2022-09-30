@@ -61,6 +61,7 @@ export const PowerDownForm = ({
     handleTransactionConfirmation: handleWithdraw,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
   const { sm } = useViewportContext();
   const mobileOpeningBalancePrefix = gposBalances
@@ -175,6 +176,7 @@ export const PowerDownForm = ({
         <PasswordModal
           visible={isPasswordModalVisible}
           onCancel={hidePasswordModal}
+          neededKeyType="active"
         />
         <TransactionModal
           visible={isTransactionModalVisible}

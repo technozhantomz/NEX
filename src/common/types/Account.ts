@@ -127,3 +127,20 @@ export type ActivityRow = {
   id: string;
   fee: string;
 };
+
+export type KeyType =
+  | "password"
+  | "active"
+  | "memo"
+  | "owner"
+  | "whaleVault"
+  | "";
+
+export type SignerKey =
+  | string
+  | {
+      whaleVaultInfo: {
+        keyType: KeyType;
+        account: string;
+      };
+    };

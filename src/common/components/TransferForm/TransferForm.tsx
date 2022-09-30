@@ -45,6 +45,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
     handleTransactionConfirmation: transfer,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
 
   return (
@@ -133,6 +134,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
         </Styled.FormItem>
       </Styled.TransferForm>
       <PasswordModal
+        neededKeyType="active"
         visible={isPasswordModalVisible}
         onCancel={hidePasswordModal}
       />

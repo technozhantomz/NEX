@@ -61,6 +61,7 @@ export const PowerUpForm = ({
     handleTransactionConfirmation: handleVesting,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
   const { sm } = useViewportContext();
 
@@ -175,6 +176,7 @@ export const PowerUpForm = ({
         <PasswordModal
           visible={isPasswordModalVisible}
           onCancel={hidePasswordModal}
+          neededKeyType="active"
         />
         <TransactionModal
           visible={isTransactionModalVisible}

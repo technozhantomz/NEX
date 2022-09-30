@@ -61,6 +61,7 @@ export const SwapTab = (): JSX.Element => {
     handleTransactionConfirmation: handleSwapSubmit,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
 
   const [transactionModalSellAmount, setTransactionModalSellAmount] =
@@ -272,6 +273,7 @@ export const SwapTab = (): JSX.Element => {
         <PasswordModal
           visible={isPasswordModalVisible}
           onCancel={hidePasswordModal}
+          neededKeyType="active"
         />
       </Styled.SwapForm.Provider>
     </Styled.SwapContainer>

@@ -12,7 +12,7 @@ import {
   useUserContext,
   useViewportContext,
 } from "../../../../../../../common/providers";
-import { Asset } from "../../../../../../../common/types";
+import { Asset, SignerKey } from "../../../../../../../common/types";
 import { Form } from "../../../../../../../ui/src";
 
 import {
@@ -39,7 +39,7 @@ export function usePowerUpForm({
   const { id, assets, localStorageAccount } = useUserContext();
   const { buildVestingBalanceCreateTransaction } = useGPOSTransactionBuilder();
   const { buildTrx } = useTransactionBuilder();
-  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { formAccountBalancesByName } = useAccount();
   const { calculateGposVestingFee } = useFees();
   const { sm } = useViewportContext();
 
@@ -56,7 +56,7 @@ export function usePowerUpForm({
   );
 
   const handleVesting = useCallback(
-    async (password: string) => {
+    async (signerKey: SignerKey) => {
       const values = powerUpForm.getFieldsValue();
       const depositAmount =
         values.depositAmount * 10 ** (gposBalances?.asset.precision as number);
@@ -66,10 +66,10 @@ export function usePowerUpForm({
         id
       );
       setTransactionErrorMessage("");
-      const activeKey = getPrivateKey(password, "active");
+
       try {
         setLoadingTransaction(true);
-        const trxResult = await buildTrx([trx], [activeKey]);
+        const trxResult = await buildTrx([trx], [signerKey]);
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await getGposInfo();
@@ -104,7 +104,6 @@ export function usePowerUpForm({
       buildVestingBalanceCreateTransaction,
       id,
       setTransactionErrorMessage,
-      getPrivateKey,
       setLoadingTransaction,
       buildTrx,
       formAccountBalancesByName,
