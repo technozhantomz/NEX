@@ -15,6 +15,10 @@ export function useGPOSTransactionBuilder(): UseGPOSTransactionBuilderResult {
       accountId: string
     ): Transaction => {
       const begin_timestamp = new Date().toISOString().replace("Z", "");
+      const amount = {
+        amount: Math.round(Number(depositAmount) * 10 ** gposAsset.precision),
+        asset_id: gposAsset.id,
+      };
       const trx = {
         type: "vesting_balance_create",
         params: {
@@ -24,10 +28,7 @@ export function useGPOSTransactionBuilder(): UseGPOSTransactionBuilderResult {
           },
           creator: accountId,
           owner: accountId,
-          amount: {
-            amount: depositAmount,
-            asset_id: gposAsset.id,
-          },
+          amount: amount,
           asset_symbol: gposAsset.symbol,
           policy: [
             0,
