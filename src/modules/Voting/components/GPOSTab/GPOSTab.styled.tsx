@@ -30,6 +30,7 @@ export const GPOSIntro = styled.div`
     width: 100%;
     margin: 0 0 26px 0;
     padding: 35px 24px 24px 24px;
+    max-height: 261px;
     ${mixIns.hairline}
   }
 `;
