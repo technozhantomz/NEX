@@ -1,5 +1,6 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
+import { SignerKey } from "../../../../../../common/types";
 import { VoteRow } from "../../../../types";
 
 export type UseVoteTabResult = {
@@ -19,7 +20,7 @@ export type UseVoteTabResult = {
   transactionSuccessMessage: string;
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  handlePublishChanges: (password: string) => Promise<void>;
+  handlePublishChanges: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   searchError: boolean;
   searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => void;

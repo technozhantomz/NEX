@@ -1,4 +1,9 @@
-import { ApiLatencies, ApiServer, ApisInstanceType } from "../../types";
+import {
+  ApiLatencies,
+  ApiServer,
+  ApisInstanceType,
+  WhaleVaultType,
+} from "../../types";
 
 export type NodeTransitionCallbackType = (
   status:
@@ -35,4 +40,5 @@ export type PeerPlaysApiContextType = {
   isAutoSelection: () => boolean;
   isBackgroundPingingInProgress: () => boolean;
   apiInstance: ApisInstanceType | undefined;
+  whaleVaultInstance: WhaleVaultType | undefined;
 };

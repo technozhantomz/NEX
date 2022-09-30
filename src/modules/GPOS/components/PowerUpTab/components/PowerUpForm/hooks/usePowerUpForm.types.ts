@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
+import { SignerKey } from "../../../../../../../common/types";
 import { FormInstance, Rule } from "../../../../../../../ui/src";
 import { GPOSBalances } from "../../../../../types";
 
@@ -11,7 +12,7 @@ export type UsePowerUpFormResult = {
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   transactionSuccessMessage: string;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  handleVesting: (password: string) => Promise<void>;
+  handleVesting: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   feeAmount: number;
   depositAmount: number;
@@ -29,6 +30,7 @@ export type PowerUpForm = {
   openingBalance: string;
   depositAmount: number;
   newBalance: string;
+  availableBalance: string;
 };
 
 export type FormValidation = {

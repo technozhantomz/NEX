@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { Layout } from "../../../../common/components";
 import {
   useSettingsContext,
+  useUserContext,
   useViewportContext,
 } from "../../../../common/providers";
 import {
@@ -26,6 +27,7 @@ const SettingPage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { tab } = router.query;
   const { settings } = useSettingsContext();
+  const { localStorageAccount } = useUserContext();
 
   const { sm } = useViewportContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
@@ -95,18 +97,26 @@ const SettingPage: NextPage = () => {
           >
             <GeneralTab />
           </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.settings.key_management.heading`)}
-            key="key-management"
-          >
-            <KeyManagementTab />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.settings.membership.heading`)}
-            key="membership"
-          >
-            <MembershipTab />
-          </TabPane>
+          {localStorageAccount && localStorageAccount !== "" ? (
+            <>
+              <TabPane
+                tab={counterpart.translate(
+                  `pages.settings.key_management.heading`
+                )}
+                key="key-management"
+              >
+                <KeyManagementTab />
+              </TabPane>
+              <TabPane
+                tab={counterpart.translate(`pages.settings.membership.heading`)}
+                key="membership"
+              >
+                <MembershipTab />
+              </TabPane>{" "}
+            </>
+          ) : (
+            ""
+          )}
         </Tabs>
       </Styled.SettingsCard>
     </Layout>

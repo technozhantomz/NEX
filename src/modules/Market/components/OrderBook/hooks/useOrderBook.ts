@@ -15,7 +15,7 @@ import {
   useTransactionBuilder,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
-import { Asset } from "../../../../../common/types";
+import { Asset, SignerKey } from "../../../../../common/types";
 import { Order, OrderColumn, OrderRow, OrderType } from "../../../types";
 
 import { UseOrderBookResult } from "./useOrderBook.types";
@@ -51,7 +51,7 @@ export function useOrderBook({
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { formAccountBalancesByName } = useAccount();
 
   const { localStorageAccount, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
@@ -166,14 +166,14 @@ export function useOrderBook({
   ]);
 
   const handleCancelLimitOrder = useCallback(
-    async (password: string) => {
+    async (signerKey: SignerKey) => {
       setTransactionErrorMessage("");
-      const activeKey = getPrivateKey(password, "active");
+
       const trx = buildCancelLimitOrderTransaction(selectedOrderId, id);
       let trxResult;
       try {
         setLoadingTransaction(true);
-        trxResult = await buildTrx([trx], [activeKey]);
+        trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
         setTransactionErrorMessage(
@@ -200,7 +200,6 @@ export function useOrderBook({
     },
     [
       setTransactionErrorMessage,
-      getPrivateKey,
       buildCancelLimitOrderTransaction,
       selectedOrderId,
       id,

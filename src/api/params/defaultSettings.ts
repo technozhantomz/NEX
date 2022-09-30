@@ -8,4 +8,11 @@ export const defaultSettings: Settings = {
   advancedMode: true,
   nodeAutoselect: true,
   defaultAsset: defaultQuote as string,
+  notifications: {
+    allow: true,
+    additional: {
+      transferToMe: true,
+    },
+  },
+  walletLock: 0,
 };

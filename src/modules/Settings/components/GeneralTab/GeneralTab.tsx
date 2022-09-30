@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 
 import { defaultLocales, faucetUrl } from "../../../../api/params";
-import { useUserSettingsContext } from "../../../../common/providers";
+import { useSettingsContext } from "../../../../common/providers";
 import { Col, InfoCircleOutlined, Row } from "../../../../ui/src";
 import { useSettings } from "../../hooks";
 
@@ -15,7 +15,7 @@ export const GeneralTab = (): JSX.Element => {
     showSuccessMessage,
   } = useSettings();
 
-  const { userSettings } = useUserSettingsContext();
+  const { settings } = useSettingsContext();
 
   const walletLockInMinutes = ["0", "30", "60", "90", "180", "210"];
 
@@ -25,7 +25,7 @@ export const GeneralTab = (): JSX.Element => {
         form={generalSettingsForm}
         name="generalSettingsForm"
         onFinish={updateSettings}
-        initialValues={{ walletLockInMinutes: userSettings.walletLock }}
+        initialValues={{ walletLockInMinutes: settings.walletLock }}
       >
         <Row>
           <Col span={12}>

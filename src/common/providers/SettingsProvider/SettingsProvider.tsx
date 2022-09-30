@@ -145,7 +145,6 @@ export function SettingsProvider({
           apiSettings.apiServers.map((apiServer) => apiServer.node.url)
         )
       ) {
-        console.log("test");
         setApiSettings(defaultApiSettings);
         setApiLatencies(defaultApiLatencies);
         setLatencyPreferences(defaultLatencyPreferences);

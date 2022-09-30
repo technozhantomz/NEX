@@ -31,9 +31,9 @@ export const PowerUpForm = styled(CardForm)`
     }
   }
 
-  .ant-input-number-group-wrapper {
+  .ant-input-group-wrapper {
     width: 100%;
-    .ant-input-number-lg input {
+    .ant-input-wrapper input {
       text-align: center;
       height: 50px;
       ${breakpoint.sm} {
@@ -43,7 +43,7 @@ export const PowerUpForm = styled(CardForm)`
         padding: 0 20px;
       }
     }
-    .ant-input-number-group-addon {
+    .ant-input-group-addon {
       background-color: #e3ebf8;
       .ant-btn-text {
         display: flex;

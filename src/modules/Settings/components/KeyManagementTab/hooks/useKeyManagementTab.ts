@@ -142,7 +142,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
 
   const validatePassword = (_: unknown, value: string) => {
     if (account) {
-      const checkPassword = validateAccountPassword(value, account);
+      const { checkPassword } = validateAccountPassword(value, account);
       if (!checkPassword)
         return Promise.reject(
           new Error(counterpart.translate(`field.errors.password_incorrect`))

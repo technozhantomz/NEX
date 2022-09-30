@@ -10,7 +10,7 @@ import {
   useTransactionBuilder,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
-import { Asset } from "../../../../../common/types";
+import { Asset, SignerKey } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 
 import {
@@ -39,7 +39,7 @@ export function useCreateLimitOrder({
   const price: number = Form.useWatch("price", orderForm);
   const quantity: number = Form.useWatch("quantity", orderForm);
   const total: number = Form.useWatch("total", orderForm);
-  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { formAccountBalancesByName } = useAccount();
   const { calculateCreateLimitOrderFee } = useFees();
   const { localStorageAccount, assets, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
@@ -180,13 +180,13 @@ export function useCreateLimitOrder({
   ]);
 
   const handleCreateLimitOrder = useCallback(
-    async (password: string) => {
+    async (signerKey: SignerKey) => {
       setTransactionErrorMessage("");
       const values = orderForm.getFieldsValue();
       const expiration = new Date(
         new Date().getTime() + 1000 * 60 * 60 * 24 * 365
       ).toISOString();
-      const activeKey = getPrivateKey(password, "active");
+
       const trx = buildCreateLimitOrderTransaction(
         id,
         values.quantity,
@@ -202,7 +202,7 @@ export function useCreateLimitOrder({
 
       try {
         setLoadingTransaction(true);
-        trxResult = await buildTrx([trx], [activeKey]);
+        trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
         setTransactionErrorMessage(
@@ -231,7 +231,6 @@ export function useCreateLimitOrder({
     [
       setTransactionErrorMessage,
       orderForm,
-      getPrivateKey,
       buildCreateLimitOrderTransaction,
       id,
       currentBase,
