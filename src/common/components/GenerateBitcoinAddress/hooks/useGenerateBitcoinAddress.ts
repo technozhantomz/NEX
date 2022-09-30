@@ -5,13 +5,13 @@ import { useCallback, useState } from "react";
 import * as ecc from "tiny-secp256k1";
 
 import {
-  useAccount,
   useSessionStorage,
   useSidechainTransactionBuilder,
   useSonNetwork,
   useTransactionBuilder,
 } from "../../../hooks";
 import { useUserContext } from "../../../providers";
+import { SignerKey } from "../../../types";
 
 import {
   BitcoinAccount,
@@ -22,17 +22,18 @@ import {
 export function useGenerateBitcoinAddress(
   getSidechainAccounts: (accountId: string) => Promise<void>
 ): UseGenerateBitcoinAddressResult {
-  const [submittingPassword, setSubmittingPassword] = useState(false);
-  const [status, setStatus] = useState<string>("");
   const [bitcoinSidechainAccounts, setBitcoinSidechainAccounts] =
     useSessionStorage("bitcoinSidechainAccounts") as [
       BitcoinSidechainAccounts,
       (value: BitcoinSidechainAccounts) => void
     ];
-  const [isPasswordModalVisible, setIsPasswordModalVisible] =
-    useState<boolean>(false);
+  const [transactionErrorMessage, setTransactionErrorMessage] =
+    useState<string>("");
+  const [transactionSuccessMessage, setTransactionSuccessMessage] =
+    useState<string>("");
+  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+
   const { buildTrx } = useTransactionBuilder();
-  const { getPrivateKey } = useAccount();
   const { id } = useUserContext();
   const { getSonNetworkStatus } = useSonNetwork();
   const { buildAddingBitcoinSidechainTransaction } =
@@ -43,25 +44,6 @@ export function useGenerateBitcoinAddress(
       .map((byte: any) => byte.toString(16).padStart(2, "0"))
       .join("");
   }, []);
-
-  const handlePasswordModalCancel = () => {
-    setIsPasswordModalVisible(false);
-  };
-
-  const confirm = () => {
-    setStatus("");
-    setIsPasswordModalVisible(true);
-  };
-
-  const onFormFinish = (name: string, info: { values: any; forms: any }) => {
-    const { values, forms } = info;
-    const { passwordModal } = forms;
-    if (name === "passwordModal") {
-      passwordModal.validateFields().then(() => {
-        generateBitcoinAddresses(values.password);
-      });
-    }
-  };
 
   const generateNewAddress = (): BitcoinAccount => {
     const ECPair = ECPairFactory(ecc);
@@ -75,16 +57,26 @@ export function useGenerateBitcoinAddress(
   };
 
   const generateBitcoinAddresses = useCallback(
-    async (password: string) => {
-      setSubmittingPassword(true);
-      const sonNetworkStatus = await getSonNetworkStatus();
+    async (signerKey: SignerKey) => {
+      setTransactionErrorMessage("");
+      setLoadingTransaction(true);
 
-      if (!sonNetworkStatus.isSonNetworkOk) {
-        setIsPasswordModalVisible(false);
-        setStatus(
+      try {
+        const sonNetworkStatus = await getSonNetworkStatus();
+
+        if (!sonNetworkStatus.isSonNetworkOk) {
+          setTransactionErrorMessage(
+            counterpart.translate(`field.errors.sons_not_available_try_again`)
+          );
+          setLoadingTransaction(false);
+          return;
+        }
+      } catch (e) {
+        console.log(e);
+        setTransactionErrorMessage(
           counterpart.translate(`field.errors.sons_not_available_try_again`)
         );
-        setSubmittingPassword(false);
+        setLoadingTransaction(false);
         return;
       }
       const deposit = generateNewAddress();
@@ -92,7 +84,6 @@ export function useGenerateBitcoinAddress(
 
       setBitcoinSidechainAccounts({ deposit, withdraw });
 
-      const activeKey = getPrivateKey(password, "active");
       const trx = buildAddingBitcoinSidechainTransaction(
         id,
         id,
@@ -104,39 +95,51 @@ export function useGenerateBitcoinAddress(
       let trxResult;
 
       try {
-        trxResult = await buildTrx([trx], [activeKey]);
+        trxResult = await buildTrx([trx], [signerKey]);
       } catch (error) {
         console.log(error);
-        setIsPasswordModalVisible(false);
-        setSubmittingPassword(false);
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.transaction_unable`)
+        );
+        setLoadingTransaction(false);
       }
       if (trxResult) {
         setTimeout(async () => {
           await getSidechainAccounts(id);
         }, 3000);
-        setIsPasswordModalVisible(false);
-        setSubmittingPassword(false);
+        setTransactionErrorMessage("");
+        setTransactionSuccessMessage(
+          counterpart.translate(
+            `field.success.successfully_generate_btc_addresses`
+          )
+        );
+        setLoadingTransaction(false);
+      } else {
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.transaction_unable`)
+        );
+        setLoadingTransaction(false);
       }
     },
     [
-      getPrivateKey,
       buildAddingBitcoinSidechainTransaction,
       buildTrx,
-      setIsPasswordModalVisible,
       getSidechainAccounts,
       setBitcoinSidechainAccounts,
-      setSubmittingPassword,
+      setTransactionErrorMessage,
+      setLoadingTransaction,
+      setTransactionSuccessMessage,
     ]
   );
 
   return {
-    isPasswordModalVisible,
     bitcoinSidechainAccounts,
-    status,
-    submittingPassword,
     setBitcoinSidechainAccounts,
-    handlePasswordModalCancel,
-    onFormFinish,
-    confirm,
+    transactionErrorMessage,
+    transactionSuccessMessage,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    loadingTransaction,
+    generateBitcoinAddresses,
   };
 }

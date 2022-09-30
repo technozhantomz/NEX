@@ -3,18 +3,19 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
-import { usePeerplaysApiContext } from "..";
+import { usePeerplaysApiContext, useSettingsContext } from "..";
 import { useAsset, useLocalStorage } from "../../hooks";
-import { Account, Asset, FullAccount } from "../../types";
+import { Account, Asset, FullAccount, KeyType } from "../../types";
 
 import { UserContextType } from "./UserProvider.types";
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 const defaultUserState: UserContextType = {
   localStorageAccount: "",
@@ -23,17 +24,21 @@ const defaultUserState: UserContextType = {
   assets: [],
   password: "",
   account: undefined,
+  keyType: "",
   updateAccount: function (id: string, name: string, assets: Asset[]): void {
     throw new Error(`Function not implemented. ${id},${name}, ${assets}`);
   },
   setAssets: function (assets: Asset[]): void {
     throw new Error(`Function not implemented. ${assets}`);
   },
-  setPassword: function (password: string) {
-    throw new Error(`Function not implemented. ${password}`);
-  },
   setLocalStorageAccount: function (value: string): void {
     throw new Error(`Function not implemented. ${value}`);
+  },
+  savePassword: function (password: string, keyType: KeyType) {
+    throw new Error(`Function not implemented. ${password} ${keyType}`);
+  },
+  removePassword: function () {
+    throw new Error(`Function not implemented.`);
   },
 };
 
@@ -45,12 +50,14 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   ) as [string, (value: string) => void];
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
+  const { settings } = useSettingsContext();
 
   const [id, setId] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [assets, _setAssets] = useState<Asset[]>([]);
-  // should add lock time functionality
-  const [password, _setPassword] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [keyType, setKeyType] = useState<KeyType>("");
+  const passwordTimeout = useRef<NodeJS.Timeout>();
   const [account, setAccount] = useState<Account | undefined>();
 
   const updateAccount = useCallback(
@@ -75,12 +82,41 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     [_setAssets]
   );
 
-  // should implement lock time functionality
-  const setPassword = useCallback(
-    (password: string) => {
-      _setPassword(password);
+  const removePassword = useCallback(() => {
+    if (passwordTimeout.current) {
+      clearTimeout(passwordTimeout.current);
+      passwordTimeout.current = undefined;
+    }
+    setPassword("");
+    setKeyType("");
+  }, [passwordTimeout, passwordTimeout.current, setPassword, setKeyType]);
+
+  const savePassword = useCallback(
+    (password: string, keyType: KeyType) => {
+      const expires = settings.walletLock;
+      if (passwordTimeout.current) {
+        clearTimeout(passwordTimeout.current);
+        passwordTimeout.current = undefined;
+      }
+      if (!expires) {
+        return;
+      }
+
+      const passwordExpiration = expires * 60000;
+
+      setKeyType(keyType);
+      setPassword(password);
+      passwordTimeout.current = setTimeout(removePassword, passwordExpiration);
     },
-    [_setPassword]
+    [
+      setPassword,
+      setKeyType,
+      settings,
+      settings.walletLock,
+      passwordTimeout,
+      passwordTimeout.current,
+      removePassword,
+    ]
   );
 
   const formInitialAccountByName = useCallback(
@@ -113,11 +149,21 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     [dbApi, updateAccount, formAssetBalanceById]
   );
 
+  const handleWalletLockChange = useCallback(() => {
+    if (password !== "" && keyType !== "") {
+      savePassword(password, keyType);
+    }
+  }, [password, keyType, savePassword]);
+
   useEffect(() => {
     if (localStorageAccount) {
       formInitialAccountByName(localStorageAccount);
     }
   }, [localStorageAccount]);
+
+  useEffect(() => {
+    handleWalletLockChange();
+  }, [settings.walletLock]);
 
   return (
     <UserContext.Provider
@@ -129,9 +175,11 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         localStorageAccount,
         setLocalStorageAccount,
         password,
+        keyType,
         updateAccount,
         setAssets,
-        setPassword,
+        savePassword,
+        removePassword,
       }}
     >
       {children}

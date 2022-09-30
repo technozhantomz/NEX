@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 import React from "react";
 
-import { useUserSettingsContext } from "../../../../common/providers";
+import { useSettingsContext } from "../../../../common/providers";
 import { useSettings } from "../../hooks";
 
 import * as Styled from "./SecurityTab.styled";
@@ -9,7 +9,7 @@ import * as Styled from "./SecurityTab.styled";
 export const SecurityTab = (): JSX.Element => {
   const { generalSettingsForm, updateSettings, showSuccessMessage } =
     useSettings();
-  const { userSettings } = useUserSettingsContext();
+  const { settings } = useSettingsContext();
 
   const walletLockInMinutes = ["0", "30", "60", "90", "180", "210"];
 
@@ -19,7 +19,7 @@ export const SecurityTab = (): JSX.Element => {
         form={generalSettingsForm}
         name="generalSettingForm"
         onFinish={updateSettings}
-        initialValues={{ walletLockInMinutes: userSettings.walletLock }}
+        initialValues={{ walletLockInMinutes: settings.walletLock }}
       >
         <Styled.LabelText>
           {counterpart.translate(`field.labels.lock_wallet`)}

@@ -777,7 +777,7 @@ export const en = {
         heading: "Please confirm the transaction",
       },
       password_modal: {
-        heading: "Password",
+        heading: "Your password or %(neededKeyType)s key is needed",
       },
     },
   },
@@ -796,6 +796,8 @@ export const en = {
     placeholder: {
       user_name: "Enter username",
       master_password: "Enter master password",
+      master_password_private_key:
+        "Master password or private key (We recommend using Whalevault web 3.0 wallet)",
       withdraw_public_key: "Withdraw public key",
       withdraw_address: "Withdraw address",
       hive_blockchain_account: "Hive blockchain account",
@@ -815,6 +817,7 @@ export const en = {
     },
     labels: {
       copy_bitcoin_address: "Copy your Bitcoin address",
+      sidechain: "Sidechain",
       fetching_price: "Fetching price",
       withdraw_public_key_address: "Withdraw Public key & Address",
       hive_blockchain_account: "Hive blockchain account",
@@ -867,6 +870,8 @@ export const en = {
       desired_committees: "Desired committees",
       desired_sons: "Desired sons",
       desired_proxy: "Desired Proxy",
+      wallet_lock: "Wallet lock (Minutes)",
+      use_whalevault: "Use WhaleVault extension",
     },
     comments: {
       deposit_hbd:
@@ -945,8 +950,14 @@ export const en = {
         "These keys are already in used for %(role)s permissions",
       need_to_vest_gpos: "You need to Vest some GPOS balance first",
       asset_required: "Asset is required",
-      cannot_send_yourself: "Can not send to yourself",
+      cannot_send_yourself: "Can not send to yourself!",
       unable_transaction: "Unable to process the transaction!",
+
+      not_added_to_whalevault: "This account is not added to WhaleVault",
+      whalevault_connection_error: "Can not Send Request to whaleVault.",
+      whalevault_not_installed:
+        "WhaleVault is not installed. Please install WhaleVault extension and reload the app",
+      wrong_whalevault_keys: "Added keys to WhaleVault are not correct",
     },
     success: {
       successfully_transferred:
@@ -959,13 +970,15 @@ export const en = {
       limit_order_successfully: "You have successfully created a limit order",
       swap_order_successfully:
         "Your swap was completed and your received %(buyAmount)s %(buyAssetSymbol)s for %(sellAmount)s %(sellAssetSymbol)s",
-      saved_changes: "You have successfully saved your changes",
+      saved_changes: "You have successfuly saved your changes",
       account_upgraded_successfully:
         "Your account successfully upgraded to lifetime membership account",
       published_proxy: "You have successfully published your proxy",
       published_votes: "You have successfully published your votes",
       canceled_limit_order:
         "You have successfully canceled #%(selectedOrderId)s order",
+      successfully_generate_btc_addresses:
+        "You have successfully generated bitcoin deposit and withdrawal addresses",
     },
   },
   settings: {

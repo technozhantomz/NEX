@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
+import { SignerKey } from "../../../../../../../common/types";
 import { FormInstance, Rule } from "../../../../../../../ui/src";
 import { GPOSBalances } from "../../../../../types";
 
@@ -12,7 +13,7 @@ export type UsePowerDownFormResult = {
   transactionSuccessMessage: string;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   loadingTransaction: boolean;
-  handleWithdraw: (password: string) => Promise<void>;
+  handleWithdraw: (signerKey: SignerKey) => Promise<void>;
   feeAmount: number;
   withdrawAmount: number;
   newBalance: number;

@@ -80,6 +80,13 @@ export const MainNav = (): JSX.Element => {
             label={counterpart.translate(`pages.blocks.heading`)}
           />
         </li>
+        <li>
+          <MenuItem
+            href="/settings"
+            icon={<SettingOutlined className={"menu-icon"} />}
+            label={counterpart.translate(`pages.settings.heading`)}
+          />
+        </li>
         {!localStorageAccount ? (
           ""
         ) : (
@@ -105,13 +112,6 @@ export const MainNav = (): JSX.Element => {
             ) : (
               ""
             )}
-            <li>
-              <MenuItem
-                href="/settings"
-                icon={<SettingOutlined className={"menu-icon"} />}
-                label={counterpart.translate(`pages.settings.heading`)}
-              />
-            </li>
             <li className={"advanced"}>
               <Switch
                 size="small"

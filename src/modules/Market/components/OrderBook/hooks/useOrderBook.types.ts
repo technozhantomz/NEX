@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
+import { SignerKey } from "../../../../../common/types";
 import { OrderColumn, OrderType } from "../../../types";
 
 export type { OrderType } from "../../../types";
@@ -18,7 +19,7 @@ export type UseOrderBookResult = {
   loadingTransaction: boolean;
   setSelectedOrderId: Dispatch<SetStateAction<string>>;
   selectedOrderId: string;
-  handleCancelLimitOrder: (password: string) => Promise<void>;
+  handleCancelLimitOrder: (signerKey: SignerKey) => Promise<void>;
 };
 
 export type TableScroll = {

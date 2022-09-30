@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import {
-  useSettingsContext,
-  useUserSettingsContext,
-} from "../../../common/providers";
-import { Settings, UserSettings } from "../../../common/types";
+import { useSettingsContext } from "../../../common/providers";
+import { Settings } from "../../../common/types";
 import { Form } from "../../../ui/src";
 
 import { UseSettingsResult } from "./useSettings.types";
@@ -12,7 +9,6 @@ import { UseSettingsResult } from "./useSettings.types";
 export function useSettings(): UseSettingsResult {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const { settings, setSettings, setLocale } = useSettingsContext();
-  const { userSettings, setUserSettings } = useUserSettingsContext();
   const [generalSettingsForm] = Form.useForm();
 
   const handleAllowNotifications = (e: any) => {
@@ -28,12 +24,6 @@ export function useSettings(): UseSettingsResult {
 
     const newSettings: Settings = {
       ...settings,
-      language: values.selectedLanguage
-        ? values.selectedLanguage
-        : settings.language,
-    };
-    const newUserSettings: UserSettings = {
-      ...userSettings,
       notifications:
         values.allowNotifications !== undefined
           ? {
@@ -42,13 +32,16 @@ export function useSettings(): UseSettingsResult {
                 transferToMe: values.allowTransferToMeNotifications,
               },
             }
-          : userSettings.notifications,
+          : settings.notifications,
       walletLock: values.walletLockInMinutes
         ? values.walletLockInMinutes
-        : userSettings.walletLock,
+        : settings.walletLock,
+      language: values.selectedLanguage
+        ? values.selectedLanguage
+        : settings.language,
     };
+
     setSettings(newSettings);
-    setUserSettings(newUserSettings);
     if (values.selectedLanguage) {
       setLocale(values.selectedLanguage);
     }
@@ -63,18 +56,16 @@ export function useSettings(): UseSettingsResult {
     setLocale,
     setSettings,
     setShowSuccessMessage,
-    userSettings,
-    setUserSettings,
   ]);
 
   useEffect(() => {
     generalSettingsForm.setFieldsValue({
       selectedLanguage: settings.language,
-      allowNotifications: userSettings.notifications.allow,
+      allowNotifications: settings.notifications.allow,
       allowTransferToMeNotifications:
-        userSettings.notifications.additional.transferToMe,
+        settings.notifications.additional.transferToMe,
     });
-  }, [settings, userSettings, generalSettingsForm]);
+  }, [settings, generalSettingsForm]);
 
   return {
     updateSettings,

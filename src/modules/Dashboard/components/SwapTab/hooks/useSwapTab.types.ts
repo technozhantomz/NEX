@@ -1,7 +1,7 @@
 import { FormInstance, Rule } from "antd/lib/form";
 import { Dispatch, SetStateAction } from "react";
 
-import { Asset } from "../../../../../common/types";
+import { Asset, SignerKey } from "../../../../../common/types";
 
 export type UseSwapResult = {
   swapForm: FormInstance<SwapForm>;
@@ -24,7 +24,7 @@ export type UseSwapResult = {
   handleSwapAssets: () => void;
   buyAssetBalance: number;
   sellAssetBalance: number;
-  handleSwapSubmit: (password: string) => Promise<void>;
+  handleSwapSubmit: (signerKey: SignerKey) => Promise<void>;
   sellAmountErrors: string[];
   buyAmountErrors: string[];
   lastChangedField: SwapInputType;

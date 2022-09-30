@@ -15,7 +15,7 @@ import {
   useTransferTransactionBuilder,
 } from "../../../hooks";
 import { useAssetsContext, useUserContext } from "../../../providers";
-import { Account } from "../../../types";
+import { Account, SignerKey } from "../../../types";
 
 import { UseWithdrawFormResult, WithdrawForm } from "./useWithdrawForm.types";
 
@@ -43,8 +43,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     loadingSidechainAccounts,
     getSidechainAccounts,
   } = useSidechainAccounts();
-  const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
-    useAccount();
+  const { getAccountByName, formAccountBalancesByName } = useAccount();
   const { account, localStorageAccount, assets, id } = useUserContext();
   const { buildTrx, getTrxFee } = useTransactionBuilder();
   const { calculateTransferFee } = useFees();
@@ -133,11 +132,9 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     }
   }, [buildWithdrawFormTransaction, getTrxFee, setFeeAmount, setWithdrawFee]);
 
-  const handleWithdraw = async (password: string) => {
+  const handleWithdraw = async (signerKey: SignerKey) => {
     setTransactionErrorMessage("");
     const values = withdrawForm.getFieldsValue();
-    const activeKey = getPrivateKey(password, "active");
-
     try {
       setLoadingTransaction(true);
       if (selectedAsset === "BTC") {
@@ -153,7 +150,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
             id
           );
 
-          const deleteTrxResult = await buildTrx([deleteTrx], [activeKey]);
+          const deleteTrxResult = await buildTrx([deleteTrx], [signerKey]);
           if (deleteTrxResult) {
             const addTrx = buildAddingBitcoinSidechainTransaction(
               id,
@@ -163,7 +160,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
               values.withdrawAddress
             );
 
-            const addTrxResult = await buildTrx([addTrx], [activeKey]);
+            const addTrxResult = await buildTrx([addTrx], [signerKey]);
             if (!addTrxResult) {
               setTransactionErrorMessage(
                 counterpart.translate(`field.errors.transaction_unable`)
@@ -184,7 +181,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       }
 
       const trx = await buildWithdrawFormTransaction();
-      const trxResult = await buildTrx([trx], [activeKey]);
+      const trxResult = await buildTrx([trx], [signerKey]);
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
         setTransactionErrorMessage("");

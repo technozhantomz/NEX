@@ -1,19 +1,37 @@
 import counterpart from "counterpart";
 import React from "react";
 
-import { Form, Input } from "../../../../ui/src";
+import { useSettingsContext } from "../../../../common/providers";
+import { Checkbox, Form, Input, Option, Select } from "../../../../ui/src";
 
 import * as Styled from "./LoginForm.styled";
 import { useLoginForm } from "./hooks";
 
 export const LoginForm: React.FC = () => {
-  const { loginForm, handleLogin, formValdation, submitting } = useLoginForm();
+  const {
+    loginForm,
+    handleLogin,
+    formValdation,
+    onChangeUseWhaleVault,
+    onChangeWalletLock,
+    submitting,
+    useWhaleVault,
+  } = useLoginForm();
+  const { settings } = useSettingsContext();
+  const walletLockInMinutes = ["0", "30", "60", "90", "180", "210"];
+
   return (
     <Styled.LoginForm
       form={loginForm}
       name="loginForm"
       onFinish={handleLogin}
       size="large"
+      initialValues={{
+        username: "",
+        password: "",
+        walletLock: settings.walletLock,
+        useWhaleVault: false,
+      }}
     >
       <Form.Item
         name="username"
@@ -22,20 +40,51 @@ export const LoginForm: React.FC = () => {
         validateTrigger={["onChange", "onSubmit"]}
       >
         <Input
+          autoComplete="new-password"
           placeholder={counterpart.translate(`field.placeholder.user_name`)}
         />
       </Form.Item>
+      {!useWhaleVault ? (
+        <>
+          <Form.Item
+            name="password"
+            rules={formValdation.password}
+            validateFirst={true}
+            validateTrigger="onSubmit"
+          >
+            <Input.Password
+              autoComplete="new-password"
+              placeholder={counterpart.translate(
+                `field.placeholder.master_password_private_key`
+              )}
+            />
+          </Form.Item>
+          <Styled.WalletLockLabel>
+            {counterpart.translate(`field.labels.wallet_lock`)}
+          </Styled.WalletLockLabel>
+          <Form.Item name="walletLock">
+            <Select onChange={onChangeWalletLock}>
+              {walletLockInMinutes.map((min) => (
+                <Option key={min} value={min}>
+                  {min}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </>
+      ) : (
+        ""
+      )}
       <Form.Item
-        name="password"
-        rules={formValdation.password}
+        rules={formValdation.useWhaleVault}
         validateFirst={true}
-        validateTrigger="onSubmit"
+        validateTrigger={["onChange", "onSubmit"]}
+        name="useWhaleVault"
+        className="checkbox"
       >
-        <Input.Password
-          placeholder={counterpart.translate(
-            `field.placeholder.master_password`
-          )}
-        />
+        <Checkbox onChange={onChangeUseWhaleVault}>
+          {counterpart.translate(`field.labels.use_whalevault`)}
+        </Checkbox>
       </Form.Item>
 
       <Styled.LoginButtonContainer className="form-button">
