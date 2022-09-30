@@ -30,7 +30,7 @@ export const GeneralTabForm = styled(UiForm)`
   margin-top: 24px;
 `;
 
-export const LanguageFormItem = styled(UiForm.Item)`
+export const GeneralSettingFormItem = styled(UiForm.Item)`
   width: 100%;
   margin-top: 15px;
   background: ${colors.white} 0% 0% no-repeat padding-box;
@@ -52,6 +52,10 @@ export const LanguageFormItem = styled(UiForm.Item)`
 `;
 export const LabelText = styled(Text)`
   font-weight: 400;
+  .anticon-info-circle {
+    margin: 0 15px;
+    color: ${colors.warningColor};
+  }
 `;
 export const Select = styled(UiSelect)``;
 
