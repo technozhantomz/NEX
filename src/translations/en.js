@@ -652,7 +652,7 @@ export const en = {
         privatekey_title: "Account Private Keys",
         download_link: "Download Generated Keys",
         download_warning:
-          "The private keys must be daved securely as it will be shown just once during the deposit address creation.",
+          "The private keys must be saved securely as it will be shown just once.",
       },
       security: {
         heading: "Security",

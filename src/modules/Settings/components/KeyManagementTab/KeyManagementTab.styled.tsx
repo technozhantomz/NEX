@@ -115,17 +115,23 @@ export const GeneratedKeyInput = styled(KeyInput)`
 `;
 
 export const DownloadWraper = styled.div`
-  max-width: 539px;
+  width: 100%
   display: flex;
   flex-direction: column;
+  ${breakpoint.sm} {
+    width: 50%;
+  }
 `;
 
 export const DownloadLink = styled.a`
   margin: 0 auto 18px;
+  font-size: 16px;
+  display: block;
+  text-align: center;
 `;
 export const DownloadInfo = styled.p`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   .anticon {
     margin-right: 10px;

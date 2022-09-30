@@ -15,6 +15,7 @@ import { CheckboxValueType, Form } from "../../../../../ui/src";
 
 import {
   FormValidation,
+  KeyManagementForm,
   UseKeyManagementTabResult,
 } from "./useKeyManagementTab.types";
 
@@ -23,7 +24,8 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
   const [publicKeys, setPublicKeys] = useState<PublicKeys[]>([]);
   const [generatedKeys, setGeneratedKeys] = useState<GeneratedKey[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
-  const [keyManagementForm] = Form.useForm();
+  const [keyManagementForm] = Form.useForm<KeyManagementForm>();
+  const [downloaded, setDownloaded] = useState<boolean>(false);
 
   const { validateAccountPassword } = useAccount();
   const { account } = useUserContext();
@@ -83,7 +85,8 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     element.download = `Peerplays_account_private_keys`;
     document.body.appendChild(element);
     element.click();
-  }, [selectedKeys, generatedKeys]);
+    setDownloaded(true);
+  }, [selectedKeys, generatedKeys, setDownloaded]);
 
   const onGo = useCallback(() => {
     const { password } = keyManagementForm.getFieldsValue();
@@ -116,6 +119,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           generatedKeys.push({ label: role, key: "" });
         }
       }
+      setDownloaded(false);
       setGeneratedKeys(generatedKeys);
     }
   }, [
@@ -124,6 +128,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     selectedKeys,
     setGeneratedKeys,
     defaultToken,
+    setDownloaded,
   ]);
 
   const validateSelectKeys = (_: unknown) => {
@@ -178,5 +183,6 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     downloadPrivateKeys,
     selectedKeys,
     onGo,
+    downloaded,
   };
 }

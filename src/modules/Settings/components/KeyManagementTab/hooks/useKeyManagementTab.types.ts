@@ -10,6 +10,7 @@ export type UseKeyManagementTabResult = {
   downloadPrivateKeys: () => void;
   selectedKeys: CheckboxValueType[];
   onGo: () => void;
+  downloaded: boolean;
 };
 
 export type FormValidation = {

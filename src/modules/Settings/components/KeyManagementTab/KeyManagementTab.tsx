@@ -17,6 +17,7 @@ export const KeyManagementTab = (): JSX.Element => {
     downloadPrivateKeys,
     selectedKeys,
     onGo,
+    downloaded,
   } = useKeyManagementTab();
 
   return (
@@ -71,12 +72,6 @@ export const KeyManagementTab = (): JSX.Element => {
           </Styled.SubmitButton>
         </Styled.ButtonFormItem>
 
-        <Styled.Label strong>
-          {counterpart.translate(
-            `pages.settings.key_management.publickey_title`
-          )}
-        </Styled.Label>
-
         {generatedKeys && generatedKeys.length > 0 ? (
           <>
             <Styled.Label strong>
@@ -111,24 +106,33 @@ export const KeyManagementTab = (): JSX.Element => {
                 }
               })}
             </div>
-            <Styled.DownloadWraper>
-              <Styled.DownloadLink href="#" onClick={downloadPrivateKeys}>
-                {counterpart.translate(
-                  `pages.settings.key_management.download_link`
-                )}
-              </Styled.DownloadLink>
-              <Styled.DownloadInfo>
-                <InfoCircleOutlined />
-                <Styled.DownloadInfoText>
+            {!downloaded ? (
+              <Styled.DownloadWraper>
+                <Styled.DownloadLink href="#" onClick={downloadPrivateKeys}>
                   {counterpart.translate(
-                    `pages.settings.key_management.download_warning`
+                    `pages.settings.key_management.download_link`
                   )}
-                </Styled.DownloadInfoText>
-              </Styled.DownloadInfo>
-            </Styled.DownloadWraper>
+                </Styled.DownloadLink>
+                <Styled.DownloadInfo>
+                  <InfoCircleOutlined />
+                  <Styled.DownloadInfoText>
+                    {counterpart.translate(
+                      `pages.settings.key_management.download_warning`
+                    )}
+                  </Styled.DownloadInfoText>
+                </Styled.DownloadInfo>
+              </Styled.DownloadWraper>
+            ) : (
+              ""
+            )}
           </>
         ) : (
           <>
+            <Styled.Label strong>
+              {counterpart.translate(
+                `pages.settings.key_management.publickey_title`
+              )}
+            </Styled.Label>
             {publicKeys && publicKeys.length > 0
               ? publicKeys.map((publicKey) => {
                   return (
