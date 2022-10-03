@@ -39,6 +39,7 @@ export function useSettings(): UseSettingsResult {
       language: values.selectedLanguage
         ? values.selectedLanguage
         : settings.language,
+      darkTheme: values.darkTheme,
     };
 
     setSettings(newSettings);
@@ -61,9 +62,11 @@ export function useSettings(): UseSettingsResult {
   useEffect(() => {
     generalSettingsForm.setFieldsValue({
       selectedLanguage: settings.language,
-      allowNotifications: settings.notifications.allow,
-      allowTransferToMeNotifications:
-        settings.notifications.additional.transferToMe,
+      walletLockInMinutes: settings.walletLock,
+      darkTheme: settings.darkTheme,
+      // allowNotifications: settings.notifications.allow,
+      // allowTransferToMeNotifications:
+      //   settings.notifications.additional.transferToMe,
     });
   }, [settings, generalSettingsForm]);
 

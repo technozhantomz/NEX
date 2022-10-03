@@ -45,13 +45,10 @@ export const GeneralTab = (): JSX.Element => {
             <Styled.LabelText>
               {counterpart.translate(`field.labels.ui_design`)}
             </Styled.LabelText>
-            <Styled.GeneralSettingFormItem name="themeMode">
+            <Styled.GeneralSettingFormItem name="darkTheme">
               <Styled.Select>
-                {defaultLocales.map((e, id) => (
-                  <Styled.Option key={id} value={e.type}>
-                    {e.title}
-                  </Styled.Option>
-                ))}
+                <Styled.Option value={true}>Dark mode</Styled.Option>
+                <Styled.Option value={false}>Light mode</Styled.Option>
               </Styled.Select>
             </Styled.GeneralSettingFormItem>
 
