@@ -58,13 +58,10 @@ export const GeneralTab = (): JSX.Element => {
               )}
               <InfoCircleOutlined />
             </Styled.LabelText>
-            <Styled.GeneralSettingFormItem name="allowTransferToMyAccount">
+            <Styled.GeneralSettingFormItem name="allowTransferToMeNotifications">
               <Styled.Select>
-                {defaultLocales.map((e, id) => (
-                  <Styled.Option key={id} value={e.type}>
-                    {e.title}
-                  </Styled.Option>
-                ))}
+                <Styled.Option value={true}>Yes</Styled.Option>
+                <Styled.Option value={false}>No</Styled.Option>
               </Styled.Select>
             </Styled.GeneralSettingFormItem>
 
@@ -125,13 +122,10 @@ export const GeneralTab = (): JSX.Element => {
             <Styled.LabelText>
               {counterpart.translate(`field.labels.show_notifications`)}
             </Styled.LabelText>
-            <Styled.GeneralSettingFormItem name="showNotifications">
-              <Styled.Select>
-                {defaultLocales.map((e, id) => (
-                  <Styled.Option key={id} value={e.type}>
-                    {e.title}
-                  </Styled.Option>
-                ))}
+            <Styled.GeneralSettingFormItem name="allowNotifications">
+              <Styled.Select onChange={handleAllowNotifications}>
+                <Styled.Option value={true}>Yes</Styled.Option>
+                <Styled.Option value={false}>No</Styled.Option>
               </Styled.Select>
             </Styled.GeneralSettingFormItem>
 

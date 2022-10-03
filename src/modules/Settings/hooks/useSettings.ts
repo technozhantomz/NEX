@@ -12,7 +12,7 @@ export function useSettings(): UseSettingsResult {
   const [generalSettingsForm] = Form.useForm();
 
   const handleAllowNotifications = (e: any) => {
-    if (!e.target.checked) {
+    if (!e) {
       generalSettingsForm.setFieldsValue({
         allowTransferToMeNotifications: false,
       });
@@ -29,7 +29,9 @@ export function useSettings(): UseSettingsResult {
           ? {
               allow: values.allowNotifications,
               additional: {
-                transferToMe: values.allowTransferToMeNotifications,
+                transferToMe: settings.notifications.allow
+                  ? values.allowTransferToMeNotifications
+                  : false,
               },
             }
           : settings.notifications,
@@ -64,9 +66,10 @@ export function useSettings(): UseSettingsResult {
       selectedLanguage: settings.language,
       walletLockInMinutes: settings.walletLock,
       darkTheme: settings.darkTheme,
-      // allowNotifications: settings.notifications.allow,
-      // allowTransferToMeNotifications:
-      //   settings.notifications.additional.transferToMe,
+      allowNotifications: settings.notifications.allow,
+      allowTransferToMeNotifications: settings.notifications.allow
+        ? settings.notifications.additional.transferToMe
+        : false,
     });
   }, [settings, generalSettingsForm]);
 
