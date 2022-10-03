@@ -107,6 +107,7 @@ export function useBlockchainTab(
           symbol: defaultAsset.symbol,
         });
         setBlockchainTableRows(blockRows);
+        setSearchDataSource(blockRows);
         setBlockchainStats({
           currentBlock: updateArrayWithLimit(
             blockchainStats.currentBlock,
@@ -159,12 +160,6 @@ export function useBlockchainTab(
       clearInterval(blockchainInterval);
     };
   }, [defaultAsset, getBlockchainData, routerQuery]);
-
-  useEffect(() => {
-    if (searchDataSource.length === 0) {
-      setSearchDataSource(blockchainTableRows);
-    }
-  }, [blockchainTableRows]);
 
   return {
     loading,

@@ -65,6 +65,7 @@ export function useAssetsTab(): UseAssetsTabResult {
         }) as ColumnsType<unknown>;
         setAssetsColumns(updatedColumns);
         setAssetTableRows(assetsRows);
+        setSearchDataSource(assetsRows);
         setAssetsStats(
           updateArrayWithLimit(assetsStats, assetsRows.length, 99)
         );
@@ -88,12 +89,6 @@ export function useAssetsTab(): UseAssetsTabResult {
       clearInterval(assetInterval);
     };
   }, []);
-
-  useEffect(() => {
-    if (searchDataSource.length === 0) {
-      setSearchDataSource(assetTableRows);
-    }
-  }, [assetTableRows]);
 
   return {
     loading,

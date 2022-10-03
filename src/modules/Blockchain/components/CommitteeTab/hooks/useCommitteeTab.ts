@@ -61,6 +61,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
             (committee) => committee.active == true
           );
           setCommitteeTableRows(committeeRows);
+          setSearchDataSource(committeeRows);
           setActiveCommittee(activeCommittee.length);
           setCommitteeStats(
             updateArrayWithLimit(committeeStats, activeCommittee.length, 99)
@@ -89,12 +90,6 @@ export function useCommitteeTab(): UseCommitteeTabResult {
       clearInterval(committeeInterval);
     };
   }, [defaultAsset]);
-
-  useEffect(() => {
-    if (searchDataSource.length === 0) {
-      setSearchDataSource(committeeTableRows);
-    }
-  }, [committeeTableRows]);
 
   return {
     loading,
