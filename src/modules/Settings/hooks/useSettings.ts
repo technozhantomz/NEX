@@ -67,9 +67,8 @@ export function useSettings(): UseSettingsResult {
       walletLockInMinutes: settings.walletLock,
       darkTheme: settings.darkTheme,
       allowNotifications: settings.notifications.allow,
-      allowTransferToMeNotifications: settings.notifications.allow
-        ? settings.notifications.additional.transferToMe
-        : false,
+      allowTransferToMeNotifications:
+        settings.notifications.additional.transferToMe,
     });
   }, [settings, generalSettingsForm]);
 
