@@ -1,7 +1,6 @@
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import Link from "next/link";
 import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
@@ -137,7 +136,9 @@ export const WitnessesTab = (): JSX.Element => {
                     {WitnessesColumns[1].title()}
                   </span>
                   <span className="item-info-value">
-                    <Link href={`/user/${item.name}`}>{item.name}</Link>
+                    <a href={`/user/${item.name}`} target="_blank">
+                      {item.name}
+                    </a>
                   </span>
                 </div>
                 <div className="item-info">
@@ -153,9 +154,9 @@ export const WitnessesTab = (): JSX.Element => {
                     {WitnessesColumns[3].title()}
                   </span>
                   <span className="item-info-value">
-                    <Link href={`${item.url}`} passHref>
+                    <a href={`${item.url}`} target="_blank">
                       <Styled.urlIcon rotate={45} />
-                    </Link>
+                    </a>
                   </span>
                 </div>
                 <div className="item-info">
@@ -187,9 +188,9 @@ export const WitnessesTab = (): JSX.Element => {
                     {WitnessesColumns[7].title()}
                   </span>
                   <span className="item-info-value">
-                    <Link href={`${item.publicKey}`} passHref>
+                    <a href={`${item.publicKey}`} target="_blank">
                       <Key />
-                    </Link>
+                    </a>
                   </span>
                 </div>
               </Styled.WitnessesItemContent>

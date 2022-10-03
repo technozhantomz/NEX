@@ -1,6 +1,5 @@
 import { SearchTableInput } from "ant-table-extensions";
 import counterpart from "counterpart";
-import Link from "next/link";
 import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
@@ -100,35 +99,37 @@ export const AssetsTab = (): JSX.Element => {
                     </Tag>
                   </span>
                 </div>
-                {/* <div className="item-info">
-                  <span className="item-info-title">
-                    {assetsColumns[2].title()}
-                  </span>
-                  <span className="item-info-value">{item.name}</span>
-                </div> */}
                 <div className="item-info">
                   <span className="item-info-title">
                     {assetsColumns[2].title()}
                   </span>
-                  <span className="item-info-value">{item.maxSupply}</span>
+                  <span className="item-info-value">{item.name}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
                     {assetsColumns[3].title()}
                   </span>
-                  <span className="item-info-value">{item.precision}</span>
+                  <span className="item-info-value">{item.maxSupply}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
                     {assetsColumns[4].title()}
                   </span>
-                  <span className="item-info-value">
-                    <Link href={`/user/${item.issuer}`}>{item.issuer}</Link>
-                  </span>
+                  <span className="item-info-value">{item.precision}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
                     {assetsColumns[5].title()}
+                  </span>
+                  <span className="item-info-value">
+                    <a href={`/user/${item.issuer}`} target="_blank">
+                      {item.issuer}
+                    </a>
+                  </span>
+                </div>
+                <div className="item-info">
+                  <span className="item-info-title">
+                    {assetsColumns[6].title()}
                   </span>
                   <span className="item-info-value">
                     {!item.info || item.info === "" ? (
