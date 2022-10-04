@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { TableHeading } from "../../../../../common/components";
 import { BlockchainTableRow } from "../hooks/useBlockchainTab.types";
 
@@ -9,7 +7,9 @@ const renders = [
   undefined,
   undefined,
   (witness: string): JSX.Element => (
-    <Link href={`/user/${witness}`}>{witness}</Link>
+    <a href={`/user/${witness}`} target="_blank">
+      {witness}
+    </a>
   ),
   undefined,
 ];

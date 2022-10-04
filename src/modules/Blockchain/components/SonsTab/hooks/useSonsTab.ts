@@ -109,6 +109,7 @@ export function useSonsTab(): UseSonsTabResult {
     }
   }, [
     defaultAsset,
+    searchDataSource,
     getChain,
     setPrecision,
     formAssetBalanceById,

@@ -1,7 +1,7 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import Link from "next/link";
-import { CSSProperties, ReactNode, useRef } from "react";
+import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
@@ -61,7 +61,7 @@ export const SonsTab = (): JSX.Element => {
           <InfoCircleOutlined />
         </Styled.SonsHeader>
         <SearchTableInput
-          columns={SonsColumns}
+          columns={SonsColumns as ColumnsType<unknown>}
           dataSource={sonsTableRows}
           setDataSource={setSearchDataSource}
           inputProps={{
@@ -73,7 +73,7 @@ export const SonsTab = (): JSX.Element => {
           <DownloadOutlined />
           <ReactToPrint
             trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current}
+            content={() => componentRef.current as unknown as ReactInstance}
           />
 
           {` / `}
@@ -105,7 +105,9 @@ export const SonsTab = (): JSX.Element => {
                     {SonsColumns[1].title()}
                   </span>
                   <span className="item-info-value">
-                    <Link href={`/user/${item.name}`}>{item.name}</Link>
+                    <a target="_blank" href={`/user/${item.name}`}>
+                      {item.name}
+                    </a>
                   </span>
                 </div>
                 <div className="item-info">
@@ -121,9 +123,9 @@ export const SonsTab = (): JSX.Element => {
                     {SonsColumns[3].title()}
                   </span>
                   <span className="item-info-value">
-                    <Link href={`${item.url}`} passHref>
+                    <a target="_blank" href={`${item.url}`}>
                       <Styled.urlIcon rotate={45} />
-                    </Link>
+                    </a>
                   </span>
                 </div>
                 <div className="item-info">
@@ -139,7 +141,7 @@ export const SonsTab = (): JSX.Element => {
       ) : (
         <Styled.SonsTable
           dataSource={searchDataSource}
-          columns={SonsColumns}
+          columns={SonsColumns as ColumnsType<unknown>}
           loading={loading}
           pagination={
             !loading
