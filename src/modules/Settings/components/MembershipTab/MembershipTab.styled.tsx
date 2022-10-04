@@ -26,7 +26,11 @@ export const Heading = styled.h4`
   text-align: left;
   color: ${colors.textColor};
   margin-bottom: 8px;
-  font-weight: 500;
+  font-weight: bold;
+  .anticon-info-circle {
+    margin: 0 15px;
+    color: ${colors.warningColor};
+  }
 `;
 
 export const Label = styled.p`
@@ -42,6 +46,10 @@ export const Paragraph = styled.p`
   width: 100%;
   font-weight: 400;
   color: ${colors.textColor};
+  .anticon-info-circle {
+    margin: 0 15px;
+    color: ${colors.warningColor};
+  }
 `;
 
 export const InfoContainer = styled.div`

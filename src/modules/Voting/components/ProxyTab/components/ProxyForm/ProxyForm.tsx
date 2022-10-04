@@ -7,7 +7,7 @@ import {
 } from "../../../../../../common/components";
 import { useHandleTransactionForm } from "../../../../../../common/hooks";
 import { useViewportContext } from "../../../../../../common/providers";
-import { Account, Proxy } from "../../../../../../common/types";
+import { Account, Proxy, SignerKey } from "../../../../../../common/types";
 import { Form, RedoOutlined } from "../../../../../../ui/src";
 
 import * as Styled from "./ProxyForm.styled";
@@ -25,7 +25,7 @@ type Props = {
   addChange: (account: Account) => void;
   cancelChange: () => void;
   searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => Promise<void>;
-  handlePublishChanges: (password: string) => Promise<void>;
+  handlePublishChanges: (signerKey: SignerKey) => Promise<void>;
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   isPublishable: boolean;
@@ -68,6 +68,7 @@ export const ProxyForm = ({
     handleTransactionConfirmation: handlePublishChanges,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
   const { sm } = useViewportContext();
 
@@ -143,6 +144,7 @@ export const ProxyForm = ({
         <PasswordModal
           visible={isPasswordModalVisible}
           onCancel={hidePasswordModal}
+          neededKeyType="active"
         />
         <TransactionModal
           visible={isTransactionModalVisible}

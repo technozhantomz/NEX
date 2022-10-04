@@ -471,10 +471,10 @@ export const ru = {
     swap: "менять",
     transfer: "Передача",
     market: "Рынок",
-    generate_bitcoin_address: "Сгенерировать биткойн-адрес",
-    login_and_generate_bitcoin_address: "Войти и создать биткойн-адрес",
+    generate_bitcoin_address: "Создание биткойн-адресов",
+    login_and_generate_bitcoin_address: "Войдите и сгенерируйте биткойн-адреса",
     dont_have_peerplays_account: "У вас нет учетной записи Peerplays? ",
-    log_in_withdraw: "Войти и выйти",
+    log_in_withdraw: "Войти и вывести %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Войти и внести депозит %(assetSymbol)s",
     send: "Отправлять",
     ok: "Ok",
@@ -607,6 +607,11 @@ export const ru = {
       },
       key_management: {
         heading: "ключевой менеджмент",
+        publickey_title: "Аккаунт публичных ключей",
+        privatekey_title: "Учетная запись частных ключей",
+        download_link: "Скачать сгенерированные ключи",
+        download_warning:
+          "Закрытые ключи должны быть надежно сохранены, так как они будут показаны только один раз.",
       },
       security: {
         heading: "Безопасность",
@@ -614,13 +619,14 @@ export const ru = {
       membership: {
         heading: "Членство",
         upgrade_title: "Обновление за %(feesCashback)s%% Cashback",
+        upgraded_title: "Вы имеете право на %(feesCashback)s%% Cashback",
         upgrade_description:
-          "Каждая транзакция в сети Peerplays делится между сетью и реферерами. При регистрации в качестве пожизненного членства учетная запись будет получать кэшбэк в размере %(feesCashback)s%% за каждую уплаченную комиссию за транзакцию. В качестве бонуса он также будет претендовать на получение реферального дохода от пользователей, зарегистрированных в сети или привлеченных к ней.",
-        membership_price:
-          "Цена пожизненного членства будет меняться со временем, сейчас она составляет всего %(membershipPrice)s %(defaultToken)s.",
+          "При регистрации на пожизненное членство учетная запись будет получать кэшбэк %(feesCashback)s%% за каждую уплаченную комиссию за транзакцию. Цена пожизненного членства будет меняться со временем, сейчас она составляет всего %(membershipPrice)s %(defaultToken)s.",
+        upgraded_description:
+          "Счета с пожизненным членством будут получать кэшбэк в размере %(feesCashback)s%% за каждую уплаченную комиссию за транзакцию.",
         fee_allocation: "Распределение комиссий",
         fee_allocation_description:
-          "Каждый раз, когда %(name)s платит комиссию за транзакцию, эта комиссия делится между несколькими разными аккаунтами. Сеть получает комиссию в размере %(networkFee)s%%, а пожизненный участник, пригласивший %(name)s, получает комиссию в размере %(lifetimeFee)s%%. Регистратором является учетная запись, которая заплатила комиссию за транзакцию для регистрации %(name)s в сети. Регистратор сам решает, как разделить оставшуюся сумму %(referrerTotalFee)s%% между собой и своей собственной партнерской реферальной программой. Регистратор %(name)s решил разделить %(referrerFee)s%% от общей суммы вознаграждения с партнерским реферером и оставить %(registrarFee)s%% от общей суммы вознаграждения себе.",
+          "Каждый раз, когда , %(name)s, платит комиссию за транзакцию, эта комиссия делится между несколькими разными аккаунтами. Сеть получает комиссию в размере %(networkFee)s%%, а пожизненный участник, пригласивший , %(name)s, , получает комиссию в размере %(lifetimeFee)s%%. Регистратором является учетная запись, которая заплатила комиссию за транзакцию для регистрации , %(name)s, в сети. Регистратор сам решает, как разделить оставшуюся сумму %(referrerTotalFee)s%% между собой и своей собственной партнерской реферальной программой. Регистратор , %(name)s, решил разделить %(referrerFee)s%% от общей суммы вознаграждения с партнерским реферером и оставить %(registrarFee)s%% от общей суммы вознаграждения себе.",
         network: "Сеть",
         lifetime_reviewer: "Пожизненный реферер",
         registrar: "Регистратор",
@@ -630,13 +636,10 @@ export const ru = {
         total_fee_paid: "Общая сумма уплаченных сборов",
         pending_fees: "Ожидающие сборы",
         pending_fee_description:
-          "Сборы, уплачиваемые %(name)s, делятся между сетью, реферерами и регистраторами один раз за каждый интервал обслуживания %(maintenanceInterval)s секунд). Время следующего обслуживания – %(nextMaintenanceTime)s.",
+          "Сборы, уплачиваемые , %(name)s, , делятся между сетью, реферерами и регистраторами один раз за каждый интервал обслуживания %(maintenanceInterval)s секунд). Время следующего обслуживания – %(nextMaintenanceTime)s.",
         vesting_fees: "Вестинговые сборы",
         vesting_description:
           "Большинство сборов доступны сразу, но сборы, превышающие %(vestingThreshold)s %(defaultToken)s (например, те, которые уплачиваются за обновление вашего членства или регистрацию имени премиум-аккаунта), должны удерживаться в общей сложности в течение %(vestingPeriod)s дней.",
-        referral_link_title: "Ваша реферальная ссылка",
-        referral_link:
-          "Дайте ссылку на людей, которых вы хотите порекомендовать в Peerplays: %(link)s/signup/?r=%(name)s",
       },
       api_closest: "Выбрать ближайший автоматически",
     },
@@ -748,7 +751,7 @@ export const ru = {
         heading: "Пожалуйста, подтвердите транзакцию",
       },
       password_modal: {
-        heading: "Пароль",
+        heading: "Требуется ваш пароль или ключ %(neededKeyType)s",
       },
     },
   },
@@ -768,9 +771,11 @@ export const ru = {
     placeholder: {
       user_name: "Введите имя пользователя",
       master_password: "Введите мастер-пароль",
+      master_password_private_key:
+        "Мастер-пароль или закрытый ключ (мы рекомендуем использовать кошелек Whalevault web 3.0)",
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
-      hive_blockchain_account: "Блокчейн-аккаунт Hive",
+      hive_blockchain_account: "учетная запись Hive",
       amount: "количество",
       quantity: "Количество",
       to: "К",
@@ -787,11 +792,31 @@ export const ru = {
       from: "из",
     },
     labels: {
-      copy_bitcoin_address: "Скопируйте свой биткойн-адрес",
+      generate_btc_deposit_address:
+        "Создайте биткойн-адрес, чтобы вы могли внести BTC на свою учетную запись Peerplays.",
+      deposit_btc:
+        "Внесите свой BTC на указанный выше биткойн-адрес, чтобы отправить его на свою учетную запись Peerplays.",
+      bitcoin_associated_account:
+        "Ваши новые биткойн-адреса теперь связаны с вашей учетной записью",
+      download_private_keys: "Скачать закрытые ключи",
+      private_keys_warning:
+        "Закрытые ключи должны быть надежно сохранены, так как они будут показаны только один раз при создании адреса депозита.",
+      bitcoin_deposit_address: "Адрес депозита (адрес BTC)",
+      sidechain: "Боковая цепь",
       fetching_price: "Получение цены",
-      withdraw_public_key_address: "Отозвать открытый ключ и адрес",
-      hive_blockchain_account: "Блокчейн-аккаунт Hive",
-      fees: "Комиссии: %(feeAmount)s %(defaultAsset)s",
+      withdraw_public_key_address: "Сжатый открытый ключ и адрес вывода",
+      btc_withdraw_instruction:
+        "Выведите свои BTC на открытый ключ Bitcoin и адрес выше или обновите их.",
+      hive_blockchain_account: "Адрес для вывода средств (учетная запись Hive)",
+      hive_withdraw_instruction:
+        "Выведите свои %(asset)s на учетную запись блокчейна Hive, указанную выше.",
+      fees_label: "Сборы: ",
+      total_transaction: "Всего транзакций: ",
+      withdrawal_confirmation_time: "Время подтверждения: ",
+      btc_withdrawal_confirmation_time: "~10 minutes",
+      hive_withdrawal_confirmation_time: "~3 minutes",
+      estimated_fees_label: "Расчетные сборы: ",
+      fees: "Сборы: %(feeAmount)s %(defaultAsset)s",
       market_fee: "Рыночная комиссия",
       balance: "Остаток средств",
       auto_generated_password: "Ваш автоматически сгенерированный пароль",
@@ -843,6 +868,8 @@ export const ru = {
       desired_proxy: "Желаемый прокси",
       pending_changes: "Ожидающие изменения",
       peerplays_accounts: "Перепрыстные аккаунты",
+      wallet_lock: "Блокировка кошелька (минуты)",
+      use_whalevault: "Используйте расширение WhaleVault",
     },
     comments: {
       deposit_hbd:
@@ -858,6 +885,8 @@ export const ru = {
     },
     errors: {
       enter_amount: "Введите сумму",
+      invalid_bitcoin_public_key:
+        "Открытый ключ недействителен для биткойн %(network)s",
       insufficient_asset_balance: "Недостаточный баланс %(asset)s",
       insufficient_balance_for_fee: "Недостаточно %(coreAsset)s для комиссии",
       not_enough_liquidity: "Недостаточно ликвидности",
@@ -888,10 +917,14 @@ export const ru = {
       field_is_required: "Это поле обязательно к заполнению",
       server_error: "Ошибка сервера, повторите попытку позже.",
       amount_should_greater: "Сумма должна быть больше 0",
+      amount_should_greater_than: "Сумма должна быть больше, чем %(amount)s",
       balance_not_enough: "Баланса не хватает",
       balance_not_enough_to_pay: "Баланса недостаточно для оплаты комиссии",
       not_your_account: "Не ваша учетная запись",
       sons_not_available: "Сеть SON сейчас недоступна",
+      first_valid_public_key:
+        "Пожалуйста, предоставьте действительный открытый ключ",
+      not_match_address: "Адрес не совпадает с открытым ключом",
       first_generate_bitcoin_address:
         "Сначала создайте биткойн-адреса на вкладке депозита.",
       from_required: "От требуется",
@@ -922,6 +955,11 @@ export const ru = {
       asset_required: "Требуется актив",
       cannot_send_yourself: "Не могу отправить себе",
       unable_transaction: "Невозможно обработать транзакцию!",
+      not_added_to_whalevault: "Эта учетная запись не добавлена в WhaleVault",
+      whalevault_connection_error: "Не удается отправить запрос в WhaleVault.",
+      whalevault_not_installed:
+        "WhaleVault не установлен. Пожалуйста, установите расширение WhaleVault и перезагрузите приложение.",
+      wrong_whalevault_keys: "Добавленные ключи в WhaleVault неверны",
     },
     success: {
       successfully_transferred:
@@ -939,6 +977,8 @@ export const ru = {
       published_proxy: "Вы успешно опубликовали свой прокси",
       published_votes: "Вы успешно опубликовали свои голоса",
       canceled_limit_order: "Вы успешно отменили заказ #%(selectedOrderId)s",
+      successfully_generate_btc_addresses:
+        "Вы успешно сгенерировали адреса ввода и вывода биткойнов",
     },
   },
   tableHead: {

@@ -128,3 +128,46 @@ export type ConnectionManagerType = {
   sortNodesByLatency: (resolve: any, reject: any) => Promise<any>;
   checkConnections: (resolve: any, reject: any) => Promise<any>;
 };
+
+export type CommonWhaleVaultResponse = {
+  data: {
+    addKeys: any;
+    appid: string;
+    domain: string;
+    request_id: number;
+    type: string;
+    username: string;
+  };
+  error: string | null;
+  message: string;
+  request_id: number;
+  success: boolean;
+};
+
+export type WhaleVaultPubKeys = {
+  activePubkey?: string;
+  activePubkey_K1?: string;
+  memoPubkey?: string;
+  memoPubkey_K1?: string;
+};
+
+export type RequestPubKeysResponse = {
+  result: {
+    [username: string]: WhaleVaultPubKeys;
+  };
+};
+
+export type WhaleVaultType = {
+  current_id: number;
+  promiseRequestPubKeys: (
+    appid: string,
+    account: string
+  ) => Promise<CommonWhaleVaultResponse & RequestPubKeysResponse>;
+  // promiseRequestDecryptMemo: (
+  //   appid: string,
+  //   account: string,
+  //   message: string,
+  //   keyType: "active" | "memo",
+  //   reason: string
+  // ) => Promise<void>;
+};

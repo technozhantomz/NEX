@@ -3,18 +3,25 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
-import { usePeerplaysApiContext } from "..";
+import { usePeerplaysApiContext, useSettingsContext } from "..";
 import { useAsset, useLocalStorage } from "../../hooks";
-import { Account, Asset, FullAccount } from "../../types";
+import {
+  Account,
+  Asset,
+  FullAccount,
+  KeyType,
+  SidechainAcccount,
+} from "../../types";
 
 import { UserContextType } from "./UserProvider.types";
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 const defaultUserState: UserContextType = {
   localStorageAccount: "",
@@ -23,17 +30,29 @@ const defaultUserState: UserContextType = {
   assets: [],
   password: "",
   account: undefined,
+  keyType: "",
+  hasBTCDepositAddress: false,
+  hasBTCWithdrawPublicKey: false,
+  getSidechainAccounts: function (accountId: string) {
+    throw new Error(`Function not implemented. ${accountId},`);
+  },
+  sidechainAccounts: [],
+  bitcoinSidechainAccount: undefined,
+  loadingSidechainAccounts: true,
   updateAccount: function (id: string, name: string, assets: Asset[]): void {
     throw new Error(`Function not implemented. ${id},${name}, ${assets}`);
   },
   setAssets: function (assets: Asset[]): void {
     throw new Error(`Function not implemented. ${assets}`);
   },
-  setPassword: function (password: string) {
-    throw new Error(`Function not implemented. ${password}`);
-  },
   setLocalStorageAccount: function (value: string): void {
     throw new Error(`Function not implemented. ${value}`);
+  },
+  savePassword: function (password: string, keyType: KeyType) {
+    throw new Error(`Function not implemented. ${password} ${keyType}`);
+  },
+  removePassword: function () {
+    throw new Error(`Function not implemented.`);
   },
 };
 
@@ -45,13 +64,90 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   ) as [string, (value: string) => void];
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
+  const { settings } = useSettingsContext();
 
   const [id, setId] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [assets, _setAssets] = useState<Asset[]>([]);
-  // should add lock time functionality
-  const [password, _setPassword] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [keyType, setKeyType] = useState<KeyType>("");
+  const passwordTimeout = useRef<NodeJS.Timeout>();
   const [account, setAccount] = useState<Account | undefined>();
+  const [sidechainAccounts, setSidechainAccounts] = useState<
+    SidechainAcccount[]
+  >([]);
+  const [bitcoinSidechainAccount, setBitcoinSidechainAccount] =
+    useState<SidechainAcccount>();
+  const [loadingSidechainAccounts, setLoadingSidechainAccounts] =
+    useState<boolean>(true);
+  const [hasBTCDepositAddress, setHasBTCDepositAddress] =
+    useState<boolean>(false);
+  const [hasBTCWithdrawPublicKey, setHasBTCWithdrawPublicKey] =
+    useState<boolean>(false);
+
+  const getSidechainAccounts = useCallback(
+    async (accountId: string) => {
+      try {
+        setLoadingSidechainAccounts(true);
+        const accounts = (await dbApi("get_sidechain_addresses_by_account", [
+          accountId,
+        ])) as SidechainAcccount[];
+        setSidechainAccounts(accounts);
+        if (accounts && accounts.length) {
+          const bitcoinSidechain = accounts.find(
+            (account) => account.sidechain === "bitcoin"
+          );
+          if (bitcoinSidechain) {
+            setBitcoinSidechainAccount(bitcoinSidechain);
+            if (
+              bitcoinSidechain.deposit_address &&
+              bitcoinSidechain.deposit_address !== ""
+            ) {
+              setHasBTCDepositAddress(true);
+            }
+            if (
+              bitcoinSidechain.withdraw_public_key &&
+              bitcoinSidechain.withdraw_public_key !== ""
+            ) {
+              setHasBTCWithdrawPublicKey(true);
+            }
+          }
+        }
+        setLoadingSidechainAccounts(false);
+      } catch (e) {
+        console.log(e);
+        setLoadingSidechainAccounts(false);
+      }
+    },
+    [
+      dbApi,
+      setSidechainAccounts,
+      setHasBTCDepositAddress,
+      setLoadingSidechainAccounts,
+      setHasBTCWithdrawPublicKey,
+      setBitcoinSidechainAccount,
+    ]
+  );
+
+  const updateSidechainAccounts = useCallback(
+    (
+      sidechainAccounts: SidechainAcccount[],
+      bitcoinSidechainAccount: SidechainAcccount | undefined,
+      hasBTCDepositAddress: boolean,
+      hasBTCWithdrawPublicKey: boolean
+    ) => {
+      setSidechainAccounts(sidechainAccounts);
+      setBitcoinSidechainAccount(bitcoinSidechainAccount);
+      setHasBTCDepositAddress(hasBTCDepositAddress);
+      setHasBTCWithdrawPublicKey(hasBTCWithdrawPublicKey);
+    },
+    [
+      setSidechainAccounts,
+      setBitcoinSidechainAccount,
+      setHasBTCDepositAddress,
+      setHasBTCWithdrawPublicKey,
+    ]
+  );
 
   const updateAccount = useCallback(
     (
@@ -75,12 +171,41 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     [_setAssets]
   );
 
-  // should implement lock time functionality
-  const setPassword = useCallback(
-    (password: string) => {
-      _setPassword(password);
+  const removePassword = useCallback(() => {
+    if (passwordTimeout.current) {
+      clearTimeout(passwordTimeout.current);
+      passwordTimeout.current = undefined;
+    }
+    setPassword("");
+    setKeyType("");
+  }, [passwordTimeout, passwordTimeout.current, setPassword, setKeyType]);
+
+  const savePassword = useCallback(
+    (password: string, keyType: KeyType) => {
+      const expires = settings.walletLock;
+      if (passwordTimeout.current) {
+        clearTimeout(passwordTimeout.current);
+        passwordTimeout.current = undefined;
+      }
+      if (!expires) {
+        return;
+      }
+
+      const passwordExpiration = expires * 60000;
+
+      setKeyType(keyType);
+      setPassword(password);
+      passwordTimeout.current = setTimeout(removePassword, passwordExpiration);
     },
-    [_setPassword]
+    [
+      setPassword,
+      setKeyType,
+      settings,
+      settings.walletLock,
+      passwordTimeout,
+      passwordTimeout.current,
+      removePassword,
+    ]
   );
 
   const formInitialAccountByName = useCallback(
@@ -90,6 +215,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
           [name],
           true,
         ]).then((e: any) => (e.length ? e[0][1] : undefined));
+        console.log(fullAccount, "fullAccount");
         if (fullAccount) {
           const assets: Asset[] = await Promise.all(
             fullAccount.balances.map((balance) => {
@@ -113,11 +239,29 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     [dbApi, updateAccount, formAssetBalanceById]
   );
 
+  const handleWalletLockChange = useCallback(() => {
+    if (password !== "" && keyType !== "") {
+      savePassword(password, keyType);
+    }
+  }, [password, keyType, savePassword]);
+
   useEffect(() => {
     if (localStorageAccount) {
       formInitialAccountByName(localStorageAccount);
     }
   }, [localStorageAccount]);
+
+  useEffect(() => {
+    handleWalletLockChange();
+  }, [settings.walletLock]);
+
+  useEffect(() => {
+    if (id !== null && id !== "") {
+      getSidechainAccounts(id);
+    } else {
+      updateSidechainAccounts([], undefined, false, false);
+    }
+  }, [id, getSidechainAccounts]);
 
   return (
     <UserContext.Provider
@@ -129,9 +273,17 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         localStorageAccount,
         setLocalStorageAccount,
         password,
+        keyType,
         updateAccount,
         setAssets,
-        setPassword,
+        savePassword,
+        removePassword,
+        hasBTCDepositAddress,
+        hasBTCWithdrawPublicKey,
+        getSidechainAccounts,
+        loadingSidechainAccounts,
+        sidechainAccounts,
+        bitcoinSidechainAccount,
       }}
     >
       {children}

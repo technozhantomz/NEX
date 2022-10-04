@@ -8,7 +8,9 @@ import {
   Account,
   Asset,
   FullAccount,
+  KeyType,
   Permissions,
+  WhaleVaultPubKeys,
   WitnessAccount,
 } from "../../types";
 
@@ -19,12 +21,13 @@ export function useAccount(): UseAccountResult {
     localStorageAccount,
     updateAccount,
     setAssets,
-    setPassword,
+    savePassword,
+    removePassword,
     setLocalStorageAccount,
   } = useUserContext();
   const [loading, setLoading] = useState<boolean>(true);
   const { formAssetBalanceById } = useAsset();
-  const { dbApi } = usePeerplaysApiContext();
+  const { dbApi, whaleVaultInstance } = usePeerplaysApiContext();
 
   const getFullAccount = useCallback(
     async (name: string, subscription: boolean) => {
@@ -55,12 +58,12 @@ export function useAccount(): UseAccountResult {
 
   const removeAccount = useCallback(() => {
     updateAccount("", "", [], undefined);
-    setPassword("");
+    removePassword();
     setLocalStorageAccount("");
-  }, [updateAccount, setPassword, setLocalStorageAccount]);
+  }, [updateAccount, removePassword, setLocalStorageAccount]);
 
   const formAccountAfterConfirmation = useCallback(
-    async (fullAccount: FullAccount) => {
+    async (fullAccount: FullAccount, password: string, keyType: KeyType) => {
       try {
         setLoading(true);
         const assets: Asset[] = await Promise.all(
@@ -74,13 +77,14 @@ export function useAccount(): UseAccountResult {
           assets,
           fullAccount.account
         );
+        savePassword(password, keyType);
         setLoading(false);
       } catch (e) {
         console.log(e);
         setLoading(false);
       }
     },
-    [updateAccount, formAssetBalanceById, setLoading]
+    [updateAccount, formAssetBalanceById, setLoading, savePassword]
   );
 
   const formAccountByName = useCallback(
@@ -143,6 +147,7 @@ export function useAccount(): UseAccountResult {
     (password: string, account: Account) => {
       const roles = ["active", "owner", "memo"];
       let checkPassword = false;
+      let keyType: KeyType = "";
       let fromWif = "";
 
       try {
@@ -157,7 +162,6 @@ export function useAccount(): UseAccountResult {
         const privKey = fromWif ? fromWif : keys.privKeys[role];
         const pubKey = privKey.toPublicKey().toString(defaultToken);
         let userKeys: string[] = [];
-
         if (role !== "memo") {
           const permission = account[role as keyof Account] as Permissions;
           userKeys = permission.key_auths.map((key_auth) => key_auth[0]);
@@ -166,10 +170,11 @@ export function useAccount(): UseAccountResult {
         }
         if (userKeys.includes(pubKey)) {
           checkPassword = true;
+          keyType = fromWif ? (role as KeyType) : "password";
           break;
         }
       }
-      return checkPassword;
+      return { checkPassword, keyType };
     },
     []
   );
@@ -196,6 +201,89 @@ export function useAccount(): UseAccountResult {
     [dbApi]
   );
 
+  const validateWhaleVaultPubKeys = useCallback(
+    (pubkeys: WhaleVaultPubKeys, account: Account, keyType?: KeyType) => {
+      let isValid = false;
+
+      let { activePubkey, memoPubkey } = pubkeys;
+      if (!keyType || keyType === "active") {
+        if (activePubkey) {
+          activePubkey = activePubkey
+            .slice(0, 4)
+            .includes(defaultToken as string)
+            ? activePubkey
+            : activePubkey.replace("PPY", defaultToken as string);
+          const accountActiveKey = account.active.key_auths[0][0];
+          if (accountActiveKey === activePubkey) {
+            isValid = true;
+            return isValid;
+          }
+        }
+      }
+      if (!keyType || keyType === "memo") {
+        if (memoPubkey) {
+          memoPubkey = memoPubkey.slice(0, 4).includes(defaultToken as string)
+            ? memoPubkey
+            : memoPubkey.replace("PPY", defaultToken as string);
+          const accountMemoKey = account.options.memo_key;
+          if (accountMemoKey === memoPubkey) {
+            isValid = true;
+            return isValid;
+          }
+        }
+      }
+      return isValid;
+    },
+    [defaultToken]
+  );
+
+  const _validateUseWhaleVault = useCallback(
+    async (account: Account, keyType?: KeyType) => {
+      let response = "";
+      let isValid = false;
+      if (whaleVaultInstance) {
+        try {
+          const res = await whaleVaultInstance.promiseRequestPubKeys(
+            "peerplays-dex",
+            `ppy:${account.name}`
+          );
+          if (res.success) {
+            const pubKeys = res.result[`ppy:${account.name}`];
+            if (Object.keys(pubKeys).length) {
+              const isValidKeys = validateWhaleVaultPubKeys(
+                pubKeys,
+                account,
+                keyType
+              );
+              if (!isValidKeys) {
+                response = "field.errors.wrong_whalevault_keys";
+                isValid = false;
+              } else {
+                response = "";
+                isValid = true;
+              }
+            } else {
+              response = "field.errors.not_added_to_whalevault";
+              isValid = false;
+            }
+          } else {
+            response = "field.errors.whalevault_connection_error";
+            isValid = false;
+          }
+        } catch (e) {
+          console.log(e);
+          response = "field.errors.whalevault_connection_error";
+          isValid = false;
+        }
+      } else {
+        response = "field.errors.whalevault_not_installed";
+        isValid = false;
+      }
+      return { response, isValid };
+    },
+    [whaleVaultInstance, validateWhaleVaultPubKeys]
+  );
+
   return {
     formAccountByName,
     loading,
@@ -207,5 +295,7 @@ export function useAccount(): UseAccountResult {
     removeAccount,
     validateAccountPassword,
     getUserNameById,
+    validateWhaleVaultPubKeys,
+    _validateUseWhaleVault,
   };
 }

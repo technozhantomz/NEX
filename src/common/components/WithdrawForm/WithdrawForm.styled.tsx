@@ -1,6 +1,6 @@
-import { FormDisclamer as UiFormDisclamer } from "..";
 import { CardForm, CardFormButton, Form, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
+import { colors } from "../../../ui/src/colors";
 
 export const WithdrawForm = styled(CardForm)`
   .form-input {
@@ -16,6 +16,10 @@ type AssetAmountProps = {
 };
 
 export const WithdrawFormAssetAmount = styled(CardForm.Item)<AssetAmountProps>`
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
+  }
   .ant-input-affix-wrapper {
     padding: 0;
     .ant-input-prefix {
@@ -33,9 +37,9 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)<AssetAmountProps>`
       ${breakpoint.sm} {
         font-size: 20px;
       }
-      height: ${(props) => (props.withassetselector ? "70px" : "50px")};
+      height: 70px !important;
       ${breakpoint.sm} {
-        height: ${(props) => (props.withassetselector ? "85px" : "65px")};
+        height: 85px !important;
       }
     }
     .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
@@ -54,16 +58,11 @@ export const WithdrawFormAsset = styled.div`
   }
 `;
 
-export const Fee = styled.p`
-  margin-bottom: 24px;
-  font-size: 12px;
-  ${breakpoint.sm} {
-    font-size: 14px;
-  }
-`;
-
 export const WithdrawFormButton = styled(CardFormButton)`
-  width: 100%;
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
+  }
 `;
 
 export const FormItem = styled(Form.Item)`
@@ -81,15 +80,45 @@ export const ButtonFormItem = styled(FormItem)`
   margin-bottom: 0;
 `;
 
-export const FormDisclamer = styled(UiFormDisclamer)`
-  margin-top: 25px;
-  ${breakpoint.sm} {
-    margin-top: 35px;
-  }
-`;
-
 export const Balance = styled.div`
   text-align: left;
   padding-left: 50px;
   font-size: 14px;
+`;
+
+export const WithdrawalInstruction = styled.div`
+  display: flex;
+  margin-bottom: 24px;
+  span {
+    color: ${colors.textColorSecondary};
+    font-size: 12px;
+    ${breakpoint.sm} {
+      font-size: 14px;
+    }
+  }
+`;
+
+export const IconWrapper = styled.div`
+  margin-right: 16px;
+`;
+
+export const DetailsWrapper = styled.div`
+  display: flex;
+  font-size: 12px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
+`;
+
+export const DetailsLabelWrapper = styled.div`
+  min-width: 150px;
+`;
+
+export const AmountsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const TransactionDetails = styled.div`
+  margin-bottom: 24px;
 `;

@@ -22,6 +22,10 @@ export const BlockchainTable = styled(UiTable)`
       display: none;
     }
   }
+  .ant-table-tbody > tr > td {
+    font-size: 1em;
+    font-weight: normal;
+  }
   .anticon-link {
     color: ${colors.linkColor};
   }

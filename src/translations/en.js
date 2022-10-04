@@ -497,10 +497,10 @@ export const en = {
     swap: "Swap",
     transfer: "Transfer",
     market: "Market",
-    generate_bitcoin_address: "Generate Bitcoin address",
-    login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Address",
+    generate_bitcoin_address: "Generate Bitcoin addresses",
+    login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Addresses",
     dont_have_peerplays_account: "Dont have a Peerplays account? ",
-    log_in_withdraw: "Log in & Withdraw",
+    log_in_withdraw: "Log in & Withdraw %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Log in & Deposit %(assetSymbol)s",
     send: "Send",
     ok: "Ok",
@@ -648,20 +648,26 @@ export const en = {
       },
       key_management: {
         heading: "key Management",
+        publickey_title: "Account Public Keys",
+        privatekey_title: "Account Private Keys",
+        download_link: "Download Generated Keys",
+        download_warning:
+          "The private keys must be saved securely as it will be shown just once.",
       },
       security: {
         heading: "Security",
       },
       membership: {
         heading: "Membership",
-        upgrade_title: "Upgrade for %(feesCashback)s%%  Cashback",
+        upgrade_title: "Upgrade for %(feesCashback)s%% Cashback",
+        upgraded_title: "You are eligible for %(feesCashback)s%% Cashback",
         upgrade_description:
-          "Every transaction on the Peerplays network is divided between the network and referrers. By registering to a Lifetime Membership the account will receive %(feesCashback)s%% cashback on every transaction fee paid. As a bonus it will also qualify to earn referral income from users registered with or referred to the network.",
-        membership_price:
-          "A Lifetime Membership price will change over time, right now it is only %(membershipPrice)s %(defaultToken)s.",
+          "By registering to a Lifetime Membership the account will receive %(feesCashback)s%% cashback on every transaction fee paid. A Lifetime Membership price will change over time, right now it is only %(membershipPrice)s %(defaultToken)s.",
+        upgraded_description:
+          "Lifetime Membership accounts will receive %(feesCashback)s%% cashback on every transaction fee paid.",
         fee_allocation: "Fee Allocation",
         fee_allocation_description:
-          "Every time %(name)s pays a transaction fee, that fee is divided among several different accounts. The network takes a %(networkFee)s%% cut, and the Lifetime Member who referred %(name)s gets a %(lifetimeFee)s%% cut. The registrar is the account that paid the transaction fee to register %(name)s with the network. The registrar gets to decide how to divide the remaining %(referrerTotalFee)s%% between themselves and their own Affiliate Referrer program. %(name)s's registrar chose to share %(referrerFee)s%% of the total fee with the Affiliate Referrer and keep %(registrarFee)s%% of the total fee for themselves.",
+          "Every time , %(name)s, pays a transaction fee, that fee is divided among several different accounts. The network takes a %(networkFee)s%% cut, and the Lifetime Member who referred , %(name)s, gets a %(lifetimeFee)s%% cut. The registrar is the account that paid the transaction fee to register , %(name)s, with the network. The registrar gets to decide how to divide the remaining %(referrerTotalFee)s%% between themselves and their own Affiliate Referrer program., %(name)s's, registrar chose to share %(referrerFee)s%% of the total fee with the Affiliate Referrer and keep %(registrarFee)s%% of the total fee for themselves.",
         network: "Network",
         lifetime_reviewer: "Lifetime Referrer",
         registrar: "Registrar",
@@ -671,13 +677,10 @@ export const en = {
         total_fee_paid: "Total Fees Paid",
         pending_fees: "Pending Fees",
         pending_fee_description:
-          "Fees paid by %(name)s are divided among the network, referrers, and registrars once every maintenance interval %(maintenanceInterval)s seconds). The next maintenance time is %(nextMaintenanceTime)s",
+          "Fees paid by , %(name)s, are divided among the network, referrers, and registrars once every maintenance interval %(maintenanceInterval)s seconds). The next maintenance time is %(nextMaintenanceTime)s",
         vesting_fees: "Vesting Fees",
         vesting_description:
           "Most fees are made available immediately, but fees over %(vestingThreshold)s %(defaultToken)s (such as those paid to upgrade your membership or register a premium account name) must vest for a total of %(vestingPeriod)s days.",
-        referral_link_title: "Your referral link",
-        referral_link:
-          "Give this link to people you want to refer to Peerplays: %(link)s/signup/?r=%(name)s",
       },
     },
     voting: {
@@ -787,7 +790,7 @@ export const en = {
         heading: "Please confirm the transaction",
       },
       password_modal: {
-        heading: "Password",
+        heading: "Your password or %(neededKeyType)s key is needed",
       },
     },
   },
@@ -807,9 +810,11 @@ export const en = {
     placeholder: {
       user_name: "Enter username",
       master_password: "Enter master password",
+      master_password_private_key:
+        "Master password or private key (We recommend using Whalevault web 3.0 wallet)",
       withdraw_public_key: "Withdraw public key",
       withdraw_address: "Withdraw address",
-      hive_blockchain_account: "Hive blockchain account",
+      hive_blockchain_account: "Hive account",
       amount: "Amount",
       quantity: "Quantity",
       to: "To",
@@ -825,11 +830,31 @@ export const en = {
       from: "From",
     },
     labels: {
-      copy_bitcoin_address: "Copy your Bitcoin address",
+      generate_btc_deposit_address:
+        "Generate a Bitcoin address so you can deposit BTC to your Peerplays account",
+      deposit_btc:
+        "Deposit your BTC to the Bitcoin address listed above to send it to your Peerplays account",
+      bitcoin_associated_account:
+        "Your new Bitcoin addresses now associated with your account",
+      download_private_keys: "Download Private Keys",
+      private_keys_warning:
+        "The private keys must be saved securely as it will be shown just once during the deposit address creation",
+      bitcoin_deposit_address: "Deposit address (BTC address)",
+      sidechain: "Sidechain",
       fetching_price: "Fetching price",
-      withdraw_public_key_address: "Withdraw Public key & Address",
-      hive_blockchain_account: "Hive blockchain account",
-      fees: "Fees : %(feeAmount)s %(defaultAsset)s",
+      withdraw_public_key_address: "Compressed Withdraw Public key & Address",
+      btc_withdraw_instruction:
+        "Withdraw your BTC to the Bitcoin public key and address above or update them.",
+      hive_blockchain_account: "Withdrawal Address (Hive account)",
+      hive_withdraw_instruction:
+        "Withdraw your %(asset)s to the Hive blockchain account entered above",
+      fees_label: "Fees: ",
+      total_transaction: "Total Transaction: ",
+      withdrawal_confirmation_time: "Confirmation Time: ",
+      btc_withdrawal_confirmation_time: "~10 minutes",
+      hive_withdrawal_confirmation_time: "~3 minutes",
+      estimated_fees_label: "Estimated Fees:",
+      fees: "Fees: %(feeAmount)s %(defaultAsset)s",
       market_fee: "Market Fee",
       balance: "Balance",
       auto_generated_password: "Your auto-generated password",
@@ -880,6 +905,8 @@ export const en = {
       desired_proxy: "Desired Proxy",
       pending_changes: "Pending changes",
       peerplays_accounts: "Peerplays accounts",
+      wallet_lock: "Wallet lock (Minutes)",
+      use_whalevault: "Use WhaleVault extension",
     },
     comments: {
       deposit_hbd:
@@ -894,6 +921,8 @@ export const en = {
       key_management_group: ["Owner", "Active", "Memo"],
     },
     errors: {
+      invalid_bitcoin_public_key:
+        "The public key is not valid for Bitcoin %(network)s",
       enter_amount: "Enter amount",
       insufficient_asset_balance: "Insufficient %(asset)s balance",
       insufficient_balance_for_fee: "Insufficient %(coreAsset)s for fee",
@@ -925,12 +954,13 @@ export const en = {
       field_is_required: "This field is required",
       server_error: "Server error, please try again later.",
       amount_should_greater: "Amount should be greater than 0",
+      amount_should_greater_than: "Amount should be greater than %(amount)s",
       balance_not_enough: "Balance is not enough",
       balance_not_enough_to_pay: "Balance is not enough to pay the fee",
       not_your_account: "Not your Account",
       sons_not_available: "SONs network is not available now",
-      first_generate_bitcoin_address:
-        "Please first generate bitcoin addresses at deposit tab",
+      first_valid_public_key: "Please provide valid public key",
+      not_match_address: "The address is not match with public key",
       from_required: "From is required",
       to_required: "To is required",
       amount_required: "Amount is required",
@@ -958,8 +988,14 @@ export const en = {
         "These keys are already in used for %(role)s permissions",
       need_to_vest_gpos: "You need to Vest some GPOS balance first",
       asset_required: "Asset is required",
-      cannot_send_yourself: "Can not send to yourself",
+      cannot_send_yourself: "Can not send to yourself!",
       unable_transaction: "Unable to process the transaction!",
+
+      not_added_to_whalevault: "This account is not added to WhaleVault",
+      whalevault_connection_error: "Can not Send Request to whaleVault.",
+      whalevault_not_installed:
+        "WhaleVault is not installed. Please install WhaleVault extension and reload the app",
+      wrong_whalevault_keys: "Added keys to WhaleVault are not correct",
     },
     success: {
       successfully_transferred:
@@ -972,13 +1008,15 @@ export const en = {
       limit_order_successfully: "You have successfully created a limit order",
       swap_order_successfully:
         "Your swap was completed and your received %(buyAmount)s %(buyAssetSymbol)s for %(sellAmount)s %(sellAssetSymbol)s",
-      saved_changes: "You have successfully saved your changes",
+      saved_changes: "You have successfuly saved your changes",
       account_upgraded_successfully:
         "Your account successfully upgraded to lifetime membership account",
       published_proxy: "You have successfully published your proxy",
       published_votes: "You have successfully published your votes",
       canceled_limit_order:
         "You have successfully canceled #%(selectedOrderId)s order",
+      successfully_generate_btc_addresses:
+        "You have successfully generated bitcoin deposit and withdrawal addresses",
     },
   },
   settings: {

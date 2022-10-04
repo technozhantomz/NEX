@@ -12,7 +12,7 @@ import {
   useTransferTransactionBuilder,
 } from "../../../hooks";
 import { useUserContext } from "../../../providers";
-import { Account } from "../../../types";
+import { Account, SignerKey } from "../../../types";
 
 import { TransferForm, UseTransferFormResult } from "./useTransferForm.types";
 
@@ -27,8 +27,7 @@ export function useTransferForm(): UseTransferFormResult {
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [amount, setAmount] = useState<number>(0);
-  const { getAccountByName, getPrivateKey, formAccountBalancesByName } =
-    useAccount();
+  const { getAccountByName, formAccountBalancesByName } = useAccount();
 
   const { limitByPrecision } = useAsset();
   const { localStorageAccount, assets } = useUserContext();
@@ -96,17 +95,15 @@ export function useTransferForm(): UseTransferFormResult {
     }
   }, [buildTransferFormTransaction, getTrxFee, setFeeAmount, setTransferFee]);
 
-  const transfer = async (password: string) => {
+  const transfer = async (signerKey: SignerKey) => {
     setTransactionErrorMessage("");
     const values = transferForm.getFieldsValue();
-
-    const activeKey = getPrivateKey(password, "active");
 
     let trxResult;
     try {
       setLoadingTransaction(true);
       const trx = await buildTransferFormTransaction();
-      trxResult = await buildTrx([trx], [activeKey]);
+      trxResult = await buildTrx([trx], [signerKey]);
     } catch (e) {
       console.log(e);
       setTransactionErrorMessage(

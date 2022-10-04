@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 
 import { useGenerateBitcoinAddress } from "../../GenerateBitcoinAddress/hooks";
 
-import { UseAddressGeneratedResult } from "./useAddressGenerated.types";
+import { UseDownloadBitcoinKeysResult } from "./useDownloadBitcoinKeys.types";
 
-export function useAddressGenerated(
+export function useDownloadBitcoinKeys(
   getSidechainAccounts: (accountId: string) => Promise<void>
-): UseAddressGeneratedResult {
+): UseDownloadBitcoinKeysResult {
   const [downloaded, setDownloaded] = useState<boolean>(true);
   const { bitcoinSidechainAccounts, setBitcoinSidechainAccounts } =
     useGenerateBitcoinAddress(getSidechainAccounts);

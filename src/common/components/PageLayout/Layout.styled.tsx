@@ -71,7 +71,7 @@ export const PageHeading = styled.h1`
   margin: 20px 0 15px;
 
   ${breakpoint.sm} {
-    margin: 45px 0 45px;
+    margin: 40px 0 20px;
     font-size: 24px;
   }
 `;

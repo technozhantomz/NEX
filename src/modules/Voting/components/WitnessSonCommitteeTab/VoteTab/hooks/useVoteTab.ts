@@ -18,6 +18,7 @@ import {
   AccountOptions,
   FullAccount,
   GlobalProperties,
+  SignerKey,
   Transaction,
   Vote,
   VoteType,
@@ -61,7 +62,7 @@ export function useVoteTab({
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const { formAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
-  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { formAccountBalancesByName } = useAccount();
   const { id, assets, name, localStorageAccount } = useUserContext();
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
@@ -169,7 +170,7 @@ export function useVoteTab({
   }, [getUpdateAccountTrx, getTrxFee, setUpdateAccountFee]);
 
   const handlePublishChanges = useCallback(
-    async (password: string) => {
+    async (signerKey: SignerKey) => {
       const userDefaultAsset = assets.find(
         (asset) => asset.symbol === defaultToken
       );
@@ -188,11 +189,10 @@ export function useVoteTab({
         );
       } else {
         setTransactionErrorMessage("");
-        const activeKey = getPrivateKey(password, "active");
         let trxResult;
         try {
           setLoadingTransaction(true);
-          trxResult = await buildTrx([pendingTransaction], [activeKey]);
+          trxResult = await buildTrx([pendingTransaction], [signerKey]);
         } catch (error) {
           console.log(error);
           setTransactionErrorMessage(
@@ -225,7 +225,6 @@ export function useVoteTab({
       updateAccountFee,
       setTransactionErrorMessage,
       totalGpos,
-      getPrivateKey,
       setLoadingTransaction,
       buildTrx,
       pendingTransaction,

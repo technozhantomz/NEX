@@ -12,7 +12,7 @@ import {
   useUserContext,
   useViewportContext,
 } from "../../../../../../common/providers";
-import { Button, Form, Input, InputNumber } from "../../../../../../ui/src";
+import { Button, Form, Input } from "../../../../../../ui/src";
 import { GPOSBalances } from "../../../../types";
 
 import * as Styled from "./PowerUpForm.styled";
@@ -61,6 +61,7 @@ export const PowerUpForm = ({
     handleTransactionConfirmation: handleVesting,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
   const { sm } = useViewportContext();
 
@@ -128,8 +129,7 @@ export const PowerUpForm = ({
             validateFirst={true}
             validateTrigger="onChange"
           >
-            <InputNumber
-              controls={false}
+            <Input
               addonBefore={
                 <Button type="text" onClick={() => adjustDeposit("+")}>
                   +
@@ -175,6 +175,7 @@ export const PowerUpForm = ({
         <PasswordModal
           visible={isPasswordModalVisible}
           onCancel={hidePasswordModal}
+          neededKeyType="active"
         />
         <TransactionModal
           visible={isTransactionModalVisible}

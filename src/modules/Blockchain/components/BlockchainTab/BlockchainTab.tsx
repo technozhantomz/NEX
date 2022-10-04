@@ -4,7 +4,7 @@ import { SearchTableInput } from "ant-table-extensions";
 import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { CSSProperties, ReactNode, useRef } from "react";
+import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
@@ -97,7 +97,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
           <DownloadOutlined />
           <ReactToPrint
             trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current}
+            content={() => componentRef.current as unknown as ReactInstance}
           />
 
           {` / `}
@@ -137,7 +137,9 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
                     </span>
                     <span className="item-info-value">
                       {" "}
-                      <Link href={`/user/${item.witness}`}>{item.witness}</Link>
+                      <a href={`/user/${item.witness}`} target="_blank">
+                        {item.witness}
+                      </a>
                     </span>
                   </div>
                   <div className="item-info">
@@ -155,7 +157,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
         <Styled.BlockTable
           dataSource={searchDataSource}
           columns={blockColumns}
-          // rowKey={(record) => record.blockID}
+          rowKey={(record) => record.blockID}
           loading={loading}
           pagination={
             !loading
