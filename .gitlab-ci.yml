@@ -59,6 +59,7 @@ build-production:
     - merge_requests
   artifacts: 
     paths:
+    - node_modules/
     - .next/
     - .env
   tags:
