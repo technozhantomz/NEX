@@ -1,5 +1,4 @@
 import counterpart from "counterpart";
-import Link from "next/link";
 
 import { TableHeading } from "../../../../../common/components";
 import { Key } from "../../../../../ui/src/icons";
@@ -28,7 +27,11 @@ const keys = [
 ];
 const renders = [
   undefined,
-  (name: string): JSX.Element => <Link href={`/user/${name}`}>{name}</Link>,
+  (name: string): JSX.Element => (
+    <a href={`/user/${name}`} target="_blank">
+      {name}
+    </a>
+  ),
   (active: boolean): JSX.Element => (
     <span>{active === true ? <Styled.ActiveIcon /> : ``}</span>
   ),
@@ -37,9 +40,9 @@ const renders = [
       {!url || url === "" ? (
         <span>{counterpart.translate(`field.labels.not_available`)}</span>
       ) : (
-        <Link href={`${url}`} passHref>
+        <a href={`${url}`} target="_blank">
           <Styled.urlIcon rotate={45} />
-        </Link>
+        </a>
       )}
     </>
   ),
@@ -51,9 +54,9 @@ const renders = [
   ),
   undefined,
   (publicKey: string): JSX.Element => (
-    <Link href={`${publicKey}`} passHref>
+    <a href={`${publicKey}`} target="_blank">
       <Key />
-    </Link>
+    </a>
   ),
 ];
 const filters = [

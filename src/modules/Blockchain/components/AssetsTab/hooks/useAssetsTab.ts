@@ -1,6 +1,7 @@
 import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 
+import { utils } from "../../../../../api/utils";
 import { useArrayLimiter } from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Account, Asset } from "../../../../../common/types";
@@ -30,7 +31,7 @@ export function useAssetsTab(): UseAssetsTabResult {
               key: asset.id,
               id: asset.id,
               symbol: asset.symbol,
-              // name: "", //TODO:: add name here
+              name: utils.getBlockchainFromSymbol(asset.symbol),
               maxSupply: Number(asset.options.max_supply),
               precision: asset.precision,
               issuer: issuer && issuer.length > 0 ? issuer[0].name : "",
