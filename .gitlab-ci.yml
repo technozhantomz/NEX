@@ -39,6 +39,10 @@ build-qa:
     - tags
     - branches
     - merge_requests
+  artifacts: 
+    paths:
+    - .next/
+    - .env
   tags:
     - build
 
@@ -98,10 +102,7 @@ sonarcloud-check:
     - sonar-check
 
 deploy_review:
-  dependencies:
-    - build-qa
-    - sonarcloud-check
-    - sast
+  dependencies: [build-qa]
   stage: deploy
   script:
     - pm2 del nex-review || true
