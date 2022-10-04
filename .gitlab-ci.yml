@@ -188,14 +188,11 @@ deployToProduction:
 dast:
   stage: dast
   before_script:
-    - if [ "$CI_COMMIT_REF_NAME" != "develop" ]; then export DAST_WEBSITE=$(cat environment_url.txt); else export DAST_WEBSITE=$DAST_WEBSITE; fi
+    - if [ "$CI_COMMIT_REF_NAME" != "dev" ]; then export DAST_WEBSITE=$(cat environment_url.txt); else export DAST_WEBSITE=$DAST_WEBSITE; fi
   artifacts:
     paths: 
       - gl-dast-report.json
   rules:
-  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    when: never
-  - if: $CI_COMMIT_REF_NAME == "develop"
-    when: manual
-  - when: always
-  
+  - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "dev"'
+
+
