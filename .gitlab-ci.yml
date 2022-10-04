@@ -154,7 +154,7 @@ deployToStaging:
     - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$PROD_QUOTE'" >> .env.local
     - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env.local
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env.local
-    - echo .env.local
+    - cat .env.local
     - npm install
     - npm run build
     #- npm run start 2>&1 > nex-logging.txt &
