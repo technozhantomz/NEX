@@ -21,7 +21,7 @@ export const CreateSwapOrder = ({
   sell,
   buy,
 }: Props): JSX.Element => {
-  const feeValue = String(fee) + defaultToken;
+  const feeValue = String(fee) + " " + defaultToken;
 
   return (
     <>
