@@ -8,6 +8,16 @@ export type Settings = {
     allow: boolean;
     additional: {
       transferToMe: boolean;
+      fundSent: boolean;
+      orderCreated: boolean;
+      orderFilled: boolean;
+      orderCanceled: boolean;
+      orderExpired: boolean;
+      fundsReceived: boolean;
+      swapStarted: boolean;
+      swapFilled: boolean;
+      swapCanceled: boolean;
+      accountUpdated: boolean;
     };
   };
   walletLock: number;

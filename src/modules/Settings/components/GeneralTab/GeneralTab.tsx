@@ -139,94 +139,64 @@ export const GeneralTab = (): JSX.Element => {
             </Styled.LabelText>
             <Row>
               <Col span={12}>
-                <Styled.FormItem
-                  valuePropName="checked"
-                  name="allowNotifications"
-                >
-                  <Styled.Checkbox onChange={handleAllowNotifications}>
+                <Styled.FormItem valuePropName="checked" name="fundSent">
+                  <Styled.Checkbox disabled={!settings.notifications.allow}>
                     {counterpart.translate(`field.checkBoxes.funds_sent`)}
                   </Styled.Checkbox>
                 </Styled.FormItem>
 
-                <Styled.FormItem
-                  valuePropName="checked"
-                  name="allowNotifications"
-                >
-                  <Styled.Checkbox onChange={handleAllowNotifications}>
+                <Styled.FormItem valuePropName="checked" name="orderCreated">
+                  <Styled.Checkbox disabled={!settings.notifications.allow}>
                     {counterpart.translate(`field.checkBoxes.order_created`)}
                   </Styled.Checkbox>
                 </Styled.FormItem>
 
-                <Styled.FormItem
-                  valuePropName="checked"
-                  name="allowNotifications"
-                >
-                  <Styled.Checkbox onChange={handleAllowNotifications}>
+                <Styled.FormItem valuePropName="checked" name="orderFilled">
+                  <Styled.Checkbox disabled={!settings.notifications.allow}>
                     {counterpart.translate(`field.checkBoxes.order_filled`)}
                   </Styled.Checkbox>
                 </Styled.FormItem>
 
-                <Styled.FormItem
-                  valuePropName="checked"
-                  name="allowNotifications"
-                >
-                  <Styled.Checkbox onChange={handleAllowNotifications}>
+                <Styled.FormItem valuePropName="checked" name="orderCanceled">
+                  <Styled.Checkbox disabled={!settings.notifications.allow}>
                     {counterpart.translate(`field.checkBoxes.order_canceled`)}
                   </Styled.Checkbox>
                 </Styled.FormItem>
 
-                <Styled.FormItem
-                  valuePropName="checked"
-                  name="allowNotifications"
-                >
-                  <Styled.Checkbox onChange={handleAllowNotifications}>
+                <Styled.FormItem valuePropName="checked" name="orderExpired">
+                  <Styled.Checkbox disabled={!settings.notifications.allow}>
                     {counterpart.translate(`field.checkBoxes.order_expired`)}
                   </Styled.Checkbox>
                 </Styled.FormItem>
               </Col>
 
               <Col span={12}>
-                <Styled.FormItem
-                  valuePropName="checked"
-                  name="allowNotifications"
-                >
-                  <Styled.Checkbox onChange={handleAllowNotifications}>
+                <Styled.FormItem valuePropName="checked" name="fundsReceived">
+                  <Styled.Checkbox disabled={!settings.notifications.allow}>
                     {counterpart.translate(`field.checkBoxes.funds_received`)}
                   </Styled.Checkbox>
                 </Styled.FormItem>
 
-                <Styled.FormItem
-                  valuePropName="checked"
-                  name="allowNotifications"
-                >
-                  <Styled.Checkbox onChange={handleAllowNotifications}>
+                <Styled.FormItem valuePropName="checked" name="swapStarted">
+                  <Styled.Checkbox disabled={!settings.notifications.allow}>
                     {counterpart.translate(`field.checkBoxes.swap_started`)}
                   </Styled.Checkbox>
                 </Styled.FormItem>
 
-                <Styled.FormItem
-                  valuePropName="checked"
-                  name="allowNotifications"
-                >
-                  <Styled.Checkbox onChange={handleAllowNotifications}>
+                <Styled.FormItem valuePropName="checked" name="swapFilled">
+                  <Styled.Checkbox disabled={!settings.notifications.allow}>
                     {counterpart.translate(`field.checkBoxes.swap_filled`)}
                   </Styled.Checkbox>
                 </Styled.FormItem>
 
-                <Styled.FormItem
-                  valuePropName="checked"
-                  name="allowNotifications"
-                >
-                  <Styled.Checkbox onChange={handleAllowNotifications}>
+                <Styled.FormItem valuePropName="checked" name="swapCanceled">
+                  <Styled.Checkbox disabled={!settings.notifications.allow}>
                     {counterpart.translate(`field.checkBoxes.swap_canceled`)}
                   </Styled.Checkbox>
                 </Styled.FormItem>
 
-                <Styled.FormItem
-                  valuePropName="checked"
-                  name="allowNotifications"
-                >
-                  <Styled.Checkbox onChange={handleAllowNotifications}>
+                <Styled.FormItem valuePropName="checked" name="accountUpdated">
+                  <Styled.Checkbox disabled={!settings.notifications.allow}>
                     {counterpart.translate(`field.checkBoxes.account_updated`)}
                   </Styled.Checkbox>
                 </Styled.FormItem>
