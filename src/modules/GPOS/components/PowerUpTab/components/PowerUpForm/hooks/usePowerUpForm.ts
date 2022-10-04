@@ -4,18 +4,21 @@ import { useCallback, useEffect, useState } from "react";
 import { defaultToken } from "../../../../../../../api/params";
 import {
   useAccount,
+  useAsset,
   useFees,
   useGPOSTransactionBuilder,
   useTransactionBuilder,
 } from "../../../../../../../common/hooks";
 import {
+  useAssetsContext,
   useUserContext,
   useViewportContext,
 } from "../../../../../../../common/providers";
-import { Asset } from "../../../../../../../common/types";
+import { Asset, SignerKey } from "../../../../../../../common/types";
 import { Form } from "../../../../../../../ui/src";
 
 import {
+  PowerUpForm,
   UsePowerUpFormArgs,
   UsePowerUpFormResult,
 } from "./usePowerUpForm.types";
@@ -34,14 +37,16 @@ export function usePowerUpForm({
   const [newBalance, setNewBalance] = useState<number>(0);
   const [userAvailableBalance, _setUserAvailableBalance] = useState<number>(0);
 
-  const [powerUpForm] = Form.useForm();
+  const [powerUpForm] = Form.useForm<PowerUpForm>();
   const depositAmount: number = Form.useWatch("depositAmount", powerUpForm);
   const { id, assets, localStorageAccount } = useUserContext();
   const { buildVestingBalanceCreateTransaction } = useGPOSTransactionBuilder();
   const { buildTrx } = useTransactionBuilder();
-  const { getPrivateKey, formAccountBalancesByName } = useAccount();
+  const { formAccountBalancesByName } = useAccount();
   const { calculateGposVestingFee } = useFees();
   const { sm } = useViewportContext();
+  const { limitByPrecision } = useAsset();
+  const { defaultAsset } = useAssetsContext();
 
   const adjustDeposit = useCallback(
     (direction: string) => {
@@ -56,20 +61,20 @@ export function usePowerUpForm({
   );
 
   const handleVesting = useCallback(
-    async (password: string) => {
+    async (signerKey: SignerKey) => {
       const values = powerUpForm.getFieldsValue();
-      const depositAmount =
-        values.depositAmount * 10 ** (gposBalances?.asset.precision as number);
+      const depositAmount = values.depositAmount;
       const trx = buildVestingBalanceCreateTransaction(
         gposBalances?.asset as Asset,
         depositAmount,
         id
       );
+
       setTransactionErrorMessage("");
-      const activeKey = getPrivateKey(password, "active");
+
       try {
         setLoadingTransaction(true);
-        const trxResult = await buildTrx([trx], [activeKey]);
+        const trxResult = await buildTrx([trx], [signerKey]);
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await getGposInfo();
@@ -104,7 +109,6 @@ export function usePowerUpForm({
       buildVestingBalanceCreateTransaction,
       id,
       setTransactionErrorMessage,
-      getPrivateKey,
       setLoadingTransaction,
       buildTrx,
       formAccountBalancesByName,
@@ -187,18 +191,27 @@ export function usePowerUpForm({
 
   useEffect(() => {
     if (gposBalances) {
-      const newBalance = gposBalances?.openingBalance + depositAmount;
+      const newBalance = Number(
+        limitByPrecision(String(gposBalances?.openingBalance + depositAmount))
+      );
       if (userAvailableBalance >= 0) {
         setNewBalance(newBalance);
         setUserAvailableBalance();
+
         if (!sm) {
           powerUpForm.setFieldsValue({
+            depositAmount: Number(
+              limitByPrecision(String(depositAmount), defaultAsset?.precision)
+            ),
             newBalance: newBalance + " " + gposBalances?.asset.symbol,
             availableBalance:
               userAvailableBalance + " " + gposBalances.asset.symbol,
           });
         } else {
           powerUpForm.setFieldsValue({
+            depositAmount: Number(
+              limitByPrecision(String(depositAmount), defaultAsset?.precision)
+            ),
             newBalance: gposBalances?.asset.symbol,
             availableBalance: gposBalances.asset.symbol,
           });

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { breakpoint } from "../breakpoints";
 import { colors } from "../colors";
 
-export const BlockchainTable = styled(UiTable)`
+export const DataTable = styled(UiTable)`
   .ant-table {
     max-width: 876px;
   }
@@ -22,6 +22,10 @@ export const BlockchainTable = styled(UiTable)`
       display: none;
     }
   }
+  .ant-table-tbody > tr > td {
+    font-size: 1em;
+    font-weight: normal;
+  }
   .anticon-link {
     color: ${colors.linkColor};
   }
@@ -37,17 +41,17 @@ export const BlockchainTable = styled(UiTable)`
   }
 `;
 
-export const BlockchainTableLastBlock = styled.span`
+export const DataTableLastBlock = styled.span`
   color: ${colors.successColor};
 `;
-export const BlockchainTableMissedBlocks = styled.span`
+export const DataTableMissedBlocks = styled.span`
   color: ${colors.missedColor};
 `;
 
-export const BlockchainTableUrlIcon = styled(LinkOutlined)`
+export const DataTableUrlIcon = styled(LinkOutlined)`
   color: ${colors.linkColor};
 `;
 
-export const BlockchainTableActiveIcon = styled(CheckCircleFilled)`
+export const DataTableActiveIcon = styled(CheckCircleFilled)`
   color: ${colors.lightText};
 `;

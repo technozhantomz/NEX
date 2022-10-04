@@ -13,10 +13,18 @@ export const VotingPageCard = styled(UiCard)`
     padding: 0;
   }
   ${breakpoint.sm} {
+    .ant-tabs-tab-btn {
+      font-size: 20px;
+      line-height: 24px;
+    }
+    .ant-tabs-top > .ant-tabs-nav {
+      margin: 0;
+    }
     .ant-card-body {
       .ant-tabs-tab {
         justify-content: center;
-        padding: 33px 28px 10px;
+        padding: 20px 28px 12px;
+        width: 200px;
       }
       .ant-tabs-top > .ant-tabs-nav::before {
         border-bottom: 2pt solid #f0f0f0;

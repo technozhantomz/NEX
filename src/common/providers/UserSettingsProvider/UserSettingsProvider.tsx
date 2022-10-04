@@ -1,19 +1,10 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useSettingsContext, useUserContext } from "..";
-import { defaultUserSettings } from "../../../api/params";
 import { useActivity, useFormDate, useLocalStorage } from "../../hooks";
-import { Notification, UserSettings } from "../../types";
+import { Notification } from "../../types";
 
 type UserSettingsContextType = {
-  userSettings: UserSettings;
-  setUserSettings: (value: UserSettings) => void;
   hasUnreadMessages: boolean;
   notifications: Notification[];
   loadingNotifications: boolean;
@@ -45,9 +36,6 @@ export function UserSettingsProvider({
   const [hasUnreadMessages, _setHasUnreadMessages] = useState<boolean>(false);
   const [loadingNotifications, setLoadingNotifications] =
     useState<boolean>(true);
-  const [userSettings, setUserSettings] = useLocalStorage(
-    `userSettings_${localStorageAccount}`
-  ) as [UserSettings, (value: UserSettings) => void];
 
   const setHasUnreadMessages = (notifications: Notification[]) => {
     for (const notification of notifications) {
@@ -156,16 +144,6 @@ export function UserSettingsProvider({
     }
   };
 
-  const initUserSettings = useCallback(() => {
-    if (localStorageAccount && localStorageAccount !== "" && !userSettings) {
-      setUserSettings(defaultUserSettings);
-    }
-  }, [userSettings, setUserSettings, localStorageAccount]);
-
-  useEffect(() => {
-    initUserSettings();
-  }, [localStorageAccount]);
-
   useEffect(() => {
     if (localStorageAccount && localStorageAccount !== "") {
       updateNotifications();
@@ -177,8 +155,6 @@ export function UserSettingsProvider({
   return (
     <userSettingsContext.Provider
       value={{
-        userSettings,
-        setUserSettings,
         hasUnreadMessages,
         notifications,
         loadingNotifications,

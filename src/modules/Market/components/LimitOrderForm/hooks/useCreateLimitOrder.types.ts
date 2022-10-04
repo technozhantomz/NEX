@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { Asset } from "../../../../../common/types";
+import { Asset, SignerKey } from "../../../../../common/types";
 import { FormInstance, Rule } from "../../../../../ui/src";
 
 export type UseCreateLimitOrderArgs = {
@@ -19,7 +19,7 @@ export type UseCreateLimitOrderResult = {
   orderForm: FormInstance<OrderForm>;
   formValidation: FormValidation;
   handleValuesChange: (changedValues: any, allValues: any) => void;
-  handleCreateLimitOrder: (password: string) => Promise<void>;
+  handleCreateLimitOrder: (signerKey: SignerKey) => Promise<void>;
   transactionErrorMessage: string;
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   transactionSuccessMessage: string;

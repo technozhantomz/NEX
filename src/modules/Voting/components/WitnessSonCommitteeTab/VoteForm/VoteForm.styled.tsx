@@ -1,6 +1,6 @@
 import {
-  BlockchainDownloadLinks,
   Button,
+  DataTableDownloadLinks,
   Form,
   styled,
   TableSearch,
@@ -74,6 +74,6 @@ export const Reset = styled(UiReset)`
   margin-right: 4px;
 `;
 
-export const DownloadLinks = styled(BlockchainDownloadLinks)``;
+export const DownloadLinks = styled(DataTableDownloadLinks)``;
 
 export const PrintTable = styled(UiPrintTable)``;

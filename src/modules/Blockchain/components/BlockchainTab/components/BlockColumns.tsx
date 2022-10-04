@@ -1,7 +1,5 @@
-import Link from "next/link";
-
 import { TableHeading } from "../../../../../common/components";
-import { BlockchainTableRow } from "../hooks/useBlockchainTab.types";
+import { DataTableRow } from "../hooks/useBlockchainTab.types";
 
 const headings = ["block_id", "time", "witness", "transaction"];
 const keys = ["blockID", "time", "witness", "transaction"];
@@ -9,7 +7,9 @@ const renders = [
   undefined,
   undefined,
   (witness: string): JSX.Element => (
-    <Link href={`/user/${witness}`}>{witness}</Link>
+    <a href={`/user/${witness}`} target="_blank">
+      {witness}
+    </a>
   ),
   undefined,
 ];
@@ -19,7 +19,7 @@ const filterSearch = [undefined, undefined, true, undefined];
 const onFilters = [
   undefined,
   undefined,
-  (value: string, record: BlockchainTableRow): boolean =>
+  (value: string, record: DataTableRow): boolean =>
     record.witness.includes(value),
   undefined,
 ];

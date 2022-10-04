@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { breakpoint } from "../breakpoints";
 
-export const BlockchainHeaderBar = styled.div`
+export const DataTableHeaderBar = styled.div`
   margin-top: 25px;
 
   display: block;

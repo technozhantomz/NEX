@@ -14,7 +14,7 @@ export type AssetTableRow = {
   key: string;
   id: string;
   symbol: string;
-  // name: string;
+  name: string;
   maxSupply: number;
   precision: number;
   issuer: string;

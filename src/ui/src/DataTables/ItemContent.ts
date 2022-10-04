@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { colors } from "../colors";
 
-export const BlockchainItemContent = styled.div`
+export const DataItemContent = styled.div`
   margin: 18px 0 25px;
   .item-info {
     margin: 5px 0;

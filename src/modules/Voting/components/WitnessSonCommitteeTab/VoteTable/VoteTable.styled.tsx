@@ -1,12 +1,12 @@
 import {
-  BlockchainDownloadLinks,
-  BlockchainHeader,
-  BlockchainHeaderBar,
-  BlockchainItemContent,
-  BlockchainTable,
-  BlockchainTableActiveIcon,
-  BlockchainTableUrlIcon,
   Col as col,
+  DataItemContent,
+  DataTable,
+  DataTableActiveIcon,
+  DataTableDownloadLinks,
+  DataTableHeader,
+  DataTableHeaderBar,
+  DataTableUrlIcon,
   Row as row,
   styled,
   Button as UiButton,
@@ -26,7 +26,7 @@ export const VoteTableWrapper = styled.div`
   }
 `;
 
-export const VoteTable = styled(BlockchainTable)`
+export const VoteTable = styled(DataTable)`
   margin: 0 35px;
   max-width: 100%;
 `;
@@ -51,7 +51,7 @@ export const VoteList = styled(UiList)`
 
 export const VoteListItem = styled(UiListItem)``;
 
-export const VoteItemContent = styled(BlockchainItemContent)``;
+export const VoteItemContent = styled(DataItemContent)``;
 
 export const VoteActionButton = styled(UiButton)`
   margin: 0px;
@@ -71,7 +71,7 @@ export const Container = styled.div`
   margin-bottom: 25px;
 `;
 
-export const Title = styled(BlockchainHeader)``;
+export const Title = styled(DataTableHeader)``;
 
 export const ColHeader = styled(col)`
   width: 25%;
@@ -111,11 +111,11 @@ export const Xmark = styled(xmark)`
   }
 `;
 
-export const VoteHeaderBar = styled(BlockchainHeaderBar)``;
-export const DownloadLinks = styled(BlockchainDownloadLinks)``;
+export const VoteHeaderBar = styled(DataTableHeaderBar)``;
+export const DownloadLinks = styled(DataTableDownloadLinks)``;
 export const PrintTable = styled(UiPrintTable)``;
-export const urlIcon = styled(BlockchainTableUrlIcon)``;
-export const ActiveIcon = styled(BlockchainTableActiveIcon)``;
+export const urlIcon = styled(DataTableUrlIcon)``;
+export const ActiveIcon = styled(DataTableActiveIcon)``;
 
 export const ApprovedStatus = styled.span`
   color: ${colors.successColor};

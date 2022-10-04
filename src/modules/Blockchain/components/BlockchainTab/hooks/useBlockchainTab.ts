@@ -15,7 +15,7 @@ import { BlockColumns } from "../components";
 import {
   BlockchainStats,
   BlockchainSupply,
-  BlockchainTableRow,
+  DataTableRow,
   UseBlockchainTabResult,
 } from "./useBlockchainTab.types";
 
@@ -24,7 +24,7 @@ export function useBlockchainTab(
 ): UseBlockchainTabResult {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchDataSource, setSearchDataSource] = useState<
-    BlockchainTableRow[]
+    DataTableRow[]
   >([]);
   const [currentBlock, setCurrentBlock] = useState<number>(0);
   const [lastIrreversibleBlock, setLastIrreversibleBlock] =
@@ -34,8 +34,8 @@ export function useBlockchainTab(
     amount: 0,
     symbol: "TEST",
   });
-  const [blockchainTableRows, setBlockchainTableRows] = useState<
-    BlockchainTableRow[]
+  const [blockchainTableRows, setDataTableRows] = useState<
+    DataTableRow[]
   >([]);
   const [blockchainStats, setBlockchainStats] = useState<BlockchainStats>({
     currentBlock: [],
@@ -106,7 +106,7 @@ export function useBlockchainTab(
           amount: supplyAmount,
           symbol: defaultAsset.symbol,
         });
-        setBlockchainTableRows(blockRows);
+        setDataTableRows(blockRows);
         setSearchDataSource(blockRows);
         setBlockchainStats({
           currentBlock: updateArrayWithLimit(
@@ -145,7 +145,7 @@ export function useBlockchainTab(
     setLastIrreversibleBlock,
     setAvgTime,
     setSupply,
-    setBlockchainTableRows,
+    setDataTableRows,
     setBlockchainStats,
     setLoading,
   ]);

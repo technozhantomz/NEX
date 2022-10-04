@@ -1,4 +1,4 @@
-import { Account, Asset } from "../../types";
+import { Account, Asset, KeyType, SidechainAcccount } from "../../types";
 
 export type UserContextType = {
   localStorageAccount: string;
@@ -7,6 +7,7 @@ export type UserContextType = {
   name: string;
   assets: Asset[];
   password: string;
+  keyType: KeyType;
   updateAccount: (
     id: string,
     name: string,
@@ -14,6 +15,13 @@ export type UserContextType = {
     account: Account | undefined
   ) => void;
   setAssets: (assets: Asset[]) => void;
-  setPassword: (password: string) => void;
   account: Account | undefined;
+  savePassword: (password: string, keyType: KeyType) => void;
+  removePassword: () => void;
+  hasBTCDepositAddress: boolean;
+  hasBTCWithdrawPublicKey: boolean;
+  getSidechainAccounts: (accountId: string) => Promise<void>;
+  sidechainAccounts: SidechainAcccount[];
+  bitcoinSidechainAccount: SidechainAcccount | undefined;
+  loadingSidechainAccounts: boolean;
 };

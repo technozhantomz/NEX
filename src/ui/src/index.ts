@@ -16,7 +16,7 @@ export { Tabs } from "./Tabs";
 export { Input } from "./Input";
 export { Form } from "./Form";
 export { PrintTable } from "./PrintTable";
-export * from "./Tables";
+export * from "./DataTables";
 
 export {
   Badge,

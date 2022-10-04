@@ -45,7 +45,7 @@ export function useSignUpForm(): UseSignUpFormResult {
     setSubmitting(true);
     const fullAccount = await createAccount(formData as SignupForm);
     if (fullAccount) {
-      await formAccountAfterConfirmation(fullAccount);
+      await formAccountAfterConfirmation(fullAccount, "", "");
       setLocalStorageAccount(fullAccount.account.name);
       setSubmitting(false);
     }

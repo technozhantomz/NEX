@@ -7,6 +7,10 @@ export const Container = styled.div`
   display: flex;
   padding-left: 8px;
   align-items: center;
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
+  }
 `;
 
 export const LogoContainer = styled.div`

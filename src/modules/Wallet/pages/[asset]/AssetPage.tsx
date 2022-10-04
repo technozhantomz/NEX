@@ -6,17 +6,17 @@ import { useState } from "react";
 
 import {
   AddressGenerated,
+  DownloadBitcoinKeys,
   GenerateBitcoinAddress,
   HIVEAndHBDDeposit,
   Layout,
   TransferForm,
   WithdrawForm,
 } from "../../../../common/components";
-import { useSidechainAccounts } from "../../../../common/hooks";
 import {
   useAssetsContext,
-  //useBrowserHistoryContext,
   useUserContext,
+  //useBrowserHistoryContext,
   useViewportContext,
 } from "../../../../common/providers";
 import { SidechainAcccount } from "../../../../common/types";
@@ -27,6 +27,7 @@ import {
   Tabs,
   UpOutlined,
 } from "../../../../ui/src";
+import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import { AssetsTable } from "../../components";
 
 import * as Styled from "./AssetPage.styled";
@@ -42,8 +43,8 @@ const AssetPage: NextPage = () => {
     hasBTCDepositAddress,
     loadingSidechainAccounts,
     getSidechainAccounts,
-  } = useSidechainAccounts();
-  const { localStorageAccount } = useUserContext();
+  } = useUserContext();
+
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
 
@@ -122,23 +123,46 @@ const AssetPage: NextPage = () => {
     </>
   );
 
+  const renderBTCDepositInstruction = (instruction: string) => {
+    return (
+      <Styled.BTCDepositInstructionContainer>
+        <Styled.BTCIconWrapper>
+          <BitcoinIcon width="30" height="30" />
+        </Styled.BTCIconWrapper>
+        <Styled.BTCDepositInstruction>
+          {instruction}
+        </Styled.BTCDepositInstruction>
+      </Styled.BTCDepositInstructionContainer>
+    );
+  };
+
   const renderBtcDepositTab = (
     hasBTCDepositAddress: boolean,
     bitcoinSidechainAccount: SidechainAcccount
   ) => {
     if (hasBTCDepositAddress) {
       return (
-        <AddressGenerated
-          bitcoinSidechainAccount={bitcoinSidechainAccount}
-          getSidechainAccounts={getSidechainAccounts}
-        />
+        <>
+          <AddressGenerated bitcoinSidechainAccount={bitcoinSidechainAccount} />
+          {renderBTCDepositInstruction(
+            counterpart.translate(`field.labels.deposit_btc`)
+          )}
+          <DownloadBitcoinKeys
+            bitcoinSidechainAccount={
+              bitcoinSidechainAccount as SidechainAcccount
+            }
+            getSidechainAccounts={getSidechainAccounts}
+          />
+        </>
       );
     } else {
       return (
-        <GenerateBitcoinAddress
-          isLoggedIn={!!localStorageAccount}
-          getSidechainAccounts={getSidechainAccounts}
-        />
+        <>
+          <GenerateBitcoinAddress getSidechainAccounts={getSidechainAccounts} />
+          {renderBTCDepositInstruction(
+            counterpart.translate(`field.labels.generate_btc_deposit_address`)
+          )}
+        </>
       );
     }
   };

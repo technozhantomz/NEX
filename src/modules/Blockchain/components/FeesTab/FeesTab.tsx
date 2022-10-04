@@ -1,6 +1,7 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { CSSProperties, ReactNode, useRef } from "react";
+import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
@@ -32,7 +33,7 @@ export const FeesTab = (): JSX.Element => {
           <InfoCircleOutlined />
         </Styled.FeesHeader>
         <SearchTableInput
-          columns={FeesColumns}
+          columns={FeesColumns as ColumnsType<unknown>}
           dataSource={fullFeesRows}
           setDataSource={setSearchDataSource}
           inputProps={{
@@ -44,7 +45,7 @@ export const FeesTab = (): JSX.Element => {
           <DownloadOutlined />
           <ReactToPrint
             trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current}
+            content={() => componentRef.current as unknown as ReactInstance}
           />
           {` / `}
           <CSVLink
@@ -126,7 +127,7 @@ export const FeesTab = (): JSX.Element => {
       ) : (
         <Styled.FeesTable
           dataSource={searchDataSource}
-          columns={FeesColumns}
+          columns={FeesColumns as ColumnsType<unknown>}
           loading={loading}
           pagination={
             !loading
