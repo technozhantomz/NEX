@@ -42,7 +42,7 @@ export const GeneralTab = (): JSX.Element => {
               </Styled.Select>
             </Styled.GeneralSettingFormItem>
 
-            <Styled.LabelText>
+            {/* <Styled.LabelText>
               {counterpart.translate(`field.labels.ui_design`)}
             </Styled.LabelText>
             <Styled.GeneralSettingFormItem name="darkTheme">
@@ -63,7 +63,7 @@ export const GeneralTab = (): JSX.Element => {
                 <Styled.Option value={true}>Yes</Styled.Option>
                 <Styled.Option value={false}>No</Styled.Option>
               </Styled.Select>
-            </Styled.GeneralSettingFormItem>
+            </Styled.GeneralSettingFormItem> */}
 
             <Styled.LabelText>
               {counterpart.translate(`field.labels.lock_wallet`)}
@@ -78,23 +78,6 @@ export const GeneralTab = (): JSX.Element => {
                 ))}
               </Styled.Select>
             </Styled.GeneralSettingFormItem>
-
-            {/* <Styled.LabelText>
-              {counterpart.translate(`field.labels.browser_notifications`)}
-            </Styled.LabelText>
-            <Styled.FormItem valuePropName="checked" name="allowNotifications">
-              <Styled.Checkbox onChange={handleAllowNotifications}>
-                {counterpart.translate(`field.checkBoxes.enable_notifications`)}
-              </Styled.Checkbox>
-            </Styled.FormItem> */}
-            {/* <Styled.FormItem
-          valuePropName="checked"
-          name="allowTransferToMeNotifications"
-        >
-          <Styled.TransferCheckbox>
-            Notify about transfers to my account
-          </Styled.TransferCheckbox>
-        </Styled.FormItem> */}
             <Styled.LabelText>
               {counterpart.translate(`field.labels.unsaved_changes`)}
               <InfoCircleOutlined />
