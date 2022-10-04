@@ -4,6 +4,7 @@ import ECPairFactory from "ecpair";
 import { useCallback, useState } from "react";
 import * as ecc from "tiny-secp256k1";
 
+import { testnetCheck } from "../../../../api/params";
 import {
   useSessionStorage,
   useSidechainTransactionBuilder,
@@ -18,6 +19,8 @@ import {
   BitcoinSidechainAccounts,
   UseGenerateBitcoinAddressResult,
 } from "./useGenerateBitcoinAddress.types";
+
+const NETWORK = testnetCheck ? bitcoin.networks.regtest : undefined;
 
 export function useGenerateBitcoinAddress(
   getSidechainAccounts: (accountId: string) => Promise<void>
@@ -47,8 +50,11 @@ export function useGenerateBitcoinAddress(
 
   const generateNewAddress = (): BitcoinAccount => {
     const ECPair = ECPairFactory(ecc);
-    const keyPair = ECPair.makeRandom();
-    const address = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey });
+    const keyPair = ECPair.makeRandom({ network: NETWORK });
+    const address = bitcoin.payments.p2pkh({
+      pubkey: keyPair.publicKey,
+      network: NETWORK,
+    });
     return {
       address: address.address as string,
       pubKey: toHex(address.pubkey),
@@ -129,6 +135,8 @@ export function useGenerateBitcoinAddress(
       setTransactionErrorMessage,
       setLoadingTransaction,
       setTransactionSuccessMessage,
+      id,
+      getSonNetworkStatus,
     ]
   );
 

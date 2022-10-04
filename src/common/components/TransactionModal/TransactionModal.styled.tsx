@@ -35,7 +35,7 @@ export const TransactionModal = styled(Modal)`
   .ant-modal-footer {
     border-top: unset;
     .ant-btn + .ant-btn:not(.ant-dropdown-trigger) {
-      margin-x: auto;
+      margin-left: auto;
     }
     .ant-btn:first-child {
       margin-bottom: 8px;
