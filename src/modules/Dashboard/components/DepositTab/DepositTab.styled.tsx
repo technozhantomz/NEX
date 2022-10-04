@@ -9,10 +9,10 @@ export const DepositFormContainer = styled.div`
   ${mixIns.borderRadius}
   font-size: 25px;
   width: 600px;
-  padding: 25px 20px;
+  padding: 25px 20px 0 20px;
   margin: 10px;
   ${breakpoint.xs} {
-    padding: 35px 30px;
+    padding: 35px 30px 0 30px;
   }
   .ant-form {
     width: 90%;
@@ -43,3 +43,27 @@ export const LogoSelect = styled(LogoSelectOption)`
 export const AddressGeneratedContainer = styled.div``;
 
 export const HIVEDepositContainer = styled.div``;
+
+export const BTCDepositInstructionContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
+  }
+  margin-left: 11px;
+`;
+
+export const BTCIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+`;
+
+export const BTCDepositInstruction = styled.div`
+  color: ${colors.textColor};
+  font-size: 12px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
+`;

@@ -1,13 +1,22 @@
 import counterpart from "counterpart";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { KeyboardEvent } from "react";
 
-import { LogoSelectOption, PasswordModal, TransactionModal } from "..";
+import {
+  DashboardLoginButton,
+  DownloadBitcoinKeys,
+  GenerateBitcoinAddress,
+  LoadingIndicator,
+  LogoSelectOption,
+  PasswordModal,
+  TransactionModal,
+} from "..";
 import { utils } from "../../../api/utils";
 import { Form, Input } from "../../../ui/src";
-import { useHandleTransactionForm } from "../../hooks";
+import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
+import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
+import { useAsset, useHandleTransactionForm } from "../../hooks";
 import { useAssetsContext, useUserContext } from "../../providers";
+import { SidechainAcccount } from "../../types";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -21,9 +30,9 @@ export const WithdrawForm = ({
   asset,
   withAssetSelector,
 }: Props): JSX.Element => {
-  const router = useRouter();
   const { localStorageAccount } = useUserContext();
   const { defaultAsset, sidechainAssets } = useAssetsContext();
+  const { limitByPrecision } = useAsset();
   const {
     feeAmount,
     withdrawForm,
@@ -41,6 +50,12 @@ export const WithdrawForm = ({
     withdrawAddress,
     userBalance,
     withdrawFee,
+    btcTransferFee,
+    selectedAssetPrecission,
+    hasBTCDepositAddress,
+    bitcoinSidechainAccount,
+    getSidechainAccounts,
+    loadingSidechainAccounts,
   } = useWithdrawForm(asset);
 
   const {
@@ -57,6 +72,11 @@ export const WithdrawForm = ({
     neededKeyType: "active",
   });
 
+  const precisedAmount = limitByPrecision(
+    String(amount),
+    selectedAssetPrecission
+  );
+
   const isLoggedIn = localStorageAccount && localStorageAccount !== "";
 
   const renderUserBalance = isLoggedIn ? (
@@ -67,193 +87,324 @@ export const WithdrawForm = ({
     ""
   );
 
-  const formDisclamer = isLoggedIn ? (
-    ""
-  ) : (
-    <Styled.FormDisclamer>
-      <span>
-        {counterpart.translate(`buttons.dont_have_peerplays_account`)}
-      </span>
-      <Link href="/signup">
-        <a>{counterpart.translate(`links.create_account`)}</a>
-      </Link>
-    </Styled.FormDisclamer>
-  );
-
-  const submitButton = isLoggedIn ? (
+  const submitButton = (
     <>
       <Styled.WithdrawFormButton type="primary" htmlType="submit">
         {counterpart.translate(`buttons.withdraw`)}
       </Styled.WithdrawFormButton>
     </>
-  ) : (
-    <>
-      <Styled.WithdrawFormButton
-        type="primary"
-        htmlType="button"
-        onClick={() => {
-          router.push("/login");
-        }}
-      >
-        {counterpart.translate(`buttons.log_in_withdraw`)}
-      </Styled.WithdrawFormButton>
-    </>
   );
 
-  const withdrawAddressTitle =
-    selectedAsset === "BTC" ? (
-      <p className="label">
-        {counterpart.translate(`field.labels.withdraw_public_key_address`)}
-      </p>
+  const feeLabel =
+    selectedAsset === "BTC"
+      ? counterpart.translate(`field.labels.estimated_fees_label`)
+      : counterpart.translate(`field.labels.fees_label`);
+
+  const feeSummary: (inTotal?: boolean) => string | JSX.Element = (
+    inTotal = false
+  ) => {
+    const BtcFeeSummary = inTotal ? (
+      <>
+        <div>{`+ ${withdrawFee} ${
+          defaultAsset ? defaultAsset.symbol : ""
+        }`}</div>
+        <div>+ {`${btcTransferFee} BTC`}</div>
+      </>
     ) : (
-      <p className="label">
-        {counterpart.translate(`field.labels.hive_blockchain_account`)}
-      </p>
+      <>
+        <div>{`${withdrawFee} ${defaultAsset ? defaultAsset.symbol : ""}`}</div>
+        <div>+ {`${btcTransferFee} BTC`}</div>
+      </>
     );
 
-  const withdrawAddressPlaceholder =
+    const HiveFeeSummary = inTotal
+      ? `+ ${withdrawFee}
+    ${defaultAsset ? defaultAsset.symbol : ""}`
+      : `${withdrawFee}
+    ${defaultAsset ? defaultAsset.symbol : ""}`;
+
+    return selectedAsset === "BTC" ? BtcFeeSummary : HiveFeeSummary;
+  };
+
+  const totalTransaction = (
+    <>
+      <div>{`${precisedAmount} ${selectedAsset}`}</div>
+      <>{feeSummary(true)}</>
+    </>
+  );
+  const confirmationTime =
     selectedAsset === "BTC"
-      ? counterpart.translate(`field.placeholder.withdraw_address`)
-      : counterpart.translate(`field.placeholder.hive_blockchain_account`);
+      ? counterpart.translate(`field.labels.btc_withdrawal_confirmation_time`)
+      : counterpart.translate(`field.labels.hive_withdrawal_confirmation_time`);
 
-  return (
-    <Form.Provider onFormFinish={handleFormFinish}>
-      <Styled.WithdrawForm
-        form={withdrawForm}
-        name="withdrawForm"
-        onFinish={showPasswordModal}
-        onValuesChange={handleValuesChange}
-        size="large"
-        validateTrigger={["onChange", "onSubmit"]}
+  const transactionDetails = (
+    <Styled.TransactionDetails>
+      <Styled.DetailsWrapper>
+        <Styled.DetailsLabelWrapper>{feeLabel}</Styled.DetailsLabelWrapper>
+        <Styled.AmountsWrapper>{feeSummary()}</Styled.AmountsWrapper>
+      </Styled.DetailsWrapper>
+      <Styled.DetailsWrapper>
+        <Styled.DetailsLabelWrapper>
+          {counterpart.translate(`field.labels.total_transaction`)}
+        </Styled.DetailsLabelWrapper>
+        <Styled.AmountsWrapper>{totalTransaction}</Styled.AmountsWrapper>
+      </Styled.DetailsWrapper>
+      <Styled.DetailsWrapper>
+        <Styled.DetailsLabelWrapper>
+          {counterpart.translate(`field.labels.withdrawal_confirmation_time`)}
+        </Styled.DetailsLabelWrapper>
+        <Styled.AmountsWrapper>{confirmationTime}</Styled.AmountsWrapper>
+      </Styled.DetailsWrapper>
+    </Styled.TransactionDetails>
+  );
+
+  const btcFormBody = hasBTCDepositAddress ? (
+    <>
+      <Form.Item
+        name="from"
+        rules={formValdation.from}
+        validateFirst={true}
+        initialValue={localStorageAccount}
+        hidden={withAssetSelector ? true : false}
       >
+        <Input disabled={true} placeholder="From" />
+      </Form.Item>
+      {/* fieldLabel */}
+      {withAssetSelector ? (
+        <p className="label">
+          {counterpart.translate(`field.labels.withdraw_public_key_address`)}
+        </p>
+      ) : (
+        ""
+      )}
+      <Form.Item
+        name="withdrawPublicKey"
+        validateFirst={true}
+        rules={formValdation.withdrawPublicKey}
+      >
+        <Input
+          placeholder={counterpart.translate(
+            `field.placeholder.withdraw_public_key`
+          )}
+          autoComplete="new-password"
+          className="form-input"
+          disabled={!isLoggedIn}
+        />
+      </Form.Item>
+      <Form.Item
+        name="withdrawAddress"
+        validateFirst={true}
+        rules={formValdation.withdrawAddress}
+      >
+        <Input
+          placeholder={counterpart.translate(
+            `field.placeholder.hive_blockchain_account`
+          )}
+          className="form-input"
+          disabled={localStorageAccount ? false : true}
+        />
+      </Form.Item>
+      {!withAssetSelector ? (
         <Form.Item
-          name="from"
-          rules={formValdation.from}
+          name="amount"
           validateFirst={true}
-          initialValue={localStorageAccount}
-          hidden={withAssetSelector ? true : false}
-        >
-          <Input disabled={true} placeholder="From" />
-        </Form.Item>
-
-        {withAssetSelector ? (
-          <>
-            <Styled.WithdrawFormAssetAmount
-              name="amount"
-              validateFirst={true}
-              rules={formValdation.amount}
-              withassetselector={withAssetSelector}
-            >
-              <Input
-                placeholder="0.0"
-                type="number"
-                step="any"
-                min={0}
-                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                  if (!utils.isNumberKey(e)) {
-                    e.preventDefault();
-                  }
-                }}
-                prefix={
-                  <Styled.WithdrawFormAsset>
-                    <LogoSelectOption
-                      assets={sidechainAssets}
-                      value={selectedAsset}
-                      onChange={handleAssetChange}
-                    />
-                    {renderUserBalance}
-                  </Styled.WithdrawFormAsset>
-                }
-                disabled={!isLoggedIn}
-              />
-            </Styled.WithdrawFormAssetAmount>
-            {withdrawAddressTitle}
-          </>
-        ) : (
-          ""
-        )}
-
-        {selectedAsset === "BTC" ? (
-          <Form.Item
-            name="withdrawPublicKey"
-            validateFirst={true}
-            rules={formValdation.withdrawPublicKey}
-          >
-            <Input
-              placeholder={counterpart.translate(
-                `field.placeholder.withdraw_public_key`
-              )}
-              className="form-input"
-              disabled={!isLoggedIn}
-            />
-          </Form.Item>
-        ) : (
-          ""
-        )}
-
-        <Form.Item
-          name="withdrawAddress"
-          validateFirst={true}
-          rules={formValdation.withdrawAddress}
+          rules={formValdation.amount}
         >
           <Input
-            placeholder={withdrawAddressPlaceholder}
-            className="form-input"
+            placeholder={counterpart.translate(`field.placeholder.amount`)}
+            type="number"
+            step="any"
+            min={0}
+            onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+              if (!utils.isNumberKey(e)) {
+                e.preventDefault();
+              }
+            }}
             disabled={localStorageAccount ? false : true}
           />
         </Form.Item>
+      ) : (
+        ""
+      )}
+      <Styled.WithdrawalInstruction>
+        <Styled.IconWrapper>
+          <BitcoinIcon height="30" width="30" />
+        </Styled.IconWrapper>
+        <span>
+          {counterpart.translate(`field.labels.btc_withdraw_instruction`)}
+        </span>
+      </Styled.WithdrawalInstruction>
+      <DownloadBitcoinKeys
+        bitcoinSidechainAccount={bitcoinSidechainAccount as SidechainAcccount}
+        getSidechainAccounts={getSidechainAccounts}
+      />
+      {transactionDetails}
+      {submitButton}
+    </>
+  ) : (
+    ""
+  );
 
-        {!withAssetSelector ? (
-          <Form.Item
-            name="amount"
-            validateFirst={true}
-            rules={formValdation.amount}
-          >
-            <Input
-              placeholder={counterpart.translate(`field.placeholder.amount`)}
-              type="number"
-              step="any"
-              min={0}
-              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e)) {
-                  e.preventDefault();
-                }
-              }}
-              disabled={localStorageAccount ? false : true}
-            />
-          </Form.Item>
-        ) : (
-          ""
-        )}
-
-        <Styled.Fee>
-          {counterpart.translate(`field.labels.fees`, {
-            feeAmount: withdrawFee,
-            defaultAsset: defaultAsset ? defaultAsset.symbol : "",
+  const hiveFormBody = (
+    <>
+      <Form.Item
+        name="from"
+        rules={formValdation.from}
+        validateFirst={true}
+        initialValue={localStorageAccount}
+        hidden={withAssetSelector ? true : false}
+      >
+        <Input disabled={true} placeholder="From" />
+      </Form.Item>
+      {withAssetSelector ? (
+        <p className="label">
+          {counterpart.translate(`field.labels.hive_blockchain_account`)}
+        </p>
+      ) : (
+        ""
+      )}
+      <Form.Item
+        name="withdrawAddress"
+        validateFirst={true}
+        rules={formValdation.withdrawAddress}
+      >
+        <Input
+          placeholder={counterpart.translate(
+            `field.placeholder.hive_blockchain_account`
+          )}
+          className="form-input"
+          disabled={localStorageAccount ? false : true}
+        />
+      </Form.Item>
+      {!withAssetSelector ? (
+        <Form.Item
+          name="amount"
+          validateFirst={true}
+          rules={formValdation.amount}
+        >
+          <Input
+            placeholder={counterpart.translate(`field.placeholder.amount`)}
+            type="number"
+            step="any"
+            min={0}
+            onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+              if (!utils.isNumberKey(e)) {
+                e.preventDefault();
+              }
+            }}
+            disabled={localStorageAccount ? false : true}
+          />
+        </Form.Item>
+      ) : (
+        ""
+      )}
+      <Styled.WithdrawalInstruction>
+        <Styled.IconWrapper>
+          <HIVEIcon width="30" height="30" />
+        </Styled.IconWrapper>
+        <span>
+          {counterpart.translate(`field.labels.hive_withdraw_instruction`, {
+            asset: selectedAsset,
           })}
-        </Styled.Fee>
-        <Styled.ButtonFormItem>{submitButton}</Styled.ButtonFormItem>
-      </Styled.WithdrawForm>
-      {formDisclamer}
+        </span>
+      </Styled.WithdrawalInstruction>
+      {transactionDetails}
+      {submitButton}
+    </>
+  );
 
-      <PasswordModal
-        neededKeyType="active"
-        visible={isPasswordModalVisible}
-        onCancel={hidePasswordModal}
-      />
-      <TransactionModal
-        visible={isTransactionModalVisible}
-        onCancel={hideTransactionModal}
-        transactionErrorMessage={transactionErrorMessage}
-        transactionSuccessMessage={transactionSuccessMessage}
-        loadingTransaction={loadingTransaction}
-        account={localStorageAccount}
-        fee={feeAmount}
-        asset={selectedAsset}
-        withdrawAddress={withdrawAddress}
-        amount={amount}
-        transactionType="withdraw"
-      />
-    </Form.Provider>
+  const formBody = selectedAsset === "BTC" ? btcFormBody : hiveFormBody;
+
+  const formBodyWithLoading = loadingSidechainAccounts ? (
+    <LoadingIndicator />
+  ) : (
+    formBody
+  );
+
+  return (
+    <>
+      <Form.Provider onFormFinish={handleFormFinish}>
+        <Styled.WithdrawForm
+          form={withdrawForm}
+          name="withdrawForm"
+          onFinish={showPasswordModal}
+          onValuesChange={handleValuesChange}
+          size="large"
+          validateTrigger={["onChange", "onSubmit"]}
+        >
+          {withAssetSelector ? (
+            <>
+              <Styled.WithdrawFormAssetAmount
+                name="amount"
+                validateFirst={true}
+                rules={formValdation.amount}
+                withassetselector={withAssetSelector}
+              >
+                <Input
+                  placeholder="0.0"
+                  type="number"
+                  step="any"
+                  min={0}
+                  onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
+                    if (!utils.isNumberKey(e)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  prefix={
+                    <Styled.WithdrawFormAsset>
+                      <LogoSelectOption
+                        assets={sidechainAssets}
+                        value={selectedAsset}
+                        onChange={handleAssetChange}
+                      />
+                      {renderUserBalance}
+                    </Styled.WithdrawFormAsset>
+                  }
+                  disabled={!isLoggedIn}
+                  autoComplete="new-password"
+                />
+              </Styled.WithdrawFormAssetAmount>
+            </>
+          ) : (
+            ""
+          )}
+
+          {isLoggedIn ? (
+            <>{formBodyWithLoading}</>
+          ) : (
+            <DashboardLoginButton
+              buttonText={counterpart.translate(`buttons.log_in_withdraw`, {
+                selectedAsset: selectedAsset,
+              })}
+            />
+          )}
+        </Styled.WithdrawForm>
+
+        <PasswordModal
+          neededKeyType="active"
+          visible={isPasswordModalVisible}
+          onCancel={hidePasswordModal}
+        />
+        <TransactionModal
+          visible={isTransactionModalVisible}
+          onCancel={hideTransactionModal}
+          transactionErrorMessage={transactionErrorMessage}
+          transactionSuccessMessage={transactionSuccessMessage}
+          loadingTransaction={loadingTransaction}
+          account={localStorageAccount}
+          fee={feeAmount}
+          asset={selectedAsset}
+          withdrawAddress={withdrawAddress}
+          amount={amount}
+          transactionType="withdraw"
+        />
+      </Form.Provider>
+      {isLoggedIn &&
+        selectedAsset === "BTC" &&
+        !hasBTCDepositAddress &&
+        !loadingSidechainAccounts && (
+          <GenerateBitcoinAddress getSidechainAccounts={getSidechainAccounts} />
+        )}
+    </>
   );
 };

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 import { FormInstance, Rule } from "../../../../ui/src";
-import { SignerKey } from "../../../types";
+import { SidechainAcccount, SignerKey } from "../../../types";
 
 export type UseWithdrawFormResult = {
   feeAmount: number;
@@ -20,6 +20,13 @@ export type UseWithdrawFormResult = {
   withdrawAddress: string;
   userBalance: number;
   withdrawFee: number;
+  btcTransferFee: number;
+  setBtcTransferFee: Dispatch<SetStateAction<number>>;
+  selectedAssetPrecission: number;
+  hasBTCDepositAddress: boolean;
+  bitcoinSidechainAccount: SidechainAcccount | undefined;
+  getSidechainAccounts: (accountId: string) => Promise<void>;
+  loadingSidechainAccounts: boolean;
 };
 
 export type FormField = {
