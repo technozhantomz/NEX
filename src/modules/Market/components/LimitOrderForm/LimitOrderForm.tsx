@@ -78,6 +78,7 @@ export const LimitOrderForm = ({
     handleTransactionConfirmation: handleCreateLimitOrder,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
 
   const isLoggedIn = localStorageAccount !== null && localStorageAccount !== "";
@@ -281,6 +282,7 @@ export const LimitOrderForm = ({
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={hidePasswordModal}
+            neededKeyType="active"
           />
         </Form.Provider>
       </Styled.FormContainer>

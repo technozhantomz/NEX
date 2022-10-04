@@ -40,6 +40,7 @@ export const WithdrawForm = ({
     amount,
     withdrawAddress,
     userBalance,
+    withdrawFee,
   } = useWithdrawForm(asset);
 
   const {
@@ -53,6 +54,7 @@ export const WithdrawForm = ({
     handleTransactionConfirmation: handleWithdraw,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
 
   const isLoggedIn = localStorageAccount && localStorageAccount !== "";
@@ -140,7 +142,7 @@ export const WithdrawForm = ({
               name="amount"
               validateFirst={true}
               rules={formValdation.amount}
-              withassetSelector={withAssetSelector}
+              withassetselector={withAssetSelector}
             >
               <Input
                 placeholder="0.0"
@@ -226,7 +228,7 @@ export const WithdrawForm = ({
 
         <Styled.Fee>
           {counterpart.translate(`field.labels.fees`, {
-            feeAmount: feeAmount,
+            feeAmount: withdrawFee,
             defaultAsset: defaultAsset ? defaultAsset.symbol : "",
           })}
         </Styled.Fee>
@@ -235,6 +237,7 @@ export const WithdrawForm = ({
       {formDisclamer}
 
       <PasswordModal
+        neededKeyType="active"
         visible={isPasswordModalVisible}
         onCancel={hidePasswordModal}
       />

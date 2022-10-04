@@ -648,20 +648,26 @@ export const en = {
       },
       key_management: {
         heading: "key Management",
+        publickey_title: "Account Public Keys",
+        privatekey_title: "Account Private Keys",
+        download_link: "Download Generated Keys",
+        download_warning:
+          "The private keys must be saved securely as it will be shown just once.",
       },
       security: {
         heading: "Security",
       },
       membership: {
         heading: "Membership",
-        upgrade_title: "Upgrade for %(feesCashback)s%%  Cashback",
+        upgrade_title: "Upgrade for %(feesCashback)s%% Cashback",
+        upgraded_title: "You are eligible for %(feesCashback)s%% Cashback",
         upgrade_description:
-          "Every transaction on the Peerplays network is divided between the network and referrers. By registering to a Lifetime Membership the account will receive %(feesCashback)s%% cashback on every transaction fee paid. As a bonus it will also qualify to earn referral income from users registered with or referred to the network.",
-        membership_price:
-          "A Lifetime Membership price will change over time, right now it is only %(membershipPrice)s %(defaultToken)s.",
+          "By registering to a Lifetime Membership the account will receive %(feesCashback)s%% cashback on every transaction fee paid. A Lifetime Membership price will change over time, right now it is only %(membershipPrice)s %(defaultToken)s.",
+        upgraded_description:
+          "Lifetime Membership accounts will receive %(feesCashback)s%% cashback on every transaction fee paid.",
         fee_allocation: "Fee Allocation",
         fee_allocation_description:
-          "Every time %(name)s pays a transaction fee, that fee is divided among several different accounts. The network takes a %(networkFee)s%% cut, and the Lifetime Member who referred %(name)s gets a %(lifetimeFee)s%% cut. The registrar is the account that paid the transaction fee to register %(name)s with the network. The registrar gets to decide how to divide the remaining %(referrerTotalFee)s%% between themselves and their own Affiliate Referrer program. %(name)s's registrar chose to share %(referrerFee)s%% of the total fee with the Affiliate Referrer and keep %(registrarFee)s%% of the total fee for themselves.",
+          "Every time , %(name)s, pays a transaction fee, that fee is divided among several different accounts. The network takes a %(networkFee)s%% cut, and the Lifetime Member who referred , %(name)s, gets a %(lifetimeFee)s%% cut. The registrar is the account that paid the transaction fee to register , %(name)s, with the network. The registrar gets to decide how to divide the remaining %(referrerTotalFee)s%% between themselves and their own Affiliate Referrer program., %(name)s's, registrar chose to share %(referrerFee)s%% of the total fee with the Affiliate Referrer and keep %(registrarFee)s%% of the total fee for themselves.",
         network: "Network",
         lifetime_reviewer: "Lifetime Referrer",
         registrar: "Registrar",
@@ -671,13 +677,10 @@ export const en = {
         total_fee_paid: "Total Fees Paid",
         pending_fees: "Pending Fees",
         pending_fee_description:
-          "Fees paid by %(name)s are divided among the network, referrers, and registrars once every maintenance interval %(maintenanceInterval)s seconds). The next maintenance time is %(nextMaintenanceTime)s",
+          "Fees paid by , %(name)s, are divided among the network, referrers, and registrars once every maintenance interval %(maintenanceInterval)s seconds). The next maintenance time is %(nextMaintenanceTime)s",
         vesting_fees: "Vesting Fees",
         vesting_description:
           "Most fees are made available immediately, but fees over %(vestingThreshold)s %(defaultToken)s (such as those paid to upgrade your membership or register a premium account name) must vest for a total of %(vestingPeriod)s days.",
-        referral_link_title: "Your referral link",
-        referral_link:
-          "Give this link to people you want to refer to Peerplays: %(link)s/signup/?r=%(name)s",
       },
     },
     voting: {
@@ -774,7 +777,7 @@ export const en = {
         heading: "Please confirm the transaction",
       },
       password_modal: {
-        heading: "Password",
+        heading: "Your password or %(neededKeyType)s key is needed",
       },
     },
   },
@@ -793,6 +796,8 @@ export const en = {
     placeholder: {
       user_name: "Enter username",
       master_password: "Enter master password",
+      master_password_private_key:
+        "Master password or private key (We recommend using Whalevault web 3.0 wallet)",
       withdraw_public_key: "Withdraw public key",
       withdraw_address: "Withdraw address",
       hive_blockchain_account: "Hive blockchain account",
@@ -812,6 +817,7 @@ export const en = {
     },
     labels: {
       copy_bitcoin_address: "Copy your Bitcoin address",
+      sidechain: "Sidechain",
       fetching_price: "Fetching price",
       withdraw_public_key_address: "Withdraw Public key & Address",
       hive_blockchain_account: "Hive blockchain account",
@@ -864,6 +870,8 @@ export const en = {
       desired_committees: "Desired committees",
       desired_sons: "Desired sons",
       desired_proxy: "Desired Proxy",
+      wallet_lock: "Wallet lock (Minutes)",
+      use_whalevault: "Use WhaleVault extension",
     },
     comments: {
       deposit_hbd:
@@ -942,8 +950,14 @@ export const en = {
         "These keys are already in used for %(role)s permissions",
       need_to_vest_gpos: "You need to Vest some GPOS balance first",
       asset_required: "Asset is required",
-      cannot_send_yourself: "Can not send to yourself",
+      cannot_send_yourself: "Can not send to yourself!",
       unable_transaction: "Unable to process the transaction!",
+
+      not_added_to_whalevault: "This account is not added to WhaleVault",
+      whalevault_connection_error: "Can not Send Request to whaleVault.",
+      whalevault_not_installed:
+        "WhaleVault is not installed. Please install WhaleVault extension and reload the app",
+      wrong_whalevault_keys: "Added keys to WhaleVault are not correct",
     },
     success: {
       successfully_transferred:
@@ -956,13 +970,15 @@ export const en = {
       limit_order_successfully: "You have successfully created a limit order",
       swap_order_successfully:
         "Your swap was completed and your received %(buyAmount)s %(buyAssetSymbol)s for %(sellAmount)s %(sellAssetSymbol)s",
-      saved_changes: "You have successfully saved your changes",
+      saved_changes: "You have successfuly saved your changes",
       account_upgraded_successfully:
         "Your account successfully upgraded to lifetime membership account",
       published_proxy: "You have successfully published your proxy",
       published_votes: "You have successfully published your votes",
       canceled_limit_order:
         "You have successfully canceled #%(selectedOrderId)s order",
+      successfully_generate_btc_addresses:
+        "You have successfully generated bitcoin deposit and withdrawal addresses",
     },
   },
   settings: {

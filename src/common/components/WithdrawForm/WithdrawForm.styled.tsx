@@ -12,7 +12,7 @@ export const WithdrawForm = styled(CardForm)`
 `;
 
 type AssetAmountProps = {
-  withassetSelector: boolean;
+  withassetselector: boolean;
 };
 
 export const WithdrawFormAssetAmount = styled(CardForm.Item)<AssetAmountProps>`
@@ -33,9 +33,9 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)<AssetAmountProps>`
       ${breakpoint.sm} {
         font-size: 20px;
       }
-      height: ${(props) => (props.withassetSelector ? "70px" : "50px")};
+      height: ${(props) => (props.withassetselector ? "70px" : "50px")};
       ${breakpoint.sm} {
-        height: ${(props) => (props.withassetSelector ? "85px" : "65px")};
+        height: ${(props) => (props.withassetselector ? "85px" : "65px")};
       }
     }
     .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)

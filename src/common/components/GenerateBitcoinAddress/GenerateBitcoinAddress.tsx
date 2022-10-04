@@ -3,8 +3,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
+import { PasswordModal, TransactionModal } from "..";
 import { Form } from "../../../ui/src";
-import { PasswordModal } from "../PasswordModal";
+import { useHandleTransactionForm } from "../../hooks";
+import { useUserContext } from "../../providers";
 
 import * as Styled from "./GenerateBitcoinAddress.styled";
 import { useGenerateBitcoinAddress } from "./hooks";
@@ -19,19 +21,37 @@ export const GenerateBitcoinAddress = ({
   getSidechainAccounts,
 }: Props): JSX.Element => {
   const router = useRouter();
+  const { localStorageAccount } = useUserContext();
+  const {
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    loadingTransaction,
+    transactionErrorMessage,
+    transactionSuccessMessage,
+    generateBitcoinAddresses,
+  } = useGenerateBitcoinAddress(getSidechainAccounts);
+
   const {
     isPasswordModalVisible,
-    handlePasswordModalCancel,
-    onFormFinish,
-    confirm,
-    status,
-    submittingPassword,
-  } = useGenerateBitcoinAddress(getSidechainAccounts);
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: generateBitcoinAddresses,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    neededKeyType: "active",
+  });
 
   return (
     <>
-      <Form.Provider onFormFinish={onFormFinish}>
-        <Styled.DepositForm name="generateAddressForm" onFinish={confirm}>
+      <Form.Provider onFormFinish={handleFormFinish}>
+        <Styled.DepositForm
+          name="generateAddressForm"
+          onFinish={showPasswordModal}
+        >
           <Styled.FormItem>
             {isLoggedIn ? (
               <Styled.Button type="primary" htmlType="submit">
@@ -52,13 +72,7 @@ export const GenerateBitcoinAddress = ({
             )}
           </Styled.FormItem>
         </Styled.DepositForm>
-        {status === "" ? (
-          ""
-        ) : (
-          <Styled.FormDisclamer>
-            <Styled.SonError>{status}</Styled.SonError>
-          </Styled.FormDisclamer>
-        )}
+
         {isLoggedIn ? (
           ""
         ) : (
@@ -72,9 +86,20 @@ export const GenerateBitcoinAddress = ({
           </Styled.FormDisclamer>
         )}
         <PasswordModal
+          neededKeyType="active"
           visible={isPasswordModalVisible}
-          onCancel={handlePasswordModalCancel}
-          submitting={submittingPassword}
+          onCancel={hidePasswordModal}
+        />
+        <TransactionModal
+          visible={isTransactionModalVisible}
+          onCancel={hideTransactionModal}
+          transactionErrorMessage={transactionErrorMessage}
+          transactionSuccessMessage={transactionSuccessMessage}
+          loadingTransaction={loadingTransaction}
+          account={localStorageAccount}
+          fee={0}
+          sidechain="Bitcoin"
+          transactionType="sidechain_address_add"
         />
       </Form.Provider>
     </>

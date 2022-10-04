@@ -8,7 +8,12 @@ import {
   useUpdateAccountTransactionBuilder,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
-import { Account, Proxy, Transaction } from "../../../../../common/types";
+import {
+  Account,
+  Proxy,
+  SignerKey,
+  Transaction,
+} from "../../../../../common/types";
 
 import { UseProxyTab } from "./useProxyTab.types";
 
@@ -40,12 +45,8 @@ export function useProxyTab({
     useState<boolean>(false);
 
   const { id, assets, name, localStorageAccount } = useUserContext();
-  const {
-    getAccountByName,
-    getFullAccount,
-    getPrivateKey,
-    formAccountBalancesByName,
-  } = useAccount();
+  const { getAccountByName, getFullAccount, formAccountBalancesByName } =
+    useAccount();
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
   const { getTrxFee, buildTrx } = useTransactionBuilder();
@@ -134,7 +135,7 @@ export function useProxyTab({
   }, [getUpdateAccountTrx, getTrxFee, setUpdateAccountFee]);
 
   const handlePublishChanges = useCallback(
-    async (password: string) => {
+    async (signerKey: SignerKey) => {
       const userDefaultAsset = assets.find(
         (asset) => asset.symbol === defaultToken
       );
@@ -153,11 +154,10 @@ export function useProxyTab({
         );
       } else {
         setTransactionErrorMessage("");
-        const activeKey = getPrivateKey(password, "active");
         let trxResult;
         try {
           setLoadingTransaction(true);
-          trxResult = await buildTrx([pendingTransaction], [activeKey]);
+          trxResult = await buildTrx([pendingTransaction], [signerKey]);
           setLoadingTransaction(false);
         } catch (error) {
           console.log(error);
@@ -189,7 +189,6 @@ export function useProxyTab({
       updateAccountFee,
       setTransactionErrorMessage,
       totalGpos,
-      getPrivateKey,
       setLoadingTransaction,
       buildTrx,
       pendingTransaction,

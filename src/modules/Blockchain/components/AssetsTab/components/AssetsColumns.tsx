@@ -1,16 +1,14 @@
 import counterpart from "counterpart";
-import Link from "next/link";
 
 import { TableHeading } from "../../../../../common/components";
 import { InfoCircleOutlined, Tag, Tooltip } from "../../../../../ui/src";
 import { colors } from "../../../../../ui/src/colors";
-// import { useAssetsTab } from "../hooks";
 import { AssetTableRow } from "../hooks/useAssetsTab.types";
 
 const headings = [
   "id",
   "symbol",
-  // "name",
+  "name",
   "max_supply",
   "precision",
   "issuer",
@@ -19,7 +17,7 @@ const headings = [
 const keys = [
   "id",
   "symbol",
-  // "name",
+  "name",
   "maxSupply",
   "precision",
   "issuer",
@@ -32,11 +30,13 @@ const renders = [
       {symbol}
     </Tag>
   ),
-  // undefined,
+  undefined,
   undefined,
   undefined,
   (issuer: string): JSX.Element => (
-    <Link href={`/user/${issuer}`}>{issuer}</Link>
+    <a href={`/user/${issuer}`} target="_blank">
+      {issuer}
+    </a>
   ),
   (info: string): JSX.Element => {
     if (!info || info === "") {
@@ -53,7 +53,28 @@ const renders = [
 const filters = [
   undefined,
   undefined,
-  // undefined,
+  [
+    {
+      text: "Bitcoin",
+      value: "Bitcoin",
+    },
+    {
+      text: "Hive",
+      value: "Hive",
+    },
+    {
+      text: "EOSIO",
+      value: "EOSIO",
+    },
+    {
+      text: "Ethereum",
+      value: "Ethereum",
+    },
+    {
+      text: "PeerPlays",
+      value: "PeerPlays",
+    },
+  ],
   undefined,
   undefined,
   undefined,
@@ -62,7 +83,7 @@ const filters = [
 const filterModes = [
   "menu",
   undefined,
-  // undefined,
+  "menu",
   undefined,
   undefined,
   "menu",
@@ -71,7 +92,7 @@ const filterModes = [
 const filterSearch = [
   true,
   undefined,
-  // undefined,
+  false,
   undefined,
   undefined,
   true,
@@ -81,7 +102,8 @@ const onFilters = [
   (value: string, record: AssetTableRow): boolean =>
     record.symbol.includes(value),
   undefined,
-  // undefined,
+  (value: string, record: AssetTableRow): boolean =>
+    record.name.includes(value),
   undefined,
   undefined,
   (value: string, record: AssetTableRow): boolean =>
@@ -93,7 +115,7 @@ const sorters = [
     parseInt(a.id.charAt(a.id.length - 1)) -
     parseInt(b.id.charAt(b.id.length - 1)),
   undefined,
-  // undefined,
+  undefined,
   (a: { maxSupply: number }, b: { maxSupply: number }) =>
     a.maxSupply - b.maxSupply,
   (a: { precision: number }, b: { precision: number }) =>

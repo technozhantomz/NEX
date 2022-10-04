@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 
+import { SignerKey } from "../../../../../common/types";
 import { FormInstance } from "../../../../../ui/src";
 
 export type UseMembershipTabResult = {
-  handleMembershipUpgrade: (password: string) => Promise<void>;
+  handleMembershipUpgrade: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   transactionErrorMessage: string;
   transactionSuccessMessage: string;

@@ -7,7 +7,7 @@ type Props = {
   loadingText?: string | boolean;
   children?: React.ReactNode | React.ReactNode[];
 };
-//TODO: styling
+
 export const LoadingIndicator = ({
   type,
   loadingText,

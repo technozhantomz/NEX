@@ -5,8 +5,10 @@ import React from "react";
 import { defaultToken } from "../../../../api/params";
 import { PasswordModal, TransactionModal } from "../../../../common/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
+import { InfoCircleOutlined } from "../../../../ui/src";
 
 import * as Styled from "./MembershipTab.styled";
+import { MembershipInfo } from "./components";
 import { useMembershipTab } from "./hooks/useMembershipTab";
 
 export const MembershipTab = (): JSX.Element => {
@@ -50,10 +52,8 @@ export const MembershipTab = (): JSX.Element => {
     handleTransactionConfirmation: handleMembershipUpgrade,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
+    neededKeyType: "active",
   });
-
-  const { origin } = window.location;
-  const link = origin;
 
   return (
     <Styled.MembershipCard>
@@ -64,72 +64,76 @@ export const MembershipTab = (): JSX.Element => {
           onFinish={showPasswordModal}
         >
           <Styled.InfoContainer>
-            {!isLifetimeMember ? (
-              <>
-                <Styled.Heading>
-                  {counterpart.translate(
-                    `pages.settings.membership.upgrade_title`,
-                    { feesCashback }
-                  )}
-                </Styled.Heading>
-                <Styled.Paragraph>
-                  {counterpart.translate(
-                    `pages.settings.membership.upgrade_description`,
-                    { feesCashback }
-                  )}
-                </Styled.Paragraph>
-                <Styled.Paragraph>
-                  {counterpart.translate(
-                    `pages.settings.membership.membership_price`,
-                    { membershipPrice, defaultToken }
-                  )}
-                </Styled.Paragraph>
-                <Styled.ButtonContainer>
-                  <Styled.Button
-                    type="primary"
-                    htmlType="submit"
-                    disabled={loadingAccountMembership}
-                  >
-                    {counterpart.translate(`buttons.buy_membership`)}
-                  </Styled.Button>
-                </Styled.ButtonContainer>
-              </>
-            ) : (
-              <>
-                <Styled.Label>
+            <>
+              {!isLifetimeMember ? (
+                <>
                   {" "}
-                  {counterpart.translate(
-                    `pages.settings.membership.referral_link_title`
-                  )}
-                </Styled.Label>
-                <Styled.RefferalParagraph>
-                  {counterpart.translate(
-                    `pages.settings.membership.referral_link`,
-                    {
-                      link,
-                      name,
-                    }
-                  )}
-                </Styled.RefferalParagraph>
-              </>
-            )}
+                  <Styled.Heading>
+                    {counterpart.translate(
+                      `pages.settings.membership.upgrade_title`,
+                      { feesCashback }
+                    )}
+                  </Styled.Heading>
+                  <Styled.Paragraph>
+                    {counterpart.translate(
+                      `pages.settings.membership.upgrade_description`,
+                      { feesCashback, membershipPrice, defaultToken }
+                    )}
+                    {/* <InfoCircleOutlined /> */}
+                  </Styled.Paragraph>
+                  <Styled.ButtonContainer>
+                    <Styled.Button
+                      type="primary"
+                      htmlType="submit"
+                      disabled={
+                        isLifetimeMember
+                          ? isLifetimeMember
+                          : loadingAccountMembership
+                      }
+                    >
+                      {counterpart.translate(`buttons.buy_membership`)}
+                    </Styled.Button>
+                  </Styled.ButtonContainer>
+                </>
+              ) : (
+                <>
+                  <Styled.Heading>
+                    {counterpart.translate(
+                      `pages.settings.membership.upgraded_title`,
+                      { feesCashback }
+                    )}
+                  </Styled.Heading>
+                  <Styled.Paragraph>
+                    {counterpart.translate(
+                      `pages.settings.membership.upgraded_description`,
+                      { feesCashback }
+                    )}
+                    {/* <InfoCircleOutlined /> */}
+                  </Styled.Paragraph>
+                </>
+              )}
+            </>
+
             <Styled.Heading>
               {counterpart.translate(
                 `pages.settings.membership.fee_allocation`
               )}
+              <InfoCircleOutlined />
             </Styled.Heading>
             <Styled.Paragraph>
-              {counterpart.translate(
-                `pages.settings.membership.fee_allocation_description`,
-                {
-                  name,
-                  networkFee,
-                  lifetimeFee,
-                  referrerTotalFee,
-                  referrerFee,
-                  registrarFee,
-                }
-              )}
+              <MembershipInfo
+                infoString={counterpart.translate(
+                  `pages.settings.membership.fee_allocation_description`,
+                  {
+                    name: `[userlink = ${name}]`,
+                    networkFee,
+                    lifetimeFee,
+                    referrerTotalFee,
+                    referrerFee,
+                    registrarFee,
+                  }
+                )}
+              />
             </Styled.Paragraph>
             <Styled.FeeCategoryContainer>
               <Styled.LabelContainer>
@@ -215,10 +219,16 @@ export const MembershipTab = (): JSX.Element => {
               {counterpart.translate(`pages.settings.membership.pending_fees`)}
             </Styled.Heading>
             <Styled.Paragraph>
-              {counterpart.translate(
-                `pages.settings.membership.pending_fee_description`,
-                { name, maintenanceInterval, nextMaintenanceTime }
-              )}
+              <MembershipInfo
+                infoString={counterpart.translate(
+                  `pages.settings.membership.pending_fee_description`,
+                  {
+                    name: `[userlink = ${name}]`,
+                    maintenanceInterval,
+                    nextMaintenanceTime,
+                  }
+                )}
+              />
             </Styled.Paragraph>
             <Styled.Heading>
               {counterpart.translate(`pages.settings.membership.vesting_fees`)}
@@ -233,6 +243,7 @@ export const MembershipTab = (): JSX.Element => {
           <PasswordModal
             visible={isPasswordModalVisible}
             onCancel={hidePasswordModal}
+            neededKeyType="active"
           />
           <TransactionModal
             visible={isTransactionModalVisible}

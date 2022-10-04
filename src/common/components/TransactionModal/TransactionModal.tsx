@@ -11,6 +11,7 @@ import {
   CreateLimitOrder,
   CreateSwapOrder,
   CreateVestingBalance,
+  GenerateBitcoinAddresses,
   Transfer,
   Withdraw,
   WithdrawVestingBalance,
@@ -41,6 +42,7 @@ type Props = {
   amount?: number;
   orderId?: string;
   withdrawAddress?: string;
+  sidechain?: string;
 };
 
 export const TransactionModal = ({
@@ -67,6 +69,7 @@ export const TransactionModal = ({
   amount,
   orderId,
   withdrawAddress,
+  sidechain,
 }: Props): JSX.Element => {
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
@@ -120,6 +123,13 @@ export const TransactionModal = ({
         withdrawalAmount={withdrawalAmount}
         fee={fee}
         account={account}
+      />
+    ),
+    sidechain_address_add: (
+      <GenerateBitcoinAddresses
+        account={account as string}
+        fee={fee}
+        sidechain={sidechain as string}
       />
     ),
     transfer: (

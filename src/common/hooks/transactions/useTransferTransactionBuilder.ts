@@ -1,13 +1,11 @@
 import { useCallback } from "react";
 
-import { useAccount } from "..";
 import { useAssetsContext } from "../../providers";
 import { Account, Asset, Transaction } from "../../types";
 
 import { UseTransferTransactionBuilderResult } from "./useTransferTransactionBuilder.types";
 
 export function useTransferTransactionBuilder(): UseTransferTransactionBuilderResult {
-  const { getPrivateKey } = useAccount();
   const { defaultAsset } = useAssetsContext();
 
   const buildTransferTransaction = useCallback(
@@ -56,7 +54,7 @@ export function useTransferTransactionBuilder(): UseTransferTransactionBuilderRe
       };
       return trx;
     },
-    [getPrivateKey, defaultAsset]
+    [defaultAsset]
   );
   return { buildTransferTransaction };
 }

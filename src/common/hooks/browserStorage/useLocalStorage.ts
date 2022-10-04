@@ -40,7 +40,7 @@ export const useLocalStorage = (key: string): Result => {
 
   const setUserItem = useCallback((key: string, value: Value) => {
     if (key.includes("_")) {
-      if (key.split("_")[1] !== "") {
+      if (!key.split("_").includes("")) {
         localStorage.setItem(key, JSON.stringify(value));
       }
     } else {
