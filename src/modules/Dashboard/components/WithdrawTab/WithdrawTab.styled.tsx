@@ -12,9 +12,9 @@ export const WithdrawContainer = styled.div`
   font-size: 20px;
   width: 600px;
   margin: 10px;
-  padding: 25px 20px;
+  padding: 25px 20px 0 20px;
   ${breakpoint.xs} {
-    padding: 35px 30px;
+    padding: 35px 30px 0 30px;
   }
   .label {
     font-size: 12px;

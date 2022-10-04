@@ -3,7 +3,12 @@ import { CardFormButton, Form, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 
-export const DepositForm = styled(Form)``;
+export const DepositForm = styled(Form)`
+  margin-bottom: 25px !important;
+  ${breakpoint.sm} {
+    margin-bottom: 35px !important;
+  }
+`;
 
 export const SonError = styled.span`
   color: ${colors.errorColor};

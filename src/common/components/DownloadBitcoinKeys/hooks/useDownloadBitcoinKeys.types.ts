@@ -1,4 +1,4 @@
-export type UseAddressGeneratedResult = {
+export type UseDownloadBitcoinKeysResult = {
   downloaded: boolean;
   downloadPrivateKeys: (sidechainDepositAddress: string) => void;
 };

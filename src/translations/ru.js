@@ -471,10 +471,10 @@ export const ru = {
     swap: "менять",
     transfer: "Передача",
     market: "Рынок",
-    generate_bitcoin_address: "Сгенерировать биткойн-адрес",
-    login_and_generate_bitcoin_address: "Войти и создать биткойн-адрес",
+    generate_bitcoin_address: "Создание биткойн-адресов",
+    login_and_generate_bitcoin_address: "Войдите и сгенерируйте биткойн-адреса",
     dont_have_peerplays_account: "У вас нет учетной записи Peerplays? ",
-    log_in_withdraw: "Войти и выйти",
+    log_in_withdraw: "Войти и вывести %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Войти и внести депозит %(assetSymbol)s",
     send: "Отправлять",
     ok: "Ok",
@@ -761,7 +761,7 @@ export const ru = {
         "Мастер-пароль или закрытый ключ (мы рекомендуем использовать кошелек Whalevault web 3.0)",
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
-      hive_blockchain_account: "Блокчейн-аккаунт Hive",
+      hive_blockchain_account: "учетная запись Hive",
       amount: "количество",
       quantity: "Количество",
       to: "К",
@@ -778,12 +778,31 @@ export const ru = {
       from: "из",
     },
     labels: {
+      generate_btc_deposit_address:
+        "Создайте биткойн-адрес, чтобы вы могли внести BTC на свою учетную запись Peerplays.",
+      deposit_btc:
+        "Внесите свой BTC на указанный выше биткойн-адрес, чтобы отправить его на свою учетную запись Peerplays.",
+      bitcoin_associated_account:
+        "Ваши новые биткойн-адреса теперь связаны с вашей учетной записью",
+      download_private_keys: "Скачать закрытые ключи",
+      private_keys_warning:
+        "Закрытые ключи должны быть надежно сохранены, так как они будут показаны только один раз при создании адреса депозита.",
+      bitcoin_deposit_address: "Адрес депозита (адрес BTC)",
       sidechain: "Боковая цепь",
-      copy_bitcoin_address: "Скопируйте свой биткойн-адрес",
       fetching_price: "Получение цены",
-      withdraw_public_key_address: "Отозвать открытый ключ и адрес",
-      hive_blockchain_account: "Блокчейн-аккаунт Hive",
-      fees: "Комиссии: %(feeAmount)s %(defaultAsset)s",
+      withdraw_public_key_address: "Сжатый открытый ключ и адрес вывода",
+      btc_withdraw_instruction:
+        "Выведите свои BTC на открытый ключ Bitcoin и адрес выше или обновите их.",
+      hive_blockchain_account: "Адрес для вывода средств (учетная запись Hive)",
+      hive_withdraw_instruction:
+        "Выведите свои %(asset)s на учетную запись блокчейна Hive, указанную выше.",
+      fees_label: "Сборы: ",
+      total_transaction: "Всего транзакций: ",
+      withdrawal_confirmation_time: "Время подтверждения: ",
+      btc_withdrawal_confirmation_time: "~10 minutes",
+      hive_withdrawal_confirmation_time: "~3 minutes",
+      estimated_fees_label: "Расчетные сборы: ",
+      fees: "Сборы: %(feeAmount)s %(defaultAsset)s",
       market_fee: "Рыночная комиссия",
       balance: "Остаток средств",
       auto_generated_password: "Ваш автоматически сгенерированный пароль",
@@ -850,6 +869,8 @@ export const ru = {
     },
     errors: {
       enter_amount: "Введите сумму",
+      invalid_bitcoin_public_key:
+        "Открытый ключ недействителен для биткойн %(network)s",
       insufficient_asset_balance: "Недостаточный баланс %(asset)s",
       insufficient_balance_for_fee: "Недостаточно %(coreAsset)s для комиссии",
       not_enough_liquidity: "Недостаточно ликвидности",
@@ -880,10 +901,14 @@ export const ru = {
       field_is_required: "Это поле обязательно к заполнению",
       server_error: "Ошибка сервера, повторите попытку позже.",
       amount_should_greater: "Сумма должна быть больше 0",
+      amount_should_greater_than: "Сумма должна быть больше, чем %(amount)s",
       balance_not_enough: "Баланса не хватает",
       balance_not_enough_to_pay: "Баланса недостаточно для оплаты комиссии",
       not_your_account: "Не ваша учетная запись",
       sons_not_available: "Сеть SON сейчас недоступна",
+      first_valid_public_key:
+        "Пожалуйста, предоставьте действительный открытый ключ",
+      not_match_address: "Адрес не совпадает с открытым ключом",
       first_generate_bitcoin_address:
         "Сначала создайте биткойн-адреса на вкладке депозита.",
       from_required: "От требуется",

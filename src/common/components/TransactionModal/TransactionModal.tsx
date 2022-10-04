@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
 
-import { Button } from "../../../ui/src";
+import { CardFormButton } from "../../../ui/src";
 import { GeneratedKey, Proxy } from "../../types";
 
 import * as Styled from "./TransactionModal.styled";
@@ -159,20 +159,17 @@ export const TransactionModal = ({
 
   const postTransactionButton =
     transactionErrorMessage !== "" ? (
-      <Button key="back" onClick={onCancel}>
+      <CardFormButton key="back" onClick={onCancel} className="cancel">
         {counterpart.translate(`buttons.cancel`)}
-      </Button>
+      </CardFormButton>
     ) : (
-      <Button key="back" onClick={onCancel}>
+      <CardFormButton key="back" onClick={onCancel} className="cancel">
         {counterpart.translate(`buttons.done`)}
-      </Button>
+      </CardFormButton>
     );
 
   const defaultButtons = [
-    <Button key="back" onClick={onCancel} disabled={loadingTransaction}>
-      {counterpart.translate(`buttons.cancel`)}
-    </Button>,
-    <Button
+    <CardFormButton
       key="submit"
       type="primary"
       onClick={() => {
@@ -181,7 +178,15 @@ export const TransactionModal = ({
       loading={loadingTransaction}
     >
       {counterpart.translate(`buttons.confirm`)}
-    </Button>,
+    </CardFormButton>,
+    <CardFormButton
+      key="back"
+      onClick={onCancel}
+      disabled={loadingTransaction}
+      className="cancel"
+    >
+      {counterpart.translate(`buttons.cancel`)}
+    </CardFormButton>,
   ];
 
   return (
