@@ -47,16 +47,20 @@ build-production:
   image: node:16.17.0-alpine3.16
   stage: build
   script:
-    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$PROD_TOKEN'" >> .env.local
-    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$PROD_QUOTE'" >> .env.local
-    - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env.local
-    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env.local
+    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$PROD_TOKEN'" >> .env
+    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$PROD_QUOTE'" >> .env
+    - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env
+    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env
     - npm install
     - npm run build
   only:
     - tags
     - branches
     - merge_requests
+  artifacts: 
+    paths:
+    - .next/
+    - .env
   tags:
     - staging
 
@@ -151,16 +155,8 @@ deployToStaging:
   script: 
     - pm2 del nex-staging || true
     - rm .env.example
-    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$PROD_TOKEN'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$PROD_QUOTE'" >> .env
-    - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env
-    - cat .env
-    - npm install
-    - npm run build
-    #- npm run start 2>&1 > nex-logging.txt &
     - pm2 start npm --name nex-staging -- run start
-  dependencies: []
+  dependencies: [build-production]
   environment:
     name: staging
     url: https://nex-staging.peerplays.download
