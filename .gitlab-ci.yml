@@ -29,10 +29,10 @@ build-qa:
   image: node:16.17.0-alpine3.16
   stage: build
   script:
-    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env.local
-    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env.local
-    - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env.local
-    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env.local
+    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
+    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
+    - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
+    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
     - npm install
     - npm run build
   only:
@@ -59,7 +59,6 @@ build-production:
     - merge_requests
   artifacts: 
     paths:
-    - node_modules/
     - .next/
     - .env
   tags:
@@ -138,8 +137,7 @@ stop_review_app:
 
 deployToQA:
   stage: deploy
-  dependencies:
-    - build-qa
+  dependencies: [build-qa]
   script: 
     - pm2 del nex-QA || true
     - npm install 
@@ -147,6 +145,8 @@ deployToQA:
   environment:
     name: QA
     url: https://nex-cicd.peerplays.download
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
   when: manual 
   tags:
     - deploy
@@ -156,14 +156,34 @@ deployToStaging:
   script: 
     - pm2 del nex-staging || true
     - rm .env.example
+    - npm install
     - pm2 start npm --name nex-staging -- run start
   dependencies: [build-production]
   environment:
     name: staging
     url: https://nex-staging.peerplays.download
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
   when: manual 
   tags:
     - staging
+
+deployToProduction:
+  stage: deploy
+  script: 
+    - pm2 del nex || true
+    - rm .env.example
+    - npm install
+    - pm2 start npm --name nex -- run start
+  dependencies: [build-production]
+  #environment:
+  #  name: production
+  #  url: 
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+  when: manual 
+  tags:
+    - production
 
 dast:
   stage: dast
