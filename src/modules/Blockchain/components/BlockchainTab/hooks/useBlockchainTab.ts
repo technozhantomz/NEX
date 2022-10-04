@@ -23,9 +23,7 @@ export function useBlockchainTab(
   routerQuery?: ParsedUrlQuery
 ): UseBlockchainTabResult {
   const [loading, setLoading] = useState<boolean>(true);
-  const [searchDataSource, setSearchDataSource] = useState<
-    DataTableRow[]
-  >([]);
+  const [searchDataSource, setSearchDataSource] = useState<DataTableRow[]>([]);
   const [currentBlock, setCurrentBlock] = useState<number>(0);
   const [lastIrreversibleBlock, setLastIrreversibleBlock] =
     useState<string>("");
@@ -34,9 +32,7 @@ export function useBlockchainTab(
     amount: 0,
     symbol: "TEST",
   });
-  const [blockchainTableRows, setDataTableRows] = useState<
-    DataTableRow[]
-  >([]);
+  const [blockchainTableRows, setDataTableRows] = useState<DataTableRow[]>([]);
   const [blockchainStats, setBlockchainStats] = useState<BlockchainStats>({
     currentBlock: [],
     lastIrreversible: [],

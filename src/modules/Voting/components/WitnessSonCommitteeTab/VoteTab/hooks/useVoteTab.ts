@@ -203,6 +203,7 @@ export function useVoteTab({
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await getVotes();
+          clearPendingActions();
           setIsVotesChanged(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
@@ -445,6 +446,13 @@ export function useVoteTab({
   );
 
   const resetChanges = useCallback(() => {
+    clearPendingActions();
+    setLocalApprovedRows([...serverApprovedRows]);
+    setPendingChanges([]);
+    setIsVotesChanged(false);
+  }, [serverApprovedRows, setLocalApprovedRows, setIsVotesChanged]);
+
+  const clearPendingActions = () => {
     const updatedMembersRows = allMembersRows.map((row) => {
       switch (row.action) {
         case "pending remove":
@@ -459,10 +467,7 @@ export function useVoteTab({
       return row;
     });
     setAllMembersRows(updatedMembersRows);
-    setLocalApprovedRows([...serverApprovedRows]);
-    setPendingChanges([]);
-    setIsVotesChanged(false);
-  }, [serverApprovedRows, setLocalApprovedRows, setIsVotesChanged]);
+  };
 
   useEffect(() => {
     if (isArrayEqual(serverApprovedRows, localApprovedRows)) {

@@ -1,8 +1,9 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
 import Link from "next/link";
-import { CSSProperties, ReactNode, useRef } from "react";
+import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
@@ -54,7 +55,7 @@ export const VoteTable = ({
         {type === "allVotes" ? (
           <>
             <SearchTableInput
-              columns={columns}
+              columns={columns as ColumnsType<unknown>}
               dataSource={votes}
               setDataSource={setSearchDataSource}
               inputProps={{
@@ -70,7 +71,7 @@ export const VoteTable = ({
                 trigger={() => (
                   <a href="#">{counterpart.translate(`links.pdf`)}</a>
                 )}
-                content={() => componentRef.current}
+                content={() => componentRef.current as unknown as ReactInstance}
               />
               {` / `}
               <CSVLink
@@ -227,7 +228,7 @@ export const VoteTable = ({
           />
         ) : (
           <Styled.VoteTable
-            columns={columns}
+            columns={columns as ColumnsType<unknown>}
             dataSource={searchDataSource}
             loading={loading}
             pagination={{
@@ -265,7 +266,7 @@ export const VoteTable = ({
           <div ref={componentRef}>
             <Styled.VoteTable
               dataSource={votes}
-              columns={columns}
+              columns={columns as ColumnsType<unknown>}
               loading={loading}
               pagination={false}
             />
