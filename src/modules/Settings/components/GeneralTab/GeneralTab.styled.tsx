@@ -65,7 +65,6 @@ export const FormItem = styled(UiForm.Item)`
 `;
 
 export const FaucetURLWrapper = styled.div`
-  margin-top: 15px;
   ${breakpoint.sm} {
     display: flex;
     align-items: center;
@@ -80,29 +79,20 @@ export const FaucetURL = styled.div`
   opacity: 1;
   margin-bottom: 20px;
   ${breakpoint.sm} {
-    margin-right: 15px;
     margin-bottom: 0;
   }
 `;
 
 export const FaucetSpace = styled.div`
-  margin-top: 30px;
+  margin-top: 96px;
   .ant-row {
     align-items: center;
   }
 `;
 
 export const SaveButton = styled(CardFormButton)`
-  margin-top: 40px;
-  width: 255px;
-  height: 35px;
-  ${breakpoint.sm} {
-    position: absolute;
-    right: 30px;
-    bottom: 50px;
-    width: 290px;
-    height: 45px;
-  }
+  margin: 0;
+  margin-top: 30px;
 `;
 
 export const CopyButton = styled(UiCopyButton)`

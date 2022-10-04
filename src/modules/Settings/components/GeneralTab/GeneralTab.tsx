@@ -95,6 +95,13 @@ export const GeneralTab = (): JSX.Element => {
             Notify about transfers to my account
           </Styled.TransferCheckbox>
         </Styled.FormItem> */}
+            <Styled.LabelText>
+              {counterpart.translate(`field.labels.unsaved_changes`)}
+              <InfoCircleOutlined />
+            </Styled.LabelText>
+            <Styled.SaveButton type="primary" htmlType="submit">
+              {counterpart.translate(`buttons.save`)}
+            </Styled.SaveButton>
             <Styled.FaucetSpace>
               <Styled.LabelText>
                 {counterpart.translate(`field.labels.faucet`)}
@@ -114,9 +121,6 @@ export const GeneralTab = (): JSX.Element => {
                 </Styled.LabelText>
               )}
             </Styled.FaucetSpace>
-            <Styled.SaveButton type="primary" htmlType="submit">
-              {counterpart.translate(`buttons.save`)}
-            </Styled.SaveButton>
           </Col>
           <Col span={12}>
             <Styled.LabelText>
