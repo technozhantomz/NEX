@@ -1,7 +1,7 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import Link from "next/link";
-import { CSSProperties, ReactNode, useRef } from "react";
+import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
@@ -48,7 +48,7 @@ export const CommitteeTab = (): JSX.Element => {
           <InfoCircleOutlined />
         </Styled.CommitteeHeader>
         <SearchTableInput
-          columns={CommitteeColumns}
+          columns={CommitteeColumns as ColumnsType<unknown>}
           dataSource={committeeTableRows}
           setDataSource={setSearchDataSource}
           inputProps={{
@@ -62,7 +62,7 @@ export const CommitteeTab = (): JSX.Element => {
           <DownloadOutlined />
           <ReactToPrint
             trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current}
+            content={() => componentRef.current as unknown as ReactInstance}
           />
 
           {` / `}
@@ -94,7 +94,9 @@ export const CommitteeTab = (): JSX.Element => {
                     {CommitteeColumns[1].title()}
                   </span>
                   <span className="item-info-value">
-                    <Link href={`/user/${item.name}`}>{item.name}</Link>
+                    <a href={`/user/${item.name}`} target="_blank">
+                      {item.name}
+                    </a>
                   </span>
                 </div>
                 <div className="item-info">
@@ -110,9 +112,9 @@ export const CommitteeTab = (): JSX.Element => {
                     {CommitteeColumns[3].title()}
                   </span>
                   <span className="item-info-value">
-                    <Link href={`${item.url}`} passHref>
+                    <a href={`${item.url}`} target="_blank">
                       <Styled.urlIcon rotate={45} />
-                    </Link>
+                    </a>
                   </span>
                 </div>
                 <div className="item-info">
@@ -128,7 +130,7 @@ export const CommitteeTab = (): JSX.Element => {
       ) : (
         <Styled.CommitteeTable
           dataSource={searchDataSource}
-          columns={CommitteeColumns}
+          columns={CommitteeColumns as ColumnsType<unknown>}
           loading={loading}
           pagination={
             !loading
