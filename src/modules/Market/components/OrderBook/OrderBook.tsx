@@ -26,6 +26,7 @@ type Props = {
   getUserOrderBook: (base: Asset, quote: Asset) => Promise<void>;
   userOrdersRows: OrderRow[];
   loadingUserOrderRows: boolean;
+  onOrderBookRowClick: (record: OrderRow) => void;
 };
 
 export const OrderBook = ({
@@ -42,6 +43,7 @@ export const OrderBook = ({
   getUserOrderBook,
   userOrdersRows,
   loadingUserOrderRows,
+  onOrderBookRowClick,
 }: Props): JSX.Element => {
   const {
     orderType,
@@ -164,6 +166,13 @@ export const OrderBook = ({
           dataSource={dataSource}
           rowClassName={(record: any) => {
             return record.isBuyOrder ? "buy" : "sell";
+          }}
+          onRow={(record, _rowIndex) => {
+            return {
+              onClick: () => {
+                onOrderBookRowClick(record);
+              },
+            };
           }}
         ></Styled.Table>
       </Styled.TableContainer>

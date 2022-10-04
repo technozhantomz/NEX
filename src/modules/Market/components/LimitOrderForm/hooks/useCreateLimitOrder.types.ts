@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 
 import { Asset, SignerKey } from "../../../../../common/types";
 import { FormInstance, Rule } from "../../../../../ui/src";
+import { OrderForm } from "../../../types";
 
 export type UseCreateLimitOrderArgs = {
   currentBase: Asset | undefined;
@@ -10,13 +11,13 @@ export type UseCreateLimitOrderArgs = {
   isBuyOrder: boolean;
   refreshHistory: () => void;
   refreshOrderBook: () => void;
+  orderForm: FormInstance<OrderForm>;
 };
 
 export type UseCreateLimitOrderResult = {
   feeAmount: number;
   marketFeePercent: number;
   balance: number;
-  orderForm: FormInstance<OrderForm>;
   formValidation: FormValidation;
   handleValuesChange: (changedValues: any, allValues: any) => void;
   handleCreateLimitOrder: (signerKey: SignerKey) => Promise<void>;
@@ -41,10 +42,4 @@ export type FormValidation = {
   price: Rule[];
   quantity: Rule[];
   total: Rule[];
-};
-
-export type OrderForm = {
-  price: number;
-  quantity: number;
-  total: number;
 };

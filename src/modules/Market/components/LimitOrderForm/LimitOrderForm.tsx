@@ -12,11 +12,12 @@ import {
 import { useHandleTransactionForm } from "../../../../common/hooks";
 import { useAssetsContext, useUserContext } from "../../../../common/providers";
 import { Asset } from "../../../../common/types";
-import { Form } from "../../../../ui/src";
+import { Form, FormInstance } from "../../../../ui/src";
+import { OrderForm } from "../../types";
 
 import { InputPrefix } from "./InputPrefix";
 import * as Styled from "./LimitOrderForm.styled";
-import { useCreateLimitOrder } from "./hooks/useCreateLimitOrder";
+import { useCreateLimitOrder } from "./hooks";
 
 type Props = {
   activePair: string;
@@ -27,6 +28,7 @@ type Props = {
   showTitle?: boolean;
   refreshHistory: () => void;
   refreshOrderBook: () => void;
+  orderForm: FormInstance<OrderForm>;
 };
 
 export const LimitOrderForm = ({
@@ -38,6 +40,7 @@ export const LimitOrderForm = ({
   showTitle = true,
   refreshHistory,
   refreshOrderBook,
+  orderForm,
 }: Props): JSX.Element => {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
@@ -46,7 +49,6 @@ export const LimitOrderForm = ({
     feeAmount,
     marketFeePercent,
     balance,
-    orderForm,
     formValidation,
     handleCreateLimitOrder,
     handleValuesChange,
@@ -65,6 +67,7 @@ export const LimitOrderForm = ({
     isBuyOrder,
     refreshHistory,
     refreshOrderBook,
+    orderForm,
   });
 
   const {

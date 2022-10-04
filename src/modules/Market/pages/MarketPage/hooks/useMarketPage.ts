@@ -20,7 +20,14 @@ import {
   LimitOrder,
   PairNameAndMarketStats,
 } from "../../../../../common/types";
-import { Order, OrderHistory, OrderHistoryRow, OrderRow } from "../../../types";
+import { Form } from "../../../../../ui/src";
+import {
+  Order,
+  OrderForm,
+  OrderHistory,
+  OrderHistoryRow,
+  OrderRow,
+} from "../../../types";
 
 import { UseMarketPageResult } from "./useMarketPage.types";
 
@@ -37,6 +44,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { getAccountHistoryById } = useAccountHistory();
   const { getDefaultPairs, formPairStats } = useMarketPairStats();
   const { formLocalDate } = useFormDate();
+  const [buyOrderForm] = Form.useForm<OrderForm>();
+  const [sellOrderForm] = Form.useForm<OrderForm>();
 
   const [tradingPairsStats, setTradingPairsStats] = useState<
     PairNameAndMarketStats[]
@@ -421,6 +430,25 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     getUserHistory,
   ]);
 
+  const onOrderBookRowClick = useCallback(
+    (record: OrderRow) => {
+      if (!record.isBuyOrder) {
+        buyOrderForm.setFieldsValue({
+          price: record.price,
+          quantity: record.quote,
+          total: record.base,
+        });
+      } else {
+        sellOrderForm.setFieldsValue({
+          price: record.price,
+          quantity: record.quote,
+          total: record.base,
+        });
+      }
+    },
+    [buyOrderForm, sellOrderForm]
+  );
+
   useEffect(() => {
     if (currentPair !== exchanges.active) {
       updateExchanges(currentPair);
@@ -461,5 +489,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     userOrderHistoryRows,
     loadingUserHistoryRows,
     refreshHistory,
+    buyOrderForm,
+    sellOrderForm,
+    onOrderBookRowClick,
   };
 }

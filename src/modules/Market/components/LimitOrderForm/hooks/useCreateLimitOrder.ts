@@ -25,6 +25,7 @@ export function useCreateLimitOrder({
   isBuyOrder,
   refreshHistory,
   refreshOrderBook,
+  orderForm,
 }: UseCreateLimitOrderArgs): UseCreateLimitOrderResult {
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [marketFeePercent, setMarketFeePercent] = useState<number>(0);
@@ -35,7 +36,6 @@ export function useCreateLimitOrder({
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
 
-  const [orderForm] = Form.useForm();
   const price: number = Form.useWatch("price", orderForm);
   const quantity: number = Form.useWatch("quantity", orderForm);
   const total: number = Form.useWatch("total", orderForm);
@@ -399,7 +399,6 @@ export function useCreateLimitOrder({
     feeAmount,
     marketFeePercent,
     balance,
-    orderForm,
     formValidation,
     handleValuesChange,
     handleCreateLimitOrder,
