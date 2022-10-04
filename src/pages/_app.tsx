@@ -27,7 +27,7 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
                     <UserSettingsProvider>
                       <MenuProvider>
                         <Component {...pageProps} />
-                          <p> hello world </p> 
+                        <p>hello-world</p>
                       </MenuProvider>
                     </UserSettingsProvider>
                   </BrowserHistoryProvider>
