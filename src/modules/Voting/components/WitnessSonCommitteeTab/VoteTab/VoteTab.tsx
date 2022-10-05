@@ -35,7 +35,6 @@ export const VoteTab = ({
   const {
     loading,
     allMembersRows,
-    localApprovedRows,
     isVotesChanged,
     addChange,
     cancelChange,
@@ -93,13 +92,8 @@ export const VoteTab = ({
               transactionSuccessMessage={transactionSuccessMessage}
               updateAccountFee={updateAccountFee}
               proxy={proxy}
-              desiredMembers={localApprovedRows.length}
-              votes={allMembersRows.filter(
-                (vote) =>
-                  !localApprovedRows
-                    .map((approvedVote) => approvedVote.id)
-                    .includes(vote.id)
-              )}
+              desiredMembers={pendingChanges.length}
+              votes={pendingChanges}
             />
           </>
         ) : (

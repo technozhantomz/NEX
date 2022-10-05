@@ -8,7 +8,6 @@ export type UseVoteTabResult = {
   loading: boolean;
   allMembersRows: VoteRow[];
   serverApprovedRows: VoteRow[];
-  localApprovedRows: VoteRow[];
   isVotesChanged: boolean;
   addChange: (voteId: string) => void;
   cancelChange: (voteId: string) => void;
