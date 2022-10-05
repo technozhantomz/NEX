@@ -6,6 +6,7 @@ export type UseSettingsResult = {
   showSuccessMessage: boolean;
   handleAllowNotifications: (e: any) => void;
   selectedKeys: CheckboxValueType[];
+  selectedNotifications: CheckboxValueType[];
   handleCheckboxChange: (checkedValues: CheckboxValueType[]) => void;
 };
 

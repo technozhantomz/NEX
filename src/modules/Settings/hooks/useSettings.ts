@@ -9,15 +9,19 @@ import { UseSettingsResult } from "./useSettings.types";
 export function useSettings(): UseSettingsResult {
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [selectedNotifications, setSelectedNotifications] = useState<
+    CheckboxValueType[]
+  >([]);
   const { settings, setSettings, setLocale } = useSettingsContext();
   const [generalSettingsForm] = Form.useForm();
 
   const handleCheckboxChange = useCallback(
     (checkedValues: CheckboxValueType[]) => {
       console.log(checkedValues);
-      setSelectedKeys(checkedValues);
+      const newArray = [...selectedNotifications, ...checkedValues];
+      setSelectedKeys(newArray);
     },
-    [setSelectedKeys]
+    [setSelectedKeys, selectedNotifications]
   );
 
   const handleAllowNotifications = (e: any) => {
@@ -69,9 +73,11 @@ export function useSettings(): UseSettingsResult {
     setLocale,
     setSettings,
     setShowSuccessMessage,
+    selectedKeys,
   ]);
 
   useEffect(() => {
+    setSelectedNotifications(settings.notifications.selectedNotifications);
     generalSettingsForm.setFieldsValue({
       selectedLanguage: settings.language,
       walletLockInMinutes: settings.walletLock,
@@ -80,7 +86,7 @@ export function useSettings(): UseSettingsResult {
       allowTransferToMeNotifications:
         settings.notifications.additional.transferToMe,
     });
-  }, [settings, generalSettingsForm]);
+  }, [settings, generalSettingsForm, setSelectedNotifications]);
 
   return {
     updateSettings,
@@ -89,5 +95,6 @@ export function useSettings(): UseSettingsResult {
     handleAllowNotifications,
     selectedKeys,
     handleCheckboxChange,
+    selectedNotifications,
   };
 }
