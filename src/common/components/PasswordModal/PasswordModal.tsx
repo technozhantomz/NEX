@@ -78,6 +78,7 @@ export const PasswordModal = ({
                   neededKeyType: neededKeyType,
                 }
               )}
+              autoComplete="new-password"
             />
           </Form.Item>
         )}

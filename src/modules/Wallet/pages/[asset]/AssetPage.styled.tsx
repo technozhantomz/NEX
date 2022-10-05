@@ -120,3 +120,24 @@ export const MobileTabsWrapper = styled.div`
     color: ${colors.textColor};
   }
 `;
+
+export const BTCDepositInstructionContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
+  }
+  margin-left: 11px;
+`;
+
+export const BTCIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+`;
+
+export const BTCDepositInstruction = styled.div`
+  color: ${colors.textColor};
+  font-size: 14px;
+`;

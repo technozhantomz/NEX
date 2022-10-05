@@ -1,6 +1,4 @@
 import counterpart from "counterpart";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import React from "react";
 
 import { PasswordModal, TransactionModal } from "..";
@@ -12,15 +10,12 @@ import * as Styled from "./GenerateBitcoinAddress.styled";
 import { useGenerateBitcoinAddress } from "./hooks";
 
 type Props = {
-  isLoggedIn?: boolean;
   getSidechainAccounts: (accountId: string) => Promise<void>;
 };
 
 export const GenerateBitcoinAddress = ({
-  isLoggedIn = false,
   getSidechainAccounts,
 }: Props): JSX.Element => {
-  const router = useRouter();
   const { localStorageAccount } = useUserContext();
   const {
     setTransactionErrorMessage,
@@ -53,38 +48,12 @@ export const GenerateBitcoinAddress = ({
           onFinish={showPasswordModal}
         >
           <Styled.FormItem>
-            {isLoggedIn ? (
-              <Styled.Button type="primary" htmlType="submit">
-                {counterpart.translate(`buttons.generate_bitcoin_address`)}
-              </Styled.Button>
-            ) : (
-              <Styled.Button
-                type="primary"
-                htmlType="button"
-                onClick={() => {
-                  router.push("/login");
-                }}
-              >
-                {counterpart.translate(
-                  `buttons.login_and_generate_bitcoin_address`
-                )}
-              </Styled.Button>
-            )}
+            <Styled.Button type="primary" htmlType="submit">
+              {counterpart.translate(`buttons.generate_bitcoin_address`)}
+            </Styled.Button>
           </Styled.FormItem>
         </Styled.DepositForm>
 
-        {isLoggedIn ? (
-          ""
-        ) : (
-          <Styled.FormDisclamer>
-            <span>
-              {counterpart.translate(`buttons.dont_have_peerplays_account`)}
-            </span>
-            <Link href="/signup">
-              <a>{counterpart.translate(`links.create_account`)}</a>
-            </Link>
-          </Styled.FormDisclamer>
-        )}
         <PasswordModal
           neededKeyType="active"
           visible={isPasswordModalVisible}
