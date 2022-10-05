@@ -1,3 +1,5 @@
+import { CheckboxValueType } from "../../ui/src";
+
 export type Settings = {
   advancedMode: boolean;
   darkTheme: boolean;
@@ -8,17 +10,8 @@ export type Settings = {
     allow: boolean;
     additional: {
       transferToMe: boolean;
-      fundSent: boolean;
-      orderCreated: boolean;
-      orderFilled: boolean;
-      orderCanceled: boolean;
-      orderExpired: boolean;
-      fundsReceived: boolean;
-      swapStarted: boolean;
-      swapFilled: boolean;
-      swapCanceled: boolean;
-      accountUpdated: boolean;
     };
+    selectedNotifications: CheckboxValueType[];
   };
   walletLock: number;
 };

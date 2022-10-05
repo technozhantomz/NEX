@@ -1,10 +1,12 @@
-import { FormInstance } from "../../../ui/src";
+import { CheckboxValueType, FormInstance } from "../../../ui/src";
 
 export type UseSettingsResult = {
   updateSettings: () => void;
   generalSettingsForm: FormInstance<GeneralSettingsForm>;
   showSuccessMessage: boolean;
   handleAllowNotifications: (e: any) => void;
+  selectedKeys: CheckboxValueType[];
+  handleCheckboxChange: (checkedValues: CheckboxValueType[]) => void;
 };
 
 export type GeneralSettingsForm = {

@@ -12,17 +12,8 @@ export const defaultSettings: Settings = {
     allow: true,
     additional: {
       transferToMe: true,
-      fundSent: false,
-      orderCreated: false,
-      orderFilled: false,
-      orderCanceled: false,
-      orderExpired: false,
-      fundsReceived: false,
-      swapStarted: false,
-      swapFilled: false,
-      swapCanceled: false,
-      accountUpdated: false,
     },
+    selectedNotifications: [],
   },
   walletLock: 0,
 };

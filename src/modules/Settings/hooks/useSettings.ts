@@ -2,29 +2,28 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useSettingsContext } from "../../../common/providers";
 import { Settings } from "../../../common/types";
-import { Form } from "../../../ui/src";
+import { CheckboxValueType, Form } from "../../../ui/src";
 
 import { UseSettingsResult } from "./useSettings.types";
 
 export function useSettings(): UseSettingsResult {
+  const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const { settings, setSettings, setLocale } = useSettingsContext();
   const [generalSettingsForm] = Form.useForm();
+
+  const handleCheckboxChange = useCallback(
+    (checkedValues: CheckboxValueType[]) => {
+      console.log(checkedValues);
+      setSelectedKeys(checkedValues);
+    },
+    [setSelectedKeys]
+  );
 
   const handleAllowNotifications = (e: any) => {
     if (!e) {
       generalSettingsForm.setFieldsValue({
         allowTransferToMeNotifications: false,
-        fundSent: false,
-        orderCreated: false,
-        orderFilled: false,
-        orderCanceled: false,
-        orderExpired: false,
-        fundsReceived: false,
-        swapStarted: false,
-        swapFilled: false,
-        swapCanceled: false,
-        accountUpdated: false,
       });
     }
   };
@@ -42,17 +41,8 @@ export function useSettings(): UseSettingsResult {
                 transferToMe: settings.notifications.allow
                   ? values.allowTransferToMeNotifications
                   : false,
-                fundSent: values.fundSent,
-                orderCreated: values.orderCreated,
-                orderFilled: values.orderFilled,
-                orderCanceled: values.orderCanceled,
-                orderExpired: values.orderExpired,
-                fundsReceived: values.fundsReceived,
-                swapStarted: values.swapStarted,
-                swapFilled: values.swapFilled,
-                swapCanceled: values.swapCanceled,
-                accountUpdated: values.accountUpdated,
               },
+              selectedNotifications: selectedKeys,
             }
           : settings.notifications,
       walletLock: values.walletLockInMinutes
@@ -89,16 +79,6 @@ export function useSettings(): UseSettingsResult {
       allowNotifications: settings.notifications.allow,
       allowTransferToMeNotifications:
         settings.notifications.additional.transferToMe,
-      fundSent: settings.notifications.additional.fundSent,
-      orderCreated: settings.notifications.additional.orderCreated,
-      orderFilled: settings.notifications.additional.orderFilled,
-      orderCanceled: settings.notifications.additional.orderCanceled,
-      orderExpired: settings.notifications.additional.orderExpired,
-      fundsReceived: settings.notifications.additional.fundsReceived,
-      swapStarted: settings.notifications.additional.swapStarted,
-      swapFilled: settings.notifications.additional.swapFilled,
-      swapCanceled: settings.notifications.additional.swapCanceled,
-      accountUpdated: settings.notifications.additional.accountUpdated,
     });
   }, [settings, generalSettingsForm]);
 
@@ -107,5 +87,7 @@ export function useSettings(): UseSettingsResult {
     generalSettingsForm,
     showSuccessMessage,
     handleAllowNotifications,
+    selectedKeys,
+    handleCheckboxChange,
   };
 }

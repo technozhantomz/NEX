@@ -111,3 +111,5 @@ export const Option = styled(UiOption)``;
 export const Space = styled(UiSpace)``;
 
 export const Typography = styled(UiTypography)``;
+
+export const CheckBoxGroup = styled(UiForm.Item)``;

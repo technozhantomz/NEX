@@ -28,7 +28,7 @@ export function UserSettingsProvider({
   const { localStorageAccount } = useUserContext();
   const { getActivitiesRows } = useActivity();
   const { formLocalDate } = useFormDate();
-  const { chainId } = useSettingsContext();
+  const { chainId, settings } = useSettingsContext();
 
   const [notifications, setNotifications] = useLocalStorage(
     `${chainId.slice(0, 8)}_notifications_${localStorageAccount}`
@@ -89,6 +89,10 @@ export function UserSettingsProvider({
         localStorageAccount,
         false
       );
+      const filteredData = serverActivities.filter((e) =>
+        settings.notifications.selectedNotifications.includes(e.type)
+      );
+      console.log(filteredData);
       if (serverActivities && serverActivities.length) {
         const filteredServerActivities = serverActivities.filter(
           (serverActivity) => {
@@ -150,7 +154,7 @@ export function UserSettingsProvider({
     } else {
       setNotifications(null);
     }
-  }, [localStorageAccount]);
+  }, [localStorageAccount, settings]);
 
   return (
     <userSettingsContext.Provider
