@@ -93,6 +93,10 @@ export const FaucetSpace = styled.div`
 export const SaveButton = styled(CardFormButton)`
   margin: 0;
   margin-top: 30px;
+  width: 100%;
+  ${breakpoint.sm} {
+    width: 350px;
+  }
 `;
 
 export const CopyButton = styled(UiCopyButton)`
@@ -112,4 +116,8 @@ export const Space = styled(UiSpace)``;
 
 export const Typography = styled(UiTypography)``;
 
-export const CheckBoxGroup = styled(UiForm.Item)``;
+export const CheckBoxGroup = styled(UiForm.Item)`
+  .ant-checkbox-group {
+    display: inline;
+  }
+`;

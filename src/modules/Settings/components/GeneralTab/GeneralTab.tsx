@@ -29,7 +29,7 @@ export const GeneralTab = (): JSX.Element => {
         initialValues={{ walletLockInMinutes: settings.walletLock }}
       >
         <Row>
-          <Col span={12}>
+          <Col span={9}>
             <Styled.LabelText>
               {counterpart.translate(`field.labels.select_language`)}
             </Styled.LabelText>
@@ -79,34 +79,8 @@ export const GeneralTab = (): JSX.Element => {
                 ))}
               </Styled.Select>
             </Styled.GeneralSettingFormItem>
-            <Styled.LabelText>
-              {counterpart.translate(`field.labels.unsaved_changes`)}
-              <InfoCircleOutlined />
-            </Styled.LabelText>
-            <Styled.SaveButton type="primary" htmlType="submit">
-              {counterpart.translate(`buttons.save`)}
-            </Styled.SaveButton>
-            <Styled.FaucetSpace>
-              <Styled.LabelText>
-                {counterpart.translate(`field.labels.faucet`)}
-              </Styled.LabelText>
-              <Styled.FaucetURLWrapper>
-                <Styled.FaucetURL>{`${counterpart.translate(
-                  `field.labels.faucet_url`
-                )} ${faucetUrl}`}</Styled.FaucetURL>
-                <Styled.CopyButton
-                  buttonText={counterpart.translate(`field.labels.copy_url`)}
-                  copyValue={`${faucetUrl as string}`}
-                ></Styled.CopyButton>
-              </Styled.FaucetURLWrapper>
-              {showSuccessMessage && (
-                <Styled.LabelText type="success">
-                  {counterpart.translate(`field.labels.setting_saved`)}
-                </Styled.LabelText>
-              )}
-            </Styled.FaucetSpace>
           </Col>
-          <Col span={12}>
+          <Col span={9}>
             <Styled.LabelText>
               {counterpart.translate(`field.labels.show_notifications`)}
             </Styled.LabelText>
@@ -128,7 +102,7 @@ export const GeneralTab = (): JSX.Element => {
             >
               <Checkbox.Group onChange={handleCheckboxChange}>
                 <Row>
-                  <Col span={12}>
+                  <Col span={9}>
                     <Styled.FormItem valuePropName="checked" name="fundSent">
                       <Styled.Checkbox
                         disabled={!settings.notifications.allow}
@@ -190,7 +164,7 @@ export const GeneralTab = (): JSX.Element => {
                     </Styled.FormItem>
                   </Col>
 
-                  <Col span={12}>
+                  <Col span={9}>
                     <Styled.FormItem
                       valuePropName="checked"
                       name="fundsReceived"
@@ -256,6 +230,33 @@ export const GeneralTab = (): JSX.Element => {
             </Styled.CheckBoxGroup>
           </Col>
         </Row>
+        <Styled.LabelText>
+          <InfoCircleOutlined />
+          {counterpart.translate(`field.labels.unsaved_changes`)}
+        </Styled.LabelText>
+        <Styled.SaveButton type="primary" htmlType="submit">
+          {counterpart.translate(`buttons.save`)}
+        </Styled.SaveButton>
+        <Styled.FaucetSpace>
+          <Styled.LabelText>
+            {counterpart.translate(`field.labels.faucet`)}
+            <InfoCircleOutlined />
+          </Styled.LabelText>
+          <Styled.FaucetURLWrapper>
+            <Styled.FaucetURL>{`${counterpart.translate(
+              `field.labels.faucet_url`
+            )} ${faucetUrl}`}</Styled.FaucetURL>
+            <Styled.CopyButton
+              buttonText={counterpart.translate(`field.labels.copy_url`)}
+              copyValue={`${faucetUrl as string}`}
+            ></Styled.CopyButton>
+          </Styled.FaucetURLWrapper>
+          {showSuccessMessage && (
+            <Styled.LabelText type="success">
+              {counterpart.translate(`field.labels.setting_saved`)}
+            </Styled.LabelText>
+          )}
+        </Styled.FaucetSpace>
       </Styled.GeneralTabForm>
     </Styled.GeneralSettingsCard>
   );
