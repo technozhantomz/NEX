@@ -21,7 +21,7 @@ export function useFooter(): UseFooterResult {
   const syncTimeout = useRef<NodeJS.Timeout>();
 
   const { isTransitionInProgress, isAutoSelection } = usePeerplaysApiContext();
-  const { getBlockTimeDelta, synced, rpcConnectionStatus } =
+  const { getBlockTimeDelta, synced, rpcConnectionStatus, OUT_OF_SYNC_LIMIT } =
     useChainStoreContext();
   const {
     willTransitionTo,
@@ -109,7 +109,7 @@ export function useFooter(): UseFooterResult {
       }
 
       // Still out of sync?
-      if (getBlockTimeDelta() > 5) {
+      if (getBlockTimeDelta() > OUT_OF_SYNC_LIMIT) {
         console.log(
           "Your node is out of sync since " +
             getBlockTimeDelta() +
@@ -120,7 +120,7 @@ export function useFooter(): UseFooterResult {
         setTimeout(() => {
           // Only ask the user once, and only continue if still out of sync
           if (
-            getBlockTimeDelta() > 5 &&
+            getBlockTimeDelta() > OUT_OF_SYNC_LIMIT &&
             hasOutOfSyncModalBeenShownOnce === false
           ) {
             setHasOutOfSyncModalBeenShownOnce(true);
