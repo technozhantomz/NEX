@@ -9,7 +9,7 @@ import { UseSettingsResult } from "./useSettings.types";
 export function useSettings(): UseSettingsResult {
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [selectedNotifications, setSelectedNotifications] = useState<
+  const [serverCheckedValues, setServerCheckedValues] = useState<
     CheckboxValueType[]
   >([]);
   const { settings, setSettings, setLocale } = useSettingsContext();
@@ -17,11 +17,13 @@ export function useSettings(): UseSettingsResult {
 
   const handleCheckboxChange = useCallback(
     (checkedValues: CheckboxValueType[]) => {
-      console.log(checkedValues);
-      const newArray = [...selectedNotifications, ...checkedValues];
-      setSelectedKeys(newArray);
+      const combineServerCheckedValuesAndCheckedValue = [
+        ...serverCheckedValues,
+        ...checkedValues,
+      ];
+      setSelectedKeys(combineServerCheckedValuesAndCheckedValue);
     },
-    [setSelectedKeys, selectedNotifications]
+    [setSelectedKeys]
   );
 
   const handleAllowNotifications = (e: any) => {
@@ -77,7 +79,7 @@ export function useSettings(): UseSettingsResult {
   ]);
 
   useEffect(() => {
-    setSelectedNotifications(settings.notifications.selectedNotifications);
+    setServerCheckedValues(settings.notifications.selectedNotifications);
     generalSettingsForm.setFieldsValue({
       selectedLanguage: settings.language,
       walletLockInMinutes: settings.walletLock,
@@ -85,16 +87,15 @@ export function useSettings(): UseSettingsResult {
       allowNotifications: settings.notifications.allow,
       allowTransferToMeNotifications:
         settings.notifications.additional.transferToMe,
+      selectNotifications: settings.notifications.selectedNotifications,
     });
-  }, [settings, generalSettingsForm, setSelectedNotifications]);
+  }, [settings, generalSettingsForm, setServerCheckedValues]);
 
   return {
     updateSettings,
     generalSettingsForm,
     showSuccessMessage,
     handleAllowNotifications,
-    selectedKeys,
     handleCheckboxChange,
-    selectedNotifications,
   };
 }

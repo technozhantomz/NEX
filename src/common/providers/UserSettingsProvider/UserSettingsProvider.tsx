@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useSettingsContext, useUserContext } from "..";
+import { CheckboxValueType } from "../../../ui/src";
 import { useActivity, useFormDate, useLocalStorage } from "../../hooks";
 import { Notification } from "../../types";
 
@@ -36,7 +37,9 @@ export function UserSettingsProvider({
   const [hasUnreadMessages, _setHasUnreadMessages] = useState<boolean>(false);
   const [loadingNotifications, setLoadingNotifications] =
     useState<boolean>(true);
-
+  const [serverCheckedValues, setServerCheckedValues] = useState<
+    CheckboxValueType[]
+  >([]);
   const setHasUnreadMessages = (notifications: Notification[]) => {
     for (const notification of notifications) {
       if (notification.unread) {
@@ -85,14 +88,11 @@ export function UserSettingsProvider({
     );
     try {
       setLoadingNotifications(true);
-      const serverActivities = await getActivitiesRows(
-        localStorageAccount,
-        false
-      );
-      const filteredData = serverActivities.filter((e) =>
-        settings.notifications.selectedNotifications.includes(e.type)
-      );
-      console.log(filteredData);
+
+      const serverActivities = (
+        await getActivitiesRows(localStorageAccount, false)
+      ).filter((e) => serverCheckedValues.includes(e.type));
+
       if (serverActivities && serverActivities.length) {
         const filteredServerActivities = serverActivities.filter(
           (serverActivity) => {
@@ -149,12 +149,18 @@ export function UserSettingsProvider({
   };
 
   useEffect(() => {
+    setServerCheckedValues(settings.notifications.selectedNotifications);
     if (localStorageAccount && localStorageAccount !== "") {
       updateNotifications();
     } else {
       setNotifications(null);
     }
-  }, [localStorageAccount, settings]);
+  }, [
+    localStorageAccount,
+    settings,
+    setServerCheckedValues,
+    serverCheckedValues,
+  ]);
 
   return (
     <userSettingsContext.Provider

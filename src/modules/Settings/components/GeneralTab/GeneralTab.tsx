@@ -13,7 +13,6 @@ export const GeneralTab = (): JSX.Element => {
     generalSettingsForm,
     handleAllowNotifications,
     showSuccessMessage,
-    selectedKeys,
     handleCheckboxChange,
   } = useSettings();
 
@@ -127,16 +126,13 @@ export const GeneralTab = (): JSX.Element => {
               name="selectNotifications"
               validateTrigger="onChange"
             >
-              <Checkbox.Group
-                onChange={handleCheckboxChange}
-                value={selectedKeys}
-              >
+              <Checkbox.Group onChange={handleCheckboxChange}>
                 <Row>
                   <Col span={12}>
                     <Styled.FormItem valuePropName="checked" name="fundSent">
                       <Styled.Checkbox
                         disabled={!settings.notifications.allow}
-                        value="fund_sent"
+                        value="transfer"
                       >
                         {counterpart.translate(`field.checkBoxes.funds_sent`)}
                       </Styled.Checkbox>
