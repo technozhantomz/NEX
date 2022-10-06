@@ -7,7 +7,7 @@ import { FullAccount, SignupForm } from "../../types";
 import { useAccount } from "./useAccount";
 
 export function useCreateAccount(): {
-  createAccount: (data: SignupForm) => Promise<FullAccount | undefined>;
+  createAccount: (data: SignupForm) => Promise<FullAccount | string>;
 } {
   const { getFullAccount } = useAccount();
   const { formKeys } = useFormKeys();
@@ -36,9 +36,11 @@ export function useCreateAccount(): {
           return fullAccount;
         } else {
           console.log(newUser.error);
+          return newUser?.error?.base[0] || "";
         }
       } catch (e) {
         console.log(e);
+        return "";
       }
     },
     [formKeys, getFullAccount]

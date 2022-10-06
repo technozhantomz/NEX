@@ -905,6 +905,8 @@ export const en = {
       key_management_group: ["Owner", "Active", "Memo"],
     },
     errors: {
+      unable_to_create_account:
+        "Unable to create an account. Please try again later",
       invalid_bitcoin_public_key:
         "The public key is not valid for Bitcoin %(network)s",
       enter_amount: "Enter amount",
