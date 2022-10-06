@@ -1,6 +1,7 @@
 import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 
+import { symbolsToBeExcepted } from "../../../../../api/params";
 import { utils } from "../../../../../api/utils";
 import { useArrayLimiter } from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
@@ -21,9 +22,12 @@ export function useAssetsTab(): UseAssetsTabResult {
   const getAssetRows = useCallback(async () => {
     try {
       const rawAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-      if (rawAssets && rawAssets.length > 0) {
+      const filteredAssets = rawAssets.filter(
+        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
+      );
+      if (filteredAssets && filteredAssets.length > 0) {
         const assetsRows = await Promise.all(
-          rawAssets.map(async (asset) => {
+          filteredAssets.map(async (asset) => {
             const issuer: Account[] = await dbApi("get_accounts", [
               [asset.issuer],
             ]);

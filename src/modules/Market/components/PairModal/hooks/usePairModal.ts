@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 
-import { defaultToken } from "../../../../../api/params";
+import { defaultToken, symbolsToBeExcepted } from "../../../../../api/params";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
 import { Form, FormInstance } from "../../../../../ui/src";
@@ -70,7 +70,9 @@ export function usePairModal({
 
   const getAllAssetsSymbols = useCallback(async () => {
     const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-    const allAssetsSymbols = allAssets.map((asset) => asset.symbol);
+    const allAssetsSymbols = allAssets
+      .map((asset) => asset.symbol)
+      .filter((symbol) => !symbolsToBeExcepted.includes(symbol));
     setAllAssetsSymbols(allAssetsSymbols);
   }, [dbApi, setAllAssetsSymbols]);
 
