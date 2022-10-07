@@ -41,14 +41,12 @@ build-qa:
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
     - npm install
     - npm run build
-    - cp .next/ .next-dev/
   only:
     - tags
     - branches
     - merge_requests
   artifacts: 
     paths:
-    - .next-dev/
     - .env
   tags:
     - build
@@ -171,8 +169,8 @@ deployToStaging:
     name: staging
     url: https://nex-staging.peerplays.download
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH == "/^release\/" || $CI_MERGE_REQUEST_TARGET_BRANCH == "/^hot-fix\/"'
-  when: manual 
+  - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH =~ /^release/ || $CI_COMMIT_BRANCH =~ /^hot-fix/
+    when: manual 
   tags:
     - staging
 
@@ -184,9 +182,9 @@ deployToProduction:
     - npm install
     - pm2 start npm --name nex -- run start
   dependencies: [build-production]
-  #environment:
-  #  name: production
-  #  url: 
+  environment:
+    name: production
+    url: https://nex.peerplays.com
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
   when: manual 
