@@ -48,6 +48,7 @@ build-qa:
   artifacts: 
     paths:
     - .env
+    - .next/
   tags:
     - build
 
