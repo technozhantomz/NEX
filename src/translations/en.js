@@ -499,7 +499,7 @@ export const en = {
     market: "Market",
     generate_bitcoin_address: "Generate Bitcoin addresses",
     login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Addresses",
-    dont_have_peerplays_account: "Dont have a Peerplays account? ",
+    dont_have_peerplays_account: "Don't have a Peerplays account? ",
     log_in_withdraw: "Log in & Withdraw %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Log in & Deposit %(assetSymbol)s",
     send: "Send",
@@ -905,6 +905,8 @@ export const en = {
       key_management_group: ["Owner", "Active", "Memo"],
     },
     errors: {
+      unable_to_create_account:
+        "Unable to create an account. Please try again later",
       invalid_bitcoin_public_key:
         "The public key is not valid for Bitcoin %(network)s",
       enter_amount: "Enter amount",

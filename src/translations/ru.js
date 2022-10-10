@@ -868,6 +868,8 @@ export const ru = {
       key_management_group: ["Владелец", "Активный", "Памятка"],
     },
     errors: {
+      unable_to_create_account:
+        "Невозможно создать учетную запись. Пожалуйста, попробуйте позже",
       enter_amount: "Введите сумму",
       invalid_bitcoin_public_key:
         "Открытый ключ недействителен для биткойн %(network)s",
