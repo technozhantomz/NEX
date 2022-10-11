@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import { roundNum, useAsset } from "..";
-import { defaultToken } from "../../../api/params";
+import { defaultToken, symbolsToBeExcepted } from "../../../api/params";
 import { usePeerplaysApiContext } from "../../providers";
 import {
   Asset,
@@ -51,20 +51,23 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
     ];
     try {
       const rawAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-      const threeLetterAsset = rawAssets.find(
+      const filteredAssets = rawAssets.filter(
+        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
+      );
+      const threeLetterAsset = filteredAssets.find(
         (asset) =>
           asset.symbol !== defaultToken &&
           asset.symbol !== "BTC" &&
           asset.symbol !== "HBD" &&
           asset.symbol.length === 3
       );
-      const fourLetterAsset = rawAssets.find(
+      const fourLetterAsset = filteredAssets.find(
         (asset) =>
           asset.symbol !== defaultToken &&
           asset.symbol !== "HIVE" &&
           asset.symbol.length === 4
       );
-      const otherAsset = rawAssets.find(
+      const otherAsset = filteredAssets.find(
         (asset) => asset.symbol !== defaultToken && asset.symbol.length > 4
       );
       if (threeLetterAsset) {
