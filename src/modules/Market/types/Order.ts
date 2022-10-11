@@ -16,15 +16,15 @@ export type OrderColumn = {
 
 export type OrderRow = {
   key: string;
-  quote: number;
-  base: number;
-  price: number;
+  quote: string;
+  base: string;
+  price: string;
   isBuyOrder: boolean;
   expiration?: string;
 };
 
 export type OrderForm = {
-  price: number;
-  quantity: number;
-  total: number;
+  price: string;
+  quantity: string;
+  total: string;
 };

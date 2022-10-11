@@ -198,7 +198,7 @@ export const WithdrawForm = ({
       >
         <Input
           placeholder={counterpart.translate(
-            `field.placeholder.hive_blockchain_account`
+            `field.placeholder.withdraw_address`
           )}
           className="form-input"
           disabled={localStorageAccount ? false : true}

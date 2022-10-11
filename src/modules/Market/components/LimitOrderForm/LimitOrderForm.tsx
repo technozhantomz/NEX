@@ -199,6 +199,7 @@ export const LimitOrderForm = ({
                     e.preventDefault();
                   }
                 }}
+                disabled={true}
               />
             </Styled.FormItem>
             <Styled.FormItem>

@@ -796,8 +796,7 @@ export const en = {
     placeholder: {
       user_name: "Enter username",
       master_password: "Enter master password",
-      master_password_private_key:
-        "Master password or private key (We recommend using Whalevault web 3.0 wallet)",
+      master_password_private_key: "Master password or private key",
       withdraw_public_key: "Withdraw public key",
       withdraw_address: "Withdraw address",
       hive_blockchain_account: "Hive account",

@@ -38,4 +38,5 @@ export type UseMarketPageResult = {
   buyOrderForm: FormInstance<OrderForm>;
   sellOrderForm: FormInstance<OrderForm>;
   onOrderBookRowClick: (record: OrderRow) => void;
+  pageLoaded: boolean;
 };

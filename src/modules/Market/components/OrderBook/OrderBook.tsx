@@ -170,7 +170,7 @@ export const OrderBook = ({
           onRow={(record, _rowIndex) => {
             return {
               onClick: () => {
-                onOrderBookRowClick(record);
+                onOrderBookRowClick(record as OrderRow);
               },
             };
           }}

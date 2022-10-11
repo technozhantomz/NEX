@@ -507,13 +507,14 @@ export function useSwap(): UseSwapResult {
           swapForm.setFieldsValue({
             sellAmount: sellAmount,
           });
-
-          await updateSwapFormData(
-            sellAsset,
-            buyAsset,
-            sellAmount,
-            "sellAsset"
-          );
+          if (Number(sellAmount) > 0) {
+            await updateSwapFormData(
+              sellAsset,
+              buyAsset,
+              sellAmount,
+              "sellAsset"
+            );
+          }
         } else if (changedValues.buyAmount !== undefined) {
           setLastChangedField("buyAsset");
           const buyAmount = limitByPrecision(
@@ -523,8 +524,14 @@ export function useSwap(): UseSwapResult {
           swapForm.setFieldsValue({
             buyAmount: buyAmount,
           });
-
-          await updateSwapFormData(sellAsset, buyAsset, buyAmount, "buyAsset");
+          if (Number(buyAmount) > 0) {
+            await updateSwapFormData(
+              sellAsset,
+              buyAsset,
+              buyAmount,
+              "buyAsset"
+            );
+          }
         }
         try {
           await swapForm.validateFields();

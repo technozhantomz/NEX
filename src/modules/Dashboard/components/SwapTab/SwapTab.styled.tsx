@@ -43,6 +43,9 @@ export const SwapForm = styled(swapForm)`
   .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper-focused {
     box-shadow: unset;
   }
+  .ant-form-item .ant-form-item-margin-offset {
+    margin-bottom: -24px !important;
+  }
 `;
 
 export const SwapItem = styled(swapForm.Item)`

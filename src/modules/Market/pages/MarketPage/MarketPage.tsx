@@ -3,7 +3,11 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 
-import { Layout, TradingPairCard } from "../../../../common/components";
+import {
+  Layout,
+  LoadingIndicator,
+  TradingPairCard,
+} from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { Col, Row } from "../../../../ui/src";
 import {
@@ -24,7 +28,7 @@ const MarketPage: NextPage = () => {
   const { pair } = router.query;
   const {
     tradingPairsStats,
-    //loadingTradingPairs,
+    loadingTradingPairs,
     handleClickOnPair,
     currentBase,
     currentQuote,
@@ -52,9 +56,12 @@ const MarketPage: NextPage = () => {
     buyOrderForm,
     sellOrderForm,
     onOrderBookRowClick,
+    pageLoaded,
   } = useMarketPage({ currentPair: pair as string });
 
-  return (
+  return loadingTradingPairs && !pageLoaded ? (
+    <LoadingIndicator />
+  ) : (
     <Layout
       title="market"
       type="card-lrg"

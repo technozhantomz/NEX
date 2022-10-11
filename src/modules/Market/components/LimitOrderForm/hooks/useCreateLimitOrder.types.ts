@@ -26,9 +26,9 @@ export type UseCreateLimitOrderResult = {
   transactionSuccessMessage: string;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   loadingTransaction: boolean;
-  price: number;
-  quantity: number;
-  total: number;
+  price: string;
+  quantity: string;
+  total: string;
 };
 
 export type FormField = {

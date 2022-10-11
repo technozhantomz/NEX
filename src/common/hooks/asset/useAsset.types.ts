@@ -7,4 +7,5 @@ export type UseAssetResult = {
   setPrecision: (roundTo: boolean, amount: number, precision: number) => number;
   getAllAssets: () => Promise<Asset[] | undefined>;
   limitByPrecision: (value: string, precision?: number) => string;
+  ceilPrice: (num: string | number, roundTo?: number | undefined) => string;
 };
