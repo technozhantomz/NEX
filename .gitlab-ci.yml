@@ -177,9 +177,9 @@ deployToProduction:
     - npm install
     - pm2 start npm --name nex -- run start
   dependencies: [build-production]
-  #environment:
-  #  name: production
-  #  url: 
+  environment:
+    name: prod
+    url: https://nex.peerplays.com
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
   when: manual 
