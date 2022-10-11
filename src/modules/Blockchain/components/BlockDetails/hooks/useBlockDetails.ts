@@ -10,10 +10,14 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
   const [hasPreviousBlock, setHasPreviousBlock] = useState<boolean>(false);
   const [blockDetails, setBlockDetails] = useState<BlockchainTableRow>({
     key: block,
+    nextSecret: "",
+    previousSecret: "",
+    merkleRoot: "",
     blockID: block,
     time: "",
     witness: "",
-    transaction: 0,
+    witnessSignature: "",
+    transactions: [],
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSideBlocks, setLoadingSideBlocks] = useState<boolean>(true);
@@ -27,6 +31,9 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
       if (rawBlock) {
         setBlockDetails({
           key: block,
+          nextSecret: rawBlock.next_secret_hash as string,
+          previousSecret: rawBlock.previous_secret,
+          merkleRoot: rawBlock.transaction_merkle_root,
           blockID: block,
           time: formLocalDate(rawBlock.timestamp, [
             "month",
@@ -34,8 +41,9 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
             "year",
             "time",
           ]),
-          transaction: rawBlock.transactions.length,
           witness: rawBlock.witness_account_name,
+          witnessSignature: rawBlock.witness_signature,
+          transactions: rawBlock.transactions,
         });
         setLoading(false);
       } else {
