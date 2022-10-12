@@ -97,7 +97,7 @@ export function useVoteTab({
       const localApprovedVotes = allMembers.filter((member) =>
         allMembersRows
           .map((vote) => {
-            if (vote.status === "approved" || vote.action === "pending add")
+            if (vote.action === "remove" || vote.action === "pending add")
               return vote.id;
           })
           .includes(member.vote_id)
@@ -385,6 +385,7 @@ export function useVoteTab({
             ...pendingChanges,
           ]);
         }
+        setTransactionSuccessMessage("");
       }
     },
     [allMembersRows, checkVotesChanged, tab, setPendingChanges, pendingChanges]
