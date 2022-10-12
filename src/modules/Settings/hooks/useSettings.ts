@@ -9,19 +9,12 @@ import { UseSettingsResult } from "./useSettings.types";
 export function useSettings(): UseSettingsResult {
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [serverCheckedValues, setServerCheckedValues] = useState<
-    CheckboxValueType[]
-  >([]);
   const { settings, setSettings, setLocale } = useSettingsContext();
   const [generalSettingsForm] = Form.useForm();
 
   const handleCheckboxChange = useCallback(
     (checkedValues: CheckboxValueType[]) => {
-      const combineServerCheckedValuesAndCheckedValue = [
-        ...serverCheckedValues,
-        ...checkedValues,
-      ];
-      setSelectedKeys(combineServerCheckedValuesAndCheckedValue);
+      setSelectedKeys(checkedValues);
     },
     [setSelectedKeys]
   );
@@ -79,7 +72,7 @@ export function useSettings(): UseSettingsResult {
   ]);
 
   useEffect(() => {
-    setServerCheckedValues(settings.notifications.selectedNotifications);
+    setSelectedKeys(settings.notifications.selectedNotifications);
     generalSettingsForm.setFieldsValue({
       selectedLanguage: settings.language,
       walletLockInMinutes: settings.walletLock,
@@ -89,7 +82,7 @@ export function useSettings(): UseSettingsResult {
         settings.notifications.additional.transferToMe,
       selectNotifications: settings.notifications.selectedNotifications,
     });
-  }, [settings, generalSettingsForm, setServerCheckedValues]);
+  }, [settings, generalSettingsForm, setSelectedKeys]);
 
   return {
     updateSettings,
