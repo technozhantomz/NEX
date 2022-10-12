@@ -21,14 +21,10 @@ variables:
 stages:
 - build
 - test
-- deploy-review
-- deployQA
+- deploy
 - dast
 
-sast:
-  stage: test
-
-build-review:
+build-qa:
   # node docker image on which this would be run
   image: node:16.17.0-alpine3.16
   stage: build
@@ -36,20 +32,41 @@ build-review:
     - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
     - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
-    - echo "NEXT_PUBLIC_DEX_URL='$DEV_DEX_URL'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
-    - echo "NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS='$DEV_BLOCKCHAIN_ENDPOINTS'" >> .env
     - npm install
     - npm run build
-  artifacts:
-    paths:
-      - .next/
-    expire_in: 2 weeks
   only:
+    - tags
     - branches
     - merge_requests
+  artifacts: 
+    paths:
+    - .next/
+    - .env
   tags:
     - build
+
+build-production:
+  # node docker image on which this would be run
+  image: node:16.17.0-alpine3.16
+  stage: build
+  script:
+    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$PROD_TOKEN'" >> .env
+    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$PROD_QUOTE'" >> .env
+    - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env
+    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env
+    - npm install
+    - npm run build
+  only:
+    - tags
+    - branches
+    - merge_requests
+  artifacts: 
+    paths:
+    - .next/
+    - .env
+  tags:
+    - staging
 
 docker_build:
   image: docker:stable
@@ -85,19 +102,10 @@ sonarcloud-check:
     - sonar-check
 
 deploy_review:
-  dependencies:
-    - build-review
-    - sonarcloud-check
-    - sast
-  stage: deploy-review
+  dependencies: [build-qa]
+  stage: deploy
   script:
     - pm2 del nex-review || true
-    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
-    - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
-    - echo "NEXT_PUBLIC_DEX_URL='$DEV_DEX_URL'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
-    - echo "NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS='$DEV_BLOCKCHAIN_ENDPOINTS'" >> .env
     - npm install 
     - pm2 start npm --name nex-review -- run start
     - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
@@ -115,7 +123,7 @@ deploy_review:
     - deploy-review
 
 stop_review_app:
-  stage: deploy-review
+  stage: deploy
   script: stop-review-app
   environment:
     name: review/$CI_COMMIT_REF_NAME
@@ -129,34 +137,66 @@ stop_review_app:
   when: manual
 
 deployToQA:
-  stage: deployQA
-  dependencies:
-    - build-review
+  stage: deploy
+  dependencies: [build-qa]
   script: 
     - pm2 del nex-QA || true
-    - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
-    - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
-    - echo "NEXT_PUBLIC_DEX_URL='$DEV_DEX_URL'" >> .env
-    - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
-    - echo "NEXT_PUBLIC_BLOCKCHAIN_ENDPOINTS='$DEV_BLOCKCHAIN_ENDPOINTS'" >> .env
     - npm install 
     - pm2 start npm --name nex-QA -- run start
+  environment:
+    name: QA
+    url: https://nex-cicd.peerplays.download
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
   when: manual 
   tags:
     - deploy
 
+deployToStaging:
+  stage: deploy
+  script: 
+    - pm2 del nex-staging || true
+    - rm .env.example
+    - npm install
+    - pm2 start npm --name nex-staging -- run start
+  dependencies: [build-production]
+  environment:
+    name: staging
+    url: https://nex-staging.peerplays.download
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+  when: manual 
+  tags:
+    - staging
+
+deployToProduction:
+  stage: deploy
+  script: 
+    - pm2 del nex || true
+    - rm .env.example
+    - npm install
+    - pm2 start npm --name nex -- run start
+  dependencies: [build-production]
+  environment:
+    name: prod
+    url: https://nex.peerplays.com
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+  when: manual 
+  tags:
+    - production
+
 dast:
   stage: dast
   before_script:
-    - if [ "$CI_COMMIT_REF_NAME" != "develop" ]; then export DAST_WEBSITE=$(cat environment_url.txt); else export DAST_WEBSITE=$DAST_WEBSITE; fi
+    - if [ "$CI_COMMIT_REF_NAME" != "dev" ]; then export DAST_WEBSITE=$(cat environment_url.txt); else export DAST_WEBSITE=$DAST_WEBSITE; fi
   artifacts:
     paths: 
       - gl-dast-report.json
   rules:
   - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     when: always
-  - if: '$CI_COMMIT_REF_NAME == "develop"'
+  - if: '$CI_COMMIT_REF_NAME == "dev"'
     when: always
   - if: '$CI_COMMIT_REF_NAME == "main"'
     when: always
@@ -164,4 +204,4 @@ dast:
     when: never
   - if: '$CI_COMMIT_REF_NAME != "main"'
     when: never
-  
+
