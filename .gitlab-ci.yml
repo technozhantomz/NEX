@@ -82,9 +82,8 @@ docker_build:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker build -f dev.Dockerfile -t $IMAGE .
     - docker push $IMAGE
-  only:
-    - branches
-    - merge_requests
+  rules:
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" 
 
 sonarcloud-check:
   stage: test
