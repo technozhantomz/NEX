@@ -127,7 +127,7 @@ export function useAsset(): UseAssetResult {
     }
   };
 
-  const ceilPrice: (num: string | number, roundTo?: number) => string =
+  const ceilPrecision: (num: string | number, precision?: number) => string =
     useCallback((num: string | number, roundTo = 5) => {
       const numbered = Number(num);
       const precised = Number(numbered.toFixed(roundTo));
@@ -143,6 +143,6 @@ export function useAsset(): UseAssetResult {
     getAssetBySymbol,
     getAllAssets,
     limitByPrecision,
-    ceilPrice,
+    ceilPrecision,
   };
 }

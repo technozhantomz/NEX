@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
+  roundNum,
   useAccount,
   useAsset,
   useFees,
@@ -44,7 +45,7 @@ export function useCreateLimitOrder({
   const { localStorageAccount, assets, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
   const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
-  const { limitByPrecision, ceilPrice } = useAsset();
+  const { limitByPrecision } = useAsset();
 
   const handleFieldAssetPrecission = useCallback(
     (fieldValue: number, fieldName: string, assetPrecission: number) => {
@@ -112,7 +113,7 @@ export function useCreateLimitOrder({
           allValues.quantity > 0
         ) {
           orderForm.setFieldsValue({
-            total: ceilPrice(allValues.price * allValues.quantity, baseRoundTo),
+            total: roundNum(allValues.price * allValues.quantity, baseRoundTo),
           });
         }
       }

@@ -37,7 +37,7 @@ type Props = {
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { historyApi, dbApi } = usePeerplaysApiContext();
   const { exchanges, updateExchanges } = useUpdateExchanges();
-  const { setPrecision, ceilPrice } = useAsset();
+  const { setPrecision, ceilPrecision } = useAsset();
   const { getFullAccount } = useAccount();
   const { id, localStorageAccount } = useUserContext();
   const { getAccountHistoryById } = useAccountHistory();
@@ -163,7 +163,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         base = String(
           setPrecision(false, limitOrder.for_sale, baseAsset.precision)
         );
-        price = ceilPrice(
+        price = ceilPrecision(
           setPrecision(
             false,
             limitOrder.sell_price.base.amount,
@@ -189,7 +189,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         quote = String(
           setPrecision(false, limitOrder.for_sale, quoteAsset.precision)
         );
-        price = ceilPrice(
+        price = ceilPrecision(
           setPrecision(
             false,
             limitOrder.sell_price.quote.amount,
@@ -304,7 +304,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
       return {
         key: history.id,
-        price: ceilPrice(baseAmount / quoteAmount),
+        price: ceilPrecision(baseAmount / quoteAmount),
         base: baseAmount,
         quote: quoteAmount,
         date: time,
@@ -365,7 +365,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           operationDetails.pays.amount,
           baseAsset.precision
         );
-        price = ceilPrice(base / quote, baseAsset.precision);
+        price = ceilPrecision(base / quote, baseAsset.precision);
         isBuyOrder = true;
       } else {
         quote = setPrecision(
@@ -378,7 +378,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           operationDetails.receives.amount,
           baseAsset.precision
         );
-        price = ceilPrice(base / quote, baseAsset.precision);
+        price = ceilPrecision(base / quote, baseAsset.precision);
       }
 
       return { key, price, base, quote, date, isBuyOrder };

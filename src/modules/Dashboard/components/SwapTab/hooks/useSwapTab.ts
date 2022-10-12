@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
+  roundNum,
   useAccount,
   useAsset,
   useFees,
@@ -83,17 +84,28 @@ export function useSwap(): UseSwapResult {
   const calculateBasePairPriceForSellAmount = useCallback(
     (sellAmount: number, asks: BookedOrder[]) => {
       const initialValue = sellAmount;
-      const usedOrders = [] as { price: number; buyAmount: number }[];
+      const usedOrders = [] as {
+        price: number;
+        buyAmount: number;
+      }[];
+
       let i = 0;
       while (sellAmount > 0) {
         usedOrders.push({
           price: Number(asks[i].price),
           buyAmount:
             sellAmount < Number(asks[i].base)
-              ? sellAmount / Number(asks[i].price)
-              : Number(asks[i].quote),
+              ? Number(
+                  limitByPrecision(
+                    String(sellAmount / Number(asks[i].price)),
+                    buyAsset?.precision
+                  )
+                )
+              : Number(limitByPrecision(asks[i].quote, buyAsset?.precision)),
         });
-        sellAmount = sellAmount - Number(asks[i].base);
+        sellAmount =
+          sellAmount -
+          Number(limitByPrecision(asks[i].base, sellAsset?.precision));
         i = i + 1;
       }
       const buyAmount = sum(usedOrders.map((order) => order.buyAmount));
@@ -101,7 +113,7 @@ export function useSwap(): UseSwapResult {
       const orderPrice = usedOrders[usedOrders.length - 1].price;
       return { calculatedPrice, orderPrice };
     },
-    []
+    [buyAsset, sellAsset]
   );
 
   const calculateBasePairPriceForBuyAmount = useCallback(
@@ -315,7 +327,7 @@ export function useSwap(): UseSwapResult {
               )
             );
             swapForm.setFieldsValue({
-              sellAmount: limitByPrecision(
+              sellAmount: roundNum(
                 String(numberedInputedAmount * calculatedPrice),
                 sellAsset.precision
               ),
@@ -502,7 +514,7 @@ export function useSwap(): UseSwapResult {
           setLastChangedField("sellAsset");
           const sellAmount = limitByPrecision(
             changedValues.sellAmount,
-            sellAsset.precision
+            sellAsset.precision - 2
           );
           swapForm.setFieldsValue({
             sellAmount: sellAmount,
@@ -519,7 +531,7 @@ export function useSwap(): UseSwapResult {
           setLastChangedField("buyAsset");
           const buyAmount = limitByPrecision(
             changedValues.buyAmount,
-            buyAsset.precision
+            buyAsset.precision - 2
           );
           swapForm.setFieldsValue({
             buyAmount: buyAmount,
@@ -740,6 +752,7 @@ export function useSwap(): UseSwapResult {
         sellAsset,
         buyAsset
       );
+
       let trxResult;
       try {
         setLoadingTransaction(true);

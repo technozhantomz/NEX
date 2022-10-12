@@ -57,7 +57,7 @@ export function useOrderBook({
   const { buildTrx } = useTransactionBuilder();
   const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
   const { calculateCancelLimitOrderFee } = useFees();
-  const { limitByPrecision, ceilPrice } = useAsset();
+  const { limitByPrecision, ceilPrecision } = useAsset();
 
   const handleFilterChange = useCallback(
     (type: OrderType) => {
@@ -78,11 +78,11 @@ export function useOrderBook({
       const reducedOrders = orders.reduce((previousOrders, currentOrder) => {
         const repeatedPriceIndex = previousOrders.findIndex(
           (previousOrder) =>
-            ceilPrice(
+            ceilPrecision(
               Number(previousOrder.base) / Number(previousOrder.quote),
               currentBase.precision
             ) ===
-            ceilPrice(
+            ceilPrecision(
               Number(currentOrder.base) / Number(currentOrder.quote),
               currentBase.precision
             )
@@ -90,7 +90,7 @@ export function useOrderBook({
         if (repeatedPriceIndex === -1) {
           previousOrders.push({
             ...currentOrder,
-            price: ceilPrice(
+            price: ceilPrecision(
               Number(currentOrder.base) / Number(currentOrder.quote),
               currentBase.precision
             ),
