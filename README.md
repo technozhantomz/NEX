@@ -1,4 +1,5 @@
 
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=PBSA_NEX&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=PBSA_NEX)
 [![pipeline status](https://gitlab.com/PBSA/NEX/badges/dev/pipeline.svg)](https://gitlab.com/PBSA/NEX/-/commits/dev)
 
 Project to build moderen DEX-UI for the Peerplays on chain DEX
