@@ -1,11 +1,10 @@
 import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 
-import { symbolsToBeExcepted } from "../../../../../api/params";
 import { utils } from "../../../../../api/utils";
-import { useArrayLimiter } from "../../../../../common/hooks";
+import { useArrayLimiter, useAsset } from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
-import { Account, Asset } from "../../../../../common/types";
+import { Account } from "../../../../../common/types";
 import { AssetsColumns } from "../components";
 
 import { AssetTableRow, UseAssetsTabResult } from "./useAssetsTab.types";
@@ -18,16 +17,14 @@ export function useAssetsTab(): UseAssetsTabResult {
   const [assetsColumns, setAssetsColumns] = useState<ColumnsType<unknown>>([]);
   const { dbApi } = usePeerplaysApiContext();
   const { updateArrayWithLimit } = useArrayLimiter();
+  const { getAllAssets } = useAsset();
 
   const getAssetRows = useCallback(async () => {
     try {
-      const rawAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-      const filteredAssets = rawAssets.filter(
-        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
-      );
-      if (filteredAssets && filteredAssets.length > 0) {
+      const rawAssets = await getAllAssets();
+      if (rawAssets && rawAssets.length > 0) {
         const assetsRows = await Promise.all(
-          filteredAssets.map(async (asset) => {
+          rawAssets.map(async (asset) => {
             const issuer: Account[] = await dbApi("get_accounts", [
               [asset.issuer],
             ]);
