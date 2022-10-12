@@ -1,5 +1,12 @@
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=PBSA_NEX&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=PBSA_NEX)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=PBSA_NEX&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=PBSA_NEX)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=PBSA_NEX&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=PBSA_NEX)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=PBSA_NEX&metric=bugs)](https://sonarcloud.io/summary/new_code?id=PBSA_NEX)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=PBSA_NEX&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=PBSA_NEX)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=PBSA_NEX&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=PBSA_NEX)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=PBSA_NEX&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=PBSA_NEX)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=PBSA_NEX&metric=coverage)](https://sonarcloud.io/summary/new_code?id=PBSA_NEX)
 [![pipeline status](https://gitlab.com/PBSA/NEX/badges/dev/pipeline.svg)](https://gitlab.com/PBSA/NEX/-/commits/dev)
 
 Project to build moderen DEX-UI for the Peerplays on chain DEX
