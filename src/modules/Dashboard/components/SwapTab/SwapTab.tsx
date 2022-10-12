@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 import { KeyboardEvent, useState } from "react";
 
-//import { defaultToken } from "../../../../api/params";
+import { defaultToken } from "../../../../api/params";
 import { utils } from "../../../../api/utils";
 import {
   DashboardLoginButton,
@@ -18,7 +18,7 @@ import {
 } from "../../../../ui/src";
 
 import * as Styled from "./SwapTab.styled";
-import { useSwap } from "./hooks/useSwapTab";
+import { useSwap } from "./hooks";
 
 export const SwapTab = (): JSX.Element => {
   const {
@@ -46,6 +46,7 @@ export const SwapTab = (): JSX.Element => {
     sellAmountErrors,
     buyAmountErrors,
     lastChangedField,
+    buyAssetMarketFee,
   } = useSwap();
 
   const {
@@ -133,6 +134,44 @@ export const SwapTab = (): JSX.Element => {
     <DashboardLoginButton
       buttonText={counterpart.translate(`buttons.login_and_swap_coins`)}
     />
+  );
+
+  const feeSummary = (
+    <>
+      <div>{`${swapOrderFee} ${defaultToken}`}</div>
+      {Number(buyAssetMarketFee) > 0 ? (
+        <div>
+          + {`${buyAssetMarketFee} ${selectedAssetsSymbols.buyAssetSymbol}`}
+        </div>
+      ) : (
+        ""
+      )}
+    </>
+  );
+
+  const renderTransactionDetails = isLoggedIn ? (
+    <Styled.TransactionDetails>
+      <Styled.FeeInfo>
+        {counterpart.translate(`field.labels.swap_fee_info`)}
+      </Styled.FeeInfo>
+      <Styled.DetailsWrapper>
+        <Styled.DetailsLabelWrapper>
+          {counterpart.translate(`field.labels.fees_label`)}
+        </Styled.DetailsLabelWrapper>
+        <Styled.AmountsWrapper>{feeSummary}</Styled.AmountsWrapper>
+      </Styled.DetailsWrapper>
+
+      <Styled.DetailsWrapper>
+        <Styled.DetailsLabelWrapper>
+          {counterpart.translate(`transaction.transaction_type`)}
+        </Styled.DetailsLabelWrapper>
+        <Styled.AmountsWrapper>
+          {counterpart.translate(`transaction.trade`)}
+        </Styled.AmountsWrapper>
+      </Styled.DetailsWrapper>
+    </Styled.TransactionDetails>
+  ) : (
+    ""
   );
 
   return (
@@ -230,6 +269,7 @@ export const SwapTab = (): JSX.Element => {
           ) : (
             ""
           )}
+          {renderTransactionDetails}
           {renderSubmitButton}
         </Styled.SwapForm>
 

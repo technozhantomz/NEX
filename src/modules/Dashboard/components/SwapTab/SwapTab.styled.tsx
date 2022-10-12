@@ -126,3 +126,36 @@ export const FormDisclamer = styled(UiFormDisclamer)`
     margin-top: 35px;
   }
 `;
+
+export const FeeInfo = styled.div`
+  font-size: 12px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
+  margin-bottom: 20px;
+`;
+
+export const DetailsWrapper = styled.div`
+  display: flex;
+  font-size: 12px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
+`;
+
+export const DetailsLabelWrapper = styled.div`
+  min-width: 150px;
+`;
+
+export const AmountsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const TransactionDetails = styled.div`
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
+  }
+  text-align: left;
+`;

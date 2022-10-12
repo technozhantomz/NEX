@@ -16,6 +16,8 @@ export const en = {
     connecting: "Connecting to API server: %(server)s",
   },
   transaction: {
+    trade: "Trade",
+    transaction_type: "Transaction Type: ",
     feeTypes: {
       _none: "Free of Charge",
       basic_fee: "Basic Fee",
@@ -815,6 +817,8 @@ export const en = {
       from: "From",
     },
     labels: {
+      swap_fee_info:
+        "In order to complete swap the following fees is applicable",
       generate_btc_deposit_address:
         "Generate a Bitcoin address so you can deposit BTC to your Peerplays account",
       deposit_btc:

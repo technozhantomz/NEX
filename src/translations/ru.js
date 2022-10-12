@@ -16,6 +16,8 @@ export const ru = {
     connecting: "Подключение к серверу API: %(server)s",
   },
   transaction: {
+    trade: "Торговля",
+    transaction_type: "Тип операции: ",
     feeTypes: {
       _none: "Бесплатно",
       basic_fee: "Базовая плата",
