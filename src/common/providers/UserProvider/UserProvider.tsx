@@ -8,10 +8,11 @@ import React, {
 } from "react";
 
 import { usePeerplaysApiContext, useSettingsContext } from "..";
-import { useAsset, useLocalStorage } from "../../hooks";
+import { useAsset, useLocalStorage, useSessionStorage } from "../../hooks";
 import {
   Account,
   Asset,
+  BitcoinSidechainAccounts,
   FullAccount,
   KeyType,
   SidechainAcccount,
@@ -33,6 +34,10 @@ const defaultUserState: UserContextType = {
   keyType: "",
   hasBTCDepositAddress: false,
   hasBTCWithdrawPublicKey: false,
+  bitcoinSidechainAccounts: undefined,
+  setBitcoinSidechainAccounts: function (value: BitcoinSidechainAccounts) {
+    throw new Error(`Function not implemented. ${value},`);
+  },
   getSidechainAccounts: function (accountId: string) {
     throw new Error(`Function not implemented. ${accountId},`);
   },
@@ -84,6 +89,11 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     useState<boolean>(false);
   const [hasBTCWithdrawPublicKey, setHasBTCWithdrawPublicKey] =
     useState<boolean>(false);
+  const [bitcoinSidechainAccounts, setBitcoinSidechainAccounts] =
+    useSessionStorage("bitcoinSidechainAccounts") as [
+      BitcoinSidechainAccounts,
+      (value: BitcoinSidechainAccounts) => void
+    ];
 
   const getSidechainAccounts = useCallback(
     async (accountId: string) => {
@@ -283,6 +293,8 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         loadingSidechainAccounts,
         sidechainAccounts,
         bitcoinSidechainAccount,
+        bitcoinSidechainAccounts,
+        setBitcoinSidechainAccounts,
       }}
     >
       {children}

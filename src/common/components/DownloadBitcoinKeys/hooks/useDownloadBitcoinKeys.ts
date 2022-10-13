@@ -18,18 +18,19 @@ export function useDownloadBitcoinKeys(
   const downloadPrivateKeys = (sidechainDepositAddress: string): void => {
     const element = document.createElement("a");
     const fileContents = `
-          \n  ###### Deposit Addresses ######
+          \n##### PeerPlays Deposit Address #####
+          \nPeerPlays Deposit Address: ${sidechainDepositAddress}
+          \n
+          \n###### Bitcoin Deposit Account (Used to create above PeerPlays multi-signature deposit address) ######
           \nAddress: ${bitcoinSidechainAccounts?.deposit.address}
           \nPublic Key: ${bitcoinSidechainAccounts?.deposit.pubKey}
           \nPrivate Key: ${bitcoinSidechainAccounts?.deposit.privateKey}
           \n
-          \n  ###### Withdraw Addresses ######
+          \n###### Bitcoin Withdraw Account ######
           \nAddress: ${bitcoinSidechainAccounts?.withdraw.address}
           \nPublic Key: ${bitcoinSidechainAccounts?.withdraw.pubKey}
           \nPrivate Key: ${bitcoinSidechainAccounts?.withdraw.privateKey}
           \n
-          \n ##### PeerPlays Deposit Address #####
-          \nPeerPlays Deposit Address: ${sidechainDepositAddress}
         `;
 
     const file = new Blob([fileContents], {
