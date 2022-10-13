@@ -29,8 +29,6 @@ export const BlockCard = styled(UiCard)`
       display: none;
     }
   }
-  ${breakpoint.sm} {
-  }
 `;
 export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
 
@@ -60,7 +58,11 @@ export const BlockNumber = styled.h2`
 
 export const TwoColumns = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  ${breakpoint.sm} {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 export const BlockInfoTitle = styled.h3`

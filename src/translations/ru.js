@@ -543,6 +543,15 @@ export const ru = {
         block_information: "Информация о блоке",
         witness: "Свидетель",
       },
+      block_details: {
+        block_num: "Номер блока",
+        witness: "Свидетель",
+        transactions: "Транзакции",
+        block_id: "Идентификатор блока",
+        merkle_root: "Корень Меркла",
+        previous_secret: "Предыдущий секрет",
+        witness_signature: "Подпись свидетеля",
+      },
       assets: {
         heading: "Активы PeerPlays",
         assets: "Ресурсы",
@@ -995,6 +1004,7 @@ export const ru = {
     total_votes: "Всего голосов",
     url: "URL",
     operation: "Операция",
+    operations: "Операции",
     fee_type: "Тип комиссии",
     standard_fee: "Стандартная плата",
     last_block: "Последний блок",
@@ -1005,6 +1015,9 @@ export const ru = {
     category: "категория",
     active: "Активный",
     key: "ключ",
+    ref_block_prefix: "Префикс блока ссылок",
+    ref_block_num: "Блок ссылок №",
+    extensions: "Расширения",
   },
   tooltips: {
     copy: "копировать",

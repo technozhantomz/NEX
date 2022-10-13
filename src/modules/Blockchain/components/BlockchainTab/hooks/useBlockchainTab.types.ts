@@ -35,5 +35,15 @@ export type BlockchainTableRow = {
   time: string;
   witness: string;
   witnessSignature: string;
-  transactions: unknown[];
+  transactions: TransactionRow[];
+};
+
+export type TransactionRow = {
+  rank: number;
+  id: string;
+  expiration: string;
+  operations: number;
+  refBlockPrefix: number;
+  refBlockNum: number;
+  extensions: number;
 };

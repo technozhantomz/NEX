@@ -43,7 +43,17 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
           ]),
           witness: rawBlock.witness_account_name,
           witnessSignature: rawBlock.witness_signature,
-          transactions: rawBlock.transactions,
+          transactions: rawBlock.transactions.map((transaction, index) => {
+            return {
+              rank: index + 1,
+              id: transaction.signatures[0],
+              expiration: transaction.expiration,
+              operations: transaction.operations.length,
+              refBlockPrefix: transaction.ref_block_prefix,
+              refBlockNum: transaction.ref_block_num,
+              extensions: transaction.extensions.length,
+            };
+          }),
         });
         setLoading(false);
       } else {
