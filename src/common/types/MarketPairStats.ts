@@ -1,7 +1,7 @@
 export type MarketPairStats = {
-  latest: number;
-  percentChange: number;
-  volume: number;
+  latest: string;
+  percentChange: string;
+  volume: string;
 };
 
 export type PairNameAndMarketStats = {

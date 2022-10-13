@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 
-import { roundNum } from "..";
 import { useAssetsContext } from "../../providers";
 import { Amount, Asset, Transaction } from "../../types";
 
@@ -12,8 +11,8 @@ export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
   const buildCreateLimitOrderTransaction = useCallback(
     (
       sellerId: string,
-      quantity: number,
-      total: number,
+      quantity: string,
+      total: string,
       currentBase: Asset,
       currentQuote: Asset,
       expiration: string,
@@ -26,36 +25,24 @@ export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
         const sellAsset = currentBase;
         const buyAsset = currentQuote;
         amount_to_sell = {
-          amount: roundNum(
-            total * 10 ** sellAsset.precision,
-            sellAsset.precision
-          ),
+          amount: Math.round(Number(total) * 10 ** sellAsset.precision),
           asset_id: sellAsset.id,
         };
 
         min_to_receive = {
-          amount: roundNum(
-            quantity * 10 ** buyAsset.precision,
-            buyAsset.precision
-          ),
+          amount: Math.round(Number(quantity) * 10 ** buyAsset.precision),
           asset_id: buyAsset.id,
         };
       } else {
         const sellAsset = currentQuote;
         const buyAsset = currentBase;
         amount_to_sell = {
-          amount: roundNum(
-            quantity * 10 ** sellAsset.precision,
-            sellAsset.precision
-          ),
+          amount: Math.round(Number(quantity) * 10 ** sellAsset.precision),
           asset_id: sellAsset.id,
         };
 
         min_to_receive = {
-          amount: roundNum(
-            total * 10 ** buyAsset.precision,
-            buyAsset.precision
-          ),
+          amount: Math.round(Number(total) * 10 ** buyAsset.precision),
           asset_id: buyAsset.id,
         };
       }
@@ -73,7 +60,7 @@ export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
       };
       return trx;
     },
-    [defaultAsset, roundNum]
+    [defaultAsset]
   );
 
   const buildCancelLimitOrderTransaction = useCallback(
@@ -88,7 +75,7 @@ export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
       };
       return trx;
     },
-    [defaultAsset, roundNum]
+    [defaultAsset]
   );
 
   const buildSwapTransaction = useCallback(

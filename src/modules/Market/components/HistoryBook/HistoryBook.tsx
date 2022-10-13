@@ -3,7 +3,7 @@ import { Asset } from "../../../../common/types";
 import { OrderHistoryRow } from "../../types";
 
 import * as Styled from "./HistoryBook.styled";
-import { useHistory } from "./hooks/useHistory";
+import { useHistory } from "./hooks";
 
 type Props = {
   forUser?: boolean;
