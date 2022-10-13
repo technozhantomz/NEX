@@ -15,7 +15,7 @@ import { BlockColumns } from "../components";
 import {
   BlockchainStats,
   BlockchainSupply,
-  BlockchainTableRow,
+  DataTableRow,
   UseBlockchainTabResult,
 } from "./useBlockchainTab.types";
 
@@ -23,9 +23,7 @@ export function useBlockchainTab(
   routerQuery?: ParsedUrlQuery
 ): UseBlockchainTabResult {
   const [loading, setLoading] = useState<boolean>(true);
-  const [searchDataSource, setSearchDataSource] = useState<
-    BlockchainTableRow[]
-  >([]);
+  const [searchDataSource, setSearchDataSource] = useState<DataTableRow[]>([]);
   const [currentBlock, setCurrentBlock] = useState<number>(0);
   const [lastIrreversibleBlock, setLastIrreversibleBlock] =
     useState<string>("");
@@ -34,9 +32,7 @@ export function useBlockchainTab(
     amount: 0,
     symbol: "TEST",
   });
-  const [blockchainTableRows, setBlockchainTableRows] = useState<
-    BlockchainTableRow[]
-  >([]);
+  const [blockchainTableRows, setDataTableRows] = useState<DataTableRow[]>([]);
   const [blockchainStats, setBlockchainStats] = useState<BlockchainStats>({
     currentBlock: [],
     lastIrreversible: [],
@@ -106,7 +102,7 @@ export function useBlockchainTab(
           amount: supplyAmount,
           symbol: defaultAsset.symbol,
         });
-        setBlockchainTableRows(blockRows);
+        setDataTableRows(blockRows);
         setSearchDataSource(blockRows);
         setBlockchainStats({
           currentBlock: updateArrayWithLimit(
@@ -145,7 +141,7 @@ export function useBlockchainTab(
     setLastIrreversibleBlock,
     setAvgTime,
     setSupply,
-    setBlockchainTableRows,
+    setDataTableRows,
     setBlockchainStats,
     setLoading,
   ]);
