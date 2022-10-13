@@ -2,9 +2,9 @@ import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 
 import { utils } from "../../../../../api/utils";
-import { useArrayLimiter } from "../../../../../common/hooks";
+import { useArrayLimiter, useAsset } from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
-import { Account, Asset } from "../../../../../common/types";
+import { Account } from "../../../../../common/types";
 import { AssetsColumns } from "../components";
 
 import { AssetTableRow, UseAssetsTabResult } from "./useAssetsTab.types";
@@ -17,10 +17,11 @@ export function useAssetsTab(): UseAssetsTabResult {
   const [assetsColumns, setAssetsColumns] = useState<ColumnsType<unknown>>([]);
   const { dbApi } = usePeerplaysApiContext();
   const { updateArrayWithLimit } = useArrayLimiter();
+  const { getAllAssets } = useAsset();
 
   const getAssetRows = useCallback(async () => {
     try {
-      const rawAssets: Asset[] = await dbApi("list_assets", ["", 99]);
+      const rawAssets = await getAllAssets();
       if (rawAssets && rawAssets.length > 0) {
         const assetsRows = await Promise.all(
           rawAssets.map(async (asset) => {
