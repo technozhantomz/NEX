@@ -354,13 +354,24 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
           );
         } else {
           const pubkey = Buffer.from(withdrawPublicKey, "hex");
-          const { address } = bitcoin.payments.p2pkh({
-            pubkey,
-            network: NETWORK,
-          });
-          if (address !== value) {
+          try {
+            const { address } = bitcoin.payments.p2pkh({
+              pubkey,
+              network: NETWORK,
+            });
+            if (address !== value) {
+              return Promise.reject(
+                new Error(
+                  counterpart.translate(`field.errors.not_match_address`)
+                )
+              );
+            }
+          } catch (e) {
+            console.log(e);
             return Promise.reject(
-              new Error(counterpart.translate(`field.errors.not_match_address`))
+              new Error(
+                counterpart.translate(`field.errors.first_valid_public_key`)
+              )
             );
           }
         }

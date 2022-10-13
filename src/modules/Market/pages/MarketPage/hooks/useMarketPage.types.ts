@@ -5,7 +5,8 @@ import {
   Exchanges,
   PairNameAndMarketStats,
 } from "../../../../../common/types";
-import { Order, OrderHistoryRow, OrderRow } from "../../../types";
+import { FormInstance } from "../../../../../ui/src";
+import { Order, OrderForm, OrderHistoryRow, OrderRow } from "../../../types";
 
 export type UseMarketPageResult = {
   tradingPairsStats: PairNameAndMarketStats[];
@@ -34,4 +35,8 @@ export type UseMarketPageResult = {
   userOrderHistoryRows: OrderHistoryRow[];
   loadingUserHistoryRows: boolean;
   refreshHistory: () => void;
+  buyOrderForm: FormInstance<OrderForm>;
+  sellOrderForm: FormInstance<OrderForm>;
+  onOrderBookRowClick: (record: OrderRow) => void;
+  pageLoaded: boolean;
 };

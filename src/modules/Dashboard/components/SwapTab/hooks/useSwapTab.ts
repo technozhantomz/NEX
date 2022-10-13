@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
+  roundNum,
   useAccount,
   useAsset,
   useFees,
@@ -59,6 +60,7 @@ export function useSwap(): UseSwapResult {
   const [buyAsset, setBuyAsset] = useState<Asset | undefined>();
   const [middleTrxCoreAmount, setMiddleTrxCoreAmount] = useState<number>(0);
   const [middleTrxOrderPrice, setMiddleTrxOrderPrice] = useState<number>(0);
+  const [buyAssetMarketFee, setBuyAssetMarketFee] = useState<string>("0");
 
   const [swapForm] = Form.useForm<SwapForm>();
   const { buildTrx } = useTransactionBuilder();
@@ -83,7 +85,11 @@ export function useSwap(): UseSwapResult {
   const calculateBasePairPriceForSellAmount = useCallback(
     (sellAmount: number, asks: BookedOrder[]) => {
       const initialValue = sellAmount;
-      const usedOrders = [] as { price: number; buyAmount: number }[];
+      const usedOrders = [] as {
+        price: number;
+        buyAmount: number;
+      }[];
+
       let i = 0;
       while (sellAmount > 0) {
         usedOrders.push({
@@ -274,7 +280,6 @@ export function useSwap(): UseSwapResult {
         const sellLiquidityVolume = calculateBasePairSellLiquidity(asks);
         setBuyLiquidityVolume(buyLiquidityVolume);
         setSellLiquidityVolume(sellLiquidityVolume);
-
         if (inputedAmountType === "sellAsset") {
           // unsuccessful
           if (numberedInputedAmount > sellLiquidityVolume) {
@@ -315,7 +320,7 @@ export function useSwap(): UseSwapResult {
               )
             );
             swapForm.setFieldsValue({
-              sellAmount: limitByPrecision(
+              sellAmount: roundNum(
                 String(numberedInputedAmount * calculatedPrice),
                 sellAsset.precision
               ),
@@ -493,6 +498,28 @@ export function useSwap(): UseSwapResult {
     [defaultToken, updateBasePairSwapForm, updateNonBasePairSwapForm]
   );
 
+  const calculateBuyAssetMarketFee = useCallback(() => {
+    const { buyAmount } = swapForm.getFieldsValue();
+    if (buyAmount && buyAsset) {
+      setBuyAssetMarketFee(
+        limitByPrecision(
+          String(
+            (Number(buyAmount) * buyAsset.options.market_fee_percent) / 10000
+          ),
+          buyAsset.precision
+        )
+      );
+    } else {
+      setBuyAssetMarketFee("0");
+    }
+  }, [
+    swapForm,
+    selectedAssetsSymbols.buyAssetSymbol,
+    buyAsset,
+    setBuyAssetMarketFee,
+    calculatedPrice,
+  ]);
+
   const handleValuesChange = useCallback(
     async (changedValues: any) => {
       if (sellAsset && buyAsset) {
@@ -502,30 +529,38 @@ export function useSwap(): UseSwapResult {
           setLastChangedField("sellAsset");
           const sellAmount = limitByPrecision(
             changedValues.sellAmount,
-            sellAsset.precision
+            sellAsset.precision - 3
           );
           swapForm.setFieldsValue({
             sellAmount: sellAmount,
           });
-
-          await updateSwapFormData(
-            sellAsset,
-            buyAsset,
-            sellAmount,
-            "sellAsset"
-          );
+          if (Number(sellAmount) > 0) {
+            await updateSwapFormData(
+              sellAsset,
+              buyAsset,
+              sellAmount,
+              "sellAsset"
+            );
+          }
         } else if (changedValues.buyAmount !== undefined) {
           setLastChangedField("buyAsset");
           const buyAmount = limitByPrecision(
             changedValues.buyAmount,
-            buyAsset.precision
+            buyAsset.precision - 3
           );
           swapForm.setFieldsValue({
             buyAmount: buyAmount,
           });
-
-          await updateSwapFormData(sellAsset, buyAsset, buyAmount, "buyAsset");
+          if (Number(buyAmount) > 0) {
+            await updateSwapFormData(
+              sellAsset,
+              buyAsset,
+              buyAmount,
+              "buyAsset"
+            );
+          }
         }
+        calculateBuyAssetMarketFee();
         try {
           await swapForm.validateFields();
           setSellAmountErrors([]);
@@ -547,6 +582,7 @@ export function useSwap(): UseSwapResult {
       setSellAmountErrors,
       setBuyAmountErrors,
       setLoadingSwapData,
+      calculateBuyAssetMarketFee,
     ]
   );
 
@@ -636,6 +672,7 @@ export function useSwap(): UseSwapResult {
     setSellAmountErrors,
     setBuyAmountErrors,
     setLoadingSwapData,
+    calculateBuyAssetMarketFee,
   ]);
 
   const calculateSelectedAssetsSwapFee = useCallback(() => {
@@ -733,6 +770,7 @@ export function useSwap(): UseSwapResult {
         sellAsset,
         buyAsset
       );
+
       let trxResult;
       try {
         setLoadingTransaction(true);
@@ -1092,6 +1130,10 @@ export function useSwap(): UseSwapResult {
     handleAssetChange();
   }, [selectedAssetsSymbols]);
 
+  useEffect(() => {
+    calculateBuyAssetMarketFee();
+  }, [calculateBuyAssetMarketFee]);
+
   return {
     swapForm,
     transactionErrorMessage,
@@ -1117,5 +1159,6 @@ export function useSwap(): UseSwapResult {
     sellAmountErrors,
     buyAmountErrors,
     lastChangedField,
+    buyAssetMarketFee,
   };
 }

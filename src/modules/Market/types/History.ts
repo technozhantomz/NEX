@@ -2,7 +2,7 @@ import { Fee } from "../../../common/types";
 
 export type OrderHistoryRow = {
   key: string;
-  price: number;
+  price: string;
   base: number;
   quote: number;
   date: string;

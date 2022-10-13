@@ -28,6 +28,7 @@ export type UseSwapResult = {
   sellAmountErrors: string[];
   buyAmountErrors: string[];
   lastChangedField: SwapInputType;
+  buyAssetMarketFee: string;
 };
 
 export type SwapInputType = "sellAsset" | "buyAsset";
