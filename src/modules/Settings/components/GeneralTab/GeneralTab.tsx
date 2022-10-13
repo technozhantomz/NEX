@@ -118,7 +118,7 @@ export const GeneralTab = (): JSX.Element => {
                     >
                       <Styled.Checkbox
                         disabled={!settings.notifications.allow}
-                        value="order_created"
+                        value="limit_order_create"
                       >
                         {counterpart.translate(
                           `field.checkBoxes.order_created`
@@ -141,7 +141,7 @@ export const GeneralTab = (): JSX.Element => {
                     >
                       <Styled.Checkbox
                         disabled={!settings.notifications.allow}
-                        value="order_canceled"
+                        value="limit_order_cancel"
                       >
                         {counterpart.translate(
                           `field.checkBoxes.order_canceled`
@@ -164,7 +164,7 @@ export const GeneralTab = (): JSX.Element => {
                     </Styled.FormItem>
                   </Col>
 
-                  <Col span={9}>
+                  <Col span={13}>
                     <Styled.FormItem
                       valuePropName="checked"
                       name="fundsReceived"
@@ -179,34 +179,44 @@ export const GeneralTab = (): JSX.Element => {
                       </Styled.Checkbox>
                     </Styled.FormItem>
 
-                    <Styled.FormItem valuePropName="checked" name="swapStarted">
+                    <Styled.FormItem
+                      valuePropName="checked"
+                      name="account_upgrade"
+                    >
                       <Styled.Checkbox
                         disabled={!settings.notifications.allow}
-                        value="swap_started"
+                        value="account_upgrade"
                       >
-                        {counterpart.translate(`field.checkBoxes.swap_started`)}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-
-                    <Styled.FormItem valuePropName="checked" name="swapFilled">
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="swap_filled"
-                      >
-                        {counterpart.translate(`field.checkBoxes.swap_filled`)}
+                        {counterpart.translate(
+                          `field.checkBoxes.account_upgrade`
+                        )}
                       </Styled.Checkbox>
                     </Styled.FormItem>
 
                     <Styled.FormItem
                       valuePropName="checked"
-                      name="swapCanceled"
+                      name="vesting_balance_create"
                     >
                       <Styled.Checkbox
                         disabled={!settings.notifications.allow}
-                        value="swap_canceled"
+                        value="vesting_balance_create"
                       >
                         {counterpart.translate(
-                          `field.checkBoxes.swap_canceled`
+                          `field.checkBoxes.vesting_balance_create`
+                        )}
+                      </Styled.Checkbox>
+                    </Styled.FormItem>
+
+                    <Styled.FormItem
+                      valuePropName="checked"
+                      name="vesting_balance_withdraw"
+                    >
+                      <Styled.Checkbox
+                        disabled={!settings.notifications.allow}
+                        value="vesting_balance_withdraw"
+                      >
+                        {counterpart.translate(
+                          `field.checkBoxes.vesting_balance_withdraw`
                         )}
                       </Styled.Checkbox>
                     </Styled.FormItem>

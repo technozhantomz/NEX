@@ -913,9 +913,9 @@ export const en = {
       order_canceled: "order canceled",
       order_expired: "order expired",
       funds_received: "funds received",
-      swap_started: "swap started",
-      swap_filled: "swap filled",
-      swap_canceled: "swap canceled",
+      account_upgrade: "account upgrade",
+      vesting_balance_create: "vesting balance create",
+      vesting_balance_withdraw: "vesting balance withdraw",
       account_updated: "account updated",
     },
     errors: {

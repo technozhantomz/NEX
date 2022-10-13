@@ -876,9 +876,9 @@ export const ru = {
       order_canceled: "заказ отменен",
       order_expired: "срок действия заказа истек",
       funds_received: "funds received",
-      swap_started: "обмен начался",
-      swap_filled: "своп заполнен",
-      swap_canceled: "своп отменен",
+      account_upgrade: "обновление аккаунта",
+      vesting_balance_create: "создание баланса",
+      vesting_balance_withdraw: "снятие баланса",
       account_updated: "аккаунт обновлен",
     },
     errors: {
