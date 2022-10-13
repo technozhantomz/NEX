@@ -726,7 +726,7 @@ export const ru = {
         },
       },
       sons: {
-        heading: "PeerPlays SONs Голосование",
+        heading: "SONs",
         tab: "Sons",
       },
       witnesses: {
@@ -738,7 +738,7 @@ export const ru = {
         tab: "Прокси",
       },
       committees: {
-        heading: "PeerPlays Комитеты Голосование",
+        heading: "Комитеты",
         tab: "Комитеты",
       },
     },

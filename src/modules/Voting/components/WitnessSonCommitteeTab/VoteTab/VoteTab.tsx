@@ -48,6 +48,7 @@ export const VoteTab = ({
     name,
     updateAccountFee,
     pendingChanges,
+    afterSuccessTransactionModalClose,
   } = useVoteTab({
     tab,
     votesLoading,
@@ -94,6 +95,9 @@ export const VoteTab = ({
               proxy={proxy}
               desiredMembers={pendingChanges.length}
               votes={pendingChanges}
+              afterSuccessTransactionModalClose={
+                afterSuccessTransactionModalClose
+              }
             />
           </>
         ) : (

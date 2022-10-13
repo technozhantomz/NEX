@@ -30,6 +30,7 @@ type Props = {
   proxy: Proxy;
   desiredMembers: number;
   votes: VoteRow[];
+  afterSuccessTransactionModalClose?: () => void;
 };
 
 export const VoteForm = ({
@@ -46,6 +47,7 @@ export const VoteForm = ({
   updateAccountFee,
   proxy,
   desiredMembers,
+  afterSuccessTransactionModalClose,
 }: Props): JSX.Element => {
   const { voteForm } = useVoteForm();
 
@@ -127,6 +129,7 @@ export const VoteForm = ({
             proxy={proxy}
             desiredMembers={desiredMembers}
             memberType={tab}
+            afterClose={afterSuccessTransactionModalClose}
           />
         </Styled.VoteForm>
       </Styled.VoteForm.Provider>

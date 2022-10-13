@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { defaultToken } from "../../../../../../api/params";
 import { isArrayEqual } from "../../../../../../api/utils";
@@ -59,6 +59,8 @@ export function useVoteTab({
     useState<string>("");
   const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const afterCloseTransactionModal = useRef<() => void>();
+
   const { formAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { formAccountBalancesByName } = useAccount();
@@ -216,7 +218,9 @@ export function useVoteTab({
           pendingChanges.forEach((vote) =>
             updateAllMembersRows(vote.id, "update")
           );
-          setPendingChanges([]);
+          afterCloseTransactionModal.current = () => {
+            setPendingChanges([]);
+          };
         } else {
           setTransactionErrorMessage(
             counterpart.translate(`field.errors.unable_transaction`)
@@ -385,7 +389,6 @@ export function useVoteTab({
             ...pendingChanges,
           ]);
         }
-        setTransactionSuccessMessage("");
       }
     },
     [allMembersRows, checkVotesChanged, tab, setPendingChanges, pendingChanges]
@@ -441,7 +444,7 @@ export function useVoteTab({
       }
       setAllMembersRows(allMembersRows);
     },
-    [allMembersRows]
+    [allMembersRows, setAllMembersRows]
   );
 
   const clearPendingActions = () => {
@@ -471,6 +474,12 @@ export function useVoteTab({
     getUpdateAccountFee();
   }, [tab, pendingChanges, allMembers, fullAccount]);
 
+  useEffect(() => {
+    if (afterCloseTransactionModal.current) {
+      afterCloseTransactionModal.current = undefined;
+    }
+  }, [pendingChanges]);
+
   return {
     name,
     loading,
@@ -488,5 +497,6 @@ export function useVoteTab({
     handlePublishChanges,
     loadingTransaction,
     pendingChanges,
+    afterSuccessTransactionModalClose: afterCloseTransactionModal.current,
   };
 }

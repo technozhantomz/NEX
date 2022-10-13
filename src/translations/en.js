@@ -764,7 +764,7 @@ export const en = {
         },
       },
       sons: {
-        heading: "PeerPlays SONs Voting",
+        heading: "SONs",
         tab: "Sons",
       },
       witnesses: {
@@ -776,7 +776,7 @@ export const en = {
         tab: "Proxy",
       },
       committees: {
-        heading: "PeerPlays Committees Voting",
+        heading: "Committees",
         tab: "Committees",
       },
     },

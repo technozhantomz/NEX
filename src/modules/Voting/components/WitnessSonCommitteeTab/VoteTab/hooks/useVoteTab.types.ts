@@ -20,4 +20,5 @@ export type UseVoteTabResult = {
   handlePublishChanges: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   pendingChanges: VoteRow[];
+  afterSuccessTransactionModalClose?: () => void;
 };
