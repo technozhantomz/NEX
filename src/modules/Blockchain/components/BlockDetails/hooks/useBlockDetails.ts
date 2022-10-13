@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useBlockchain, useFormDate } from "../../../../../common/hooks";
-import { BlockchainTableRow } from "../../BlockchainTab/hooks/useBlockchainTab.types";
+import { DataTableRow } from "../../BlockchainTab/hooks/useBlockchainTab.types";
 
 import { UseBlockDetailsResult } from "./useBlockDetails.types";
 
 export function useBlockDetails(block: number): UseBlockDetailsResult {
   const [hasNextBlock, setHasNextBlock] = useState<boolean>(false);
   const [hasPreviousBlock, setHasPreviousBlock] = useState<boolean>(false);
-  const [blockDetails, setBlockDetails] = useState<BlockchainTableRow>({
+  const [blockDetails, setBlockDetails] = useState<DataTableRow>({
     key: block,
     nextSecret: "",
     previousSecret: "",

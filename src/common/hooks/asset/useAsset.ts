@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
 
 import { roundNum } from "..";
+import { symbolsToBeExcepted } from "../../../api/params";
 import { usePeerplaysApiContext, useSettingsContext } from "../../providers";
 import { Asset, Cache } from "../../types";
 
@@ -104,7 +105,9 @@ export function useAsset(): UseAssetResult {
   const getAllAssets = useCallback(async () => {
     try {
       const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-      return allAssets;
+      return allAssets.filter(
+        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
+      );
     } catch (e) {
       console.log(e);
     }

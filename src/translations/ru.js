@@ -659,6 +659,19 @@ export const ru = {
       lower_case_witnesses: "свидетели",
       lower_case_sons: "sons",
       lower_case_committees: "комитеты",
+      status: {
+        approved: "Утверждено",
+        not_approved: "Не одобрено",
+        pending_add: "голосование за одобрение",
+        pending_remove: "голосование за снятие одобрения",
+      },
+      actions: {
+        add: "Добавлять",
+        remove: "Удалить",
+        cancel: "Отмена",
+        pending_add: "Ожидание добавления",
+        pending_remove: "Ожидание удаления",
+      },
       gpos: {
         heading: "геймифицированное доказательство доли (GPOS)",
         tab: "GPOS",
@@ -722,11 +735,11 @@ export const ru = {
         },
       },
       sons: {
-        heading: "PeerPlays SONs Голосование",
+        heading: "SONs",
         tab: "Sons",
       },
       witnesses: {
-        heading: "PeerPlays Свидетели Голосование",
+        heading: "Свидетели",
         tab: "Свидетели",
       },
       proxy: {
@@ -734,7 +747,7 @@ export const ru = {
         tab: "Прокси",
       },
       committees: {
-        heading: "PeerPlays Комитеты Голосование",
+        heading: "Комитеты",
         tab: "Комитеты",
       },
     },
@@ -758,6 +771,7 @@ export const ru = {
     mark_all_read: "отметить все как прочитанное",
     pdf: "PDF",
     csv: "CSV",
+    learn_more: "Учить больше",
   },
   field: {
     options: {
@@ -861,6 +875,7 @@ export const ru = {
       desired_committees: "Желаемые комитеты",
       desired_sons: "Желаемые сыновья",
       desired_proxy: "Желаемый прокси",
+      pending_changes: "Ожидающие изменения",
       wallet_lock: "Блокировка кошелька (минуты)",
       use_whalevault: "Используйте расширение WhaleVault",
     },
@@ -1018,6 +1033,17 @@ export const ru = {
     ref_block_prefix: "Префикс блока ссылок",
     ref_block_num: "Блок ссылок №",
     extensions: "Расширения",
+    status: "Статус",
+  },
+  tableFilters: {
+    avtive: "Активный",
+    inactive: "Неактивно",
+    approved: "Утверждено",
+    not_approved: "Не одобрено",
+    add: "Добавить",
+    remove: "Удалить",
+    pending_add: "Ожидание добавления",
+    pending_remove: "Ожидание удаления",
   },
   tooltips: {
     copy: "копировать",
