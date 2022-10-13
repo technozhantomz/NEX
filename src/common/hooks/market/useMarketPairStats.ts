@@ -14,7 +14,7 @@ import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { getAssetBySymbol } = useAsset();
+  const { getAssetBySymbol, getAllAssets } = useAsset();
 
   const getMarketPairStats = useCallback(
     async (base: Asset, quote: Asset) => {
@@ -50,36 +50,38 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
       `HBD/${defaultToken}`,
     ];
     try {
-      const rawAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-      const threeLetterAsset = rawAssets.find(
-        (asset) =>
-          asset.symbol !== defaultToken &&
-          asset.symbol !== "BTC" &&
-          asset.symbol !== "HBD" &&
-          asset.symbol.length === 3
-      );
-      const fourLetterAsset = rawAssets.find(
-        (asset) =>
-          asset.symbol !== defaultToken &&
-          asset.symbol !== "HIVE" &&
-          asset.symbol.length === 4
-      );
-      const otherAsset = rawAssets.find(
-        (asset) => asset.symbol !== defaultToken && asset.symbol.length > 4
-      );
-      if (threeLetterAsset) {
-        pairs.push(`${threeLetterAsset.symbol}/${defaultToken}`);
+      const rawAssets = await getAllAssets();
+      if (rawAssets && rawAssets.length > 0) {
+        const threeLetterAsset = rawAssets.find(
+          (asset) =>
+            asset.symbol !== defaultToken &&
+            asset.symbol !== "BTC" &&
+            asset.symbol !== "HBD" &&
+            asset.symbol.length === 3
+        );
+        const fourLetterAsset = rawAssets.find(
+          (asset) =>
+            asset.symbol !== defaultToken &&
+            asset.symbol !== "HIVE" &&
+            asset.symbol.length === 4
+        );
+        const otherAsset = rawAssets.find(
+          (asset) => asset.symbol !== defaultToken && asset.symbol.length > 4
+        );
+        if (threeLetterAsset) {
+          pairs.push(`${threeLetterAsset.symbol}/${defaultToken}`);
+          return pairs;
+        }
+        if (fourLetterAsset) {
+          pairs.push(`${fourLetterAsset.symbol}/${defaultToken}`);
+          return pairs;
+        }
+        if (otherAsset) {
+          pairs.push(`${otherAsset.symbol}/${defaultToken}`);
+          return pairs;
+        }
         return pairs;
       }
-      if (fourLetterAsset) {
-        pairs.push(`${fourLetterAsset.symbol}/${defaultToken}`);
-        return pairs;
-      }
-      if (otherAsset) {
-        pairs.push(`${otherAsset.symbol}/${defaultToken}`);
-        return pairs;
-      }
-      return pairs;
     } catch (e) {
       console.log(e);
       return pairs;
