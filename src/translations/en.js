@@ -690,6 +690,19 @@ export const en = {
       lower_case_witnesses: "witnesses",
       lower_case_sons: "sons",
       lower_case_committees: "committees",
+      status: {
+        approved: "Approved",
+        not_approved: "Not Approved",
+        pending_add: "voting to approve",
+        pending_remove: "voting to remove approval",
+      },
+      actions: {
+        add: "Add",
+        remove: "Remove",
+        cancel: "Cancel",
+        pending_add: "Pending Add",
+        pending_remove: "Pending Remove",
+      },
       gpos: {
         heading: "Gamified Proof of Stake (GPOS)",
         tab: "GPOS",
@@ -751,11 +764,11 @@ export const en = {
         },
       },
       sons: {
-        heading: "PeerPlays SONs Voting",
+        heading: "SONs",
         tab: "Sons",
       },
       witnesses: {
-        heading: "PeerPlays Witnesses Voting",
+        heading: "Witnesses",
         tab: "Witnesses",
       },
       proxy: {
@@ -763,7 +776,7 @@ export const en = {
         tab: "Proxy",
       },
       committees: {
-        heading: "PeerPlays Committees Voting",
+        heading: "Committees",
         tab: "Committees",
       },
     },
@@ -788,6 +801,7 @@ export const en = {
     mark_all_read: "Mark all as read",
     pdf: "PDF",
     csv: "CSV",
+    learn_more: "Learn More",
   },
   field: {
     options: {
@@ -889,6 +903,7 @@ export const en = {
       desired_committees: "Desired committees",
       desired_sons: "Desired sons",
       desired_proxy: "Desired Proxy",
+      pending_changes: "Pending changes",
       wallet_lock: "Wallet lock (Minutes)",
       use_whalevault: "Use WhaleVault extension",
     },
@@ -1048,6 +1063,17 @@ export const en = {
     category: "Category",
     active: "Active",
     key: "key",
+    status: "Status",
+  },
+  tableFilters: {
+    avtive: "Avtive",
+    inactive: "Inactive",
+    approved: "Approved",
+    not_approved: "Not Approved",
+    add: "Add",
+    remove: "Remove",
+    pending_add: "Pending Add",
+    pending_remove: "Pending Remove",
   },
   tooltips: {
     copy: "copy",

@@ -1,41 +1,39 @@
 import {
+  DataItemContent,
+  DataTable,
+  DataTableActiveIcon,
+  DataTableDownloadLinks,
+  DataTableHeader,
+  DataTableHeaderBar,
+  DataTableLastBlock,
+  DataTableMissedBlocks,
+  DataTableUrlIcon,
+  DataTabWrapper,
   styled,
   ListItem as UiListItem,
   PrintTable as UiPrintTable,
   StatsCardsDeck as UIStatsCardsDeck,
 } from "../../../../ui/src";
-import {
-  BlockchainDownloadLinks,
-  BlockchainHeader,
-  BlockchainHeaderBar,
-  BlockchainItemContent,
-  BlockchainTable,
-  BlockchainTableActiveIcon,
-  BlockchainTableLastBlock,
-  BlockchainTableMissedBlocks,
-  BlockchainTableUrlIcon,
-  BlockchainTabWrapper,
-} from "../../common";
 
-export const WitnessesTabWrapper = styled(BlockchainTabWrapper)``;
+export const WitnessesTabWrapper = styled(DataTabWrapper)``;
 
 export const StatsCardsDeck = styled(UIStatsCardsDeck)``;
 
-export const WitnessesHeaderBar = styled(BlockchainHeaderBar)``;
+export const WitnessesHeaderBar = styled(DataTableHeaderBar)``;
 
-export const WitnessesHeader = styled(BlockchainHeader)``;
+export const WitnessesHeader = styled(DataTableHeader)``;
 
-export const DownloadLinks = styled(BlockchainDownloadLinks)``;
+export const DownloadLinks = styled(DataTableDownloadLinks)``;
 
-export const WitnessesTable = styled(BlockchainTable)``;
+export const WitnessesTable = styled(DataTable)``;
 
 export const WitnessListItem = styled(UiListItem)``;
 
-export const WitnessesItemContent = styled(BlockchainItemContent)``;
+export const WitnessesItemContent = styled(DataItemContent)``;
 
 export const PrintTable = styled(UiPrintTable)``;
 
-export const LastBlock = styled(BlockchainTableLastBlock)``;
-export const MissedBlocks = styled(BlockchainTableMissedBlocks)``;
-export const urlIcon = styled(BlockchainTableUrlIcon)``;
-export const ActiveIcon = styled(BlockchainTableActiveIcon)``;
+export const LastBlock = styled(DataTableLastBlock)``;
+export const MissedBlocks = styled(DataTableMissedBlocks)``;
+export const urlIcon = styled(DataTableUrlIcon)``;
+export const ActiveIcon = styled(DataTableActiveIcon)``;
