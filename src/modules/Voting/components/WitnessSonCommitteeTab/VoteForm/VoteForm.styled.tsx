@@ -1,4 +1,11 @@
-import { Button, Form, styled, TableSearch } from "../../../../../ui/src";
+import {
+  Button,
+  DataTableDownloadLinks,
+  Form,
+  styled,
+  TableSearch,
+  PrintTable as UiPrintTable,
+} from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 import { Reset as UiReset } from "../../../../../ui/src/icons";
@@ -14,20 +21,12 @@ export const VoteFormWrapper = styled.div`
   }
 `;
 
-export const Title = styled.h2`
-  font-size: 14px;
-  ${breakpoint.sm} {
-    font-size: 20px;
-  }
-  margin-bottom: 25px;
-`;
-
 export const VoteSearch = styled(TableSearch)`
   margin-bottom: 20px;
 `;
 
 export const VoteForm = styled(Form)`
-  max-width: 705px;
+  max-width: 100%;
 `;
 
 export const ActionsContainer = styled.div`
@@ -74,3 +73,7 @@ export const Reset = styled(UiReset)`
   color: #b9b9b9;
   margin-right: 4px;
 `;
+
+export const DownloadLinks = styled(DataTableDownloadLinks)``;
+
+export const PrintTable = styled(UiPrintTable)``;

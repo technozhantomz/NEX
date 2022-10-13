@@ -43,6 +43,7 @@ type Props = {
   orderId?: string;
   withdrawAddress?: string;
   sidechain?: string;
+  afterClose?: () => void;
 };
 
 export const TransactionModal = ({
@@ -70,6 +71,7 @@ export const TransactionModal = ({
   orderId,
   withdrawAddress,
   sidechain,
+  afterClose,
 }: Props): JSX.Element => {
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
@@ -204,6 +206,7 @@ export const TransactionModal = ({
             ? postTransactionButton
             : defaultButtons
         }
+        afterClose={afterClose}
       >
         <Styled.TransactionModalForm
           form={transactionModalForm}
