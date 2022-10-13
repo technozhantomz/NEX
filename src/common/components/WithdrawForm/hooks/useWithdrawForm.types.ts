@@ -4,7 +4,6 @@ import { FormInstance, Rule } from "../../../../ui/src";
 import { SidechainAcccount, SignerKey } from "../../../types";
 
 export type UseWithdrawFormResult = {
-  feeAmount: number;
   formValdation: FormValidation;
   withdrawForm: FormInstance<WithdrawForm>;
   handleValuesChange: (changedValues: any) => void;

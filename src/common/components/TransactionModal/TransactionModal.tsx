@@ -26,7 +26,7 @@ type Props = {
   transactionSuccessMessage: string;
   loadingTransaction: boolean;
   account?: string;
-  fee: number;
+  fee: number | string;
   proxy?: Proxy;
   desiredMembers?: number;
   memberType?: string;
@@ -76,11 +76,13 @@ export const TransactionModal = ({
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
   } = {
-    account_upgrade: <AccountUpgrade account={account as string} fee={fee} />,
+    account_upgrade: (
+      <AccountUpgrade account={account as string} fee={fee as number} />
+    ),
     account_update: (
       <AccountUpdate
         account={account as string}
-        fee={fee}
+        fee={fee as number}
         proxy={proxy}
         desiredMembers={desiredMembers}
         memberType={memberType}
@@ -90,7 +92,7 @@ export const TransactionModal = ({
     limit_order_create: (
       <CreateLimitOrder
         account={account as string}
-        fee={fee}
+        fee={fee as number}
         price={price as string}
         sell={sell as string}
         buy={buy as string}
@@ -100,7 +102,7 @@ export const TransactionModal = ({
     swap_order_create: (
       <CreateSwapOrder
         account={account as string}
-        fee={fee}
+        fee={fee as number}
         price={price as string}
         sell={sell as string}
         buy={buy as string}
@@ -109,35 +111,35 @@ export const TransactionModal = ({
     limit_order_cancel: (
       <CancelLimitOrder
         account={account as string}
-        fee={fee}
+        fee={fee as number}
         orderId={orderId as string}
       />
     ),
     vesting_balance_create: (
       <CreateVestingBalance
         vestingAmount={vestingAmount}
-        fee={fee}
+        fee={fee as number}
         account={account}
       />
     ),
     vesting_balance_withdraw: (
       <WithdrawVestingBalance
         withdrawalAmount={withdrawalAmount}
-        fee={fee}
+        fee={fee as number}
         account={account}
       />
     ),
     sidechain_address_add: (
       <GenerateBitcoinAddresses
         account={account as string}
-        fee={fee}
+        fee={fee as number}
         sidechain={sidechain as string}
       />
     ),
     transfer: (
       <Transfer
         account={account as string}
-        fee={fee}
+        fee={fee as number}
         asset={asset as string}
         to={to as string}
         amount={amount as number}
@@ -146,7 +148,7 @@ export const TransactionModal = ({
     withdraw: (
       <Withdraw
         account={account as string}
-        fee={fee}
+        fee={fee as string}
         asset={asset as string}
         withdrawAddress={withdrawAddress as string}
         amount={amount as number}

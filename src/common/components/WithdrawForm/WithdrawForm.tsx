@@ -10,6 +10,7 @@ import {
   PasswordModal,
   TransactionModal,
 } from "..";
+import { defaultToken } from "../../../api/params";
 import { utils } from "../../../api/utils";
 import { Form, Input } from "../../../ui/src";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
@@ -31,10 +32,9 @@ export const WithdrawForm = ({
   withAssetSelector,
 }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
-  const { defaultAsset, sidechainAssets } = useAssetsContext();
+  const { sidechainAssets } = useAssetsContext();
   const { limitByPrecision } = useAsset();
   const {
-    feeAmount,
     withdrawForm,
     formValdation,
     handleValuesChange,
@@ -105,26 +105,30 @@ export const WithdrawForm = ({
   ) => {
     const BtcFeeSummary = inTotal ? (
       <>
-        <div>{`+ ${withdrawFee} ${
-          defaultAsset ? defaultAsset.symbol : ""
-        }`}</div>
+        <div>{`+ ${withdrawFee} ${defaultToken}`}</div>
         <div>+ {`${btcTransferFee} BTC`}</div>
       </>
     ) : (
       <>
-        <div>{`${withdrawFee} ${defaultAsset ? defaultAsset.symbol : ""}`}</div>
+        <div>{`${withdrawFee} ${defaultToken}`}</div>
         <div>+ {`${btcTransferFee} BTC`}</div>
       </>
     );
 
     const HiveFeeSummary = inTotal
       ? `+ ${withdrawFee}
-    ${defaultAsset ? defaultAsset.symbol : ""}`
+    ${defaultToken}`
       : `${withdrawFee}
-    ${defaultAsset ? defaultAsset.symbol : ""}`;
+    ${defaultToken}`;
 
     return selectedAsset === "BTC" ? BtcFeeSummary : HiveFeeSummary;
   };
+
+  const transactionModalFee =
+    selectedAsset === "BTC"
+      ? `${withdrawFee} ${defaultToken} + ${btcTransferFee} BTC`
+      : `${withdrawFee}
+  ${defaultToken}`;
 
   const totalTransaction = (
     <>
@@ -392,7 +396,7 @@ export const WithdrawForm = ({
           transactionSuccessMessage={transactionSuccessMessage}
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
-          fee={feeAmount}
+          fee={transactionModalFee}
           asset={selectedAsset}
           withdrawAddress={withdrawAddress}
           amount={amount}
