@@ -1,4 +1,5 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
@@ -18,7 +19,7 @@ import { StatsCard } from "../../common";
 
 import * as Styled from "./AssetsTab.styled";
 import { AssetsPrintTable } from "./components";
-import { useAssetsTab } from "./hooks";
+import { AssetTableRow, useAssetsTab } from "./hooks";
 
 export const AssetsTab = (): JSX.Element => {
   const {
@@ -30,7 +31,7 @@ export const AssetsTab = (): JSX.Element => {
     setSearchDataSource,
   } = useAssetsTab();
   const { sm } = useViewportContext();
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
     <Styled.AssetsTabWrapper>
@@ -48,7 +49,7 @@ export const AssetsTab = (): JSX.Element => {
           <InfoCircleOutlined />
         </Styled.AssetHeader>
         <SearchTableInput
-          columns={assetsColumns}
+          columns={assetsColumns as ColumnsType<AssetTableRow>}
           dataSource={assetTableRows}
           setDataSource={setSearchDataSource}
           inputProps={{
@@ -150,7 +151,7 @@ export const AssetsTab = (): JSX.Element => {
       ) : (
         <Styled.AssetsTable
           dataSource={searchDataSource}
-          columns={assetsColumns}
+          columns={assetsColumns as ColumnsType<AssetTableRow>}
           loading={loading}
           pagination={
             !loading

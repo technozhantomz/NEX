@@ -1,4 +1,4 @@
-import { ColumnsType } from "antd/lib/table";
+import { uniq } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
 import { utils } from "../../../../../api/utils";
@@ -7,14 +7,18 @@ import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Account } from "../../../../../common/types";
 import { AssetsColumns } from "../components";
 
-import { AssetTableRow, UseAssetsTabResult } from "./useAssetsTab.types";
+import {
+  AssetColumnType,
+  AssetTableRow,
+  UseAssetsTabResult,
+} from "./useAssetsTab.types";
 
 export function useAssetsTab(): UseAssetsTabResult {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchDataSource, setSearchDataSource] = useState<AssetTableRow[]>([]);
   const [assetTableRows, setAssetTableRows] = useState<AssetTableRow[]>([]);
   const [assetsStats, setAssetsStats] = useState<number[]>([]);
-  const [assetsColumns, setAssetsColumns] = useState<ColumnsType<unknown>>([]);
+  const [assetsColumns, setAssetsColumns] = useState<AssetColumnType[]>([]);
   const { dbApi } = usePeerplaysApiContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { getAllAssets } = useAsset();
@@ -49,7 +53,7 @@ export function useAssetsTab(): UseAssetsTabResult {
             return issuer && issuer.length > 0 ? issuer[0].name : "";
           })
         );
-        const uniqIssuers = [...new Set(allIssuers)];
+        const uniqIssuers = uniq(allIssuers);
         const updatedColumns = AssetsColumns.map((column) => {
           switch (true) {
             case column.key === "symbol":
@@ -64,7 +68,7 @@ export function useAssetsTab(): UseAssetsTabResult {
               break;
           }
           return { ...column };
-        }) as ColumnsType<unknown>;
+        });
         setAssetsColumns(updatedColumns);
         setAssetTableRows(assetsRows);
         setSearchDataSource(assetsRows);
