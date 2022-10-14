@@ -23,10 +23,12 @@ const LogoutPage: NextPage = () => {
     >
       <Styled.LogoutCard>
         <p>{counterpart.translate(`pages.logout.title`)}</p>
-        <Link href="/login" passHref={true}>
-          <Styled.LogoutButton type="primary">
-            {counterpart.translate(`buttons.login`)}
-          </Styled.LogoutButton>
+        <Link href="/login">
+          <a>
+            <Styled.LogoutButton type="primary">
+              {counterpart.translate(`buttons.login`)}
+            </Styled.LogoutButton>
+          </a>
         </Link>
         <FormDisclamer>
           <span>{counterpart.translate(`pages.login.dont_have_account`)}</span>

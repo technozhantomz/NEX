@@ -116,40 +116,44 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
           dataSource={searchDataSource}
           loading={loading}
           renderItem={(item) => (
-            <Link href={`/blockchain/${item.blockID}`} passHref>
-              <Styled.BlockListItem key={item.key}>
-                <Styled.BlockItemContent>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {blockColumns[0].title()}
-                    </span>
-                    <span className="item-info-value">{item.blockID}</span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {blockColumns[1].title()}
-                    </span>
-                    <span className="item-info-value">{item.time}</span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {blockColumns[2].title()}
-                    </span>
-                    <span className="item-info-value">
-                      {" "}
-                      <a href={`/user/${item.witness}`} target="_blank">
-                        {item.witness}
-                      </a>
-                    </span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {blockColumns[3].title()}
-                    </span>
-                    <span className="item-info-value">{item.transaction}</span>
-                  </div>
-                </Styled.BlockItemContent>
-              </Styled.BlockListItem>
+            <Link href={`/blockchain/${item.blockID}`}>
+              <a>
+                <Styled.BlockListItem key={item.key}>
+                  <Styled.BlockItemContent>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {blockColumns[0].title()}
+                      </span>
+                      <span className="item-info-value">{item.blockID}</span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {blockColumns[1].title()}
+                      </span>
+                      <span className="item-info-value">{item.time}</span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {blockColumns[2].title()}
+                      </span>
+                      <span className="item-info-value">
+                        {" "}
+                        <a href={`/user/${item.witness}`} target="_blank">
+                          {item.witness}
+                        </a>
+                      </span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {blockColumns[3].title()}
+                      </span>
+                      <span className="item-info-value">
+                        {item.transaction}
+                      </span>
+                    </div>
+                  </Styled.BlockItemContent>
+                </Styled.BlockListItem>
+              </a>
             </Link>
           )}
         />

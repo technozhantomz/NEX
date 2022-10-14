@@ -20,7 +20,7 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
         <span>
           {!loadingSideBlocks && hasPreviousBlock ? (
             <Link href={`/blockchain/${Number(block) - 1}`}>
-              {counterpart.translate(`buttons.previous`)}
+              <a>{counterpart.translate(`buttons.previous`)}</a>
             </Link>
           ) : (
             <span> {counterpart.translate(`buttons.previous`)}</span>
@@ -28,7 +28,7 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
           |{" "}
           {!loadingSideBlocks && hasNextBlock ? (
             <Link href={`/blockchain/${Number(block) + 1}`}>
-              {counterpart.translate(`buttons.next`)}
+              <a>{counterpart.translate(`buttons.next`)}</a>
             </Link>
           ) : (
             <span>{counterpart.translate(`buttons.next`)}</span>
@@ -49,7 +49,7 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
         <span>{counterpart.translate(`pages.blocks.blockchain.witness`)}</span>
         <span>
           <Link href={`/user/${blockDetails.witness}`}>
-            {blockDetails.witness}
+            <a>{blockDetails.witness}</a>
           </Link>
         </span>
       </Styled.BlockInfo>
