@@ -18,7 +18,7 @@ export function useLoginForm(): UseLoginFormResult {
   const [temporaryFullAccount, setTemporaryFullAccount] = useState<
     FullAccount | undefined
   >(undefined);
-  const [useWhaleVault, setUseWhaleVault] = useState<boolean>(false);
+  const [useWhaleVault, setUseWhaleVault] = useState<boolean>(true);
   const [loggedInKeyType, setLoggedInKeyType] = useState<KeyType>("");
 
   const {

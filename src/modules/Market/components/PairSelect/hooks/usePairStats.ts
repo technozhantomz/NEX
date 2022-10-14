@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { roundNum, useMarketPairStats } from "../../../../../common/hooks";
+import { useMarketPairStats } from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
 
@@ -19,11 +19,11 @@ export function usePairStats({
   loadingAssets,
 }: Args): UsePairStatsResult {
   // latest price for base asset in 24hr
-  const [latest, setLatest] = useState<number>(0);
+  const [latest, setLatest] = useState<string>("0");
   // change in price of base asset in 24hr
-  const [change, setChange] = useState<number>(0);
+  const [change, setChange] = useState<string>("0");
   // trade volume of quote asset in 24hr
-  const [volume, setVolume] = useState<number>(0);
+  const [volume, setVolume] = useState<string>("0");
   const { getMarketPairStats } = useMarketPairStats();
   const { dbApi } = usePeerplaysApiContext();
 
@@ -31,9 +31,9 @@ export function usePairStats({
     async (base: Asset, quote: Asset) => {
       const marketPairStats = await getMarketPairStats(base, quote);
 
-      setLatest(roundNum(Number(marketPairStats.latest), base.precision));
-      setChange(roundNum(Number(marketPairStats.percentChange), 1));
-      setVolume(roundNum(Number(marketPairStats.volume), 3));
+      setLatest(marketPairStats.latest);
+      setChange(marketPairStats.percentChange);
+      setVolume(marketPairStats.volume);
     },
     [dbApi, setLatest, setChange, setVolume]
   );

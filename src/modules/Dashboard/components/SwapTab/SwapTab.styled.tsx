@@ -1,12 +1,7 @@
 import { Button } from "antd";
 
 import { FormDisclamer as UiFormDisclamer } from "../../../../common/components";
-import {
-  LoadingOutlined,
-  styled,
-  Form as swapForm,
-  Tooltip as tooltip,
-} from "../../../../ui/src";
+import { LoadingOutlined, styled, Form as swapForm } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 import { mixIns } from "../../../../ui/src/mixins";
@@ -18,9 +13,9 @@ export const SwapContainer = styled.div`
   font-size: 20px;
   width: 600px;
   margin: 10px;
-  padding: 25px 20px;
+  padding: 25px 20px 0 20px;
   ${breakpoint.sm} {
-    padding: 35px 30px;
+    padding: 35px 30px 0 30px;
   }
 `;
 
@@ -42,6 +37,9 @@ export const SwapForm = styled(swapForm)`
   .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper:focus,
   .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper-focused {
     box-shadow: unset;
+  }
+  .ant-form-item .ant-form-item-margin-offset {
+    margin-bottom: -24px !important;
   }
 `;
 
@@ -87,6 +85,13 @@ export const Balance = styled.div`
   font-size: 14px;
 `;
 
+export const SwapButtonFormItem = styled(swapForm.Item)`
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
+  }
+`;
+
 export const SwapButton = styled(Button)`
   transform: rotate(90deg);
   position: absolute;
@@ -115,10 +120,6 @@ export const PriceLoadingOutlined = styled(LoadingOutlined)`
   margin-right: 4px;
 `;
 
-export const SwapButtonFormItem = styled(swapForm.Item)`
-  margin-bottom: 0;
-`;
-
 export const FormDisclamer = styled(UiFormDisclamer)`
   margin-top: 25px;
   ${breakpoint.sm} {
@@ -126,46 +127,35 @@ export const FormDisclamer = styled(UiFormDisclamer)`
   }
 `;
 
-export const FooterPara = styled.p`
-  width: 55%;
-  color: var(---text-icons);
+export const FeeInfo = styled.div`
+  font-size: 12px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
+  margin-bottom: 20px;
+`;
+
+export const DetailsWrapper = styled.div`
+  display: flex;
+  font-size: 12px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
+`;
+
+export const DetailsLabelWrapper = styled.div`
+  min-width: 150px;
+`;
+
+export const AmountsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const TransactionDetails = styled.div`
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
+  }
   text-align: left;
-  font: normal normal normal 14px/20px Inter;
-  letter-spacing: 0px;
-  color: #212121;
-  opacity: 1;
-  margin-left: 30px;
-  margin-top: 30px;
-`;
-
-export const HistoryLinkDiv = styled.div`
-  margin-top: 30px;
-  backgroundcolor: red;
-`;
-
-export const HistoryLink = styled.a`
-  font: normal normal normal 16px/20px Inter;
-  letter-spacing: 0px;
-  color: #0a48be;
-  opacity: 1;
-`;
-
-export const Tooltip = styled(tooltip)`
-  margin-left: 30px;
-`;
-
-export const TooltipPara = styled.p`
-  padding: 1rem;
-  padding-bottom: 0px;
-  color: var(---text-icons);
-  font: normal normal normal 14px/20px Inter;
-  letter-spacing: 0px;
-  color: #212121;
-  opacity: 1;
-  span {
-    display: block;
-  }
-  @media (max-width: 500px) {
-    font-size: 11px;
-  }
 `;

@@ -21,7 +21,7 @@ export const CreateSwapOrder = ({
   sell,
   buy,
 }: Props): JSX.Element => {
-  const feeValue = String(fee) + defaultToken;
+  const feeValue = String(fee) + " " + defaultToken;
 
   return (
     <>
@@ -39,7 +39,7 @@ export const CreateSwapOrder = ({
       )}
       {buy && (
         <ItemDetails
-          label={counterpart.translate(`field.labels.buy_amount`)}
+          label={counterpart.translate(`field.labels.buy_at_least`)}
           value={buy}
         />
       )}

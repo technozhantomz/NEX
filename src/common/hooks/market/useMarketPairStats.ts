@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { roundNum, useAsset } from "..";
+import { useAsset } from "..";
 import { defaultToken } from "../../../api/params";
 import { usePeerplaysApiContext } from "../../providers";
 import {
@@ -14,22 +14,22 @@ import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { getAssetBySymbol, getAllAssets } = useAsset();
+  const { getAllAssets, getAssetBySymbol, limitByPrecision } = useAsset();
 
   const getMarketPairStats = useCallback(
     async (base: Asset, quote: Asset) => {
-      let latest = 0,
-        percentChange = 0,
-        volume = 0;
+      let latest = "0",
+        percentChange = "0",
+        volume = "0";
       try {
         const ticker: Ticker = await dbApi("get_ticker", [
           base.symbol,
           quote.symbol,
         ]);
         if (ticker) {
-          latest = roundNum(Number(ticker.latest), base.precision);
-          percentChange = roundNum(Number(ticker.percent_change), 1) || 0;
-          volume = roundNum(Number(ticker.quote_volume), 3);
+          latest = limitByPrecision(ticker.latest, base.precision);
+          percentChange = limitByPrecision(ticker.percent_change, 1) || "0";
+          volume = limitByPrecision(ticker.quote_volume, 3);
         }
       } catch (e) {
         console.log(e);
@@ -104,9 +104,9 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         return {
           tradingPair: pair,
           marketPairStats: {
-            volume: 0,
-            latest: 0,
-            percentChange: 0,
+            volume: "0",
+            latest: "0",
+            percentChange: "0",
           },
         } as PairNameAndMarketStats;
       }
