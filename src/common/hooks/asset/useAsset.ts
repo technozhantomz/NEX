@@ -47,12 +47,14 @@ export function useAsset(): UseAssetResult {
         return cache.assets.find((asset) => asset.id === id) as Asset;
       }
       try {
-        const asset: Asset = await dbApi("get_assets", [[id]]).then(
-          (e: Asset[]) => e[0]
-        );
-        setAssetsCache(asset);
-
-        return asset;
+        const assets = await dbApi("get_assets", [[id]]);
+        if (assets && assets.length) {
+          const asset: Asset = assets[0];
+          setAssetsCache(asset);
+          return asset;
+        } else {
+          return {} as Asset;
+        }
       } catch (e) {
         console.log(e);
         return {} as Asset;
@@ -70,11 +72,14 @@ export function useAsset(): UseAssetResult {
         return cache.assets.find((asset) => asset.symbol === symbol) as Asset;
       }
       try {
-        const asset: Asset = await dbApi("lookup_asset_symbols", [
-          [symbol],
-        ]).then((e: Asset[]) => e[0]);
-        setAssetsCache(asset);
-        return asset;
+        const assets = await dbApi("lookup_asset_symbols", [[symbol]]);
+        if (assets && assets.length) {
+          const asset: Asset = assets[0];
+          setAssetsCache(asset);
+          return asset;
+        } else {
+          return {} as Asset;
+        }
       } catch (e) {
         console.log(e);
         return {} as Asset;

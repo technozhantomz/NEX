@@ -32,11 +32,15 @@ export function useAccount(): UseAccountResult {
   const getFullAccount = useCallback(
     async (name: string, subscription: boolean) => {
       try {
-        const fullAccount: FullAccount = await dbApi("get_full_accounts", [
+        const fullAccounts = await dbApi("get_full_accounts", [
           [name],
           subscription,
-        ]).then((e: any) => (e.length ? e[0][1] : undefined));
-        return fullAccount;
+        ]);
+        if (fullAccounts && fullAccounts.length) {
+          return fullAccounts[0][1] as FullAccount;
+        } else {
+          return undefined;
+        }
       } catch (e) {
         console.log(e);
       }

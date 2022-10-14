@@ -211,11 +211,9 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const formInitialAccountByName = useCallback(
     async (name: string) => {
       try {
-        const fullAccount: FullAccount = await dbApi("get_full_accounts", [
-          [name],
-          true,
-        ]).then((e: any) => (e.length ? e[0][1] : undefined));
-        if (fullAccount) {
+        const fullAccounts = await dbApi("get_full_accounts", [[name], true]);
+        if (fullAccounts && fullAccounts.length) {
+          const fullAccount: FullAccount = fullAccounts[0][1];
           const assets: Asset[] = await Promise.all(
             fullAccount.balances.map((balance) => {
               return formAssetBalanceById(balance.asset_type, balance.balance);

@@ -1341,9 +1341,9 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   const historyApi = useCallback(getApi("_hist"), [getApi]);
 
   useEffect(() => {
-    if (window.whalevault) {
-      WhaleVaultConfig.setWhaleVault(window.whalevault);
-      setWhaleVaultInstance(window.whalevault as WhaleVaultType);
+    if ((window as any).whalevault) {
+      WhaleVaultConfig.setWhaleVault((window as any).whalevault);
+      setWhaleVaultInstance((window as any).whalevault as WhaleVaultType);
     }
   }, []);
 
