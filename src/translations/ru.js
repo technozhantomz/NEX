@@ -1041,4 +1041,11 @@ export const ru = {
     mark_unread: "отметить как непрочитанное",
     swap_transaction_type: "Тип сделки: своп",
   },
+  file_content: {
+    btc_withdraw_account: "Счет для вывода биткойнов",
+    btc_deposit_account: "Депозитный счет Биткойн",
+    btc_deposit_account_description:
+      "Используется для создания депозитного адреса PeerPlays с мультиподписью выше.",
+    peerplays_btc_deposit_address: "Адрес депозита PeerPlays",
+  },
 };
