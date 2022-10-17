@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useBlockchain, useFormDate } from "../../../../../common/hooks";
-import { DataTableRow } from "../../BlockchainTab/hooks/useBlockchainTab.types";
+import { DataTableRow } from "../../BlockchainTab/hooks";
 
 import { UseBlockDetailsResult } from "./useBlockDetails.types";
 
@@ -10,9 +10,14 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
   const [hasPreviousBlock, setHasPreviousBlock] = useState<boolean>(false);
   const [blockDetails, setBlockDetails] = useState<DataTableRow>({
     key: block,
+    nextSecret: "",
+    previousSecret: "",
+    merkleRoot: "",
     blockID: block,
     time: "",
     witness: "",
+    witnessSignature: "",
+    transactions: [],
     transaction: 0,
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -25,8 +30,22 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
       setLoading(true);
       const rawBlock = await getBlock(Number(block));
       if (rawBlock) {
+        const transactions = rawBlock.transactions.map((transaction, index) => {
+          return {
+            rank: index + 1,
+            id: transaction.signatures[0],
+            expiration: transaction.expiration,
+            operations: transaction.operations.length,
+            refBlockPrefix: transaction.ref_block_prefix,
+            refBlockNum: transaction.ref_block_num,
+            extensions: transaction.extensions.length,
+          };
+        });
         setBlockDetails({
           key: block,
+          nextSecret: rawBlock.next_secret_hash as string,
+          previousSecret: rawBlock.previous_secret,
+          merkleRoot: rawBlock.transaction_merkle_root,
           blockID: block,
           time: formLocalDate(rawBlock.timestamp, [
             "month",
@@ -34,8 +53,10 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
             "year",
             "time",
           ]),
-          transaction: rawBlock.transactions.length,
           witness: rawBlock.witness_account_name,
+          witnessSignature: rawBlock.witness_signature,
+          transactions: transactions,
+          transaction: transactions.length,
         });
         setLoading(false);
       } else {

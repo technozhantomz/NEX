@@ -63,7 +63,7 @@ export function useBlockchainTab(
 
       const chainAvgTime = getAvgBlockTime();
 
-      const blockRows = recentBlocks.map((block) => {
+      const blockRows: DataTableRow[] = recentBlocks.map((block) => {
         return {
           key: block.id as number,
           blockID: block.id as number,
