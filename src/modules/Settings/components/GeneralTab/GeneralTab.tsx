@@ -14,6 +14,8 @@ export const GeneralTab = (): JSX.Element => {
     handleAllowNotifications,
     showSuccessMessage,
     handleCheckboxChange,
+    handleValuesChange,
+    _isSettingChanged,
   } = useSettings();
 
   const { settings } = useSettingsContext();
@@ -27,6 +29,7 @@ export const GeneralTab = (): JSX.Element => {
         name="generalSettingsForm"
         onFinish={updateSettings}
         initialValues={{ walletLockInMinutes: settings.walletLock }}
+        onValuesChange={handleValuesChange}
       >
         <Row>
           <Col span={9}>
@@ -240,10 +243,12 @@ export const GeneralTab = (): JSX.Element => {
             </Styled.CheckBoxGroup>
           </Col>
         </Row>
-        <Styled.LabelText>
-          <InfoCircleOutlined />
-          {counterpart.translate(`field.labels.unsaved_changes`)}
-        </Styled.LabelText>
+        {!_isSettingChanged && (
+          <Styled.LabelText>
+            <InfoCircleOutlined />
+            {counterpart.translate(`field.labels.unsaved_changes`)}
+          </Styled.LabelText>
+        )}
         <Styled.SaveButton type="primary" htmlType="submit">
           {counterpart.translate(`buttons.save`)}
         </Styled.SaveButton>

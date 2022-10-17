@@ -9,7 +9,7 @@ export type Settings = {
   notifications: {
     allow: boolean;
     additional: {
-      transferToMe: boolean;
+      // transferToMe: boolean;
     };
     selectedNotifications: CheckboxValueType[];
   };

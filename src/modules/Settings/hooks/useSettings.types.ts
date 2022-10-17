@@ -6,6 +6,8 @@ export type UseSettingsResult = {
   showSuccessMessage: boolean;
   handleAllowNotifications: (e: any) => void;
   handleCheckboxChange: (checkedValues: CheckboxValueType[]) => void;
+  handleValuesChange: () => void;
+  _isSettingChanged: boolean;
 };
 
 export type GeneralSettingsForm = {

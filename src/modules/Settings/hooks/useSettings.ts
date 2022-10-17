@@ -9,6 +9,7 @@ import { UseSettingsResult } from "./useSettings.types";
 export function useSettings(): UseSettingsResult {
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [_isSettingChanged, setIsSettingChanged] = useState(true);
   const { settings, setSettings, setLocale } = useSettingsContext();
   const [generalSettingsForm] = Form.useForm();
 
@@ -27,32 +28,36 @@ export function useSettings(): UseSettingsResult {
     }
   };
 
+  const handleNewSettings = useCallback(
+    (values, isSubmitButtonClicked) => {
+      const newSettings: Settings = {
+        ...settings,
+        notifications:
+          values.allowNotifications !== undefined
+            ? {
+                allow: values.allowNotifications,
+                additional: {},
+                selectedNotifications: isSubmitButtonClicked
+                  ? selectedKeys
+                  : values.selectNotifications.sort(),
+              }
+            : settings.notifications,
+        walletLock: values.walletLockInMinutes
+          ? values.walletLockInMinutes
+          : settings.walletLock,
+        language: values.selectedLanguage
+          ? values.selectedLanguage
+          : settings.language,
+      };
+
+      return newSettings;
+    },
+    [selectedKeys]
+  );
+
   const updateSettings = useCallback(() => {
     const values = generalSettingsForm.getFieldsValue();
-
-    const newSettings: Settings = {
-      ...settings,
-      notifications:
-        values.allowNotifications !== undefined
-          ? {
-              allow: values.allowNotifications,
-              additional: {
-                transferToMe: settings.notifications.allow
-                  ? values.allowTransferToMeNotifications
-                  : false,
-              },
-              selectedNotifications: selectedKeys,
-            }
-          : settings.notifications,
-      walletLock: values.walletLockInMinutes
-        ? values.walletLockInMinutes
-        : settings.walletLock,
-      language: values.selectedLanguage
-        ? values.selectedLanguage
-        : settings.language,
-      darkTheme: values.darkTheme,
-    };
-
+    const newSettings = handleNewSettings(values, true);
     setSettings(newSettings);
     if (values.selectedLanguage) {
       setLocale(values.selectedLanguage);
@@ -68,7 +73,29 @@ export function useSettings(): UseSettingsResult {
     setLocale,
     setSettings,
     setShowSuccessMessage,
-    selectedKeys,
+    handleNewSettings,
+  ]);
+
+  const isSettingsChanged = useCallback(
+    (newSettings) => {
+      const valueChange =
+        JSON.stringify(newSettings) === JSON.stringify(settings);
+      return valueChange;
+    },
+    [settings]
+  );
+
+  const handleValuesChange = useCallback(() => {
+    const values = generalSettingsForm.getFieldsValue();
+    const newSettings = handleNewSettings(values, false);
+    const isSettingChanged = isSettingsChanged(newSettings);
+
+    setIsSettingChanged(isSettingChanged);
+  }, [
+    generalSettingsForm,
+    setIsSettingChanged,
+    isSettingsChanged,
+    handleNewSettings,
   ]);
 
   useEffect(() => {
@@ -78,8 +105,6 @@ export function useSettings(): UseSettingsResult {
       walletLockInMinutes: settings.walletLock,
       darkTheme: settings.darkTheme,
       allowNotifications: settings.notifications.allow,
-      allowTransferToMeNotifications:
-        settings.notifications.additional.transferToMe,
       selectNotifications: settings.notifications.selectedNotifications,
     });
   }, [settings, generalSettingsForm, setSelectedKeys]);
@@ -90,5 +115,7 @@ export function useSettings(): UseSettingsResult {
     showSuccessMessage,
     handleAllowNotifications,
     handleCheckboxChange,
+    handleValuesChange,
+    _isSettingChanged,
   };
 }
