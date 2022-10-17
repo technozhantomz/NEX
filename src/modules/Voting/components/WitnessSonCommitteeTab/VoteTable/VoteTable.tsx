@@ -40,7 +40,7 @@ export const VoteTable = ({
   const { sm } = useViewportContext();
   const { localStorageAccount } = useUserContext();
   const columns = showVotesColumns(addChange, cancelChange, getActionString);
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
     <Styled.VoteTableWrapper>

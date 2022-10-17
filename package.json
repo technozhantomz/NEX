@@ -7,8 +7,9 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "pre-commit": "npm run format",
-    "format": "eslint ./src --fix"
+    "pre-commit": "npm run format && npm run ts-lint",
+    "format": "eslint ./src --fix",
+    "ts-lint": "tsc --noEmit --incremental"
   },
   "dependencies": {
     "@ant-design/charts": "^1.4.2",

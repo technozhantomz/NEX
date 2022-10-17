@@ -45,9 +45,9 @@ export function useAssetsTable(): UseAssetsTabResult {
         asset: baseAsset.symbol,
         quoteAsset: defaultToken as string,
         available,
-        price: 0,
+        price: "0",
         change: "0%",
-        volume: 0,
+        volume: "0",
       };
     },
     [dbApi, getMarketPairStats, getAssetBySymbol, defaultAsset]

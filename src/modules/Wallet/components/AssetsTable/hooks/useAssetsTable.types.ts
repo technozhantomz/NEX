@@ -3,9 +3,9 @@ export interface IAssetRow {
   asset: string;
   quoteAsset: string;
   available: number;
-  price: number;
+  price: string;
   change: string;
-  volume: number;
+  volume: string;
 }
 
 export type UseAssetsTabResult = {

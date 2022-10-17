@@ -1,6 +1,6 @@
 import { ParsedUrlQuery } from "querystring";
 
-import { ColumnsType } from "antd/lib/table";
+import { uniq } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -15,6 +15,7 @@ import { BlockColumns } from "../components";
 import {
   BlockchainStats,
   BlockchainSupply,
+  BlockColumnType,
   DataTableRow,
   UseBlockchainTabResult,
 } from "./useBlockchainTab.types";
@@ -39,7 +40,7 @@ export function useBlockchainTab(
     avgTime: [],
     supply: [],
   });
-  const [blockColumns, setBlockColumns] = useState<ColumnsType<unknown>>([]);
+  const [blockColumns, setBlockColumns] = useState<BlockColumnType[]>([]);
   const { defaultAsset } = useAssetsContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const {
@@ -72,7 +73,7 @@ export function useBlockchainTab(
         };
       });
       const allWitnesses = blockRows.map((block) => block.witness);
-      const witnesses = [...new Set(allWitnesses)];
+      const witnesses = uniq(allWitnesses);
       const updateBlockColumns = BlockColumns.map((column) => {
         if (column.key === "witness") {
           column.filters = witnesses.map((witness) => {
@@ -80,7 +81,7 @@ export function useBlockchainTab(
           });
         }
         return { ...column };
-      }) as ColumnsType<unknown>;
+      });
       setBlockColumns(updateBlockColumns);
       if (defaultAsset && chain && blockData && dynamic) {
         const distance_form_irreversible =

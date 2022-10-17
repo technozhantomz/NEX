@@ -1,6 +1,7 @@
 import { ParsedUrlQuery } from "querystring";
 
 import { SearchTableInput } from "ant-table-extensions";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -19,7 +20,7 @@ import { StatsCard } from "../../common";
 
 import * as Styled from "./BlockchainTab.styled";
 import { BlockPrintTable } from "./components";
-import { useBlockchainTab } from "./hooks";
+import { DataTableRow, useBlockchainTab } from "./hooks";
 
 type Props = {
   routerQuery: ParsedUrlQuery;
@@ -39,7 +40,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
   } = useBlockchainTab(routerQuery);
   const router = useRouter();
   const { sm } = useViewportContext();
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
     <Styled.BlockTabWrapper>
@@ -83,7 +84,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
           <InfoCircleOutlined />
         </Styled.BlockHeader>
         <SearchTableInput
-          columns={blockColumns}
+          columns={blockColumns as ColumnsType<DataTableRow>}
           dataSource={blockchainTableRows}
           setDataSource={setSearchDataSource}
           inputProps={{
@@ -160,7 +161,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
       ) : (
         <Styled.BlockTable
           dataSource={searchDataSource}
-          columns={blockColumns}
+          columns={blockColumns as ColumnsType<DataTableRow>}
           rowKey={(record) => record.blockID}
           loading={loading}
           pagination={
