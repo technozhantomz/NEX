@@ -1099,4 +1099,11 @@ export const en = {
     mark_unread: "mark as unread",
     swap_transaction_type: "Transaction Type : Swap",
   },
+  file_content: {
+    btc_withdraw_account: "Bitcoin Withdraw Account",
+    btc_deposit_account: "Bitcoin Deposit Account",
+    btc_deposit_account_description:
+      "Used to create the above PeerPlays multi-signature deposit address",
+    peerplays_btc_deposit_address: "PeerPlays Deposit Address",
+  },
 };

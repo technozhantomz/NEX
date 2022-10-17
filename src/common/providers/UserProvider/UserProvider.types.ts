@@ -1,4 +1,10 @@
-import { Account, Asset, KeyType, SidechainAcccount } from "../../types";
+import {
+  Account,
+  Asset,
+  BitcoinSidechainAccounts,
+  KeyType,
+  SidechainAcccount,
+} from "../../types";
 
 export type UserContextType = {
   localStorageAccount: string;
@@ -8,6 +14,8 @@ export type UserContextType = {
   assets: Asset[];
   password: string;
   keyType: KeyType;
+  bitcoinSidechainAccounts: BitcoinSidechainAccounts;
+  setBitcoinSidechainAccounts: (value: BitcoinSidechainAccounts) => void;
   updateAccount: (
     id: string,
     name: string,

@@ -24,6 +24,7 @@ export function useAccount(): UseAccountResult {
     savePassword,
     removePassword,
     setLocalStorageAccount,
+    setBitcoinSidechainAccounts,
   } = useUserContext();
   const [loading, setLoading] = useState<boolean>(true);
   const { formAssetBalanceById } = useAsset();
@@ -64,6 +65,7 @@ export function useAccount(): UseAccountResult {
     updateAccount("", "", [], undefined);
     removePassword();
     setLocalStorageAccount("");
+    setBitcoinSidechainAccounts(undefined);
   }, [updateAccount, removePassword, setLocalStorageAccount]);
 
   const formAccountAfterConfirmation = useCallback(
