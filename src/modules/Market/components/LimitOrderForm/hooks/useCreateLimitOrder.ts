@@ -5,6 +5,7 @@ import { defaultToken } from "../../../../../api/params";
 import {
   roundNum,
   useAccount,
+  useAsset,
   useFees,
   useOrderTransactionBuilder,
   useTransactionBuilder,
@@ -25,6 +26,7 @@ export function useCreateLimitOrder({
   isBuyOrder,
   refreshHistory,
   refreshOrderBook,
+  orderForm,
 }: UseCreateLimitOrderArgs): UseCreateLimitOrderResult {
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [marketFeePercent, setMarketFeePercent] = useState<number>(0);
@@ -35,37 +37,31 @@ export function useCreateLimitOrder({
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
 
-  const [orderForm] = Form.useForm();
-  const price: number = Form.useWatch("price", orderForm);
-  const quantity: number = Form.useWatch("quantity", orderForm);
-  const total: number = Form.useWatch("total", orderForm);
+  const price: string = Form.useWatch("price", orderForm);
+  const quantity: string = Form.useWatch("quantity", orderForm);
+  const total: string = Form.useWatch("total", orderForm);
   const { formAccountBalancesByName } = useAccount();
   const { calculateCreateLimitOrderFee } = useFees();
   const { localStorageAccount, assets, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
-
   const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
+  const { limitByPrecision } = useAsset();
 
   const handleFieldAssetPrecission = useCallback(
-    (fieldValue: string, fieldName: string, assetPrecission: number) => {
-      let numberedFieldValue = Number(fieldValue);
+    (fieldValue: number, fieldName: string, assetPrecission: number) => {
+      const precisedValue = limitByPrecision(
+        String(fieldValue),
+        assetPrecission
+      );
 
-      if (fieldValue.split(".")[1]?.length >= assetPrecission) {
-        numberedFieldValue =
-          roundNum(numberedFieldValue, assetPrecission) > 0
-            ? roundNum(numberedFieldValue, assetPrecission)
-            : numberedFieldValue;
+      const fieldsValueObject: {
+        [fieldName: string]: string;
+      } = {};
+      fieldsValueObject[`${fieldName}`] = precisedValue;
 
-        const fieldsValueObject: {
-          [fieldName: string]: number;
-        } = {};
-
-        fieldsValueObject[`${fieldName}`] = numberedFieldValue;
-
-        orderForm.setFieldsValue(fieldsValueObject);
-      }
+      orderForm.setFieldsValue(fieldsValueObject);
     },
-    [orderForm]
+    [orderForm, limitByPrecision]
   );
 
   const handleAssetPrecission = useCallback(
@@ -102,14 +98,12 @@ export function useCreateLimitOrder({
   const handleRelationsBetweenInputs = useCallback(
     (changedValues, allValues) => {
       let baseRoundTo = 5;
-      let quoteRoundTo = 5;
       if (
         !loadingSelectedPair &&
         currentBase !== undefined &&
-        currentQuote != undefined
+        currentQuote !== undefined
       ) {
         baseRoundTo = currentBase.precision;
-        quoteRoundTo = currentQuote.precision;
       }
       if (changedValues.price || changedValues.quantity) {
         if (
@@ -122,20 +116,9 @@ export function useCreateLimitOrder({
             total: roundNum(allValues.price * allValues.quantity, baseRoundTo),
           });
         }
-      } else if (changedValues.total) {
-        if (
-          allValues.price &&
-          allValues.price > 0 &&
-          allValues.total &&
-          allValues.total > 0
-        ) {
-          orderForm.setFieldsValue({
-            quantity: roundNum(allValues.total / allValues.price, quoteRoundTo),
-          });
-        }
       }
     },
-    [orderForm, currentBase, currentQuote, roundNum]
+    [orderForm, currentBase, currentQuote, limitByPrecision]
   );
 
   const handleValuesChange = useCallback(
@@ -399,7 +382,6 @@ export function useCreateLimitOrder({
     feeAmount,
     marketFeePercent,
     balance,
-    orderForm,
     formValidation,
     handleValuesChange,
     handleCreateLimitOrder,

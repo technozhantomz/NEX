@@ -33,6 +33,9 @@ export const Table = styled(UiTable)`
   .ant-table-tbody > tr.ant-table-row.buy {
     background: #e5fff6;
   }
+  .ant-table-row {
+    cursor: pointer;
+  }
 `;
 
 export const TableContainer = styled.div`

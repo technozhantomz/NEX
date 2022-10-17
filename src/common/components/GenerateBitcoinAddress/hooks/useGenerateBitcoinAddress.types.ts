@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { SignerKey } from "../../../types";
+import { BitcoinSidechainAccounts, SignerKey } from "../../../types";
 
 export type UseGenerateBitcoinAddressResult = {
   bitcoinSidechainAccounts: BitcoinSidechainAccounts | undefined;
@@ -11,17 +11,4 @@ export type UseGenerateBitcoinAddressResult = {
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   loadingTransaction: boolean;
   generateBitcoinAddresses: (signerKey: SignerKey) => Promise<void>;
-};
-
-export type BitcoinSidechainAccounts =
-  | {
-      deposit: BitcoinAccount;
-      withdraw: BitcoinAccount;
-    }
-  | undefined;
-
-export type BitcoinAccount = {
-  address: string;
-  pubKey: string;
-  privateKey: string;
 };

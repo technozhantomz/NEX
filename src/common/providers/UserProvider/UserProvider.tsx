@@ -8,10 +8,11 @@ import React, {
 } from "react";
 
 import { usePeerplaysApiContext, useSettingsContext } from "..";
-import { useAsset, useLocalStorage } from "../../hooks";
+import { useAsset, useLocalStorage, useSessionStorage } from "../../hooks";
 import {
   Account,
   Asset,
+  BitcoinSidechainAccounts,
   FullAccount,
   KeyType,
   SidechainAcccount,
@@ -33,6 +34,10 @@ const defaultUserState: UserContextType = {
   keyType: "",
   hasBTCDepositAddress: false,
   hasBTCWithdrawPublicKey: false,
+  bitcoinSidechainAccounts: undefined,
+  setBitcoinSidechainAccounts: function (value: BitcoinSidechainAccounts) {
+    throw new Error(`Function not implemented. ${value},`);
+  },
   getSidechainAccounts: function (accountId: string) {
     throw new Error(`Function not implemented. ${accountId},`);
   },
@@ -84,6 +89,11 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     useState<boolean>(false);
   const [hasBTCWithdrawPublicKey, setHasBTCWithdrawPublicKey] =
     useState<boolean>(false);
+  const [bitcoinSidechainAccounts, setBitcoinSidechainAccounts] =
+    useSessionStorage("bitcoinSidechainAccounts") as [
+      BitcoinSidechainAccounts,
+      (value: BitcoinSidechainAccounts) => void
+    ];
 
   const getSidechainAccounts = useCallback(
     async (accountId: string) => {
@@ -211,11 +221,9 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const formInitialAccountByName = useCallback(
     async (name: string) => {
       try {
-        const fullAccount: FullAccount = await dbApi("get_full_accounts", [
-          [name],
-          true,
-        ]).then((e: any) => (e.length ? e[0][1] : undefined));
-        if (fullAccount) {
+        const fullAccounts = await dbApi("get_full_accounts", [[name], true]);
+        if (fullAccounts && fullAccounts.length) {
+          const fullAccount: FullAccount = fullAccounts[0][1];
           const assets: Asset[] = await Promise.all(
             fullAccount.balances.map((balance) => {
               return formAssetBalanceById(balance.asset_type, balance.balance);
@@ -283,6 +291,8 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         loadingSidechainAccounts,
         sidechainAccounts,
         bitcoinSidechainAccount,
+        bitcoinSidechainAccounts,
+        setBitcoinSidechainAccounts,
       }}
     >
       {children}

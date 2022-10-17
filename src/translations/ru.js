@@ -16,6 +16,8 @@ export const ru = {
     connecting: "Подключение к серверу API: %(server)s",
   },
   transaction: {
+    trade: "Торговля",
+    transaction_type: "Тип операции: ",
     feeTypes: {
       _none: "Бесплатно",
       basic_fee: "Базовая плата",
@@ -780,8 +782,7 @@ export const ru = {
     placeholder: {
       user_name: "Введите имя пользователя",
       master_password: "Введите мастер-пароль",
-      master_password_private_key:
-        "Мастер-пароль или закрытый ключ (мы рекомендуем использовать кошелек Whalevault web 3.0)",
+      master_password_private_key: "Мастер-пароль или закрытый ключ",
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
       hive_blockchain_account: "учетная запись Hive",
@@ -801,6 +802,7 @@ export const ru = {
       from: "из",
     },
     labels: {
+      swap_fee_info: "Для завершения обмена применяются следующие сборы",
       generate_btc_deposit_address:
         "Создайте биткойн-адрес, чтобы вы могли внести BTC на свою учетную запись Peerplays.",
       deposit_btc:
@@ -1051,5 +1053,12 @@ export const ru = {
     mark_read: "пометить, как прочитанное",
     mark_unread: "отметить как непрочитанное",
     swap_transaction_type: "Тип сделки: своп",
+  },
+  file_content: {
+    btc_withdraw_account: "Счет для вывода биткойнов",
+    btc_deposit_account: "Депозитный счет Биткойн",
+    btc_deposit_account_description:
+      "Используется для создания депозитного адреса PeerPlays с мультиподписью выше.",
+    peerplays_btc_deposit_address: "Адрес депозита PeerPlays",
   },
 };

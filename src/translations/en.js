@@ -16,6 +16,8 @@ export const en = {
     connecting: "Connecting to API server: %(server)s",
   },
   transaction: {
+    trade: "Trade",
+    transaction_type: "Transaction Type: ",
     feeTypes: {
       _none: "Free of Charge",
       basic_fee: "Basic Fee",
@@ -820,8 +822,7 @@ export const en = {
     placeholder: {
       user_name: "Enter username",
       master_password: "Enter master password",
-      master_password_private_key:
-        "Master password or private key (We recommend using Whalevault web 3.0 wallet)",
+      master_password_private_key: "Master password or private key",
       withdraw_public_key: "Withdraw public key",
       withdraw_address: "Withdraw address",
       hive_blockchain_account: "Hive account",
@@ -840,6 +841,8 @@ export const en = {
       from: "From",
     },
     labels: {
+      swap_fee_info:
+        "In order to complete swap the following fees is applicable",
       generate_btc_deposit_address:
         "Generate a Bitcoin address so you can deposit BTC to your Peerplays account",
       deposit_btc:
@@ -1095,5 +1098,12 @@ export const en = {
     mark_read: "mark as read",
     mark_unread: "mark as unread",
     swap_transaction_type: "Transaction Type : Swap",
+  },
+  file_content: {
+    btc_withdraw_account: "Bitcoin Withdraw Account",
+    btc_deposit_account: "Bitcoin Deposit Account",
+    btc_deposit_account_description:
+      "Used to create the above PeerPlays multi-signature deposit address",
+    peerplays_btc_deposit_address: "PeerPlays Deposit Address",
   },
 };

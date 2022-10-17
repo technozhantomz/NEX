@@ -3,7 +3,11 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 
-import { Layout, TradingPairCard } from "../../../../common/components";
+import {
+  Layout,
+  LoadingIndicator,
+  TradingPairCard,
+} from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { Col, Row } from "../../../../ui/src";
 import {
@@ -24,7 +28,7 @@ const MarketPage: NextPage = () => {
   const { pair } = router.query;
   const {
     tradingPairsStats,
-    //loadingTradingPairs,
+    loadingTradingPairs,
     handleClickOnPair,
     currentBase,
     currentQuote,
@@ -49,9 +53,15 @@ const MarketPage: NextPage = () => {
     userOrderHistoryRows,
     loadingUserHistoryRows,
     refreshHistory,
+    buyOrderForm,
+    sellOrderForm,
+    onOrderBookRowClick,
+    pageLoaded,
   } = useMarketPage({ currentPair: pair as string });
 
-  return (
+  return loadingTradingPairs && !pageLoaded ? (
+    <LoadingIndicator />
+  ) : (
     <Layout
       title="market"
       type="card-lrg"
@@ -111,6 +121,7 @@ const MarketPage: NextPage = () => {
                     getUserHistory={getUserHistory}
                     userOrderHistoryRows={userOrderHistoryRows}
                     loadingUserHistoryRows={loadingUserHistoryRows}
+                    onOrderBookRowClick={onOrderBookRowClick}
                   />
                 </Styled.ColumnFlex>
               </Styled.Container>
@@ -137,6 +148,7 @@ const MarketPage: NextPage = () => {
                   getUserHistory={getUserHistory}
                   userOrderHistoryRows={userOrderHistoryRows}
                   loadingUserHistoryRows={loadingUserHistoryRows}
+                  onOrderBookRowClick={onOrderBookRowClick}
                 />
               </Styled.Container>
             </Col>
@@ -153,6 +165,7 @@ const MarketPage: NextPage = () => {
                       refreshOrderBook={refreshOrderBook}
                       refreshHistory={refreshHistory}
                       showTitle={false}
+                      orderForm={buyOrderForm}
                     />
                   </TabPane>
                   <TabPane tab="SELL" key="2">
@@ -165,6 +178,7 @@ const MarketPage: NextPage = () => {
                       refreshOrderBook={refreshOrderBook}
                       refreshHistory={refreshHistory}
                       showTitle={false}
+                      orderForm={sellOrderForm}
                     />
                   </TabPane>
                 </Styled.Tabs>
@@ -209,6 +223,7 @@ const MarketPage: NextPage = () => {
                   getUserHistory={getUserHistory}
                   userOrderHistoryRows={userOrderHistoryRows}
                   loadingUserHistoryRows={loadingUserHistoryRows}
+                  onOrderBookRowClick={onOrderBookRowClick}
                 />
               </Styled.ColumnFlex>
             </Col>
@@ -236,6 +251,7 @@ const MarketPage: NextPage = () => {
                     isBuyOrder={true}
                     refreshOrderBook={refreshOrderBook}
                     refreshHistory={refreshHistory}
+                    orderForm={buyOrderForm}
                   />
                 </Col>
                 <Col span={12}>
@@ -247,6 +263,7 @@ const MarketPage: NextPage = () => {
                     isBuyOrder={false}
                     refreshOrderBook={refreshOrderBook}
                     refreshHistory={refreshHistory}
+                    orderForm={sellOrderForm}
                   />
                 </Col>
               </Row>
@@ -271,6 +288,7 @@ const MarketPage: NextPage = () => {
                   getUserHistory={getUserHistory}
                   userOrderHistoryRows={userOrderHistoryRows}
                   loadingUserHistoryRows={loadingUserHistoryRows}
+                  onOrderBookRowClick={onOrderBookRowClick}
                 />
               </Row>
             </Col>

@@ -32,7 +32,7 @@ export function UserSettingsProvider({
 
   const [notifications, setNotifications] = useLocalStorage(
     `${chainId.slice(0, 8)}_notifications_${localStorageAccount}`
-  ) as [Notification[], (value: Notification[]) => void];
+  ) as [Notification[], (value: Notification[] | null) => void];
   const [hasUnreadMessages, _setHasUnreadMessages] = useState<boolean>(false);
   const [loadingNotifications, setLoadingNotifications] =
     useState<boolean>(true);
