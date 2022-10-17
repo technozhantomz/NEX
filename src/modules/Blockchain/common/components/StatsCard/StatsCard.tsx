@@ -12,7 +12,7 @@ type Props = {
   statsData?: number[];
   noData: boolean;
   title: string;
-  data: string;
+  data: string | JSX.Element;
 };
 
 export const StatsCard = ({

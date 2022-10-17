@@ -28,8 +28,22 @@ export type BlockchainStats = {
 
 export type DataTableRow = {
   key: number;
+  nextSecret: string;
+  previousSecret: string;
+  merkleRoot: string;
   blockID: number;
   time: string;
   witness: string;
-  transaction: number;
+  witnessSignature: string;
+  transactions: TransactionRow[];
+};
+
+export type TransactionRow = {
+  rank: number;
+  id: string;
+  expiration: string;
+  operations: number;
+  refBlockPrefix: number;
+  refBlockNum: number;
+  extensions: number;
 };
