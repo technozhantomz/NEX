@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { useUserContext } from "..";
+import { useSettingsContext, useUserContext } from "..";
 import { useActivity, useFormDate } from "../../hooks";
 import { Notification } from "../../types";
 
@@ -28,11 +28,8 @@ export function UserSettingsProvider({
   const { localStorageAccount } = useUserContext();
   const { getActivitiesRows } = useActivity();
   const { formLocalDate } = useFormDate();
-  // const { chainId } = useSettingsContext();
+  const { settings } = useSettingsContext();
 
-  // const [notifications, setNotifications] = useLocalStorage(
-  //   `${chainId.slice(0, 8)}_notifications_${localStorageAccount}`
-  // ) as [Notification[], (value: Notification[]) => void];
   const [hasUnreadMessages, _setHasUnreadMessages] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loadingNotifications, setLoadingNotifications] =
@@ -110,7 +107,7 @@ export function UserSettingsProvider({
           setNotifications(serverNotifications);
           _setHasUnreadMessages(true);
         } else {
-          const filteredLocalNotifications = notifications.filter(
+          const filteredLocalNotifications = serverNotifications.filter(
             (notification) =>
               new Date(notification.activity.time) > pastThirtyDaysDate
           );
@@ -151,7 +148,7 @@ export function UserSettingsProvider({
     } else {
       setNotifications(null);
     }
-  }, [localStorageAccount]);
+  }, [localStorageAccount, settings]);
 
   return (
     <userSettingsContext.Provider

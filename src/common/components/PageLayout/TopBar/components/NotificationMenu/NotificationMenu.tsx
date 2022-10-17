@@ -30,7 +30,7 @@ export const NotificationMenu = (): JSX.Element => {
     });
   const { localStorageAccount } = useUserContext();
   const { formLocalDate } = useFormDate();
-
+  // console.log(notifications);
   const today = new Date();
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
