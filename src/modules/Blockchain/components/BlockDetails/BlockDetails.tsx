@@ -24,7 +24,7 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
               <LeftOutlined />
             </Link>
           ) : (
-            <LeftOutlined />
+            ""
           )}
           <Styled.BlockNavItem>
             <Styled.BlockNumber>
@@ -41,7 +41,7 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
                 <RightOutlined />
               </Link>
             ) : (
-              <RightOutlined />
+              ""
             )}
           </span>
         </Styled.BlockNav>
@@ -112,7 +112,10 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
           <p>{blockDetails.witnessSignature}</p>
         </Styled.BlockInfo>
       </Styled.BlockWrapper>
-      <TransactionsTable transactionRows={blockDetails.transactions} />
+      <TransactionsTable
+        block={block}
+        transactionRows={blockDetails.transactions}
+      />
     </>
   );
 };

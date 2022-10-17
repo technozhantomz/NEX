@@ -42,8 +42,10 @@ export type TransactionRow = {
   rank: number;
   id: string;
   expiration: string;
-  operations: number;
+  operations: unknown[];
+  operationResults: unknown[];
   refBlockPrefix: number;
   refBlockNum: number;
-  extensions: number;
+  extensions: unknown[];
+  signatures: string[];
 };

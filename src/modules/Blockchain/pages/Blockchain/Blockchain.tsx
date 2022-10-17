@@ -19,6 +19,7 @@ import {
   CommitteeTab,
   FeesTab,
   SonsTab,
+  TransactionDetails,
   WitnessesTab,
 } from "../../components";
 
@@ -30,7 +31,7 @@ const { TabPane } = Tabs;
 const Blockchain: NextPage = () => {
   const router = useRouter();
   const [visible, setVisible] = useState<boolean>(false);
-  const { blockNumber, tab } = router.query;
+  const { blockNumber, transactionNumber, tab } = router.query;
   const { pageMeta } = useBlockchainPage(tab as string);
   const { sm } = useViewportContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
@@ -96,7 +97,16 @@ const Blockchain: NextPage = () => {
             key="blockchain"
           >
             {blockNumber ? (
-              <BlockDetails block={blockNumber as string} />
+              <>
+                {transactionNumber ? (
+                  <TransactionDetails
+                    block={blockNumber as unknown as number}
+                    transaction={transactionNumber as unknown as number}
+                  />
+                ) : (
+                  <BlockDetails block={blockNumber as unknown as number} />
+                )}
+              </>
             ) : (
               <BlockchainTab routerQuery={router.query} />
             )}

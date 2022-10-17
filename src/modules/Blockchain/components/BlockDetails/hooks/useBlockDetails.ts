@@ -1,13 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useBlockchain, useFormDate } from "../../../../../common/hooks";
-import { DataTableRow } from "../../BlockchainTab/hooks/useBlockchainTab.types";
+import {
+  DataTableRow,
+  TransactionRow,
+} from "../../BlockchainTab/hooks/useBlockchainTab.types";
 
 import { UseBlockDetailsResult } from "./useBlockDetails.types";
 
-export function useBlockDetails(block: number): UseBlockDetailsResult {
+export function useBlockDetails(
+  block: number,
+  transactionNum?: number
+): UseBlockDetailsResult {
   const [hasNextBlock, setHasNextBlock] = useState<boolean>(false);
   const [hasPreviousBlock, setHasPreviousBlock] = useState<boolean>(false);
+  const [hasNextTransition, setHasNextTransition] = useState<boolean>(false);
+  const [hasPreviousTransition, setHasPreviousTransition] =
+    useState<boolean>(false);
   const [blockDetails, setBlockDetails] = useState<DataTableRow>({
     key: block,
     nextSecret: "",
@@ -19,8 +28,22 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
     witnessSignature: "",
     transactions: [],
   });
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<TransactionRow>({
+      rank: 0,
+      id: "",
+      expiration: "",
+      operations: [],
+      operationResults: [],
+      refBlockPrefix: 0,
+      refBlockNum: 0,
+      extensions: [],
+      signatures: [],
+    });
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSideBlocks, setLoadingSideBlocks] = useState<boolean>(true);
+  const [loadingSideTransactions, setLoadingSideTransactions] =
+    useState<boolean>(true);
   const { formLocalDate } = useFormDate();
   const { getBlock } = useBlockchain();
 
@@ -48,13 +71,16 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
               rank: index + 1,
               id: transaction.signatures[0],
               expiration: transaction.expiration,
-              operations: transaction.operations.length,
+              operations: transaction.operations,
+              operationResults: transaction.operation_results,
               refBlockPrefix: transaction.ref_block_prefix,
               refBlockNum: transaction.ref_block_num,
-              extensions: transaction.extensions.length,
+              extensions: transaction.extensions,
+              signatures: transaction.signatures,
             };
           }),
         });
+        console.log(rawBlock.transactions);
         setLoading(false);
       } else {
         setLoading(false);
@@ -88,6 +114,35 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
     }
   }, [getBlock, block, setHasNextBlock, setHasPreviousBlock]);
 
+  const getSideTransactions = useCallback(async () => {
+    try {
+      if (transactionNum !== undefined) {
+        const transactionNumAsIndex = transactionNum - 1;
+        setLoadingSideTransactions(true);
+        const nextTransaction =
+          blockDetails.transactions[transactionNumAsIndex + 1];
+        if (nextTransaction) {
+          setHasNextTransition(true);
+        } else {
+          setHasNextTransition(false);
+        }
+        const previousTransaction =
+          blockDetails.transactions[transactionNumAsIndex - 1];
+        if (previousTransaction) {
+          setHasPreviousTransition(true);
+        } else {
+          setHasPreviousTransition(false);
+        }
+        setLoadingSideTransactions(false);
+      }
+    } catch (e) {
+      console.log(e);
+      setHasNextTransition(false);
+      setHasPreviousTransition(false);
+      setLoadingSideTransactions(false);
+    }
+  }, [blockDetails, setHasNextTransition, setHasPreviousTransition]);
+
   useEffect(() => {
     getBlockDetails();
   }, [block]);
@@ -96,11 +151,22 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
     getSideBlocks();
   }, [getSideBlocks]);
 
+  useEffect(() => {
+    if (blockDetails.transactions.length < 0 && transactionNum !== undefined) {
+      setSelectedTransaction(blockDetails.transactions[transactionNum]);
+    }
+    getSideTransactions();
+  }, [blockDetails, transactionNum, getSideTransactions]);
+
   return {
     blockDetails,
     loading,
     hasNextBlock,
     hasPreviousBlock,
     loadingSideBlocks,
+    hasNextTransition,
+    hasPreviousTransition,
+    loadingSideTransactions,
+    selectedTransaction,
   };
 }

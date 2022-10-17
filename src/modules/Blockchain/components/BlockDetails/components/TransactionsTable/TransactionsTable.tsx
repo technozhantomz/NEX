@@ -1,4 +1,5 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
@@ -18,14 +19,19 @@ import * as Styled from "./TransactionsTable.styled";
 import { useTransactionsTable } from "./hooks";
 
 type Props = {
+  block: number;
   transactionRows: TransactionRow[];
 };
 
-export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
+export const TransactionsTable = ({
+  block,
+  transactionRows,
+}: Props): JSX.Element => {
   const { loading, searchDataSource, setSearchDataSource } =
     useTransactionsTable(transactionRows);
   const { sm } = useViewportContext();
   const componentRef = useRef();
+  const transactionsColumns = TransactionsColumns(block);
 
   return (
     <Styled.TableWrapper>
@@ -35,7 +41,7 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
           <InfoCircleOutlined />
         </Styled.TransactionHeader>
         <SearchTableInput
-          columns={TransactionsColumns}
+          columns={transactionsColumns as ColumnsType<TransactionRow>}
           dataSource={transactionRows}
           setDataSource={setSearchDataSource}
           inputProps={{
@@ -71,16 +77,19 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
               <Styled.TransactionItemContent>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {TransactionsColumns[0].title()}
+                    {transactionsColumns[0].title()}
                   </span>
                   <span className="item-info-value">{item.rank}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {TransactionsColumns[1].title()}
+                    {transactionsColumns[1].title()}
                   </span>
                   <span className="item-info-value">
-                    <a target="_blank" href={`/transaction/${item.id}`}>
+                    <a
+                      target="_blank"
+                      href={`/blockchain/${block}/${item.rank}`}
+                    >
                       <Styled.CenterEllipsis>
                         <span className="ellipsis">{item.id}</span>
                         <span className="indent">{item.id}</span>
@@ -90,33 +99,37 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {TransactionsColumns[2].title()}
+                    {transactionsColumns[2].title()}
                   </span>
                   <span className="item-info-value">{item.expiration}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {TransactionsColumns[3].title()}
+                    {transactionsColumns[3].title()}
                   </span>
-                  <span className="item-info-value">{item.operations}</span>
+                  <span className="item-info-value">
+                    {item.operations.length}
+                  </span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {TransactionsColumns[4].title()}
+                    {transactionsColumns[4].title()}
                   </span>
                   <span className="item-info-value">{item.refBlockPrefix}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {TransactionsColumns[5].title()}
+                    {transactionsColumns[5].title()}
                   </span>
                   <span className="item-info-value">{item.refBlockNum}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {TransactionsColumns[6].title()}
+                    {transactionsColumns[6].title()}
                   </span>
-                  <span className="item-info-value">{item.extensions}</span>
+                  <span className="item-info-value">
+                    {item.extensions.length}
+                  </span>
                 </div>
               </Styled.TransactionItemContent>
             </Styled.TransactionListItem>
@@ -125,7 +138,7 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
       ) : (
         <Styled.TransactionsTable
           dataSource={searchDataSource}
-          columns={TransactionsColumns}
+          columns={transactionsColumns as ColumnsType<TransactionRow>}
           loading={loading}
           pagination={
             !loading
@@ -164,7 +177,7 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
         <div ref={componentRef}>
           <Styled.TransactionsTable
             dataSource={transactionRows}
-            columns={TransactionsColumns}
+            columns={transactionsColumns as ColumnsType<TransactionRow>}
             loading={loading}
             pagination={false}
           />
