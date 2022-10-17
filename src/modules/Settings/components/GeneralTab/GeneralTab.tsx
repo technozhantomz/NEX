@@ -243,12 +243,14 @@ export const GeneralTab = (): JSX.Element => {
             </Styled.CheckBoxGroup>
           </Col>
         </Row>
-        {!_isSettingChanged && (
-          <Styled.LabelText>
-            <InfoCircleOutlined />
-            {counterpart.translate(`field.labels.unsaved_changes`)}
-          </Styled.LabelText>
-        )}
+        <Styled.TextContainer>
+          {!_isSettingChanged && (
+            <Styled.LabelText>
+              <InfoCircleOutlined />
+              {counterpart.translate(`field.labels.unsaved_changes`)}
+            </Styled.LabelText>
+          )}
+        </Styled.TextContainer>
         <Styled.SaveButton type="primary" htmlType="submit">
           {counterpart.translate(`buttons.save`)}
         </Styled.SaveButton>

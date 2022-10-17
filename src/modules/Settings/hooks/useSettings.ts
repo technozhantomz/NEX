@@ -9,7 +9,7 @@ import { UseSettingsResult } from "./useSettings.types";
 export function useSettings(): UseSettingsResult {
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [_isSettingChanged, setIsSettingChanged] = useState(true);
+  const [_isSettingChanged, setIsSettingChanged] = useState<boolean>(true);
   const { settings, setSettings, setLocale } = useSettingsContext();
   const [generalSettingsForm] = Form.useForm();
 
@@ -29,7 +29,7 @@ export function useSettings(): UseSettingsResult {
   };
 
   const handleNewSettings = useCallback(
-    (values, isSubmitButtonClicked) => {
+    (values: any, isSubmitButtonClicked: boolean) => {
       const newSettings: Settings = {
         ...settings,
         notifications:
@@ -64,6 +64,7 @@ export function useSettings(): UseSettingsResult {
     }
 
     setShowSuccessMessage(true);
+    setIsSettingChanged(true);
     setTimeout(() => {
       setShowSuccessMessage(false);
     }, 2000);
@@ -77,7 +78,7 @@ export function useSettings(): UseSettingsResult {
   ]);
 
   const isSettingsChanged = useCallback(
-    (newSettings) => {
+    (newSettings: Settings) => {
       const valueChange =
         JSON.stringify(newSettings) === JSON.stringify(settings);
       return valueChange;

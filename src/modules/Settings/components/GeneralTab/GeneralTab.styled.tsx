@@ -121,3 +121,7 @@ export const CheckBoxGroup = styled(UiForm.Item)`
     display: inline;
   }
 `;
+
+export const TextContainer = styled.div`
+  min-height: 22px;
+`;
