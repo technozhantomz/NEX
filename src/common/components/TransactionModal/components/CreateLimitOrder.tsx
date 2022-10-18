@@ -23,7 +23,7 @@ export const CreateLimitOrder = ({
   buy,
   expiration,
 }: Props): JSX.Element => {
-  const feeValue = String(fee) + defaultToken;
+  const feeValue = String(fee) + " " + defaultToken;
 
   return (
     <>

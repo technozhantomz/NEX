@@ -29,13 +29,15 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
   const [apiConnected, setApiConnected] = useState<boolean>(false);
   const [apiError, setApiError] = useState<boolean>(false);
   const [syncError, setSyncError] = useState<boolean | null>(null);
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<
+    string | { background: boolean; key: string } | boolean
+  >("");
 
   const { apiSettings } = useSettingsContext();
   const { willTransitionTo: _willTransitionTo, apiInstance } =
     usePeerplaysApiContext();
   const statusCallback = useCallback(
-    (status: string) => {
+    (status: string | { background: boolean; key: string } | boolean) => {
       setStatus(status);
     },
     [setStatus]
@@ -84,7 +86,7 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
       <React.Fragment>
         <LoadingIndicator
           loadingText={
-            status ||
+            (status as string) ||
             counterpart.translate("app_init.connecting", {
               server: server,
             })

@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 import { CSSProperties, ReactNode } from "react";
 
-import { ActivityRow } from "../../hooks/useActivityTable.types";
+import { ActivityRow } from "../../../../types";
 import { ActivityColumns as columns } from "../ActivityColumns/";
 import { ActivityTag } from "../ActivityTag";
 import { AvtivityInfo } from "../AvtivityInfo";
@@ -61,36 +61,49 @@ export const ActivityList = ({
             }
           : false
       }
-      renderItem={(item) => (
-        <Styled.ActivityListItem key={item.key}>
-          <Styled.ActivitysItemContent>
-            <div className="activity-info">
-              <span className="activity-info-title">{columns[0].title()}</span>
-              <span className="activity-info-value">{item.time}</span>
-            </div>
-            <div className="activity-info">
-              <span className="activity-info-title">{columns[2].title()}</span>
-              <span className="activity-info-value">
-                <AvtivityInfo infoString={item.info} />
-              </span>
-            </div>
-            <div className="activity-info">
-              <span className="activity-info-title">{columns[3].title()}</span>
-              <span className="activity-info-value">{item.id}</span>
-            </div>
-            <div className="activity-info">
-              <span className="activity-info-title">{columns[4].title()}</span>
-              <span className="activity-info-value">{item.fee}</span>
-            </div>
-            <div className="activity-info">
-              <span className="activity-info-title">{columns[1].title()}</span>
-              <span className="activity-info-value">
-                <ActivityTag type={item.type} />
-              </span>
-            </div>
-          </Styled.ActivitysItemContent>
-        </Styled.ActivityListItem>
-      )}
+      renderItem={(item) => {
+        const activityRow = item as ActivityRow;
+        return (
+          <Styled.ActivityListItem key={activityRow.key}>
+            <Styled.ActivitysItemContent>
+              <div className="activity-info">
+                <span className="activity-info-title">
+                  {columns[0].title()}
+                </span>
+                <span className="activity-info-value">{activityRow.time}</span>
+              </div>
+              <div className="activity-info">
+                <span className="activity-info-title">
+                  {columns[2].title()}
+                </span>
+                <span className="activity-info-value">
+                  <AvtivityInfo infoString={activityRow.info} />
+                </span>
+              </div>
+              <div className="activity-info">
+                <span className="activity-info-title">
+                  {columns[3].title()}
+                </span>
+                <span className="activity-info-value">{activityRow.id}</span>
+              </div>
+              <div className="activity-info">
+                <span className="activity-info-title">
+                  {columns[4].title()}
+                </span>
+                <span className="activity-info-value">{activityRow.fee}</span>
+              </div>
+              <div className="activity-info">
+                <span className="activity-info-title">
+                  {columns[1].title()}
+                </span>
+                <span className="activity-info-value">
+                  <ActivityTag type={activityRow.type} />
+                </span>
+              </div>
+            </Styled.ActivitysItemContent>
+          </Styled.ActivityListItem>
+        );
+      }}
     />
   );
 };

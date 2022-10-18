@@ -3,8 +3,8 @@ import { Asset, Transaction } from "../../types";
 export type UseOrderTransactionBuilderResult = {
   buildCreateLimitOrderTransaction: (
     sellerId: string,
-    quantity: number,
-    total: number,
+    quantity: string,
+    total: string,
     currentBase: Asset,
     currentQuote: Asset,
     expiration: string,

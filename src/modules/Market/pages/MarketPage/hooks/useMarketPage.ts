@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
 import {
-  roundNum,
   useAccount,
   useAccountHistory,
   useAsset,
@@ -20,7 +19,14 @@ import {
   LimitOrder,
   PairNameAndMarketStats,
 } from "../../../../../common/types";
-import { Order, OrderHistory, OrderHistoryRow, OrderRow } from "../../../types";
+import { Form } from "../../../../../ui/src";
+import {
+  Order,
+  OrderForm,
+  OrderHistory,
+  OrderHistoryRow,
+  OrderRow,
+} from "../../../types";
 
 import { UseMarketPageResult } from "./useMarketPage.types";
 
@@ -31,12 +37,14 @@ type Props = {
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { historyApi, dbApi } = usePeerplaysApiContext();
   const { exchanges, updateExchanges } = useUpdateExchanges();
-  const { setPrecision } = useAsset();
+  const { setPrecision, ceilPrecision } = useAsset();
   const { getFullAccount } = useAccount();
   const { id, localStorageAccount } = useUserContext();
   const { getAccountHistoryById } = useAccountHistory();
   const { getDefaultPairs, formPairStats } = useMarketPairStats();
   const { formLocalDate } = useFormDate();
+  const [buyOrderForm] = Form.useForm<OrderForm>();
+  const [sellOrderForm] = Form.useForm<OrderForm>();
 
   const [tradingPairsStats, setTradingPairsStats] = useState<
     PairNameAndMarketStats[]
@@ -63,6 +71,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   >([]);
   const [loadingUserHistoryRows, setLoadingUserHistoryRows] =
     useState<boolean>(true);
+  const [pageLoaded, setPageLoaded] = useState<boolean>(false);
 
   const handleClickOnPair = useCallback(() => {
     setIsPairModalVisible(true);
@@ -95,12 +104,21 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         );
         setTradingPairsStats(tradingPairsStats);
         setLoadingTradingPairs(false);
+        if (!pageLoaded) {
+          setPageLoaded(true);
+        }
       } catch (e) {
         console.log(e);
         setLoadingTradingPairs(false);
       }
     },
-    [setTradingPairsStats, formPairStats, setLoadingTradingPairs]
+    [
+      setTradingPairsStats,
+      formPairStats,
+      setLoadingTradingPairs,
+      pageLoaded,
+      setPageLoaded,
+    ]
   );
 
   const getOrderBook = useCallback(
@@ -135,15 +153,17 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
   const formUserOrderRow = useCallback(
     (baseAsset: Asset, quoteAsset: Asset, limitOrder: LimitOrder): OrderRow => {
-      let price = 0,
-        base = 0,
-        quote = 0,
+      let price = "0",
+        base = "0",
+        quote = "0",
         isBuyOrder = false;
       const key = limitOrder.id;
       const expiration = formLocalDate(limitOrder.expiration);
       if (baseAsset.id === limitOrder.sell_price.base.asset_id) {
-        base = setPrecision(false, limitOrder.for_sale, baseAsset.precision);
-        price = roundNum(
+        base = String(
+          setPrecision(false, limitOrder.for_sale, baseAsset.precision)
+        );
+        price = ceilPrecision(
           setPrecision(
             false,
             limitOrder.sell_price.base.amount,
@@ -157,11 +177,19 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           baseAsset.precision
         );
 
-        quote = roundNum(base / price, quoteAsset.precision);
+        quote = String(
+          setPrecision(
+            false,
+            limitOrder.sell_price.quote.amount,
+            quoteAsset.precision
+          )
+        );
         isBuyOrder = true;
       } else {
-        quote = setPrecision(false, limitOrder.for_sale, quoteAsset.precision);
-        price = roundNum(
+        quote = String(
+          setPrecision(false, limitOrder.for_sale, quoteAsset.precision)
+        );
+        price = ceilPrecision(
           setPrecision(
             false,
             limitOrder.sell_price.quote.amount,
@@ -174,7 +202,13 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
             ),
           baseAsset.precision
         );
-        base = roundNum(price * quote, baseAsset.precision);
+        base = String(
+          setPrecision(
+            false,
+            limitOrder.sell_price.quote.amount,
+            baseAsset.precision
+          )
+        );
       }
 
       return {
@@ -186,7 +220,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         expiration,
       } as OrderRow;
     },
-    [setPrecision, roundNum]
+    [setPrecision]
   );
 
   const getUserOrderBook = useCallback(
@@ -270,14 +304,14 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
       return {
         key: history.id,
-        price: roundNum(baseAmount / quoteAmount),
+        price: ceilPrecision(baseAmount / quoteAmount),
         base: baseAmount,
         quote: quoteAmount,
         date: time,
         isBuyOrder,
       } as OrderHistoryRow;
     },
-    [setPrecision, roundNum]
+    [setPrecision]
   );
 
   const getHistory = useCallback(
@@ -315,7 +349,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       const operationDetails = history.op[1];
       const key = history.id;
 
-      let price = 0,
+      let price = "0",
         base = 0,
         quote = 0,
         isBuyOrder = false;
@@ -331,7 +365,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           operationDetails.pays.amount,
           baseAsset.precision
         );
-        price = roundNum(base / quote, baseAsset.precision);
+        price = ceilPrecision(base / quote, baseAsset.precision);
         isBuyOrder = true;
       } else {
         quote = setPrecision(
@@ -344,12 +378,12 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           operationDetails.receives.amount,
           baseAsset.precision
         );
-        price = roundNum(base / quote, baseAsset.precision);
+        price = ceilPrecision(base / quote, baseAsset.precision);
       }
 
       return { key, price, base, quote, date, isBuyOrder };
     },
-    [dbApi, setPrecision, roundNum]
+    [dbApi, setPrecision]
   );
 
   const getUserHistory = useCallback(
@@ -421,6 +455,25 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     getUserHistory,
   ]);
 
+  const onOrderBookRowClick = useCallback(
+    (record: OrderRow) => {
+      if (!record.isBuyOrder) {
+        buyOrderForm.setFieldsValue({
+          price: record.price,
+          quantity: record.quote,
+          total: record.base,
+        });
+      } else {
+        sellOrderForm.setFieldsValue({
+          price: record.price,
+          quantity: record.quote,
+          total: record.base,
+        });
+      }
+    },
+    [buyOrderForm, sellOrderForm]
+  );
+
   useEffect(() => {
     if (currentPair !== exchanges.active) {
       updateExchanges(currentPair);
@@ -461,5 +514,9 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     userOrderHistoryRows,
     loadingUserHistoryRows,
     refreshHistory,
+    buyOrderForm,
+    sellOrderForm,
+    onOrderBookRowClick,
+    pageLoaded,
   };
 }
