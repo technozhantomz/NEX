@@ -193,13 +193,21 @@ export function SettingsProvider({
     setLocale(localeFromStorage());
   }, [setLocale, localeFromStorage]);
 
+  const initApplication = useCallback(() => {
+    return new Promise((resolve, _reject) => {
+      initCache();
+      initSettings();
+      initApiSettings();
+      initLocale();
+      resolve(true);
+    });
+  }, []);
+
   useEffect(() => {
     setLoading(true);
-    initCache();
-    initSettings();
-    initApiSettings();
-    initLocale();
-    setLoading(false);
+    initApplication().then(() => {
+      setLoading(false);
+    });
   }, []);
 
   return (

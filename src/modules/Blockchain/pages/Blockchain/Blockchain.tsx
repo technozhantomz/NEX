@@ -96,7 +96,7 @@ const Blockchain: NextPage = () => {
             key="blockchain"
           >
             {blockNumber ? (
-              <BlockDetails block={blockNumber as string} />
+              <BlockDetails block={Number(blockNumber as string)} />
             ) : (
               <BlockchainTab routerQuery={router.query} />
             )}
