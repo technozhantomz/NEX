@@ -28,7 +28,7 @@ export const CommitteeTab = (): JSX.Element => {
     setSearchDataSource,
   } = useCommitteeTab();
   const { sm } = useViewportContext();
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
     <Styled.CommitteeTabWrapper>

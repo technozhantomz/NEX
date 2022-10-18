@@ -2,6 +2,10 @@ import { Dropdown, Menu, styled, Table as UiTable } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
+type TableContainerType = {
+  forUser: boolean;
+};
+
 export const Flex = styled.div`
   display: flex;
 `;
@@ -38,7 +42,7 @@ export const Table = styled(UiTable)`
   }
 `;
 
-export const TableContainer = styled.div`
+export const TableContainer = styled.div<TableContainerType>`
   ${breakpoint.md} {
     height: ${(props) => (props.forUser ? "230px" : "775px")};
     overflow-y: auto;

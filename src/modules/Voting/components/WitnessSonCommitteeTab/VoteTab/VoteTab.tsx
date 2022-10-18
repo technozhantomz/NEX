@@ -66,7 +66,9 @@ export const VoteTab = ({
           tab: capitalize(counterpart.translate(`pages.voting.${tab}.heading`)),
         })}
         <InfoCircleOutlined />
-        <Link href={""}>{counterpart.translate(`links.learn_more`)}</Link>
+        <Link href={""}>
+          <a>{counterpart.translate(`links.learn_more`)}</a>
+        </Link>
       </Styled.Title>
       <Styled.VoteTabCard>
         {pendingChanges.length > 0 ? (

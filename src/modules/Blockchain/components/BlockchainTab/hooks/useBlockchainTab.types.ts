@@ -1,9 +1,8 @@
-import { ColumnsType } from "antd/lib/table";
 import { Dispatch, SetStateAction } from "react";
 
 export type UseBlockchainTabResult = {
   loading: boolean;
-  blockColumns: ColumnsType<unknown>;
+  blockColumns: BlockColumnType[];
   blockchainTableRows: DataTableRow[];
   blockchainStats: BlockchainStats;
   currentBlock: number;
@@ -28,14 +27,15 @@ export type BlockchainStats = {
 
 export type DataTableRow = {
   key: number;
-  nextSecret: string;
-  previousSecret: string;
-  merkleRoot: string;
+  nextSecret?: string;
+  previousSecret?: string;
+  merkleRoot?: string;
   blockID: number;
   time: string;
   witness: string;
-  witnessSignature: string;
-  transactions: TransactionRow[];
+  witnessSignature?: string;
+  transactions?: TransactionRow[];
+  transaction: number;
 };
 
 export type TransactionRow = {
@@ -46,4 +46,46 @@ export type TransactionRow = {
   refBlockPrefix: number;
   refBlockNum: number;
   extensions: number;
+};
+
+export type BlockColumnType = {
+  title: () => JSX.Element;
+  dataIndex: string;
+  key: string;
+  render: ((witness: string) => JSX.Element) | undefined;
+  filters:
+    | {
+        text: string;
+        value: string;
+      }[]
+    | undefined;
+  filterMode: string | undefined;
+  filterSearch: boolean | undefined;
+  onFilter: ((value: string, record: DataTableRow) => boolean) | undefined;
+  sorter:
+    | ((
+        a: {
+          blockID: number;
+        },
+        b: {
+          blockID: number;
+        }
+      ) => number)
+    | ((
+        a: {
+          time: string;
+        },
+        b: {
+          time: string;
+        }
+      ) => number)
+    | ((
+        a: {
+          transaction: number;
+        },
+        b: {
+          transaction: number;
+        }
+      ) => number)
+    | undefined;
 };

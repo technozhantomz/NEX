@@ -1,5 +1,5 @@
 import { useViewportContext } from "../../../../common/providers";
-import { Asset } from "../../../../common/types";
+import { Asset, Scroll } from "../../../../common/types";
 import { OrderHistoryRow } from "../../types";
 
 import * as Styled from "./HistoryBook.styled";
@@ -41,9 +41,9 @@ export const HistoryBook = ({
   const dataSource = forUser ? userOrderHistoryRows : orderHistoryRows;
   const desktopScroll =
     dataSource.length > 24
-      ? { scrollToFirstRowOnChange: false, y: 540, x: true }
-      : { scrollToFirstRowOnChange: false, x: true };
-  const scroll = md ? { x: true } : desktopScroll;
+      ? { y: 540, x: true, scrollToFirstRowOnChange: false }
+      : { x: true, scrollToFirstRowOnChange: false };
+  const scroll = md ? ({ x: true } as Scroll) : (desktopScroll as Scroll);
 
   return (
     <>
@@ -56,7 +56,8 @@ export const HistoryBook = ({
           dataSource={dataSource}
           bordered={false}
           rowClassName={(record) => {
-            return record.isBuyOrder ? "buy" : "sell";
+            const item = record as OrderHistoryRow;
+            return item.isBuyOrder ? "buy" : "sell";
           }}
         ></Styled.Table>
       </Styled.TableContainer>
