@@ -1,4 +1,8 @@
 export const ru = {
+  general: {
+    yes: "Да",
+    no: "Нет",
+  },
   app_init: {
     check_latency: "Запуск проверки задержки...",
     check_latency_feedback:

@@ -1,3 +1,4 @@
+import { Settings } from "../../../common/types";
 import { CheckboxValueType, FormInstance } from "../../../ui/src";
 
 export type UseSettingsResult = {
@@ -5,14 +6,15 @@ export type UseSettingsResult = {
   generalSettingsForm: FormInstance<GeneralSettingsForm>;
   showSuccessMessage: boolean;
   handleAllowNotifications: (e: any) => void;
-  handleCheckboxChange: (checkedValues: CheckboxValueType[]) => void;
   handleValuesChange: () => void;
-  _isSettingChanged: boolean;
+  isSettingChanged: boolean;
+  settings: Settings;
+  allowNotification: boolean;
 };
 
 export type GeneralSettingsForm = {
   selectedLanguage: string;
   allowNotifications: boolean;
-  allowTransferToMeNotifications: boolean;
   walletLockInMinutes: number;
+  selectedNotifications: CheckboxValueType[];
 };

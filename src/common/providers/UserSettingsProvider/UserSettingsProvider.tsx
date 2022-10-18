@@ -36,6 +36,7 @@ export function UserSettingsProvider({
   const [hasUnreadMessages, _setHasUnreadMessages] = useState<boolean>(false);
   const [loadingNotifications, setLoadingNotifications] =
     useState<boolean>(true);
+
   const setHasUnreadMessages = (notifications: Notification[]) => {
     for (const notification of notifications) {
       if (notification.unread) {
@@ -84,54 +85,66 @@ export function UserSettingsProvider({
     );
     try {
       setLoadingNotifications(true);
-
-      const serverActivities = (
-        await getActivitiesRows(localStorageAccount, false)
-      ).filter((activities) =>
-        settings.notifications.selectedNotifications.includes(activities.type)
-      );
-      if (serverActivities && serverActivities.length) {
-        const filteredServerActivities = serverActivities.filter(
-          (serverActivity) => {
-            return (
-              new Date(formLocalDate(serverActivity.time)) >= pastThirtyDaysDate
-            );
-          }
+      if (settings.notifications.allow) {
+        const serverActivities = (
+          await getActivitiesRows(localStorageAccount, false)
+        ).filter((activities) =>
+          settings.notifications.selectedNotifications.includes(activities.type)
         );
-        const serverNotifications = filteredServerActivities.map(
-          (serverActivity) => {
-            return {
-              activity: serverActivity,
-              unread: true,
-            } as Notification;
-          }
-        );
-        if (!notifications || notifications.length === 0) {
-          setNotifications(serverNotifications);
-          _setHasUnreadMessages(true);
-        } else {
-          const filteredLocalNotifications = notifications.filter(
-            (notification) =>
-              new Date(notification.activity.time) > pastThirtyDaysDate
+        if (serverActivities && serverActivities.length > 0) {
+          const filteredServerActivities = serverActivities.filter(
+            (serverActivity) => {
+              return (
+                new Date(formLocalDate(serverActivity.time)) >=
+                pastThirtyDaysDate
+              );
+            }
           );
-          if (filteredLocalNotifications.length === 0) {
+          const serverNotifications = filteredServerActivities.map(
+            (serverActivity) => {
+              return {
+                activity: serverActivity,
+                unread: true,
+              } as Notification;
+            }
+          );
+          if (!notifications || notifications.length === 0) {
             setNotifications(serverNotifications);
             _setHasUnreadMessages(true);
           } else {
-            const lastUpdateNotificationIndex = serverNotifications.findIndex(
-              (serverNotification) =>
-                serverNotification.activity.id ===
-                filteredLocalNotifications[0].activity.id
-            );
-            const newNotifications = [
-              ...serverNotifications.slice(0, lastUpdateNotificationIndex),
-              ...filteredLocalNotifications,
-            ];
-            setNotifications(newNotifications);
-            setHasUnreadMessages(newNotifications);
+            const filteredLocalNotifications = notifications
+              .filter(
+                (notification) =>
+                  new Date(notification.activity.time) > pastThirtyDaysDate
+              )
+              .filter((notif) =>
+                settings.notifications.selectedNotifications.includes(
+                  notif.activity.type
+                )
+              );
+            if (filteredLocalNotifications.length === 0) {
+              setNotifications(serverNotifications);
+              _setHasUnreadMessages(true);
+            } else {
+              const lastUpdateNotificationIndex = serverNotifications.findIndex(
+                (serverNotification) =>
+                  serverNotification.activity.id ===
+                  filteredLocalNotifications[0].activity.id
+              );
+              const newNotifications = [
+                ...serverNotifications.slice(0, lastUpdateNotificationIndex),
+                ...filteredLocalNotifications,
+              ];
+              setNotifications(newNotifications);
+              setHasUnreadMessages(newNotifications);
+            }
           }
+          setLoadingNotifications(false);
+        } else {
+          setNotifications([]);
+          _setHasUnreadMessages(false);
+          setLoadingNotifications(false);
         }
-        setLoadingNotifications(false);
       } else {
         setNotifications([]);
         _setHasUnreadMessages(false);
@@ -151,7 +164,12 @@ export function UserSettingsProvider({
     } else {
       setNotifications(null);
     }
-  }, [localStorageAccount, settings]);
+  }, [
+    localStorageAccount,
+    settings.notifications.allow,
+    settings.notifications.selectedNotifications,
+    settings.notifications.selectedNotifications.length,
+  ]);
 
   return (
     <userSettingsContext.Provider

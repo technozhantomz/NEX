@@ -1,7 +1,6 @@
 import counterpart from "counterpart";
 
 import { defaultLocales, faucetUrl } from "../../../../api/params";
-import { useSettingsContext } from "../../../../common/providers";
 import { Checkbox, Col, InfoCircleOutlined, Row } from "../../../../ui/src";
 import { useSettings } from "../../hooks";
 
@@ -13,14 +12,57 @@ export const GeneralTab = (): JSX.Element => {
     generalSettingsForm,
     handleAllowNotifications,
     showSuccessMessage,
-    handleCheckboxChange,
     handleValuesChange,
-    _isSettingChanged,
+    isSettingChanged,
+    settings,
+    allowNotification,
   } = useSettings();
 
-  const { settings } = useSettingsContext();
-
   const walletLockInMinutes = ["0", "30", "60", "90", "180", "210"];
+  const notificationOptions = [
+    {
+      label: counterpart.translate(`transaction.trxTypes.transfer.title`),
+      value: "transfer",
+    },
+    {
+      label: counterpart.translate(
+        `transaction.trxTypes.limit_order_create.title`
+      ),
+      value: "limit_order_create",
+    },
+    {
+      label: counterpart.translate(`transaction.trxTypes.fill_order.title`),
+      value: "fill_order",
+    },
+    {
+      label: counterpart.translate(
+        `transaction.trxTypes.limit_order_cancel.title`
+      ),
+      value: "limit_order_cancel",
+    },
+    {
+      label: counterpart.translate(`transaction.trxTypes.account_update.title`),
+      value: "account_update",
+    },
+    {
+      label: counterpart.translate(
+        `transaction.trxTypes.account_upgrade.title`
+      ),
+      value: "account_upgrade",
+    },
+    {
+      label: counterpart.translate(
+        `transaction.trxTypes.vesting_balance_create.title`
+      ),
+      value: "vesting_balance_create",
+    },
+    {
+      label: counterpart.translate(
+        `transaction.trxTypes.vesting_balance_withdraw.title`
+      ),
+      value: "vesting_balance_withdraw",
+    },
+  ];
 
   return (
     <Styled.GeneralSettingsCard>
@@ -28,7 +70,12 @@ export const GeneralTab = (): JSX.Element => {
         form={generalSettingsForm}
         name="generalSettingsForm"
         onFinish={updateSettings}
-        initialValues={{ walletLockInMinutes: settings.walletLock }}
+        initialValues={{
+          walletLockInMinutes: settings.walletLock,
+          selectedLanguage: settings.language,
+          allowNotifications: settings.notifications.allow,
+          selectedNotifications: settings.notifications.selectedNotifications,
+        }}
         onValuesChange={handleValuesChange}
       >
         <Row>
@@ -89,8 +136,12 @@ export const GeneralTab = (): JSX.Element => {
             </Styled.LabelText>
             <Styled.GeneralSettingFormItem name="allowNotifications">
               <Styled.Select onChange={handleAllowNotifications}>
-                <Styled.Option value={true}>Yes</Styled.Option>
-                <Styled.Option value={false}>No</Styled.Option>
+                <Styled.Option value={true}>
+                  {counterpart.translate(`general.yes`)}
+                </Styled.Option>
+                <Styled.Option value={false}>
+                  {counterpart.translate(`general.no`)}
+                </Styled.Option>
               </Styled.Select>
             </Styled.GeneralSettingFormItem>
 
@@ -100,158 +151,29 @@ export const GeneralTab = (): JSX.Element => {
             </Styled.LabelText>
 
             <Styled.CheckBoxGroup
-              name="selectNotifications"
+              name="selectedNotifications"
               validateTrigger="onChange"
             >
-              <Checkbox.Group onChange={handleCheckboxChange}>
-                <Row>
-                  <Col span={9}>
-                    <Styled.FormItem valuePropName="checked" name="fundSent">
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="transfer"
-                      >
-                        {counterpart.translate(`field.checkBoxes.funds_sent`)}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-
-                    <Styled.FormItem
-                      valuePropName="checked"
-                      name="orderCreated"
-                    >
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="limit_order_create"
-                      >
-                        {counterpart.translate(
-                          `field.checkBoxes.order_created`
-                        )}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-
-                    <Styled.FormItem valuePropName="checked" name="orderFilled">
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="order_filled"
-                      >
-                        {counterpart.translate(`field.checkBoxes.order_filled`)}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-
-                    <Styled.FormItem
-                      valuePropName="checked"
-                      name="orderCanceled"
-                    >
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="limit_order_cancel"
-                      >
-                        {counterpart.translate(
-                          `field.checkBoxes.order_canceled`
-                        )}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-
-                    <Styled.FormItem
-                      valuePropName="checked"
-                      name="orderExpired"
-                    >
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="order_expired"
-                      >
-                        {counterpart.translate(
-                          `field.checkBoxes.order_expired`
-                        )}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-                  </Col>
-
-                  <Col span={13}>
-                    <Styled.FormItem
-                      valuePropName="checked"
-                      name="fundsReceived"
-                    >
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="funds_received"
-                      >
-                        {counterpart.translate(
-                          `field.checkBoxes.funds_received`
-                        )}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-
-                    <Styled.FormItem
-                      valuePropName="checked"
-                      name="account_upgrade"
-                    >
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="account_upgrade"
-                      >
-                        {counterpart.translate(
-                          `field.checkBoxes.account_upgrade`
-                        )}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-
-                    <Styled.FormItem
-                      valuePropName="checked"
-                      name="vesting_balance_create"
-                    >
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="vesting_balance_create"
-                      >
-                        {counterpart.translate(
-                          `field.checkBoxes.vesting_balance_create`
-                        )}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-
-                    <Styled.FormItem
-                      valuePropName="checked"
-                      name="vesting_balance_withdraw"
-                    >
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="vesting_balance_withdraw"
-                      >
-                        {counterpart.translate(
-                          `field.checkBoxes.vesting_balance_withdraw`
-                        )}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-
-                    <Styled.FormItem
-                      valuePropName="checked"
-                      name="accountUpdated"
-                    >
-                      <Styled.Checkbox
-                        disabled={!settings.notifications.allow}
-                        value="account_updated"
-                      >
-                        {counterpart.translate(
-                          `field.checkBoxes.account_updated`
-                        )}
-                      </Styled.Checkbox>
-                    </Styled.FormItem>
-                  </Col>
-                </Row>
-              </Checkbox.Group>
+              <Checkbox.Group
+                disabled={!allowNotification}
+                options={notificationOptions}
+              ></Checkbox.Group>
             </Styled.CheckBoxGroup>
           </Col>
         </Row>
         <Styled.TextContainer>
-          {!_isSettingChanged && (
+          {isSettingChanged && (
             <Styled.LabelText>
               <InfoCircleOutlined />
               {counterpart.translate(`field.labels.unsaved_changes`)}
             </Styled.LabelText>
           )}
         </Styled.TextContainer>
-        <Styled.SaveButton type="primary" htmlType="submit">
+        <Styled.SaveButton
+          type="primary"
+          htmlType="submit"
+          disabled={!isSettingChanged}
+        >
           {counterpart.translate(`buttons.save`)}
         </Styled.SaveButton>
         <Styled.FaucetSpace>

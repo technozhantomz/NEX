@@ -120,6 +120,11 @@ export const CheckBoxGroup = styled(UiForm.Item)`
   .ant-checkbox-group {
     display: inline;
   }
+  .ant-checkbox-wrapper {
+    width: 45%;
+    margin-bottom: 8px;
+    margin-top: 8px;
+  }
 `;
 
 export const TextContainer = styled.div`

@@ -1,4 +1,8 @@
 export const en = {
+  general: {
+    yes: "Yes",
+    no: "No",
+  },
   app_init: {
     check_latency: "Running latency checks...",
     check_latency_feedback:

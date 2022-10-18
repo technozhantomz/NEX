@@ -8,9 +8,6 @@ export type Settings = {
   nodeAutoselect: boolean;
   notifications: {
     allow: boolean;
-    additional: {
-      // transferToMe: boolean;
-    };
     selectedNotifications: CheckboxValueType[];
   };
   walletLock: number;

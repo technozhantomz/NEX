@@ -9,10 +9,7 @@ export const defaultSettings: Settings = {
   nodeAutoselect: true,
   defaultAsset: defaultQuote as string,
   notifications: {
-    allow: true,
-    additional: {
-      transferToMe: true,
-    },
+    allow: false,
     selectedNotifications: [],
   },
   walletLock: 0,

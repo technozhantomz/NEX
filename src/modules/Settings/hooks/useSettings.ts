@@ -1,122 +1,79 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { useSettingsContext } from "../../../common/providers";
 import { Settings } from "../../../common/types";
-import { CheckboxValueType, Form } from "../../../ui/src";
+import { Form } from "../../../ui/src";
 
-import { UseSettingsResult } from "./useSettings.types";
+import { GeneralSettingsForm, UseSettingsResult } from "./useSettings.types";
 
 export function useSettings(): UseSettingsResult {
-  const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [_isSettingChanged, setIsSettingChanged] = useState<boolean>(true);
   const { settings, setSettings, setLocale } = useSettingsContext();
-  const [generalSettingsForm] = Form.useForm();
 
-  const handleCheckboxChange = useCallback(
-    (checkedValues: CheckboxValueType[]) => {
-      setSelectedKeys(checkedValues);
-    },
-    [setSelectedKeys]
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [isSettingChanged, _setIsSettingChanged] = useState<boolean>(false);
+  const [generalSettingsForm] = Form.useForm<GeneralSettingsForm>();
+  const [allowNotification, setAllowNotification] = useState<boolean>(
+    settings.notifications.allow
   );
 
   const handleAllowNotifications = (e: any) => {
-    if (!e) {
-      generalSettingsForm.setFieldsValue({
-        allowTransferToMeNotifications: false,
-      });
-    }
+    generalSettingsForm.setFieldsValue({
+      allowNotifications: e,
+    });
+    setAllowNotification(e);
   };
 
-  const handleNewSettings = useCallback(
-    (values: any, isSubmitButtonClicked: boolean) => {
-      const newSettings: Settings = {
-        ...settings,
-        notifications:
-          values.allowNotifications !== undefined
-            ? {
-                allow: values.allowNotifications,
-                additional: {},
-                selectedNotifications: isSubmitButtonClicked
-                  ? selectedKeys
-                  : values.selectNotifications.sort(),
-              }
-            : settings.notifications,
-        walletLock: values.walletLockInMinutes
-          ? values.walletLockInMinutes
-          : settings.walletLock,
-        language: values.selectedLanguage
-          ? values.selectedLanguage
-          : settings.language,
-      };
+  const createNewSettings = useCallback(() => {
+    const values = generalSettingsForm.getFieldsValue();
+    const newSettings: Settings = {
+      ...settings,
+      notifications: {
+        allow: values.allowNotifications,
+        selectedNotifications: values.selectedNotifications,
+      },
+      walletLock: values.walletLockInMinutes,
+      language: values.selectedLanguage,
+    };
 
-      return newSettings;
+    return newSettings;
+  }, [generalSettingsForm, settings]);
+
+  const setIsSettingChanged = useCallback(
+    (newSettings: Settings) => {
+      const settingsChanged =
+        JSON.stringify(newSettings) !== JSON.stringify(settings);
+      _setIsSettingChanged(settingsChanged);
     },
-    [selectedKeys]
+    [settings, _setIsSettingChanged]
   );
+
+  const handleValuesChange = useCallback(() => {
+    const newSettings = createNewSettings();
+    setIsSettingChanged(newSettings);
+  }, [createNewSettings, setIsSettingChanged]);
 
   const updateSettings = useCallback(() => {
     const values = generalSettingsForm.getFieldsValue();
-    const newSettings = handleNewSettings(values, true);
+    const newSettings = createNewSettings();
     setSettings(newSettings);
     if (values.selectedLanguage) {
       setLocale(values.selectedLanguage);
     }
-
     setShowSuccessMessage(true);
-    setIsSettingChanged(true);
+    _setIsSettingChanged(false);
     setTimeout(() => {
       setShowSuccessMessage(false);
     }, 2000);
-  }, [
-    settings,
-    generalSettingsForm,
-    setLocale,
-    setSettings,
-    setShowSuccessMessage,
-    handleNewSettings,
-  ]);
-
-  const isSettingsChanged = useCallback(
-    (newSettings: Settings) => {
-      const valueChange =
-        JSON.stringify(newSettings) === JSON.stringify(settings);
-      return valueChange;
-    },
-    [settings]
-  );
-
-  const handleValuesChange = useCallback(() => {
-    const values = generalSettingsForm.getFieldsValue();
-    const newSettings = handleNewSettings(values, false);
-    const isSettingChanged = isSettingsChanged(newSettings);
-
-    setIsSettingChanged(isSettingChanged);
-  }, [
-    generalSettingsForm,
-    setIsSettingChanged,
-    isSettingsChanged,
-    handleNewSettings,
-  ]);
-
-  useEffect(() => {
-    setSelectedKeys(settings.notifications.selectedNotifications);
-    generalSettingsForm.setFieldsValue({
-      selectedLanguage: settings.language,
-      walletLockInMinutes: settings.walletLock,
-      darkTheme: settings.darkTheme,
-      allowNotifications: settings.notifications.allow,
-      selectNotifications: settings.notifications.selectedNotifications,
-    });
-  }, [settings, generalSettingsForm, setSelectedKeys]);
+  }, [generalSettingsForm, setLocale, setSettings, setShowSuccessMessage]);
 
   return {
     updateSettings,
     generalSettingsForm,
     showSuccessMessage,
     handleAllowNotifications,
-    handleCheckboxChange,
     handleValuesChange,
-    _isSettingChanged,
+    isSettingChanged,
+    settings,
+    allowNotification,
   };
 }
