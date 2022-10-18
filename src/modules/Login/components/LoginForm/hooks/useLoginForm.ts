@@ -63,8 +63,8 @@ export function useLoginForm(): UseLoginFormResult {
       });
   };
 
-  const onChangeWalletLock = (value: number) => {
-    setSettings({ ...settings, walletLock: value });
+  const onChangeWalletLock = (value: any) => {
+    setSettings({ ...settings, walletLock: Number(value) });
   };
 
   const onChangeUseWhaleVault = (e: CheckboxChangeEvent) => {

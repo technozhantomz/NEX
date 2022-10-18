@@ -10,7 +10,7 @@ export type UsePairModalResult = {
   ) => void;
   handleCancel: () => void;
   handleSelectPair: () => void;
-  handleSelectRecent: (value: string) => void;
+  handleSelectRecent: (value: unknown) => void;
   handleValuesChange: () => void;
 };
 

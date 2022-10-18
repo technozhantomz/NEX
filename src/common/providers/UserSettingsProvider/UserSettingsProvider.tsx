@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { useSettingsContext, useUserContext } from "..";
 import { useActivity, useFormDate, useLocalStorage } from "../../hooks";
@@ -29,6 +35,7 @@ export function UserSettingsProvider({
   const { getActivitiesRows } = useActivity();
   const { formLocalDate } = useFormDate();
   const { chainId, settings } = useSettingsContext();
+  const { account } = useUserContext();
 
   const [notifications, setNotifications] = useLocalStorage(
     `${chainId.slice(0, 8)}_notifications_${localStorageAccount}`
@@ -158,6 +165,19 @@ export function UserSettingsProvider({
     }
   };
 
+  const updateNotificationsLanguage = useCallback(async () => {
+    if (account) {
+      const activityRows = await getActivitiesRows(account.name);
+      const updatedNotifications = notifications.map((notif) => {
+        return {
+          activity: activityRows.find((row) => row.id === notif.activity.id),
+          unread: notif.unread,
+        } as Notification;
+      });
+      setNotifications(updatedNotifications);
+    }
+  }, [account, getActivitiesRows, notifications, setNotifications]);
+
   useEffect(() => {
     if (localStorageAccount && localStorageAccount !== "") {
       updateNotifications();
@@ -170,6 +190,10 @@ export function UserSettingsProvider({
     settings.notifications.selectedNotifications,
     settings.notifications.selectedNotifications.length,
   ]);
+
+  useEffect(() => {
+    updateNotificationsLanguage();
+  }, [settings.language]);
 
   return (
     <userSettingsContext.Provider

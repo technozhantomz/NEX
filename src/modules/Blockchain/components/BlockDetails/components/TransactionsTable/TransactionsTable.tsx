@@ -25,7 +25,7 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
   const { loading, searchDataSource, setSearchDataSource } =
     useTransactionsTable(transactionRows);
   const { sm } = useViewportContext();
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
     <Styled.TableWrapper>

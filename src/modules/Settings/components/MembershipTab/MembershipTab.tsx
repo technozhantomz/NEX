@@ -153,7 +153,7 @@ export const MembershipTab = (): JSX.Element => {
                   )}
                 </Styled.Label>
                 <Link href={`/user/${lifetimeReferrerName}`}>
-                  {lifetimeReferrerName}
+                  <a>{lifetimeReferrerName}</a>
                 </Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
@@ -165,7 +165,9 @@ export const MembershipTab = (): JSX.Element => {
                 <Styled.Label>
                   {counterpart.translate(`pages.settings.membership.registrar`)}
                 </Styled.Label>
-                <Link href={`/user/${registrarName}`}>{registrarName}</Link>
+                <Link href={`/user/${registrarName}`}>
+                  <a>{registrarName}</a>
+                </Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{registrarFee}%</Styled.PercentageText>
@@ -178,7 +180,9 @@ export const MembershipTab = (): JSX.Element => {
                     `pages.settings.membership.affiliate_referrer`
                   )}
                 </Styled.Label>
-                <Link href={`/user/${referrerName}`}>{referrerName}</Link>
+                <Link href={`/user/${referrerName}`}>
+                  <a>{referrerName}</a>
+                </Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{referrerFee}%</Styled.PercentageText>

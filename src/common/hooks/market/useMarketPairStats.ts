@@ -71,15 +71,15 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         if (threeLetterAsset) {
           pairs.push(`${threeLetterAsset.symbol}/${defaultToken}`);
           return pairs;
-        }
-        if (fourLetterAsset) {
+        } else if (fourLetterAsset) {
           pairs.push(`${fourLetterAsset.symbol}/${defaultToken}`);
           return pairs;
-        }
-        if (otherAsset) {
+        } else if (otherAsset) {
           pairs.push(`${otherAsset.symbol}/${defaultToken}`);
           return pairs;
         }
+        return pairs;
+      } else {
         return pairs;
       }
     } catch (e) {

@@ -3,6 +3,7 @@
 const nextBundleAnalyzer = require("@next/bundle-analyzer");
 const withPlugins = require("next-compose-plugins");
 const withLess = require("next-with-less");
+const { PHASE_DEVELOPMENT_SERVER } = require("next/constants");
 
 const withBundleAnalyzer = nextBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
@@ -24,17 +25,22 @@ const plugins = [
   ],
 ];
 
+const generateBuildId = async () => {
+  if (process.env.BUILD_ID) {
+    return process.env.BUILD_ID;
+  } else {
+    return `${new Date().getTime()}`;
+  }
+};
+
 const nextConfig = {
   reactStrictMode: true,
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
-  },
   devIndicators: {
     buildActivity: false,
+  },
+  ["!" + PHASE_DEVELOPMENT_SERVER]: {
+    distDir: "build",
+    generateBuildId: generateBuildId,
   },
   webpack(config) {
     config.module.rules.push({
