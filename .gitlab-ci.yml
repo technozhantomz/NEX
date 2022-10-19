@@ -115,7 +115,8 @@ deploy_review:
     - deploy-review
 
 stop_review_app:
-  dependencies: [deploy_review]
+  needs:
+    - deploy_review
   stage: deploy
   script: stop-review-app
   environment:
