@@ -148,9 +148,7 @@ const AssetPage: NextPage = () => {
             counterpart.translate(`field.labels.deposit_btc`)
           )}
           <DownloadBitcoinKeys
-            bitcoinSidechainAccount={
-              bitcoinSidechainAccount as SidechainAcccount
-            }
+            bitcoinSidechainAccount={bitcoinSidechainAccount}
             getSidechainAccounts={getSidechainAccounts}
           />
         </>

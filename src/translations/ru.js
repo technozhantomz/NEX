@@ -894,6 +894,8 @@ export const ru = {
       key_management_group: ["Владелец", "Активный", "Памятка"],
     },
     errors: {
+      loading_sidechain_accounts:
+        "Подождите, пока загрузятся сайдчейн-аккаунты.",
       unable_to_create_account:
         "Невозможно создать учетную запись. Пожалуйста, попробуйте позже",
       enter_amount: "Введите сумму",

@@ -80,7 +80,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
           ).getTime();
           const nextVoteDistance = nextVoteTime - now;
           const currentWitness = await getUserNameById(
-            blockData.current_witness as string
+            blockData.current_witness
           );
           if (witnesses && witnesses.length > 0) {
             witnesses.sort((a, b) => b.total_votes - a.total_votes);

@@ -263,27 +263,21 @@ export function useAccount(): UseAccountResult {
               );
               if (!isValidKeys) {
                 response = "field.errors.wrong_whalevault_keys";
-                isValid = false;
               } else {
-                response = "";
                 isValid = true;
               }
             } else {
               response = "field.errors.not_added_to_whalevault";
-              isValid = false;
             }
           } else {
             response = "field.errors.whalevault_connection_error";
-            isValid = false;
           }
         } catch (e) {
           console.log(e);
           response = "field.errors.whalevault_connection_error";
-          isValid = false;
         }
       } else {
         response = "field.errors.whalevault_not_installed";
-        isValid = false;
       }
       return { response, isValid };
     },

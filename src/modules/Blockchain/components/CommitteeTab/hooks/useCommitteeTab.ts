@@ -58,7 +58,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
             })
           );
           const activeCommittee = committeeRows.filter(
-            (committee) => committee.active == true
+            (committee) => committee.active
           );
           setCommitteeTableRows(committeeRows);
           setSearchDataSource(committeeRows);
