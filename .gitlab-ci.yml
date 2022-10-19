@@ -120,10 +120,9 @@ stop_review_app:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
-  only: 
-    - merge_requests
-  when: delayed
-  start_in: 1 week
+  rules:
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
+  when: manual
   tags:
     - deploy-review
 
