@@ -58,7 +58,7 @@ build-production:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   artifacts: 
     paths:
-    - .build/
+    - build/
     - .env
   tags:
     - staging
@@ -115,8 +115,7 @@ deploy_review:
     - deploy-review
 
 stop_review_app:
-  needs:
-    - deploy_review
+  dependencies: [deploy_review]
   stage: deploy
   script: stop-review-app
   environment:
