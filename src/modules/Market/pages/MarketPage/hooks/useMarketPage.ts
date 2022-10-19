@@ -288,8 +288,23 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           "get_fill_order_history",
           [base.id, quote.id, 100]
         );
+
+        const filterMarketTaker = histories.reduce(
+          (previousHistory, currentHistory, i, { [i - 1]: next }) => {
+            if (i % 2) {
+              previousHistory.push(
+                currentHistory.op.order_id > next.op.order_id
+                  ? currentHistory
+                  : next
+              );
+            }
+            return previousHistory;
+          },
+          [] as OrderHistory[]
+        );
+
         setOrderHistoryRows(
-          histories.map((history) => {
+          filterMarketTaker.map((history) => {
             return formOrderHistoryRow(history, base, quote);
           })
         );
