@@ -122,7 +122,8 @@ stop_review_app:
     action: stop
   only: 
     - merge_requests
-  when: manual
+  when: delayed
+  start_in: 1 week
   tags:
     - deploy-review
 
