@@ -23,7 +23,7 @@ export const CreateLimitOrder = ({
   buy,
   expiration,
 }: Props): JSX.Element => {
-  const feeValue = String(fee) + defaultToken;
+  const feeValue = String(fee) + " " + defaultToken;
 
   return (
     <>
@@ -47,7 +47,9 @@ export const CreateLimitOrder = ({
       )}
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.labels.seller`)}</p>
-        <Link href={`/user/${account}`}>{account}</Link>
+        <Link href={`/user/${account}`}>
+          <a>{account}</a>
+        </Link>
       </Styled.DetailContainer>
       {expiration && (
         <ItemDetails

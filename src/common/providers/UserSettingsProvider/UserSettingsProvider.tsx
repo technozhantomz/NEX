@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { useSettingsContext, useUserContext } from "..";
 import { useActivity, useFormDate, useLocalStorage } from "../../hooks";
@@ -28,11 +34,12 @@ export function UserSettingsProvider({
   const { localStorageAccount } = useUserContext();
   const { getActivitiesRows } = useActivity();
   const { formLocalDate } = useFormDate();
-  const { chainId } = useSettingsContext();
+  const { chainId, settings } = useSettingsContext();
+  const { account } = useUserContext();
 
   const [notifications, setNotifications] = useLocalStorage(
     `${chainId.slice(0, 8)}_notifications_${localStorageAccount}`
-  ) as [Notification[], (value: Notification[]) => void];
+  ) as [Notification[], (value: Notification[] | null) => void];
   const [hasUnreadMessages, _setHasUnreadMessages] = useState<boolean>(false);
   const [loadingNotifications, setLoadingNotifications] =
     useState<boolean>(true);
@@ -144,6 +151,19 @@ export function UserSettingsProvider({
     }
   };
 
+  const updateNotificationsLanguage = useCallback(async () => {
+    if (account) {
+      const activityRows = await getActivitiesRows(account.name);
+      const updatedNotifications = notifications.map((notif) => {
+        return {
+          activity: activityRows.find((row) => row.id === notif.activity.id),
+          unread: notif.unread,
+        } as Notification;
+      });
+      setNotifications(updatedNotifications);
+    }
+  }, [account, getActivitiesRows, notifications, setNotifications]);
+
   useEffect(() => {
     if (localStorageAccount && localStorageAccount !== "") {
       updateNotifications();
@@ -151,6 +171,10 @@ export function UserSettingsProvider({
       setNotifications(null);
     }
   }, [localStorageAccount]);
+
+  useEffect(() => {
+    updateNotificationsLanguage();
+  }, [settings.language]);
 
   return (
     <userSettingsContext.Provider

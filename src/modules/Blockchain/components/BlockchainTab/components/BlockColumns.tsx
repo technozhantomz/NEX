@@ -1,5 +1,5 @@
 import { TableHeading } from "../../../../../common/components";
-import { BlockchainTableRow } from "../hooks/useBlockchainTab.types";
+import { BlockColumnType, DataTableRow } from "../hooks";
 
 const headings = ["block_id", "time", "witness", "transaction"];
 const keys = ["blockID", "time", "witness", "transaction"];
@@ -19,7 +19,7 @@ const filterSearch = [undefined, undefined, true, undefined];
 const onFilters = [
   undefined,
   undefined,
-  (value: string, record: BlockchainTableRow): boolean =>
+  (value: string, record: DataTableRow): boolean =>
     record.witness.includes(value),
   undefined,
 ];
@@ -32,16 +32,18 @@ const sorters = [
     a.transaction - b.transaction,
 ];
 
-export const BlockColumns = headings.map((heading, index) => {
-  return {
-    title: (): JSX.Element => <TableHeading heading={heading} />,
-    dataIndex: keys[index],
-    key: keys[index],
-    render: renders[index],
-    filters: filters[index],
-    filterMode: filterModes[index],
-    filterSearch: filterSearch[index],
-    onFilter: onFilters[index],
-    sorter: sorters[index],
-  };
-});
+export const BlockColumns: BlockColumnType[] = headings.map(
+  (heading, index) => {
+    return {
+      title: (): JSX.Element => <TableHeading heading={heading} />,
+      dataIndex: keys[index],
+      key: keys[index],
+      render: renders[index],
+      filters: filters[index],
+      filterMode: filterModes[index],
+      filterSearch: filterSearch[index],
+      onFilter: onFilters[index],
+      sorter: sorters[index],
+    };
+  }
+);

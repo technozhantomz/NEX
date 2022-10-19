@@ -1,6 +1,6 @@
 import { ParsedUrlQuery } from "querystring";
 
-import { ColumnsType } from "antd/lib/table";
+import { uniq } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -15,7 +15,8 @@ import { BlockColumns } from "../components";
 import {
   BlockchainStats,
   BlockchainSupply,
-  BlockchainTableRow,
+  BlockColumnType,
+  DataTableRow,
   UseBlockchainTabResult,
 } from "./useBlockchainTab.types";
 
@@ -23,9 +24,7 @@ export function useBlockchainTab(
   routerQuery?: ParsedUrlQuery
 ): UseBlockchainTabResult {
   const [loading, setLoading] = useState<boolean>(true);
-  const [searchDataSource, setSearchDataSource] = useState<
-    BlockchainTableRow[]
-  >([]);
+  const [searchDataSource, setSearchDataSource] = useState<DataTableRow[]>([]);
   const [currentBlock, setCurrentBlock] = useState<number>(0);
   const [lastIrreversibleBlock, setLastIrreversibleBlock] =
     useState<string>("");
@@ -34,16 +33,14 @@ export function useBlockchainTab(
     amount: 0,
     symbol: "TEST",
   });
-  const [blockchainTableRows, setBlockchainTableRows] = useState<
-    BlockchainTableRow[]
-  >([]);
+  const [blockchainTableRows, setDataTableRows] = useState<DataTableRow[]>([]);
   const [blockchainStats, setBlockchainStats] = useState<BlockchainStats>({
     currentBlock: [],
     lastIrreversible: [],
     avgTime: [],
     supply: [],
   });
-  const [blockColumns, setBlockColumns] = useState<ColumnsType<unknown>>([]);
+  const [blockColumns, setBlockColumns] = useState<BlockColumnType[]>([]);
   const { defaultAsset } = useAssetsContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const {
@@ -66,7 +63,7 @@ export function useBlockchainTab(
 
       const chainAvgTime = getAvgBlockTime();
 
-      const blockRows = recentBlocks.map((block) => {
+      const blockRows: DataTableRow[] = recentBlocks.map((block) => {
         return {
           key: block.id as number,
           blockID: block.id as number,
@@ -76,7 +73,7 @@ export function useBlockchainTab(
         };
       });
       const allWitnesses = blockRows.map((block) => block.witness);
-      const witnesses = [...new Set(allWitnesses)];
+      const witnesses = uniq(allWitnesses);
       const updateBlockColumns = BlockColumns.map((column) => {
         if (column.key === "witness") {
           column.filters = witnesses.map((witness) => {
@@ -84,7 +81,7 @@ export function useBlockchainTab(
           });
         }
         return { ...column };
-      }) as ColumnsType<unknown>;
+      });
       setBlockColumns(updateBlockColumns);
       if (defaultAsset && chain && blockData && dynamic) {
         const distance_form_irreversible =
@@ -106,7 +103,7 @@ export function useBlockchainTab(
           amount: supplyAmount,
           symbol: defaultAsset.symbol,
         });
-        setBlockchainTableRows(blockRows);
+        setDataTableRows(blockRows);
         setSearchDataSource(blockRows);
         setBlockchainStats({
           currentBlock: updateArrayWithLimit(
@@ -145,7 +142,7 @@ export function useBlockchainTab(
     setLastIrreversibleBlock,
     setAvgTime,
     setSupply,
-    setBlockchainTableRows,
+    setDataTableRows,
     setBlockchainStats,
     setLoading,
   ]);

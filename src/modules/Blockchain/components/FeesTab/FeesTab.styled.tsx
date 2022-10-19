@@ -1,21 +1,19 @@
 import {
+  DataItemContent,
+  DataTable,
+  DataTableDownloadLinks,
+  DataTableHeaderBar,
+  DataTabWrapper,
   styled,
   ListItem as UiListItem,
   PrintTable as UiPrintTable,
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
-import {
-  BlockchainDownloadLinks,
-  BlockchainHeaderBar,
-  BlockchainItemContent,
-  BlockchainTable,
-  BlockchainTabWrapper,
-} from "../../common";
 
-export const FeesTabWrapper = styled(BlockchainTabWrapper)``;
+export const FeesTabWrapper = styled(DataTabWrapper)``;
 
-export const FeesHeaderBar = styled(BlockchainHeaderBar)``;
+export const FeesHeaderBar = styled(DataTableHeaderBar)``;
 
 export const FeesHeader = styled.h3`
   .anticon-info-circle {
@@ -27,9 +25,9 @@ export const FeesHeader = styled.h3`
   }
 `;
 
-export const DownloadLinks = styled(BlockchainDownloadLinks)``;
+export const DownloadLinks = styled(DataTableDownloadLinks)``;
 
-export const FeesTable = styled(BlockchainTable)`
+export const FeesTable = styled(DataTable)`
   .ant-table-thead > tr > th {
     ${breakpoint.sm} {
       padding: 16px 0px;
@@ -56,7 +54,7 @@ export const FeesTable = styled(BlockchainTable)`
 
 export const FeeListItem = styled(UiListItem)``;
 
-export const FeeItemContent = styled(BlockchainItemContent)``;
+export const FeeItemContent = styled(DataItemContent)``;
 
 export const FeeTypeOrValueContainer = styled.div`
   display: flex;

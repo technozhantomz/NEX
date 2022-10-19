@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
 
 import { roundNum } from "..";
+import { symbolsToBeExcepted } from "../../../api/params";
 import { usePeerplaysApiContext, useSettingsContext } from "../../providers";
 import { Asset, Cache } from "../../types";
 
@@ -46,12 +47,14 @@ export function useAsset(): UseAssetResult {
         return cache.assets.find((asset) => asset.id === id) as Asset;
       }
       try {
-        const asset: Asset = await dbApi("get_assets", [[id]]).then(
-          (e: Asset[]) => e[0]
-        );
-        setAssetsCache(asset);
-
-        return asset;
+        const assets = await dbApi("get_assets", [[id]]);
+        if (assets && assets.length) {
+          const asset: Asset = assets[0];
+          setAssetsCache(asset);
+          return asset;
+        } else {
+          return {} as Asset;
+        }
       } catch (e) {
         console.log(e);
         return {} as Asset;
@@ -69,11 +72,14 @@ export function useAsset(): UseAssetResult {
         return cache.assets.find((asset) => asset.symbol === symbol) as Asset;
       }
       try {
-        const asset: Asset = await dbApi("lookup_asset_symbols", [
-          [symbol],
-        ]).then((e: Asset[]) => e[0]);
-        setAssetsCache(asset);
-        return asset;
+        const assets = await dbApi("lookup_asset_symbols", [[symbol]]);
+        if (assets && assets.length) {
+          const asset: Asset = assets[0];
+          setAssetsCache(asset);
+          return asset;
+        } else {
+          return {} as Asset;
+        }
       } catch (e) {
         console.log(e);
         return {} as Asset;
@@ -85,7 +91,7 @@ export function useAsset(): UseAssetResult {
   const setPrecision = useCallback(
     (roundTo: boolean, amount: number, precision: number) => {
       const precisioned = amount / 10 ** precision;
-      return roundTo ? roundNum(precisioned, precision) : precisioned;
+      return roundTo ? Number(roundNum(precisioned, precision)) : precisioned;
     },
     []
   );
@@ -104,7 +110,9 @@ export function useAsset(): UseAssetResult {
   const getAllAssets = useCallback(async () => {
     try {
       const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-      return allAssets;
+      return allAssets.filter(
+        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
+      );
     } catch (e) {
       console.log(e);
     }
@@ -120,10 +128,21 @@ export function useAsset(): UseAssetResult {
       return value;
     } else {
       const limitedValue =
-        splitString[0] + "." + splitString[1].slice(0, precision);
+        Number(splitString[1].slice(0, precision)) > 0
+          ? splitString[0] + "." + splitString[1].slice(0, precision)
+          : splitString[0];
       return limitedValue;
     }
   };
+
+  const ceilPrecision: (num: string | number, precision?: number) => string =
+    useCallback((num: string | number, roundTo = 5) => {
+      const numbered = Number(num);
+      const precised = Number(numbered.toFixed(roundTo));
+      return precised >= numbered
+        ? String(precised)
+        : String(precised + 1 / 10 ** roundTo);
+    }, []);
 
   return {
     formAssetBalanceById,
@@ -132,5 +151,6 @@ export function useAsset(): UseAssetResult {
     getAssetBySymbol,
     getAllAssets,
     limitByPrecision,
+    ceilPrecision,
   };
 }

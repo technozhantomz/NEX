@@ -1,4 +1,4 @@
-export function roundNum(num: number, roundTo = 5): number {
-  num = Number(num);
-  return Number(num.toFixed(roundTo));
+export function roundNum(num: string | number, roundTo = 5): string {
+  const numbered = Number(num);
+  return numbered.toFixed(roundTo);
 }

@@ -1,6 +1,6 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
-import { Account, Proxy } from "../../../../../common/types";
+import { Account, Proxy, SignerKey } from "../../../../../common/types";
 
 export type UseProxyTab = {
   name: string;
@@ -13,7 +13,7 @@ export type UseProxyTab = {
   addProxy: (account: Account) => void;
   removeProxy: () => void;
   searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => Promise<void>;
-  handlePublishChanges: (password: string) => Promise<void>;
+  handlePublishChanges: (password: SignerKey) => Promise<void>;
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   localProxy: Proxy;
