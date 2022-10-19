@@ -39,7 +39,7 @@ build-qa:
   artifacts: 
     paths:
     - .env
-    - .next/
+    - build/
   tags:
     - build
 
@@ -58,7 +58,7 @@ build-production:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   artifacts: 
     paths:
-    - .next/
+    - .build/
     - .env
   tags:
     - staging
