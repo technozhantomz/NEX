@@ -125,8 +125,31 @@ export const CheckBoxGroup = styled(UiForm.Item)`
     margin-bottom: 8px;
     margin-top: 8px;
   }
+  .ant-checkbox + span {
+    font-size: 10px;
+  }
+  ${breakpoint.sm} {
+    .ant-checkbox + span {
+      font-size: 14px;
+    }
+    .ant-form-item-control-input-content {
+      min-width: 120%;
+    }
+  }
 `;
 
 export const TextContainer = styled.div`
   min-height: 22px;
+  font-size: 10px;
+  .anticon-info-circle {
+    margin: 0 15px 0 0;
+    color: ${colors.warningColor};
+  }
+  ${breakpoint.sm} {
+    font-size: 14px;
+    .anticon-info-circle {
+      margin: 0 15px;
+      color: ${colors.warningColor};
+    }
+  }
 `;

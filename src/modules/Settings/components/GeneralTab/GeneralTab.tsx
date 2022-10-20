@@ -79,7 +79,7 @@ export const GeneralTab = (): JSX.Element => {
         onValuesChange={handleValuesChange}
       >
         <Row>
-          <Col span={9}>
+          <Col span={{ xs: 24, sm: 24, lg: 9 }}>
             <Styled.LabelText>
               {counterpart.translate(`field.labels.select_language`)}
             </Styled.LabelText>
@@ -130,7 +130,7 @@ export const GeneralTab = (): JSX.Element => {
               </Styled.Select>
             </Styled.GeneralSettingFormItem>
           </Col>
-          <Col span={9}>
+          <Col span={{ xs: 24, sm: 24, lg: 9 }}>
             <Styled.LabelText>
               {counterpart.translate(`field.labels.show_notifications`)}
             </Styled.LabelText>
