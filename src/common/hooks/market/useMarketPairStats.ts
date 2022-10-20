@@ -86,7 +86,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
       console.log(e);
       return pairs;
     }
-  }, [defaultToken, dbApi]);
+  }, [defaultToken, getAllAssets]);
 
   const formPairStats = useCallback(
     async (pair: string): Promise<PairNameAndMarketStats> => {
@@ -112,7 +112,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         } as PairNameAndMarketStats;
       }
     },
-    [getAssetsBySymbols, getMarketPairStats]
+    [getAssetsBySymbols]
   );
 
   return {

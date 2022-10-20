@@ -9,8 +9,6 @@ export type UseCreateLimitOrderArgs = {
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
   isBuyOrder: boolean;
-  refreshHistory: () => void;
-  refreshOrderBook: () => void;
   orderForm: FormInstance<OrderForm>;
 };
 

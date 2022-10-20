@@ -1340,8 +1340,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   const dbApi = useCallback(getApi("_db"), [getApi]);
   const historyApi = useCallback(getApi("_hist"), [getApi]);
 
-  console.log("apiInstance", apiInstance.current);
-
   useEffect(() => {
     if ((window as any).whalevault) {
       WhaleVaultConfig.setWhaleVault((window as any).whalevault);
