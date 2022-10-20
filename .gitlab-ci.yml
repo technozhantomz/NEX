@@ -125,17 +125,17 @@ stop_review_app:
     - merge_requests
   except:
     - main
+  allow_failure: true  
   when: manual
   tags:
     - deploy-review
-
 
 deployToQA:
   stage: deploy
   dependencies: [build-qa]
   script: 
-    - pm2 del nex-QA || true
-    - npm install 
+    - npm install
+    - pm2 del nex-QA || true 
     - pm2 start npm --name nex-QA -- run start
   environment:
     name: QA
@@ -149,9 +149,9 @@ deployToQA:
 deployToStaging:
   stage: deploy
   script: 
-    - pm2 del nex-staging || true
     - rm .env.example
     - npm install
+    - pm2 del nex-staging || true
     - pm2 start npm --name nex-staging -- run start
   dependencies: [build-production]
   environment:
@@ -159,6 +159,7 @@ deployToStaging:
     url: https://nex-staging.peerplays.download
   rules:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
+    allow_failure: true
     when: manual 
   tags:
     - staging
@@ -166,9 +167,9 @@ deployToStaging:
 deployToProduction:
   stage: deploy
   script: 
-    - pm2 del nex || true
     - rm .env.example
     - npm install
+    - pm2 del nex || true
     - pm2 start npm --name nex -- run start
   dependencies: [build-production]
   environment:
