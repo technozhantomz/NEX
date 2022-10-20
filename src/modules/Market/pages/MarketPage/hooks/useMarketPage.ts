@@ -36,7 +36,7 @@ type Props = {
 };
 
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
-  const { historyApi, dbApi, apiInstance } = usePeerplaysApiContext();
+  const { historyApi, dbApi } = usePeerplaysApiContext();
   const { exchanges, updateExchanges } = useUpdateExchanges();
   const { setPrecision, ceilPrecision, getAssetsBySymbols } = useAsset();
   const { getFullAccount } = useAccount();
