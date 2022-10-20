@@ -63,7 +63,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const handleValuesChange = (changedValues: any) => {
     if (changedValues.amount) {
       const selectedSidechainAsset = sidechainAssets.find(
-        (asset) => asset.symbol === selectedAsset
+        (asset) => asset?.symbol === selectedAsset
       );
 
       const amount = limitByPrecision(
@@ -231,7 +231,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const setSelectedAssetPrecission = useCallback(() => {
     if (sidechainAssets && sidechainAssets.length > 0) {
       const selectedsidechainAsset = sidechainAssets.find(
-        (asset) => asset.symbol === selectedAsset
+        (asset) => asset?.symbol === selectedAsset
       );
 
       if (selectedsidechainAsset) {

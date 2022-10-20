@@ -15,6 +15,7 @@ import {
 import {
   Asset,
   BlockHeader,
+  Exchanges,
   History,
   LimitOrder,
   PairNameAndMarketStats,
@@ -37,7 +38,7 @@ type Props = {
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { historyApi, dbApi } = usePeerplaysApiContext();
   const { exchanges, updateExchanges } = useUpdateExchanges();
-  const { setPrecision, ceilPrecision } = useAsset();
+  const { setPrecision, ceilPrecision, getAssetsBySymbols } = useAsset();
   const { getFullAccount } = useAccount();
   const { id, localStorageAccount } = useUserContext();
   const { getAccountHistoryById } = useAccountHistory();
@@ -81,7 +82,9 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     async (assets: string[]) => {
       try {
         setLoadingSelectedPair(true);
-        const [quote, base] = await dbApi("lookup_asset_symbols", [assets]);
+        const quoteBase = await getAssetsBySymbols(assets);
+        const quote = quoteBase[0];
+        const base = quoteBase[1];
         setCurrentBase(base as Asset);
         setCurrentQuote(quote as Asset);
         setLoadingSelectedPair(false);
@@ -90,11 +93,16 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         console.log(e);
       }
     },
-    [dbApi, setCurrentBase, setCurrentQuote, setLoadingSelectedPair]
+    [
+      setCurrentBase,
+      setCurrentQuote,
+      setLoadingSelectedPair,
+      getAssetsBySymbols,
+    ]
   );
 
   const getTradingPairsStats = useCallback(
-    async (exchanges) => {
+    async (exchanges: Exchanges) => {
       try {
         setLoadingTradingPairs(true);
         const initPairs: string[] =
@@ -474,6 +482,18 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     [buyOrderForm, sellOrderForm]
   );
 
+  // const subscribeToMarket = useCallback(async () => {
+  //   if (currentBase && currentQuote) {
+  //     await dbApi("subscribe_to_market", [
+  //       () => {
+  //         console.log("ghasem market");
+  //       },
+  //       currentBase?.id,
+  //       currentQuote?.id,
+  //     ]);
+  //   }
+  // }, [dbApi, currentBase, currentQuote]);
+
   useEffect(() => {
     if (currentPair !== exchanges.active) {
       updateExchanges(currentPair);
@@ -486,6 +506,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       getTradingPairsStats(exchanges);
     }
   }, [exchanges.list]);
+
+  // useEffect(() => {
+  //   subscribeToMarket();
+  // }, [subscribeToMarket]);
 
   return {
     tradingPairsStats,

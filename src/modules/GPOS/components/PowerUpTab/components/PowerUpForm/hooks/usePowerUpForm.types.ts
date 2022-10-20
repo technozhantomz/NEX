@@ -23,7 +23,7 @@ export type UsePowerUpFormResult = {
 export type UsePowerUpFormArgs = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
-  getGposInfo: () => Promise<void>;
+  calculateGposBalances: () => Promise<void>;
 };
 
 export type PowerUpForm = {

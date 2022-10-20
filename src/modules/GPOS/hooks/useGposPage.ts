@@ -5,7 +5,7 @@ import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../common/providers";
-import { GPOSInfoResponse } from "../../../common/types";
+import { GPOSInfoType } from "../../../common/types";
 import { GPOSBalances } from "../types";
 
 import { UseGposPageResult } from "./useGposPage.types";
@@ -30,10 +30,21 @@ export function useGposPage(): UseGposPageResult {
   const getGposInfo = useCallback(async () => {
     try {
       if (id) {
-        setLoading(true);
-        const gposInfo: GPOSInfoResponse = await dbApi("get_gpos_info", [id]);
-        if (gposInfo) {
-          const asset = await getAssetById(gposInfo.award.asset_id);
+        const gposInfo: GPOSInfoType = await dbApi("get_gpos_info", [id]);
+        return gposInfo;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi, id]);
+
+  const calculateGposBalances = useCallback(async () => {
+    try {
+      setLoading(true);
+      const gposInfo = await getGposInfo();
+      if (gposInfo) {
+        const asset = await getAssetById(gposInfo.award.asset_id);
+        if (asset) {
           const openingBalance =
             gposInfo.account_vested_balance / 10 ** asset.precision;
           const availableBalance =
@@ -44,24 +55,25 @@ export function useGposPage(): UseGposPageResult {
             newBalance: openingBalance,
             asset: asset,
           });
-        } else {
-          setLoading(false);
         }
+        setLoading(false);
+      } else {
+        setLoading(false);
       }
     } catch (e) {
       console.log(e);
       setLoading(false);
     }
-  }, [id, dbApi, setLoading, getAssetById, setGposBalances]);
+  }, [getGposInfo, setLoading, getAssetById, setGposBalances]);
 
   useEffect(() => {
-    getGposInfo();
-  }, [getGposInfo]);
+    calculateGposBalances();
+  }, [calculateGposBalances]);
 
   return {
     gposBalances,
     loading,
-    getGposInfo,
+    calculateGposBalances,
     isMobileDropdownvisible,
     setIsMobileDropdownvisible,
   };

@@ -53,11 +53,10 @@ export function useAsset(): UseAssetResult {
           setAssetsCache(asset);
           return asset;
         } else {
-          return {} as Asset;
+          return undefined;
         }
       } catch (e) {
         console.log(e);
-        return {} as Asset;
       }
     },
     [dbApi, cache, setAssetsCache, assetsCacheExists]
@@ -78,18 +77,31 @@ export function useAsset(): UseAssetResult {
           setAssetsCache(asset);
           return asset;
         } else {
-          return {} as Asset;
+          return undefined;
         }
       } catch (e) {
         console.log(e);
-        return {} as Asset;
       }
     },
     [dbApi, cache, setAssetsCache, assetsCacheExists]
   );
 
-  const setPrecision = useCallback(
-    (roundTo: boolean, amount: number, precision: number) => {
+  const getAssetsBySymbols = useCallback(
+    async (symbols: string[]) => {
+      const assets = await Promise.all(
+        symbols.map((symbol) => getAssetBySymbol(symbol))
+      );
+      return assets;
+    },
+    [getAssetBySymbol]
+  );
+
+  const setPrecision: (
+    roundTo: boolean,
+    amount: number,
+    precision?: number
+  ) => number = useCallback(
+    (roundTo: boolean, amount: number, precision = 5) => {
       const precisioned = amount / 10 ** precision;
       return roundTo ? Number(roundNum(precisioned, precision)) : precisioned;
     },
@@ -99,10 +111,12 @@ export function useAsset(): UseAssetResult {
   const formAssetBalanceById = useCallback(
     async (id: string, amount: number) => {
       const asset = await getAssetById(id);
-      return {
-        ...asset,
-        amount: setPrecision(false, amount, asset.precision),
-      } as Asset;
+      if (asset) {
+        return {
+          ...asset,
+          amount: setPrecision(false, amount, asset.precision),
+        } as Asset;
+      }
     },
     [getAssetById, setPrecision]
   );
@@ -152,5 +166,6 @@ export function useAsset(): UseAssetResult {
     getAllAssets,
     limitByPrecision,
     ceilPrecision,
+    getAssetsBySymbols,
   };
 }

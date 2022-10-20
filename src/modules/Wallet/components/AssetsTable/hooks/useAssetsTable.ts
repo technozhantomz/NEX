@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params/networkparams";
-import { useAsset, useMarketPairStats } from "../../../../../common/hooks";
+import { useMarketPairStats } from "../../../../../common/hooks";
 import {
   useAssetsContext,
   usePeerplaysApiContext,
@@ -17,7 +17,6 @@ export function useAssetsTable(): UseAssetsTabResult {
   const [loading, setLoading] = useState<boolean>(true);
   const { dbApi } = usePeerplaysApiContext();
   const { assets, localStorageAccount } = useUserContext();
-  const { getAssetBySymbol } = useAsset();
   const { getMarketPairStats } = useMarketPairStats();
   const { defaultAsset } = useAssetsContext();
 
@@ -50,7 +49,7 @@ export function useAssetsTable(): UseAssetsTabResult {
         volume: "0",
       };
     },
-    [dbApi, getMarketPairStats, getAssetBySymbol, defaultAsset]
+    [dbApi, getMarketPairStats, defaultAsset]
   );
 
   const setTableAssets = useCallback(async () => {

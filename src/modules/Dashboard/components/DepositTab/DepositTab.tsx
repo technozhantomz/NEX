@@ -10,7 +10,7 @@ import {
   LoadingIndicator,
 } from "../../../../common/components";
 import { useAssetsContext, useUserContext } from "../../../../common/providers";
-import { SidechainAcccount } from "../../../../common/types";
+import { Asset, SidechainAcccount } from "../../../../common/types";
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 
 import * as Styled from "./DepositTab.styled";
@@ -85,7 +85,7 @@ export const DepositTab = (): JSX.Element => {
   return (
     <Styled.DepositFormContainer>
       <Styled.LogoSelect
-        assets={sidechainAssets}
+        assets={sidechainAssets as Asset[]}
         value={selectedAsset}
         onChange={handleAssetChange}
       />

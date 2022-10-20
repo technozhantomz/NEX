@@ -17,7 +17,7 @@ import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg"
 import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import { useAsset, useHandleTransactionForm } from "../../hooks";
 import { useAssetsContext, useUserContext } from "../../providers";
-import { SidechainAcccount } from "../../types";
+import { Asset, SidechainAcccount } from "../../types";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -357,7 +357,7 @@ export const WithdrawForm = ({
                   prefix={
                     <Styled.WithdrawFormAsset>
                       <LogoSelectOption
-                        assets={sidechainAssets}
+                        assets={sidechainAssets as Asset[]}
                         value={selectedAsset}
                         onChange={handleAssetChange}
                       />

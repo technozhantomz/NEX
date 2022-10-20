@@ -28,7 +28,9 @@ const AssetsContext = createContext<AssetsContextType>(defaultAssetsState);
 
 export const AssetsProvider = ({ children }: Props): JSX.Element => {
   const [defaultAsset, setDefaultAsset] = useState<Asset>();
-  const [sidechainAssets, setSidechainAssets] = useState<Asset[]>([]);
+  const [sidechainAssets, setSidechainAssets] = useState<(Asset | undefined)[]>(
+    []
+  );
   const [loadingSidechainAssets, setLoadingSidechainAssets] =
     useState<boolean>(true);
   const [loadingDefaultAsset, setLoadingDefaultAsset] = useState<boolean>(true);

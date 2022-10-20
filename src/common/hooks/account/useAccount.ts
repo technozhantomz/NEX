@@ -49,6 +49,20 @@ export function useAccount(): UseAccountResult {
     [dbApi]
   );
 
+  const getAccounts = useCallback(
+    async (idsOrNames: string[]) => {
+      try {
+        const accounts: (Account | undefined)[] = await dbApi("get_accounts", [
+          idsOrNames,
+        ]);
+        return accounts;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
+  );
+
   const getAccountByName = useCallback(
     async (name: string) => {
       try {
@@ -72,7 +86,7 @@ export function useAccount(): UseAccountResult {
     async (fullAccount: FullAccount, password: string, keyType: KeyType) => {
       try {
         setLoading(true);
-        const assets: Asset[] = await Promise.all(
+        const assets = await Promise.all(
           fullAccount.balances.map((balance) => {
             return formAssetBalanceById(balance.asset_type, balance.balance);
           })
@@ -80,7 +94,7 @@ export function useAccount(): UseAccountResult {
         updateAccount(
           fullAccount.account.id,
           fullAccount.account.name,
-          assets,
+          assets.filter((asset) => asset !== undefined) as Asset[],
           fullAccount.account
         );
         savePassword(password, keyType);
@@ -99,7 +113,7 @@ export function useAccount(): UseAccountResult {
         setLoading(true);
         const fullAccount = await getFullAccount(name, subscription);
         if (fullAccount) {
-          const assets: Asset[] = await Promise.all(
+          const assets = await Promise.all(
             fullAccount.balances.map((balance) => {
               return formAssetBalanceById(balance.asset_type, balance.balance);
             })
@@ -107,7 +121,7 @@ export function useAccount(): UseAccountResult {
           updateAccount(
             fullAccount.account.id,
             fullAccount.account.name,
-            assets,
+            assets.filter((asset) => asset !== undefined) as Asset[],
             fullAccount.account
           );
         }
@@ -297,5 +311,6 @@ export function useAccount(): UseAccountResult {
     getUserNameById,
     validateWhaleVaultPubKeys,
     _validateUseWhaleVault,
+    getAccounts,
   };
 }

@@ -49,7 +49,7 @@ const AssetPage: NextPage = () => {
   const { sm } = useViewportContext();
 
   const isSidechainAsset = sidechainAssets
-    .map((sideAsset) => sideAsset.symbol)
+    .map((sideAsset) => sideAsset?.symbol)
     .includes(asset as string);
 
   const sidechainAssetsTabBarItems = [

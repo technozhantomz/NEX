@@ -30,7 +30,7 @@ import {
 export function usePowerDownForm({
   gposBalances,
   //loading,
-  getGposInfo,
+  calculateGposBalances,
 }: UsePowerDownFormArgs): UsePowerDownFormResult {
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [transactionErrorMessage, setTransactionErrorMessage] =
@@ -77,7 +77,7 @@ export function usePowerDownForm({
         const trxResult = await buildTrx([trx], [signerKey]);
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
-          await getGposInfo();
+          await calculateGposBalances();
           powerDownForm.setFieldsValue({
             withdrawAmount: 0,
           });
@@ -113,7 +113,7 @@ export function usePowerDownForm({
       buildVestingWithdrawTransaction,
       buildTrx,
       formAccountBalancesByName,
-      getGposInfo,
+      calculateGposBalances,
       setTransactionSuccessMessage,
     ]
   );

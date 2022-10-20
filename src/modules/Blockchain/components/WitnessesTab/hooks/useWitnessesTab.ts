@@ -12,7 +12,7 @@ import {
   useAssetsContext,
   usePeerplaysApiContext,
 } from "../../../../../common/providers";
-import { GlobalProperties } from "../../../../../common/types";
+import { BlockData, GlobalProperties } from "../../../../../common/types";
 
 import {
   UseWitnessesTabResult,
@@ -59,9 +59,15 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const getWitnessData = useCallback(async () => {
     if (defaultAsset) {
       try {
-        const gpo: GlobalProperties = await dbApi("get_global_properties");
-        const chain = await getChain();
-        const blockData = await getBlockData();
+        const [gpo, chain, blockData]: [
+          GlobalProperties,
+          GlobalProperties | undefined,
+          BlockData | undefined
+        ] = await Promise.all([
+          dbApi("get_global_properties"),
+          getChain(),
+          getBlockData(),
+        ]);
         if (chain && blockData) {
           const rewardAmount = setPrecision(
             false,
@@ -104,7 +110,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
                 url: witness.url,
                 lastBlock: witness.last_confirmed_block_num,
                 missedBlocks: witness.total_missed,
-                totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+                totalVotes: `${votesAsset?.amount} ${votesAsset?.symbol}`,
                 publicKey: witness.signing_key,
               } as WitnessTableRow);
               index = index + 1;
