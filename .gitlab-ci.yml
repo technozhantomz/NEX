@@ -114,22 +114,22 @@ deploy_review:
   tags:
     - deploy-review
 
-stop_review_app:
-  dependencies: [deploy_review]
-  stage: deploy
-  script: stop-review-app
-  environment:
-    name: review/$CI_COMMIT_REF_NAME
-    action: stop
-  only:
-    - merge_requests
-  except:
-    - main
-  when: manual
-  needs:
-    - deploy_review
-  tags:
-    - deploy-review
+#stop_review_app:
+#  dependencies: [deploy_review]
+#  stage: deploy
+#  script: stop-review-app
+#  environment:
+#    name: review/$CI_COMMIT_REF_NAME
+#    action: stop
+#  only:
+#    - merge_requests
+#  except:
+#    - main
+#  when: manual
+#  needs:
+#    - deploy_review
+#  tags:
+#    - deploy-review
 
 
 deployToQA:
@@ -162,8 +162,6 @@ deployToStaging:
   rules:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
     when: manual 
-  needs:
-    - build-production
   tags:
     - staging
 
