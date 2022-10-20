@@ -8,15 +8,9 @@ import {
 
 import { UseBlockDetailsResult } from "./useBlockDetails.types";
 
-export function useBlockDetails(
-  block: number,
-  transactionNum?: number
-): UseBlockDetailsResult {
+export function useBlockDetails(block: number): UseBlockDetailsResult {
   const [hasNextBlock, setHasNextBlock] = useState<boolean>(false);
   const [hasPreviousBlock, setHasPreviousBlock] = useState<boolean>(false);
-  const [hasNextTransition, setHasNextTransition] = useState<boolean>(false);
-  const [hasPreviousTransition, setHasPreviousTransition] =
-    useState<boolean>(false);
   const [blockDetails, setBlockDetails] = useState<DataTableRow>({
     key: block,
     nextSecret: "",
@@ -28,22 +22,9 @@ export function useBlockDetails(
     witnessSignature: "",
     transactions: [],
   });
-  const [selectedTransaction, setSelectedTransaction] =
-    useState<TransactionRow>({
-      rank: 0,
-      id: "",
-      expiration: "",
-      operations: [],
-      operationResults: [],
-      refBlockPrefix: 0,
-      refBlockNum: 0,
-      extensions: [],
-      signatures: [],
-    });
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSideBlocks, setLoadingSideBlocks] = useState<boolean>(true);
-  const [loadingSideTransactions, setLoadingSideTransactions] =
-    useState<boolean>(true);
+
   const { formLocalDate } = useFormDate();
   const { getBlock } = useBlockchain();
 
@@ -83,10 +64,6 @@ export function useBlockDetails(
           witnessSignature: rawBlock.witness_signature,
           transactions: transactions,
         });
-        if (transactionNum) {
-          const transactionIndex = transactionNum - 1;
-          setSelectedTransaction(transactions[transactionIndex]);
-        }
         setLoading(false);
       } else {
         setLoading(false);
@@ -120,41 +97,6 @@ export function useBlockDetails(
     }
   }, [getBlock, block, setHasNextBlock, setHasPreviousBlock]);
 
-  const getSideTransactions = useCallback(async () => {
-    try {
-      if (transactionNum !== undefined) {
-        const transactionNumAsIndex = transactionNum - 1;
-        setLoadingSideTransactions(true);
-        const nextTransaction =
-          blockDetails.transactions[transactionNumAsIndex + 1];
-        if (nextTransaction) {
-          setHasNextTransition(true);
-        } else {
-          setHasNextTransition(false);
-        }
-        const previousTransaction =
-          blockDetails.transactions[transactionNumAsIndex - 1];
-        if (previousTransaction) {
-          setHasPreviousTransition(true);
-        } else {
-          setHasPreviousTransition(false);
-        }
-        setLoadingSideTransactions(false);
-      }
-    } catch (e) {
-      console.log(e);
-      setHasNextTransition(false);
-      setHasPreviousTransition(false);
-      setLoadingSideTransactions(false);
-    }
-  }, [
-    blockDetails,
-    transactionNum,
-    getBlock,
-    setHasNextTransition,
-    setHasPreviousTransition,
-  ]);
-
   useEffect(() => {
     getBlockDetails();
   }, [block]);
@@ -163,19 +105,11 @@ export function useBlockDetails(
     getSideBlocks();
   }, [getSideBlocks]);
 
-  useEffect(() => {
-    getSideTransactions();
-  }, [transactionNum, selectedTransaction, getSideTransactions]);
-
   return {
     blockDetails,
     loading,
     hasNextBlock,
     hasPreviousBlock,
     loadingSideBlocks,
-    hasNextTransition,
-    hasPreviousTransition,
-    loadingSideTransactions,
-    selectedTransaction,
   };
 }

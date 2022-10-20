@@ -1,7 +1,4 @@
-import {
-  DataTableRow,
-  TransactionRow,
-} from "../../BlockchainTab/hooks/useBlockchainTab.types";
+import { DataTableRow } from "../../BlockchainTab/hooks/useBlockchainTab.types";
 
 export type UseBlockDetailsResult = {
   blockDetails: DataTableRow;
@@ -9,8 +6,4 @@ export type UseBlockDetailsResult = {
   hasNextBlock: boolean;
   hasPreviousBlock: boolean;
   loadingSideBlocks: boolean;
-  hasNextTransition: boolean;
-  hasPreviousTransition: boolean;
-  loadingSideTransactions: boolean;
-  selectedTransaction: TransactionRow;
 };

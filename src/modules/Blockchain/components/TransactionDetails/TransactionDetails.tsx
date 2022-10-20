@@ -4,9 +4,9 @@ import Link from "next/link";
 
 import { StatsCard } from "../../common";
 import * as Styled from "../BlockDetails/BlockDetails.styled";
-import { useBlockDetails } from "../BlockDetails/hooks";
 
 // import { OperationsTable } from "./components";
+import { useTransactionDetails } from "./hooks";
 
 type Props = {
   block: number;
@@ -17,12 +17,12 @@ export const TransactionDetails = ({
   transaction,
 }: Props): JSX.Element => {
   const {
-    blockDetails,
+    blockTransactions,
+    transactionDetails,
     hasNextTransition,
     hasPreviousTransition,
     loadingSideTransactions,
-    selectedTransaction,
-  } = useBlockDetails(block, parseInt(transaction));
+  } = useTransactionDetails(block, parseInt(transaction));
 
   return (
     <>
@@ -41,7 +41,7 @@ export const TransactionDetails = ({
             <Styled.BlockNumber>
               <span>
                 Transaction
-                {transaction} of {blockDetails.transactions.length}
+                {transaction} of {blockTransactions.length}
               </span>
             </Styled.BlockNumber>
             <Styled.BlockNumber>
@@ -73,31 +73,31 @@ export const TransactionDetails = ({
             statsData={[block]}
           />
           <StatsCard
-            noData={selectedTransaction.expiration === ""}
+            noData={transactionDetails.expiration === ""}
             title={counterpart.translate(`tableHead.expiration`)}
             isTimeCard={true}
-            data={`${selectedTransaction.expiration}`}
+            data={`${transactionDetails.expiration}`}
             statsData={[0]}
           />
           <StatsCard
-            noData={selectedTransaction.operations.length < 0}
+            noData={transactionDetails.operations.length < 0}
             title={counterpart.translate(`tableHead.operations`)}
-            data={`${selectedTransaction.operations.length}`}
-            statsData={[selectedTransaction.operations.length]}
+            data={`${transactionDetails.operations.length}`}
+            statsData={[transactionDetails.operations.length]}
           />
         </Styled.StatsCardsDeck>
         <Styled.BlockInfo>
           <Styled.BlockInfoTitle>Transaction ID</Styled.BlockInfoTitle>
-          <p>{selectedTransaction.id}</p>
+          <p>{transactionDetails.id}</p>
         </Styled.BlockInfo>
         <Styled.TwoColumns>
           <Styled.BlockInfo>
             <Styled.BlockInfoTitle>Ref block prefix</Styled.BlockInfoTitle>
-            <p>{selectedTransaction.refBlockPrefix}</p>
+            <p>{transactionDetails.refBlockPrefix}</p>
           </Styled.BlockInfo>
           <Styled.BlockInfo>
             <Styled.BlockInfoTitle>Ref block number</Styled.BlockInfoTitle>
-            <p>{selectedTransaction.refBlockNum}</p>
+            <p>{transactionDetails.refBlockNum}</p>
           </Styled.BlockInfo>
         </Styled.TwoColumns>
         <Styled.BlockInfo>
@@ -105,15 +105,15 @@ export const TransactionDetails = ({
             {counterpart.translate(`tableHead.extensions`)}
           </Styled.BlockInfoTitle>
           <p>
-            {selectedTransaction.extensions.length > 0
-              ? selectedTransaction.extensions.length
-              : "="}
+            {transactionDetails.extensions.length > 0
+              ? transactionDetails.extensions.length
+              : "-"}
           </p>
         </Styled.BlockInfo>
         <Styled.BlockInfo>
           <Styled.BlockInfoTitle>Signatures</Styled.BlockInfoTitle>
           <ol>
-            {selectedTransaction.signatures.map(
+            {transactionDetails.signatures.map(
               (signature: string): JSX.Element => {
                 return <li key={signature}>{signature}</li>;
               }
@@ -121,7 +121,7 @@ export const TransactionDetails = ({
           </ol>
         </Styled.BlockInfo>
       </Styled.BlockWrapper>
-      {/* <OperationsTable transactionRow={selectedTransaction} /> */}
+      {/* <OperationsTable transactionRow={transactionDetails} /> */}
     </>
   );
 };

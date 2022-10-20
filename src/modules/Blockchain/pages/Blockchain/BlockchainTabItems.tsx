@@ -35,7 +35,6 @@ export const BlockchainTabItems = (
         ) : (
           <BlockchainTab routerQuery={router.query} />
         )}
-        ;
       </>
     );
   };

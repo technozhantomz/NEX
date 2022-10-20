@@ -5,4 +5,4 @@ export * from "./CommitteeTab";
 export * from "./WitnessesTab";
 export * from "./SonsTab";
 export * from "./FeesTab";
-export * from "./TransactionsDetails";
+export * from "./TransactionDetails";

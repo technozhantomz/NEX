@@ -95,56 +95,6 @@ const Blockchain: NextPage = () => {
           }}
           items={blockchainTabItems}
         />
-        {/* <TabPane
-            tab={counterpart.translate(`pages.blocks.blockchain.blockchain`)}
-            key="blockchain"
-          >
-            {block ? (
-              <>
-                {transactionId ? (
-                  <TransactionDetails
-                    block={blockNum as number}
-                    transaction={transactionId}
-                  />
-                ) : (
-                  <BlockDetails block={blockNum as unknown as number} />
-                )}
-              </>
-            ) : (
-              <BlockchainTab routerQuery={router.query} />
-            )}
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.blocks.assets.assets`)}
-            key="assets"
-          >
-            <AssetsTab />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.blocks.witnesses.witnesses`)}
-            key="witnesses"
-          >
-            <WitnessesTab />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.blocks.committees.committees`)}
-            key="committees"
-          >
-            <CommitteeTab />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate("pages.blocks.sons.sons")}
-            key="sons"
-          >
-            <SonsTab />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.blocks.fees.fees`)}
-            key="fees"
-          >
-            <FeesTab />
-          </TabPane> */}
-        {/* </Tabs> */}
       </Styled.BlockchainCard>
     </Layout>
   );
