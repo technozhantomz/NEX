@@ -3,8 +3,8 @@ import counterpart from "counterpart";
 import Link from "next/link";
 
 import { StatsCard } from "../../common";
-import * as Styled from "../BlockDetails/BlockDetails.styled";
 
+import * as Styled from "./TransactionDetails.styled";
 // import { OperationsTable } from "./components";
 import { useTransactionDetails } from "./hooks";
 

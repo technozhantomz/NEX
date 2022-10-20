@@ -22,8 +22,8 @@ export function useOperationsTable(
       if (transaction) {
         const operations = transaction.operations.map(
           (operation: unknown[], index: number) => {
-            const operationDetails = operation[1];
-            const operationResults = transaction.operationResults[index];
+            const operationDetails: any = operation[1];
+            const operationResults: any = transaction.operationResults[index];
             const fees = `${operationDetails.fee.amount} ${getAssetById(
               operationDetails.fee.asset_id
             )}`;
