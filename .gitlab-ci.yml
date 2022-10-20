@@ -126,6 +126,8 @@ stop_review_app:
   except:
     - main
   when: manual
+  needs:
+    - deploy_review
   tags:
     - deploy-review
 
@@ -160,6 +162,8 @@ deployToStaging:
   rules:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
     when: manual 
+  needs:
+    - build-production
   tags:
     - staging
 
