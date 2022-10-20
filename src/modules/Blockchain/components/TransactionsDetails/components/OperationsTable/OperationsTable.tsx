@@ -20,39 +20,35 @@ import {
 } from "../../../../../../ui/src";
 import { TransactionRow } from "../../../BlockchainTab/hooks/useBlockchainTab.types";
 
-import { TransactionsColumns } from "./TransactionsColumns";
-import * as Styled from "./TransactionsTable.styled";
-import { useTransactionsTable } from "./hooks";
+import { OperationsColumns } from "./OperationsColumns";
+import * as Styled from "./OperationsTable.styled";
+import { useOperationsTable } from "./hooks";
+import { OperationRow } from "./hooks/useOperationsTable.types";
 
 type Props = {
-  block: number;
-  transactionRows: TransactionRow[];
+  transactionRow: TransactionRow;
 };
 
-export const TransactionsTable = ({
-  block,
-  transactionRows,
-}: Props): JSX.Element => {
-  const { loading, searchDataSource, setSearchDataSource } =
-    useTransactionsTable(transactionRows);
+export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
+  const { loading, searchDataSource, setSearchDataSource, operationsRows } =
+    useOperationsTable(transactionRow);
   const { sm } = useViewportContext();
   const componentRef = useRef();
-  const transactionsColumns = TransactionsColumns(block);
 
   return (
     <Styled.TableWrapper>
-      <Styled.TransactionHeaderBar>
-        <Styled.TransactionHeader>
+      <Styled.OperationsHeaderBar>
+        <Styled.OperationsHeader>
           {counterpart.translate(`pages.blocks.block_details.transactions`)}
           <InfoCircleOutlined />
-        </Styled.TransactionHeader>
+        </Styled.OperationsHeader>
         <SearchTableInput
-          columns={transactionsColumns as ColumnsType<TransactionRow>}
-          dataSource={transactionRows}
+          columns={OperationsColumns as ColumnsType<OperationRow>}
+          dataSource={operationsRows}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
-              `pages.blocks.block_details.search_transactions`
+              `pages.blocks.trnasaction_details.search_operations`
             ),
             suffix: <SearchOutlined />,
           }}
@@ -66,85 +62,59 @@ export const TransactionsTable = ({
           {` / `}
           <CSVLink
             filename={"AssetsTable.csv"}
-            data={transactionRows}
+            data={operationsRows}
             className="btn btn-primary"
           >
             {counterpart.translate(`links.csv`)}
           </CSVLink>
         </Styled.DownloadLinks>
-      </Styled.TransactionHeaderBar>
+      </Styled.OperationsHeaderBar>
       {sm ? (
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
           loading={loading}
           renderItem={(item) => (
-            <Styled.TransactionListItem key={item.rank}>
-              <Styled.TransactionItemContent>
+            <Styled.OperationsListItem key={item.number}>
+              <Styled.OperationsItemContent>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {transactionsColumns[0].title()}
+                    {OperationsColumns[0].title()}
                   </span>
-                  <span className="item-info-value">{item.rank}</span>
+                  <span className="item-info-value"></span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {transactionsColumns[1].title()}
+                    {OperationsColumns[1].title()}
                   </span>
-                  <span className="item-info-value">
-                    <a
-                      target="_blank"
-                      href={`/blockchain/${block}/${item.rank}`}
-                    >
-                      <Styled.CenterEllipsis>
-                        <span className="ellipsis">{item.id}</span>
-                        <span className="indent">{item.id}</span>
-                      </Styled.CenterEllipsis>
-                    </a>
-                  </span>
+                  <span className="item-info-value"></span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {transactionsColumns[2].title()}
+                    {OperationsColumns[2].title()}
                   </span>
-                  <span className="item-info-value">{item.expiration}</span>
+                  <span className="item-info-value"></span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {transactionsColumns[3].title()}
+                    {OperationsColumns[3].title()}
                   </span>
-                  <span className="item-info-value">
-                    {item.operations.length}
-                  </span>
+                  <span className="item-info-value"></span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {transactionsColumns[4].title()}
+                    {OperationsColumns[4].title()}
                   </span>
-                  <span className="item-info-value">{item.refBlockPrefix}</span>
+                  <span className="item-info-value"></span>
                 </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {transactionsColumns[5].title()}
-                  </span>
-                  <span className="item-info-value">{item.refBlockNum}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {transactionsColumns[6].title()}
-                  </span>
-                  <span className="item-info-value">
-                    {item.extensions.length}
-                  </span>
-                </div>
-              </Styled.TransactionItemContent>
-            </Styled.TransactionListItem>
+              </Styled.OperationsItemContent>
+            </Styled.OperationsListItem>
           )}
         />
       ) : (
-        <Styled.TransactionsTable
+        <Styled.OperationsTable
           dataSource={searchDataSource}
-          columns={transactionsColumns as ColumnsType<TransactionRow>}
+          columns={OperationsColumns as ColumnsType<OperationRow>}
           loading={loading}
           pagination={
             !loading
@@ -181,9 +151,9 @@ export const TransactionsTable = ({
       )}
       <Styled.PrintTable>
         <div ref={componentRef as unknown as RefObject<HTMLDivElement>}>
-          <Styled.TransactionsTable
-            dataSource={transactionRows}
-            columns={transactionsColumns as ColumnsType<TransactionRow>}
+          <Styled.OperationsTable
+            dataSource={operationsRows}
+            columns={OperationsColumns as ColumnsType<OperationRow>}
             loading={loading}
             pagination={false}
           />

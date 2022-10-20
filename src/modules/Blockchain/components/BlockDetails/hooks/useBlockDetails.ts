@@ -52,6 +52,21 @@ export function useBlockDetails(
       setLoading(true);
       const rawBlock = await getBlock(Number(block));
       if (rawBlock) {
+        const transactions: TransactionRow[] = rawBlock.transactions.map(
+          (transaction, index) => {
+            return {
+              rank: index + 1,
+              id: transaction.signatures[0],
+              expiration: transaction.expiration,
+              operations: transaction.operations,
+              operationResults: transaction.operation_results,
+              refBlockPrefix: transaction.ref_block_prefix,
+              refBlockNum: transaction.ref_block_num,
+              extensions: transaction.extensions,
+              signatures: transaction.signatures,
+            };
+          }
+        );
         setBlockDetails({
           key: block,
           nextSecret: rawBlock.next_secret_hash as string,
@@ -66,21 +81,12 @@ export function useBlockDetails(
           ]),
           witness: rawBlock.witness_account_name,
           witnessSignature: rawBlock.witness_signature,
-          transactions: rawBlock.transactions.map((transaction, index) => {
-            return {
-              rank: index + 1,
-              id: transaction.signatures[0],
-              expiration: transaction.expiration,
-              operations: transaction.operations,
-              operationResults: transaction.operation_results,
-              refBlockPrefix: transaction.ref_block_prefix,
-              refBlockNum: transaction.ref_block_num,
-              extensions: transaction.extensions,
-              signatures: transaction.signatures,
-            };
-          }),
+          transactions: transactions,
         });
-        console.log(rawBlock.transactions);
+        if (transactionNum) {
+          const transactionIndex = transactionNum - 1;
+          setSelectedTransaction(transactions[transactionIndex]);
+        }
         setLoading(false);
       } else {
         setLoading(false);
@@ -141,7 +147,13 @@ export function useBlockDetails(
       setHasPreviousTransition(false);
       setLoadingSideTransactions(false);
     }
-  }, [blockDetails, setHasNextTransition, setHasPreviousTransition]);
+  }, [
+    blockDetails,
+    transactionNum,
+    getBlock,
+    setHasNextTransition,
+    setHasPreviousTransition,
+  ]);
 
   useEffect(() => {
     getBlockDetails();
@@ -152,11 +164,8 @@ export function useBlockDetails(
   }, [getSideBlocks]);
 
   useEffect(() => {
-    if (blockDetails.transactions.length < 0 && transactionNum !== undefined) {
-      setSelectedTransaction(blockDetails.transactions[transactionNum]);
-    }
     getSideTransactions();
-  }, [blockDetails, transactionNum, getSideTransactions]);
+  }, [transactionNum, selectedTransaction, getSideTransactions]);
 
   return {
     blockDetails,

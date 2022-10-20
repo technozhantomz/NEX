@@ -60,7 +60,7 @@ export const ChoiceModal = ({
     <Styled.ChoiceModal
       width={600}
       title={counterpart.translate("connection.title_out_of_sync")}
-      visible={visible}
+      open={visible}
       onCancel={hideModal}
       footer={footer}
       centered={true}

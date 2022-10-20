@@ -4,12 +4,13 @@ import Link from "next/link";
 
 import { StatsCard } from "../../common";
 import * as Styled from "../BlockDetails/BlockDetails.styled";
-// import { TransactionsTable } from "../BlockDetails/components";
 import { useBlockDetails } from "../BlockDetails/hooks";
+
+// import { OperationsTable } from "./components";
 
 type Props = {
   block: number;
-  transaction: number;
+  transaction: string;
 };
 export const TransactionDetails = ({
   block,
@@ -21,7 +22,7 @@ export const TransactionDetails = ({
     hasPreviousTransition,
     loadingSideTransactions,
     selectedTransaction,
-  } = useBlockDetails(block, transaction);
+  } = useBlockDetails(block, parseInt(transaction));
 
   return (
     <>
@@ -79,7 +80,7 @@ export const TransactionDetails = ({
             statsData={[0]}
           />
           <StatsCard
-            noData={selectedTransaction.operations.length >= 0}
+            noData={selectedTransaction.operations.length < 0}
             title={counterpart.translate(`tableHead.operations`)}
             data={`${selectedTransaction.operations.length}`}
             statsData={[selectedTransaction.operations.length]}
@@ -103,23 +104,24 @@ export const TransactionDetails = ({
           <Styled.BlockInfoTitle>
             {counterpart.translate(`tableHead.extensions`)}
           </Styled.BlockInfoTitle>
-          <p>{selectedTransaction.extensions.length}</p>
+          <p>
+            {selectedTransaction.extensions.length > 0
+              ? selectedTransaction.extensions.length
+              : "="}
+          </p>
         </Styled.BlockInfo>
         <Styled.BlockInfo>
           <Styled.BlockInfoTitle>Signatures</Styled.BlockInfoTitle>
           <ol>
-            {selectedTransaction.signatures.forEach(
+            {selectedTransaction.signatures.map(
               (signature: string): JSX.Element => {
-                return <li>{signature}</li>;
+                return <li key={signature}>{signature}</li>;
               }
             )}
           </ol>
         </Styled.BlockInfo>
       </Styled.BlockWrapper>
-      {/* <TransactionsTable
-        transactionRows={blockDetails.transactions}
-        block={block}
-      /> */}
+      {/* <OperationsTable transactionRow={selectedTransaction} /> */}
     </>
   );
 };

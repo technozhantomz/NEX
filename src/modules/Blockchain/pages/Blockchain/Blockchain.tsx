@@ -12,28 +12,30 @@ import {
   Tabs,
   UpOutlined,
 } from "../../../../ui/src";
-import {
-  AssetsTab,
-  BlockchainTab,
-  BlockDetails,
-  CommitteeTab,
-  FeesTab,
-  SonsTab,
-  TransactionDetails,
-  WitnessesTab,
-} from "../../components";
+// import {
+//   AssetsTab,
+//   BlockchainTab,
+//   BlockDetails,
+//   CommitteeTab,
+//   FeesTab,
+//   SonsTab,
+//   TransactionDetails,
+//   WitnessesTab,
+// } from "../../components";
 
 import * as Styled from "./Blockchain.styled";
+import { BlockchainTabItems } from "./BlockchainTabItems";
 import { useBlockchainPage } from "./hooks";
 
-const { TabPane } = Tabs;
+// const { TabPane } = Tabs;
 
 const Blockchain: NextPage = () => {
   const router = useRouter();
   const [visible, setVisible] = useState<boolean>(false);
-  const { blockNumber, transactionNumber, tab } = router.query;
-  const { pageMeta } = useBlockchainPage(tab as string);
+  const { block, tab } = router.query;
+  const { pageMeta, blockNum, transactionId } = useBlockchainPage(tab, block);
   const { sm } = useViewportContext();
+  const blockchainTabItems = BlockchainTabItems(block, blockNum, transactionId);
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
       {sm ? (
@@ -91,20 +93,21 @@ const Blockchain: NextPage = () => {
             router.push(`/blockchain?tab=${key}`);
             if (sm) setVisible(false);
           }}
-        >
-          <TabPane
+          items={blockchainTabItems}
+        />
+        {/* <TabPane
             tab={counterpart.translate(`pages.blocks.blockchain.blockchain`)}
             key="blockchain"
           >
-            {blockNumber ? (
+            {block ? (
               <>
-                {transactionNumber ? (
+                {transactionId ? (
                   <TransactionDetails
-                    block={blockNumber as unknown as number}
-                    transaction={transactionNumber as unknown as number}
+                    block={blockNum as number}
+                    transaction={transactionId}
                   />
                 ) : (
-                  <BlockDetails block={blockNumber as unknown as number} />
+                  <BlockDetails block={blockNum as unknown as number} />
                 )}
               </>
             ) : (
@@ -140,8 +143,8 @@ const Blockchain: NextPage = () => {
             key="fees"
           >
             <FeesTab />
-          </TabPane>
-        </Tabs>
+          </TabPane> */}
+        {/* </Tabs> */}
       </Styled.BlockchainCard>
     </Layout>
   );
