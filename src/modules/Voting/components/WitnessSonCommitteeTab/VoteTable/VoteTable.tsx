@@ -40,7 +40,7 @@ export const VoteTable = ({
   const { sm } = useViewportContext();
   const { localStorageAccount } = useUserContext();
   const columns = showVotesColumns(addChange, cancelChange, getActionString);
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
     <Styled.VoteTableWrapper>
@@ -110,7 +110,7 @@ export const VoteTable = ({
                     </span>
                     <span className="item-info-value">
                       <Link href={`/user/${(item as VoteRow).name}`}>
-                        {(item as VoteRow).name}
+                        <a>{(item as VoteRow).name}</a>
                       </Link>
                     </span>
                   </div>
@@ -133,8 +133,14 @@ export const VoteTable = ({
                       {columns[3].title()}
                     </span>
                     <span className="item-info-value">
-                      <Link href={`${(item as VoteRow).url}`} passHref>
-                        <Styled.urlIcon rotate={45} />
+                      <Link
+                        href={`${(item as VoteRow).url}`}
+                        passHref
+                        target="_blank"
+                      >
+                        <a target="_blank">
+                          <Styled.urlIcon rotate={45} />
+                        </a>
                       </Link>
                     </span>
                   </div>

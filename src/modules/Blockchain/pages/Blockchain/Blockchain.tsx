@@ -12,22 +12,10 @@ import {
   Tabs,
   UpOutlined,
 } from "../../../../ui/src";
-// import {
-//   AssetsTab,
-//   BlockchainTab,
-//   BlockDetails,
-//   CommitteeTab,
-//   FeesTab,
-//   SonsTab,
-//   TransactionDetails,
-//   WitnessesTab,
-// } from "../../components";
 
 import * as Styled from "./Blockchain.styled";
 import { BlockchainTabItems } from "./BlockchainTabItems";
 import { useBlockchainPage } from "./hooks";
-
-// const { TabPane } = Tabs;
 
 const Blockchain: NextPage = () => {
   const router = useRouter();

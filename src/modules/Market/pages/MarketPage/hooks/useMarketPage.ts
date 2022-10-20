@@ -291,15 +291,15 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       let baseAmount = 0,
         quoteAmount = 0,
         isBuyOrder = false;
-      // this is sell orders
+      // this is buy orders
       if (pays.asset_id === base.id) {
         baseAmount = setPrecision(false, pays.amount, base.precision);
         quoteAmount = setPrecision(false, receives.amount, quote.precision);
-        //this is buy orders
+        isBuyOrder = true;
+        //this is sell orders
       } else {
         baseAmount = setPrecision(false, receives.amount, base.precision);
         quoteAmount = setPrecision(false, pays.amount, quote.precision);
-        isBuyOrder = true;
       }
 
       return {
@@ -322,8 +322,23 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           "get_fill_order_history",
           [base.id, quote.id, 100]
         );
+
+        const filterMarketTaker = histories.reduce(
+          (previousHistory, currentHistory, i, { [i - 1]: next }) => {
+            if (i % 2) {
+              previousHistory.push(
+                currentHistory.op.order_id > next.op.order_id
+                  ? currentHistory
+                  : next
+              );
+            }
+            return previousHistory;
+          },
+          [] as OrderHistory[]
+        );
+
         setOrderHistoryRows(
-          histories.map((history) => {
+          filterMarketTaker.map((history) => {
             return formOrderHistoryRow(history, base, quote);
           })
         );
@@ -333,7 +348,12 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         setLoadingOrderHistoryRows(false);
       }
     },
-    [historyApi, setOrderHistoryRows, setLoadingOrderHistoryRows]
+    [
+      historyApi,
+      setOrderHistoryRows,
+      setLoadingOrderHistoryRows,
+      formOrderHistoryRow,
+    ]
   );
 
   const formUserHistoryRow = useCallback(

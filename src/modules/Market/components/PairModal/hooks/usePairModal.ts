@@ -78,8 +78,9 @@ export function usePairModal({
   }, [dbApi, setAllAssetsSymbols]);
 
   const handleSelectRecent = useCallback(
-    (value: string) => {
-      const pair = value.split("/");
+    (value: unknown) => {
+      const selectedItem = value as string;
+      const pair = selectedItem.split("/");
       pairModalForm.setFieldsValue({ quote: pair[0] });
       pairModalForm.setFieldsValue({ base: pair[1] });
     },

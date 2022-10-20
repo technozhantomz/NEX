@@ -3,6 +3,7 @@ import counterpart from "counterpart";
 import Link from "next/link";
 
 import { StatsCard } from "../../common";
+import { TransactionRow } from "../BlockchainTab/hooks";
 
 import * as Styled from "./BlockDetails.styled";
 import { TransactionsTable } from "./components";
@@ -69,8 +70,8 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
             title={counterpart.translate(
               `pages.blocks.block_details.transactions`
             )}
-            data={`${blockDetails.transactions.length}`}
-            statsData={[blockDetails.transactions.length]}
+            data={`${(blockDetails.transactions as TransactionRow[]).length}`}
+            statsData={[(blockDetails.transactions as TransactionRow[]).length]}
           />
         </Styled.StatsCardsDeck>
         <Styled.TwoColumns>
@@ -114,7 +115,7 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
       </Styled.BlockWrapper>
       <TransactionsTable
         block={block}
-        transactionRows={blockDetails.transactions}
+        transactionRows={blockDetails.transactions as TransactionRow[]}
       />
     </>
   );

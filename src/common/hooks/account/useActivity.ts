@@ -414,7 +414,6 @@ export function useActivity(): UseActivityResult {
         history = await getAccountHistoryById(id);
       }
 
-      // this should change based on designer decision
       if (isWalletActivityTable) {
         history = history.filter((el: { op: number[] }) => el.op[0] === 0);
       } else {
