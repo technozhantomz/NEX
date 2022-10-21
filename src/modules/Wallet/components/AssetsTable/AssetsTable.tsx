@@ -11,6 +11,7 @@ import { DownloadOutlined, List } from "../../../../ui/src";
 import { AssetActionButton } from "../AssetActionButton";
 import { AssetTitle } from "../AssetTitle";
 
+import { AssetsTabColumns } from "./AssetsTabColumns";
 import * as Styled from "./AssetsTable.styled";
 import { IAssetRow, useAssetsTable } from "./hooks";
 
@@ -219,9 +220,7 @@ export const AssetsTable = ({
         />
       ) : (
         <Styled.AssetsTable
-          columns={
-            showActions ? columns : columns.filter((item) => item.title !== "")
-          }
+          columns={AssetsTabColumns}
           dataSource={
             fillterAsset === ""
               ? tableAssets
