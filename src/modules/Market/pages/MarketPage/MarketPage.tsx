@@ -97,7 +97,15 @@ const MarketPage: NextPage = () => {
                         (stats) =>
                           stats.tradingPair ===
                           (pair as string).replace("_", "/")
-                      ) as PairNameAndMarketStats
+                      ) ||
+                      ({
+                        tradingPair: (pair as string).replace("_", "/"),
+                        marketPairStats: {
+                          latest: "0",
+                          percentChange: "0",
+                          volume: "0",
+                        },
+                      } as PairNameAndMarketStats)
                     }
                     showStats={false}
                   />
@@ -191,7 +199,15 @@ const MarketPage: NextPage = () => {
                     tradingPairsStats.find(
                       (stats) =>
                         stats.tradingPair === (pair as string).replace("_", "/")
-                    ) as PairNameAndMarketStats
+                    ) ||
+                    ({
+                      tradingPair: (pair as string).replace("_", "/"),
+                      marketPairStats: {
+                        latest: "0",
+                        percentChange: "0",
+                        volume: "0",
+                      },
+                    } as PairNameAndMarketStats)
                   }
                 />
                 <OrderTabs

@@ -9,6 +9,7 @@ import {
   useUpdateExchanges,
 } from "../../../../../common/hooks";
 import {
+  useChainStoreContext,
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
@@ -44,6 +45,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { getAccountHistoryById } = useAccountHistory();
   const { getDefaultPairs, formPairStats } = useMarketPairStats();
   const { formLocalDate } = useFormDate();
+  const { synced } = useChainStoreContext();
   const [buyOrderForm] = Form.useForm<OrderForm>();
   const [sellOrderForm] = Form.useForm<OrderForm>();
 
@@ -488,7 +490,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
   const unsubscribeFromMarket = useCallback(async () => {
     if (previousPair !== "") {
-      console.log("unsub");
       const previousBaseSymbol = previousPair.split("_")[1];
       const previousQuoteSymbol = previousPair.split("_")[0];
       try {
@@ -506,9 +507,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   }, [previousPair, dbApi]);
 
   const subscribeToMarket = useCallback(async () => {
-    if (currentBase && currentQuote) {
-      console.log("in sub");
-      // setSubscribing(true);
+    if (currentBase && currentQuote && synced) {
       try {
         await Promise.all([
           getTradingPairsStats(exchanges),
@@ -518,7 +517,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         await dbApi("subscribe_to_market", [
           async () => {
             try {
-              console.log("ghasem Market");
               await Promise.all([
                 getTradingPairsStats(exchanges),
                 refreshOrderBook(currentBase, currentQuote),
@@ -543,6 +541,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     refreshOrderBook,
     refreshHistory,
     dbApi,
+    synced,
   ]);
 
   useEffect(() => {
@@ -555,13 +554,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
   useEffect(() => {
     subscribeToMarket();
+    return () => {
+      unsubscribeFromMarket();
+    };
   }, [subscribeToMarket]);
-
-  useEffect(() => {
-    unsubscribeFromMarket();
-  }, [unsubscribeFromMarket]);
-
-  //console.log("apiIns", apiInstance);
 
   return {
     tradingPairsStats,

@@ -11,8 +11,10 @@ export const DepositFormContainer = styled.div`
   width: 600px;
   padding: 25px 20px 0 20px;
   margin: 10px;
-  ${breakpoint.xs} {
+  min-height: 190px;
+  ${breakpoint.sm} {
     padding: 35px 30px 0 30px;
+    min-height: 215px;
   }
   .ant-form {
     width: 90%;
