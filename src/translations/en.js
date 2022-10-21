@@ -595,6 +595,17 @@ export const en = {
         previous_secret: "Previous Secret",
         next_secret: "Next Secret",
         witness_signature: "Witness Signature",
+        search_transactions: "Search Transactions",
+      },
+      transaction_detials: {
+        transaction: "Transaction",
+        transaction_id: "Transaction ID",
+        ref_block_prefix: "Ref block prefix",
+        ref_block_num: "Ref block number",
+        signatures: "Signatures",
+        see_details: "See Details here",
+        details: "Details",
+        results: "Results",
       },
       assets: {
         heading: "PeerPlays Assets",

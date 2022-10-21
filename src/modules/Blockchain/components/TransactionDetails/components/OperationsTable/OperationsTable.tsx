@@ -30,8 +30,14 @@ type Props = {
 };
 
 export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
-  const { loading, searchDataSource, setSearchDataSource, operationsRows } =
-    useOperationsTable(transactionRow);
+  const {
+    loading,
+    showDetials,
+    searchDataSource,
+    operationsRows,
+    setSearchDataSource,
+    toggleDetails,
+  } = useOperationsTable(transactionRow);
   const { sm } = useViewportContext();
   const componentRef = useRef();
 
@@ -39,7 +45,7 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
     <Styled.TableWrapper>
       <Styled.OperationsHeaderBar>
         <Styled.OperationsHeader>
-          {counterpart.translate(`pages.blocks.transaction_details.operations`)}
+          {counterpart.translate(`tableHead.operations`)}
           <InfoCircleOutlined />
         </Styled.OperationsHeader>
         <SearchTableInput
@@ -81,29 +87,49 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
                   <span className="item-info-title">
                     {OperationsColumns[0].title()}
                   </span>
-                  <span className="item-info-value"></span>
+                  <span className="item-info-value">{item.number}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
                     {OperationsColumns[1].title()}
                   </span>
-                  <span className="item-info-value"></span>
+                  <span className="item-info-value">{item.id}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
                     {OperationsColumns[2].title()}
                   </span>
-                  <span className="item-info-value"></span>
+                  <span className="item-info-value">{item.type}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
                     {OperationsColumns[3].title()}
                   </span>
-                  <span className="item-info-value"></span>
+                  <span className="item-info-value">{item.fees}</span>
                 </div>
                 <div className="item-info">
-                  <span className="item-info-value"></span>
+                  <span className="item-info-value">
+                    <a onClick={toggleDetails}>
+                      {counterpart.translate(
+                        `pages.blocks.transaction_detials.see_details`
+                      )}
+                    </a>
+                  </span>
                 </div>
+                <Styled.OperationDetails className={showDetials ? "open" : ""}>
+                  <p>
+                    {counterpart.translate(
+                      `pages.blocks.transaction_detials.details`
+                    )}
+                    : {item.details}
+                  </p>
+                  <p>
+                    {counterpart.translate(
+                      `pages.blocks.transaction_detials.results`
+                    )}
+                    : {item.results}
+                  </p>
+                </Styled.OperationDetails>
               </Styled.OperationsItemContent>
             </Styled.OperationsListItem>
           )}
@@ -115,8 +141,18 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
           expandable={{
             expandedRowRender: (record) => (
               <>
-                <p>{record.details}</p>
-                <p>{record.results}</p>
+                <p>
+                  {counterpart.translate(
+                    `pages.blocks.transaction_detials.details`
+                  )}
+                  : {record.details}
+                </p>
+                <p>
+                  {counterpart.translate(
+                    `pages.blocks.transaction_detials.results`
+                  )}
+                  : {record.results}
+                </p>
               </>
             ),
             rowExpandable: (record) => record.details !== undefined,

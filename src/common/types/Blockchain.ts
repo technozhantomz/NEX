@@ -7,6 +7,7 @@ export type Block = {
   timestamp: string | Date;
   transaction_merkle_root: string;
   transactions: any[];
+  transaction_ids: string[];
   witness: string;
   witness_account_name: string;
   witness_signature: string;

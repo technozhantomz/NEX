@@ -40,7 +40,9 @@ export const TransactionDetails = ({
           <Styled.BlockNavItem>
             <Styled.BlockNumber>
               <span>
-                Transaction
+                {counterpart.translate(
+                  `pages.blocks.transaction_detials.transaction`
+                )}
                 {transaction} of {blockTransactions.length}
               </span>
             </Styled.BlockNumber>
@@ -75,7 +77,6 @@ export const TransactionDetails = ({
           <StatsCard
             noData={transactionDetails.expiration === ""}
             title={counterpart.translate(`tableHead.expiration`)}
-            isTimeCard={true}
             data={`${transactionDetails.expiration}`}
             statsData={[0]}
           />
@@ -87,16 +88,28 @@ export const TransactionDetails = ({
           />
         </Styled.StatsCardsDeck>
         <Styled.BlockInfo>
-          <Styled.BlockInfoTitle>Transaction ID</Styled.BlockInfoTitle>
+          <Styled.BlockInfoTitle>
+            {counterpart.translate(
+              `pages.blocks.transaction_detials.transaction_id`
+            )}
+          </Styled.BlockInfoTitle>
           <p>{transactionDetails.id}</p>
         </Styled.BlockInfo>
         <Styled.TwoColumns>
           <Styled.BlockInfo>
-            <Styled.BlockInfoTitle>Ref block prefix</Styled.BlockInfoTitle>
+            <Styled.BlockInfoTitle>
+              {counterpart.translate(
+                `pages.blocks.transaction_detials.ref_block_prefix`
+              )}
+            </Styled.BlockInfoTitle>
             <p>{transactionDetails.refBlockPrefix}</p>
           </Styled.BlockInfo>
           <Styled.BlockInfo>
-            <Styled.BlockInfoTitle>Ref block number</Styled.BlockInfoTitle>
+            <Styled.BlockInfoTitle>
+              {counterpart.translate(
+                `pages.blocks.transaction_detials.ref_block_num`
+              )}
+            </Styled.BlockInfoTitle>
             <p>{transactionDetails.refBlockNum}</p>
           </Styled.BlockInfo>
         </Styled.TwoColumns>
@@ -111,7 +124,11 @@ export const TransactionDetails = ({
           </p>
         </Styled.BlockInfo>
         <Styled.BlockInfo>
-          <Styled.BlockInfoTitle>Signatures</Styled.BlockInfoTitle>
+          <Styled.BlockInfoTitle>
+            {counterpart.translate(
+              `pages.blocks.transaction_detials.signatures`
+            )}
+          </Styled.BlockInfoTitle>
           <ol>
             {transactionDetails.signatures.map(
               (signature: string): JSX.Element => {

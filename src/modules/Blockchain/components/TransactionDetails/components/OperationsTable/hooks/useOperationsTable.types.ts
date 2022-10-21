@@ -6,7 +6,7 @@ export type UseOperationsTableResult = {
   searchDataSource: OperationRow[];
   operationsRows: OperationRow[];
   setSearchDataSource: Dispatch<SetStateAction<OperationRow[]>>;
-  setShowDetials: Dispatch<SetStateAction<boolean>>;
+  toggleDetails: () => void;
 };
 
 export type OperationRow = {

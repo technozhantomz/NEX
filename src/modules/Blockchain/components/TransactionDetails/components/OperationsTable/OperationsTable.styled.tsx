@@ -18,6 +18,16 @@ export const TableWrapper = styled.div`
   margin: 0 51px 0 35px;
 `;
 
+export const OperationDetails = styled.div`
+  display: none;
+  &.open {
+    display: block;
+  }
+  p{
+    word-break: break-all;
+  }
+`;
+
 export const OperationsHeaderBar = styled(DataTableHeaderBar)``;
 
 export const OperationsHeader = styled(DataTableHeader)``;

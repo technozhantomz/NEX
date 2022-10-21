@@ -553,6 +553,17 @@ export const ru = {
         merkle_root: "Корень Меркла",
         previous_secret: "Предыдущий секрет",
         witness_signature: "Подпись свидетеля",
+        search_transactions: "Поиск транзакций",
+      },
+      transaction_detials: {
+        transaction: "Транзакция",
+        transaction_id: "Идентификатор транзакции",
+        ref_block_prefix: "Префикс блока ссылки",
+        ref_block_num: "Номер блока ссылок",
+        signatures: "Подписи",
+        see_details: "Подробности здесь",
+        details: "Подробности",
+        results: "Результаты",
       },
       assets: {
         heading: "Активы PeerPlays",

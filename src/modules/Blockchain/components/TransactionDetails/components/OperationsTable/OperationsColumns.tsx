@@ -1,15 +1,21 @@
+import counterpart from "counterpart";
+
 import { TableHeading } from "../../../../../../common/components";
 
 import * as Styled from "./OperationsTable.styled";
 
-const headings = ["number", "operation_id", "operations_type", "fees", ""];
+const headings = ["number", "operation_id", "operation_type", "fees", ""];
 const keys = ["number", "id", "type", "fees", "details"];
 const renders = [
   undefined,
   undefined,
   (type: string): JSX.Element => <Styled.TimeStamp>{type}</Styled.TimeStamp>,
   undefined,
-  (_details: unknown): JSX.Element => <a>See details here</a>,
+  (_details: unknown): JSX.Element => (
+    <a>
+      {counterpart.translate(`pages.blocks.transaction_detials.see_details`)}
+    </a>
+  ),
 ];
 const filters = [undefined, undefined, undefined, undefined, undefined];
 const filterModes = [undefined, undefined, undefined, undefined, undefined];

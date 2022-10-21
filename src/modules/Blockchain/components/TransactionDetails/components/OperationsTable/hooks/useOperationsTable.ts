@@ -51,6 +51,10 @@ export function useOperationsTable(
     }
   }, [transaction, setOperationsRows]);
 
+  const toggleDetails = useCallback(() => {
+    setShowDetials(showDetials ? false : true);
+  }, [showDetials]);
+
   useEffect(() => {
     formOperationRows();
   }, [transaction]);
@@ -61,6 +65,6 @@ export function useOperationsTable(
     searchDataSource,
     operationsRows,
     setSearchDataSource,
-    setShowDetials,
+    toggleDetails,
   };
 }
