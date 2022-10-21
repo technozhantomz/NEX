@@ -122,3 +122,9 @@ export const AmountsWrapper = styled.div`
 export const TransactionDetails = styled.div`
   margin-bottom: 24px;
 `;
+
+export const LoadingIndicatorContainer = styled.div`
+  text-align: center;
+  display: "flex";
+  justifycontent: "center";
+`;

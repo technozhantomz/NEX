@@ -320,7 +320,9 @@ export const WithdrawForm = ({
   const formBody = selectedAsset === "BTC" ? btcFormBody : hiveFormBody;
 
   const formBodyWithLoading = loadingSidechainAccounts ? (
-    <LoadingIndicator type="three-bounce" />
+    <Styled.LoadingIndicatorContainer>
+      <LoadingIndicator type="three-bounce" />
+    </Styled.LoadingIndicatorContainer>
   ) : (
     formBody
   );

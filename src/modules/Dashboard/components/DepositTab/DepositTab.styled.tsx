@@ -69,3 +69,9 @@ export const BTCDepositInstruction = styled.div`
     font-size: 14px;
   }
 `;
+
+export const LoadingIndicatorContainer = styled.div`
+  text-align: center;
+  display: "flex";
+  justifycontent: "center";
+`;

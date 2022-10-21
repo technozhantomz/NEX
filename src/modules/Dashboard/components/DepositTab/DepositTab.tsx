@@ -77,7 +77,9 @@ export const DepositTab = (): JSX.Element => {
 
   const deposit = selectedAsset === "BTC" ? BTCDeposit : HIVEDeposit;
   const depositWithLoading = loadingSidechainAccounts ? (
-    <LoadingIndicator type="three-bounce" />
+    <Styled.LoadingIndicatorContainer>
+      <LoadingIndicator type="three-bounce" />
+    </Styled.LoadingIndicatorContainer>
   ) : (
     deposit
   );
