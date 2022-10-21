@@ -39,7 +39,7 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
     <Styled.TableWrapper>
       <Styled.OperationsHeaderBar>
         <Styled.OperationsHeader>
-          {counterpart.translate(`pages.blocks.block_details.transactions`)}
+          {counterpart.translate(`pages.blocks.transaction_details.operations`)}
           <InfoCircleOutlined />
         </Styled.OperationsHeader>
         <SearchTableInput
@@ -102,9 +102,6 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
                   <span className="item-info-value"></span>
                 </div>
                 <div className="item-info">
-                  <span className="item-info-title">
-                    {OperationsColumns[4].title()}
-                  </span>
                   <span className="item-info-value"></span>
                 </div>
               </Styled.OperationsItemContent>
@@ -115,6 +112,17 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
         <Styled.OperationsTable
           dataSource={searchDataSource}
           columns={OperationsColumns as ColumnsType<OperationRow>}
+          expandable={{
+            expandedRowRender: (record) => (
+              <>
+                <p>{record.details}</p>
+                <p>{record.results}</p>
+              </>
+            ),
+            rowExpandable: (record) => record.details !== undefined,
+            expandRowByClick: true,
+            showExpandColumn: false,
+          }}
           loading={loading}
           pagination={
             !loading

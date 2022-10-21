@@ -1,10 +1,7 @@
-// import { ColumnsType } from "antd/lib/table";
-
 import { TableHeading } from "../../../../../../common/components";
 
 import * as Styled from "./OperationsTable.styled";
 
-// export const OperationsColumns = (): ColumnsType<unknown> => {
 const headings = ["number", "operation_id", "operations_type", "fees", ""];
 const keys = ["number", "id", "type", "fees", "details"];
 const renders = [
@@ -29,7 +26,10 @@ const sorters = [
 
 export const OperationsColumns = headings.map((heading, index) => {
   return {
-    title: (): JSX.Element => <TableHeading heading={heading} />,
+    title:
+      heading === ""
+        ? ""
+        : (): JSX.Element => <TableHeading heading={heading} />,
     dataIndex: keys[index],
     key: keys[index],
     render: renders[index],
@@ -40,6 +40,3 @@ export const OperationsColumns = headings.map((heading, index) => {
     sorter: sorters[index],
   };
 });
-
-//   return columns as ColumnsType<unknown>;
-// };

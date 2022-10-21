@@ -36,6 +36,7 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
         const transactions: TransactionRow[] = rawBlock.transactions.map(
           (transaction, index) => {
             return {
+              key: index + 1,
               rank: index + 1,
               id: transaction.signatures[0],
               expiration: transaction.expiration,

@@ -1081,6 +1081,10 @@ export const en = {
     ref_block_num: "Ref block #",
     extensions: "Extensions",
     status: "Status",
+    number: "#",
+    operation_id: "Operation ID",
+    operation_type: "Operation Type",
+    fees: "Fees",
   },
   tableFilters: {
     avtive: "Avtive",

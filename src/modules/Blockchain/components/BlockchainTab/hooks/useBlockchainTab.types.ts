@@ -38,6 +38,7 @@ export type DataTableRow = {
 };
 
 export type TransactionRow = {
+  key: number;
   rank: number;
   id: string;
   expiration: string;

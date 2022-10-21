@@ -1036,6 +1036,10 @@ export const ru = {
     ref_block_num: "Блок ссылок №",
     extensions: "Расширения",
     status: "Статус",
+    number: "#",
+    operation_id: "Идентификатор операции",
+    operation_type: "Тип операции",
+    fees: "Сборы",
   },
   tableFilters: {
     avtive: "Активный",
