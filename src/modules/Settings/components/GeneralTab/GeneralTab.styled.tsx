@@ -30,7 +30,7 @@ export const GeneralTabForm = styled(UiForm)`
   margin-top: 24px;
 `;
 
-export const LanguageFormItem = styled(UiForm.Item)`
+export const GeneralSettingFormItem = styled(UiForm.Item)`
   width: 100%;
   margin-top: 15px;
   background: ${colors.white} 0% 0% no-repeat padding-box;
@@ -52,6 +52,10 @@ export const LanguageFormItem = styled(UiForm.Item)`
 `;
 export const LabelText = styled(Text)`
   font-weight: 400;
+  .anticon-info-circle {
+    margin: 0 15px;
+    color: ${colors.warningColor};
+  }
 `;
 export const Select = styled(UiSelect)``;
 
@@ -61,7 +65,6 @@ export const FormItem = styled(UiForm.Item)`
 `;
 
 export const FaucetURLWrapper = styled.div`
-  margin-top: 15px;
   ${breakpoint.sm} {
     display: flex;
     align-items: center;
@@ -76,28 +79,23 @@ export const FaucetURL = styled.div`
   opacity: 1;
   margin-bottom: 20px;
   ${breakpoint.sm} {
-    margin-right: 15px;
     margin-bottom: 0;
   }
 `;
 
 export const FaucetSpace = styled.div`
-  margin-top: 30px;
+  margin-top: 96px;
   .ant-row {
     align-items: center;
   }
 `;
 
 export const SaveButton = styled(CardFormButton)`
-  margin-top: 40px;
-  width: 255px;
-  height: 35px;
+  margin: 0;
+  margin-top: 30px;
+  width: 100%;
   ${breakpoint.sm} {
-    position: absolute;
-    right: 30px;
-    bottom: 50px;
-    width: 290px;
-    height: 45px;
+    width: 350px;
   }
 `;
 
@@ -117,3 +115,41 @@ export const Option = styled(UiOption)``;
 export const Space = styled(UiSpace)``;
 
 export const Typography = styled(UiTypography)``;
+
+export const CheckBoxGroup = styled(UiForm.Item)`
+  .ant-checkbox-group {
+    display: inline;
+  }
+  .ant-checkbox-wrapper {
+    width: 45%;
+    margin-bottom: 8px;
+    margin-top: 8px;
+  }
+  .ant-checkbox + span {
+    font-size: 10px;
+  }
+  ${breakpoint.sm} {
+    .ant-checkbox + span {
+      font-size: 14px;
+    }
+    .ant-form-item-control-input-content {
+      min-width: 120%;
+    }
+  }
+`;
+
+export const TextContainer = styled.div`
+  min-height: 22px;
+  font-size: 10px;
+  .anticon-info-circle {
+    margin: 0 15px 0 0;
+    color: ${colors.warningColor};
+  }
+  ${breakpoint.sm} {
+    font-size: 14px;
+    .anticon-info-circle {
+      margin: 0 15px;
+      color: ${colors.warningColor};
+    }
+  }
+`;
