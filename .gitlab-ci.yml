@@ -150,9 +150,9 @@ deployToQA:
 deployToStaging:
   stage: deploy
   script: 
-    - rm -rf $PROD_DEPLOY_DIR/*
+    - rm -rf $PROD_DEPLOY_DIR/* || true
     - tar -zxf nex-prod.tar.gz --directory $PROD_DEPLOY_DIR
-    - cd $PROD_DEPLOY_DIR
+    - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-staging || true
     - pm2 start npm --name nex-staging -- run start
   dependencies: [build-production]
