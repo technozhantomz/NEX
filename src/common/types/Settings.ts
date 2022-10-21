@@ -1,3 +1,5 @@
+import { CheckboxValueType } from "../../ui/src";
+
 export type Settings = {
   advancedMode: boolean;
   darkTheme: boolean;
@@ -6,9 +8,7 @@ export type Settings = {
   nodeAutoselect: boolean;
   notifications: {
     allow: boolean;
-    additional: {
-      transferToMe: boolean;
-    };
+    selectedNotifications: CheckboxValueType[];
   };
   walletLock: number;
 };
