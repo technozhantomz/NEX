@@ -854,6 +854,7 @@ export const ru = {
       desired_proxy: "Желаемый прокси",
       wallet_lock: "Блокировка кошелька (минуты)",
       use_whalevault: "Используйте расширение WhaleVault",
+      coins_token: "Монеты/Токены",
     },
     comments: {
       deposit_hbd:

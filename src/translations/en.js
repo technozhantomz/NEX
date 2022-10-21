@@ -891,6 +891,7 @@ export const en = {
       desired_proxy: "Desired Proxy",
       wallet_lock: "Wallet lock (Minutes)",
       use_whalevault: "Use WhaleVault extension",
+      coins_token: "Coins/Tokens",
     },
     comments: {
       deposit_hbd:

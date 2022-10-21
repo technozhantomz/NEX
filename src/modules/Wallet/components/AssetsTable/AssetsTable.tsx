@@ -1,11 +1,13 @@
 import counterpart from "counterpart";
+import { CSVLink } from "react-csv";
+import ReactToPrint from "react-to-print";
 
 import { TableHeading } from "../../../../common/components";
 import {
   useAssetsContext,
   useViewportContext,
 } from "../../../../common/providers";
-import { List } from "../../../../ui/src";
+import { DownloadOutlined, List } from "../../../../ui/src";
 import { AssetActionButton } from "../AssetActionButton";
 import { AssetTitle } from "../AssetTitle";
 
@@ -134,6 +136,27 @@ export const AssetsTable = ({
 
   return (
     <>
+      <Styled.AssetTabHeader>
+        <Styled.AssetHeader>
+          {counterpart.translate(`field.labels.coins_token`)}
+        </Styled.AssetHeader>
+
+        <Styled.DownloadLinks>
+          <DownloadOutlined />
+          <ReactToPrint
+            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
+            content={() => <p></p>}
+          />
+          {` / `}
+          <CSVLink
+            filename={"FeesTable.csv"}
+            data={""}
+            className="btn btn-primary"
+          >
+            {counterpart.translate(`links.csv`)}
+          </CSVLink>
+        </Styled.DownloadLinks>
+      </Styled.AssetTabHeader>
       {sm ? (
         <List
           itemLayout="vertical"

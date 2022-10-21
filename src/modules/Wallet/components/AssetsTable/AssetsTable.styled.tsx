@@ -49,3 +49,20 @@ export const AssetsItemContent = styled.div`
     }
   }
 `;
+
+export const AssetTabHeader = styled.div`
+  display: flex;
+  margin: 34px 40px 20px 35px;
+`;
+
+export const DownloadLinks = styled.span`
+  .anticon-download {
+    margin-right: 15px;
+    height: 17px;
+    color: ${colors.lightText};
+  }
+`;
+
+export const AssetHeader = styled.h3`
+  margin-right: 25px;
+`;
