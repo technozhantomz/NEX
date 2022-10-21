@@ -33,7 +33,7 @@ build-qa:
     - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
     - npm install
-    - npm run build
+    - npm run build --debug
   rules:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   artifacts: 
@@ -54,12 +54,13 @@ build-production:
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env
     - npm install
     - npm run build
+    - cd .. && tar czf nex-prod.tar.gz NEX/
+    - cp nex-prod.tar.gz NEX/ && cd NEX
   rules:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   artifacts: 
     paths:
-    - build/
-    - .env
+    - nex-prod.tar.gz
   tags:
     - staging
 
@@ -149,8 +150,9 @@ deployToQA:
 deployToStaging:
   stage: deploy
   script: 
-    - rm .env.example
-    - npm install
+    - rm -rf $PROD_DEPLOY_DIR/* || true
+    - tar -zxf nex-prod.tar.gz --directory $PROD_DEPLOY_DIR
+    - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-staging || true
     - pm2 start npm --name nex-staging -- run start
   dependencies: [build-production]
