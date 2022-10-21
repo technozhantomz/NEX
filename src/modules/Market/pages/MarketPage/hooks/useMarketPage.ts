@@ -153,9 +153,9 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
   const formUserOrderRow = useCallback(
     (baseAsset: Asset, quoteAsset: Asset, limitOrder: LimitOrder): OrderRow => {
-      let price = "0",
-        base = "0",
-        quote = "0",
+      let price: string,
+        base: string,
+        quote: string,
         isBuyOrder = false;
       const key = limitOrder.id;
       const expiration = formLocalDate(limitOrder.expiration);
