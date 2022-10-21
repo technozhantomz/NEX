@@ -55,6 +55,7 @@ build-production:
     - npm install
     - npm run build
     - cd .. && tar czf nex-prod.tar.gz NEX/
+    - cp nex-prod.tar.gz NEX/ && cd NEX
   rules:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   artifacts: 
@@ -149,6 +150,7 @@ deployToQA:
 deployToStaging:
   stage: deploy
   script: 
+    - rm -rf $PROD_DEPLOY_DIR/*
     - tar -zxf nex-prod.tar.gz --directory $PROD_DEPLOY_DIR
     - cd $PROD_DEPLOY_DIR
     - pm2 del nex-staging || true
