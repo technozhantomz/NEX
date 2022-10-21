@@ -23,7 +23,7 @@ export const OperationDetails = styled.div`
   &.open {
     display: block;
   }
-  p{
+  p {
     word-break: break-all;
   }
 `;
