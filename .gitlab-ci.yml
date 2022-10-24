@@ -137,7 +137,7 @@ deployToQA:
   dependencies: [build-qa]
   script: 
     - rm -rf $PROD_DEPLOY_DIR/* || true
-    - tar -zxf nex-prod.tar.gz --directory $PROD_DEPLOY_DIR
+    - tar -zxf nex-qa.tar.gz --directory $PROD_DEPLOY_DIR
     - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-QA || true 
     - pm2 start npm --name nex-QA -- run start
