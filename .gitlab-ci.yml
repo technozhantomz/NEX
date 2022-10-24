@@ -34,12 +34,13 @@ build-qa:
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
     - npm install
     - npm run build --debug
+    - cd .. && tar czf nex-qa.tar.gz NEX/
+    - cp nex-qa.tar.gz NEX/ && cd NEX
   rules:
-  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   artifacts: 
     paths:
-    - .env
-    - build/
+    - nex-qa.tar.gz
   tags:
     - build
 
@@ -135,7 +136,9 @@ deployToQA:
   stage: deploy
   dependencies: [build-qa]
   script: 
-    - npm install
+    - rm -rf $PROD_DEPLOY_DIR/* || true
+    - tar -zxf nex-prod.tar.gz --directory $PROD_DEPLOY_DIR
+    - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-QA || true 
     - pm2 start npm --name nex-QA -- run start
   environment:
@@ -169,8 +172,9 @@ deployToStaging:
 deployToProduction:
   stage: deploy
   script: 
-    - rm .env.example
-    - npm install
+    - rm -rf $PROD_DEPLOY_DIR/* || true
+    - tar -zxf nex-prod.tar.gz --directory $PROD_DEPLOY_DIR
+    - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex || true
     - pm2 start npm --name nex -- run start
   dependencies: [build-production]
