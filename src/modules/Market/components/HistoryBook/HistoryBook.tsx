@@ -33,10 +33,17 @@ export const HistoryBook = ({
     loadingSelectedPair,
   });
   const dataSource = forUser ? userOrderHistoryRows : orderHistoryRows;
-  const desktopScroll =
+  const desktopScrollForUserHistories =
     dataSource.length > 24
-      ? { y: 540, x: true, scrollToFirstRowOnChange: false }
+      ? { y: 230, x: true, scrollToFirstRowOnChange: false }
       : { x: true, scrollToFirstRowOnChange: false };
+  const desktopScrollForHistories =
+    dataSource.length > 24
+      ? { y: 677, x: true, scrollToFirstRowOnChange: false }
+      : { x: true, scrollToFirstRowOnChange: false };
+  const desktopScroll = forUser
+    ? desktopScrollForUserHistories
+    : desktopScrollForHistories;
   const scroll = md ? ({ x: true } as Scroll) : (desktopScroll as Scroll);
 
   return (
