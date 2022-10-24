@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 
 import { TableHeading } from "../../../../common/components";
-// import { useAssetsContext } from "../../../../common/providers";
+import { useAssetsContext } from "../../../../common/providers";
 import { AssetActionButton } from "../AssetActionButton";
 
 import { IAssetRow } from "./hooks";
@@ -29,7 +29,7 @@ export const AssetsTabColumns = (): {
     | ((a: { votes: string }, b: { votes: string }) => number)
     | undefined;
 }[] => {
-  // const { sidechainAssets } = useAssetsContext();
+  const { sidechainAssets } = useAssetsContext();
 
   const headings = [
     "symbol",
@@ -47,20 +47,28 @@ export const AssetsTabColumns = (): {
     undefined,
     undefined,
     (_value: any, record: any) => {
-      // const hasWithdraw = sidechainAssets
-      //   .map((asset) => asset.symbol)
-      //   .includes(record.asset);
-
+      const hasWithdrawAndDeposit = sidechainAssets
+        .map((asset) => asset.symbol)
+        .includes(record.symbol);
       return (
         <div>
           <AssetActionButton
             txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}
             href={`/wallet/${record.symbol}?tab=transfer`}
           />
-          <AssetActionButton
-            txt={counterpart.translate(`buttons.withdraw`)}
-            href={`/wallet/${record.symbol}?tab=withdraw`}
-          />
+
+          {hasWithdrawAndDeposit && (
+            <div>
+              <AssetActionButton
+                txt={counterpart.translate(`buttons.withdraw`)}
+                href={`/wallet/${record.symbol}?tab=withdraw`}
+              />
+              <AssetActionButton
+                txt={counterpart.translate(`buttons.deposit`)}
+                href={`/wallet/${record.symbol}?tab=deposit`}
+              />
+            </div>
+          )}
         </div>
       );
     },
