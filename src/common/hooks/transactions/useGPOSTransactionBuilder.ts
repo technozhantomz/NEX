@@ -49,7 +49,7 @@ export function useGPOSTransactionBuilder(): UseGPOSTransactionBuilderResult {
   const buildVestingWithdrawTransaction = useCallback(
     (
       gposAsset: Asset,
-      withdrawAmount: number,
+      withdrawAmount: string,
       vestingBalances: VestingBalance[],
       accountId: string
     ): Transaction => {

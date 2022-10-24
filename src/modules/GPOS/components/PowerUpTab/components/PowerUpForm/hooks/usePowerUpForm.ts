@@ -38,7 +38,8 @@ export function usePowerUpForm({
   const [userAvailableBalance, _setUserAvailableBalance] = useState<number>(0);
 
   const [powerUpForm] = Form.useForm<PowerUpForm>();
-  const depositAmount: string = Form.useWatch("depositAmount", powerUpForm);
+  const depositAmount: string =
+    Form.useWatch("depositAmount", powerUpForm) || "0";
   const { id, assets, localStorageAccount } = useUserContext();
   const { buildVestingBalanceCreateTransaction } = useGPOSTransactionBuilder();
   const { buildTrx } = useTransactionBuilder();
@@ -51,16 +52,24 @@ export function usePowerUpForm({
   const adjustDeposit = useCallback(
     (direction: string) => {
       const minusDirection =
-        Number(depositAmount) >= 1 ? Number(depositAmount) - 1 : 0;
+        Number(depositAmount) >= 1
+          ? limitByPrecision(
+              String(Number(depositAmount) - 1),
+              defaultAsset?.precision
+            )
+          : "0";
       powerUpForm.setFieldsValue({
         depositAmount:
           direction === "+"
-            ? String(Number(depositAmount) + 1)
-            : String(minusDirection),
+            ? limitByPrecision(
+                String(Number(depositAmount) + 1),
+                defaultAsset?.precision
+              )
+            : minusDirection,
       });
       powerUpForm.validateFields();
     },
-    [powerUpForm, depositAmount]
+    [powerUpForm, depositAmount, defaultAsset, limitByPrecision]
   );
 
   const handleVesting = useCallback(
@@ -81,9 +90,6 @@ export function usePowerUpForm({
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await calculateGposBalances();
-          powerUpForm.setFieldsValue({
-            depositAmount: "0",
-          });
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
             counterpart.translate(`field.success.successfully_deposited`, {
@@ -197,10 +203,9 @@ export function usePowerUpForm({
       powerUpForm.setFieldsValue({
         depositAmount: limitByPrecision(depositAmount, defaultAsset?.precision),
       });
-      const newBalance = Number(
-        limitByPrecision(
-          String(gposBalances?.openingBalance + Number(depositAmount))
-        )
+      const newBalance = limitByPrecision(
+        String(gposBalances?.openingBalance + Number(depositAmount)),
+        defaultAsset?.precision
       );
       if (userAvailableBalance >= 0) {
         setNewBalance(newBalance);

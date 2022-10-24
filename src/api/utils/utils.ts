@@ -38,7 +38,7 @@ export const utils = {
   ensureInputNumberValidity: (e: KeyboardEvent<HTMLInputElement>): void => {
     if (
       !utils.isNumberKey(e) ||
-      (e.target as any).value.split(".")[0].length >= 18
+      (e.target as any).value.split(".")[0].length >= 6
     ) {
       e.preventDefault();
     }

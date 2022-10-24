@@ -1,6 +1,5 @@
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
-import { KeyboardEvent } from "react";
 
 import { utils } from "../../../../../../api/utils";
 import {
@@ -83,7 +82,7 @@ export const PowerDownForm = ({
           size="large"
           initialValues={{
             openingBalance: "",
-            withdrawAmount: 0,
+            withdrawAmount: "0",
             newBalance: "",
             availableBalance: "",
           }}
@@ -143,11 +142,7 @@ export const PowerDownForm = ({
               type="number"
               min={0}
               step="any"
-              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e)) {
-                  e.preventDefault();
-                }
-              }}
+              onKeyPress={utils.ensureInputNumberValidity}
             />
           </Form.Item>
           <Form.Item

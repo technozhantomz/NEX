@@ -1,6 +1,5 @@
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
-import { KeyboardEvent } from "react";
 
 import { utils } from "../../../../../../api/utils";
 import {
@@ -143,11 +142,7 @@ export const PowerUpForm = ({
               type="number"
               min={0}
               step="any"
-              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e) || e.target.value.length > 30) {
-                  e.preventDefault();
-                }
-              }}
+              onKeyPress={utils.ensureInputNumberValidity}
             />
           </Form.Item>
           <Form.Item

@@ -8,7 +8,7 @@ export type UseGPOSTransactionBuilderResult = {
   ) => Transaction;
   buildVestingWithdrawTransaction: (
     gposAsset: Asset,
-    withdrawAmount: number,
+    withdrawAmount: string,
     vestingBalance: any,
     accountId: string
   ) => Transaction;

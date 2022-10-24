@@ -49,7 +49,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const [buyOrderForm] = Form.useForm<OrderForm>();
   const [sellOrderForm] = Form.useForm<OrderForm>();
 
-  const [previousPair, setPreviousPair] = useState<string>("");
+  const [previousPair, setPreviousPair] = useState<string>(exchanges.active);
   const [tradingPairsStats, setTradingPairsStats] = useState<
     PairNameAndMarketStats[]
   >([]);
@@ -232,7 +232,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         expiration,
       } as OrderRow;
     },
-    [setPrecision]
+    [setPrecision, ceilPrecision]
   );
 
   const getUserOrderBook = useCallback(
@@ -405,7 +405,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
       return { key, price, base, quote, date, isBuyOrder };
     },
-    [dbApi, setPrecision]
+    [dbApi, setPrecision, ceilPrecision]
   );
 
   const getUserHistory = useCallback(
@@ -428,10 +428,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
                 orderAssetsIds.includes(quote.id)
               );
             }
-          );
-          console.log(
-            "fillOrdersHistoryForThePair",
-            fillOrdersHistoryForThePair
           );
           const userHistoryRows = await Promise.all(
             fillOrdersHistoryForThePair.map(
@@ -492,20 +488,18 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   );
 
   const unsubscribeFromMarket = useCallback(async () => {
-    if (previousPair !== "") {
-      const previousBaseSymbol = previousPair.split("_")[1];
-      const previousQuoteSymbol = previousPair.split("_")[0];
-      try {
-        await dbApi("unsubscribe_from_market", [
-          () => {
-            console.log("unsubscribing");
-          },
-          previousBaseSymbol,
-          previousQuoteSymbol,
-        ]);
-      } catch (e) {
-        console.log(e);
-      }
+    const previousBaseSymbol = previousPair.split("_")[1];
+    const previousQuoteSymbol = previousPair.split("_")[0];
+    try {
+      await dbApi("unsubscribe_from_market", [
+        () => {
+          console.log("unsubscribing");
+        },
+        previousBaseSymbol,
+        previousQuoteSymbol,
+      ]);
+    } catch (e) {
+      console.log(e);
     }
   }, [previousPair, dbApi]);
 
@@ -552,6 +546,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       setPreviousPair(exchanges.active);
       updateExchanges(currentPair);
     }
+    // this one update currentBase and currentQuote
     getPairAssets(currentPair.split("_"));
   }, [currentPair, getPairAssets, updateExchanges, setPreviousPair]);
 
@@ -560,7 +555,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     return () => {
       unsubscribeFromMarket();
     };
-  }, [subscribeToMarket]);
+  }, [currentBase, currentQuote, id]);
 
   return {
     tradingPairsStats,

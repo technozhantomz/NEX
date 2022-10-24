@@ -1,7 +1,6 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { KeyboardEvent } from "react";
 
 import { utils } from "../../../../api/utils";
 import {
@@ -130,11 +129,7 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
-                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                  if (!utils.isNumberKey(e)) {
-                    e.preventDefault();
-                  }
-                }}
+                onKeyPress={utils.ensureInputNumberValidity}
               />
             </Styled.FormItem>
             <Styled.FormItem
@@ -159,11 +154,7 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
-                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                  if (!utils.isNumberKey(e)) {
-                    e.preventDefault();
-                  }
-                }}
+                onKeyPress={utils.ensureInputNumberValidity}
               />
             </Styled.FormItem>
             <Styled.FormItem
@@ -188,11 +179,7 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
-                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                  if (!utils.isNumberKey(e)) {
-                    e.preventDefault();
-                  }
-                }}
+                onKeyPress={utils.ensureInputNumberValidity}
                 disabled={true}
               />
             </Styled.FormItem>

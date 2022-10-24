@@ -36,7 +36,7 @@ type Props = {
   buy?: string;
   expiration?: string;
   vestingAmount?: string;
-  withdrawalAmount?: number;
+  withdrawalAmount?: string;
   asset?: string;
   to?: string;
   amount?: string;

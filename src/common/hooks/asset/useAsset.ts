@@ -142,6 +142,37 @@ export function useAsset(): UseAssetResult {
     }
   }, [dbApi]);
 
+  /**
+   * private method, used only inside limitByPrecision function
+   */
+  const removeUnnecessaryZerosInDecimalPart = useCallback(
+    (integerPart: string, decimalPart: string) => {
+      let decimalPartWithoutEndZeros = decimalPart;
+      for (let index = decimalPart.length - 1; index >= 0; index--) {
+        const char = decimalPart[index];
+        if (char === "0") {
+          decimalPartWithoutEndZeros = decimalPart.slice(0, index);
+        } else {
+          break;
+        }
+      }
+      if (decimalPartWithoutEndZeros.length > 0) {
+        return integerPart + "." + decimalPartWithoutEndZeros;
+      } else {
+        return integerPart;
+      }
+    },
+    []
+  );
+  /**
+   * This is used for input fields in the app (like fee amounts)
+   *
+   * @param value value to be limited by precision
+   * @param precision asset precision
+   *
+   * @returns limited by precision amount
+   *
+   */
   const limitByPrecision = (value: string, precision = 5) => {
     value = !value.includes("e") ? value : Number(value).toFixed(20);
     const splitString = value.split(".");
@@ -151,19 +182,21 @@ export function useAsset(): UseAssetResult {
     ) {
       return value;
     } else {
-      const limitedValue =
-        splitString[0] + "." + splitString[1].slice(0, precision);
+      const limitedValue = removeUnnecessaryZerosInDecimalPart(
+        splitString[0],
+        splitString[1].slice(0, precision)
+      );
       return limitedValue;
     }
   };
 
   const ceilPrecision: (num: string | number, precision?: number) => string =
-    useCallback((num: string | number, roundTo = 5) => {
+    useCallback((num: string | number, precision = 5) => {
       const numbered = Number(num);
-      const precised = Number(numbered.toFixed(roundTo));
+      const precised = Number(numbered.toFixed(precision));
       return precised >= numbered
         ? String(precised)
-        : String(precised + 1 / 10 ** roundTo);
+        : String((precised + 1 / 10 ** precision).toFixed(precision));
     }, []);
 
   return {

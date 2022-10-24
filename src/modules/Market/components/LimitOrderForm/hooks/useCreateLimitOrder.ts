@@ -116,7 +116,7 @@ export function useCreateLimitOrder({
         }
       }
     },
-    [orderForm, currentBase, currentQuote, limitByPrecision]
+    [orderForm, currentBase, currentQuote]
   );
 
   const handleValuesChange = useCallback(

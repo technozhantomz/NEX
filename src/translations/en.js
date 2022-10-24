@@ -18,6 +18,18 @@ export const en = {
     check_latency_feedback_world:
       "Latency check in each region (%(pinged)s/%(totalToPing)s nodes)",
     connecting: "Connecting to API server: %(server)s",
+    sync_error: {
+      title: "Failed to sync with the API server",
+      first_description: "Please verify that your computer clock is correct",
+      second_description:
+        "Once you've synchronized your clock, please refresh this page",
+    },
+    connection_error: {
+      title: "Application initialization issues",
+      first_description:
+        "Coming soon: Node manual selection and Adding a personal node",
+      second_description: "Please check your connection and refresh the page",
+    },
   },
   transaction: {
     trade: "Trade",

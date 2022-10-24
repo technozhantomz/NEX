@@ -7,7 +7,7 @@ import * as Styled from "../TransactionModal.styled";
 
 type Props = {
   fee: number;
-  withdrawalAmount?: number;
+  withdrawalAmount?: string;
   account?: string;
 };
 
@@ -16,7 +16,7 @@ export const WithdrawVestingBalance = ({
   withdrawalAmount,
   account,
 }: Props): JSX.Element => {
-  const prevWithdrawalAmount = useRef<number>();
+  const prevWithdrawalAmount = useRef<string>();
   useEffect(() => {
     if (withdrawalAmount || !prevWithdrawalAmount.current) {
       prevWithdrawalAmount.current = withdrawalAmount;
