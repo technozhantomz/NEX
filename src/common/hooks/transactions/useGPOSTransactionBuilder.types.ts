@@ -3,7 +3,7 @@ import { Asset, Transaction } from "../../types";
 export type UseGPOSTransactionBuilderResult = {
   buildVestingBalanceCreateTransaction: (
     gposAsset: Asset,
-    depositAmount: number,
+    depositAmount: string,
     accountId: string
   ) => Transaction;
   buildVestingWithdrawTransaction: (

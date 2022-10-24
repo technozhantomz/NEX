@@ -35,6 +35,14 @@ export const utils = {
     }
     return false;
   },
+  ensureInputNumberValidity: (e: KeyboardEvent<HTMLInputElement>): void => {
+    if (
+      !utils.isNumberKey(e) ||
+      (e.target as any).value.split(".")[0].length >= 18
+    ) {
+      e.preventDefault();
+    }
+  },
   getBlockchainFromSymbol: (symbol: string): string => {
     const blockchains: Record<string, string> = {
       BTC: "Bitcoin",

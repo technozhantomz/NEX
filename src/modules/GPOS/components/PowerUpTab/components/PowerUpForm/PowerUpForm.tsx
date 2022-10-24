@@ -84,7 +84,7 @@ export const PowerUpForm = ({
           size="large"
           initialValues={{
             openingBalance: "",
-            depositAmount: 0,
+            depositAmount: "0",
             newBalance: "",
           }}
         >
@@ -144,7 +144,7 @@ export const PowerUpForm = ({
               min={0}
               step="any"
               onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e)) {
+                if (!utils.isNumberKey(e) || e.target.value.length > 30) {
                   e.preventDefault();
                 }
               }}

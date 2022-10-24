@@ -11,7 +11,7 @@ export function useGPOSTransactionBuilder(): UseGPOSTransactionBuilderResult {
   const buildVestingBalanceCreateTransaction = useCallback(
     (
       gposAsset: Asset,
-      depositAmount: number,
+      depositAmount: string,
       accountId: string
     ): Transaction => {
       const begin_timestamp = new Date().toISOString().replace("Z", "");

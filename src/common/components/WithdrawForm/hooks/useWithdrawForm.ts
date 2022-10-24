@@ -32,7 +32,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<string>("0");
   const [withdrawAddress, setWithdrawAddress] = useState<string>("");
   const [withdrawPublicKey, setWithdrawPublicKey] = useState<string>("");
   const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
@@ -245,7 +245,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     const accountDefaultAsset = assets.find(
       (asset) => asset.symbol === defaultToken
     );
-    setAmount(Number(value));
+    setAmount(value);
     if (Number(value) <= 0) {
       return Promise.reject(
         new Error(counterpart.translate(`field.errors.amount_should_greater`))

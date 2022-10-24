@@ -15,7 +15,7 @@ export type UsePowerUpFormResult = {
   handleVesting: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   feeAmount: number;
-  depositAmount: number;
+  depositAmount: string;
   newBalance: number;
   userAvailableBalance: number;
 };
@@ -28,7 +28,7 @@ export type UsePowerUpFormArgs = {
 
 export type PowerUpForm = {
   openingBalance: string;
-  depositAmount: number;
+  depositAmount: string;
   newBalance: string;
   availableBalance: string;
 };

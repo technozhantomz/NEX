@@ -311,7 +311,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         isBuyOrder,
       } as OrderHistoryRow;
     },
-    [setPrecision]
+    [setPrecision, formLocalDate, ceilPrecision]
   );
 
   const getHistory = useCallback(
@@ -323,7 +323,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           [base.id, quote.id, 100]
         );
 
-        const filterMarketTaker = histories.reduce(
+        const marketTakersHistories = histories.reduce(
           (previousHistory, currentHistory, i, { [i - 1]: next }) => {
             if (i % 2) {
               previousHistory.push(
@@ -336,9 +336,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           },
           [] as OrderHistory[]
         );
-
         setOrderHistoryRows(
-          filterMarketTaker.map((history) => {
+          marketTakersHistories.map((history) => {
             return formOrderHistoryRow(history, base, quote);
           })
         );
@@ -426,6 +425,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
                 orderAssetsIds.includes(quote.id)
               );
             }
+          );
+          console.log(
+            "fillOrdersHistoryForThePair",
+            fillOrdersHistoryForThePair
           );
           const userHistoryRows = await Promise.all(
             fillOrdersHistoryForThePair.map(

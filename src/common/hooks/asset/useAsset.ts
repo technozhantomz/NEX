@@ -88,6 +88,16 @@ export function useAsset(): UseAssetResult {
     [dbApi, cache, setAssetsCache, assetsCacheExists]
   );
 
+  /**
+   * This is used for integer amounts comes from the chain (like fee amounts)
+   *
+   * @param roundTo whether round the result or not
+   * @param amount integer amount value
+   * @param precision asset precision
+   *
+   * @returns denominated amount based on the asset precisions
+   *
+   */
   const setPrecision = useCallback(
     (roundTo: boolean, amount: number, precision: number) => {
       const precisioned = amount / 10 ** precision;
@@ -118,7 +128,7 @@ export function useAsset(): UseAssetResult {
     }
   }, [dbApi]);
 
-  const limitByPrecision = (value: string, precision = 8) => {
+  const limitByPrecision = (value: string, precision = 5) => {
     value = !value.includes("e") ? value : Number(value).toFixed(20);
     const splitString = value.split(".");
     if (
@@ -128,9 +138,7 @@ export function useAsset(): UseAssetResult {
       return value;
     } else {
       const limitedValue =
-        Number(splitString[1].slice(0, precision)) > 0
-          ? splitString[0] + "." + splitString[1].slice(0, precision)
-          : splitString[0];
+        splitString[0] + "." + splitString[1].slice(0, precision);
       return limitedValue;
     }
   };

@@ -349,11 +349,7 @@ export const WithdrawForm = ({
                   type="number"
                   step="any"
                   min={0}
-                  onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                    if (!utils.isNumberKey(e)) {
-                      e.preventDefault();
-                    }
-                  }}
+                  onKeyPress={utils.ensureInputNumberValidity}
                   prefix={
                     <Styled.WithdrawFormAsset>
                       <LogoSelectOption

@@ -190,7 +190,14 @@ export function usePowerDownForm({
   }, [calculateGposWithdrawFee, setFeeAmount]);
 
   useEffect(() => {
+    console.log("defaultAsset", defaultAsset);
+    console.log("gposBalances", gposBalances);
     if (gposBalances) {
+      powerDownForm.setFieldsValue({
+        withdrawAmount: Number(
+          limitByPrecision(String(withdrawAmount), defaultAsset?.precision)
+        ),
+      });
       const newBalance = Number(
         limitByPrecision(
           String(gposBalances.openingBalance - withdrawAmount),
@@ -203,23 +210,25 @@ export function usePowerDownForm({
           defaultAsset?.precision
         )
       );
+      console.log("new", newAvailableBalance);
       if (newAvailableBalance >= 0) {
+        console.log("abbas");
         setNewBalance(newBalance);
         setNewAvailableBalance(newAvailableBalance);
         if (!sm) {
           powerDownForm.setFieldsValue({
-            withdrawAmount: Number(
-              limitByPrecision(String(withdrawAmount), defaultAsset?.precision)
-            ),
+            // withdrawAmount: Number(
+            //   limitByPrecision(String(withdrawAmount), defaultAsset?.precision)
+            // ),
             availableBalance:
               newAvailableBalance + " " + gposBalances.asset.symbol,
             newBalance: newBalance + " " + gposBalances.asset.symbol,
           });
         } else {
           powerDownForm.setFieldsValue({
-            withdrawAmount: Number(
-              limitByPrecision(String(withdrawAmount), defaultAsset?.precision)
-            ),
+            // withdrawAmount: Number(
+            //   limitByPrecision(String(withdrawAmount), defaultAsset?.precision)
+            // ),
             availableBalance: gposBalances.asset.symbol,
             newBalance: gposBalances.asset.symbol,
           });

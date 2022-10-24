@@ -7,7 +7,7 @@ import * as Styled from "../TransactionModal.styled";
 
 type Props = {
   fee: number;
-  vestingAmount?: number;
+  vestingAmount?: string;
   account?: string;
 };
 
@@ -16,7 +16,7 @@ export const CreateVestingBalance = ({
   vestingAmount,
   account,
 }: Props): JSX.Element => {
-  const prevVestingAmount = useRef<number>();
+  const prevVestingAmount = useRef<string>();
   useEffect(() => {
     if (vestingAmount || !prevVestingAmount.current) {
       prevVestingAmount.current = vestingAmount;
