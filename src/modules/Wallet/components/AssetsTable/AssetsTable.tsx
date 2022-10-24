@@ -27,6 +27,8 @@ export const AssetsTable = ({
   const { tableAssets, loading } = useAssetsTable();
   const { sm } = useViewportContext();
   const { sidechainAssets } = useAssetsContext();
+  const assetsTabColumns = AssetsTabColumns();
+
   const columns = [
     {
       title: (): JSX.Element => <TableHeading heading={"asset"} />,
@@ -220,7 +222,7 @@ export const AssetsTable = ({
         />
       ) : (
         <Styled.AssetsTable
-          columns={AssetsTabColumns}
+          columns={assetsTabColumns}
           dataSource={
             fillterAsset === ""
               ? tableAssets
