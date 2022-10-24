@@ -23,7 +23,7 @@ export type UsePowerDownFormResult = {
 export type UsePowerDownFormArgs = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
-  getGposInfo: () => Promise<void>;
+  calculateGposBalances: () => Promise<void>;
 };
 
 export type PowerDownForm = {

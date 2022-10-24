@@ -26,7 +26,7 @@ import {
 export function usePowerUpForm({
   gposBalances,
   //loading,
-  getGposInfo,
+  calculateGposBalances,
 }: UsePowerUpFormArgs): UsePowerUpFormResult {
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [transactionErrorMessage, setTransactionErrorMessage] =
@@ -80,7 +80,7 @@ export function usePowerUpForm({
         const trxResult = await buildTrx([trx], [signerKey]);
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
-          await getGposInfo();
+          await calculateGposBalances();
           powerUpForm.setFieldsValue({
             depositAmount: "0",
           });
@@ -116,7 +116,7 @@ export function usePowerUpForm({
       buildTrx,
       formAccountBalancesByName,
       localStorageAccount,
-      getGposInfo,
+      calculateGposBalances,
       setTransactionSuccessMessage,
     ]
   );

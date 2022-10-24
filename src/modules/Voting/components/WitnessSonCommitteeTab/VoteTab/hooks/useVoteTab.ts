@@ -304,7 +304,7 @@ export function useVoteTab({
             type: voteType,
             name: name,
             url: vote.url,
-            votes: `${votesAsset.amount} ${votesAsset.symbol}`,
+            votes: `${votesAsset?.amount} ${votesAsset?.symbol}`,
             action: action,
             active: voteActive,
             status: action === "remove" ? "approved" : "unapproved",

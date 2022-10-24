@@ -1,6 +1,6 @@
 import { Amount } from ".";
 
-export type GPOSInfoResponse = {
+export type GPOSInfoType = {
   account_vested_balance: number;
   allowed_withdraw_amount: number;
   award: Amount;

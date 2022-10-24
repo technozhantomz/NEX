@@ -951,6 +951,7 @@ export const en = {
       account_updated: "account updated",
     },
     errors: {
+      loading_sidechain_accounts: "Please wait for sidechain accounts to load",
       unable_to_create_account:
         "Unable to create an account. Please try again later",
       invalid_bitcoin_public_key:

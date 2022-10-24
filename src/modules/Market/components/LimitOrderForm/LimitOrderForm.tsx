@@ -26,8 +26,6 @@ type Props = {
   loadingSelectedPair: boolean;
   isBuyOrder: boolean;
   showTitle?: boolean;
-  refreshHistory: () => void;
-  refreshOrderBook: () => void;
   orderForm: FormInstance<OrderForm>;
 };
 
@@ -38,8 +36,6 @@ export const LimitOrderForm = ({
   loadingSelectedPair,
   isBuyOrder,
   showTitle = true,
-  refreshHistory,
-  refreshOrderBook,
   orderForm,
 }: Props): JSX.Element => {
   const router = useRouter();
@@ -65,8 +61,6 @@ export const LimitOrderForm = ({
     currentQuote,
     loadingSelectedPair,
     isBuyOrder,
-    refreshHistory,
-    refreshOrderBook,
     orderForm,
   });
 

@@ -21,13 +21,13 @@ import { usePowerUpForm } from "./hooks";
 type Props = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
-  getGposInfo: () => Promise<void>;
+  calculateGposBalances: () => Promise<void>;
 };
 
 export const PowerUpForm = ({
   gposBalances,
   loading,
-  getGposInfo,
+  calculateGposBalances,
 }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const router = useRouter();
@@ -48,7 +48,7 @@ export const PowerUpForm = ({
   } = usePowerUpForm({
     gposBalances,
     loading,
-    getGposInfo,
+    calculateGposBalances,
   });
   const {
     isPasswordModalVisible,

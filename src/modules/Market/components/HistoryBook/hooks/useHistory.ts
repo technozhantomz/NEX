@@ -10,16 +10,12 @@ type Args = {
   currentBase: Asset | undefined;
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
-  getHistory: (base: Asset, quote: Asset) => Promise<void>;
-  getUserHistory: (base: Asset, quote: Asset) => Promise<void>;
 };
 
 export function useHistory({
   currentBase,
   currentQuote,
   loadingSelectedPair,
-  getHistory,
-  getUserHistory,
 }: Args): UseHistoryResult {
   const [columns, setColumns] = useState<OrderHistoryColumn[]>([]);
 
@@ -51,16 +47,8 @@ export function useHistory({
           key: "date",
         },
       ]);
-      getHistory(currentBase, currentQuote);
-      getUserHistory(currentBase, currentQuote);
     }
-  }, [
-    loadingSelectedPair,
-    currentBase,
-    currentQuote,
-    getHistory,
-    getUserHistory,
-  ]);
+  }, [loadingSelectedPair, currentBase, currentQuote]);
 
   return {
     columns,

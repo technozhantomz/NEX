@@ -10,10 +10,8 @@ type Props = {
   currentBase: Asset | undefined;
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
-  getHistory: (base: Asset, quote: Asset) => Promise<void>;
   orderHistoryRows: OrderHistoryRow[];
   loadingOrderHistoryRows: boolean;
-  getUserHistory: (base: Asset, quote: Asset) => Promise<void>;
   userOrderHistoryRows: OrderHistoryRow[];
   loadingUserHistoryRows: boolean;
 };
@@ -23,10 +21,8 @@ export const HistoryBook = ({
   currentBase,
   currentQuote,
   loadingSelectedPair,
-  getHistory,
   orderHistoryRows,
   loadingOrderHistoryRows,
-  getUserHistory,
   userOrderHistoryRows,
   loadingUserHistoryRows,
 }: Props): JSX.Element => {
@@ -35,8 +31,6 @@ export const HistoryBook = ({
     currentBase,
     currentQuote,
     loadingSelectedPair,
-    getHistory,
-    getUserHistory,
   });
   const dataSource = forUser ? userOrderHistoryRows : orderHistoryRows;
   const desktopScroll =

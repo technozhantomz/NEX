@@ -912,6 +912,8 @@ export const ru = {
       account_updated: "аккаунт обновлен",
     },
     errors: {
+      loading_sidechain_accounts:
+        "Подождите, пока загрузятся сайдчейн-аккаунты.",
       unable_to_create_account:
         "Невозможно создать учетную запись. Пожалуйста, попробуйте позже",
       enter_amount: "Введите сумму",

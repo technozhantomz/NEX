@@ -21,13 +21,13 @@ import { usePowerDownForm } from "./hooks";
 type Props = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
-  getGposInfo: () => Promise<void>;
+  calculateGposBalances: () => Promise<void>;
 };
 
 export const PowerDownForm = ({
   gposBalances,
   loading,
-  getGposInfo,
+  calculateGposBalances,
 }: Props): JSX.Element => {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
@@ -48,7 +48,7 @@ export const PowerDownForm = ({
   } = usePowerDownForm({
     gposBalances,
     loading,
-    getGposInfo,
+    calculateGposBalances,
   });
   const {
     isPasswordModalVisible,
