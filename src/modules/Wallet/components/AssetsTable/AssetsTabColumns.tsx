@@ -3,26 +3,9 @@ import counterpart from "counterpart";
 import { TableHeading } from "../../../../common/components";
 import { AssetActionButton } from "../AssetActionButton";
 
-const headings = [
-  "asset",
-  "available",
-  "quote_asset",
-  "price",
-  "change",
-  "volume",
-  "transfer",
-];
-const keys = [
-  "asset",
-  "available",
-  "quoteAsset",
-  "price",
-  "change",
-  "volume",
-  "transfer",
-];
+const headings = ["symbol", "name", "available", "change", "volume", "actions"];
+const keys = ["symbol", "name", "available", "change", "volume", "actions"];
 const renders = [
-  undefined,
   undefined,
   undefined,
   undefined,
@@ -42,7 +25,6 @@ const filters = [
   undefined,
   undefined,
   undefined,
-  undefined,
 ];
 const filterModes = [
   undefined,
@@ -51,10 +33,8 @@ const filterModes = [
   undefined,
   undefined,
   undefined,
-  undefined,
 ];
 const filterSearch = [
-  undefined,
   undefined,
   undefined,
   undefined,
@@ -72,7 +52,6 @@ const onFilters = [
   undefined,
 ];
 const sorters = [
-  undefined,
   undefined,
   undefined,
   undefined,

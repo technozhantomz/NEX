@@ -1,9 +1,8 @@
 export interface IAssetRow {
   key: string;
-  asset: string;
-  quoteAsset: string;
+  symbol: string;
+  name: string;
   available: number;
-  price: number;
   change: string;
   volume: number;
 }

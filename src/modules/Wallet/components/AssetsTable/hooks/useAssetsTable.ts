@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { defaultToken } from "../../../../../api/params/networkparams";
 import { useAsset, useMarketPairStats } from "../../../../../common/hooks";
 import {
   useAssetsContext,
@@ -32,20 +31,18 @@ export function useAssetsTable(): UseAssetsTabResult {
         );
         return {
           key: baseAsset.id,
-          asset: baseAsset.symbol,
-          quoteAsset: defaultToken as string,
+          symbol: baseAsset.symbol,
+          name: "Peerplays",
           available,
-          price: marketPairStats.latest,
           change: `${marketPairStats.percentChange}%`,
           volume: marketPairStats.volume,
         };
       }
       return {
         key: baseAsset.id,
-        asset: baseAsset.symbol,
-        quoteAsset: defaultToken as string,
+        symbol: baseAsset.symbol,
+        name: "Peerplays",
         available,
-        price: 0,
         change: "0%",
         volume: 0,
       };

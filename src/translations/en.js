@@ -1047,6 +1047,7 @@ export const en = {
     category: "Category",
     active: "Active",
     key: "key",
+    actions: "Actions",
   },
   tooltips: {
     copy: "copy",
