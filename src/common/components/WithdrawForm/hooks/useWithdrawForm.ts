@@ -32,7 +32,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<string>("0");
   const [withdrawAddress, setWithdrawAddress] = useState<string>("");
   const [withdrawPublicKey, setWithdrawPublicKey] = useState<string>("");
   const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
@@ -63,7 +63,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const handleValuesChange = (changedValues: any) => {
     if (changedValues.amount) {
       const selectedSidechainAsset = sidechainAssets.find(
-        (asset) => asset.symbol === selectedAsset
+        (asset) => asset?.symbol === selectedAsset
       );
 
       const amount = limitByPrecision(
@@ -231,11 +231,11 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const setSelectedAssetPrecission = useCallback(() => {
     if (sidechainAssets && sidechainAssets.length > 0) {
       const selectedsidechainAsset = sidechainAssets.find(
-        (asset) => asset.symbol === selectedAsset
+        (asset) => asset?.symbol === selectedAsset
       );
 
       if (selectedsidechainAsset) {
-        _setSelectedAssetPrecission(selectedsidechainAsset.precision as number);
+        _setSelectedAssetPrecission(selectedsidechainAsset.precision);
       }
     }
   }, [selectedAsset, sidechainAssets, _setSelectedAssetPrecission]);
@@ -245,7 +245,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     const accountDefaultAsset = assets.find(
       (asset) => asset.symbol === defaultToken
     );
-    setAmount(Number(value));
+    setAmount(value);
     if (Number(value) <= 0) {
       return Promise.reject(
         new Error(counterpart.translate(`field.errors.amount_should_greater`))
@@ -330,7 +330,35 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     return Promise.reject(new Error(""));
   };
 
-  // we need bitcoin address validation
+  const validateBtcWithdrawAddress = (value: string) => {
+    let error = "";
+    if (!loadingSidechainAccounts) {
+      if (withdrawPublicKey === "") {
+        error = counterpart.translate(`field.errors.first_valid_public_key`);
+        return error;
+      } else {
+        const pubkey = Buffer.from(withdrawPublicKey, "hex");
+        try {
+          const { address } = bitcoin.payments.p2pkh({
+            pubkey,
+            network: NETWORK,
+          });
+          if (address !== value) {
+            error = counterpart.translate(`field.errors.not_match_address`);
+            return error;
+          }
+        } catch (e) {
+          console.log(e);
+          error = counterpart.translate(`field.errors.first_valid_public_key`);
+          return error;
+        }
+      }
+      return error;
+    }
+    error = counterpart.translate(`field.errors.loading_sidechain_accounts`);
+    return error;
+  };
+
   const validateWithdrawAddress = async (_: unknown, value: string) => {
     if (isSonNetworkOk === undefined) {
       return Promise.reject(
@@ -345,39 +373,12 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     }
     setWithdrawAddress(value);
     if (selectedAsset === "BTC") {
-      if (!loadingSidechainAccounts) {
-        if (withdrawPublicKey === "") {
-          return Promise.reject(
-            new Error(
-              counterpart.translate(`field.errors.first_valid_public_key`)
-            )
-          );
-        } else {
-          const pubkey = Buffer.from(withdrawPublicKey, "hex");
-          try {
-            const { address } = bitcoin.payments.p2pkh({
-              pubkey,
-              network: NETWORK,
-            });
-            if (address !== value) {
-              return Promise.reject(
-                new Error(
-                  counterpart.translate(`field.errors.not_match_address`)
-                )
-              );
-            }
-          } catch (e) {
-            console.log(e);
-            return Promise.reject(
-              new Error(
-                counterpart.translate(`field.errors.first_valid_public_key`)
-              )
-            );
-          }
-        }
+      const error = validateBtcWithdrawAddress(value);
+      if (error !== "") {
+        return Promise.reject(new Error(error));
+      } else {
         return Promise.resolve();
       }
-      return Promise.reject(new Error(""));
     } else {
       if (!utils.validateGrapheneAccountName(value)) {
         return Promise.reject(
