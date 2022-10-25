@@ -7,6 +7,7 @@ import {
   useUserContext,
 } from "../../../../../common/providers";
 import { Asset } from "../../../../../common/types";
+import { AssetsTabColumns } from "../AssetsTabColumns";
 
 import { IAssetRow, UseAssetsTabResult } from "./useAssetsTable.types";
 
@@ -14,11 +15,13 @@ export function useAssetsTable(): UseAssetsTabResult {
   const [tableAssets, _setTableAssets] = useState<IAssetRow[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
+  const [assetsTabColumns, setAssetsTabColumns] = useState<IAssetRow[]>([]);
   const { dbApi } = usePeerplaysApiContext();
   const { assets, localStorageAccount } = useUserContext();
   const { getAssetBySymbol } = useAsset();
   const { getMarketPairStats } = useMarketPairStats();
   const { defaultAsset } = useAssetsContext();
+  const _assetsTabColumns = AssetsTabColumns();
 
   const formAssetRow = useCallback(
     async (baseAsset: Asset): Promise<IAssetRow> => {
@@ -56,7 +59,19 @@ export function useAssetsTable(): UseAssetsTabResult {
         setLoading(true);
         const assetsRows = await Promise.all(assets.map(formAssetRow));
         _setTableAssets(assetsRows);
+        const symbols = assetsRows.map((asset) => asset.symbol);
+        console.log(_assetsTabColumns);
+        const updateAssetsTabColumns = _assetsTabColumns.map((column) => {
+          if (column.key === "symbol") {
+            column.filters = symbols.map((symbol) => {
+              return { text: symbol, value: symbol };
+            });
+          }
+          return { ...column };
+        });
+        console.log(_assetsTabColumns);
 
+        setAssetsTabColumns(updateAssetsTabColumns);
         setLoading(false);
       } catch (e) {
         setLoading(false);
@@ -71,5 +86,5 @@ export function useAssetsTable(): UseAssetsTabResult {
     setTableAssets();
   }, [assets, localStorageAccount]);
 
-  return { tableAssets, loading };
+  return { tableAssets, loading, assetsTabColumns };
 }

@@ -11,7 +11,6 @@ import { DownloadOutlined, List } from "../../../../ui/src";
 import { AssetActionButton } from "../AssetActionButton";
 import { AssetTitle } from "../AssetTitle";
 
-import { AssetsTabColumns } from "./AssetsTabColumns";
 import * as Styled from "./AssetsTable.styled";
 import { IAssetRow, useAssetsTable } from "./hooks";
 
@@ -24,10 +23,9 @@ export const AssetsTable = ({
   showActions = true,
   fillterAsset = "",
 }: Props): JSX.Element => {
-  const { tableAssets, loading } = useAssetsTable();
+  const { tableAssets, loading, assetsTabColumns } = useAssetsTable();
   const { sm } = useViewportContext();
   const { sidechainAssets } = useAssetsContext();
-  const assetsTabColumns = AssetsTabColumns();
 
   const columns = [
     {

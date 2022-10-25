@@ -10,4 +10,5 @@ export interface IAssetRow {
 export type UseAssetsTabResult = {
   tableAssets: IAssetRow[];
   loading: boolean;
+  assetsTabColumns: IAssetRow[];
 };
