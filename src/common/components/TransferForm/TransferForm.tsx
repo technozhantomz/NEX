@@ -79,6 +79,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
               min={0}
               onKeyPress={utils.ensureInputNumberValidity}
               step="any"
+              autoComplete="off"
             />
           </Form.Item>
         </div>
@@ -91,6 +92,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           >
             <Input
               placeholder={counterpart.translate(`field.placeholder.to`)}
+              autoComplete="off"
             />
           </Form.Item>
           <Form.Item
