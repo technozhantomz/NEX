@@ -16,12 +16,7 @@ import {
   Tabs,
   UpOutlined,
 } from "../../../../ui/src";
-import {
-  GeneralTab,
-  KeyManagementTab,
-  MembershipTab,
-  SecurityTab,
-} from "../../components";
+import { GeneralTab, KeyManagementTab, MembershipTab } from "../../components";
 
 import * as Styled from "./SettingsPage.styled";
 
@@ -101,12 +96,6 @@ const SettingPage: NextPage = () => {
             key="general"
           >
             <GeneralTab />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.settings.security.heading`)}
-            key="security"
-          >
-            <SecurityTab />
           </TabPane>
           {localStorageAccount && localStorageAccount !== "" ? (
             <>

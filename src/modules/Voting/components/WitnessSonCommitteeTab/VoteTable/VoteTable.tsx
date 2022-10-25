@@ -42,6 +42,34 @@ export const VoteTable = ({
   const columns = showVotesColumns(addChange, cancelChange, getActionString);
   const componentRef = useRef<HTMLDivElement>(null);
 
+  const renderCancelActionRows = (item: VoteRow) =>
+    item.status === "unapproved" ? (
+      <Styled.ApprovedStatus>
+        {counterpart.translate(`pages.voting.status.pending_add`)}
+      </Styled.ApprovedStatus>
+    ) : (
+      <Styled.NotApprovedStatus>
+        {counterpart.translate(`pages.voting.status.pending_remove`)}
+      </Styled.NotApprovedStatus>
+    );
+
+  const renderAddActionRows = (item: VoteRow) =>
+    item.status === "unapproved" ? (
+      <>
+        <Styled.Xmark></Styled.Xmark>
+        <Styled.NotApprovedStatus>
+          {counterpart.translate(`pages.voting.status.not_approved`)}
+        </Styled.NotApprovedStatus>
+      </>
+    ) : (
+      <>
+        <Styled.Check></Styled.Check>
+        <Styled.ApprovedStatus>
+          {counterpart.translate(`pages.voting.status.approved`)}
+        </Styled.ApprovedStatus>
+      </>
+    );
+
   return (
     <Styled.VoteTableWrapper>
       <Styled.VoteHeaderBar>
@@ -157,39 +185,9 @@ export const VoteTable = ({
                       {columns[5].title()}
                     </span>
                     <span className="item-info-value">
-                      {(item as VoteRow).action === "cancel" ? (
-                        (item as VoteRow).status === "unapproved" ? (
-                          <Styled.ApprovedStatus>
-                            {counterpart.translate(
-                              `pages.voting.status.pending_add`
-                            )}
-                          </Styled.ApprovedStatus>
-                        ) : (
-                          <Styled.NotApprovedStatus>
-                            {counterpart.translate(
-                              `pages.voting.status.pending_remove`
-                            )}
-                          </Styled.NotApprovedStatus>
-                        )
-                      ) : (item as VoteRow).status === "unapproved" ? (
-                        <>
-                          <Styled.Xmark></Styled.Xmark>
-                          <Styled.NotApprovedStatus>
-                            {counterpart.translate(
-                              `pages.voting.status.not_approved`
-                            )}
-                          </Styled.NotApprovedStatus>
-                        </>
-                      ) : (
-                        <>
-                          <Styled.Check></Styled.Check>
-                          <Styled.ApprovedStatus>
-                            {counterpart.translate(
-                              `pages.voting.status.approved`
-                            )}
-                          </Styled.ApprovedStatus>
-                        </>
-                      )}
+                      {(item as VoteRow).action === "cancel"
+                        ? renderCancelActionRows(item as VoteRow)
+                        : renderAddActionRows(item as VoteRow)}
                     </span>
                   </div>
                   <div className="item-info">
@@ -203,9 +201,9 @@ export const VoteTable = ({
                         <Styled.VoteActionButton
                           onClick={() => {
                             if ((item as VoteRow).action === "cancel") {
-                              cancelChange((item as VoteRow).id as string);
+                              cancelChange((item as VoteRow).id);
                             } else {
-                              addChange((item as VoteRow).id as string);
+                              addChange((item as VoteRow).id);
                             }
                           }}
                         >

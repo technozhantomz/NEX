@@ -1,4 +1,8 @@
 export const en = {
+  general: {
+    yes: "Yes",
+    no: "No",
+  },
   app_init: {
     check_latency: "Running latency checks...",
     check_latency_feedback:
@@ -885,7 +889,10 @@ export const en = {
       keep_password_safe: "Keep your password safe to avoid losing any funds. ",
       download_recovery_password: "Download Recovery password file here",
       select_language: "Select Language",
-      browser_notifications: "Browser Notifications",
+      ui_design: "UI Design",
+      allow_transfer_to_my_account: "Allow transfers to my account",
+      show_notifications: "Show Notifications",
+      select_notifications: "Select notifications",
       faucet: "Faucet",
       faucet_url: "Faucet URL: ",
       copy_url: "Copy URL",
@@ -930,6 +937,7 @@ export const en = {
       pending_changes: "Pending changes",
       wallet_lock: "Wallet lock (Minutes)",
       use_whalevault: "Use WhaleVault extension",
+      unsaved_changes: "You have unsaved changes to your settings",
     },
     comments: {
       deposit_hbd:
@@ -942,6 +950,16 @@ export const en = {
       securely_saved_my_password: "I have securely saved my password",
       enable_notifications: "Enable Notifications",
       key_management_group: ["Owner", "Active", "Memo"],
+      funds_sent: "funds sent",
+      order_created: "order created",
+      order_filled: "order filled",
+      order_canceled: "order canceled",
+      order_expired: "order expired",
+      funds_received: "funds received",
+      account_upgrade: "account upgrade",
+      vesting_balance_create: "vesting balance create",
+      vesting_balance_withdraw: "vesting balance withdraw",
+      account_updated: "account updated",
     },
     errors: {
       unable_to_create_account:

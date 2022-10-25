@@ -245,13 +245,11 @@ export function useVoteTab({
   );
 
   const sortVotesRows = useCallback((votes: VoteRow[]) => {
-    return votes
-      .sort(
-        (a, b) => Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0])
-      )
-      .map((vote, index) => {
-        return { ...vote, rank: index + 1 };
-      });
+    const sorter = (a: VoteRow, b: VoteRow) =>
+      Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0]);
+    return votes.sort(sorter).map((vote, index) => {
+      return { ...vote, rank: index + 1 };
+    });
   }, []);
 
   const formVoteRow = useCallback(
@@ -278,11 +276,6 @@ export function useVoteTab({
                 gpo["active_committee_members"].indexOf(vote.id) >= 0
                   ? true
                   : false;
-              break;
-            case 1:
-              voteType = "witnesses";
-              voteActive =
-                gpo["active_witnesses"].indexOf(vote.id) >= 0 ? true : false;
               break;
             case 3:
               voteType = "sons";
@@ -422,27 +415,28 @@ export function useVoteTab({
 
   const updateAllMembersRows = useCallback(
     (memberId: string, changeType: "add" | "cancel" | "update") => {
+      const newAllMembersRows = [...allMembersRows];
       const selectedRow = allMembersRows.find((vote) => vote.id === memberId);
       const selectedRowIndex = allMembersRows.findIndex(
         (vote) => vote.id === memberId
       );
       switch (changeType) {
         case "add":
-          allMembersRows[selectedRowIndex].action =
+          newAllMembersRows[selectedRowIndex].action =
             selectedRow?.action === "add" ? "pending add" : "pending remove";
           break;
         case "cancel":
-          allMembersRows[selectedRowIndex].action =
+          newAllMembersRows[selectedRowIndex].action =
             selectedRow?.action === "pending add" ? "add" : "remove";
           break;
         case "update":
-          allMembersRows[selectedRowIndex].action =
+          newAllMembersRows[selectedRowIndex].action =
             selectedRow?.action === "pending add" ? "remove" : "add";
-          allMembersRows[selectedRowIndex].status =
+          newAllMembersRows[selectedRowIndex].status =
             selectedRow?.action === "remove" ? "approved" : "unapproved";
           break;
       }
-      setAllMembersRows(allMembersRows);
+      setAllMembersRows(newAllMembersRows);
     },
     [allMembersRows, setAllMembersRows]
   );

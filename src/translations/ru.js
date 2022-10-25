@@ -1,4 +1,8 @@
 export const ru = {
+  general: {
+    yes: "Да",
+    no: "Нет",
+  },
   app_init: {
     check_latency: "Запуск проверки задержки...",
     check_latency_feedback:
@@ -846,7 +850,10 @@ export const ru = {
         "Храните свой пароль в безопасности, чтобы не потерять средства.",
       download_recovery_password: "Загрузите файл восстановления пароля здесь",
       select_language: "Выберите язык",
-      browser_notifications: "Уведомления браузера",
+      ui_design: "пользовательский интерфейс Дизайн",
+      allow_transfer_to_my_account: "Разрешить переводы на мой счет",
+      show_notifications: "Показать уведомления",
+      select_notifications: "Выберите уведомления",
       faucet: "кран",
       faucet_url: "URL крана: ",
       copy_url: "Скопировать URL",
@@ -891,6 +898,7 @@ export const ru = {
       pending_changes: "Ожидающие изменения",
       wallet_lock: "Блокировка кошелька (минуты)",
       use_whalevault: "Используйте расширение WhaleVault",
+      unsaved_changes: "У вас есть несохраненные изменения в настройках",
     },
     comments: {
       deposit_hbd:
@@ -903,6 +911,16 @@ export const ru = {
       securely_saved_my_password: "Я надежно сохранил свой пароль",
       enable_notifications: "Включить уведомления",
       key_management_group: ["Владелец", "Активный", "Памятка"],
+      funds_sent: "средства отправлены",
+      order_created: "заказ создан",
+      order_filled: "заказ выполнен",
+      order_canceled: "заказ отменен",
+      order_expired: "срок действия заказа истек",
+      funds_received: "funds received",
+      account_upgrade: "обновление аккаунта",
+      vesting_balance_create: "создание баланса",
+      vesting_balance_withdraw: "снятие баланса",
+      account_updated: "аккаунт обновлен",
     },
     errors: {
       unable_to_create_account:

@@ -42,6 +42,8 @@ export function useNotificationMenu({
         }
       );
       setGroupedNotificationsByDate(groupedNotificationsByDate);
+    } else {
+      setGroupedNotificationsByDate({});
     }
   }, [
     notifications,
