@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { useSettingsContext, useUserContext } from "..";
 import { useActivity, useFormDate, useLocalStorage } from "../../hooks";
@@ -28,11 +34,12 @@ export function UserSettingsProvider({
   const { localStorageAccount } = useUserContext();
   const { getActivitiesRows } = useActivity();
   const { formLocalDate } = useFormDate();
-  const { chainId } = useSettingsContext();
+  const { chainId, settings } = useSettingsContext();
+  const { account } = useUserContext();
 
   const [notifications, setNotifications] = useLocalStorage(
     `${chainId.slice(0, 8)}_notifications_${localStorageAccount}`
-  ) as [Notification[], (value: Notification[]) => void];
+  ) as [Notification[], (value: Notification[] | null) => void];
   const [hasUnreadMessages, _setHasUnreadMessages] = useState<boolean>(false);
   const [loadingNotifications, setLoadingNotifications] =
     useState<boolean>(true);
@@ -85,52 +92,66 @@ export function UserSettingsProvider({
     );
     try {
       setLoadingNotifications(true);
-      const serverActivities = await getActivitiesRows(
-        localStorageAccount,
-        false
-      );
-      if (serverActivities && serverActivities.length) {
-        const filteredServerActivities = serverActivities.filter(
-          (serverActivity) => {
-            return (
-              new Date(formLocalDate(serverActivity.time)) >= pastThirtyDaysDate
-            );
-          }
+      if (settings.notifications.allow) {
+        const serverActivities = (
+          await getActivitiesRows(localStorageAccount, false)
+        ).filter((activities) =>
+          settings.notifications.selectedNotifications.includes(activities.type)
         );
-        const serverNotifications = filteredServerActivities.map(
-          (serverActivity) => {
-            return {
-              activity: serverActivity,
-              unread: true,
-            } as Notification;
-          }
-        );
-        if (!notifications || notifications.length === 0) {
-          setNotifications(serverNotifications);
-          _setHasUnreadMessages(true);
-        } else {
-          const filteredLocalNotifications = notifications.filter(
-            (notification) =>
-              new Date(notification.activity.time) > pastThirtyDaysDate
+        if (serverActivities && serverActivities.length > 0) {
+          const filteredServerActivities = serverActivities.filter(
+            (serverActivity) => {
+              return (
+                new Date(formLocalDate(serverActivity.time)) >=
+                pastThirtyDaysDate
+              );
+            }
           );
-          if (filteredLocalNotifications.length === 0) {
+          const serverNotifications = filteredServerActivities.map(
+            (serverActivity) => {
+              return {
+                activity: serverActivity,
+                unread: true,
+              } as Notification;
+            }
+          );
+          if (!notifications || notifications.length === 0) {
             setNotifications(serverNotifications);
             _setHasUnreadMessages(true);
           } else {
-            const lastUpdateNotificationIndex = serverNotifications.findIndex(
-              (serverNotification) =>
-                serverNotification.activity.id ===
-                filteredLocalNotifications[0].activity.id
-            );
-            const newNotifications = [
-              ...serverNotifications.slice(0, lastUpdateNotificationIndex),
-              ...filteredLocalNotifications,
-            ];
-            setNotifications(newNotifications);
-            setHasUnreadMessages(newNotifications);
+            const filteredLocalNotifications = notifications
+              .filter(
+                (notification) =>
+                  new Date(notification.activity.time) > pastThirtyDaysDate
+              )
+              .filter((notif) =>
+                settings.notifications.selectedNotifications.includes(
+                  notif.activity.type
+                )
+              );
+            if (filteredLocalNotifications.length === 0) {
+              setNotifications(serverNotifications);
+              _setHasUnreadMessages(true);
+            } else {
+              const lastUpdateNotificationIndex = serverNotifications.findIndex(
+                (serverNotification) =>
+                  serverNotification.activity.id ===
+                  filteredLocalNotifications[0].activity.id
+              );
+              const newNotifications = [
+                ...serverNotifications.slice(0, lastUpdateNotificationIndex),
+                ...filteredLocalNotifications,
+              ];
+              setNotifications(newNotifications);
+              setHasUnreadMessages(newNotifications);
+            }
           }
+          setLoadingNotifications(false);
+        } else {
+          setNotifications([]);
+          _setHasUnreadMessages(false);
+          setLoadingNotifications(false);
         }
-        setLoadingNotifications(false);
       } else {
         setNotifications([]);
         _setHasUnreadMessages(false);
@@ -144,13 +165,35 @@ export function UserSettingsProvider({
     }
   };
 
+  const updateNotificationsLanguage = useCallback(async () => {
+    if (account) {
+      const activityRows = await getActivitiesRows(account.name);
+      const updatedNotifications = notifications.map((notif) => {
+        return {
+          activity: activityRows.find((row) => row.id === notif.activity.id),
+          unread: notif.unread,
+        } as Notification;
+      });
+      setNotifications(updatedNotifications);
+    }
+  }, [account, getActivitiesRows, notifications, setNotifications]);
+
   useEffect(() => {
     if (localStorageAccount && localStorageAccount !== "") {
       updateNotifications();
     } else {
       setNotifications(null);
     }
-  }, [localStorageAccount]);
+  }, [
+    localStorageAccount,
+    settings.notifications.allow,
+    settings.notifications.selectedNotifications,
+    settings.notifications.selectedNotifications.length,
+  ]);
+
+  useEffect(() => {
+    updateNotificationsLanguage();
+  }, [settings.language]);
 
   return (
     <userSettingsContext.Provider

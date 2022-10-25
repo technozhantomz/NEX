@@ -43,10 +43,35 @@ export function useSignUpForm(): UseSignUpFormResult {
 
   const handleSignUp = async (formData: unknown) => {
     setSubmitting(true);
-    const fullAccount = await createAccount(formData as SignupForm);
-    if (fullAccount) {
-      await formAccountAfterConfirmation(fullAccount, "", "");
-      setLocalStorageAccount(fullAccount.account.name);
+    try {
+      const fullAccount = await createAccount(formData as SignupForm);
+      if (typeof fullAccount !== "string") {
+        await formAccountAfterConfirmation(fullAccount, "", "");
+        setLocalStorageAccount(fullAccount.account.name);
+        setSubmitting(false);
+      } else {
+        const error =
+          fullAccount === ""
+            ? counterpart.translate(`field.errors.unable_to_create_account`)
+            : fullAccount;
+        signUpForm.setFields([
+          {
+            name: "username",
+            errors: [error],
+          },
+        ]);
+        setSubmitting(false);
+      }
+    } catch (e) {
+      console.log(e);
+      signUpForm.setFields([
+        {
+          name: "username",
+          errors: [
+            counterpart.translate(`field.errors.unable_to_create_account`),
+          ],
+        },
+      ]);
       setSubmitting(false);
     }
   };

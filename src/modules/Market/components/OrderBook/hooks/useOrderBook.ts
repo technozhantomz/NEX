@@ -8,8 +8,8 @@ import {
 } from "react";
 
 import {
-  roundNum,
   useAccount,
+  useAsset,
   useFees,
   useOrderTransactionBuilder,
   useTransactionBuilder,
@@ -57,6 +57,7 @@ export function useOrderBook({
   const { buildTrx } = useTransactionBuilder();
   const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
   const { calculateCancelLimitOrderFee } = useFees();
+  const { limitByPrecision, ceilPrecision } = useAsset();
 
   const handleFilterChange = useCallback(
     (type: OrderType) => {
@@ -77,40 +78,48 @@ export function useOrderBook({
       const reducedOrders = orders.reduce((previousOrders, currentOrder) => {
         const repeatedPriceIndex = previousOrders.findIndex(
           (previousOrder) =>
-            roundNum(Number(previousOrder.price), currentBase.precision) ===
-            roundNum(Number(currentOrder.price), currentBase.precision)
+            ceilPrecision(
+              Number(previousOrder.base) / Number(previousOrder.quote),
+              currentBase.precision
+            ) ===
+            ceilPrecision(
+              Number(currentOrder.base) / Number(currentOrder.quote),
+              currentBase.precision
+            )
         );
         if (repeatedPriceIndex === -1) {
-          previousOrders.push(currentOrder);
+          previousOrders.push({
+            ...currentOrder,
+            price: ceilPrecision(
+              Number(currentOrder.base) / Number(currentOrder.quote),
+              currentBase.precision
+            ),
+          });
         } else {
           const orderWithRepeatedPrice = previousOrders[repeatedPriceIndex];
           previousOrders[repeatedPriceIndex] = {
             quote: String(
-              roundNum(
-                Number(orderWithRepeatedPrice.quote),
-                currentQuote.precision
-              ) + roundNum(Number(currentOrder.quote), currentQuote.precision)
+              Number(orderWithRepeatedPrice.quote) + Number(currentOrder.quote)
             ),
             base: String(
-              roundNum(
-                Number(orderWithRepeatedPrice.base),
-                currentBase.precision
-              ) + roundNum(Number(currentOrder.base), currentBase.precision)
+              Number(orderWithRepeatedPrice.base) + Number(currentOrder.base)
             ),
-            price: String(
-              roundNum(
-                Number(orderWithRepeatedPrice.price),
-                currentBase.precision
-              )
-            ),
+            price: orderWithRepeatedPrice.price,
             isBuyOrder: orderWithRepeatedPrice.isBuyOrder,
           };
         }
         return previousOrders;
       }, [] as Order[]);
-      return reducedOrders;
+
+      return reducedOrders.map((order) => {
+        return {
+          ...order,
+          quote: limitByPrecision(order.quote, currentQuote.precision),
+          base: limitByPrecision(order.base, currentBase.precision),
+        };
+      });
     },
-    [roundNum]
+    []
   );
 
   const selectOrdersForThresholdAndFilter = useCallback(() => {
@@ -145,9 +154,9 @@ export function useOrderBook({
       const orders: OrderRow[] = selectedOrders.map((order, index) => {
         return {
           key: String(index),
-          quote: roundNum(Number(order.quote), currentQuote.precision),
-          base: roundNum(Number(order.base), currentBase.precision),
-          price: roundNum(Number(order.price), currentBase.precision),
+          quote: order.quote,
+          base: order.base,
+          price: order.price,
           isBuyOrder: order.isBuyOrder,
         };
       });
@@ -161,7 +170,6 @@ export function useOrderBook({
     loadingSelectedPair,
     currentBase,
     currentQuote,
-    roundNum,
     setOrdersRows,
   ]);
 

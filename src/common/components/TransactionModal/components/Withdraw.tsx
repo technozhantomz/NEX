@@ -1,11 +1,10 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { defaultToken } from "../../../../api/params";
 import * as Styled from "../TransactionModal.styled";
 
 type Props = {
-  fee: number;
+  fee: string;
   account: string;
   asset: string;
   withdrawAddress: string;
@@ -23,7 +22,9 @@ export const Withdraw = ({
     <>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.placeholder.from`)}</p>
-        <Link href={`/user/${account}`}>{account}</Link>
+        <Link href={`/user/${account}`}>
+          <a>{account}</a>
+        </Link>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>
@@ -45,7 +46,7 @@ export const Withdraw = ({
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.labels.fee`)}</p>
-        <p>{`${fee} ${defaultToken}`}</p>
+        <p>{`${fee}`}</p>
       </Styled.DetailContainer>
     </>
   );

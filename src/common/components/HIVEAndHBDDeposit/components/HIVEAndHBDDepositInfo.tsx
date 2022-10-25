@@ -21,7 +21,7 @@ export const HIVEAndHBDDepositInfo = ({ infoString }: Props): JSX.Element => {
     return (
       <i>
         <Link key={key} href={`/user/${userName}`}>
-          {userName}
+          <a>{userName}</a>
         </Link>
       </i>
     );
@@ -29,8 +29,12 @@ export const HIVEAndHBDDepositInfo = ({ infoString }: Props): JSX.Element => {
 
   const getSonAccountLink = (key: number) => {
     return (
-      <Link key={key} href={`https://hiveblockexplorer.com/@son-account`}>
-        {"son-account"}
+      <Link
+        key={`son-${key}`}
+        target="_blank"
+        href={`https://hiveblockexplorer.com/@son-account`}
+      >
+        <a target="_blank">son-account</a>
       </Link>
     );
   };

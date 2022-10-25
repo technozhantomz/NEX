@@ -6,30 +6,20 @@ import * as ecc from "tiny-secp256k1";
 
 import { testnetCheck } from "../../../../api/params";
 import {
-  useSessionStorage,
   useSidechainTransactionBuilder,
   useSonNetwork,
   useTransactionBuilder,
 } from "../../../hooks";
 import { useUserContext } from "../../../providers";
-import { SignerKey } from "../../../types";
+import { BitcoinAccount, SignerKey } from "../../../types";
 
-import {
-  BitcoinAccount,
-  BitcoinSidechainAccounts,
-  UseGenerateBitcoinAddressResult,
-} from "./useGenerateBitcoinAddress.types";
+import { UseGenerateBitcoinAddressResult } from "./useGenerateBitcoinAddress.types";
 
 const NETWORK = testnetCheck ? bitcoin.networks.regtest : undefined;
 
 export function useGenerateBitcoinAddress(
   getSidechainAccounts: (accountId: string) => Promise<void>
 ): UseGenerateBitcoinAddressResult {
-  const [bitcoinSidechainAccounts, setBitcoinSidechainAccounts] =
-    useSessionStorage("bitcoinSidechainAccounts") as [
-      BitcoinSidechainAccounts,
-      (value: BitcoinSidechainAccounts) => void
-    ];
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
@@ -41,6 +31,8 @@ export function useGenerateBitcoinAddress(
   const { getSonNetworkStatus } = useSonNetwork();
   const { buildAddingBitcoinSidechainTransaction } =
     useSidechainTransactionBuilder();
+  const { bitcoinSidechainAccounts, setBitcoinSidechainAccounts } =
+    useUserContext();
 
   const toHex = useCallback((buffer: any) => {
     return Array.from(buffer)

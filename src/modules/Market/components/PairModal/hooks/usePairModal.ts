@@ -10,8 +10,8 @@ import {
 } from "react";
 
 import { defaultToken } from "../../../../../api/params";
+import { useAsset } from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
-import { Asset } from "../../../../../common/types";
 import { Form, FormInstance } from "../../../../../ui/src";
 
 import { PairForm, UsePairModalResult } from "./usePairModal.types";
@@ -29,6 +29,7 @@ export function usePairModal({
   const [allAssetsSymbols, setAllAssetsSymbols] = useState<string[]>([]);
   const { dbApi } = usePeerplaysApiContext();
   const router = useRouter();
+  const { getAllAssets } = useAsset();
 
   const handleValuesChange = useCallback(() => {
     pairModalForm.validateFields();
@@ -69,14 +70,17 @@ export function usePairModal({
   };
 
   const getAllAssetsSymbols = useCallback(async () => {
-    const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-    const allAssetsSymbols = allAssets.map((asset) => asset.symbol);
-    setAllAssetsSymbols(allAssetsSymbols);
+    const allAssets = await getAllAssets();
+    if (allAssets && allAssets.length > 0) {
+      const allAssetsSymbols = allAssets.map((asset) => asset.symbol);
+      setAllAssetsSymbols(allAssetsSymbols);
+    }
   }, [dbApi, setAllAssetsSymbols]);
 
   const handleSelectRecent = useCallback(
-    (value: string) => {
-      const pair = value.split("/");
+    (value: unknown) => {
+      const selectedItem = value as string;
+      const pair = selectedItem.split("/");
       pairModalForm.setFieldsValue({ quote: pair[0] });
       pairModalForm.setFieldsValue({ base: pair[1] });
     },

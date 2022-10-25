@@ -23,7 +23,7 @@ export const FeesTab = (): JSX.Element => {
   const { loading, searchDataSource, fullFeesRows, setSearchDataSource } =
     useFeesTab();
   const { sm } = useViewportContext();
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
     <Styled.FeesTabWrapper>

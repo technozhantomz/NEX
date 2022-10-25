@@ -82,7 +82,7 @@ export const LoginForm: React.FC = () => {
         name="useWhaleVault"
         className="checkbox"
       >
-        <Checkbox onChange={onChangeUseWhaleVault}>
+        <Checkbox onChange={onChangeUseWhaleVault} checked={useWhaleVault}>
           {counterpart.translate(`field.labels.use_whalevault`)}
         </Checkbox>
       </Form.Item>

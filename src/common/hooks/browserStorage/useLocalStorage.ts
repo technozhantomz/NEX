@@ -9,7 +9,6 @@ import {
   LatencyPreferences,
   Notification,
   Settings,
-  UserSettings,
 } from "../../types";
 
 type Value =
@@ -20,7 +19,6 @@ type Value =
   | JSON
   | Exchanges
   | Settings
-  | UserSettings
   | Cache
   | undefined
   | Notification[]

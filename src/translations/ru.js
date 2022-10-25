@@ -1,4 +1,8 @@
 export const ru = {
+  general: {
+    yes: "Да",
+    no: "Нет",
+  },
   app_init: {
     check_latency: "Запуск проверки задержки...",
     check_latency_feedback:
@@ -16,6 +20,8 @@ export const ru = {
     connecting: "Подключение к серверу API: %(server)s",
   },
   transaction: {
+    trade: "Торговля",
+    transaction_type: "Тип операции: ",
     feeTypes: {
       _none: "Бесплатно",
       basic_fee: "Базовая плата",
@@ -543,6 +549,15 @@ export const ru = {
         block_information: "Информация о блоке",
         witness: "Свидетель",
       },
+      block_details: {
+        block_num: "Номер блока",
+        witness: "Свидетель",
+        transactions: "Транзакции",
+        block_id: "Идентификатор блока",
+        merkle_root: "Корень Меркла",
+        previous_secret: "Предыдущий секрет",
+        witness_signature: "Подпись свидетеля",
+      },
       assets: {
         heading: "Активы PeerPlays",
         assets: "Ресурсы",
@@ -650,6 +665,19 @@ export const ru = {
       lower_case_witnesses: "свидетели",
       lower_case_sons: "sons",
       lower_case_committees: "комитеты",
+      status: {
+        approved: "Утверждено",
+        not_approved: "Не одобрено",
+        pending_add: "голосование за одобрение",
+        pending_remove: "голосование за снятие одобрения",
+      },
+      actions: {
+        add: "Добавлять",
+        remove: "Удалить",
+        cancel: "Отмена",
+        pending_add: "Ожидание добавления",
+        pending_remove: "Ожидание удаления",
+      },
       gpos: {
         heading: "геймифицированное доказательство доли (GPOS)",
         tab: "GPOS",
@@ -713,11 +741,11 @@ export const ru = {
         },
       },
       sons: {
-        heading: "PeerPlays SONs Голосование",
+        heading: "SONs",
         tab: "Sons",
       },
       witnesses: {
-        heading: "PeerPlays Свидетели Голосование",
+        heading: "Свидетели",
         tab: "Свидетели",
       },
       proxy: {
@@ -725,7 +753,7 @@ export const ru = {
         tab: "Прокси",
       },
       committees: {
-        heading: "PeerPlays Комитеты Голосование",
+        heading: "Комитеты",
         tab: "Комитеты",
       },
     },
@@ -749,6 +777,7 @@ export const ru = {
     mark_all_read: "отметить все как прочитанное",
     pdf: "PDF",
     csv: "CSV",
+    learn_more: "Учить больше",
   },
   field: {
     options: {
@@ -757,8 +786,7 @@ export const ru = {
     placeholder: {
       user_name: "Введите имя пользователя",
       master_password: "Введите мастер-пароль",
-      master_password_private_key:
-        "Мастер-пароль или закрытый ключ (мы рекомендуем использовать кошелек Whalevault web 3.0)",
+      master_password_private_key: "Мастер-пароль или закрытый ключ",
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
       hive_blockchain_account: "учетная запись Hive",
@@ -778,6 +806,7 @@ export const ru = {
       from: "из",
     },
     labels: {
+      swap_fee_info: "Для завершения обмена применяются следующие сборы",
       generate_btc_deposit_address:
         "Создайте биткойн-адрес, чтобы вы могли внести BTC на свою учетную запись Peerplays.",
       deposit_btc:
@@ -810,7 +839,10 @@ export const ru = {
         "Храните свой пароль в безопасности, чтобы не потерять средства.",
       download_recovery_password: "Загрузите файл восстановления пароля здесь",
       select_language: "Выберите язык",
-      browser_notifications: "Уведомления браузера",
+      ui_design: "пользовательский интерфейс Дизайн",
+      allow_transfer_to_my_account: "Разрешить переводы на мой счет",
+      show_notifications: "Показать уведомления",
+      select_notifications: "Выберите уведомления",
       faucet: "кран",
       faucet_url: "URL крана: ",
       copy_url: "Скопировать URL",
@@ -852,8 +884,10 @@ export const ru = {
       desired_committees: "Желаемые комитеты",
       desired_sons: "Желаемые сыновья",
       desired_proxy: "Желаемый прокси",
+      pending_changes: "Ожидающие изменения",
       wallet_lock: "Блокировка кошелька (минуты)",
       use_whalevault: "Используйте расширение WhaleVault",
+      unsaved_changes: "У вас есть несохраненные изменения в настройках",
     },
     comments: {
       deposit_hbd:
@@ -866,8 +900,20 @@ export const ru = {
       securely_saved_my_password: "Я надежно сохранил свой пароль",
       enable_notifications: "Включить уведомления",
       key_management_group: ["Владелец", "Активный", "Памятка"],
+      funds_sent: "средства отправлены",
+      order_created: "заказ создан",
+      order_filled: "заказ выполнен",
+      order_canceled: "заказ отменен",
+      order_expired: "срок действия заказа истек",
+      funds_received: "funds received",
+      account_upgrade: "обновление аккаунта",
+      vesting_balance_create: "создание баланса",
+      vesting_balance_withdraw: "снятие баланса",
+      account_updated: "аккаунт обновлен",
     },
     errors: {
+      unable_to_create_account:
+        "Невозможно создать учетную запись. Пожалуйста, попробуйте позже",
       enter_amount: "Введите сумму",
       invalid_bitcoin_public_key:
         "Открытый ключ недействителен для биткойн %(network)s",
@@ -993,6 +1039,7 @@ export const ru = {
     total_votes: "Всего голосов",
     url: "URL",
     operation: "Операция",
+    operations: "Операции",
     fee_type: "Тип комиссии",
     standard_fee: "Стандартная плата",
     last_block: "Последний блок",
@@ -1003,6 +1050,20 @@ export const ru = {
     category: "категория",
     active: "Активный",
     key: "ключ",
+    ref_block_prefix: "Префикс блока ссылок",
+    ref_block_num: "Блок ссылок №",
+    extensions: "Расширения",
+    status: "Статус",
+  },
+  tableFilters: {
+    avtive: "Активный",
+    inactive: "Неактивно",
+    approved: "Утверждено",
+    not_approved: "Не одобрено",
+    add: "Добавить",
+    remove: "Удалить",
+    pending_add: "Ожидание добавления",
+    pending_remove: "Ожидание удаления",
   },
   tooltips: {
     copy: "копировать",
@@ -1010,5 +1071,12 @@ export const ru = {
     mark_read: "пометить, как прочитанное",
     mark_unread: "отметить как непрочитанное",
     swap_transaction_type: "Тип сделки: своп",
+  },
+  file_content: {
+    btc_withdraw_account: "Счет для вывода биткойнов",
+    btc_deposit_account: "Депозитный счет Биткойн",
+    btc_deposit_account_description:
+      "Используется для создания депозитного адреса PeerPlays с мультиподписью выше.",
+    peerplays_btc_deposit_address: "Адрес депозита PeerPlays",
   },
 };

@@ -56,7 +56,7 @@ ChainStore.setDispatchFrequency(60);
 export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   const [whaleVaultInstance, setWhaleVaultInstance] =
     useState<WhaleVaultType>();
-  const willTransitionToInProgress = useRef<
+  const [willTransitionToInProgress, setWillTransitionToInProgress] = useState<
     boolean | string | { background: boolean; key: string }
   >(false);
   // boolean flag if the lowest latency node should be autoselected
@@ -125,27 +125,23 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   const isTransitionInProgress = useCallback(() => {
     return (
-      !!willTransitionToInProgress.current &&
-      typeof willTransitionToInProgress.current !== "object"
+      !!willTransitionToInProgress &&
+      typeof willTransitionToInProgress !== "object"
     );
-  }, [willTransitionToInProgress, willTransitionToInProgress.current]);
+  }, [willTransitionToInProgress]);
 
   const isBackgroundPingingInProgress = useCallback(() => {
     return (
-      !!willTransitionToInProgress.current &&
-      typeof willTransitionToInProgress.current === "object"
+      !!willTransitionToInProgress &&
+      typeof willTransitionToInProgress === "object"
     );
-  }, [willTransitionToInProgress, willTransitionToInProgress.current]);
+  }, [willTransitionToInProgress]);
 
   const getTransitionTarget = useCallback(() => {
     if (isTransitionInProgress()) {
-      return willTransitionToInProgress.current;
+      return willTransitionToInProgress;
     }
-  }, [
-    isTransitionInProgress,
-    willTransitionToInProgress,
-    willTransitionToInProgress.current,
-  ]);
+  }, [isTransitionInProgress, willTransitionToInProgress]);
 
   const apiUrlSecuritySuitable = useCallback((apiNodeUrl: string) => {
     if (
@@ -349,7 +345,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       }
       // decide where to connect to first
       const connectionString = getFirstToTry(urls);
-      willTransitionToInProgress.current = connectionString;
+      setWillTransitionToInProgress(connectionString);
       const _connectionManager: ConnectionManagerType = new ConnectionManager({
         url: connectionString,
         urls: urls,
@@ -359,19 +355,19 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     [
       getNodesToConnectTo,
       getFirstToTry,
-      willTransitionToInProgress,
+      setWillTransitionToInProgress,
       connectionManager,
     ]
   );
 
   const updateTransitionTarget = useCallback(
     (update: string | { background: boolean; key: string } | boolean) => {
-      willTransitionToInProgress.current = update;
+      setWillTransitionToInProgress(update);
       if (statusCallback.current !== undefined) {
         statusCallback.current(update);
       }
     },
-    [statusCallback, statusCallback.current]
+    [statusCallback, statusCallback.current, setWillTransitionToInProgress]
   );
 
   const clearLatencies = useCallback(() => {
@@ -379,9 +375,9 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   }, [setApiLatencies]);
 
   const transitionDone = useCallback(() => {
-    willTransitionToInProgress.current = false;
+    setWillTransitionToInProgress(false);
     statusCallback.current = undefined;
-  }, []);
+  }, [setWillTransitionToInProgress]);
 
   const enableBackgroundPinging = useCallback(() => {
     pingerBeSatisfiedWith.current = { instant: 0, low: 0, medium: 0 };
@@ -1017,7 +1013,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         if (pingInBackground > 0) {
           const _func = function () {
             // wait for transition to be completed
-            if (!willTransitionToInProgress.current) {
+            if (!willTransitionToInProgress) {
               enableBackgroundPinging();
               pingNodes(() => {
                 const _nodes = getNodesToConnectTo(
@@ -1055,7 +1051,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       isAutoSelection,
       transitionDone,
       willTransitionToInProgress,
-      willTransitionToInProgress.current,
       enableBackgroundPinging,
       pingNodes,
       getSelectedNode,
@@ -1178,7 +1173,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   const initiateConnection = useCallback(
     async (appInit: boolean) => {
-      willTransitionToInProgress.current = connectionManager.current.url;
+      setWillTransitionToInProgress(connectionManager.current.url);
       connectionStart.current = new Date().getTime();
 
       console.log("Connecting to " + connectionManager.current.url);
@@ -1230,6 +1225,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       onConnect,
       transitionDone,
       attemptReconnect,
+      setWillTransitionToInProgress,
     ]
   );
 
@@ -1247,7 +1243,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         return;
       }
       statusCallback.current = _statusCallback;
-      willTransitionToInProgress.current = true;
+      setWillTransitionToInProgress(true);
 
       const _apiLatencies = apiLatencies;
       let latenciesEstablished = Object.keys(_apiLatencies).length > 0;
@@ -1300,6 +1296,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       doLatencyUpdate,
       initiateConnection,
       transitionDone,
+      setWillTransitionToInProgress,
     ]
   );
 
@@ -1344,9 +1341,9 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   const historyApi = useCallback(getApi("_hist"), [getApi]);
 
   useEffect(() => {
-    if (window.whalevault) {
-      WhaleVaultConfig.setWhaleVault(window.whalevault);
-      setWhaleVaultInstance(window.whalevault as WhaleVaultType);
+    if ((window as any).whalevault) {
+      WhaleVaultConfig.setWhaleVault((window as any).whalevault);
+      setWhaleVaultInstance((window as any).whalevault as WhaleVaultType);
     }
   }, []);
 

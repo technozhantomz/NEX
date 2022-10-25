@@ -30,7 +30,7 @@ export const SonsTab = (): JSX.Element => {
     setSearchDataSource,
   } = useSonsTab();
   const { sm } = useViewportContext();
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
     <Styled.SonsTabWrapper>

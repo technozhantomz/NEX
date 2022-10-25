@@ -8,7 +8,7 @@ export type UseLoginFormResult = {
   submitting: boolean;
   useWhaleVault: boolean;
   onChangeUseWhaleVault: (e: CheckboxChangeEvent) => void;
-  onChangeWalletLock: (value: number) => void;
+  onChangeWalletLock: (value: any) => void;
 };
 
 export type LoginForm = {

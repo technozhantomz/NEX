@@ -1,11 +1,10 @@
 import counterpart from "counterpart";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { KeyboardEvent, useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import { utils } from "../../../../api/utils";
 import {
+  DashboardLoginButton,
   LogoSelectOption,
   PasswordModal,
   TransactionModal,
@@ -19,10 +18,9 @@ import {
 } from "../../../../ui/src";
 
 import * as Styled from "./SwapTab.styled";
-import { useSwap } from "./hooks/useSwapTab";
+import { useSwap } from "./hooks";
 
 export const SwapTab = (): JSX.Element => {
-  const router = useRouter();
   const {
     swapForm,
     transactionErrorMessage,
@@ -48,6 +46,7 @@ export const SwapTab = (): JSX.Element => {
     sellAmountErrors,
     buyAmountErrors,
     lastChangedField,
+    buyAssetMarketFee,
   } = useSwap();
 
   const {
@@ -68,18 +67,6 @@ export const SwapTab = (): JSX.Element => {
     useState<string>("");
   const [transactionModalBuyAmount, setTransactionModalBuyAmount] =
     useState<string>("");
-
-  const InfoToolTip = (
-    <Styled.TooltipPara>
-      {<span>{counterpart.translate(`tooltips.swap_transaction_type`)}</span>}
-      {
-        <span>
-          {counterpart.translate(`tableHead.fee`)} : {swapOrderFee}{" "}
-          {defaultToken}
-        </span>
-      }
-    </Styled.TooltipPara>
-  );
 
   const isLoggedIn = localStorageAccount ? true : false;
   const renderUserSellAssetBalance = isLoggedIn ? (
@@ -109,9 +96,7 @@ export const SwapTab = (): JSX.Element => {
         <span>
           {renderPriceLeftSideEquality} &#8776; {renderPriceRightSideEquality}
         </span>
-        <Styled.Tooltip placement="left" title={InfoToolTip} color="#E3EBF8">
-          <InfoCircleOutlined />
-        </Styled.Tooltip>
+        <InfoCircleOutlined />
       </>
     );
   const renderPrice = loadingSwapData ? (
@@ -134,20 +119,59 @@ export const SwapTab = (): JSX.Element => {
   const renderSwapButtonText = swapHasError
     ? renderSellAmountError
     : counterpart.translate(`buttons.swap_coins`);
+
   const renderSubmitButton = isLoggedIn ? (
-    <CardFormButton type="primary" htmlType="submit" disabled={swapHasError}>
-      {renderSwapButtonText}
-    </CardFormButton>
+    <Styled.SwapButtonFormItem>
+      <CardFormButton
+        type="primary"
+        htmlType="submit"
+        disabled={swapHasError || loadingSwapData}
+      >
+        {renderSwapButtonText}
+      </CardFormButton>
+    </Styled.SwapButtonFormItem>
   ) : (
-    <CardFormButton
-      type="primary"
-      htmlType="button"
-      onClick={() => {
-        router.push("/login");
-      }}
-    >
-      {counterpart.translate(`buttons.login_and_swap_coins`)}
-    </CardFormButton>
+    <DashboardLoginButton
+      buttonText={counterpart.translate(`buttons.login_and_swap_coins`)}
+    />
+  );
+
+  const feeSummary = (
+    <>
+      <div>{`${swapOrderFee} ${defaultToken}`}</div>
+      {Number(buyAssetMarketFee) > 0 ? (
+        <div>
+          + {`${buyAssetMarketFee} ${selectedAssetsSymbols.buyAssetSymbol}`}
+        </div>
+      ) : (
+        ""
+      )}
+    </>
+  );
+
+  const renderTransactionDetails = isLoggedIn ? (
+    <Styled.TransactionDetails>
+      <Styled.FeeInfo>
+        {counterpart.translate(`field.labels.swap_fee_info`)}
+      </Styled.FeeInfo>
+      <Styled.DetailsWrapper>
+        <Styled.DetailsLabelWrapper>
+          {counterpart.translate(`field.labels.fees_label`)}
+        </Styled.DetailsLabelWrapper>
+        <Styled.AmountsWrapper>{feeSummary}</Styled.AmountsWrapper>
+      </Styled.DetailsWrapper>
+
+      <Styled.DetailsWrapper>
+        <Styled.DetailsLabelWrapper>
+          {counterpart.translate(`transaction.transaction_type`)}
+        </Styled.DetailsLabelWrapper>
+        <Styled.AmountsWrapper>
+          {counterpart.translate(`transaction.trade`)}
+        </Styled.AmountsWrapper>
+      </Styled.DetailsWrapper>
+    </Styled.TransactionDetails>
+  ) : (
+    ""
   );
 
   return (
@@ -240,23 +264,14 @@ export const SwapTab = (): JSX.Element => {
               }
             />
           </Styled.SwapItem>
-          <Styled.PriceContainer>{renderPrice}</Styled.PriceContainer>
-          <Styled.SwapButtonFormItem>
-            {renderSubmitButton}
-          </Styled.SwapButtonFormItem>
+          {isLoggedIn ? (
+            <Styled.PriceContainer>{renderPrice}</Styled.PriceContainer>
+          ) : (
+            ""
+          )}
+          {renderTransactionDetails}
+          {renderSubmitButton}
         </Styled.SwapForm>
-        {!localStorageAccount ? (
-          <Styled.FormDisclamer>
-            <span>
-              {counterpart.translate(`buttons.dont_have_peerplays_account`)}
-            </span>
-            <Link href="/signup">
-              <a>{counterpart.translate(`links.create_account`)}</a>
-            </Link>
-          </Styled.FormDisclamer>
-        ) : (
-          ""
-        )}
 
         <TransactionModal
           visible={isTransactionModalVisible}

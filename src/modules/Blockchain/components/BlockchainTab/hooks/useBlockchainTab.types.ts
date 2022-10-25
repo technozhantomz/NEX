@@ -1,17 +1,16 @@
-import { ColumnsType } from "antd/lib/table";
 import { Dispatch, SetStateAction } from "react";
 
 export type UseBlockchainTabResult = {
   loading: boolean;
-  blockColumns: ColumnsType<unknown>;
-  blockchainTableRows: BlockchainTableRow[];
+  blockColumns: BlockColumnType[];
+  blockchainTableRows: DataTableRow[];
   blockchainStats: BlockchainStats;
   currentBlock: number;
   lastIrreversibleBlock: string;
   avgTime: number;
   supply: BlockchainSupply;
-  searchDataSource: BlockchainTableRow[];
-  setSearchDataSource: Dispatch<SetStateAction<BlockchainTableRow[]>>;
+  searchDataSource: DataTableRow[];
+  setSearchDataSource: Dispatch<SetStateAction<DataTableRow[]>>;
 };
 
 export type BlockchainSupply = {
@@ -26,10 +25,67 @@ export type BlockchainStats = {
   supply: number[];
 };
 
-export type BlockchainTableRow = {
+export type DataTableRow = {
   key: number;
+  nextSecret?: string;
+  previousSecret?: string;
+  merkleRoot?: string;
   blockID: number;
   time: string;
   witness: string;
+  witnessSignature?: string;
+  transactions?: TransactionRow[];
   transaction: number;
+};
+
+export type TransactionRow = {
+  rank: number;
+  id: string;
+  expiration: string;
+  operations: number;
+  refBlockPrefix: number;
+  refBlockNum: number;
+  extensions: number;
+};
+
+export type BlockColumnType = {
+  title: () => JSX.Element;
+  dataIndex: string;
+  key: string;
+  render: ((witness: string) => JSX.Element) | undefined;
+  filters:
+    | {
+        text: string;
+        value: string;
+      }[]
+    | undefined;
+  filterMode: string | undefined;
+  filterSearch: boolean | undefined;
+  onFilter: ((value: string, record: DataTableRow) => boolean) | undefined;
+  sorter:
+    | ((
+        a: {
+          blockID: number;
+        },
+        b: {
+          blockID: number;
+        }
+      ) => number)
+    | ((
+        a: {
+          time: string;
+        },
+        b: {
+          time: string;
+        }
+      ) => number)
+    | ((
+        a: {
+          transaction: number;
+        },
+        b: {
+          transaction: number;
+        }
+      ) => number)
+    | undefined;
 };

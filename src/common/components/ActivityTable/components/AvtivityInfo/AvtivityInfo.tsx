@@ -24,7 +24,7 @@ export const AvtivityInfo = ({ infoString }: Props): JSX.Element => {
     );
     return (
       <Link key={key} href={`/user/${userName}`}>
-        {userName === localStorageAccount ? "You" : userName}
+        <a>{userName === localStorageAccount ? "You" : userName}</a>
       </Link>
     );
   };
