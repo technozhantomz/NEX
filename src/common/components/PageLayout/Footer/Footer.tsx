@@ -24,7 +24,7 @@ export const Footer = (): JSX.Element => {
     <div>
       <span>
         {counterpart.translate("connection.out_of_sync", {
-          out_of_sync_seconds: String(getBlockTimeDelta()),
+          out_of_sync_seconds: String(Math.round(getBlockTimeDelta())),
         })}
       </span>
 

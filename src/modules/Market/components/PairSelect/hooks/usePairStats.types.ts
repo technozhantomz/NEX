@@ -1,7 +1,7 @@
 export type UsePairStatsResult = {
-  latest: number;
-  change: number;
-  volume: number;
+  latest: string;
+  change: string;
+  volume: string;
 };
 
 export type Ticker = {

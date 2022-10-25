@@ -34,7 +34,7 @@ export const WitnessesTab = (): JSX.Element => {
     setSearchDataSource,
   } = useWitnessesTab();
   const { sm } = useViewportContext();
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
     <Styled.WitnessesTabWrapper>

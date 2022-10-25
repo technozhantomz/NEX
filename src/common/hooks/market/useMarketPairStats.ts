@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { roundNum, useAsset } from "..";
+import { useAsset } from "..";
 import { defaultToken } from "../../../api/params";
 import { usePeerplaysApiContext } from "../../providers";
 import {
@@ -14,22 +14,22 @@ import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { getAssetBySymbol } = useAsset();
+  const { getAllAssets, getAssetBySymbol, limitByPrecision } = useAsset();
 
   const getMarketPairStats = useCallback(
     async (base: Asset, quote: Asset) => {
-      let latest = 0,
-        percentChange = 0,
-        volume = 0;
+      let latest = "0",
+        percentChange = "0",
+        volume = "0";
       try {
         const ticker: Ticker = await dbApi("get_ticker", [
           base.symbol,
           quote.symbol,
         ]);
         if (ticker) {
-          latest = roundNum(Number(ticker.latest), base.precision);
-          percentChange = roundNum(Number(ticker.percent_change), 1) || 0;
-          volume = roundNum(Number(ticker.quote_volume), 3);
+          latest = limitByPrecision(ticker.latest, base.precision);
+          percentChange = limitByPrecision(ticker.percent_change, 1) || "0";
+          volume = limitByPrecision(ticker.quote_volume, 3);
         }
       } catch (e) {
         console.log(e);
@@ -50,36 +50,38 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
       `HBD/${defaultToken}`,
     ];
     try {
-      const rawAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-      const threeLetterAsset = rawAssets.find(
-        (asset) =>
-          asset.symbol !== defaultToken &&
-          asset.symbol !== "BTC" &&
-          asset.symbol !== "HBD" &&
-          asset.symbol.length === 3
-      );
-      const fourLetterAsset = rawAssets.find(
-        (asset) =>
-          asset.symbol !== defaultToken &&
-          asset.symbol !== "HIVE" &&
-          asset.symbol.length === 4
-      );
-      const otherAsset = rawAssets.find(
-        (asset) => asset.symbol !== defaultToken && asset.symbol.length > 4
-      );
-      if (threeLetterAsset) {
-        pairs.push(`${threeLetterAsset.symbol}/${defaultToken}`);
+      const rawAssets = await getAllAssets();
+      if (rawAssets && rawAssets.length > 0) {
+        const threeLetterAsset = rawAssets.find(
+          (asset) =>
+            asset.symbol !== defaultToken &&
+            asset.symbol !== "BTC" &&
+            asset.symbol !== "HBD" &&
+            asset.symbol.length === 3
+        );
+        const fourLetterAsset = rawAssets.find(
+          (asset) =>
+            asset.symbol !== defaultToken &&
+            asset.symbol !== "HIVE" &&
+            asset.symbol.length === 4
+        );
+        const otherAsset = rawAssets.find(
+          (asset) => asset.symbol !== defaultToken && asset.symbol.length > 4
+        );
+        if (threeLetterAsset) {
+          pairs.push(`${threeLetterAsset.symbol}/${defaultToken}`);
+          return pairs;
+        } else if (fourLetterAsset) {
+          pairs.push(`${fourLetterAsset.symbol}/${defaultToken}`);
+          return pairs;
+        } else if (otherAsset) {
+          pairs.push(`${otherAsset.symbol}/${defaultToken}`);
+          return pairs;
+        }
+        return pairs;
+      } else {
         return pairs;
       }
-      if (fourLetterAsset) {
-        pairs.push(`${fourLetterAsset.symbol}/${defaultToken}`);
-        return pairs;
-      }
-      if (otherAsset) {
-        pairs.push(`${otherAsset.symbol}/${defaultToken}`);
-        return pairs;
-      }
-      return pairs;
     } catch (e) {
       console.log(e);
       return pairs;
@@ -102,9 +104,9 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         return {
           tradingPair: pair,
           marketPairStats: {
-            volume: 0,
-            latest: 0,
-            percentChange: 0,
+            volume: "0",
+            latest: "0",
+            percentChange: "0",
           },
         } as PairNameAndMarketStats;
       }

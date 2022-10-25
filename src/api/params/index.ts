@@ -6,3 +6,4 @@ export * from "./defaultLocales";
 export * from "./defaultNotifications";
 export * from "./nodesList";
 export * from "./defaultApiSettings";
+export * from "./symbolsToBeExcepted";

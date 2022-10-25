@@ -38,6 +38,7 @@ export const showUserOrderColumns = (
       render: (_value: string, record: any) => (
         <Styled.DeleteIconContainer
           onClick={(e) => {
+            e.stopPropagation();
             e.preventDefault();
             handleClick(record.key);
           }}

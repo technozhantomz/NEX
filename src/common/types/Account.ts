@@ -144,3 +144,16 @@ export type SignerKey =
         account: string;
       };
     };
+
+export type BitcoinSidechainAccounts =
+  | {
+      deposit: BitcoinAccount;
+      withdraw: BitcoinAccount;
+    }
+  | undefined;
+
+export type BitcoinAccount = {
+  address: string;
+  pubKey: string;
+  privateKey: string;
+};

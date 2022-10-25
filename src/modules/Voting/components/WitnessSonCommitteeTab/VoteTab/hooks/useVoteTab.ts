@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { defaultToken } from "../../../../../../api/params";
 import { isArrayEqual } from "../../../../../../api/utils";
@@ -11,11 +11,13 @@ import {
 } from "../../../../../../common/hooks";
 import {
   useAssetsContext,
+  usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../../common/providers";
 import {
   AccountOptions,
   FullAccount,
+  GlobalProperties,
   SignerKey,
   Transaction,
   Vote,
@@ -45,12 +47,11 @@ export function useVoteTab({
   getVotes,
   totalGpos,
 }: Args): UseVoteTabResult {
+  const [pendingChanges, setPendingChanges] = useState<VoteRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [allMembersRows, setAllMembersRows] = useState<VoteRow[]>([]);
   const [serverApprovedRows, setServerApprovedRows] = useState<VoteRow[]>([]);
-  const [localApprovedRows, setLocalApprovedRows] = useState<VoteRow[]>([]);
   const [isVotesChanged, setIsVotesChanged] = useState<boolean>(false);
-  const [voteSearchValue, setVoteSearchValue] = useState<string>("");
   const [updateAccountFee, setUpdateAccountFee] = useState<number>(0);
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
@@ -58,14 +59,16 @@ export function useVoteTab({
     useState<string>("");
   const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  const [searchError, setSearchError] = useState<boolean>(false);
+  const afterCloseTransactionModal = useRef<() => void>();
+
   const { formAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
-  const { formAccountBalancesByName, getAccountByName } = useAccount();
+  const { formAccountBalancesByName } = useAccount();
   const { id, assets, name, localStorageAccount } = useUserContext();
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
   const { getTrxFee, buildTrx } = useTransactionBuilder();
+  const { dbApi } = usePeerplaysApiContext();
 
   const getUpdateAccountTrx = useCallback(() => {
     const membersIdentifiers: {
@@ -94,7 +97,12 @@ export function useVoteTab({
       const allTabsServerApprovedVotes = fullAccount.votes;
 
       const localApprovedVotes = allMembers.filter((member) =>
-        localApprovedRows.map((vote) => vote.id).includes(member.vote_id)
+        allMembersRows
+          .map((vote) => {
+            if (vote.action === "remove" || vote.action === "pending add")
+              return vote.id;
+          })
+          .includes(member.vote_id)
       );
 
       const localApprovedVotesIds = localApprovedVotes.map(
@@ -150,7 +158,7 @@ export function useVoteTab({
     fullAccount,
     id,
     allMembers,
-    localApprovedRows,
+    allMembersRows,
     tab,
     buildUpdateAccountTransaction,
     setPendingTransaction,
@@ -207,8 +215,12 @@ export function useVoteTab({
             counterpart.translate(`field.success.published_votes`)
           );
           setLoadingTransaction(false);
-          setServerApprovedRows([...localApprovedRows]);
-          setLocalApprovedRows([...localApprovedRows]);
+          pendingChanges.forEach((vote) =>
+            updateAllMembersRows(vote.id, "update")
+          );
+          afterCloseTransactionModal.current = () => {
+            setPendingChanges([]);
+          };
         } else {
           setTransactionErrorMessage(
             counterpart.translate(`field.errors.unable_transaction`)
@@ -228,48 +240,55 @@ export function useVoteTab({
       formAccountBalancesByName,
       localStorageAccount,
       getVotes,
-      localApprovedRows,
       setServerApprovedRows,
-      setLocalApprovedRows,
     ]
   );
 
-  const handleVoteSearch = useCallback(
-    (name: string) => {
-      setLoading(true);
-      setVoteSearchValue(name);
-      setLoading(false);
-    },
-    [setVoteSearchValue, setLoading]
-  );
-
   const sortVotesRows = useCallback((votes: VoteRow[]) => {
-    return votes.sort(
-      (a, b) => Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0])
-    );
+    const sorter = (a: VoteRow, b: VoteRow) =>
+      Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0]);
+    return votes.sort(sorter).map((vote, index) => {
+      return { ...vote, rank: index + 1 };
+    });
   }, []);
 
   const formVoteRow = useCallback(
     async (
       vote: Vote,
       votesIds: [string, string][],
-      action: "add" | "remove" | ""
+      action:
+        | "add"
+        | "remove"
+        | "pending add"
+        | "pending remove"
+        | "cancel"
+        | ""
     ): Promise<VoteRow> => {
       try {
+        const gpo: GlobalProperties = await dbApi("get_global_properties");
         if (defaultAsset !== undefined) {
           let voteType: VoteType;
+          let voteActive: boolean;
           switch (parseInt(vote.vote_id.charAt(0))) {
             case 0:
               voteType = "committees";
-              break;
-            case 1:
-              voteType = "witnesses";
+              voteActive =
+                gpo["active_committee_members"].indexOf(vote.id) >= 0
+                  ? true
+                  : false;
               break;
             case 3:
               voteType = "sons";
+              voteActive =
+                gpo.active_sons.find((son) => son.son_id === vote.id) !==
+                undefined
+                  ? true
+                  : false;
               break;
             default:
               voteType = "witnesses";
+              voteActive =
+                gpo["active_witnesses"].indexOf(vote.id) >= 0 ? true : false;
           }
           const name = votesIds.filter((voteId) => voteId[1] === vote.id)[0][0];
 
@@ -277,14 +296,18 @@ export function useVoteTab({
             defaultAsset.id,
             Number(vote.total_votes)
           );
+
           return {
             id: vote.vote_id,
             key: vote.vote_id,
+            rank: 0,
             type: voteType,
             name: name,
-            website: vote.url,
+            url: vote.url,
             votes: `${votesAsset.amount} ${votesAsset.symbol}`,
             action: action,
+            active: voteActive,
+            status: action === "remove" ? "approved" : "unapproved",
           } as VoteRow;
         } else {
           return {} as VoteRow;
@@ -302,7 +325,13 @@ export function useVoteTab({
       setLoading(true);
       const allMembersRows = await Promise.all(
         allMembers.map((member) => {
-          return formVoteRow(member, allMembersIds, "add");
+          return formVoteRow(
+            member,
+            allMembersIds,
+            fullAccount?.votes.some((vote) => vote.id === member.id)
+              ? "remove"
+              : "add"
+          );
         })
       );
       setAllMembersRows(sortVotesRows(allMembersRows));
@@ -312,7 +341,6 @@ export function useVoteTab({
         })
       );
       setServerApprovedRows(sortVotesRows([...serverApprovedRows]));
-      setLocalApprovedRows(sortVotesRows([...serverApprovedRows]));
       setLoading(false);
     } catch (e) {
       console.log(e);
@@ -327,129 +355,133 @@ export function useVoteTab({
     serverApprovedVotes,
     setServerApprovedRows,
     sortVotesRows,
-    setLocalApprovedRows,
   ]);
 
   const checkVotesChanged = useCallback(
-    (serverApprovedRows: VoteRow[], localApprovedRows: VoteRow[]) => {
-      const isVotesChanged = !isArrayEqual(
-        serverApprovedRows,
-        localApprovedRows
-      );
+    (serverApprovedRows: VoteRow[], pendingChanges: VoteRow[]) => {
+      const isVotesChanged = !isArrayEqual(serverApprovedRows, pendingChanges);
       setIsVotesChanged(isVotesChanged);
     },
     [setIsVotesChanged]
   );
 
-  const approveVote = useCallback(
+  const addChange = useCallback(
     (voteId: string) => {
-      if (localApprovedRows.find((vote) => vote.id === voteId) === undefined) {
+      if (pendingChanges.find((vote) => vote.id === voteId) === undefined) {
         const selectedRow = allMembersRows.find((vote) => vote.id === voteId);
         if (selectedRow !== undefined) {
-          setLocalApprovedRows(
+          updateAllMembersRows(voteId, "add");
+          setPendingChanges(
             sortVotesRows([
-              { ...selectedRow, action: "remove" },
-              ...localApprovedRows,
+              { ...selectedRow, action: "cancel" },
+              ...pendingChanges,
             ])
           );
           checkVotesChanged(serverApprovedRows, [
-            { ...selectedRow, action: "remove" } as VoteRow,
-            ...localApprovedRows,
+            { ...selectedRow, action: "cancel" } as VoteRow,
+            ...pendingChanges,
           ]);
         }
       }
     },
-    [
-      localApprovedRows,
-      allMembersRows,
-      setLocalApprovedRows,
-      checkVotesChanged,
-      tab,
-    ]
+    [allMembersRows, checkVotesChanged, tab, setPendingChanges, pendingChanges]
   );
 
-  const removeVote = useCallback(
+  const cancelChange = useCallback(
     (voteId: string) => {
-      if (localApprovedRows.find((vote) => vote.id === voteId) !== undefined) {
-        setLocalApprovedRows(
-          sortVotesRows(localApprovedRows.filter((vote) => vote.id !== voteId))
-        );
-        checkVotesChanged(
-          serverApprovedRows,
-          localApprovedRows.filter((vote) => vote.id !== voteId)
-        );
-      }
+      updateAllMembersRows(voteId, "cancel");
+      setPendingChanges(
+        sortVotesRows(pendingChanges.filter((vote) => vote.id !== voteId))
+      );
+      checkVotesChanged(
+        serverApprovedRows,
+        pendingChanges.filter((vote) => vote.id !== voteId)
+      );
     },
     [
-      localApprovedRows,
-      setLocalApprovedRows,
       sortVotesRows,
       checkVotesChanged,
       serverApprovedRows,
+      setPendingChanges,
+      pendingChanges,
     ]
   );
 
   const resetChanges = useCallback(() => {
-    setLocalApprovedRows([...serverApprovedRows]);
+    clearPendingActions();
+    setPendingChanges([]);
     setIsVotesChanged(false);
-  }, [serverApprovedRows, setLocalApprovedRows, setIsVotesChanged]);
+  }, [serverApprovedRows, setIsVotesChanged]);
 
-  const getWitnessSonCommitteeAccountByName = useCallback(
-    (name: string) => {
-      try {
-        const account: VoteRow | undefined = allMembersRows.find(
-          (account) => account.name == name
-        );
-        return account;
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    [allMembersRows]
-  );
-
-  const searchChange = useCallback(
-    (inputEvent: ChangeEvent<HTMLInputElement>) => {
-      setVoteSearchValue(inputEvent.target.value);
-
-      const account = getWitnessSonCommitteeAccountByName(
-        inputEvent.target.value
+  const updateAllMembersRows = useCallback(
+    (memberId: string, changeType: "add" | "cancel" | "update") => {
+      const newAllMembersRows = [...allMembersRows];
+      const selectedRow = allMembersRows.find((vote) => vote.id === memberId);
+      const selectedRowIndex = allMembersRows.findIndex(
+        (vote) => vote.id === memberId
       );
-      if (account) {
-        setSearchError(false);
-      } else {
-        setSearchError(true);
+      switch (changeType) {
+        case "add":
+          newAllMembersRows[selectedRowIndex].action =
+            selectedRow?.action === "add" ? "pending add" : "pending remove";
+          break;
+        case "cancel":
+          newAllMembersRows[selectedRowIndex].action =
+            selectedRow?.action === "pending add" ? "add" : "remove";
+          break;
+        case "update":
+          newAllMembersRows[selectedRowIndex].action =
+            selectedRow?.action === "pending add" ? "remove" : "add";
+          newAllMembersRows[selectedRowIndex].status =
+            selectedRow?.action === "remove" ? "approved" : "unapproved";
+          break;
       }
+      setAllMembersRows(newAllMembersRows);
     },
-    [
-      getAccountByName,
-      setSearchError,
-      setVoteSearchValue,
-      getWitnessSonCommitteeAccountByName,
-    ]
+    [allMembersRows, setAllMembersRows]
   );
+
+  const clearPendingActions = () => {
+    const updatedMembersRows = allMembersRows.map((row) => {
+      switch (row.action) {
+        case "pending remove":
+          row.action = "remove";
+          break;
+        case "pending add":
+          row.action = "add";
+          break;
+        default:
+          break;
+      }
+      return row;
+    });
+    setAllMembersRows(updatedMembersRows);
+  };
 
   useEffect(() => {
-    if (isArrayEqual(serverApprovedRows, localApprovedRows)) {
+    if (isArrayEqual(serverApprovedRows, pendingChanges)) {
       formTableRows();
     }
   }, [formTableRows]);
 
   useEffect(() => {
     getUpdateAccountFee();
-  }, [tab, localApprovedRows, allMembers, fullAccount]);
+  }, [tab, pendingChanges, allMembers, fullAccount]);
+
+  useEffect(() => {
+    if (afterCloseTransactionModal.current) {
+      afterCloseTransactionModal.current = undefined;
+    }
+  }, [pendingChanges]);
 
   return {
     name,
     loading,
     allMembersRows,
     serverApprovedRows,
-    localApprovedRows,
     isVotesChanged,
-    handleVoteSearch,
-    voteSearchValue,
-    approveVote,
-    removeVote,
+    addChange,
+    cancelChange,
     resetChanges,
     updateAccountFee,
     transactionErrorMessage,
@@ -458,7 +490,7 @@ export function useVoteTab({
     setTransactionSuccessMessage,
     handlePublishChanges,
     loadingTransaction,
-    searchChange,
-    searchError,
+    pendingChanges,
+    afterSuccessTransactionModalClose: afterCloseTransactionModal.current,
   };
 }
