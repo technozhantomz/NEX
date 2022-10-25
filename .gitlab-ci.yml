@@ -1,10 +1,10 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
 include:
   - template: Dependency-Scanning.gitlab-ci.yml
   - template: License-Scanning.gitlab-ci.yml
@@ -12,7 +12,6 @@ include:
   - template: Secret-Detection.gitlab-ci.yml
   - template: Container-Scanning.gitlab-ci.yml
   - template: DAST.gitlab-ci.yml
-
 
 variables:
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -34,15 +33,14 @@ build-qa:
     - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
     - npm install
-    - npm run build
-  only:
-    - tags
-    - branches
-    - merge_requests
+    - npm run build --debug
+    - cd .. && tar czf nex-qa.tar.gz NEX/
+    - cp nex-qa.tar.gz NEX/ && cd NEX
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   artifacts: 
     paths:
-    - .next/
-    - .env
+    - nex-qa.tar.gz
   tags:
     - build
 
@@ -57,14 +55,13 @@ build-production:
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env
     - npm install
     - npm run build
-  only:
-    - tags
-    - branches
-    - merge_requests
+    - cd .. && tar czf nex-prod.tar.gz NEX/
+    - cp nex-prod.tar.gz NEX/ && cd NEX
+  rules:
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   artifacts: 
     paths:
-    - .next/
-    - .env
+    - nex-prod.tar.gz
   tags:
     - staging
 
@@ -80,9 +77,8 @@ docker_build:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker build -f dev.Dockerfile -t $IMAGE .
     - docker push $IMAGE
-  only:
-    - branches
-    - merge_requests
+  rules:
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" 
 
 sonarcloud-check:
   stage: test
@@ -115,14 +111,13 @@ deploy_review:
   artifacts:
     paths:
       - environment_url.txt
-  only:
-    - merge_requests
-  except:
-    - main
+  rules:
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   tags:
     - deploy-review
 
 stop_review_app:
+  dependencies: [deploy_review]
   stage: deploy
   script: stop-review-app
   environment:
@@ -132,49 +127,55 @@ stop_review_app:
     - merge_requests
   except:
     - main
+  allow_failure: true  
+  when: manual
   tags:
     - deploy-review
-  when: manual
 
 deployToQA:
   stage: deploy
   dependencies: [build-qa]
   script: 
-    - pm2 del nex-QA || true
-    - npm install 
+    - rm -rf $PROD_DEPLOY_DIR/* || true
+    - tar -zxf nex-qa.tar.gz --directory $PROD_DEPLOY_DIR
+    - cd $PROD_DEPLOY_DIR && cd NEX
+    - pm2 del nex-QA || true 
     - pm2 start npm --name nex-QA -- run start
   environment:
     name: QA
     url: https://nex-cicd.peerplays.download
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
-  when: manual 
+  - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH =~ /^release/ || $CI_COMMIT_BRANCH =~ /^hot-fix/
+  when: always
   tags:
     - deploy
 
 deployToStaging:
   stage: deploy
   script: 
+    - rm -rf $PROD_DEPLOY_DIR/* || true
+    - tar -zxf nex-prod.tar.gz --directory $PROD_DEPLOY_DIR
+    - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-staging || true
-    - rm .env.example
-    - npm install
     - pm2 start npm --name nex-staging -- run start
   dependencies: [build-production]
   environment:
     name: staging
     url: https://nex-staging.peerplays.download
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
-  when: manual 
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
+    allow_failure: true
+    when: manual 
   tags:
     - staging
 
 deployToProduction:
   stage: deploy
   script: 
+    - rm -rf $PROD_DEPLOY_DIR/* || true
+    - tar -zxf nex-prod.tar.gz --directory $PROD_DEPLOY_DIR
+    - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex || true
-    - rm .env.example
-    - npm install
     - pm2 start npm --name nex -- run start
   dependencies: [build-production]
   environment:
@@ -188,20 +189,12 @@ deployToProduction:
 
 dast:
   stage: dast
-  before_script:
-    - if [ "$CI_COMMIT_REF_NAME" != "dev" ]; then export DAST_WEBSITE=$(cat environment_url.txt); else export DAST_WEBSITE=$DAST_WEBSITE; fi
+  #before_script:
+  #  - if [ "$CI_COMMIT_REF_NAME" != "dev" ]; then export DAST_WEBSITE=$(cat environment_url.txt); else export DAST_WEBSITE=$DAST_WEBSITE; fi
   artifacts:
     paths: 
       - gl-dast-report.json
   rules:
-  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    when: always
-  - if: '$CI_COMMIT_REF_NAME == "dev"'
-    when: always
-  - if: '$CI_COMMIT_REF_NAME == "main"'
-    when: always
-  - if: '$CI_COMMIT_REF_NAME != "develop"'
-    when: never
-  - if: '$CI_COMMIT_REF_NAME != "main"'
-    when: never
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
 
+  

@@ -27,7 +27,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [selectedAsset, setSelectedAsset] = useState<string>(asset);
   const [selectedAssetPrecission, _setSelectedAssetPrecission] =
     useState<number>(8);
-  const [feeAmount, setFeeAmount] = useState<number>(0);
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
@@ -130,14 +129,13 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       if (trx !== undefined) {
         const fee = await getTrxFee([trx]);
         if (fee !== undefined) {
-          setFeeAmount(fee);
           setWithdrawFee(fee);
         }
       }
     } catch (e) {
       console.log(e);
     }
-  }, [buildWithdrawFormTransaction, getTrxFee, setFeeAmount, setWithdrawFee]);
+  }, [buildWithdrawFormTransaction, getTrxFee, setWithdrawFee]);
 
   const handleWithdraw = async (signerKey: SignerKey) => {
     setTransactionErrorMessage("");
@@ -279,7 +277,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         )
       );
     }
-    if ((accountDefaultAsset.amount as number) < feeAmount) {
+    if ((accountDefaultAsset.amount as number) < withdrawFee) {
       return Promise.reject(
         new Error(
           counterpart.translate(`field.errors.balance_not_enough_to_pay`)
@@ -356,13 +354,24 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
           );
         } else {
           const pubkey = Buffer.from(withdrawPublicKey, "hex");
-          const { address } = bitcoin.payments.p2pkh({
-            pubkey,
-            network: NETWORK,
-          });
-          if (address !== value) {
+          try {
+            const { address } = bitcoin.payments.p2pkh({
+              pubkey,
+              network: NETWORK,
+            });
+            if (address !== value) {
+              return Promise.reject(
+                new Error(
+                  counterpart.translate(`field.errors.not_match_address`)
+                )
+              );
+            }
+          } catch (e) {
+            console.log(e);
             return Promise.reject(
-              new Error(counterpart.translate(`field.errors.not_match_address`))
+              new Error(
+                counterpart.translate(`field.errors.first_valid_public_key`)
+              )
             );
           }
         }
@@ -470,7 +479,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   }, [setSelectedAssetPrecission]);
 
   return {
-    feeAmount,
     withdrawForm,
     formValdation,
     handleValuesChange,

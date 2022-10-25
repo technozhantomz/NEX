@@ -25,6 +25,8 @@ const ChainStoreContext = createContext<ChainStoreContextType>(
   defaultChainStoreState
 );
 
+const OUT_OF_SYNC_LIMIT = 7;
+
 export const ChainStoreProvider = ({
   children,
   apiInstance,
@@ -71,7 +73,7 @@ export const ChainStoreProvider = ({
 
   const syncStatus: (setState?: boolean) => boolean = useCallback(
     (setState = true) => {
-      const _synced = getBlockTimeDelta() < 5;
+      const _synced = getBlockTimeDelta() < OUT_OF_SYNC_LIMIT;
       if (setState && _synced !== synced) {
         setSynced(_synced);
       }
@@ -144,7 +146,12 @@ export const ChainStoreProvider = ({
 
   return (
     <ChainStoreContext.Provider
-      value={{ synced, getBlockTimeDelta, rpcConnectionStatus }}
+      value={{
+        synced,
+        getBlockTimeDelta,
+        rpcConnectionStatus,
+        OUT_OF_SYNC_LIMIT,
+      }}
     >
       {syncFail ? <div>Sync error</div> : children}
     </ChainStoreContext.Provider>

@@ -1,4 +1,8 @@
 export const en = {
+  general: {
+    yes: "Yes",
+    no: "No",
+  },
   app_init: {
     check_latency: "Running latency checks...",
     check_latency_feedback:
@@ -16,6 +20,8 @@ export const en = {
     connecting: "Connecting to API server: %(server)s",
   },
   transaction: {
+    trade: "Trade",
+    transaction_type: "Transaction Type: ",
     feeTypes: {
       _none: "Free of Charge",
       basic_fee: "Basic Fee",
@@ -499,7 +505,7 @@ export const en = {
     market: "Market",
     generate_bitcoin_address: "Generate Bitcoin addresses",
     login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Addresses",
-    dont_have_peerplays_account: "Dont have a Peerplays account? ",
+    dont_have_peerplays_account: "Don't have a Peerplays account? ",
     log_in_withdraw: "Log in & Withdraw %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Log in & Deposit %(assetSymbol)s",
     send: "Send",
@@ -583,6 +589,16 @@ export const en = {
         transactions: "Transactions",
         block_information: "Block Information",
         witness: "Witness",
+      },
+      block_details: {
+        block_num: "Block Number",
+        witness: "Witness",
+        transactions: "Transactions",
+        block_id: "Block ID",
+        merkle_root: "Merkle Root",
+        previous_secret: "Previous Secret",
+        next_secret: "Next Secret",
+        witness_signature: "Witness Signature",
       },
       assets: {
         heading: "PeerPlays Assets",
@@ -690,6 +706,19 @@ export const en = {
       lower_case_witnesses: "witnesses",
       lower_case_sons: "sons",
       lower_case_committees: "committees",
+      status: {
+        approved: "Approved",
+        not_approved: "Not Approved",
+        pending_add: "voting to approve",
+        pending_remove: "voting to remove approval",
+      },
+      actions: {
+        add: "Add",
+        remove: "Remove",
+        cancel: "Cancel",
+        pending_add: "Pending Add",
+        pending_remove: "Pending Remove",
+      },
       gpos: {
         heading: "Gamified Proof of Stake (GPOS)",
         tab: "GPOS",
@@ -751,11 +780,11 @@ export const en = {
         },
       },
       sons: {
-        heading: "PeerPlays SONs Voting",
+        heading: "SONs",
         tab: "Sons",
       },
       witnesses: {
-        heading: "PeerPlays Witnesses Voting",
+        heading: "Witnesses",
         tab: "Witnesses",
       },
       proxy: {
@@ -763,7 +792,7 @@ export const en = {
         tab: "Proxy",
       },
       committees: {
-        heading: "PeerPlays Committees Voting",
+        heading: "Committees",
         tab: "Committees",
       },
     },
@@ -788,6 +817,7 @@ export const en = {
     mark_all_read: "Mark all as read",
     pdf: "PDF",
     csv: "CSV",
+    learn_more: "Learn More",
   },
   field: {
     options: {
@@ -796,8 +826,7 @@ export const en = {
     placeholder: {
       user_name: "Enter username",
       master_password: "Enter master password",
-      master_password_private_key:
-        "Master password or private key (We recommend using Whalevault web 3.0 wallet)",
+      master_password_private_key: "Master password or private key",
       withdraw_public_key: "Withdraw public key",
       withdraw_address: "Withdraw address",
       hive_blockchain_account: "Hive account",
@@ -816,6 +845,8 @@ export const en = {
       from: "From",
     },
     labels: {
+      swap_fee_info:
+        "In order to complete swap the following fees is applicable",
       generate_btc_deposit_address:
         "Generate a Bitcoin address so you can deposit BTC to your Peerplays account",
       deposit_btc:
@@ -847,7 +878,10 @@ export const en = {
       keep_password_safe: "Keep your password safe to avoid losing any funds. ",
       download_recovery_password: "Download Recovery password file here",
       select_language: "Select Language",
-      browser_notifications: "Browser Notifications",
+      ui_design: "UI Design",
+      allow_transfer_to_my_account: "Allow transfers to my account",
+      show_notifications: "Show Notifications",
+      select_notifications: "Select notifications",
       faucet: "Faucet",
       faucet_url: "Faucet URL: ",
       copy_url: "Copy URL",
@@ -889,8 +923,10 @@ export const en = {
       desired_committees: "Desired committees",
       desired_sons: "Desired sons",
       desired_proxy: "Desired Proxy",
+      pending_changes: "Pending changes",
       wallet_lock: "Wallet lock (Minutes)",
       use_whalevault: "Use WhaleVault extension",
+      unsaved_changes: "You have unsaved changes to your settings",
     },
     comments: {
       deposit_hbd:
@@ -903,8 +939,20 @@ export const en = {
       securely_saved_my_password: "I have securely saved my password",
       enable_notifications: "Enable Notifications",
       key_management_group: ["Owner", "Active", "Memo"],
+      funds_sent: "funds sent",
+      order_created: "order created",
+      order_filled: "order filled",
+      order_canceled: "order canceled",
+      order_expired: "order expired",
+      funds_received: "funds received",
+      account_upgrade: "account upgrade",
+      vesting_balance_create: "vesting balance create",
+      vesting_balance_withdraw: "vesting balance withdraw",
+      account_updated: "account updated",
     },
     errors: {
+      unable_to_create_account:
+        "Unable to create an account. Please try again later",
       invalid_bitcoin_public_key:
         "The public key is not valid for Bitcoin %(network)s",
       enter_amount: "Enter amount",
@@ -1036,6 +1084,7 @@ export const en = {
     total_votes: "Total Votes",
     url: "Url",
     operation: "Operation",
+    operations: "Operations",
     fee_type: "Fee Type",
     standard_fee: "Standard Fee",
     last_block: "Last Block",
@@ -1046,6 +1095,20 @@ export const en = {
     category: "Category",
     active: "Active",
     key: "key",
+    ref_block_prefix: "Ref block prefix",
+    ref_block_num: "Ref block #",
+    extensions: "Extensions",
+    status: "Status",
+  },
+  tableFilters: {
+    avtive: "Avtive",
+    inactive: "Inactive",
+    approved: "Approved",
+    not_approved: "Not Approved",
+    add: "Add",
+    remove: "Remove",
+    pending_add: "Pending Add",
+    pending_remove: "Pending Remove",
   },
   tooltips: {
     copy: "copy",
@@ -1053,5 +1116,12 @@ export const en = {
     mark_read: "mark as read",
     mark_unread: "mark as unread",
     swap_transaction_type: "Transaction Type : Swap",
+  },
+  file_content: {
+    btc_withdraw_account: "Bitcoin Withdraw Account",
+    btc_deposit_account: "Bitcoin Deposit Account",
+    btc_deposit_account_description:
+      "Used to create the above PeerPlays multi-signature deposit address",
+    peerplays_btc_deposit_address: "PeerPlays Deposit Address",
   },
 };

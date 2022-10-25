@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useActivity, useFormDate } from "../../../hooks";
 import { useViewportContext } from "../../../providers";
+import { ActivityRow } from "../../../types";
 
 import {
-  ActivityRow,
   UseActivityTableArgs,
   UseActivityTableResult,
 } from "./useActivityTable.types";

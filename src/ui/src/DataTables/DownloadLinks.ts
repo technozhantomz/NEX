@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-import { colors } from "../../../../ui/src/colors";
+import { colors } from "../colors";
 
-export const BlockchainDownloadLinks = styled.span`
+export const DataTableDownloadLinks = styled.span`
   .anticon-download {
     margin-right: 15px;
     height: 17px;
