@@ -5,16 +5,19 @@ import { colors } from "../../../../ui/src/colors";
 export const AssetActionButton = styled(UiButton)`
    {
     padding: 0px;
-    background-color: #e3ebf8;
+    background-color: ${colors.primaryColor};
+    color: ${colors.white};
     max-height: 35px;
     min-width: 90px;
+    font-size: 12px;
     &:hover,
     &:active {
-      background-color: ${colors.primaryColor};
+      background-color: #015ef4;
       color: ${colors.white};
     }
     ${breakpoint.sm} {
-      max-height: 25px;
+      min-height: 25px;
+      margin: 0px 15px;
     }
   }
 `;

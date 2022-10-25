@@ -51,7 +51,7 @@ export const AssetsTabColumns = (): {
         .map((asset) => asset.symbol)
         .includes(record.symbol);
       return (
-        <div>
+        <div style={{ display: "flex" }}>
           <AssetActionButton
             txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}
             href={`/wallet/${record.symbol}?tab=transfer`}
