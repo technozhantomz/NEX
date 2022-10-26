@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { KeyboardEvent, useState } from "react";
+import { useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import { utils } from "../../../../api/utils";
@@ -206,11 +206,7 @@ export const SwapTab = (): JSX.Element => {
               onFocus={(e) => {
                 e.target.select();
               }}
-              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e)) {
-                  e.preventDefault();
-                }
-              }}
+              onKeyPress={utils.ensureInputNumberValidity}
               autoComplete="off"
               disabled={!isLoggedIn}
               prefix={
@@ -241,11 +237,7 @@ export const SwapTab = (): JSX.Element => {
               onFocus={(e) => {
                 e.target.select();
               }}
-              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e)) {
-                  e.preventDefault();
-                }
-              }}
+              onKeyPress={utils.ensureInputNumberValidity}
               autoComplete="off"
               disabled={!isLoggedIn}
               prefix={

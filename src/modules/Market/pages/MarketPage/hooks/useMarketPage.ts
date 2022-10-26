@@ -9,12 +9,14 @@ import {
   useUpdateExchanges,
 } from "../../../../../common/hooks";
 import {
+  useChainStoreContext,
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
 import {
   Asset,
   BlockHeader,
+  Exchanges,
   History,
   LimitOrder,
   PairNameAndMarketStats,
@@ -37,15 +39,17 @@ type Props = {
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { historyApi, dbApi } = usePeerplaysApiContext();
   const { exchanges, updateExchanges } = useUpdateExchanges();
-  const { setPrecision, ceilPrecision } = useAsset();
+  const { setPrecision, ceilPrecision, getAssetsBySymbols } = useAsset();
   const { getFullAccount } = useAccount();
   const { id, localStorageAccount } = useUserContext();
   const { getAccountHistoryById } = useAccountHistory();
   const { getDefaultPairs, formPairStats } = useMarketPairStats();
   const { formLocalDate } = useFormDate();
+  const { synced } = useChainStoreContext();
   const [buyOrderForm] = Form.useForm<OrderForm>();
   const [sellOrderForm] = Form.useForm<OrderForm>();
 
+  const [previousPair, setPreviousPair] = useState<string>(exchanges.active);
   const [tradingPairsStats, setTradingPairsStats] = useState<
     PairNameAndMarketStats[]
   >([]);
@@ -81,7 +85,9 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     async (assets: string[]) => {
       try {
         setLoadingSelectedPair(true);
-        const [quote, base] = await dbApi("lookup_asset_symbols", [assets]);
+        const quoteBase = await getAssetsBySymbols(assets);
+        const quote = quoteBase[0];
+        const base = quoteBase[1];
         setCurrentBase(base as Asset);
         setCurrentQuote(quote as Asset);
         setLoadingSelectedPair(false);
@@ -90,11 +96,16 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         console.log(e);
       }
     },
-    [dbApi, setCurrentBase, setCurrentQuote, setLoadingSelectedPair]
+    [
+      setCurrentBase,
+      setCurrentQuote,
+      setLoadingSelectedPair,
+      getAssetsBySymbols,
+    ]
   );
 
   const getTradingPairsStats = useCallback(
-    async (exchanges) => {
+    async (exchanges: Exchanges) => {
       try {
         setLoadingTradingPairs(true);
         const initPairs: string[] =
@@ -113,9 +124,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       }
     },
     [
+      setLoadingTradingPairs,
+      getDefaultPairs,
       setTradingPairsStats,
       formPairStats,
-      setLoadingTradingPairs,
       pageLoaded,
       setPageLoaded,
     ]
@@ -220,7 +232,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         expiration,
       } as OrderRow;
     },
-    [setPrecision]
+    [setPrecision, ceilPrecision]
   );
 
   const getUserOrderBook = useCallback(
@@ -262,22 +274,13 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     ]
   );
 
-  const refreshOrderBook = useCallback(() => {
-    if (
-      !loadingSelectedPair &&
-      currentBase !== undefined &&
-      currentQuote !== undefined
-    ) {
-      getOrderBook(currentBase, currentQuote);
-      getUserOrderBook(currentBase, currentQuote);
-    }
-  }, [
-    loadingSelectedPair,
-    currentBase,
-    currentQuote,
-    getOrderBook,
-    getUserOrderBook,
-  ]);
+  const refreshOrderBook = useCallback(
+    async (currentBase: Asset, currentQuote: Asset) => {
+      await getOrderBook(currentBase, currentQuote);
+      await getUserOrderBook(currentBase, currentQuote);
+    },
+    [getOrderBook, getUserOrderBook]
+  );
 
   const formOrderHistoryRow = useCallback(
     (history: OrderHistory, base: Asset, quote: Asset): OrderHistoryRow => {
@@ -311,7 +314,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         isBuyOrder,
       } as OrderHistoryRow;
     },
-    [setPrecision]
+    [setPrecision, formLocalDate, ceilPrecision]
   );
 
   const getHistory = useCallback(
@@ -323,7 +326,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           [base.id, quote.id, 100]
         );
 
-        const filterMarketTaker = histories.reduce(
+        const marketTakersHistories = histories.reduce(
           (previousHistory, currentHistory, i, { [i - 1]: next }) => {
             if (i % 2) {
               previousHistory.push(
@@ -336,9 +339,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           },
           [] as OrderHistory[]
         );
-
         setOrderHistoryRows(
-          filterMarketTaker.map((history) => {
+          marketTakersHistories.map((history) => {
             return formOrderHistoryRow(history, base, quote);
           })
         );
@@ -403,7 +405,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
       return { key, price, base, quote, date, isBuyOrder };
     },
-    [dbApi, setPrecision]
+    [dbApi, setPrecision, ceilPrecision]
   );
 
   const getUserHistory = useCallback(
@@ -458,22 +460,13 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     ]
   );
 
-  const refreshHistory = useCallback(() => {
-    if (
-      !loadingSelectedPair &&
-      currentBase !== undefined &&
-      currentQuote !== undefined
-    ) {
-      getHistory(currentBase, currentQuote);
-      getUserHistory(currentBase, currentQuote);
-    }
-  }, [
-    loadingSelectedPair,
-    currentBase,
-    currentQuote,
-    getHistory,
-    getUserHistory,
-  ]);
+  const refreshHistory = useCallback(
+    async (currentBase: Asset, currentQuote: Asset) => {
+      await getHistory(currentBase, currentQuote);
+      await getUserHistory(currentBase, currentQuote);
+    },
+    [getHistory, getUserHistory]
+  );
 
   const onOrderBookRowClick = useCallback(
     (record: OrderRow) => {
@@ -494,18 +487,75 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     [buyOrderForm, sellOrderForm]
   );
 
-  useEffect(() => {
-    if (currentPair !== exchanges.active) {
-      updateExchanges(currentPair);
+  const unsubscribeFromMarket = useCallback(async () => {
+    const previousBaseSymbol = previousPair.split("_")[1];
+    const previousQuoteSymbol = previousPair.split("_")[0];
+    try {
+      await dbApi("unsubscribe_from_market", [
+        () => {
+          console.log("unsubscribing");
+        },
+        previousBaseSymbol,
+        previousQuoteSymbol,
+      ]);
+    } catch (e) {
+      console.log(e);
     }
-    getPairAssets(currentPair.split("_"));
-  }, [currentPair, getPairAssets, updateExchanges]);
+  }, [previousPair, dbApi]);
+
+  const subscribeToMarket = useCallback(async () => {
+    if (currentBase && currentQuote && synced) {
+      try {
+        await Promise.all([
+          getTradingPairsStats(exchanges),
+          refreshOrderBook(currentBase, currentQuote),
+          refreshHistory(currentBase, currentQuote),
+        ]);
+        await dbApi("subscribe_to_market", [
+          async () => {
+            try {
+              await Promise.all([
+                getTradingPairsStats(exchanges),
+                refreshOrderBook(currentBase, currentQuote),
+                refreshHistory(currentBase, currentQuote),
+              ]);
+            } catch (e) {
+              console.log(e);
+            }
+          },
+          currentBase.symbol,
+          currentQuote.symbol,
+        ]);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, [
+    currentBase,
+    currentQuote,
+    getTradingPairsStats,
+    exchanges,
+    refreshOrderBook,
+    refreshHistory,
+    dbApi,
+    synced,
+  ]);
 
   useEffect(() => {
-    if (exchanges) {
-      getTradingPairsStats(exchanges);
+    if (currentPair !== exchanges.active) {
+      setPreviousPair(exchanges.active);
+      updateExchanges(currentPair);
     }
-  }, [exchanges.list]);
+    // this one update currentBase and currentQuote
+    getPairAssets(currentPair.split("_"));
+  }, [currentPair, getPairAssets, updateExchanges, setPreviousPair]);
+
+  useEffect(() => {
+    subscribeToMarket();
+    return () => {
+      unsubscribeFromMarket();
+    };
+  }, [currentBase, currentQuote, id]);
 
   return {
     tradingPairsStats,
@@ -517,23 +567,17 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     setIsPairModalVisible,
     handleClickOnPair,
     exchanges,
-    getOrderBook,
     asks,
     bids,
     ordersRows,
     setOrdersRows,
     loadingOrderRows,
-    getUserOrderBook,
     userOrdersRows,
     loadingUserOrderRows,
-    refreshOrderBook,
-    getHistory,
     orderHistoryRows,
     loadingOrderHistoryRows,
-    getUserHistory,
     userOrderHistoryRows,
     loadingUserHistoryRows,
-    refreshHistory,
     buyOrderForm,
     sellOrderForm,
     onOrderBookRowClick,

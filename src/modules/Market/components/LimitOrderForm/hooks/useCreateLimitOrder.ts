@@ -24,8 +24,6 @@ export function useCreateLimitOrder({
   currentQuote,
   loadingSelectedPair,
   isBuyOrder,
-  refreshHistory,
-  refreshOrderBook,
   orderForm,
 }: UseCreateLimitOrderArgs): UseCreateLimitOrderResult {
   const [feeAmount, setFeeAmount] = useState<number>(0);
@@ -118,7 +116,7 @@ export function useCreateLimitOrder({
         }
       }
     },
-    [orderForm, currentBase, currentQuote, limitByPrecision]
+    [orderForm, currentBase, currentQuote]
   );
 
   const handleValuesChange = useCallback(
@@ -195,16 +193,12 @@ export function useCreateLimitOrder({
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
-        refreshOrderBook();
-        refreshHistory();
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
           counterpart.translate(`field.success.limit_order_successfully`)
         );
         setLoadingTransaction(false);
       } else {
-        refreshOrderBook();
-        refreshHistory();
         setTransactionErrorMessage(
           counterpart.translate(`field.errors.unable_transaction`)
         );
@@ -223,8 +217,6 @@ export function useCreateLimitOrder({
       setLoadingTransaction,
       localStorageAccount,
       formAccountBalancesByName,
-      refreshOrderBook,
-      refreshHistory,
       setTransactionSuccessMessage,
     ]
   );

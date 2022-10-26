@@ -17,13 +17,11 @@ type Props = {
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
   forUser?: boolean;
-  getOrderBook: (base: Asset, quote: Asset) => Promise<void>;
   asks: Order[];
   bids: Order[];
   ordersRows: OrderRow[];
   setOrdersRows: Dispatch<SetStateAction<OrderRow[]>>;
   loadingOrderRows: boolean;
-  getUserOrderBook: (base: Asset, quote: Asset) => Promise<void>;
   userOrdersRows: OrderRow[];
   loadingUserOrderRows: boolean;
   onOrderBookRowClick: (record: OrderRow) => void;
@@ -34,13 +32,11 @@ export const OrderBook = ({
   currentBase,
   currentQuote,
   loadingSelectedPair,
-  getOrderBook,
   asks,
   bids,
   ordersRows,
   setOrdersRows,
   loadingOrderRows,
-  getUserOrderBook,
   userOrdersRows,
   loadingUserOrderRows,
   onOrderBookRowClick,
@@ -64,11 +60,9 @@ export const OrderBook = ({
     currentBase,
     currentQuote,
     loadingSelectedPair,
-    getOrderBook,
     asks,
     bids,
     setOrdersRows,
-    getUserOrderBook,
   });
 
   const {

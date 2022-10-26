@@ -73,9 +73,11 @@ export function useVoting(): UseVotingResult {
       }
       let allMembers: Vote[] = [];
       let allMembersIds: [string, string][] = [];
-      const { committees, committeesIds } = await getCommittees();
-      const { sons, sonsIds } = await getSons();
-      const { witnesses, witnessesIds } = await getWitnesses();
+      const [
+        { committees, committeesIds },
+        { sons, sonsIds },
+        { witnesses, witnessesIds },
+      ] = await Promise.all([getCommittees(), getSons(), getWitnesses()]);
       allMembers = [...committees, ...sons, ...witnesses];
       allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
 

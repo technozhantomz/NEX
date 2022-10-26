@@ -15,7 +15,7 @@ export type UseTransferFormResult = {
   transfer: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   toAccount: Account | undefined;
-  amount: number;
+  amount: string;
   transferFee: number;
 };
 

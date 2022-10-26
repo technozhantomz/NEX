@@ -36,7 +36,7 @@ export const ChoiceModal = ({
     [hideModal]
   );
 
-  choices.map((choice, key) => {
+  choices.forEach((choice, key) => {
     footer.push(
       <Button
         type="primary"
@@ -65,7 +65,7 @@ export const ChoiceModal = ({
       footer={footer}
       centered={true}
     >
-      <div>{content && content}</div>
+      {content && <div>{content}</div>}
     </Styled.ChoiceModal>
   );
 };
