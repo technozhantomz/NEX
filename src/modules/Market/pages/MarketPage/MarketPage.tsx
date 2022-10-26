@@ -9,6 +9,7 @@ import {
   TradingPairCard,
 } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
+import { PairNameAndMarketStats } from "../../../../common/types";
 import { Col, Row } from "../../../../ui/src";
 import {
   LimitOrderForm,
@@ -36,23 +37,17 @@ const MarketPage: NextPage = () => {
     isPairModalVisible,
     setIsPairModalVisible,
     exchanges,
-    getOrderBook,
     asks,
     bids,
     ordersRows,
     setOrdersRows,
     loadingOrderRows,
-    getUserOrderBook,
     userOrdersRows,
     loadingUserOrderRows,
-    refreshOrderBook,
-    getHistory,
     orderHistoryRows,
     loadingOrderHistoryRows,
-    getUserHistory,
     userOrderHistoryRows,
     loadingUserHistoryRows,
-    refreshHistory,
     buyOrderForm,
     sellOrderForm,
     onOrderBookRowClick,
@@ -97,28 +92,36 @@ const MarketPage: NextPage = () => {
                   <PairSelect
                     handleClickOnPair={handleClickOnPair}
                     currentPair={pair as string}
-                    currentBase={currentBase}
-                    currentQuote={currentQuote}
-                    loadingSelectedPair={loadingSelectedPair}
+                    currentPairStats={
+                      tradingPairsStats.find(
+                        (stats) =>
+                          stats.tradingPair ===
+                          (pair as string).replace("_", "/")
+                      ) ||
+                      ({
+                        tradingPair: (pair as string).replace("_", "/"),
+                        marketPairStats: {
+                          latest: "0",
+                          percentChange: "0",
+                          volume: "0",
+                        },
+                      } as PairNameAndMarketStats)
+                    }
                     showStats={false}
                   />
                   <OrderTabs
                     currentBase={currentBase}
                     currentQuote={currentQuote}
                     loadingSelectedPair={loadingSelectedPair}
-                    getOrderBook={getOrderBook}
                     asks={asks}
                     bids={bids}
                     ordersRows={ordersRows}
                     setOrdersRows={setOrdersRows}
                     loadingOrderRows={loadingOrderRows}
-                    getUserOrderBook={getUserOrderBook}
                     userOrdersRows={userOrdersRows}
                     loadingUserOrderRows={loadingUserOrderRows}
-                    getHistory={getHistory}
                     orderHistoryRows={orderHistoryRows}
                     loadingOrderHistoryRows={loadingOrderHistoryRows}
-                    getUserHistory={getUserHistory}
                     userOrderHistoryRows={userOrderHistoryRows}
                     loadingUserHistoryRows={loadingUserHistoryRows}
                     onOrderBookRowClick={onOrderBookRowClick}
@@ -133,19 +136,15 @@ const MarketPage: NextPage = () => {
                   currentQuote={currentQuote}
                   loadingSelectedPair={loadingSelectedPair}
                   forUser={true}
-                  getOrderBook={getOrderBook}
                   asks={asks}
                   bids={bids}
                   ordersRows={ordersRows}
                   setOrdersRows={setOrdersRows}
                   loadingOrderRows={loadingOrderRows}
-                  getUserOrderBook={getUserOrderBook}
                   userOrdersRows={userOrdersRows}
                   loadingUserOrderRows={loadingUserOrderRows}
-                  getHistory={getHistory}
                   orderHistoryRows={orderHistoryRows}
                   loadingOrderHistoryRows={loadingOrderHistoryRows}
-                  getUserHistory={getUserHistory}
                   userOrderHistoryRows={userOrderHistoryRows}
                   loadingUserHistoryRows={loadingUserHistoryRows}
                   onOrderBookRowClick={onOrderBookRowClick}
@@ -162,8 +161,6 @@ const MarketPage: NextPage = () => {
                       currentQuote={currentQuote}
                       loadingSelectedPair={loadingSelectedPair}
                       isBuyOrder={true}
-                      refreshOrderBook={refreshOrderBook}
-                      refreshHistory={refreshHistory}
                       showTitle={false}
                       orderForm={buyOrderForm}
                     />
@@ -175,8 +172,6 @@ const MarketPage: NextPage = () => {
                       currentQuote={currentQuote}
                       loadingSelectedPair={loadingSelectedPair}
                       isBuyOrder={false}
-                      refreshOrderBook={refreshOrderBook}
-                      refreshHistory={refreshHistory}
                       showTitle={false}
                       orderForm={sellOrderForm}
                     />
@@ -200,27 +195,34 @@ const MarketPage: NextPage = () => {
                 <PairSelect
                   handleClickOnPair={handleClickOnPair}
                   currentPair={pair as string}
-                  currentBase={currentBase}
-                  currentQuote={currentQuote}
-                  loadingSelectedPair={loadingSelectedPair}
+                  currentPairStats={
+                    tradingPairsStats.find(
+                      (stats) =>
+                        stats.tradingPair === (pair as string).replace("_", "/")
+                    ) ||
+                    ({
+                      tradingPair: (pair as string).replace("_", "/"),
+                      marketPairStats: {
+                        latest: "0",
+                        percentChange: "0",
+                        volume: "0",
+                      },
+                    } as PairNameAndMarketStats)
+                  }
                 />
                 <OrderTabs
                   currentBase={currentBase}
                   currentQuote={currentQuote}
                   loadingSelectedPair={loadingSelectedPair}
-                  getOrderBook={getOrderBook}
                   asks={asks}
                   bids={bids}
                   ordersRows={ordersRows}
                   setOrdersRows={setOrdersRows}
                   loadingOrderRows={loadingOrderRows}
-                  getUserOrderBook={getUserOrderBook}
                   userOrdersRows={userOrdersRows}
                   loadingUserOrderRows={loadingUserOrderRows}
-                  getHistory={getHistory}
                   orderHistoryRows={orderHistoryRows}
                   loadingOrderHistoryRows={loadingOrderHistoryRows}
-                  getUserHistory={getUserHistory}
                   userOrderHistoryRows={userOrderHistoryRows}
                   loadingUserHistoryRows={loadingUserHistoryRows}
                   onOrderBookRowClick={onOrderBookRowClick}
@@ -249,8 +251,6 @@ const MarketPage: NextPage = () => {
                     currentQuote={currentQuote}
                     loadingSelectedPair={loadingSelectedPair}
                     isBuyOrder={true}
-                    refreshOrderBook={refreshOrderBook}
-                    refreshHistory={refreshHistory}
                     orderForm={buyOrderForm}
                   />
                 </Col>
@@ -261,8 +261,6 @@ const MarketPage: NextPage = () => {
                     currentQuote={currentQuote}
                     loadingSelectedPair={loadingSelectedPair}
                     isBuyOrder={false}
-                    refreshOrderBook={refreshOrderBook}
-                    refreshHistory={refreshHistory}
                     orderForm={sellOrderForm}
                   />
                 </Col>
@@ -273,19 +271,15 @@ const MarketPage: NextPage = () => {
                   currentQuote={currentQuote}
                   loadingSelectedPair={loadingSelectedPair}
                   forUser={true}
-                  getOrderBook={getOrderBook}
                   asks={asks}
                   bids={bids}
                   ordersRows={ordersRows}
                   setOrdersRows={setOrdersRows}
                   loadingOrderRows={loadingOrderRows}
-                  getUserOrderBook={getUserOrderBook}
                   userOrdersRows={userOrdersRows}
                   loadingUserOrderRows={loadingUserOrderRows}
-                  getHistory={getHistory}
                   orderHistoryRows={orderHistoryRows}
                   loadingOrderHistoryRows={loadingOrderHistoryRows}
-                  getUserHistory={getUserHistory}
                   userOrderHistoryRows={userOrderHistoryRows}
                   loadingUserHistoryRows={loadingUserHistoryRows}
                   onOrderBookRowClick={onOrderBookRowClick}

@@ -293,11 +293,11 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
    * @returns list of strings or list of ApiServers
    */
   const getNodesToConnectTo: (
-    all?: boolean,
     latenciesMap?: ApiLatencies,
+    all?: boolean,
     keepObject?: boolean
   ) => ApiServer[] | string[] = useCallback(
-    (all = false, latenciesMap, keepObject = false) => {
+    (latenciesMap, all = false, keepObject = false) => {
       const nodeList = getNodes(latenciesMap, !all); // drop location, only urls in list
       if (!keepObject) {
         const urls = nodeList.map((apiServer) => apiServer.node.url);
@@ -326,7 +326,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
       if (!tryThisNode) {
         // something went horribly wrong, no node to connect to
-        throw "No node to connect to found, this should not happen.";
+        throw new Error("No node to connect to found, this should not happen.");
       }
 
       // ... if insecure websocket url is used when using secure protocol
@@ -341,7 +341,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
   const initConnectionManager: (urls?: string[]) => void = useCallback(
     (urls) => {
       if (!urls) {
-        urls = getNodesToConnectTo(true) as string[];
+        urls = getNodesToConnectTo(undefined, true) as string[];
       }
       // decide where to connect to first
       const connectionString = getFirstToTry(urls);
@@ -502,8 +502,9 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   const runCheck = useCallback(async () => {
     const latencyPromises: Promise<number | undefined>[] = [];
-    for (let i = 0; i < directPingerUrls.current.length; i++) {
-      const latencyPromise = checkURL(directPingerUrls.current[i].url);
+
+    for (const directPingerUrl of directPingerUrls.current) {
+      const latencyPromise = checkURL(directPingerUrl.url);
       latencyPromises.push(latencyPromise);
     }
 
@@ -967,8 +968,8 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         initConnectionManager();
       }
       const nodeList = getNodesToConnectTo(
-        true,
         undefined,
+        true,
         true
       ) as ApiServer[];
       pingerStrategyNodesList.current = nodeList;
@@ -984,8 +985,8 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       function donePinging() {
         // resort the api nodes with the new pings
         const apiServers = getNodesToConnectTo(
-          false,
           undefined,
+          false,
           true
         ) as ApiServer[];
         connectionManager.current.urls = apiServers.map((a) => a.node.url);
@@ -1017,8 +1018,8 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
               enableBackgroundPinging();
               pingNodes(() => {
                 const _nodes = getNodesToConnectTo(
-                  false,
                   undefined,
+                  false,
                   true
                 ) as ApiServer[];
                 connectionManager.current.urls = _nodes.map((a) => a.node.url);
@@ -1075,7 +1076,6 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
       return;
     }
     connectInProgress.current = true;
-    // this.updateTransitionTarget(counterpart.translate("app_init.database"));
     const _apiInstance = (Apis as ApisType).instance();
     if (_apiInstance) {
       let currentUrl = _apiInstance.ws_rpc?.ws.url as string;
@@ -1158,7 +1158,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
 
   const attemptReconnect = useCallback(async () => {
     oldChain.current = "old";
-    const apiInstance = await (Apis as ApisType).reset(
+    const apiInstance = (Apis as ApisType).reset(
       connectionManager.current.url,
       true,
       undefined
@@ -1261,7 +1261,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         }
       }
 
-      const urls = getNodesToConnectTo(false, _apiLatencies) as string[];
+      const urls = getNodesToConnectTo(_apiLatencies, false) as string[];
       const selectedNode = getSelectedNode();
 
       // set auto selection flag

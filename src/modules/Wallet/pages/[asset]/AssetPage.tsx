@@ -49,7 +49,7 @@ const AssetPage: NextPage = () => {
   const { sm } = useViewportContext();
 
   const isSidechainAsset = sidechainAssets
-    .map((sideAsset) => sideAsset.symbol)
+    .map((sideAsset) => sideAsset?.symbol)
     .includes(asset as string);
 
   const sidechainAssetsTabBarItems = [
@@ -148,9 +148,7 @@ const AssetPage: NextPage = () => {
             counterpart.translate(`field.labels.deposit_btc`)
           )}
           <DownloadBitcoinKeys
-            bitcoinSidechainAccount={
-              bitcoinSidechainAccount as SidechainAcccount
-            }
+            bitcoinSidechainAccount={bitcoinSidechainAccount}
             getSidechainAccounts={getSidechainAccounts}
           />
         </>
