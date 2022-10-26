@@ -51,14 +51,14 @@ export function useCommitteeTab(): UseCommitteeTabResult {
                 name: committeesIds.filter(
                   (committeeId) => committeeId[1] === committee.id
                 )[0][0],
-                active: (votesAsset.amount as number) > 0 ? true : false,
+                active: (votesAsset?.amount as number) > 0 ? true : false,
                 url: committee.url,
-                totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+                totalVotes: `${votesAsset?.amount} ${votesAsset?.symbol}`,
               } as CommitteeTableRow;
             })
           );
           const activeCommittee = committeeRows.filter(
-            (committee) => committee.active == true
+            (committee) => committee.active
           );
           setCommitteeTableRows(committeeRows);
           setSearchDataSource(committeeRows);

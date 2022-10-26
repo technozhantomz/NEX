@@ -18,6 +18,18 @@ export const ru = {
     check_latency_feedback_world:
       "Проверка задержки в каждом регионе (узлы %(pinged)s/%(totalToPing)s)",
     connecting: "Подключение к серверу API: %(server)s",
+    sync_error: {
+      title: "Не удалось синхронизироваться с сервером API",
+      first_description:
+        "Пожалуйста, убедитесь, что часы вашего компьютера верны",
+      second_description: "После синхронизации часов обновите эту страницу.",
+    },
+    connection_error: {
+      title: "Проблема с инициализацией приложения",
+      first_description: "Скоро: ручной выбор узла и добавление личного узла",
+      second_description:
+        "Пожалуйста, проверьте подключение и обновите страницу",
+    },
   },
   transaction: {
     trade: "Торговля",
@@ -912,6 +924,8 @@ export const ru = {
       account_updated: "аккаунт обновлен",
     },
     errors: {
+      loading_sidechain_accounts:
+        "Подождите, пока загрузятся сайдчейн-аккаунты.",
       unable_to_create_account:
         "Невозможно создать учетную запись. Пожалуйста, попробуйте позже",
       enter_amount: "Введите сумму",

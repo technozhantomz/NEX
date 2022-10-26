@@ -24,22 +24,18 @@ type Args = {
   currentBase: Asset | undefined;
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
-  getOrderBook: (base: Asset, quote: Asset) => Promise<void>;
   asks: Order[];
   bids: Order[];
   setOrdersRows: Dispatch<SetStateAction<OrderRow[]>>;
-  getUserOrderBook: (base: Asset, quote: Asset) => Promise<void>;
 };
 
 export function useOrderBook({
   currentBase,
   currentQuote,
   loadingSelectedPair,
-  getOrderBook,
   asks,
   bids,
   setOrdersRows,
-  getUserOrderBook,
 }: Args): UseOrderBookResult {
   const [cancelOrderfeeAmount, setCancelOrderfeeAmount] = useState<number>(0);
   const [orderType, setOrderType] = useState<OrderType>("total");
@@ -191,7 +187,6 @@ export function useOrderBook({
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
-        getUserOrderBook(currentBase as Asset, currentQuote as Asset);
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
           counterpart.translate(`field.success.canceled_limit_order`, {
@@ -215,7 +210,6 @@ export function useOrderBook({
       buildTrx,
       formAccountBalancesByName,
       localStorageAccount,
-      getUserOrderBook,
       currentBase,
       currentQuote,
     ]
@@ -244,19 +238,8 @@ export function useOrderBook({
           key: "base",
         },
       ]);
-      getOrderBook(currentBase, currentQuote);
-
-      // user section
-      getUserOrderBook(currentBase, currentQuote);
     }
-  }, [
-    loadingSelectedPair,
-    currentBase,
-    currentQuote,
-    getOrderBook,
-    getUserOrderBook,
-    setOrderColumns,
-  ]);
+  }, [loadingSelectedPair, currentBase, currentQuote, setOrderColumns]);
 
   useEffect(() => {
     selectOrdersForThresholdAndFilter();

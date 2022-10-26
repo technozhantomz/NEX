@@ -26,7 +26,7 @@ export function useTransferForm(): UseTransferFormResult {
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<string>("0");
   const { getAccountByName, formAccountBalancesByName } = useAccount();
 
   const { limitByPrecision } = useAsset();
@@ -173,7 +173,7 @@ export function useTransferForm(): UseTransferFormResult {
     const selectedAccountAsset = assets.find(
       (asset) => asset.symbol === selectedAsset
     );
-    setAmount(Number(value));
+    setAmount(value);
 
     if (Number(value) <= 0) {
       return Promise.reject(

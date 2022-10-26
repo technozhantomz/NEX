@@ -14,7 +14,7 @@ import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { getAllAssets, getAssetBySymbol, limitByPrecision } = useAsset();
+  const { getAllAssets, getAssetsBySymbols, limitByPrecision } = useAsset();
 
   const getMarketPairStats = useCallback(
     async (base: Asset, quote: Asset) => {
@@ -86,14 +86,15 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
       console.log(e);
       return pairs;
     }
-  }, [defaultToken, dbApi]);
+  }, [defaultToken, getAllAssets]);
 
   const formPairStats = useCallback(
     async (pair: string): Promise<PairNameAndMarketStats> => {
       const quoteSymbol = pair.split("/")[0].trim();
       const baseSymbol = pair.split("/")[1].trim();
-      const quote = await getAssetBySymbol(quoteSymbol);
-      const base = await getAssetBySymbol(baseSymbol);
+      const quoteBase = await getAssetsBySymbols([quoteSymbol, baseSymbol]);
+      const quote = quoteBase[0];
+      const base = quoteBase[1];
       if (base && quote) {
         const marketPairStats = await getMarketPairStats(base, quote);
         return {
@@ -111,7 +112,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         } as PairNameAndMarketStats;
       }
     },
-    [getAssetBySymbol, getMarketPairStats]
+    [getAssetsBySymbols]
   );
 
   return {

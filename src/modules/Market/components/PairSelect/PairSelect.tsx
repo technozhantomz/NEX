@@ -1,16 +1,13 @@
 import counterpart from "counterpart";
 
-import { Asset } from "../../../../common/types";
+import { PairNameAndMarketStats } from "../../../../common/types";
 import { Col, DownOutlined, Row } from "../../../../ui/src";
 
 import * as Styled from "./PairSelect.styled";
-import { usePairStats } from "./hooks";
 
 type Props = {
   currentPair: string;
-  currentBase: Asset | undefined;
-  currentQuote: Asset | undefined;
-  loadingSelectedPair: boolean;
+  currentPairStats: PairNameAndMarketStats;
   showStats?: boolean;
   handleClickOnPair: () => void;
 };
@@ -18,17 +15,9 @@ type Props = {
 export const PairSelect = ({
   handleClickOnPair,
   currentPair,
-  currentBase,
-  currentQuote,
-  loadingSelectedPair,
+  currentPairStats,
   showStats = true,
 }: Props): JSX.Element => {
-  const { latest, change, volume } = usePairStats({
-    currentBase,
-    currentQuote,
-    loadingAssets: loadingSelectedPair,
-  });
-
   return (
     <Styled.PairSelectContainer>
       <Styled.PairButtonRow>
@@ -40,7 +29,7 @@ export const PairSelect = ({
         <Row>
           <Col span={10}>
             <Styled.ColumnFlex>
-              <span>{latest}</span>
+              <span>{currentPairStats.marketPairStats.latest}</span>
               <Styled.PairInfoLabel>
                 {counterpart.translate(`tableHead.current_price`)}
               </Styled.PairInfoLabel>
@@ -48,7 +37,7 @@ export const PairSelect = ({
           </Col>
           <Col span={7}>
             <Styled.ColumnFlex>
-              <span>{change}%</span>
+              <span>{currentPairStats.marketPairStats.percentChange}%</span>
               <Styled.PairInfoLabel>
                 {counterpart.translate(`tableHead.market_change`)}
               </Styled.PairInfoLabel>
@@ -56,7 +45,7 @@ export const PairSelect = ({
           </Col>
           <Col span={7}>
             <Styled.ColumnFlex>
-              <span>{volume}</span>
+              <span>{currentPairStats.marketPairStats.volume}</span>
               <Styled.PairInfoLabel>
                 {counterpart.translate(`tableHead.volume`)}
               </Styled.PairInfoLabel>

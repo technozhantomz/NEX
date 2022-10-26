@@ -15,7 +15,11 @@ import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
-import { GlobalProperties, SignerKey } from "../../../../../common/types";
+import {
+  FullAccount,
+  GlobalProperties,
+  SignerKey,
+} from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 
 import { UseMembershipTabResult } from "./useMembershipTab.types";
@@ -57,8 +61,12 @@ export function useMembershipTab(): UseMembershipTabResult {
   const getAccountMembership = useCallback(async () => {
     try {
       setLoadingAccountMembership(true);
-      const fullAccount = await getFullAccount(name, false);
-      const gpo: GlobalProperties = await dbApi("get_global_properties");
+
+      const [fullAccount, gpo]: [FullAccount | undefined, GlobalProperties] =
+        await Promise.all([
+          getFullAccount(name, false),
+          dbApi("get_global_properties"),
+        ]);
       if (fullAccount && defaultAsset) {
         let expirationDate = fullAccount.account.membership_expiration_date;
         if (expirationDate === "1970-01-01T00:00:00") {

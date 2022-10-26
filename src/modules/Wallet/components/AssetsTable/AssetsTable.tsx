@@ -72,7 +72,7 @@ export const AssetsTable = ({
       key: "withdraw",
       render: (_value: any, record: any) => {
         const hasWithdraw = sidechainAssets
-          .map((asset) => asset.symbol)
+          .map((asset) => asset?.symbol)
           .includes(record.asset);
         if (hasWithdraw) {
           return (
@@ -92,7 +92,7 @@ export const AssetsTable = ({
       key: "deposit",
       render: (_value: any, record: any) => {
         const hasDeposit = sidechainAssets
-          .map((asset) => asset.symbol)
+          .map((asset) => asset?.symbol)
           .includes(record.asset);
         if (hasDeposit) {
           return (
@@ -107,7 +107,7 @@ export const AssetsTable = ({
   ];
 
   const renderAssetsActions = (item: IAssetRow) => {
-    if (sidechainAssets.map((asset) => asset.symbol).includes(item.asset)) {
+    if (sidechainAssets.map((asset) => asset?.symbol).includes(item.asset)) {
       return [
         <AssetActionButton
           txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}

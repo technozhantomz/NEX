@@ -19,7 +19,7 @@ const GPOSPage: NextPage = () => {
   const {
     gposBalances,
     loading,
-    getGposInfo,
+    calculateGposBalances,
     isMobileDropdownvisible,
     setIsMobileDropdownvisible,
   } = useGposPage();
@@ -98,7 +98,7 @@ const GPOSPage: NextPage = () => {
             <PowerUpTab
               gposBalances={gposBalances}
               loading={loading}
-              getGposInfo={getGposInfo}
+              calculateGposBalances={calculateGposBalances}
             />
           </TabPane>
           <TabPane
@@ -108,7 +108,7 @@ const GPOSPage: NextPage = () => {
             <PowerDownTab
               gposBalances={gposBalances}
               loading={loading}
-              getGposInfo={getGposInfo}
+              calculateGposBalances={calculateGposBalances}
             />
           </TabPane>
           <TabPane
