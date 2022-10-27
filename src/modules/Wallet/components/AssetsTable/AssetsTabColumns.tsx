@@ -46,7 +46,7 @@ export const AssetsTabColumns = (): {
     undefined,
     undefined,
     undefined,
-    (_value: any, record: any) => {
+    (_value: any, record: IAssetRow) => {
       const hasWithdrawAndDeposit = sidechainAssets
         .map((asset) => asset.symbol)
         .includes(record.symbol);
@@ -82,7 +82,7 @@ export const AssetsTabColumns = (): {
     undefined,
   ];
   const filterModes = [
-    undefined,
+    "menu",
     undefined,
     undefined,
     undefined,
@@ -90,7 +90,7 @@ export const AssetsTabColumns = (): {
     undefined,
   ];
   const filterSearch = [
-    undefined,
+    true,
     undefined,
     undefined,
     undefined,
@@ -98,7 +98,8 @@ export const AssetsTabColumns = (): {
     undefined,
   ];
   const onFilters = [
-    undefined,
+    (value: string, record: IAssetRow): boolean =>
+      record.symbol.includes(value),
     undefined,
     undefined,
     undefined,
