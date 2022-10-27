@@ -1,5 +1,5 @@
 import { TableHeading } from "../../../../../../common/components";
-import { TransactionRow } from "../../../BlockchainTab/hooks/useBlockchainTab.types";
+// import { TransactionRow } from "../../../BlockchainTab/hooks/useBlockchainTab.types";
 
 import * as Styled from "./TransactionsTable.styled";
 
@@ -10,7 +10,7 @@ export const TransactionsColumns = (
   dataIndex: string;
   key: string;
   render:
-    | ((id: string, record: TransactionRow) => JSX.Element)
+    | ((rank: number) => JSX.Element) // | ((id: string, record: TransactionRow) => JSX.Element)
     | ((expiration: string) => JSX.Element)
     | ((operations: unknown[]) => JSX.Element)
     | ((extensions: unknown[]) => JSX.Element)
@@ -47,7 +47,11 @@ export const TransactionsColumns = (
     "extensions",
   ];
   const renders = [
-    undefined,
+    (rank: number): JSX.Element => (
+      <a target="_blank" href={`/blockchain/${block}/${rank}`}>
+        {rank}
+      </a>
+    ),
     // (id: string, record: TransactionRow): JSX.Element => (
     //   <a target="_blank" href={`/blockchain/${block}/${record.rank}`}>
     //     <Styled.CenterEllipsis>

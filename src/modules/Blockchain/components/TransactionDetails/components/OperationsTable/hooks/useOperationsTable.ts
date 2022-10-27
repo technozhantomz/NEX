@@ -29,7 +29,7 @@ export function useOperationsTable(
               const feeAsset = await getAssetById(
                 operationDetails.fee.asset_id
               );
-              const fees = `${operationDetails.fee.amount} ${feeAsset.symbol}`;
+              const fees = `${operationDetails.fee.amount} ${feeAsset?.symbol}`;
               return {
                 key: index + 1,
                 number: index + 1,

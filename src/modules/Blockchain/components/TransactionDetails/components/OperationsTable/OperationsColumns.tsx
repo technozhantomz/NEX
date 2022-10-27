@@ -34,7 +34,7 @@ export const OperationsColumns = headings.map((heading, index) => {
   return {
     title:
       heading === ""
-        ? ""
+        ? (): JSX.Element => <></>
         : (): JSX.Element => <TableHeading heading={heading} />,
     dataIndex: keys[index],
     key: keys[index],
