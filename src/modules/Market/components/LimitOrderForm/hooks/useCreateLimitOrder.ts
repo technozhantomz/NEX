@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
-  roundNum,
   useAccount,
   useAsset,
   useFees,
@@ -43,7 +42,7 @@ export function useCreateLimitOrder({
   const { localStorageAccount, assets, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
   const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
-  const { limitByPrecision } = useAsset();
+  const { limitByPrecision, roundNum } = useAsset();
 
   const handleFieldAssetPrecission = useCallback(
     (fieldValue: number, fieldName: string, assetPrecission: number) => {

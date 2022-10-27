@@ -206,8 +206,8 @@ export const SwapTab = (): JSX.Element => {
               onFocus={(e) => {
                 e.target.select();
               }}
-              onKeyPress={utils.ensureInputNumberValidity}
               autoComplete="off"
+              onKeyPress={utils.ensureInputNumberValidity}
               disabled={!isLoggedIn}
               prefix={
                 <Styled.AssetSelectContainer>

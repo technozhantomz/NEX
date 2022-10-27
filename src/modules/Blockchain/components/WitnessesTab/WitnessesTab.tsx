@@ -205,6 +205,7 @@ export const WitnessesTab = (): JSX.Element => {
           pagination={
             !loading
               ? {
+                  hideOnSinglePage: true,
                   showSizeChanger: false,
                   size: "small",
                   pageSize: 15,

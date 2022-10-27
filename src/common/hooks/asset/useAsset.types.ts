@@ -19,4 +19,5 @@ export type UseAssetResult = {
     precision?: number | undefined
   ) => string;
   getAssetsBySymbols: (symbols: string[]) => Promise<(Asset | undefined)[]>;
+  roundNum: (num: string | number, roundTo?: number) => string;
 };
