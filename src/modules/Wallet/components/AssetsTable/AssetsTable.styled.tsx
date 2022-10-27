@@ -1,4 +1,9 @@
-import { styled, List as UiList, Table as UiTable } from "../../../../ui/src";
+import {
+  styled,
+  List as UiList,
+  PrintTable as UiPrintTable,
+  Table as UiTable,
+} from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
 export const AssetsTable = styled(UiTable)`
@@ -66,3 +71,5 @@ export const DownloadLinks = styled.span`
 export const AssetHeader = styled.h3`
   margin-right: 25px;
 `;
+
+export const PrintTable = styled(UiPrintTable)``;

@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { CSSProperties, ReactNode } from "react";
+import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
@@ -27,6 +27,7 @@ export const AssetsTable = ({
   const { tableAssets, loading, assetsTabColumns } = useAssetsTable();
   const { sm } = useViewportContext();
   const { sidechainAssets } = useAssetsContext();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   const columns = [
     {
@@ -147,12 +148,12 @@ export const AssetsTable = ({
           <DownloadOutlined />
           <ReactToPrint
             trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => <p></p>}
+            content={() => componentRef.current as unknown as ReactInstance}
           />
           {` / `}
           <CSVLink
-            filename={"FeesTable.csv"}
-            data={""}
+            filename={"AssetsTable.csv"}
+            data={tableAssets}
             className="btn btn-primary"
           >
             {counterpart.translate(`links.csv`)}
@@ -253,6 +254,17 @@ export const AssetsTable = ({
           size="small"
         />
       )}
+
+      <Styled.PrintTable>
+        <div ref={componentRef}>
+          <Styled.AssetsTable
+            dataSource={tableAssets}
+            columns={assetsTabColumns}
+            loading={loading}
+            pagination={false}
+          />
+        </div>
+      </Styled.PrintTable>
     </>
   );
 };
