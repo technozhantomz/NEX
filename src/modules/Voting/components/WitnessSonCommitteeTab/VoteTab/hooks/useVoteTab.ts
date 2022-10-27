@@ -29,10 +29,10 @@ import { UseVoteTabResult } from "./useVoteTab.types";
 
 type Args = {
   tab: string;
-  serverApprovedVotes: Vote[];
+  tabServerApprovedVotes: Vote[];
   allMembers: Vote[];
   fullAccount: FullAccount | undefined;
-  getVotes: () => Promise<void>;
+  getUserVotes: () => Promise<void>;
   allMembersIds: [string, string][];
   votesLoading: boolean;
   totalGpos: number;
@@ -40,11 +40,11 @@ type Args = {
 
 export function useVoteTab({
   tab,
-  serverApprovedVotes,
+  tabServerApprovedVotes,
   allMembers,
   allMembersIds,
   fullAccount,
-  getVotes,
+  getUserVotes,
   totalGpos,
   votesLoading,
 }: Args): UseVoteTabResult {
@@ -209,7 +209,7 @@ export function useVoteTab({
         }
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
-          await getVotes();
+          getUserVotes();
           setIsVotesChanged(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
@@ -240,7 +240,7 @@ export function useVoteTab({
       pendingTransaction,
       formAccountBalancesByName,
       localStorageAccount,
-      getVotes,
+      getUserVotes,
       setServerApprovedRows,
     ]
   );
@@ -338,7 +338,7 @@ export function useVoteTab({
         );
         setAllMembersRows(sortVotesRows(allMembersRows));
         const serverApprovedRows = await Promise.all(
-          serverApprovedVotes.map((vote) => {
+          tabServerApprovedVotes.map((vote) => {
             return formVoteRow(vote, allMembersIds, "remove");
           })
         );
@@ -356,7 +356,7 @@ export function useVoteTab({
     allMembers,
     setAllMembersRows,
     allMembersIds,
-    serverApprovedVotes,
+    tabServerApprovedVotes,
     setServerApprovedRows,
     sortVotesRows,
   ]);
