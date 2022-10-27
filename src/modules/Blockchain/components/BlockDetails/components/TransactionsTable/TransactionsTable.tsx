@@ -130,6 +130,7 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
           pagination={
             !loading
               ? {
+                  hideOnSinglePage: true,
                   showSizeChanger: false,
                   size: "small",
                   pageSize: 5,

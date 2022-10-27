@@ -130,6 +130,7 @@ export const LimitOrderForm = ({
                   e.target.select();
                 }}
                 onKeyPress={utils.ensureInputNumberValidity}
+                autoComplete="off"
               />
             </Styled.FormItem>
             <Styled.FormItem
@@ -155,6 +156,7 @@ export const LimitOrderForm = ({
                   e.target.select();
                 }}
                 onKeyPress={utils.ensureInputNumberValidity}
+                autoComplete="off"
               />
             </Styled.FormItem>
             <Styled.FormItem

@@ -46,6 +46,7 @@ export function useVoteTab({
   fullAccount,
   getVotes,
   totalGpos,
+  votesLoading,
 }: Args): UseVoteTabResult {
   const [pendingChanges, setPendingChanges] = useState<VoteRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -321,32 +322,35 @@ export function useVoteTab({
   );
 
   const formTableRows = useCallback(async () => {
-    try {
-      setLoading(true);
-      const allMembersRows = await Promise.all(
-        allMembers.map((member) => {
-          return formVoteRow(
-            member,
-            allMembersIds,
-            fullAccount?.votes.some((vote) => vote.id === member.id)
-              ? "remove"
-              : "add"
-          );
-        })
-      );
-      setAllMembersRows(sortVotesRows(allMembersRows));
-      const serverApprovedRows = await Promise.all(
-        serverApprovedVotes.map((vote) => {
-          return formVoteRow(vote, allMembersIds, "remove");
-        })
-      );
-      setServerApprovedRows(sortVotesRows([...serverApprovedRows]));
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
+    if (!votesLoading) {
+      try {
+        setLoading(true);
+        const allMembersRows = await Promise.all(
+          allMembers.map((member) => {
+            return formVoteRow(
+              member,
+              allMembersIds,
+              fullAccount?.votes.some((vote) => vote.id === member.id)
+                ? "remove"
+                : "add"
+            );
+          })
+        );
+        setAllMembersRows(sortVotesRows(allMembersRows));
+        const serverApprovedRows = await Promise.all(
+          serverApprovedVotes.map((vote) => {
+            return formVoteRow(vote, allMembersIds, "remove");
+          })
+        );
+        setServerApprovedRows(sortVotesRows([...serverApprovedRows]));
+        setLoading(false);
+      } catch (e) {
+        console.log(e);
+        setLoading(false);
+      }
     }
   }, [
+    votesLoading,
     setLoading,
     formVoteRow,
     allMembers,

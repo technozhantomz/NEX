@@ -36,6 +36,7 @@ export const ActivityTable = ({
           pagination={
             !loading
               ? {
+                  hideOnSinglePage: true,
                   showSizeChanger: false,
                   size: "small",
                   pageSize: 15,

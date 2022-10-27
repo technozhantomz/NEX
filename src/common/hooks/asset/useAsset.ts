@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from "react";
 
-import { roundNum } from "..";
 import { symbolsToBeExcepted } from "../../../api/params";
 import { usePeerplaysApiContext, useSettingsContext } from "../../providers";
 import { Asset, Cache } from "../../types";
@@ -97,52 +96,6 @@ export function useAsset(): UseAssetResult {
   );
 
   /**
-   * This is used for integer amounts comes from the chain (like fee amounts)
-   *
-   * @param roundTo whether round the result or not
-   * @param amount integer amount value
-   * @param precision asset precision
-   *
-   * @returns denominated amount based on the asset precisions
-   *
-   */
-  const setPrecision: (
-    roundTo: boolean,
-    amount: number,
-    precision?: number
-  ) => number = useCallback(
-    (roundTo: boolean, amount: number, precision = 5) => {
-      const precisioned = amount / 10 ** precision;
-      return roundTo ? Number(roundNum(precisioned, precision)) : precisioned;
-    },
-    []
-  );
-
-  const formAssetBalanceById = useCallback(
-    async (id: string, amount: number) => {
-      const asset = await getAssetById(id);
-      if (asset) {
-        return {
-          ...asset,
-          amount: setPrecision(false, amount, asset.precision),
-        } as Asset;
-      }
-    },
-    [getAssetById, setPrecision]
-  );
-
-  const getAllAssets = useCallback(async () => {
-    try {
-      const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-      return allAssets.filter(
-        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  }, [dbApi]);
-
-  /**
    * private method, used only inside limitByPrecision function
    */
   const removeUnnecessaryZerosInDecimalPart = useCallback(
@@ -190,13 +143,66 @@ export function useAsset(): UseAssetResult {
     }
   };
 
+  const roundNum = (num: string | number, roundTo = 5): string => {
+    const numbered = Number(num);
+    const precised = numbered.toFixed(roundTo);
+    const splitString = precised.split(".");
+    return removeUnnecessaryZerosInDecimalPart(splitString[0], splitString[1]);
+  };
+
+  /**
+   * This is used for integer amounts comes from the chain (like fee amounts)
+   *
+   * @param roundTo whether round the result or not
+   * @param amount integer amount value
+   * @param precision asset precision
+   *
+   * @returns denominated amount based on the asset precisions
+   *
+   */
+  const setPrecision: (
+    roundTo: boolean,
+    amount: number,
+    precision?: number
+  ) => number = useCallback(
+    (roundTo: boolean, amount: number, precision = 5) => {
+      const precisioned = amount / 10 ** precision;
+      return roundTo ? Number(roundNum(precisioned, precision)) : precisioned;
+    },
+    []
+  );
+
+  const formAssetBalanceById = useCallback(
+    async (id: string, amount: number) => {
+      const asset = await getAssetById(id);
+      if (asset) {
+        return {
+          ...asset,
+          amount: setPrecision(false, amount, asset.precision),
+        } as Asset;
+      }
+    },
+    [getAssetById, setPrecision]
+  );
+
+  const getAllAssets = useCallback(async () => {
+    try {
+      const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
+      return allAssets.filter(
+        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi]);
+
   const ceilPrecision: (num: string | number, precision?: number) => string =
     useCallback((num: string | number, precision = 5) => {
       const numbered = Number(num);
       const precised = Number(numbered.toFixed(precision));
       return precised >= numbered
         ? String(precised)
-        : String((precised + 1 / 10 ** precision).toFixed(precision));
+        : (precised + 1 / 10 ** precision).toFixed(precision);
     }, []);
 
   return {
@@ -208,5 +214,6 @@ export function useAsset(): UseAssetResult {
     limitByPrecision,
     ceilPrecision,
     getAssetsBySymbols,
+    roundNum,
   };
 }
