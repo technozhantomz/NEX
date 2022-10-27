@@ -44,7 +44,7 @@ export function useTransactionDetails(
               return {
                 key: index + 1,
                 rank: index + 1,
-                id: transaction.signatures[0],
+                id: index.toString(),
                 expiration: transaction.expiration,
                 operations: transaction.operations,
                 operationResults: transaction.operation_results,

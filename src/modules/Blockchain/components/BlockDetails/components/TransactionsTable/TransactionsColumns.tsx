@@ -30,7 +30,7 @@ export const TransactionsColumns = (
 }[] => {
   const headings = [
     "rank",
-    "id",
+    // "id",
     "expiration",
     "operations",
     "ref_block_prefix",
@@ -39,7 +39,7 @@ export const TransactionsColumns = (
   ];
   const keys = [
     "rank",
-    "id",
+    // "id",
     "expiration",
     "operations",
     "refBlockPrefix",
@@ -48,14 +48,14 @@ export const TransactionsColumns = (
   ];
   const renders = [
     undefined,
-    (id: string, record: TransactionRow): JSX.Element => (
-      <a target="_blank" href={`/blockchain/${block}/${record.rank}`}>
-        <Styled.CenterEllipsis>
-          <span className="ellipsis">{id}</span>
-          <span className="indent">{id}</span>
-        </Styled.CenterEllipsis>
-      </a>
-    ),
+    // (id: string, record: TransactionRow): JSX.Element => (
+    //   <a target="_blank" href={`/blockchain/${block}/${record.rank}`}>
+    //     <Styled.CenterEllipsis>
+    //       <span className="ellipsis">{id}</span>
+    //       <span className="indent">{id}</span>
+    //     </Styled.CenterEllipsis>
+    //   </a>
+    // ),
     (expiration: string): JSX.Element => (
       <Styled.TimeStamp>{expiration}</Styled.TimeStamp>
     ),
@@ -66,7 +66,7 @@ export const TransactionsColumns = (
   ];
   const filters = [
     undefined,
-    undefined,
+    // undefined,
     undefined,
     undefined,
     undefined,
@@ -75,7 +75,7 @@ export const TransactionsColumns = (
   ];
   const filterModes = [
     undefined,
-    undefined,
+    // undefined,
     undefined,
     undefined,
     undefined,
@@ -84,7 +84,7 @@ export const TransactionsColumns = (
   ];
   const filterSearch = [
     undefined,
-    undefined,
+    // undefined,
     undefined,
     undefined,
     undefined,
@@ -93,7 +93,7 @@ export const TransactionsColumns = (
   ];
   const onFilters = [
     undefined,
-    undefined,
+    // undefined,
     undefined,
     undefined,
     undefined,
@@ -102,7 +102,7 @@ export const TransactionsColumns = (
   ];
   const sorters = [
     (a: { rank: number }, b: { rank: number }) => a.rank - b.rank,
-    undefined,
+    // undefined,
     (a: { expiration: string }, b: { expiration: string }) =>
       new Date(a.expiration).getTime() - new Date(b.expiration).getTime(),
     (a: { operations: unknown[] }, b: { operations: unknown[] }) =>
