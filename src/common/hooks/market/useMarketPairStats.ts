@@ -14,7 +14,8 @@ import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { getAllAssets, getAssetsBySymbols, limitByPrecision } = useAsset();
+  const { getAllAssets, getAssetsBySymbols, limitByPrecision, ceilPrecision } =
+    useAsset();
 
   const getMarketPairStats = useCallback(
     async (base: Asset, quote: Asset) => {
@@ -27,7 +28,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
           quote.symbol,
         ]);
         if (ticker) {
-          latest = limitByPrecision(ticker.latest, base.precision);
+          latest = ceilPrecision(ticker.latest, base.precision);
           percentChange = limitByPrecision(ticker.percent_change, 1) || "0";
           volume = limitByPrecision(ticker.quote_volume, 3);
         }

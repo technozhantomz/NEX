@@ -12,10 +12,10 @@ import { useVoteTab } from "./hooks";
 type Props = {
   tab: string;
   votesLoading: boolean;
-  serverApprovedVotes: Vote[];
+  tabServerApprovedVotes: Vote[];
   allMembers: Vote[];
   fullAccount: FullAccount | undefined;
-  getVotes: () => Promise<void>;
+  getUserVotes: () => Promise<void>;
   allMembersIds: [string, string][];
   totalGpos: number;
   proxy: Proxy;
@@ -24,10 +24,10 @@ type Props = {
 export const VoteTab = ({
   tab,
   votesLoading,
-  serverApprovedVotes,
+  tabServerApprovedVotes,
   allMembers,
   fullAccount,
-  getVotes,
+  getUserVotes,
   allMembersIds,
   totalGpos,
   proxy,
@@ -52,10 +52,10 @@ export const VoteTab = ({
   } = useVoteTab({
     tab,
     votesLoading,
-    serverApprovedVotes,
+    tabServerApprovedVotes,
     allMembers,
     fullAccount,
-    getVotes,
+    getUserVotes,
     allMembersIds,
     totalGpos,
   });

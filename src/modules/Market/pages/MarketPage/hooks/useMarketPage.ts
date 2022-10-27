@@ -411,7 +411,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       if (id !== null && id !== "") {
         try {
           setLoadingUserHistoryRows(true);
-          setUserOrderHistoryRows([]);
           const userOperationsHistory = await getAccountHistoryById(id);
           const fillOrdersHistory = userOperationsHistory.filter(
             (userOperationHistory) => userOperationHistory.op[0] === 4
