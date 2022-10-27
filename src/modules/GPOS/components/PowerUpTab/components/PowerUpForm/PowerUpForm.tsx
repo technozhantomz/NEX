@@ -129,6 +129,7 @@ export const PowerUpForm = ({
             validateTrigger="onChange"
           >
             <Input
+              autoComplete="off"
               addonBefore={
                 <Button type="text" onClick={() => adjustDeposit("+")}>
                   +

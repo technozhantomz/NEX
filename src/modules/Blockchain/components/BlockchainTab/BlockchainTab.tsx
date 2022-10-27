@@ -167,6 +167,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
           pagination={
             !loading
               ? {
+                  hideOnSinglePage: true,
                   showSizeChanger: false,
                   size: "small",
                   pageSize: 15,

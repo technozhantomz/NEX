@@ -29,10 +29,10 @@ import { UseVoteTabResult } from "./useVoteTab.types";
 
 type Args = {
   tab: string;
-  serverApprovedVotes: Vote[];
+  tabServerApprovedVotes: Vote[];
   allMembers: Vote[];
   fullAccount: FullAccount | undefined;
-  getVotes: () => Promise<void>;
+  getUserVotes: () => Promise<void>;
   allMembersIds: [string, string][];
   votesLoading: boolean;
   totalGpos: number;
@@ -40,12 +40,13 @@ type Args = {
 
 export function useVoteTab({
   tab,
-  serverApprovedVotes,
+  tabServerApprovedVotes,
   allMembers,
   allMembersIds,
   fullAccount,
-  getVotes,
+  getUserVotes,
   totalGpos,
+  votesLoading,
 }: Args): UseVoteTabResult {
   const [pendingChanges, setPendingChanges] = useState<VoteRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -208,7 +209,7 @@ export function useVoteTab({
         }
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
-          await getVotes();
+          getUserVotes();
           setIsVotesChanged(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
@@ -239,7 +240,7 @@ export function useVoteTab({
       pendingTransaction,
       formAccountBalancesByName,
       localStorageAccount,
-      getVotes,
+      getUserVotes,
       setServerApprovedRows,
     ]
   );
@@ -321,38 +322,41 @@ export function useVoteTab({
   );
 
   const formTableRows = useCallback(async () => {
-    try {
-      setLoading(true);
-      const allMembersRows = await Promise.all(
-        allMembers.map((member) => {
-          return formVoteRow(
-            member,
-            allMembersIds,
-            fullAccount?.votes.some((vote) => vote.id === member.id)
-              ? "remove"
-              : "add"
-          );
-        })
-      );
-      setAllMembersRows(sortVotesRows(allMembersRows));
-      const serverApprovedRows = await Promise.all(
-        serverApprovedVotes.map((vote) => {
-          return formVoteRow(vote, allMembersIds, "remove");
-        })
-      );
-      setServerApprovedRows(sortVotesRows([...serverApprovedRows]));
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
+    if (!votesLoading) {
+      try {
+        setLoading(true);
+        const allMembersRows = await Promise.all(
+          allMembers.map((member) => {
+            return formVoteRow(
+              member,
+              allMembersIds,
+              fullAccount?.votes.some((vote) => vote.id === member.id)
+                ? "remove"
+                : "add"
+            );
+          })
+        );
+        setAllMembersRows(sortVotesRows(allMembersRows));
+        const serverApprovedRows = await Promise.all(
+          tabServerApprovedVotes.map((vote) => {
+            return formVoteRow(vote, allMembersIds, "remove");
+          })
+        );
+        setServerApprovedRows(sortVotesRows([...serverApprovedRows]));
+        setLoading(false);
+      } catch (e) {
+        console.log(e);
+        setLoading(false);
+      }
     }
   }, [
+    votesLoading,
     setLoading,
     formVoteRow,
     allMembers,
     setAllMembersRows,
     allMembersIds,
-    serverApprovedVotes,
+    tabServerApprovedVotes,
     setServerApprovedRows,
     sortVotesRows,
   ]);

@@ -82,6 +82,12 @@ export const ru = {
         title: "Белый список аккаунта",
         description: "%(issuer)s, %(status)s счет, %(listed)s",
       },
+      affiliate_payout: {
+        title: "Партнер по выплатам",
+      },
+      affiliate_referral_payout: {
+        title: "Выплата реферала",
+      },
       all: {
         title: "Показать все",
       },
@@ -209,6 +215,9 @@ export const ru = {
       },
       call_order_update: {
         title: "Обновить поля",
+      },
+      cancel_offer: {
+        title: "Отменить предложение",
       },
       committee_member_create: {
         title: "Создать члена комитета",
@@ -720,7 +729,8 @@ export const ru = {
         gpos_balance: "GPOS Остаток средств",
         voting_performance: "Результаты голосования",
         qualified_reward: "Квалифицированная награда",
-        estimated_rake_reward: "Расчетное вознаграждение за рейк",
+        estimated_participation_reward:
+          "Предполагаемое вознаграждение за участие",
         available_balance: "Доступные средства:",
         read_less: "Читать меньше",
         read_more: "Читать далее",

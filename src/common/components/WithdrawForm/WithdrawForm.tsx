@@ -189,7 +189,7 @@ export const WithdrawForm = ({
           placeholder={counterpart.translate(
             `field.placeholder.withdraw_public_key`
           )}
-          autoComplete="new-password"
+          autoComplete="off"
           className="form-input"
           disabled={!isLoggedIn}
         />
@@ -205,6 +205,7 @@ export const WithdrawForm = ({
           )}
           className="form-input"
           disabled={localStorageAccount ? false : true}
+          autoComplete="off"
         />
       </Form.Item>
       {!withAssetSelector ? (
@@ -220,6 +221,7 @@ export const WithdrawForm = ({
             min={0}
             onKeyPress={utils.ensureInputNumberValidity}
             disabled={localStorageAccount ? false : true}
+            autoComplete="off"
           />
         </Form.Item>
       ) : (
@@ -354,7 +356,7 @@ export const WithdrawForm = ({
                     </Styled.WithdrawFormAsset>
                   }
                   disabled={!isLoggedIn}
-                  autoComplete="new-password"
+                  autoComplete="off"
                 />
               </Styled.WithdrawFormAssetAmount>
             </>

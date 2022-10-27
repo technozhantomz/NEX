@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Layout } from "../../../../common/components";
 import { DepositTab, MarketTab, SwapTab, WithdrawTab } from "../../components";
@@ -18,6 +18,10 @@ const Dashboard: React.FC = () => {
     setActiveTab(tab);
     router.push(`/?tab=${tab.toLowerCase()}`);
   };
+
+  useEffect(() => {
+    setActiveTab(tab ? (tab as string) : "Deposit");
+  }, [tab, setActiveTab]);
 
   const Tabs = [
     { tabName: "Deposit" },

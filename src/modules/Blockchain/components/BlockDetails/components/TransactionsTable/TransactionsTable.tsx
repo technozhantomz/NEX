@@ -149,6 +149,7 @@ export const TransactionsTable = ({
           pagination={
             !loading
               ? {
+                  hideOnSinglePage: true,
                   showSizeChanger: false,
                   size: "small",
                   pageSize: 5,

@@ -9,14 +9,14 @@ import { useProxyTab } from "./hooks";
 type Props = {
   totalGpos: number;
   serverProxy: Proxy;
-  getProxyAccount: (proxyId: string) => Promise<void>;
+  getUserVotes: () => Promise<void>;
   loading: boolean;
 };
 
 export const ProxyTab = ({
   totalGpos,
   serverProxy,
-  getProxyAccount,
+  getUserVotes,
   loading,
 }: Props): JSX.Element => {
   const {
@@ -39,7 +39,7 @@ export const ProxyTab = ({
     searchValue,
     isSameAccount,
     accountAlreadyAdded,
-  } = useProxyTab({ serverProxy, totalGpos, getProxyAccount });
+  } = useProxyTab({ serverProxy, totalGpos, getUserVotes });
   return (
     <Styled.ProxyTabWrapper>
       <Styled.ProxyIntroWrapper>

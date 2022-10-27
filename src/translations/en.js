@@ -82,7 +82,7 @@ export const en = {
         description: "%(issuer)s, %(status)s the account, %(listed)s",
       },
       affiliate_payout: {
-        title: "payout affiliate",
+        title: "Payout affiliate",
       },
       affiliate_referral_payout: {
         title: "Payout referral affiliate",
@@ -761,7 +761,7 @@ export const en = {
         gpos_balance: "GPOS Balance",
         voting_performance: "Voting Performance",
         qualified_reward: "Qualified Reward",
-        estimated_rake_reward: "Estimated Rake Reward",
+        estimated_participation_reward: "Estimated Participation Reward",
         available_balance: "Available Balance:",
         read_less: "Read less",
         read_more: "Read more",

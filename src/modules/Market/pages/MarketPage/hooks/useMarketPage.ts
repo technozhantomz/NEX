@@ -6,6 +6,7 @@ import {
   useAsset,
   useFormDate,
   useMarketPairStats,
+  useOrderBook,
   useUpdateExchanges,
 } from "../../../../../common/hooks";
 import {
@@ -48,6 +49,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { synced } = useChainStoreContext();
   const [buyOrderForm] = Form.useForm<OrderForm>();
   const [sellOrderForm] = Form.useForm<OrderForm>();
+  const { getOrderBook } = useOrderBook();
 
   const [previousPair, setPreviousPair] = useState<string>(exchanges.active);
   const [tradingPairsStats, setTradingPairsStats] = useState<
@@ -133,22 +135,18 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     ]
   );
 
-  const getOrderBook = useCallback(
+  const setOrders = useCallback(
     async (base: Asset, quote: Asset) => {
       try {
         setLoadingOrderRows(true);
-        const { asks, bids } = await dbApi("get_order_book", [
-          base.symbol,
-          quote.symbol,
-          50,
-        ]);
+        const { asks, bids } = await getOrderBook(base, quote);
         setAsks(
-          asks.map((ask: Order) => {
+          asks.map((ask) => {
             return { ...ask, isBuyOrder: false };
           }) as Order[]
         );
         setBids(
-          bids.map((bid: Order) => {
+          bids.map((bid) => {
             return { ...bid, isBuyOrder: true };
           }) as Order[]
         );
@@ -276,10 +274,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
   const refreshOrderBook = useCallback(
     async (currentBase: Asset, currentQuote: Asset) => {
-      await getOrderBook(currentBase, currentQuote);
+      await setOrders(currentBase, currentQuote);
       await getUserOrderBook(currentBase, currentQuote);
     },
-    [getOrderBook, getUserOrderBook]
+    [setOrders, getUserOrderBook]
   );
 
   const formOrderHistoryRow = useCallback(
@@ -413,7 +411,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       if (id !== null && id !== "") {
         try {
           setLoadingUserHistoryRows(true);
-          setUserOrderHistoryRows([]);
           const userOperationsHistory = await getAccountHistoryById(id);
           const fillOrdersHistory = userOperationsHistory.filter(
             (userOperationHistory) => userOperationHistory.op[0] === 4
