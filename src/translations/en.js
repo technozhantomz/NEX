@@ -82,7 +82,7 @@ export const en = {
         description: "%(issuer)s, %(status)s the account, %(listed)s",
       },
       affiliate_payout: {
-        title: "payout affiliate",
+        title: "Payout affiliate",
       },
       affiliate_referral_payout: {
         title: "Payout referral affiliate",

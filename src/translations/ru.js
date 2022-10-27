@@ -82,6 +82,12 @@ export const ru = {
         title: "Белый список аккаунта",
         description: "%(issuer)s, %(status)s счет, %(listed)s",
       },
+      affiliate_payout: {
+        title: "Партнер по выплатам",
+      },
+      affiliate_referral_payout: {
+        title: "Выплата реферала",
+      },
       all: {
         title: "Показать все",
       },
@@ -209,6 +215,9 @@ export const ru = {
       },
       call_order_update: {
         title: "Обновить поля",
+      },
+      cancel_offer: {
+        title: "Отменить предложение",
       },
       committee_member_create: {
         title: "Создать члена комитета",
