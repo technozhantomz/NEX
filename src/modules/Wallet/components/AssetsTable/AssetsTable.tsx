@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import { CSSProperties, ReactNode } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
@@ -221,13 +222,34 @@ export const AssetsTable = ({
       ) : (
         <Styled.AssetsTable
           columns={assetsTabColumns}
-          dataSource={
-            fillterAsset === ""
-              ? tableAssets
-              : tableAssets.filter((item) => item.asset === fillterAsset)
-          }
+          dataSource={tableAssets}
           loading={loading}
-          pagination={false}
+          pagination={{
+            position: ["bottomRight"],
+            size: "small",
+            pageSize: 5,
+            itemRender: (
+              _page: number,
+              type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
+              element: ReactNode
+            ) => {
+              if (type === "prev") {
+                return (
+                  <a style={{ marginRight: "8px" } as CSSProperties}>
+                    {counterpart.translate(`buttons.previous`)}
+                  </a>
+                );
+              }
+              if (type === "next") {
+                return (
+                  <a style={{ marginLeft: "8px" } as CSSProperties}>
+                    {counterpart.translate(`buttons.next`)}
+                  </a>
+                );
+              }
+              return element;
+            },
+          }}
           size="small"
         />
       )}
