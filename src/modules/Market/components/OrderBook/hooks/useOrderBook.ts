@@ -53,7 +53,7 @@ export function useOrderBook({
   const { buildTrx } = useTransactionBuilder();
   const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
   const { calculateCancelLimitOrderFee } = useFees();
-  const { limitByPrecision, ceilPrecision } = useAsset();
+  const { ceilPrecision, roundNum } = useAsset();
 
   const handleFilterChange = useCallback(
     (type: OrderType) => {
@@ -86,10 +86,7 @@ export function useOrderBook({
         if (repeatedPriceIndex === -1) {
           previousOrders.push({
             ...currentOrder,
-            price: ceilPrecision(
-              Number(currentOrder.base) / Number(currentOrder.quote),
-              currentBase.precision
-            ),
+            price: ceilPrecision(currentOrder.price, currentBase.precision),
           });
         } else {
           const orderWithRepeatedPrice = previousOrders[repeatedPriceIndex];
@@ -110,12 +107,12 @@ export function useOrderBook({
       return reducedOrders.map((order) => {
         return {
           ...order,
-          quote: limitByPrecision(order.quote, currentQuote.precision),
-          base: limitByPrecision(order.base, currentBase.precision),
+          quote: roundNum(order.quote, currentQuote.precision),
+          base: roundNum(order.base, currentBase.precision),
         };
       });
     },
-    []
+    [ceilPrecision, roundNum]
   );
 
   const selectOrdersForThresholdAndFilter = useCallback(() => {

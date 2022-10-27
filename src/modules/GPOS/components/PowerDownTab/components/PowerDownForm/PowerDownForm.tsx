@@ -143,6 +143,7 @@ export const PowerDownForm = ({
               min={0}
               step="any"
               onKeyPress={utils.ensureInputNumberValidity}
+              autoComplete="off"
             />
           </Form.Item>
           <Form.Item

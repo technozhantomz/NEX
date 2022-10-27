@@ -26,6 +26,7 @@ export const ActivityList = ({
         !loading
           ? {
               position: "bottom",
+              hideOnSinglePage: true,
               showSizeChanger: false,
               size: "small",
               pageSize: 2,
