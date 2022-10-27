@@ -750,7 +750,7 @@ export const en = {
         gpos_balance: "GPOS Balance",
         voting_performance: "Voting Performance",
         qualified_reward: "Qualified Reward",
-        estimated_rake_reward: "Estimated Rake Reward",
+        estimated_participation_reward: "Estimated Participation Reward",
         available_balance: "Available Balance:",
         read_less: "Read less",
         read_more: "Read more",
