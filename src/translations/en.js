@@ -524,6 +524,7 @@ export const en = {
     previous: "Previous",
     next: "Next",
     show_only_unread: "Show only unread",
+    receive: "Receive",
   },
   connection: {
     automatic_reconnect:
@@ -1048,6 +1049,7 @@ export const en = {
     active: "Active",
     key: "key",
     actions: "Actions",
+    in_orders: "In orders",
   },
   tooltips: {
     copy: "copy",

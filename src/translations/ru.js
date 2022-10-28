@@ -498,6 +498,7 @@ export const ru = {
     next: "следующий",
     previous: "предыдущий",
     show_only_unread: "Показать только непрочитанные",
+    receive: "Получать",
   },
   pages: {
     logout: {
@@ -1004,6 +1005,8 @@ export const ru = {
     category: "категория",
     active: "Активный",
     key: "ключ",
+    actions: "Действия",
+    in_orders: "В заказах",
   },
   tooltips: {
     copy: "копировать",

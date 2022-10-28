@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { utils } from "../../../../../api/utils";
 import { useAsset, useMarketPairStats } from "../../../../../common/hooks";
 import {
   useAssetsContext,
@@ -35,19 +36,17 @@ export function useAssetsTable(): UseAssetsTabResult {
         return {
           key: baseAsset.id,
           symbol: baseAsset.symbol,
-          name: "Peerplays",
+          name: utils.getBlockchainFromSymbol(baseAsset.symbol),
           available,
-          change: `${marketPairStats.percentChange}%`,
-          volume: marketPairStats.volume,
+          inOrders: `${marketPairStats.percentChange}%`,
         };
       }
       return {
         key: baseAsset.id,
         symbol: baseAsset.symbol,
-        name: "Peerplays",
+        name: utils.getBlockchainFromSymbol(baseAsset.symbol),
         available,
-        change: "0%",
-        volume: 0,
+        inOrders: "0%",
       };
     },
     [dbApi, getMarketPairStats, getAssetBySymbol, defaultAsset]
@@ -60,7 +59,6 @@ export function useAssetsTable(): UseAssetsTabResult {
         const assetsRows = await Promise.all(assets.map(formAssetRow));
         _setTableAssets(assetsRows);
         const symbols = assetsRows.map((asset) => asset.symbol);
-        console.log(_assetsTabColumns);
         const updateAssetsTabColumns = _assetsTabColumns.map((column) => {
           if (column.key === "symbol") {
             column.filters = symbols.map((symbol) => {
@@ -69,8 +67,6 @@ export function useAssetsTable(): UseAssetsTabResult {
           }
           return { ...column };
         });
-        console.log(_assetsTabColumns);
-
         setAssetsTabColumns(updateAssetsTabColumns);
         setLoading(false);
       } catch (e) {

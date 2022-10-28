@@ -3,8 +3,7 @@ export interface IAssetRow {
   symbol: string;
   name: string;
   available: number;
-  change: string;
-  volume: number;
+  inOrders: string;
 }
 
 export type UseAssetsTabResult = {

@@ -31,17 +31,9 @@ export const AssetsTabColumns = (): {
 }[] => {
   const { sidechainAssets } = useAssetsContext();
 
-  const headings = [
-    "symbol",
-    "name",
-    "available",
-    "change",
-    "volume",
-    "actions",
-  ];
-  const keys = ["symbol", "name", "available", "change", "volume", "actions"];
+  const headings = ["symbol", "name", "available", "in_orders", "actions"];
+  const keys = ["symbol", "name", "available", "inOrders", "actions"];
   const renders = [
-    undefined,
     undefined,
     undefined,
     undefined,
@@ -53,14 +45,14 @@ export const AssetsTabColumns = (): {
       return (
         <div style={{ display: "flex" }}>
           <AssetActionButton
-            txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}
+            txt={counterpart.translate(`buttons.send`)}
             href={`/wallet/${record.symbol}?tab=transfer`}
           />
 
           {hasWithdrawAndDeposit && (
             <div>
               <AssetActionButton
-                txt={counterpart.translate(`buttons.withdraw`)}
+                txt={counterpart.translate(`buttons.receive`)}
                 href={`/wallet/${record.symbol}?tab=withdraw`}
               />
               <AssetActionButton
@@ -73,30 +65,9 @@ export const AssetsTabColumns = (): {
       );
     },
   ];
-  const filters = [
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-  ];
-  const filterModes = [
-    "menu",
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-  ];
-  const filterSearch = [
-    true,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-  ];
+  const filters = [undefined, undefined, undefined, undefined, undefined];
+  const filterModes = ["menu", undefined, undefined, undefined, undefined];
+  const filterSearch = [true, undefined, undefined, undefined, undefined];
   const onFilters = [
     (value: string, record: IAssetRow): boolean =>
       record.symbol.includes(value),
@@ -105,16 +76,8 @@ export const AssetsTabColumns = (): {
     undefined,
     undefined,
     undefined,
-    undefined,
   ];
-  const sorters = [
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-  ];
+  const sorters = [undefined, undefined, undefined, undefined, undefined];
 
   return headings.map((heading, index) => {
     return {
