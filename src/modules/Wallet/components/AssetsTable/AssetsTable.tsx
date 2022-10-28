@@ -20,7 +20,10 @@ type Props = {
   fillterAsset?: string;
 };
 
-export const AssetsTable = ({ showActions = true }: Props): JSX.Element => {
+export const AssetsTable = ({
+  showActions = true,
+  fillterAsset = "",
+}: Props): JSX.Element => {
   const { tableAssets, loading, assetsTabColumns } = useAssetsTable();
   const { sm } = useViewportContext();
   const { sidechainAssets } = useAssetsContext();
@@ -78,7 +81,11 @@ export const AssetsTable = ({ showActions = true }: Props): JSX.Element => {
       {sm ? (
         <List
           itemLayout="vertical"
-          dataSource={tableAssets}
+          dataSource={
+            fillterAsset === ""
+              ? tableAssets
+              : tableAssets.filter((item) => item.symbol === fillterAsset)
+          }
           loading={loading}
           renderItem={(item) => (
             <Styled.AssetListItem
@@ -109,8 +116,18 @@ export const AssetsTable = ({ showActions = true }: Props): JSX.Element => {
         />
       ) : (
         <Styled.AssetsTable
-          columns={assetsTabColumns as ColumnsType<IAssetRow>}
-          dataSource={tableAssets}
+          columns={
+            showActions
+              ? (assetsTabColumns as ColumnsType<IAssetRow>)
+              : (assetsTabColumns.filter(
+                  (item) => item.dataIndex !== "actions"
+                ) as ColumnsType<IAssetRow>)
+          }
+          dataSource={
+            fillterAsset === ""
+              ? tableAssets
+              : tableAssets.filter((item) => item.symbol === fillterAsset)
+          }
           loading={loading}
           pagination={{
             position: ["bottomRight"],
@@ -145,8 +162,18 @@ export const AssetsTable = ({ showActions = true }: Props): JSX.Element => {
       <Styled.PrintTable>
         <div ref={componentRef}>
           <Styled.AssetsTable
-            dataSource={tableAssets}
-            columns={assetsTabColumns as ColumnsType<IAssetRow>}
+            dataSource={
+              fillterAsset === ""
+                ? tableAssets
+                : tableAssets.filter((item) => item.symbol === fillterAsset)
+            }
+            columns={
+              showActions
+                ? (assetsTabColumns as ColumnsType<IAssetRow>)
+                : (assetsTabColumns.filter(
+                    (item) => item.dataIndex !== "actions"
+                  ) as ColumnsType<IAssetRow>)
+            }
             loading={loading}
             pagination={false}
           />
