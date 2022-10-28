@@ -10,13 +10,19 @@ import {
 import { Asset } from "../../../../../common/types";
 import { AssetsTabColumns } from "../AssetsTabColumns";
 
-import { IAssetRow, UseAssetsTabResult } from "./useAssetsTable.types";
+import {
+  AssetsTabColumnType,
+  IAssetRow,
+  UseAssetsTabResult,
+} from "./useAssetsTable.types";
 
 export function useAssetsTable(): UseAssetsTabResult {
   const [tableAssets, _setTableAssets] = useState<IAssetRow[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [assetsTabColumns, setAssetsTabColumns] = useState<IAssetRow[]>([]);
+  const [assetsTabColumns, setAssetsTabColumns] = useState<
+    AssetsTabColumnType[]
+  >([]);
   const { dbApi } = usePeerplaysApiContext();
   const { assets, localStorageAccount } = useUserContext();
   const { getAssetBySymbol } = useAsset();
