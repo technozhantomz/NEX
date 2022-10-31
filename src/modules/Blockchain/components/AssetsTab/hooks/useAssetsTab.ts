@@ -55,11 +55,18 @@ export function useAssetsTab(): UseAssetsTabResult {
         const symbols = rawAssets.map((asset) => asset.symbol);
         const allIssuers = assetsRows.map((row) => row.issuer);
         const uniqIssuers = uniq(allIssuers);
+        const allNames = assetsRows.map((row) => row.name);
+        const uniqNames = uniq(allNames);
         const updatedColumns = AssetsColumns.map((column) => {
           switch (true) {
             case column.key === "symbol":
               column.filters = symbols.map((symbol) => {
                 return { text: symbol, value: symbol };
+              });
+              break;
+            case column.key === "name":
+              column.filters = uniqNames.map((name) => {
+                return { text: name, value: name };
               });
               break;
             case column.key === "issuer":
