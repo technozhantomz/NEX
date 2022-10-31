@@ -1,12 +1,15 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { TablePaginationConfig } from "antd";
+import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
 import Link from "next/link";
-import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
+import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
+import { renderPaginationConfig } from "../../../../../common/components";
 import {
   useUserContext,
   useViewportContext,
@@ -229,68 +232,22 @@ export const VoteTable = ({
                 </Styled.VoteItemContent>
               </Styled.VoteListItem>
             )}
-            pagination={{
-              showSizeChanger: false,
-              hideOnSinglePage: true,
-              //position: ["bottomRight"],
-              size: "small",
-              pageSize: 5,
-              itemRender: (
-                _page: number,
-                type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                element: ReactNode
-              ) => {
-                if (type === "prev") {
-                  return (
-                    <a style={{ marginRight: "8px" } as CSSProperties}>
-                      {counterpart.translate(`buttons.previous`)}
-                    </a>
-                  );
-                }
-                if (type === "next") {
-                  return (
-                    <a style={{ marginLeft: "8px" } as CSSProperties}>
-                      {counterpart.translate(`buttons.next`)}
-                    </a>
-                  );
-                }
-                return element;
-              },
-            }}
+            pagination={
+              renderPaginationConfig({ loading, pageSize: 3 }) as
+                | false
+                | PaginationConfig
+            }
           />
         ) : (
           <Styled.VoteTable
             columns={columns as ColumnsType<unknown>}
             dataSource={searchDataSource}
             loading={loading}
-            pagination={{
-              showSizeChanger: false,
-              hideOnSinglePage: true,
-              position: ["bottomRight"],
-              size: "small",
-              pageSize: 5,
-              itemRender: (
-                _page: number,
-                type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                element: ReactNode
-              ) => {
-                if (type === "prev") {
-                  return (
-                    <a style={{ marginRight: "8px" } as CSSProperties}>
-                      {counterpart.translate(`buttons.previous`)}
-                    </a>
-                  );
-                }
-                if (type === "next") {
-                  return (
-                    <a style={{ marginLeft: "8px" } as CSSProperties}>
-                      {counterpart.translate(`buttons.next`)}
-                    </a>
-                  );
-                }
-                return element;
-              },
-            }}
+            pagination={
+              renderPaginationConfig({ loading, pageSize: 5 }) as
+                | false
+                | TablePaginationConfig
+            }
             size="small"
           />
         )}

@@ -910,6 +910,7 @@ export const ru = {
       wallet_lock: "Блокировка кошелька (минуты)",
       use_whalevault: "Используйте расширение WhaleVault",
       unsaved_changes: "У вас есть несохраненные изменения в настройках",
+      coins_token: "Монеты/Жетоны",
     },
     comments: {
       deposit_hbd:
@@ -1074,6 +1075,8 @@ export const ru = {
     category: "категория",
     active: "Активный",
     key: "ключ",
+    actions: "Действия",
+    in_orders: "В заказах",
     ref_block_prefix: "Префикс блока ссылок",
     ref_block_num: "Блок ссылок №",
     extensions: "Расширения",

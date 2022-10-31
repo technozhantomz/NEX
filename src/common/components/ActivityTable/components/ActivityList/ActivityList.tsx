@@ -1,6 +1,6 @@
-import counterpart from "counterpart";
-import { CSSProperties, ReactNode } from "react";
+import { PaginationConfig } from "antd/lib/pagination";
 
+import { renderPaginationConfig } from "../../..";
 import { ActivityRow } from "../../../../types";
 import { ActivityColumns as columns } from "../ActivityColumns/";
 import { ActivityTag } from "../ActivityTag";
@@ -23,44 +23,9 @@ export const ActivityList = ({
       dataSource={activitiesRows}
       loading={loading}
       pagination={
-        !loading
-          ? {
-              position: "bottom",
-              hideOnSinglePage: true,
-              showSizeChanger: false,
-              size: "small",
-              pageSize: 2,
-              showLessItems: true,
-              itemRender: (
-                _page: number,
-                type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                element: ReactNode
-              ) => {
-                if (type === "prev") {
-                  return (
-                    <>
-                      {" "}
-                      {_page > 0 ? (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.previous`)}
-                        </a>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  );
-                }
-                if (type === "next") {
-                  return (
-                    <a style={{ marginLeft: "8px" } as CSSProperties}>
-                      {counterpart.translate(`buttons.next`)}
-                    </a>
-                  );
-                }
-                return element;
-              },
-            }
-          : false
+        renderPaginationConfig({ loading, pageSize: 2 }) as
+          | false
+          | PaginationConfig
       }
       renderItem={(item) => {
         const activityRow = item as ActivityRow;

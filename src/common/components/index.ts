@@ -16,3 +16,4 @@ export * from "./KeyInput";
 export * from "./LoadingIndicator";
 export * from "./DashboardLoginButton";
 export * from "./DownloadBitcoinKeys";
+export * from "./PaginationConfig";

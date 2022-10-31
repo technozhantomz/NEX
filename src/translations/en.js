@@ -939,6 +939,7 @@ export const en = {
       wallet_lock: "Wallet lock (Minutes)",
       use_whalevault: "Use WhaleVault extension",
       unsaved_changes: "You have unsaved changes to your settings",
+      coins_token: "Coins/Tokens",
     },
     comments: {
       deposit_hbd:
@@ -1108,6 +1109,8 @@ export const en = {
     category: "Category",
     active: "Active",
     key: "key",
+    actions: "Actions",
+    in_orders: "In orders",
     ref_block_prefix: "Ref block prefix",
     ref_block_num: "Ref block #",
     extensions: "Extensions",

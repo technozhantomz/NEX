@@ -1,9 +1,12 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { TablePaginationConfig } from "antd";
+import { PaginationConfig } from "antd/lib/pagination";
 import counterpart from "counterpart";
-import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
+import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
+import { renderPaginationConfig } from "../../../../../../common/components";
 import { useViewportContext } from "../../../../../../common/providers";
 import {
   DownloadOutlined,
@@ -66,6 +69,9 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
           itemLayout="vertical"
           dataSource={searchDataSource}
           loading={loading}
+          pagination={
+            renderPaginationConfig({ loading, pageSize: 2 }) as PaginationConfig
+          }
           renderItem={(item) => (
             <Styled.TransactionListItem key={item.rank}>
               <Styled.TransactionItemContent>
@@ -128,36 +134,9 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
           columns={TransactionsColumns}
           loading={loading}
           pagination={
-            !loading
-              ? {
-                  hideOnSinglePage: true,
-                  showSizeChanger: false,
-                  size: "small",
-                  pageSize: 5,
-                  showLessItems: true,
-                  itemRender: (
-                    _page: number,
-                    type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                    element: ReactNode
-                  ) => {
-                    if (type === "prev") {
-                      return (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.previous`)}
-                        </a>
-                      );
-                    }
-                    if (type === "next") {
-                      return (
-                        <a style={{ marginLeft: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.next`)}
-                        </a>
-                      );
-                    }
-                    return element;
-                  },
-                }
-              : false
+            renderPaginationConfig({ loading, pageSize: 5 }) as
+              | false
+              | TablePaginationConfig
           }
         />
       )}
