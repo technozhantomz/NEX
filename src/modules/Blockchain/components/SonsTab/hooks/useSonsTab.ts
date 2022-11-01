@@ -52,7 +52,7 @@ export function useSonsTab(): UseSonsTabResult {
           const nextVoteTime = new Date(
             blockData.next_maintenance_time
           ).getTime();
-          const nextVoteDistance = nextVoteTime - now;
+          const nextVoteDistance = now - nextVoteTime;
           if (sons && sons.length > 0) {
             sons.sort((a, b) => b.total_votes - a.total_votes);
             const sonsRows: SonsTableRow[] = [];
