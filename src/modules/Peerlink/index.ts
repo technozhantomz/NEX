@@ -1,1 +1,1 @@
-export { default } from './pages/Connect';
+export { default } from "./pages/Connect";
