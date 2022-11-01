@@ -122,16 +122,71 @@ const sorters = [
   undefined,
 ];
 
-export const WitnessesColumns = headings.map((heading, index) => {
-  return {
-    title: (): JSX.Element => <TableHeading heading={heading} />,
-    dataIndex: keys[index],
-    key: keys[index],
-    render: renders[index],
-    filters: filters[index],
-    filterMode: filterModes[index],
-    filterSearch: filterSearch[index],
-    onFilter: onFilters[index],
-    sorter: sorters[index],
-  };
-});
+export type WitnessColumnType = {
+  title: () => JSX.Element;
+  dataIndex: string;
+  key: string;
+  render:
+    | ((name: string) => JSX.Element)
+    | ((active: boolean) => JSX.Element)
+    | undefined;
+  filters:
+    | {
+        text: string;
+        value: boolean;
+      }[]
+    | undefined;
+  filterMode: string | undefined;
+  filterSearch: boolean | undefined;
+  onFilter: ((value: boolean, record: WitnessTableRow) => boolean) | undefined;
+  sorter:
+    | ((
+        a: {
+          rank: number;
+        },
+        b: {
+          rank: number;
+        }
+      ) => number)
+    | ((
+        a: {
+          lastBlock: string;
+        },
+        b: {
+          lastBlock: string;
+        }
+      ) => number)
+    | ((
+        a: {
+          missedBlocks: string;
+        },
+        b: {
+          missedBlocks: string;
+        }
+      ) => number)
+    | ((
+        a: {
+          totalVotes: string;
+        },
+        b: {
+          totalVotes: string;
+        }
+      ) => number)
+    | undefined;
+};
+
+export const WitnessesColumns: WitnessColumnType[] = headings.map(
+  (heading, index) => {
+    return {
+      title: (): JSX.Element => <TableHeading heading={heading} />,
+      dataIndex: keys[index],
+      key: keys[index],
+      render: renders[index],
+      filters: filters[index],
+      filterMode: filterModes[index],
+      filterSearch: filterSearch[index],
+      onFilter: onFilters[index],
+      sorter: sorters[index],
+    };
+  }
+);

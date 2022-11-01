@@ -187,7 +187,12 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
         />
       )}
       <Styled.PrintTable>
-        <BlockPrintTable ref={componentRef} />
+        <BlockPrintTable
+          ref={componentRef}
+          blockColumns={blockColumns}
+          blockchainTableRows={blockchainTableRows}
+          loading={loading}
+        />
       </Styled.PrintTable>
     </Styled.BlockTabWrapper>
   );

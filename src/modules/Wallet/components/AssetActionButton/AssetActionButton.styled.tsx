@@ -7,11 +7,13 @@ export const AssetActionButton = styled(UiButton)`
     padding: 0px;
     background-color: ${colors.primaryColor};
     color: ${colors.white};
-    max-height: 25px;
+    height: 25px !important;
+    min-height: 25px !important;
+    margin-right: 16px;
     min-width: 90px;
     &:hover,
     &:active {
-      background-color: #015ef4;
+      background-color: ${colors.primaryColor};
       color: ${colors.white};
     }
   }

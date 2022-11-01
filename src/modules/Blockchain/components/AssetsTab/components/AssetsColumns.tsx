@@ -5,6 +5,48 @@ import { InfoCircleOutlined, Tag, Tooltip } from "../../../../../ui/src";
 import { colors } from "../../../../../ui/src/colors";
 import { AssetTableRow } from "../hooks/useAssetsTab.types";
 
+export type AssetColumnType = {
+  title: () => JSX.Element;
+  dataIndex: string;
+  key: string;
+  render: ((symbol: string) => JSX.Element) | undefined;
+  filters:
+    | {
+        text: string;
+        value: string;
+      }[]
+    | undefined;
+  filterMode: string | undefined;
+  filterSearch: boolean | undefined;
+  onFilter: ((value: string, record: AssetTableRow) => boolean) | undefined;
+  sorter:
+    | ((
+        a: {
+          id: string;
+        },
+        b: {
+          id: string;
+        }
+      ) => number)
+    | ((
+        a: {
+          maxSupply: number;
+        },
+        b: {
+          maxSupply: number;
+        }
+      ) => number)
+    | ((
+        a: {
+          precision: number;
+        },
+        b: {
+          precision: number;
+        }
+      ) => number)
+    | undefined;
+};
+
 const headings = [
   "id",
   "symbol",
@@ -103,48 +145,6 @@ const sorters = [
   undefined,
   undefined,
 ];
-
-export type AssetColumnType = {
-  title: () => JSX.Element;
-  dataIndex: string;
-  key: string;
-  render: ((symbol: string) => JSX.Element) | undefined;
-  filters:
-    | {
-        text: string;
-        value: string;
-      }[]
-    | undefined;
-  filterMode: string | undefined;
-  filterSearch: boolean | undefined;
-  onFilter: ((value: string, record: AssetTableRow) => boolean) | undefined;
-  sorter:
-    | ((
-        a: {
-          id: string;
-        },
-        b: {
-          id: string;
-        }
-      ) => number)
-    | ((
-        a: {
-          maxSupply: number;
-        },
-        b: {
-          maxSupply: number;
-        }
-      ) => number)
-    | ((
-        a: {
-          precision: number;
-        },
-        b: {
-          precision: number;
-        }
-      ) => number)
-    | undefined;
-};
 
 export const AssetsColumns: AssetColumnType[] = headings.map(
   (heading, index) => {

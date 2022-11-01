@@ -1,13 +1,14 @@
 import { ColumnsType } from "antd/lib/table";
 import React from "react";
 
-import * as Styled from "../AssetsTab.styled";
-import { AssetColumnType, AssetTableRow } from "../hooks";
+import { AssetColumnType } from "..";
+import * as Styled from "../AssetsTable/AssetsTable.styled";
+import { AssetTableRow } from "../AssetsTable/hooks";
 
 type Props = {
   loading: boolean;
   assetsColumns: AssetColumnType[];
-  assetTableRows: AssetTableRow[];
+  assetsTableRows: AssetTableRow[];
 };
 
 export const AssetsPrintTable = React.forwardRef(
@@ -15,7 +16,7 @@ export const AssetsPrintTable = React.forwardRef(
     return (
       <div ref={ref}>
         <Styled.AssetsTable
-          dataSource={props.assetTableRows}
+          dataSource={props.assetsTableRows}
           columns={props.assetsColumns as ColumnsType<AssetTableRow>}
           loading={props.loading}
           pagination={false}

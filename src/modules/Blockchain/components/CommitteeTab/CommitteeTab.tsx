@@ -149,7 +149,12 @@ export const CommitteeTab = (): JSX.Element => {
         />
       )}
       <Styled.PrintTable>
-        <CommitteePrintTable ref={componentRef} />
+        <CommitteePrintTable
+          ref={componentRef}
+          loading={loading}
+          committeeColumns={CommitteeColumns}
+          committeeTableRows={committeeTableRows}
+        />
       </Styled.PrintTable>
     </Styled.CommitteeTabWrapper>
   );

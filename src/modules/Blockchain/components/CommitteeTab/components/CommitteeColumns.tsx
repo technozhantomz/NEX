@@ -64,16 +64,57 @@ const sorters = [
     parseFloat(a.totalVotes) - parseFloat(b.totalVotes),
 ];
 
-export const CommitteeColumns = headings.map((heading, index) => {
-  return {
-    title: (): JSX.Element => <TableHeading heading={heading} />,
-    dataIndex: keys[index],
-    key: keys[index],
-    render: renders[index],
-    filters: filters[index],
-    filterMode: filterModes[index],
-    filterSearch: filterSearch[index],
-    onFilter: onFilters[index],
-    sorter: sorters[index],
-  };
-});
+export type CommitteeColumnType = {
+  title: () => JSX.Element;
+  dataIndex: string;
+  key: string;
+  render:
+    | ((name: string) => JSX.Element)
+    | ((active: boolean) => JSX.Element)
+    | undefined;
+  filters:
+    | {
+        text: string;
+        value: boolean;
+      }[]
+    | undefined;
+  filterMode: string | undefined;
+  filterSearch: boolean | undefined;
+  onFilter:
+    | ((value: boolean, record: CommitteeTableRow) => boolean)
+    | undefined;
+  sorter:
+    | ((
+        a: {
+          rank: number;
+        },
+        b: {
+          rank: number;
+        }
+      ) => number)
+    | ((
+        a: {
+          totalVotes: string;
+        },
+        b: {
+          totalVotes: string;
+        }
+      ) => number)
+    | undefined;
+};
+
+export const CommitteeColumns: CommitteeColumnType[] = headings.map(
+  (heading, index) => {
+    return {
+      title: (): JSX.Element => <TableHeading heading={heading} />,
+      dataIndex: keys[index],
+      key: keys[index],
+      render: renders[index],
+      filters: filters[index],
+      filterMode: filterModes[index],
+      filterSearch: filterSearch[index],
+      onFilter: onFilters[index],
+      sorter: sorters[index],
+    };
+  }
+);

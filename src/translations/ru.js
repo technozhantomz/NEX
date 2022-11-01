@@ -525,6 +525,7 @@ export const ru = {
     next: "следующий",
     previous: "предыдущий",
     show_only_unread: "Показать только непрочитанные",
+    receive: "Получать",
   },
   pages: {
     logout: {
@@ -623,7 +624,13 @@ export const ru = {
       heading: "Бумажник",
       activities: "мероприятия",
       assets: "Ресурсы",
+      send: "Отправлять",
+      receive: "Получать",
       back_to_assets: "Назад к активам",
+      available_assets: "Доступные активы",
+      receive_assets: "Получить активы",
+      select_this_asset: "Выберите этот объект",
+      select_to_receive: "Выберите актив для получения",
     },
     market: {
       heading: "Рынок",

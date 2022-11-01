@@ -1,22 +1,28 @@
 import { ColumnsType } from "antd/lib/table";
-import React, { RefObject } from "react";
+import React from "react";
 
 import * as Styled from "../WitnessesTab.styled";
-import { useWitnessesTab, WitnessTableRow } from "../hooks";
+import { WitnessTableRow } from "../hooks";
 
-import { WitnessesColumns } from "./WitnessesColumns";
+import { WitnessColumnType } from ".";
 
-export const WitnessesPrintTable = React.forwardRef((_props, ref) => {
-  const { loading, witnessTableRows } = useWitnessesTab();
+type Props = {
+  loading: boolean;
+  witnessTableRows: WitnessTableRow[];
+  witnessesColumns: WitnessColumnType[];
+};
 
-  return (
-    <div ref={ref as RefObject<HTMLDivElement>}>
-      <Styled.WitnessesTable
-        dataSource={witnessTableRows}
-        columns={WitnessesColumns as ColumnsType<WitnessTableRow>}
-        loading={loading}
-        pagination={false}
-      />
-    </div>
-  );
-});
+export const WitnessesPrintTable = React.forwardRef(
+  (props: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
+    return (
+      <div ref={ref}>
+        <Styled.WitnessesTable
+          dataSource={props.witnessTableRows}
+          columns={props.witnessesColumns as ColumnsType<WitnessTableRow>}
+          loading={props.loading}
+          pagination={false}
+        />
+      </div>
+    );
+  }
+);

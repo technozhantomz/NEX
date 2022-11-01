@@ -542,6 +542,7 @@ export const en = {
     previous: "Previous",
     next: "Next",
     show_only_unread: "Show only unread",
+    receive: "Receive",
   },
   connection: {
     automatic_reconnect:
@@ -656,7 +657,17 @@ export const en = {
       heading: "Wallet",
       activities: "Activities",
       assets: "Assets",
+      send: "Send",
+      receive: "Receive",
       back_to_assets: "Back to Assets",
+      available_assets: "Available assets",
+      receive_assets: "Receive assets",
+      select_this_asset: "Select this asset",
+      select_to_receive: "Select an asset to receive",
+      no_btc_address:
+        "A Bitcoin address is not yet associated with your account",
+      receive_selected_asset_instruction:
+        "To receive %(assetSymbol)s send funds to %(account)s on the Peerplays blockchain",
     },
     market: {
       heading: "Market",

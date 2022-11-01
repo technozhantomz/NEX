@@ -11,9 +11,11 @@ import { useGenerateBitcoinAddress } from "./hooks";
 
 type Props = {
   getSidechainAccounts: (accountId: string) => Promise<void>;
+  className?: string;
 };
 
 export const GenerateBitcoinAddress = ({
+  className,
   getSidechainAccounts,
 }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
@@ -46,6 +48,7 @@ export const GenerateBitcoinAddress = ({
         <Styled.DepositForm
           name="generateAddressForm"
           onFinish={showPasswordModal}
+          className={className}
         >
           <Styled.FormItem>
             <Styled.Button type="primary" htmlType="submit">

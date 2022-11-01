@@ -145,7 +145,12 @@ export const FeesTab = (): JSX.Element => {
         />
       )}
       <Styled.PrintTable>
-        <FeesPrintTable ref={componentRef} />
+        <FeesPrintTable
+          ref={componentRef}
+          loading={loading}
+          feesColumns={FeesColumns}
+          fullFeesRows={fullFeesRows}
+        />
       </Styled.PrintTable>
     </Styled.FeesTabWrapper>
   );

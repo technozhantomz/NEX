@@ -4,11 +4,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { Layout } from "../../../../common/components";
-import {
-  useUserContext,
-  useViewportContext,
-} from "../../../../common/providers";
+import { useViewportContext } from "../../../../common/providers";
 import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
+import { ReceiveTab } from "../../components";
 import { AssetsTable } from "../../components/AssetsTable";
 
 import * as Styled from "./WalletPage.styled";
@@ -17,10 +15,9 @@ const { TabPane } = Styled.Tabs;
 
 const WalletPage: NextPage = () => {
   const router = useRouter();
-  const { tab } = router.query;
+  const { asset, tab } = router.query;
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
-  const { localStorageAccount } = useUserContext();
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
       {sm ? (
@@ -54,6 +51,7 @@ const WalletPage: NextPage = () => {
       )}
     </>
   );
+  const assetSymbol = asset && asset.length > 0 ? asset[0] : undefined;
 
   return (
     <Layout
@@ -81,9 +79,11 @@ const WalletPage: NextPage = () => {
             tab={counterpart.translate(`pages.wallet.assets`)}
             key="assets"
           >
-            <AssetsTable />
+            <AssetsTable
+              title={counterpart.translate(`field.labels.coins_token`)}
+            />
           </TabPane>
-          <TabPane
+          {/* <TabPane
             tab={counterpart.translate(`pages.wallet.activities`)}
             key="activities"
           >
@@ -91,6 +91,12 @@ const WalletPage: NextPage = () => {
               isWalletActivityTable={true}
               userName={localStorageAccount}
             />
+          </TabPane> */}
+          <TabPane
+            tab={counterpart.translate(`pages.wallet.receive`)}
+            key="receive"
+          >
+            <ReceiveTab assetSymbol={assetSymbol} />
           </TabPane>
         </Styled.Tabs>
       </Styled.WalletCard>

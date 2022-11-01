@@ -169,7 +169,12 @@ export const AssetsTab = (): JSX.Element => {
         />
       )}
       <Styled.PrintTable>
-        <AssetsPrintTable ref={componentRef} />
+        <AssetsPrintTable
+          ref={componentRef}
+          assetTableRows={assetTableRows}
+          loading={loading}
+          assetsColumns={assetsColumns}
+        />
       </Styled.PrintTable>
     </Styled.AssetsTabWrapper>
   );

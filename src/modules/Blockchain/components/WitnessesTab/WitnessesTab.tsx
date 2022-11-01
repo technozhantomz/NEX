@@ -219,7 +219,12 @@ export const WitnessesTab = (): JSX.Element => {
         />
       )}
       <Styled.PrintTable>
-        <WitnessesPrintTable ref={componentRef} />
+        <WitnessesPrintTable
+          ref={componentRef}
+          loading={loading}
+          witnessesColumns={WitnessesColumns}
+          witnessTableRows={witnessTableRows}
+        />
       </Styled.PrintTable>
     </Styled.WitnessesTabWrapper>
   );

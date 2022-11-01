@@ -159,7 +159,12 @@ export const SonsTab = (): JSX.Element => {
         />
       )}
       <Styled.PrintTable>
-        <SonsPrintTable ref={componentRef} />
+        <SonsPrintTable
+          ref={componentRef}
+          loading={loading}
+          sonsTableRows={sonsTableRows}
+          sonsColumns={SonsColumns}
+        />
       </Styled.PrintTable>
     </Styled.SonsTabWrapper>
   );

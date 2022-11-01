@@ -13,9 +13,13 @@ import * as Styled from "./AssetTitle.styled";
 
 type Props = {
   symbol: string;
+  showTitle?: boolean;
 };
 
-export const AssetTitle = ({ symbol }: Props): JSX.Element => {
+export const AssetTitle = ({
+  symbol,
+  showTitle = true,
+}: Props): JSX.Element => {
   const icons: {
     [symbol: string]: JSX.Element;
   } = {
@@ -49,9 +53,13 @@ export const AssetTitle = ({ symbol }: Props): JSX.Element => {
     <Styled.AssetTitle
       avatar={icons[symbol] !== undefined ? icons[symbol] : icons["Default"]}
       title={
-        <>
-          {AssetNames[symbol]} <span className="asset-symbol">{symbol}</span>
-        </>
+        showTitle ? (
+          <>
+            {AssetNames[symbol]} <span className="asset-symbol">{symbol}</span>
+          </>
+        ) : (
+          ""
+        )
       }
     />
   );
