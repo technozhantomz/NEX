@@ -10,6 +10,7 @@ import {
 } from "../../../../common/providers";
 import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
 import { AssetsTable } from "../../components/AssetsTable";
+import { NFTsTable } from "../../components/NFTsTable";
 
 import * as Styled from "./WalletPage.styled";
 
@@ -82,6 +83,7 @@ const WalletPage: NextPage = () => {
             key="assets"
           >
             <AssetsTable />
+            <NFTsTable />
           </TabPane>
           <TabPane
             tab={counterpart.translate(`pages.wallet.activities`)}
