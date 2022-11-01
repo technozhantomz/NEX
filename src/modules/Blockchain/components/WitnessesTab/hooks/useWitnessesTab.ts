@@ -78,7 +78,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
           const nextVoteTime = new Date(
             blockData.next_maintenance_time
           ).getTime();
-          const nextVoteDistance = nextVoteTime - now;
+          const nextVoteDistance = now - nextVoteTime;
           const currentWitness = await getUserNameById(
             blockData.current_witness as string
           );
