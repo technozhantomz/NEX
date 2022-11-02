@@ -4,3 +4,4 @@ export * from "./AssetsTable";
 export * from "./AssetsColumns";
 export * from "./AssetsPrintTable";
 export * from "./ReceiveTab";
+export * from "./SendTab";

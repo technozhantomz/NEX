@@ -7,7 +7,7 @@ import { BaseOptionType, DefaultOptionType } from "../../../../../../../ui/src";
 
 type UseAssetSelectorResult = {
   allAssets: Asset[];
-  onChange?:
+  onChange:
     | ((
         value: unknown,
         option:
