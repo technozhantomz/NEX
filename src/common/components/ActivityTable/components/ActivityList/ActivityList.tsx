@@ -1,10 +1,9 @@
 import { PaginationConfig } from "antd/lib/pagination";
 
-import { renderPaginationConfig } from "../../..";
+import { renderPaginationConfig, UserLinkExtracer } from "../../..";
 import { ActivityRow } from "../../../../types";
 import { ActivityColumns as columns } from "../ActivityColumns/";
 import { ActivityTag } from "../ActivityTag";
-import { AvtivityInfo } from "../AvtivityInfo";
 
 import * as Styled from "./ActivityList.styled";
 
@@ -43,7 +42,7 @@ export const ActivityList = ({
                   {columns[2].title()}
                 </span>
                 <span className="activity-info-value">
-                  <AvtivityInfo infoString={activityRow.info} />
+                  <UserLinkExtracer infoString={activityRow.info} />
                 </span>
               </div>
               <div className="activity-info">

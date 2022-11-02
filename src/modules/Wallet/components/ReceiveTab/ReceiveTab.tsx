@@ -6,6 +6,7 @@ import {
   DownloadBitcoinKeys,
   HIVEAndHBDDeposit,
   LoadingIndicator,
+  UserLinkExtracer,
 } from "../../../../common/components";
 import { useUserContext } from "../../../../common/providers";
 import { SidechainAcccount } from "../../../../common/types";
@@ -86,13 +87,17 @@ export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
       return (
         <Styled.AssetTitleWrapper>
           <AssetTitle symbol={asset} showTitle={false} />
-          {counterpart.translate(
-            `pages.wallet.receive_selected_asset_instruction`,
-            {
-              assetSymbol: asset,
-              account: localStorageAccount,
-            }
-          )}
+          <span>
+            <UserLinkExtracer
+              infoString={counterpart.translate(
+                `pages.wallet.receive_selected_asset_instruction`,
+                {
+                  assetSymbol: asset,
+                  account: `[userlink = ${localStorageAccount}]`,
+                }
+              )}
+            />
+          </span>
         </Styled.AssetTitleWrapper>
       );
     }

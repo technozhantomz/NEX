@@ -631,6 +631,9 @@ export const ru = {
       receive_assets: "Получить активы",
       select_this_asset: "Выберите этот объект",
       select_to_receive: "Выберите актив для получения",
+      no_btc_address: "Биткойн-адрес еще не связан с вашей учетной записью",
+      receive_selected_asset_instruction:
+        "Чтобы получить %(assetSymbol)s, отправьте средства на %(account)s в блокчейне Peerplays",
     },
     market: {
       heading: "Рынок",

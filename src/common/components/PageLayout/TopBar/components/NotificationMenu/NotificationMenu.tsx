@@ -2,7 +2,7 @@ import { PaginationConfig } from "antd/lib/pagination";
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { AvtivityInfo, renderPaginationConfig } from "../../../..";
+import { renderPaginationConfig, UserLinkExtracer } from "../../../..";
 import { Checkbox, List, Switch, Tooltip } from "../../../../../../ui/src";
 import { useFormDate } from "../../../../../hooks";
 import {
@@ -131,7 +131,9 @@ export const NotificationMenu = (): JSX.Element => {
                                 }}
                               ></Checkbox>
                               <span className="activity-info-value">
-                                <AvtivityInfo infoString={item.activity.info} />
+                                <UserLinkExtracer
+                                  infoString={item.activity.info}
+                                />
                               </span>
                             </Tooltip>
                           </div>
