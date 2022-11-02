@@ -157,6 +157,14 @@ export const NFTsTable = (): JSX.Element => {
           }
         />
       )}
+      <Styled.PrintTable>
+        <Styled.NFTsTable
+          dataSource={nftRows}
+          columns={NFTsColumns as ColumnsType<unknown>}
+          loading={loading}
+          pagination={false}
+        />
+      </Styled.PrintTable>
     </Styled.NFTsTableWrapper>
   );
 };
