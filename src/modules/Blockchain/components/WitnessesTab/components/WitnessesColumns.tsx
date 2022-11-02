@@ -3,26 +3,23 @@ import counterpart from "counterpart";
 import { TableHeading } from "../../../../../common/components";
 import { Key } from "../../../../../ui/src/icons";
 import * as Styled from "../WitnessesTab.styled";
-import { WitnessTableRow } from "../hooks";
 
 const headings = [
   "rank",
   "name",
-  "active",
-  "url",
+  "total_votes",
   "last_block",
   "missed_blocks",
-  "total_votes",
+  "url",
   "key",
 ];
 const keys = [
   "rank",
   "name",
-  "active",
-  "url",
+  "totalVotes",
   "lastBlock",
   "missedBlocks",
-  "totalVotes",
+  "url",
   "publicKey",
 ];
 const renders = [
@@ -32,8 +29,12 @@ const renders = [
       {name}
     </a>
   ),
-  (active: boolean): JSX.Element => (
-    <span>{active === true ? <Styled.ActiveIcon /> : ``}</span>
+  undefined,
+  (lastBlock: string): JSX.Element => (
+    <Styled.LastBlock>{lastBlock}</Styled.LastBlock>
+  ),
+  (missedBlocks: string): JSX.Element => (
+    <Styled.MissedBlocks>{missedBlocks}</Styled.MissedBlocks>
   ),
   (url: string): JSX.Element => (
     <>
@@ -46,13 +47,6 @@ const renders = [
       )}
     </>
   ),
-  (lastBlock: string): JSX.Element => (
-    <Styled.LastBlock>{lastBlock}</Styled.LastBlock>
-  ),
-  (missedBlocks: string): JSX.Element => (
-    <Styled.MissedBlocks>{missedBlocks}</Styled.MissedBlocks>
-  ),
-  undefined,
   (publicKey: string): JSX.Element => (
     <a href={`${publicKey}`} target="_blank">
       <Key />
@@ -62,16 +56,6 @@ const renders = [
 const filters = [
   undefined,
   undefined,
-  [
-    {
-      text: "Avtive",
-      value: true,
-    },
-    {
-      text: "Inactive",
-      value: false,
-    },
-  ],
   undefined,
   undefined,
   undefined,
@@ -81,7 +65,6 @@ const filters = [
 const filterModes = [
   undefined,
   undefined,
-  "menu",
   undefined,
   undefined,
   undefined,
@@ -91,7 +74,6 @@ const filterModes = [
 const filterSearch = [
   undefined,
   undefined,
-  false,
   undefined,
   undefined,
   undefined,
@@ -101,7 +83,6 @@ const filterSearch = [
 const onFilters = [
   undefined,
   undefined,
-  (value: boolean, record: WitnessTableRow): boolean => record.active === value,
   undefined,
   undefined,
   undefined,
@@ -111,14 +92,13 @@ const onFilters = [
 const sorters = [
   (a: { rank: number }, b: { rank: number }) => a.rank - b.rank,
   undefined,
-  undefined,
-  undefined,
+  (a: { totalVotes: string }, b: { totalVotes: string }) =>
+    parseFloat(a.totalVotes) - parseFloat(b.totalVotes),
   (a: { lastBlock: string }, b: { lastBlock: string }) =>
     parseFloat(a.lastBlock) - parseFloat(b.lastBlock),
   (a: { missedBlocks: string }, b: { missedBlocks: string }) =>
     parseFloat(a.missedBlocks) - parseFloat(b.missedBlocks),
-  (a: { totalVotes: string }, b: { totalVotes: string }) =>
-    parseFloat(a.totalVotes) - parseFloat(b.totalVotes),
+  undefined,
   undefined,
 ];
 
