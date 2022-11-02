@@ -1,6 +1,10 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type UseNFTsTableresult = {
   loading: boolean;
   nftRows: NFTRow[];
+  searchDataSource: NFTRow[];
+  setSearchDataSource: Dispatch<SetStateAction<NFTRow[]>>;
 };
 
 export type NFTRow = {

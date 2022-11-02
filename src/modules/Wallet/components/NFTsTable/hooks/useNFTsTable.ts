@@ -1,43 +1,39 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useAccount } from "../../../../../common/hooks";
-import {
-  usePeerplaysApiContext,
-  useUserContext,
-} from "../../../../../common/providers";
+import { isJson, useAccount, useNFTs } from "../../../../../common/hooks";
+import { useUserContext } from "../../../../../common/providers";
 
 import { NFTRow, UseNFTsTableresult } from "./useNFTsTable.types";
 
 export function useNFTsTable(): UseNFTsTableresult {
   const [loading, setLoading] = useState<boolean>(true);
   const [nftRows, setNFTRows] = useState<NFTRow[]>([]);
-  const { dbApi } = usePeerplaysApiContext();
+  const [searchDataSource, setSearchDataSource] = useState<NFTRow[]>([]);
   const { id, localStorageAccount } = useUserContext();
   const { getUserNameById } = useAccount();
+  const { getNFTsByOwner, getMetaData, getQuantity, getOffers } = useNFTs();
 
   const getNFTs = useCallback(async () => {
     setLoading(true);
     if (id) {
-      const rawNFTs = await dbApi("nft_get_tokens_by_owner", [id]);
+      const rawNFTs = await getNFTsByOwner(id); // NFTS by owner
       if (rawNFTs.length > 0) {
-        const testNFTS = await Promise.all(
+        const NFTS = await Promise.all(
           rawNFTs.map(async (nft) => {
-            const nftMeta = JSON.parse(nft.token_uri);
-            console.log(nftMeta);
-            const nftObj = await dbApi("get_objects", [[nft.nft_metadata_id]]);
-            console.log(nftObj);
-            const nftQuantity = await dbApi("nft_get_total_supply", [
-              nft.nft_metadata_id,
-            ]);
-            console.log(nftQuantity);
-            //const nftMaker = await getUserNameById(nftObj.owner);
-            //console.log(nftMaker);
-            const nftOffers = await dbApi("get_offers_by_item", [
-              "1.29.0",
-              nft.id,
-              10,
-            ]);
-            console.log(nftOffers);
+            const nftMetaData = await getMetaData(nft.nft_metadata_id);
+            const nftMaker = await getUserNameById(nftMetaData.owner);
+            const nftQuantity = await getQuantity(nft.nft_metadata_id);
+            const nftOffers = await getOffers(nft.id);
+            const isUriJson = isJson(nft.token_uri);
+            const nftUri = isUriJson
+              ? JSON.parse(nft.token_uri)
+              : nft.token_uri;
+            const nftImg = isUriJson
+              ? nftUri.image.replace(
+                  "ipfs://",
+                  "https://tradehands.peerplays.download/ipfs/"
+                )
+              : "";
             let nftOnSale = false;
             if (nftOffers.length > 0) {
               const sellOffers = nftOffers.filter(
@@ -47,34 +43,18 @@ export function useNFTsTable(): UseNFTsTableresult {
             }
             return {
               key: nft.id,
-              img: nftMeta.image,
-              name: nftMeta.name,
-              maker: "nftMaker",
-              collection: nftObj.name,
+              img: nftImg,
+              name: isUriJson ? nftUri.name : "",
+              maker: nftMaker,
+              collection: nftMetaData.name,
               quantity: nftQuantity,
               onSale: nftOnSale,
             };
           })
         );
-        console.log(testNFTS);
-        setNFTRows(
-          rawNFTs.map(async (nft) => {
-            const nftMeta = JSON.parse(nft.token_uri);
-            const nftObj = await dbApi("get_objects", [[nft.nft_metadata_id]]);
-            const nftQuantity = await dbApi("nft_get_total_supply", [
-              nft.nft_metadata_id,
-            ]);
-            const nftMaker = getUserNameById(nftObj.owner);
-            return {
-              key: nft.id,
-              img: nftMeta.image,
-              name: nftMeta.name,
-              maker: nftMaker,
-              collection: nftObj.name,
-              quantity: nftQuantity,
-            };
-          })
-        );
+        console.log(NFTS);
+        setNFTRows(NFTS);
+        setSearchDataSource(NFTS);
         setLoading(false);
       }
     }
@@ -84,5 +64,5 @@ export function useNFTsTable(): UseNFTsTableresult {
     getNFTs();
   }, [id, localStorageAccount]);
 
-  return { loading, nftRows };
+  return { loading, nftRows, searchDataSource, setSearchDataSource };
 }
