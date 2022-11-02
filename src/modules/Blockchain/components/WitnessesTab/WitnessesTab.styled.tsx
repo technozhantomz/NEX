@@ -1,7 +1,6 @@
 import {
   DataItemContent,
   DataTable,
-  DataTableActiveIcon,
   DataTableDownloadLinks,
   DataTableHeader,
   DataTableHeaderBar,
@@ -36,4 +35,3 @@ export const PrintTable = styled(UiPrintTable)``;
 export const LastBlock = styled(DataTableLastBlock)``;
 export const MissedBlocks = styled(DataTableMissedBlocks)``;
 export const urlIcon = styled(DataTableUrlIcon)``;
-export const ActiveIcon = styled(DataTableActiveIcon)``;
