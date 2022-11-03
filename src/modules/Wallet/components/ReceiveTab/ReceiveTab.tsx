@@ -6,7 +6,7 @@ import {
   DownloadBitcoinKeys,
   HIVEAndHBDDeposit,
   LoadingIndicator,
-  UserLinkExtracer,
+  UserLinkExtractor,
 } from "../../../../common/components";
 import { useUserContext } from "../../../../common/providers";
 import { SidechainAcccount } from "../../../../common/types";
@@ -88,7 +88,7 @@ export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
         <Styled.AssetTitleWrapper>
           <AssetTitle symbol={asset} showTitle={false} />
           <span>
-            <UserLinkExtracer
+            <UserLinkExtractor
               infoString={counterpart.translate(
                 `pages.wallet.receive_selected_asset_instruction`,
                 {
@@ -120,7 +120,7 @@ export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
       </Styled.ReceiveInstructionWrapper>
       <AssetsTable
         className="no-margin"
-        fillterAsset={assetSymbol}
+        filterAsset={assetSymbol}
         actionType="receive_select"
         title={counterpart.translate(`pages.wallet.available_assets`)}
       />

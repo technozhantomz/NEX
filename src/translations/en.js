@@ -668,6 +668,10 @@ export const en = {
         "A Bitcoin address is not yet associated with your account",
       receive_selected_asset_instruction:
         "To receive %(assetSymbol)s send funds to , %(account)s, on the Peerplays blockchain",
+      send_assets: "Send assets",
+      clear_form: "Clear form",
+      select_asset: "Select an asset",
+      select_blockchain: "Select a blockchain",
     },
     market: {
       heading: "Market",

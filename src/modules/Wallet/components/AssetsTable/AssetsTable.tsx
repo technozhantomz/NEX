@@ -20,14 +20,14 @@ type Props = {
   className?: string;
   title: string;
   actionType?: "send_receive" | "receive_select" | "send_select";
-  fillterAsset?: string;
+  filterAsset?: string;
 };
 
 export const AssetsTable = ({
   className = "",
   title,
   actionType = "send_receive",
-  fillterAsset = "",
+  filterAsset = "",
 }: Props): JSX.Element => {
   const {
     loading,
@@ -35,7 +35,7 @@ export const AssetsTable = ({
     assetsTableRows,
     searchDataSource,
     setSearchDataSource,
-  } = useAssetsTable({ fillterAsset, actionType });
+  } = useAssetsTable({ filterAsset, actionType });
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
 

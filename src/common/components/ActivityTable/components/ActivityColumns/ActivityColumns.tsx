@@ -1,5 +1,5 @@
 import { TableHeading } from "../../../";
-import { UserLinkExtracer } from "../../../UserLinkExtracer";
+import { UserLinkExtractor } from "../../../UserLinkExtractor";
 import { ActivityTag } from "../ActivityTag";
 
 export const ActivityColumns = [
@@ -19,7 +19,7 @@ export const ActivityColumns = [
     dataIndex: "info",
     key: "info",
     render: (value: string): JSX.Element => (
-      <UserLinkExtracer infoString={value} />
+      <UserLinkExtractor infoString={value} />
     ),
   },
   {

@@ -1,6 +1,6 @@
 import { PaginationConfig } from "antd/lib/pagination";
 
-import { renderPaginationConfig, UserLinkExtracer } from "../../..";
+import { renderPaginationConfig, UserLinkExtractor } from "../../..";
 import { ActivityRow } from "../../../../types";
 import { ActivityColumns as columns } from "../ActivityColumns/";
 import { ActivityTag } from "../ActivityTag";
@@ -42,7 +42,7 @@ export const ActivityList = ({
                   {columns[2].title()}
                 </span>
                 <span className="activity-info-value">
-                  <UserLinkExtracer infoString={activityRow.info} />
+                  <UserLinkExtractor infoString={activityRow.info} />
                 </span>
               </div>
               <div className="activity-info">

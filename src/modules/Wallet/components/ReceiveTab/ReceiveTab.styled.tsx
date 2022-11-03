@@ -44,10 +44,9 @@ export const ReceiveInstructionWrapper = styled.div`
 
 export const Header = styled.div`
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 16px;
   ${breakpoint.sm} {
-    font-size: 16px;
     margin-bottom: 20px;
   }
 `;

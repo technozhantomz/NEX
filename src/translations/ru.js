@@ -634,6 +634,10 @@ export const ru = {
       no_btc_address: "Биткойн-адрес еще не связан с вашей учетной записью",
       receive_selected_asset_instruction:
         "Чтобы получить %(assetSymbol)s, отправьте средства на %(account)s в блокчейне Peerplays",
+      send_assets: "Отправить активы",
+      clear_form: "Наглядная форма",
+      select_asset: "Выберите актив",
+      select_blockchain: "Выберите блокчейн",
     },
     market: {
       heading: "Рынок",

@@ -11,11 +11,11 @@ import { AssetTableRow, UseAssetsTabResult } from "./useAssetsTable.types";
 
 type Args = {
   actionType?: "send_receive" | "receive_select" | "send_select";
-  fillterAsset?: string;
+  filterAsset?: string;
 };
 
 export function useAssetsTable({
-  fillterAsset,
+  filterAsset,
   actionType,
 }: Args): UseAssetsTabResult {
   const [assetsTableRows, _setAssetsTableRows] = useState<AssetTableRow[]>([]);
@@ -60,7 +60,7 @@ export function useAssetsTable({
         setLoading(true);
         const assetsRows = await Promise.all(
           assets
-            .filter((asset) => asset.symbol !== fillterAsset)
+            .filter((asset) => asset.symbol !== filterAsset)
             .map(formAssetRow)
         );
         const symbols = assetsRows.map((asset) => asset.symbol);
@@ -100,7 +100,7 @@ export function useAssetsTable({
     setLoading,
     assets,
     setAssetsColumns,
-    fillterAsset,
+    filterAsset,
     setSearchDataSource,
   ]);
 

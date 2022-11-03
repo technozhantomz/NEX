@@ -5,11 +5,10 @@ type Props = {
   infoString: string;
 };
 
-export const UserLinkExtracer = ({ infoString }: Props): JSX.Element => {
+export const UserLinkExtractor = ({ infoString }: Props): JSX.Element => {
   const [stringParts, setStringParts] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log("infoString", infoString);
     setStringParts(infoString.split(","));
   }, [infoString]);
 
