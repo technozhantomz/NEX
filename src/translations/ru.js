@@ -624,6 +624,9 @@ export const ru = {
       activities: "мероприятия",
       assets: "Ресурсы",
       back_to_assets: "Назад к активам",
+      nfts: "NFTs",
+      nft_store: "Магазин NFT",
+      nft_search: "Поиск NFTs",
     },
     market: {
       heading: "Рынок",
@@ -1078,6 +1081,11 @@ export const ru = {
     ref_block_num: "Блок ссылок №",
     extensions: "Расширения",
     status: "Статус",
+    img: "Изображение",
+    maker: "Мастер",
+    collection: "Коллекция",
+    quantity: "Количество",
+    on_sale: "В продаже",
   },
   tableFilters: {
     avtive: "Активный",

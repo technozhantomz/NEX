@@ -6,7 +6,7 @@ import Link from "next/link";
 import { TableHeading } from "../../../../common/components";
 import { Avatar } from "../../../../ui/src";
 
-import { NFTRow } from "./hooks";
+import { NFTColumnsType, NFTRow } from "./hooks";
 
 const headings = ["img", "name", "maker", "collection", "quantity", "on_sale"];
 const keys = ["img", "name", "maker", "collection", "quantity", "onSale"];
@@ -60,8 +60,8 @@ const filterSearch = [
 const onFilters = [
   undefined,
   undefined,
-  undefined,
-  undefined,
+  (value: string, record: NFTRow): boolean => record.maker.includes(value),
+  (value: string, record: NFTRow): boolean => record.collection.includes(value),
   undefined,
   (value: boolean, record: NFTRow): boolean => record.onSale === value,
 ];
@@ -70,11 +70,11 @@ const sorters = [
   undefined,
   undefined,
   undefined,
-  undefined,
+  (a: { quantity: number }, b: { quantity: number }) => a.quantity - b.quantity,
   undefined,
 ];
 
-export const NFTsColumns = headings.map((heading, index) => {
+export const NFTColumns = headings.map((heading, index) => {
   return {
     title: (): JSX.Element => <TableHeading heading={heading} />,
     dataIndex: keys[index],
@@ -85,5 +85,5 @@ export const NFTsColumns = headings.map((heading, index) => {
     filterSearch: filterSearch[index],
     onFilter: onFilters[index],
     sorter: sorters[index],
-  };
+  } as NFTColumnsType;
 });

@@ -1,13 +1,20 @@
+import { uniq } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
 import { isJson, useAccount, useNFTs } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
+import { NFTColumns } from "../NFTColumns";
 
-import { NFTRow, UseNFTsTableresult } from "./useNFTsTable.types";
+import {
+  NFTColumnsType,
+  NFTRow,
+  UseNFTsTableresult,
+} from "./useNFTsTable.types";
 
 export function useNFTsTable(): UseNFTsTableresult {
   const [loading, setLoading] = useState<boolean>(true);
   const [nftRows, setNFTRows] = useState<NFTRow[]>([]);
+  const [nftColumns, setNFTColumns] = useState<NFTColumnsType[]>(NFTColumns);
   const [searchDataSource, setSearchDataSource] = useState<NFTRow[]>([]);
   const { id, localStorageAccount } = useUserContext();
   const { getUserNameById } = useAccount();
@@ -52,7 +59,24 @@ export function useNFTsTable(): UseNFTsTableresult {
             };
           })
         );
-        console.log(NFTS);
+        const makers = uniq(NFTS.map((nft) => nft.maker));
+        const collections = uniq(NFTS.map((nft) => nft.collection));
+        const updatedNFTColumns = NFTColumns.map((column) => {
+          switch (true) {
+            case column.key === "maker":
+              column.filters = makers.map((maker) => {
+                return { text: maker, value: maker };
+              });
+              break;
+            case column.key === "collection":
+              column.filters = collections.map((collection) => {
+                return { text: collection, value: collection };
+              });
+              break;
+          }
+          return column;
+        });
+        setNFTColumns(updatedNFTColumns);
         setNFTRows(NFTS);
         setSearchDataSource(NFTS);
         setLoading(false);
@@ -64,5 +88,11 @@ export function useNFTsTable(): UseNFTsTableresult {
     getNFTs();
   }, [id, localStorageAccount]);
 
-  return { loading, nftRows, searchDataSource, setSearchDataSource };
+  return {
+    loading,
+    nftRows,
+    nftColumns,
+    searchDataSource,
+    setSearchDataSource,
+  };
 }

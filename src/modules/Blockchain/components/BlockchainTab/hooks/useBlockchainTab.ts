@@ -73,8 +73,7 @@ export function useBlockchainTab(
           transaction: block.transactions.length,
         };
       });
-      const allWitnesses = blockRows.map((block) => block.witness);
-      const witnesses = uniq(allWitnesses);
+      const witnesses = uniq(blockRows.map((block) => block.witness));
       const updateBlockColumns = BlockColumns.map((column) => {
         if (column.key === "witness") {
           column.filters = witnesses.map((witness) => {

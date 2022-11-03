@@ -15,13 +15,17 @@ import {
   SearchOutlined,
 } from "../../../../ui/src";
 
-import { NFTsColumns } from "./NFTsColumns";
 import * as Styled from "./NFTsTable.styled";
 import { useNFTsTable } from "./hooks";
 
 export const NFTsTable = (): JSX.Element => {
-  const { loading, nftRows, searchDataSource, setSearchDataSource } =
-    useNFTsTable();
+  const {
+    loading,
+    nftRows,
+    nftColumns,
+    searchDataSource,
+    setSearchDataSource,
+  } = useNFTsTable();
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
 
@@ -29,20 +33,17 @@ export const NFTsTable = (): JSX.Element => {
     <Styled.NFTsTableWrapper>
       <Styled.NFTsHeaderBar>
         <Styled.NFTsHeader>
-          {/* {counterpart.translate(`pages.blocks.witnesses.witnesses`)} */}
-          NFTs{" "}
+          {counterpart.translate(`pages.wallet.nfts`)}{" "}
           <a target="_blank" href="https://tradehands.peerplays.download/">
-            NFT Store
+            {counterpart.translate(`pages.wallet.nft_store`)}
           </a>
         </Styled.NFTsHeader>
         <SearchTableInput
-          columns={NFTsColumns as ColumnsType<unknown>}
+          columns={nftColumns as ColumnsType<unknown>}
           dataSource={nftRows}
           setDataSource={setSearchDataSource}
           inputProps={{
-            placeholder: counterpart.translate(
-              `pages.blocks.witnesses.search_witnesses`
-            ),
+            placeholder: counterpart.translate(`pages.wallet.nft_search`),
             suffix: <SearchOutlined />,
           }}
         />
@@ -72,7 +73,7 @@ export const NFTsTable = (): JSX.Element => {
               <Styled.NFTsItemContent>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {NFTsColumns[0].title()}
+                    {nftColumns[0].title()}
                   </span>
                   <span className="item-info-value">
                     <Avatar src={<Image src={item.img} width="30" />}></Avatar>
@@ -80,13 +81,13 @@ export const NFTsTable = (): JSX.Element => {
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {NFTsColumns[1].title()}
+                    {nftColumns[1].title()}
                   </span>
                   <span className="item-info-value">{item.name}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {NFTsColumns[2].title()}
+                    {nftColumns[2].title()}
                   </span>
                   <span className="item-info-value">
                     <Link href={`/user/${item.maker}`}>
@@ -96,19 +97,19 @@ export const NFTsTable = (): JSX.Element => {
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {NFTsColumns[3].title()}
+                    {nftColumns[3].title()}
                   </span>
                   <span className="item-info-value">{item.collection}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {NFTsColumns[4].title()}
+                    {nftColumns[4].title()}
                   </span>
                   <span className="item-info-value">{item.quantity}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
-                    {NFTsColumns[5].title()}
+                    {nftColumns[5].title()}
                   </span>
                   <span className="item-info-value">
                     {item.onSale === true ? <Styled.ActiveIcon /> : ``}
@@ -121,7 +122,7 @@ export const NFTsTable = (): JSX.Element => {
       ) : (
         <Styled.NFTsTable
           dataSource={searchDataSource}
-          columns={NFTsColumns as ColumnsType<unknown>}
+          columns={nftColumns as ColumnsType<unknown>}
           loading={loading}
           pagination={
             !loading
@@ -160,7 +161,7 @@ export const NFTsTable = (): JSX.Element => {
       <Styled.PrintTable>
         <Styled.NFTsTable
           dataSource={nftRows}
-          columns={NFTsColumns as ColumnsType<unknown>}
+          columns={nftColumns as ColumnsType<unknown>}
           loading={loading}
           pagination={false}
         />

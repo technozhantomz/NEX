@@ -657,6 +657,9 @@ export const en = {
       activities: "Activities",
       assets: "Assets",
       back_to_assets: "Back to Assets",
+      nfts: "NFTs",
+      nft_store: "NFT Store",
+      nft_search: "Search NFTs",
     },
     market: {
       heading: "Market",
@@ -1112,6 +1115,11 @@ export const en = {
     ref_block_num: "Ref block #",
     extensions: "Extensions",
     status: "Status",
+    img: "Image",
+    maker: "Maker",
+    collection: "Collection",
+    quantity: "Quantity",
+    on_sale: "On sale",
   },
   tableFilters: {
     avtive: "Avtive",

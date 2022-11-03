@@ -5,12 +5,13 @@ import {
   DataTableDownloadLinks,
   DataTableHeader,
   DataTableHeaderBar,
+  DataTabWrapper,
   styled,
   ListItem as UiListItem,
   PrintTable as UiPrintTable,
 } from "../../../../ui/src";
 
-export const NFTsTableWrapper = styled.div``;
+export const NFTsTableWrapper = styled(DataTabWrapper)``;
 export const NFTsHeaderBar = styled(DataTableHeaderBar)``;
 export const NFTsHeader = styled(DataTableHeader)``;
 export const NFTsTable = styled(DataTable)``;
