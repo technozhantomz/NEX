@@ -1084,6 +1084,7 @@ export const ru = {
     img: "Изображение",
     maker: "Мастер",
     collection: "Коллекция",
+    best_offer: "Лучшее предложение",
     quantity: "Количество",
     on_sale: "В продаже",
   },

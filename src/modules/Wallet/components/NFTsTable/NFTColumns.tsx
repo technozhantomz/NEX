@@ -8,8 +8,26 @@ import { Avatar } from "../../../../ui/src";
 
 import { NFTColumnsType, NFTRow } from "./hooks";
 
-const headings = ["img", "name", "maker", "collection", "quantity", "on_sale"];
-const keys = ["img", "name", "maker", "collection", "quantity", "onSale"];
+const headings = [
+  "img",
+  "name",
+  "maker",
+  "collection",
+  // "last_price",
+  "best_offer",
+  "quantity",
+  "on_sale",
+];
+const keys = [
+  "img",
+  "name",
+  "maker",
+  "collection",
+  // "lastPrice",
+  "bestOffer",
+  "quantity",
+  "onSale",
+];
 const renders = [
   (img: string): JSX.Element => (
     <Avatar src={<Image src={img} width="30" />}></Avatar>
@@ -22,6 +40,8 @@ const renders = [
   ),
   undefined,
   undefined,
+  // undefined,
+  undefined,
   undefined,
 ];
 const filters = [
@@ -29,6 +49,8 @@ const filters = [
   undefined,
   undefined,
   undefined,
+  undefined,
+  // undefined,
   undefined,
   [
     {
@@ -47,6 +69,8 @@ const filterModes = [
   undefined,
   undefined,
   undefined,
+  // undefined,
+  undefined,
   "menu",
 ];
 const filterSearch = [
@@ -55,6 +79,8 @@ const filterSearch = [
   undefined,
   undefined,
   undefined,
+  // undefined,
+  undefined,
   false,
 ];
 const onFilters = [
@@ -62,6 +88,7 @@ const onFilters = [
   undefined,
   (value: string, record: NFTRow): boolean => record.maker.includes(value),
   (value: string, record: NFTRow): boolean => record.collection.includes(value),
+  // undefined,
   undefined,
   (value: boolean, record: NFTRow): boolean => record.onSale === value,
 ];
@@ -70,6 +97,9 @@ const sorters = [
   undefined,
   undefined,
   undefined,
+  // (a: { lastPrice: string }, b: { lastPrice: string }) => parseFloat(a.lastPrice) - parseFloat(b.lastPrice),
+  (a: { bestOffer: string }, b: { bestOffer: string }) =>
+    parseFloat(a.bestOffer) - parseFloat(b.bestOffer),
   (a: { quantity: number }, b: { quantity: number }) => a.quantity - b.quantity,
   undefined,
 ];

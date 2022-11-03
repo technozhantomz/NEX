@@ -1,7 +1,12 @@
 import { uniq } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
-import { isJson, useAccount, useNFTs } from "../../../../../common/hooks";
+import {
+  isJson,
+  useAccount,
+  useAsset,
+  useNFTs,
+} from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
 import { NFTColumns } from "../NFTColumns";
 
@@ -18,6 +23,7 @@ export function useNFTsTable(): UseNFTsTableresult {
   const [searchDataSource, setSearchDataSource] = useState<NFTRow[]>([]);
   const { id, localStorageAccount } = useUserContext();
   const { getUserNameById } = useAccount();
+  const { getAssetById } = useAsset();
   const { getNFTsByOwner, getMetaData, getQuantity, getOffers } = useNFTs();
 
   const getNFTs = useCallback(async () => {
@@ -42,11 +48,21 @@ export function useNFTsTable(): UseNFTsTableresult {
                 )
               : "";
             let nftOnSale = false;
+            let bestOffer = "";
             if (nftOffers.length > 0) {
               const sellOffers = nftOffers.filter(
                 (offer) => offer.buying_item === false
               );
               nftOnSale = sellOffers.length > 0 ? true : false;
+              const bestOfferAmmount = nftOffers
+                .filter((offer) => offer.buying_item === true)
+                .sort(
+                  (a, b) => a.maximum_price.amount - b.maximum_price.amount
+                )[0].maximum_price;
+              const bestOfferAsset = await getAssetById(
+                bestOfferAmmount.asset_id
+              );
+              bestOffer = `${bestOfferAmmount.amount} ${bestOfferAsset?.symbol}`;
             }
             return {
               key: nft.id,
@@ -54,6 +70,7 @@ export function useNFTsTable(): UseNFTsTableresult {
               name: isUriJson ? nftUri.name : "",
               maker: nftMaker,
               collection: nftMetaData.name,
+              bestOffer: bestOffer,
               quantity: nftQuantity,
               onSale: nftOnSale,
             };

@@ -15,7 +15,7 @@ export type NFTRow = {
   maker: string;
   collection: string;
   // lastPrice: string;
-  // bestOffer: string;
+  bestOffer: string;
   quantity: number;
   // value: string;
   onSale: boolean;
@@ -36,8 +36,8 @@ export type NFTColumnsType = {
     | ((value: boolean, record: NFTRow) => boolean)
     | ((value: string, record: NFTRow) => boolean)
     | undefined;
-  sorter: (
-    a: { quantity: number },
-    b: { quantity: number }
-  ) => number | undefined;
+  sorter:
+    | ((a: { bestOffer: string }, b: { bestOffer: string }) => number)
+    | ((a: { quantity: number }, b: { quantity: number }) => number)
+    | undefined;
 };

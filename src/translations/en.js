@@ -1118,6 +1118,7 @@ export const en = {
     img: "Image",
     maker: "Maker",
     collection: "Collection",
+    best_offer: "Best offer",
     quantity: "Quantity",
     on_sale: "On sale",
   },
