@@ -76,7 +76,9 @@ export function useSonsTab(): UseSonsTabResult {
 
             const activeSones = sonsRows.filter((son) => son.active === true);
             setSonsTableRows(sonsRows);
-            setSearchDataSource(sonsRows);
+            if (sonsTableRows.length === searchDataSource.length) {
+              setSearchDataSource(sonsRows);
+            }
             setActiveSons(activeSones.length);
             setBudget(budgetAmount);
             setNextVote(
@@ -119,6 +121,8 @@ export function useSonsTab(): UseSonsTabResult {
     setActiveSons,
     setSonsStats,
     setLoading,
+    searchDataSource,
+    sonsTableRows,
   ]);
 
   useEffect(() => {
@@ -126,7 +130,7 @@ export function useSonsTab(): UseSonsTabResult {
     return () => {
       clearInterval(sonsInterval);
     };
-  }, [defaultAsset]);
+  }, [defaultAsset, sonsTableRows, searchDataSource]);
 
   return {
     loading,
