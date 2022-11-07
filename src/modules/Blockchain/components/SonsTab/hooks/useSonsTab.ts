@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { isArrayEqual } from "../../../../../api/utils";
 import {
   useArrayLimiter,
   useAsset,
@@ -52,7 +53,7 @@ export function useSonsTab(): UseSonsTabResult {
           const nextVoteTime = new Date(
             blockData.next_maintenance_time
           ).getTime();
-          const nextVoteDistance = nextVoteTime - now;
+          const nextVoteDistance = now - nextVoteTime;
           if (sons && sons.length > 0) {
             sons.sort((a, b) => b.total_votes - a.total_votes);
             const sonsRows: SonsTableRow[] = [];
@@ -76,7 +77,9 @@ export function useSonsTab(): UseSonsTabResult {
 
             const activeSones = sonsRows.filter((son) => son.active === true);
             setSonsTableRows(sonsRows);
-            setSearchDataSource(sonsRows);
+            if (isArrayEqual(searchDataSource, sonsTableRows)) {
+              setSearchDataSource(sonsRows);
+            }
             setActiveSons(activeSones.length);
             setBudget(budgetAmount);
             setNextVote(
@@ -119,6 +122,7 @@ export function useSonsTab(): UseSonsTabResult {
     setActiveSons,
     setSonsStats,
     setLoading,
+    sonsTableRows,
   ]);
 
   useEffect(() => {
@@ -126,7 +130,7 @@ export function useSonsTab(): UseSonsTabResult {
     return () => {
       clearInterval(sonsInterval);
     };
-  }, [defaultAsset]);
+  }, [getSonsData]);
 
   return {
     loading,
