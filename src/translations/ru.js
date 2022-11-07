@@ -638,6 +638,7 @@ export const ru = {
       clear_form: "Наглядная форма",
       select_asset: "Выберите актив",
       select_blockchain: "Выберите блокчейн",
+      available_to_send: "Доступно для отправки:",
     },
     market: {
       heading: "Рынок",
