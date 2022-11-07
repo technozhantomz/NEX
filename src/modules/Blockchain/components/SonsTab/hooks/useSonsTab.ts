@@ -70,7 +70,7 @@ export function useSonsTab(): UseSonsTabResult {
                 name: sonsIds.filter((sonId) => sonId[1] === son.id)[0][0],
                 active: son.status === "active" ? true : false,
                 url: son.url,
-                totalVotes: `${sonsVotesAsset[index].amount} ${sonsVotesAsset[index].symbol}`,
+                totalVotes: `${sonsVotesAsset[index]?.amount} ${sonsVotesAsset[index]?.symbol}`,
               } as SonsTableRow);
               index = index + 1;
             }

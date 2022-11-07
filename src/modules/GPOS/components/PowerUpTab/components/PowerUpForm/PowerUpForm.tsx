@@ -1,6 +1,5 @@
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
-import { KeyboardEvent } from "react";
 
 import { utils } from "../../../../../../api/utils";
 import {
@@ -21,13 +20,13 @@ import { usePowerUpForm } from "./hooks";
 type Props = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
-  getGposInfo: () => Promise<void>;
+  calculateGposBalances: () => Promise<void>;
 };
 
 export const PowerUpForm = ({
   gposBalances,
   loading,
-  getGposInfo,
+  calculateGposBalances,
 }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const router = useRouter();
@@ -48,7 +47,7 @@ export const PowerUpForm = ({
   } = usePowerUpForm({
     gposBalances,
     loading,
-    getGposInfo,
+    calculateGposBalances,
   });
   const {
     isPasswordModalVisible,
@@ -84,7 +83,7 @@ export const PowerUpForm = ({
           size="large"
           initialValues={{
             openingBalance: "",
-            depositAmount: 0,
+            depositAmount: "0",
             newBalance: "",
           }}
         >
@@ -130,6 +129,7 @@ export const PowerUpForm = ({
             validateTrigger="onChange"
           >
             <Input
+              autoComplete="off"
               addonBefore={
                 <Button type="text" onClick={() => adjustDeposit("+")}>
                   +
@@ -143,11 +143,7 @@ export const PowerUpForm = ({
               type="number"
               min={0}
               step="any"
-              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e)) {
-                  e.preventDefault();
-                }
-              }}
+              onKeyPress={utils.ensureInputNumberValidity}
             />
           </Form.Item>
           <Form.Item

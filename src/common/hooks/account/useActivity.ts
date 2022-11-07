@@ -9,15 +9,21 @@ import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../providers";
-import { ActivityRow, Amount, BlockHeader, Fee, History } from "../../types";
+import {
+  ActivityRow,
+  Amount,
+  Asset,
+  BlockHeader,
+  Fee,
+  History,
+} from "../../types";
 
 import { useAccount } from "./useAccount";
 import { UseActivityResult } from "./useActivity.types";
 
 export function useActivity(): UseActivityResult {
   const { getUserNameById, getAccountByName } = useAccount();
-  const { formAssetBalanceById, getAssetById, setPrecision, getAssetBySymbol } =
-    useAsset();
+  const { formAssetBalanceById, getAssetById, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { dbApi } = usePeerplaysApiContext();
   const { getAccountHistoryById } = useAccountHistory();
@@ -33,8 +39,10 @@ export function useActivity(): UseActivityResult {
       registrar: string;
       name: string;
     }) => {
-      const registrarName = await getUserNameById(registrar);
-      const userName = await getUserNameById(name);
+      const [registrarName, userName] = await Promise.all([
+        getUserNameById(registrar),
+        getUserNameById(name),
+      ]);
       return counterpart.translate(
         `transaction.trxTypes.account_create.description`,
         {
@@ -50,14 +58,17 @@ export function useActivity(): UseActivityResult {
       creator: string;
       amount: Amount;
     }) => {
-      const asset = await formAssetBalanceById(amount.asset_id, amount.amount);
-      const creatorName = await getUserNameById(creator);
+      const [asset, creatorName] = await Promise.all([
+        formAssetBalanceById(amount.asset_id, amount.amount),
+        getUserNameById(creator),
+      ]);
+
       return counterpart.translate(
         `transaction.trxTypes.vesting_balance_create.description`,
         {
           creator: `[userlink = ${creatorName}]`,
-          amount: asset.amount,
-          symbol: asset.symbol,
+          amount: asset?.amount,
+          symbol: asset?.symbol,
         }
       );
     },
@@ -68,14 +79,17 @@ export function useActivity(): UseActivityResult {
       owner: string;
       amount: Amount;
     }) => {
-      const asset = await formAssetBalanceById(amount.asset_id, amount.amount);
-      const ownerName = await getUserNameById(owner);
+      const [asset, ownerName] = await Promise.all([
+        formAssetBalanceById(amount.asset_id, amount.amount),
+        getUserNameById(owner),
+      ]);
+
       return counterpart.translate(
         `transaction.trxTypes.vesting_balance_withdraw.description`,
         {
           owner: `[userlink = ${ownerName}]`,
-          amount: asset.amount,
-          symbol: asset.symbol,
+          amount: asset?.amount,
+          symbol: asset?.symbol,
         }
       );
     },
@@ -113,15 +127,17 @@ export function useActivity(): UseActivityResult {
       to: string;
       amount: Amount;
     }) => {
-      const asset = await formAssetBalanceById(amount.asset_id, amount.amount);
-      const sender = await getUserNameById(from);
-      const receiver = await getUserNameById(to);
+      const [asset, sender, receiver] = await Promise.all([
+        formAssetBalanceById(amount.asset_id, amount.amount),
+        getUserNameById(from),
+        getUserNameById(to),
+      ]);
       return counterpart.translate(
         `transaction.trxTypes.transfer.description`,
         {
           sender: `[userlink = ${sender}]`,
-          amount: asset.amount,
-          symbol: asset.symbol,
+          amount: asset?.amount,
+          symbol: asset?.symbol,
           receiver: `[userlink = ${receiver}]`,
         }
       );
@@ -152,18 +168,14 @@ export function useActivity(): UseActivityResult {
       },
       id: string
     ) => {
-      const buyAsset = await formAssetBalanceById(
-        min_to_receive.asset_id,
-        min_to_receive.amount
-      );
-      const sellAsset = await formAssetBalanceById(
-        amount_to_sell.asset_id,
-        amount_to_sell.amount
-      );
-      const creator = await getUserNameById(seller);
+      const [buyAsset, sellAsset, creator] = await Promise.all([
+        formAssetBalanceById(min_to_receive.asset_id, min_to_receive.amount),
+        formAssetBalanceById(amount_to_sell.asset_id, amount_to_sell.amount),
+        getUserNameById(seller),
+      ]);
       const orderId = id.split(".")[2];
-      const buyAmount = `${buyAsset.amount} ${buyAsset.symbol}`;
-      const sellAmount = `${sellAsset.amount} ${sellAsset.symbol}`;
+      const buyAmount = `${buyAsset?.amount} ${buyAsset?.symbol}`;
+      const sellAmount = `${sellAsset?.amount} ${sellAsset?.symbol}`;
       return counterpart.translate(
         `transaction.trxTypes.limit_order_create.description`,
         {
@@ -185,15 +197,14 @@ export function useActivity(): UseActivityResult {
       order_id: string;
       account_id: string;
     }) => {
-      const buyAsset = await formAssetBalanceById(
-        receives.asset_id,
-        receives.amount
-      );
-      const sellAsset = await formAssetBalanceById(pays.asset_id, pays.amount);
+      const [buyAsset, sellAsset, user] = await Promise.all([
+        formAssetBalanceById(receives.asset_id, receives.amount),
+        formAssetBalanceById(pays.asset_id, pays.amount),
+        getUserNameById(account_id),
+      ]);
       const id = order_id.split(".")[2];
-      const user = await getUserNameById(account_id);
-      const paysAmount = `${buyAsset.amount} ${buyAsset.symbol}`;
-      const receivesAmmount = `${sellAsset.amount} ${sellAsset.symbol}`;
+      const paysAmount = `${buyAsset?.amount} ${buyAsset?.symbol}`;
+      const receivesAmmount = `${sellAsset?.amount} ${sellAsset?.symbol}`;
       return counterpart.translate(
         `transaction.trxTypes.fill_order.description`,
         {
@@ -213,16 +224,17 @@ export function useActivity(): UseActivityResult {
       asset_id: string;
       amount: number;
     }) => {
-      const defaultAsset = await getAssetBySymbol(defaultToken as string);
-      const asset = await formAssetBalanceById(defaultAsset.id, amount);
-      const feePoolAsset = await getAssetById(asset_id);
-      const from = await getUserNameById(from_account);
+      const [asset, feePoolAsset, from] = await Promise.all([
+        formAssetBalanceById((defaultAsset as Asset).id, amount),
+        getAssetById(asset_id),
+        getUserNameById(from_account),
+      ]);
       return counterpart.translate(
         `transaction.trxTypes.asset_fund_fee_pool.description`,
         {
           from: `[userlink = ${from}]`,
-          symbol: feePoolAsset.symbol,
-          amount: asset.amount,
+          symbol: feePoolAsset?.symbol,
+          amount: asset?.amount,
           defaultToken,
         }
       );
@@ -243,8 +255,11 @@ export function useActivity(): UseActivityResult {
         1: "whitelisted",
         2: "blacklisted",
       };
-      const issuerName = await getUserNameById(account_to_list);
-      const listed = await getUserNameById(authorizing_account);
+
+      const [issuerName, listed] = await Promise.all([
+        getUserNameById(account_to_list),
+        getUserNameById(authorizing_account),
+      ]);
       return counterpart.translate(
         `transaction.trxTypes.account_whitelist.description`,
         {
@@ -276,18 +291,17 @@ export function useActivity(): UseActivityResult {
       issue_to_account: string;
       issuer: string;
     }) => {
-      const asset = await formAssetBalanceById(
-        asset_to_issue.asset_id,
-        asset_to_issue.amount
-      );
-      const issuerName = await getUserNameById(issuer);
-      const receiver = await getUserNameById(issue_to_account);
+      const [asset, issuerName, receiver] = await Promise.all([
+        formAssetBalanceById(asset_to_issue.asset_id, asset_to_issue.amount),
+        getUserNameById(issuer),
+        getUserNameById(issue_to_account),
+      ]);
       return counterpart.translate(
         `transaction.trxTypes.asset_issue.description`,
         {
           issuer: `[userlink = ${issuerName}]`,
-          assetAmount: asset.amount,
-          symbol: asset.symbol,
+          assetAmount: asset?.amount,
+          symbol: asset?.symbol,
           receiver: `[userlink = ${receiver}]`,
         }
       );
@@ -299,11 +313,13 @@ export function useActivity(): UseActivityResult {
       issuer: string;
       asset_to_update: string;
     }) => {
-      const issuerName = await getUserNameById(issuer);
-      const asset = await getAssetById(asset_to_update);
+      const [issuerName, asset] = await Promise.all([
+        getUserNameById(issuer),
+        getAssetById(asset_to_update),
+      ]);
       return counterpart.translate(
         `transaction.trxTypes.asset_update.description`,
-        { issuer: `[userlink = ${issuerName}]`, symbol: asset.symbol }
+        { issuer: `[userlink = ${issuerName}]`, symbol: asset?.symbol }
       );
     },
     // unnecessary
@@ -316,19 +332,18 @@ export function useActivity(): UseActivityResult {
       asset_id: string;
       issuer: string;
     }) => {
-      const claimedAsset = await formAssetBalanceById(
-        amount_to_claim.asset_id,
-        amount_to_claim.amount
-      );
-      const issuerName = await getUserNameById(issuer);
-      const asset = await getAssetById(asset_id);
+      const [claimedAsset, issuerName, asset] = await Promise.all([
+        formAssetBalanceById(amount_to_claim.asset_id, amount_to_claim.amount),
+        getUserNameById(issuer),
+        getAssetById(asset_id),
+      ]);
       return counterpart.translate(
         `transaction.trxTypes.asset_claim_pool.description`,
         {
           issuer: `[userlink = ${issuerName}]`,
-          claimed: claimedAsset.amount,
-          claimedSymbol: claimedAsset.symbol,
-          asset: asset.symbol,
+          claimed: claimedAsset?.amount,
+          claimedSymbol: claimedAsset?.symbol,
+          asset: asset?.symbol,
         }
       );
     },
@@ -342,14 +357,16 @@ export function useActivity(): UseActivityResult {
       asset_to_update: string;
       issuer: string;
     }) => {
-      const issuerName = await getUserNameById(issuer);
-      const asset = await getAssetById(asset_to_update);
-      const newOwner = await getUserNameById(new_issuer);
+      const [issuerName, asset, newOwner] = await Promise.all([
+        getUserNameById(issuer),
+        getAssetById(asset_to_update),
+        getUserNameById(new_issuer),
+      ]);
       return counterpart.translate(
         `transaction.trxTypes.asset_update_issuer.description`,
         {
           issuer: `[userlink = ${issuerName}]`,
-          asset: asset.symbol,
+          asset: asset?.symbol,
           newOwner: `[userlink=${newOwner}]`,
         }
       );
@@ -361,11 +378,13 @@ export function useActivity(): UseActivityResult {
       asset_to_update: string;
       issuer: string;
     }) => {
-      const issuerName = await getUserNameById(issuer);
-      const asset = await getAssetById(asset_to_update);
+      const [issuerName, asset] = await Promise.all([
+        getUserNameById(issuer),
+        getAssetById(asset_to_update),
+      ]);
       return counterpart.translate(
         `transaction.trxTypes.asset_update_feed_producers.description`,
-        { issuer: `[userlink = ${issuerName}]`, asset: asset.symbol }
+        { issuer: `[userlink = ${issuerName}]`, asset: asset?.symbol }
       );
     },
   };
@@ -392,8 +411,8 @@ export function useActivity(): UseActivityResult {
         type: operationType,
         info: activityDescription,
         id: activity.id,
-        fee: `${setPrecision(false, fee.amount, feeAsset.precision)} ${
-          feeAsset.symbol
+        fee: `${setPrecision(false, fee.amount, feeAsset?.precision)} ${
+          feeAsset?.symbol
         }`,
       } as ActivityRow;
     },

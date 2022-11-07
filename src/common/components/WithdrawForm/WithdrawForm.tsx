@@ -1,5 +1,4 @@
 import counterpart from "counterpart";
-import { KeyboardEvent } from "react";
 
 import {
   DashboardLoginButton,
@@ -17,7 +16,7 @@ import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg"
 import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import { useAsset, useHandleTransactionForm } from "../../hooks";
 import { useAssetsContext, useUserContext } from "../../providers";
-import { SidechainAcccount } from "../../types";
+import { Asset, SidechainAcccount } from "../../types";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -190,7 +189,7 @@ export const WithdrawForm = ({
           placeholder={counterpart.translate(
             `field.placeholder.withdraw_public_key`
           )}
-          autoComplete="new-password"
+          autoComplete="off"
           className="form-input"
           disabled={!isLoggedIn}
         />
@@ -206,6 +205,7 @@ export const WithdrawForm = ({
           )}
           className="form-input"
           disabled={localStorageAccount ? false : true}
+          autoComplete="off"
         />
       </Form.Item>
       {!withAssetSelector ? (
@@ -219,12 +219,9 @@ export const WithdrawForm = ({
             type="number"
             step="any"
             min={0}
-            onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-              if (!utils.isNumberKey(e)) {
-                e.preventDefault();
-              }
-            }}
+            onKeyPress={utils.ensureInputNumberValidity}
             disabled={localStorageAccount ? false : true}
+            autoComplete="off"
           />
         </Form.Item>
       ) : (
@@ -291,11 +288,7 @@ export const WithdrawForm = ({
             type="number"
             step="any"
             min={0}
-            onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-              if (!utils.isNumberKey(e)) {
-                e.preventDefault();
-              }
-            }}
+            onKeyPress={utils.ensureInputNumberValidity}
             disabled={localStorageAccount ? false : true}
           />
         </Form.Item>
@@ -320,7 +313,9 @@ export const WithdrawForm = ({
   const formBody = selectedAsset === "BTC" ? btcFormBody : hiveFormBody;
 
   const formBodyWithLoading = loadingSidechainAccounts ? (
-    <LoadingIndicator />
+    <Styled.LoadingIndicatorContainer>
+      <LoadingIndicator type="three-bounce" />
+    </Styled.LoadingIndicatorContainer>
   ) : (
     formBody
   );
@@ -349,15 +344,11 @@ export const WithdrawForm = ({
                   type="number"
                   step="any"
                   min={0}
-                  onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                    if (!utils.isNumberKey(e)) {
-                      e.preventDefault();
-                    }
-                  }}
+                  onKeyPress={utils.ensureInputNumberValidity}
                   prefix={
                     <Styled.WithdrawFormAsset>
                       <LogoSelectOption
-                        assets={sidechainAssets}
+                        assets={sidechainAssets as Asset[]}
                         value={selectedAsset}
                         onChange={handleAssetChange}
                       />
@@ -365,7 +356,7 @@ export const WithdrawForm = ({
                     </Styled.WithdrawFormAsset>
                   }
                   disabled={!isLoggedIn}
-                  autoComplete="new-password"
+                  autoComplete="off"
                 />
               </Styled.WithdrawFormAssetAmount>
             </>

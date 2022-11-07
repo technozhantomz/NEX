@@ -20,13 +20,13 @@ import { UseProxyTab } from "./useProxyTab.types";
 type Args = {
   serverProxy: Proxy;
   totalGpos: number;
-  getProxyAccount: (proxyId: string) => Promise<void>;
+  getUserVotes: () => Promise<void>;
 };
 
 export function useProxyTab({
   serverProxy,
   totalGpos,
-  getProxyAccount,
+  getUserVotes,
 }: Args): UseProxyTab {
   const [localProxy, setLocalProxy] = useState<Proxy>({ ...serverProxy });
   const [searchError, setSearchError] = useState<boolean>(false);
@@ -168,7 +168,7 @@ export function useProxyTab({
         }
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
-          await getProxyAccount(localProxy.id);
+          getUserVotes();
           setIsPublishable(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
@@ -193,7 +193,7 @@ export function useProxyTab({
       buildTrx,
       pendingTransaction,
       formAccountBalancesByName,
-      getProxyAccount,
+      getUserVotes,
       localProxy,
       localProxy.id,
       localProxy.name,

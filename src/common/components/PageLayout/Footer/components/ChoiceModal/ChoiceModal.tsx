@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 import React, { useCallback } from "react";
 
-import { Button } from "../../../../../../ui/src";
+import { CardFormButton } from "../../../../../../ui/src";
 
 import * as Styled from "./ChoiceModal.styled";
 
@@ -36,9 +36,9 @@ export const ChoiceModal = ({
     [hideModal]
   );
 
-  choices.map((choice, key) => {
+  choices.forEach((choice, key) => {
     footer.push(
-      <Button
+      <CardFormButton
         type="primary"
         key={key}
         onClick={(event) => {
@@ -46,14 +46,14 @@ export const ChoiceModal = ({
         }}
       >
         {counterpart.translate(choice.translationKey)}
-      </Button>
+      </CardFormButton>
     );
   });
 
   footer.push(
-    <Button key="cancel" onClick={hideModal}>
+    <CardFormButton key="cancel" className="cancel" onClick={hideModal}>
       {counterpart.translate("pages.modal.cancel")}
-    </Button>
+    </CardFormButton>
   );
 
   return (
@@ -65,7 +65,7 @@ export const ChoiceModal = ({
       footer={footer}
       centered={true}
     >
-      <div>{content && content}</div>
+      {content && <div>{content}</div>}
     </Styled.ChoiceModal>
   );
 };

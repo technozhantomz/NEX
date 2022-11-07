@@ -31,15 +31,15 @@ const VotingPage: NextPage = () => {
   const { pageMeta } = useVotingPageMeta(tab as string);
   const { sm } = useViewportContext();
   const {
-    loading,
-    serverApprovedVotes,
+    loadingMembers,
+    loadingUserVotes,
     allMembers,
-    fullAccount,
     allMembersIds,
-    totalGpos,
+    fullAccount,
+    serverApprovedVotes,
     proxy,
-    getVotes,
-    getProxyAccount,
+    totalGpos,
+    getUserVotes,
   } = useVoting();
   const dropdowItems = [
     { label: counterpart.translate(`pages.voting.gpos.tab`), key: "gpos" },
@@ -127,20 +127,20 @@ const VotingPage: NextPage = () => {
               >
                 <VoteTab
                   tab={voteTab}
-                  serverApprovedVotes={serverApprovedVotes.filter(
+                  votesLoading={loadingMembers || loadingUserVotes}
+                  tabServerApprovedVotes={serverApprovedVotes.filter(
                     (approvedVote) =>
                       parseInt(approvedVote.vote_id.split(":")[0]) ===
                       voteIdentifiers[index]
                   )}
+                  fullAccount={fullAccount}
                   allMembers={allMembers.filter(
                     (member) =>
                       parseInt(member.vote_id.split(":")[0]) ===
                       voteIdentifiers[index]
                   )}
-                  fullAccount={fullAccount}
-                  getVotes={getVotes}
                   allMembersIds={allMembersIds}
-                  votesLoading={loading}
+                  getUserVotes={getUserVotes}
                   totalGpos={totalGpos}
                   proxy={proxy}
                 />
@@ -154,8 +154,8 @@ const VotingPage: NextPage = () => {
             <ProxyTab
               serverProxy={proxy}
               totalGpos={totalGpos}
-              getProxyAccount={getProxyAccount}
-              loading={loading}
+              getUserVotes={getUserVotes}
+              loading={loadingMembers || loadingUserVotes}
             />
           </TabPane>
         </Tabs>
