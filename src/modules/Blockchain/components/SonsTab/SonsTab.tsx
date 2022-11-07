@@ -146,6 +146,7 @@ export const SonsTab = (): JSX.Element => {
           pagination={
             !loading
               ? {
+                  hideOnSinglePage: true,
                   showSizeChanger: false,
                   size: "small",
                   pageSize: 15,

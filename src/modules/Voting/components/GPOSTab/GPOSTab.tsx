@@ -102,7 +102,7 @@ export const GPOSTab = (): JSX.Element => {
               <li>
                 <Styled.GPOSDetailsTitle>
                   {counterpart.translate(
-                    `pages.voting.gpos.estimated_rake_reward`
+                    `pages.voting.gpos.estimated_participation_reward`
                   )}{" "}
                   %
                 </Styled.GPOSDetailsTitle>

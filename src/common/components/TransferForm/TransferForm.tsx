@@ -1,5 +1,4 @@
 import counterpart from "counterpart";
-import { KeyboardEvent } from "react";
 
 import { utils } from "../../../api/utils";
 import { Form, Input } from "../../../ui/src";
@@ -78,12 +77,9 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
               placeholder={counterpart.translate(`field.placeholder.amount`)}
               type="number"
               min={0}
-              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e)) {
-                  e.preventDefault();
-                }
-              }}
+              onKeyPress={utils.ensureInputNumberValidity}
               step="any"
+              autoComplete="off"
             />
           </Form.Item>
         </div>
@@ -96,6 +92,7 @@ export const TransferForm = ({ asset }: Props): JSX.Element => {
           >
             <Input
               placeholder={counterpart.translate(`field.placeholder.to`)}
+              autoComplete="off"
             />
           </Form.Item>
           <Form.Item

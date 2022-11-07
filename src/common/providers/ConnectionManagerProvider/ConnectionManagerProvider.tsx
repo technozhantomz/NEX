@@ -96,45 +96,49 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
     );
   };
 
-  const renderUnsuccessfulConnection = (
+  const renderUnsuccessfulConnection = syncError ? (
+    <div
+      style={{
+        height: "100px",
+        margin: "0",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+      }}
+    >
+      <h1>{counterpart.translate(`app_init.sync_error.title`)}</h1>
+      <div>
+        {counterpart.translate(`app_init.sync_error.first_description`)}
+      </div>
+      <div>
+        {counterpart.translate(`app_init.sync_error.second_description`)}
+      </div>
+    </div>
+  ) : (
+    <div
+      style={{
+        height: "100px",
+        margin: "0",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+      }}
+    >
+      <h1>{counterpart.translate(`app_init.connection_error.title`)}</h1>
+      <div>
+        {counterpart.translate(`app_init.connection_error.first_description`)}
+      </div>
+      <div>
+        {counterpart.translate(`app_init.connection_error.second_description`)}
+      </div>
+    </div>
+  );
+
+  const renderNotConnectedScreen = (
     <div>
-      {!apiError ? (
-        renderLoadingScreen()
-      ) : syncError ? (
-        <div
-          style={{
-            height: "100px",
-            margin: "0",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <h1>Failed to sync with the API server</h1>
-          <div>Please verify that your computer clock is correct.</div>
-          <div>
-            Once you've synchronized your clock, please refresh this page.
-          </div>
-        </div>
-      ) : (
-        <div
-          style={{
-            height: "100px",
-            margin: "0",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <h1>Application initialization issues</h1>
-          <div>
-            Comming soon: Node mannual selection and Adding personal node{" "}
-          </div>
-          <div>Please check your connection and refresh the page</div>
-        </div>
-      )}
+      {!apiError ? renderLoadingScreen() : renderUnsuccessfulConnection}
     </div>
   );
 
@@ -147,7 +151,7 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
       }}
     >
       {!apiConnected ? (
-        renderUnsuccessfulConnection
+        renderNotConnectedScreen
       ) : (
         <ChainStoreProvider apiInstance={apiInstance}>
           {children}

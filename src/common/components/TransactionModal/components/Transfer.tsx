@@ -9,7 +9,7 @@ type Props = {
   account: string;
   asset: string;
   to: string;
-  amount: number;
+  amount: string;
 };
 
 export const Transfer = ({

@@ -229,6 +229,34 @@ export const VoteTable = ({
                 </Styled.VoteItemContent>
               </Styled.VoteListItem>
             )}
+            pagination={{
+              showSizeChanger: false,
+              hideOnSinglePage: true,
+              //position: ["bottomRight"],
+              size: "small",
+              pageSize: 5,
+              itemRender: (
+                _page: number,
+                type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
+                element: ReactNode
+              ) => {
+                if (type === "prev") {
+                  return (
+                    <a style={{ marginRight: "8px" } as CSSProperties}>
+                      {counterpart.translate(`buttons.previous`)}
+                    </a>
+                  );
+                }
+                if (type === "next") {
+                  return (
+                    <a style={{ marginLeft: "8px" } as CSSProperties}>
+                      {counterpart.translate(`buttons.next`)}
+                    </a>
+                  );
+                }
+                return element;
+              },
+            }}
           />
         ) : (
           <Styled.VoteTable
@@ -236,6 +264,8 @@ export const VoteTable = ({
             dataSource={searchDataSource}
             loading={loading}
             pagination={{
+              showSizeChanger: false,
+              hideOnSinglePage: true,
               position: ["bottomRight"],
               size: "small",
               pageSize: 5,
