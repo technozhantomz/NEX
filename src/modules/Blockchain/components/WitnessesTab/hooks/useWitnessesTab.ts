@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { isArrayEqual } from "../../../../../api/utils";
 import {
   useAccount,
   useArrayLimiter,
@@ -119,7 +120,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
               rewardAmount
             ).toFixed(defaultAsset.precision);
             setWitnessTableRows(witnessesRows);
-            if (witnessTableRows.length === searchDataSource.length) {
+            if (isArrayEqual(witnessTableRows, searchDataSource)) {
               setSearchDataSource(witnessesRows);
             }
             setActiveWitnesses(activeWitnesses.length);
@@ -191,7 +192,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     return () => {
       clearInterval(witnessInterval);
     };
-  }, [defaultAsset, searchDataSource, witnessTableRows]);
+  }, [getWitnessData]);
 
   return {
     loading,

@@ -1,12 +1,15 @@
 import counterpart from "counterpart";
 
 import { TableHeading } from "../../../../../common/components";
+import { Tooltip } from "../../../../../ui/src";
 import { Key } from "../../../../../ui/src/icons";
 import * as Styled from "../WitnessesTab.styled";
+import { WitnessTableRow } from "../hooks";
 
 const headings = [
   "rank",
   "name",
+  "active",
   "total_votes",
   "last_block",
   "missed_blocks",
@@ -16,6 +19,7 @@ const headings = [
 const keys = [
   "rank",
   "name",
+  "active",
   "totalVotes",
   "lastBlock",
   "missedBlocks",
@@ -28,6 +32,9 @@ const renders = [
     <a href={`/user/${name}`} target="_blank">
       {name}
     </a>
+  ),
+  (active: boolean): JSX.Element => (
+    <span>{active === true ? <Styled.ActiveIcon /> : ``}</span>
   ),
   undefined,
   (lastBlock: string): JSX.Element => (
@@ -48,14 +55,26 @@ const renders = [
     </>
   ),
   (publicKey: string): JSX.Element => (
-    <a href={`${publicKey}`} target="_blank">
-      <Key />
-    </a>
+    <Tooltip placement="top" title={publicKey}>
+      <span>
+        <Key />
+      </span>
+    </Tooltip>
   ),
 ];
 const filters = [
   undefined,
   undefined,
+  [
+    {
+      text: "Avtive",
+      value: true,
+    },
+    {
+      text: "Inactive",
+      value: false,
+    },
+  ],
   undefined,
   undefined,
   undefined,
@@ -65,6 +84,7 @@ const filters = [
 const filterModes = [
   undefined,
   undefined,
+  "menu",
   undefined,
   undefined,
   undefined,
@@ -74,6 +94,7 @@ const filterModes = [
 const filterSearch = [
   undefined,
   undefined,
+  false,
   undefined,
   undefined,
   undefined,
@@ -83,6 +104,7 @@ const filterSearch = [
 const onFilters = [
   undefined,
   undefined,
+  (value: boolean, record: WitnessTableRow): boolean => record.active === value,
   undefined,
   undefined,
   undefined,
@@ -91,6 +113,7 @@ const onFilters = [
 ];
 const sorters = [
   (a: { rank: number }, b: { rank: number }) => a.rank - b.rank,
+  undefined,
   undefined,
   (a: { totalVotes: string }, b: { totalVotes: string }) =>
     parseFloat(a.totalVotes) - parseFloat(b.totalVotes),
