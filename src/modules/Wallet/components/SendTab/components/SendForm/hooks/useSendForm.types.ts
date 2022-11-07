@@ -1,7 +1,11 @@
 // import { Dispatch, SetStateAction } from "react";
 
 import { Asset } from "../../../../../../../common/types";
-import { BaseOptionType, DefaultOptionType } from "../../../../../../../ui/src";
+import {
+  BaseOptionType,
+  DefaultOptionType,
+  FormInstance,
+} from "../../../../../../../ui/src";
 
 // import { Account, SignerKey } from "../../../types";
 
@@ -17,10 +21,12 @@ export type UseSendFormResult = {
       ) => void)
     | undefined;
   assetBlockchains: string[];
+  sendForm: FormInstance<SendForm>;
+  selectedAssetSymbol: string | undefined;
+  selectedAsset: Asset | undefined;
 
   // feeAmount: number;
   // formValdation: FormValidation;
-  // transferForm: FormInstance<TransferForm>;
   // handleValuesChange: (changedValues: any) => void;
   // setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   // transactionErrorMessage: string;
@@ -31,6 +37,13 @@ export type UseSendFormResult = {
   // toAccount: Account | undefined;
   // amount: string;
   // transferFee: number;
+};
+export type SendForm = {
+  asset: string;
+  to: string;
+  amount: string;
+  blockchain: string;
+  memo?: string;
 };
 
 // export type FormField = {
@@ -46,12 +59,4 @@ export type UseSendFormResult = {
 //   amount: Rule[];
 //   asset: Rule[];
 //   memo: Rule[];
-// };
-
-// export type TransferForm = {
-//   from: string;
-//   to: string;
-//   amount: string;
-//   asset: string;
-//   memo?: string;
 // };

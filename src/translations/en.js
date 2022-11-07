@@ -672,6 +672,7 @@ export const en = {
       clear_form: "Clear form",
       select_asset: "Select an asset",
       select_blockchain: "Select a blockchain",
+      available_to_send: "Available to send:",
     },
     market: {
       heading: "Market",

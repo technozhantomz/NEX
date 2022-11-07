@@ -1,9 +1,11 @@
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useUserContext } from "../../../../../../../common/providers";
+import { Asset } from "../../../../../../../common/types";
+import { Form } from "../../../../../../../ui/src";
 
-import { UseSendFormResult } from "./useSendForm.types";
+import { SendForm, UseSendFormResult } from "./useSendForm.types";
 
 type Args = {
   assetSymbol?: string;
@@ -12,6 +14,13 @@ type Args = {
 export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
   const router = useRouter();
   const { assets } = useUserContext();
+  const [sendForm] = Form.useForm<SendForm>();
+
+  const [selectedAsset, setSelectedAsset] = useState<Asset>();
+  const [selectedAssetSymbol, setSelectedAssetSymbol] = useState<
+    string | undefined
+  >(assetSymbol);
+
   const assetBlockchains: {
     [assetSymbol: string]: string[];
   } = {
@@ -27,10 +36,29 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
 
   const onAssetChange = useCallback(
     (value: unknown) => {
+      setSelectedAssetSymbol(value as string);
+      setSelectedAsset(assets.find((asset) => asset.symbol === value));
+      sendForm.setFieldsValue({
+        blockchain: undefined,
+      });
       router.push(`/wallet/${value}?tab=send`);
     },
-    [router]
+    [router, setSelectedAssetSymbol, setSelectedAsset]
   );
+
+  useEffect(() => {
+    if (!assetSymbol || assetSymbol === "") {
+      setSelectedAssetSymbol("");
+      sendForm.resetFields();
+    }
+  }, [assetSymbol]);
+
+  useEffect(() => {
+    setSelectedAsset(assets.find((asset) => asset.symbol === assetSymbol));
+  }, [assetSymbol, assets, assets.length]);
+
+  console.log("selectedassetSymbol", selectedAssetSymbol);
+  console.log("selectedAsset", selectedAsset);
   // const [transferFee, setTransferFee] = useState<number>(0);
   // const [feeAmount, setFeeAmount] = useState<number>(0);
   // const [toAccount, setToAccount] = useState<Account>();
@@ -283,6 +311,9 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     assets,
     onAssetChange,
     assetBlockchains: blockchains,
+    sendForm,
+    selectedAssetSymbol,
+    selectedAsset,
     // feeAmount,
     // transferForm,
     // formValdation,

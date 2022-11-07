@@ -24,15 +24,22 @@ type Props = {
 };
 
 export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
-  const { assets, onAssetChange, assetBlockchains } = useSendForm({
+  const {
+    assets,
+    onAssetChange,
+    assetBlockchains,
+    sendForm,
+    selectedAssetSymbol,
+    selectedAsset,
+  } = useSendForm({
     assetSymbol,
   });
   const icons: {
     [blockchain: string]: JSX.Element;
   } = {
-    Peerplays: <BitcoinIcon height="20" width="20" />,
+    Peerplays: <PPYIcon height="20" width="20" />,
     Hive: <HIVEIcon height="20" width="20" />,
-    Bitcoin: <PPYIcon height="02" width="20" />,
+    Bitcoin: <BitcoinIcon height="20" width="20" />,
   };
   //   const { localStorageAccount } = useUserContext();
   //   const {
@@ -48,13 +55,17 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
   //     setTransactionSuccessMessage,
   //     neededKeyType: "active",
   //   });
-
+  console.log("assetSymbol", assetSymbol);
   return (
     <Form.Provider>
       <Styled.SendForm
         size="large"
+        form={sendForm}
         // onValuesChange={handleValuesChange}
         // validateTrigger={["onBlur", "onSubmit"]}
+        initialValues={{
+          asset: assetSymbol,
+        }}
       >
         <div className="two-input-row">
           <Form.Item
@@ -66,7 +77,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
           >
             <Styled.AssetSelector
               placeholder={counterpart.translate(`pages.wallet.select_asset`)}
-              value={assetSymbol}
+              value={selectedAssetSymbol}
               onChange={onAssetChange}
             >
               {assets.map((asset) => {
@@ -96,6 +107,14 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             />
           </Form.Item>
         </div>
+        <Styled.AvailableAssetWrapper>
+          <Styled.AvailableAssetLabel>
+            {counterpart.translate(`pages.wallet.available_to_send`)}
+          </Styled.AvailableAssetLabel>
+          <Styled.AvailableAssetAmount>
+            {selectedAsset ? selectedAsset.amount : 0}
+          </Styled.AvailableAssetAmount>
+        </Styled.AvailableAssetWrapper>
         <div className="two-input-row">
           <Form.Item
             name="to"
@@ -108,7 +127,11 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
               autoComplete="off"
             />
           </Form.Item>
-          <Form.Item>
+          <Form.Item
+            name="blockchain"
+            validateFirst={true}
+            validateTrigger="onBlur"
+          >
             <Styled.BlockchainSelector
               placeholder={counterpart.translate(
                 `pages.wallet.select_blockchain`
@@ -118,12 +141,14 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             >
               {assetBlockchains.map((blockchain, index) => {
                 return (
-                  <Styled.BlockchainOptionWrapper key={index}>
-                    <Styled.IconWrapper>{icons[blockchain]}</Styled.IconWrapper>
-                    <Styled.BlockchainOption value={blockchain}>
-                      {blockchain}
-                    </Styled.BlockchainOption>
-                  </Styled.BlockchainOptionWrapper>
+                  <Styled.BlockchainOption key={index} value={blockchain}>
+                    <Styled.contentWrapper>
+                      <Styled.IconWrapper>
+                        {icons[blockchain]}
+                      </Styled.IconWrapper>
+                      <div>{blockchain}</div>
+                    </Styled.contentWrapper>
+                  </Styled.BlockchainOption>
                 );
               })}
             </Styled.BlockchainSelector>

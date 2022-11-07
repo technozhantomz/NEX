@@ -1,8 +1,7 @@
-import { CardForm, Select, styled } from "../../../../../../ui/src";
+import { CardForm, Option, Select, styled } from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
+import { colors } from "../../../../../../ui/src/colors";
 // import { CardForm, CardFormButton, Form, Input, styled } from "../../../ui/src";
-
-const { Option } = Select;
 
 export const SendForm = styled(CardForm)`
   margin: 0 0 20px 0;
@@ -20,7 +19,12 @@ export const SendForm = styled(CardForm)`
       border-radius: 4px !important;
       display: flex;
       align-items: center;
-      padding: 15px 30px !important;
+      padding: 0px 30px !important;
+    }
+    .ant-select-selection-item {
+      height: 100% !important;
+      display: flex;
+      align-items: center;
     }
     .ant-input-lg {
       padding: 15px 30px;
@@ -44,12 +48,33 @@ export const SendForm = styled(CardForm)`
 
 export const AssetSelector = styled(Select)``;
 export const AssetOption = styled(Option)``;
-export const BlockchainSelector = styled(Select)``;
-export const BlockchainOptionWrapper = styled.div`
-  height: 50px;
+
+export const AvailableAssetWrapper = styled.div`
+  margin-bottom: 15px;
+  display: flex;
 `;
+export const AvailableAssetLabel = styled.div`
+  color: ${colors.textColorSecondary};
+  font-size: 14px;
+  margin-right: 4px;
+`;
+export const AvailableAssetAmount = styled.div`
+  color: ${colors.textColor};
+  font-size: 14px;
+`;
+
+export const BlockchainSelector = styled(Select)``;
 export const BlockchainOption = styled(Option)``;
-export const IconWrapper = styled.div``;
+export const contentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100% !important;
+`;
+export const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+`;
 
 // export const TransferFormButton = styled(CardFormButton)`
 //   width: 100%;
