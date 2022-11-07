@@ -122,7 +122,6 @@ export function useSonsTab(): UseSonsTabResult {
     setActiveSons,
     setSonsStats,
     setLoading,
-    searchDataSource,
     sonsTableRows,
   ]);
 
@@ -131,7 +130,7 @@ export function useSonsTab(): UseSonsTabResult {
     return () => {
       clearInterval(sonsInterval);
     };
-  }, [defaultAsset, sonsTableRows, searchDataSource]);
+  }, [getSonsData]);
 
   return {
     loading,
