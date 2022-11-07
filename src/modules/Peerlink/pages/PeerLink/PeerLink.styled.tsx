@@ -5,6 +5,5 @@ export const ConnectCard = styled(Card)`
   max-width: 700px;
   min-height: 291px;
   ${breakpoint.sm} {
-    
   }
 `;
