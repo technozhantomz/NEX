@@ -26,7 +26,7 @@ import {
 export function usePowerUpForm({
   gposBalances,
   //loading,
-  getGposInfo,
+  calculateGposBalances,
 }: UsePowerUpFormArgs): UsePowerUpFormResult {
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [transactionErrorMessage, setTransactionErrorMessage] =
@@ -34,11 +34,12 @@ export function usePowerUpForm({
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  const [newBalance, setNewBalance] = useState<number>(0);
+  const [newBalance, setNewBalance] = useState<string>("0");
   const [userAvailableBalance, _setUserAvailableBalance] = useState<number>(0);
 
   const [powerUpForm] = Form.useForm<PowerUpForm>();
-  const depositAmount: number = Form.useWatch("depositAmount", powerUpForm);
+  const depositAmount: string =
+    Form.useWatch("depositAmount", powerUpForm) || "0";
   const { id, assets, localStorageAccount } = useUserContext();
   const { buildVestingBalanceCreateTransaction } = useGPOSTransactionBuilder();
   const { buildTrx } = useTransactionBuilder();
@@ -50,14 +51,25 @@ export function usePowerUpForm({
 
   const adjustDeposit = useCallback(
     (direction: string) => {
-      const currentAmount = powerUpForm.getFieldValue("depositAmount");
-      const minusDirection = currentAmount >= 1 ? currentAmount - 1 : 0;
+      const minusDirection =
+        Number(depositAmount) >= 1
+          ? limitByPrecision(
+              String(Number(depositAmount) - 1),
+              defaultAsset?.precision
+            )
+          : "0";
       powerUpForm.setFieldsValue({
-        depositAmount: direction === "+" ? currentAmount + 1 : minusDirection,
+        depositAmount:
+          direction === "+"
+            ? limitByPrecision(
+                String(Number(depositAmount) + 1),
+                defaultAsset?.precision
+              )
+            : minusDirection,
       });
       powerUpForm.validateFields();
     },
-    [powerUpForm]
+    [powerUpForm, depositAmount, defaultAsset, limitByPrecision]
   );
 
   const handleVesting = useCallback(
@@ -77,10 +89,7 @@ export function usePowerUpForm({
         const trxResult = await buildTrx([trx], [signerKey]);
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
-          await getGposInfo();
-          powerUpForm.setFieldsValue({
-            depositAmount: 0,
-          });
+          await calculateGposBalances();
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
             counterpart.translate(`field.success.successfully_deposited`, {
@@ -113,7 +122,7 @@ export function usePowerUpForm({
       buildTrx,
       formAccountBalancesByName,
       localStorageAccount,
-      getGposInfo,
+      calculateGposBalances,
       setTransactionSuccessMessage,
     ]
   );
@@ -130,12 +139,12 @@ export function usePowerUpForm({
     }
   }, [assets, defaultToken, _setUserAvailableBalance]);
 
-  const validateDepositAmount = async (_: unknown, value: number) => {
+  const validateDepositAmount = async (_: unknown, value: string) => {
     const accountAsset = assets.find(
       (asset) => asset.symbol === gposBalances?.asset.symbol
     );
     const total = Number(value) + feeAmount;
-    if (value <= 0) {
+    if (Number(value) <= 0) {
       return Promise.reject(
         new Error(
           counterpart.translate(`field.errors.deposit_amount_should_greater`)
@@ -191,8 +200,12 @@ export function usePowerUpForm({
 
   useEffect(() => {
     if (gposBalances) {
-      const newBalance = Number(
-        limitByPrecision(String(gposBalances?.openingBalance + depositAmount))
+      powerUpForm.setFieldsValue({
+        depositAmount: limitByPrecision(depositAmount, defaultAsset?.precision),
+      });
+      const newBalance = limitByPrecision(
+        String(gposBalances?.openingBalance + Number(depositAmount)),
+        defaultAsset?.precision
       );
       if (userAvailableBalance >= 0) {
         setNewBalance(newBalance);
@@ -200,18 +213,12 @@ export function usePowerUpForm({
 
         if (!sm) {
           powerUpForm.setFieldsValue({
-            depositAmount: Number(
-              limitByPrecision(String(depositAmount), defaultAsset?.precision)
-            ),
             newBalance: newBalance + " " + gposBalances?.asset.symbol,
             availableBalance:
               userAvailableBalance + " " + gposBalances.asset.symbol,
           });
         } else {
           powerUpForm.setFieldsValue({
-            depositAmount: Number(
-              limitByPrecision(String(depositAmount), defaultAsset?.precision)
-            ),
             newBalance: gposBalances?.asset.symbol,
             availableBalance: gposBalances.asset.symbol,
           });

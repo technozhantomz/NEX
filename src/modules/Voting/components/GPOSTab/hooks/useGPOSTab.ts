@@ -6,7 +6,7 @@ import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
-import { GPOSInfoResponse } from "../../../../../common/types";
+import { GPOSInfoType } from "../../../../../common/types";
 
 import { GPOSInfo, UseGPOSTabResult } from "./useGPOSTab.types";
 
@@ -54,13 +54,24 @@ export function useGPOSTab(): UseGPOSTabResult {
     }
   }, []);
 
-  const getGPOSInfo = useCallback(async () => {
+  const getGposInfo = useCallback(async () => {
     try {
       if (id) {
-        setLoading(true);
-        const gposInfo: GPOSInfoResponse = await dbApi("get_gpos_info", [id]);
-        if (gposInfo) {
-          const asset = await getAssetById(gposInfo.award.asset_id);
+        const gposInfo: GPOSInfoType = await dbApi("get_gpos_info", [id]);
+        return gposInfo;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [id, dbApi]);
+
+  const calculateGposInfo = useCallback(async () => {
+    try {
+      setLoading(true);
+      const gposInfo = await getGposInfo();
+      if (gposInfo) {
+        const asset = await getAssetById(gposInfo.award.asset_id);
+        if (asset) {
           const totalBlockchainGPOS =
             gposInfo.total_amount / 10 ** asset.precision;
           const vestingFactor = parseInt(gposInfo.vesting_factor);
@@ -82,22 +93,28 @@ export function useGPOSTab(): UseGPOSTabResult {
               gposInfo.allowed_withdraw_amount / 10 ** asset.precision,
             symbol: asset.symbol,
           });
-          setLoading(false);
-        } else {
-          setLoading(false);
         }
+        setLoading(false);
+      } else {
+        setLoading(false);
       }
     } catch (e) {
       console.log(e);
       setLoading(false);
     }
-  }, [id, dbApi, setLoading, getAssetById, getPerformanceString, setGPOSInfo]);
+  }, [
+    getGposInfo,
+    setLoading,
+    getAssetById,
+    getPerformanceString,
+    setGPOSInfo,
+  ]);
 
   useEffect(() => {
     if (id) {
-      getGPOSInfo();
+      calculateGposInfo();
     }
-  }, [id, getGPOSInfo]);
+  }, [calculateGposInfo]);
 
   return { GPOSInfo, setReadMore, readMore, loading };
 }

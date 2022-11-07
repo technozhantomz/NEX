@@ -160,15 +160,9 @@ export function SettingsProvider({
     setChainId,
   ]);
 
-  const setLocale = useCallback(
-    (selectedLang: string) => {
-      counterpart.setLocale(selectedLang);
-      if (settings && settings.language !== selectedLang) {
-        setSettings({ ...settings, language: selectedLang });
-      }
-    },
-    [settings, setSettings]
-  );
+  const setLocale = useCallback((selectedLang: string) => {
+    counterpart.setLocale(selectedLang);
+  }, []);
 
   const localeFromStorage = useCallback(() => {
     let selectedLang = "";

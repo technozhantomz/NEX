@@ -8,7 +8,7 @@ type Props = {
   account: string;
   asset: string;
   withdrawAddress: string;
-  amount: number;
+  amount: string;
 };
 
 export const Withdraw = ({

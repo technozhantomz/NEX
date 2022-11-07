@@ -35,4 +35,7 @@ export type UseAccountResult = {
     response: string;
     isValid: boolean;
   }>;
+  getAccounts: (
+    idsOrNames: string[]
+  ) => Promise<(Account | undefined)[] | undefined>;
 };

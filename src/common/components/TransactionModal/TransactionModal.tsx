@@ -35,11 +35,11 @@ type Props = {
   sell?: string;
   buy?: string;
   expiration?: string;
-  vestingAmount?: number;
-  withdrawalAmount?: number;
+  vestingAmount?: string;
+  withdrawalAmount?: string;
   asset?: string;
   to?: string;
-  amount?: number;
+  amount?: string;
   orderId?: string;
   withdrawAddress?: string;
   sidechain?: string;
@@ -142,7 +142,7 @@ export const TransactionModal = ({
         fee={fee as number}
         asset={asset as string}
         to={to as string}
-        amount={amount as number}
+        amount={amount as string}
       />
     ),
     withdraw: (
@@ -151,7 +151,7 @@ export const TransactionModal = ({
         fee={fee as string}
         asset={asset as string}
         withdrawAddress={withdrawAddress as string}
-        amount={amount as number}
+        amount={amount as string}
       />
     ),
   };
