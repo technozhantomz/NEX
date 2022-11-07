@@ -1,1 +1,1 @@
-export { default } from "../../modules/Peerlink";
+export { default } from "../../modules/PeerLink";

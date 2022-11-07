@@ -2,17 +2,19 @@ import { NextPage } from "next";
 
 import { Layout } from "../../../../common/components";
 
-const Connect: NextPage = () => {
+import * as Styled from "./PeerLink.styled";
+
+const PeerLink: NextPage = () => {
   return (
     <Layout
       title={"connect"}
-      type="card-lrg"
+      type="card"
       heading={"Connect"}
       description="PeerLink Connect"
-      dexLayout={false}
+      layout="peerlink"
     >
-      <p>Teset</p>
+      <Styled.ConnectCard></Styled.ConnectCard>
     </Layout>
   );
 };
-export default Connect;
+export default PeerLink;

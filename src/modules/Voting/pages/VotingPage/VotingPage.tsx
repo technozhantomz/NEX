@@ -95,7 +95,7 @@ const VotingPage: NextPage = () => {
       type="card-lrg"
       heading={`${pageMeta.heading}`}
       description={`${pageMeta.description}`}
-      dexLayout={true}
+      layout="dex"
       onClick={() => {
         if (sm) {
           visible && setVisible(false);
