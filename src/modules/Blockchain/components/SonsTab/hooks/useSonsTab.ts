@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { isArrayEqual } from "../../../../../api/utils";
 import {
   useArrayLimiter,
   useAsset,
@@ -76,7 +77,7 @@ export function useSonsTab(): UseSonsTabResult {
 
             const activeSones = sonsRows.filter((son) => son.active === true);
             setSonsTableRows(sonsRows);
-            if (sonsTableRows.length === searchDataSource.length) {
+            if (isArrayEqual(searchDataSource, sonsTableRows)) {
               setSearchDataSource(sonsRows);
             }
             setActiveSons(activeSones.length);
