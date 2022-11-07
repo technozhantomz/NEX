@@ -11,6 +11,7 @@ import {
   InfoCircleOutlined,
   List,
   SearchOutlined,
+  Tooltip,
 } from "../../../../ui/src";
 import { Key } from "../../../../ui/src/icons";
 import { StatsCard } from "../../common";
@@ -153,11 +154,7 @@ export const WitnessesTab = (): JSX.Element => {
                   <span className="item-info-title">
                     {WitnessesColumns[3].title()}
                   </span>
-                  <span className="item-info-value">
-                    <a href={`${item.url}`} target="_blank">
-                      <Styled.urlIcon rotate={45} />
-                    </a>
-                  </span>
+                  <span className="item-info-value">{item.totalVotes}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
@@ -181,16 +178,22 @@ export const WitnessesTab = (): JSX.Element => {
                   <span className="item-info-title">
                     {WitnessesColumns[6].title()}
                   </span>
-                  <span className="item-info-value">{item.totalVotes}</span>
+                  <span className="item-info-value">
+                    <a href={`${item.url}`} target="_blank">
+                      <Styled.urlIcon rotate={45} />
+                    </a>
+                  </span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
                     {WitnessesColumns[7].title()}
                   </span>
                   <span className="item-info-value">
-                    <a href={`${item.publicKey}`} target="_blank">
-                      <Key />
-                    </a>
+                    <Tooltip placement="top" title={item.publicKey}>
+                      <span>
+                        <Key />
+                      </span>
+                    </Tooltip>
                   </span>
                 </div>
               </Styled.WitnessesItemContent>
