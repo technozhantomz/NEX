@@ -7,6 +7,11 @@ import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 import { mixIns } from "../../../../ui/src/mixins";
 
+export const LoadingContainer = styled.div`
+  min-height: 44px;
+  margin-left: 64px;
+`;
+
 export const BlockCard = styled(UiCard)`
     .ant-card-body {
       color: ${colors.textColor}
@@ -40,6 +45,9 @@ export const BlockWrapper = styled.div`
 export const BlockNav = styled.div`
   display: flex;
   align-items: center;
+  a {
+    color: ${colors.textColor};
+  }
 `;
 
 export const BlockNavItem = styled.div`
@@ -76,6 +84,10 @@ export const BlockInfo = styled.div`
   font-weight: normal;
   word-break: break-all;
   width: 100%;
+  min-height: 120px;
+  ${breakpoint.sm} {
+    min-height: 88px;
+  }
 `;
 export const BlockTime = styled.p`
   font-weight: 400;

@@ -18,7 +18,7 @@ import {
   List,
   SearchOutlined,
 } from "../../../../../../ui/src";
-import { TransactionRow } from "../../../BlockchainTab/hooks/useBlockchainTab.types";
+import { TransactionRow } from "../../../BlockDetails/hooks";
 
 import { OperationsColumns } from "./OperationsColumns";
 import * as Styled from "./OperationsTable.styled";

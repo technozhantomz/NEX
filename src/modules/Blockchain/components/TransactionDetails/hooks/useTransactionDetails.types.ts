@@ -1,4 +1,4 @@
-import { TransactionRow } from "../../BlockchainTab/hooks/useBlockchainTab.types";
+import { TransactionRow } from "../../BlockDetails/hooks";
 
 export type UseTransactionDetails = {
   loading: boolean;

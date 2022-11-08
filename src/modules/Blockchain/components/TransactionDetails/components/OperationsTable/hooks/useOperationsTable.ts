@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useAsset } from "../../../../../../../common/hooks";
-import { TransactionRow } from "../../../../BlockchainTab/hooks/useBlockchainTab.types";
+import { TransactionRow } from "../../../../BlockDetails/hooks";
 
 import {
   OperationRow,
@@ -48,16 +48,23 @@ export function useOperationsTable(
       setLoading(false);
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
-  }, [transaction, setOperationsRows]);
+  }, [
+    setLoading,
+    transaction,
+    setOperationsRows,
+    getAssetById,
+    setSearchDataSource,
+  ]);
 
   const toggleDetails = useCallback(() => {
     setShowDetials(showDetials ? false : true);
-  }, [showDetials]);
+  }, [showDetials, setLoading]);
 
   useEffect(() => {
     formOperationRows();
-  }, [transaction]);
+  }, [formOperationRows]);
 
   return {
     loading,

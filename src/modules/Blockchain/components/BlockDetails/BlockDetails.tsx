@@ -2,50 +2,67 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import counterpart from "counterpart";
 import Link from "next/link";
 
+import { LoadingIndicator } from "../../../../common/components";
 import { StatsCard } from "../../common";
-import { TransactionRow } from "../BlockchainTab/hooks";
 
 import * as Styled from "./BlockDetails.styled";
 import { TransactionsTable } from "./components";
-import { useBlockDetails } from "./hooks";
+import { TransactionRow, useBlockDetails } from "./hooks";
 
 type Props = {
   block: number;
 };
 export const BlockDetails = ({ block }: Props): JSX.Element => {
-  const { blockDetails, hasNextBlock, hasPreviousBlock, loadingSideBlocks } =
-    useBlockDetails(block);
+  const {
+    blockDetails,
+    hasNextBlock,
+    hasPreviousBlock,
+    loadingSideBlocks,
+    loading,
+  } = useBlockDetails(block);
+
+  const renderPreviousBlockLink = hasPreviousBlock ? (
+    <Link href={`/blockchain/${Number(block) - 1}`}>
+      <a>
+        <LeftOutlined />
+      </a>
+    </Link>
+  ) : (
+    ""
+  );
+  const renderNextBlockLink = hasNextBlock ? (
+    <Link href={`/blockchain/${Number(block) + 1}`}>
+      <a>
+        <RightOutlined />
+      </a>
+    </Link>
+  ) : (
+    ""
+  );
 
   return (
     <>
       <Styled.BlockWrapper>
-        <Styled.BlockNav>
-          {!loadingSideBlocks && hasPreviousBlock ? (
-            <Link href={`/blockchain/${Number(block) - 1}`}>
-              <LeftOutlined />
-            </Link>
-          ) : (
-            ""
-          )}
-          <Styled.BlockNavItem>
-            <Styled.BlockNumber>
-              <span>
-                {counterpart.translate(`pages.blocks.blockchain.block`)} #
-                {block}
-              </span>
-            </Styled.BlockNumber>
-            <Styled.BlockTime>{blockDetails.time}</Styled.BlockTime>
-          </Styled.BlockNavItem>
-          <span>
-            {!loadingSideBlocks && hasNextBlock ? (
-              <Link href={`/blockchain/${Number(block) + 1}`}>
-                <RightOutlined />
-              </Link>
-            ) : (
-              ""
-            )}
-          </span>
-        </Styled.BlockNav>
+        {loadingSideBlocks ? (
+          <Styled.LoadingContainer>
+            <LoadingIndicator type="circle" />
+          </Styled.LoadingContainer>
+        ) : (
+          <Styled.BlockNav>
+            <span>{renderPreviousBlockLink}</span>
+            <Styled.BlockNavItem>
+              <Styled.BlockNumber>
+                <span>
+                  {counterpart.translate(`pages.blocks.blockchain.block`)} #
+                  {block}
+                </span>
+              </Styled.BlockNumber>
+              <Styled.BlockTime>{blockDetails.time}</Styled.BlockTime>
+            </Styled.BlockNavItem>
+            <span>{renderNextBlockLink}</span>
+          </Styled.BlockNav>
+        )}
+
         <Styled.StatsCardsDeck>
           <StatsCard
             noData={block === 0}
@@ -114,6 +131,7 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
         </Styled.BlockInfo>
       </Styled.BlockWrapper>
       <TransactionsTable
+        loadingBlockDetails={loading}
         block={block}
         transactionRows={blockDetails.transactions as TransactionRow[]}
       />

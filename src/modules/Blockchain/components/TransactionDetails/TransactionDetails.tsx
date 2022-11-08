@@ -2,6 +2,7 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import counterpart from "counterpart";
 import Link from "next/link";
 
+import { LoadingIndicator } from "../../../../common/components";
 import { StatsCard } from "../../common";
 
 import * as Styled from "./TransactionDetails.styled";
@@ -21,50 +22,58 @@ export const TransactionDetails = ({
     transactionDetails,
     hasNextTransition,
     hasPreviousTransition,
-    loadingSideTransactions,
+    loading,
   } = useTransactionDetails(block, parseInt(transaction));
+
+  const renderPreviousTransaction = hasPreviousTransition ? (
+    <Link href={`/blockchain/${Number(block)}/${Number(transaction) - 1}`}>
+      <a>
+        <LeftOutlined />
+      </a>
+    </Link>
+  ) : (
+    ""
+  );
+  const renderNextTransaction = hasNextTransition ? (
+    <Link href={`/blockchain/${Number(block)}/${Number(transaction) + 1}`}>
+      <a>
+        <RightOutlined />
+      </a>
+    </Link>
+  ) : (
+    ""
+  );
 
   return (
     <>
       <Styled.BlockWrapper>
-        <Styled.BlockNav>
-          {!loadingSideTransactions && hasPreviousTransition ? (
-            <Link
-              href={`/blockchain/${Number(block)}/${Number(transaction) - 1}`}
-            >
-              <LeftOutlined />
-            </Link>
-          ) : (
-            ""
-          )}
-          <Styled.BlockNavItem>
-            <Styled.BlockNumber>
-              <span>
-                {counterpart.translate(
-                  `pages.blocks.transaction_detials.transaction`
-                )}
-                {transaction} of {blockTransactions.length}
-              </span>
-            </Styled.BlockNumber>
-            <Styled.BlockNumber>
-              <span>
-                {counterpart.translate(`pages.blocks.blockchain.block`)} #
-                {block}
-              </span>
-            </Styled.BlockNumber>
-          </Styled.BlockNavItem>
-          <span>
-            {!loadingSideTransactions && hasNextTransition ? (
-              <Link
-                href={`/blockchain/${Number(block)}/${Number(transaction) + 1}`}
-              >
-                <RightOutlined />
-              </Link>
-            ) : (
-              ""
-            )}
-          </span>
-        </Styled.BlockNav>
+        {loading ? (
+          <Styled.LoadingContainer>
+            <LoadingIndicator type="circle" />
+          </Styled.LoadingContainer>
+        ) : (
+          <Styled.BlockNav>
+            <span>{renderPreviousTransaction}</span>
+            <Styled.BlockNavItem>
+              <Styled.BlockNumber>
+                <span>
+                  {counterpart.translate(
+                    `pages.blocks.transaction_detials.transaction`
+                  )}
+                  {transaction} of {blockTransactions.length}
+                </span>
+              </Styled.BlockNumber>
+              <Styled.BlockNumber>
+                <span>
+                  {counterpart.translate(`pages.blocks.blockchain.block`)} #
+                  {block}
+                </span>
+              </Styled.BlockNumber>
+            </Styled.BlockNavItem>
+            <span>{renderNextTransaction}</span>
+          </Styled.BlockNav>
+        )}
+
         <Styled.StatsCardsDeck>
           <StatsCard
             noData={block === 0}

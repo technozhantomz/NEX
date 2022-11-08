@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useBlockchain } from "../../../../../common/hooks";
-import { TransactionRow } from "../../BlockchainTab/hooks/useBlockchainTab.types";
+import { TransactionRow } from "../../BlockDetails/hooks";
 
 import { UseTransactionDetails } from "./useTransactionDetails.types";
 
@@ -64,14 +64,22 @@ export function useTransactionDetails(
       }
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
-  }, [block, transactionNum, setBlockTransactions, setTransactionDetails]);
+  }, [
+    getBlock,
+    block,
+    transactionNum,
+    setBlockTransactions,
+    setTransactionDetails,
+    setLoading,
+  ]);
 
   const getSideTransactions = useCallback(async () => {
     try {
       if (transactionNum !== undefined) {
-        const transactionNumAsIndex = transactionNum - 1;
         setLoadingSideTransactions(true);
+        const transactionNumAsIndex = transactionNum - 1;
         const nextTransaction = blockTransactions[transactionNumAsIndex + 1];
         if (nextTransaction) {
           setHasNextTransition(true);
@@ -85,6 +93,8 @@ export function useTransactionDetails(
         } else {
           setHasPreviousTransition(false);
         }
+        setLoadingSideTransactions(false);
+      } else {
         setLoadingSideTransactions(false);
       }
     } catch (e) {
@@ -100,15 +110,16 @@ export function useTransactionDetails(
     getTransactionDetails,
     setHasNextTransition,
     setHasPreviousTransition,
+    setLoadingSideTransactions,
   ]);
 
   useEffect(() => {
     getTransactionDetails();
-  }, [block]);
+  }, [getTransactionDetails]);
 
   useEffect(() => {
     getSideTransactions();
-  }, [transactionNum, getSideTransactions]);
+  }, [getSideTransactions]);
 
   return {
     loading,

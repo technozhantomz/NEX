@@ -149,7 +149,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
                         {blockColumns[3].title()}
                       </span>
                       <span className="item-info-value">
-                        {item.transactions?.length}
+                        {item.transaction ? item.transaction : 0}
                       </span>
                     </div>
                   </Styled.BlockItemContent>

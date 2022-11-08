@@ -27,27 +27,10 @@ export type BlockchainStats = {
 
 export type DataTableRow = {
   key: number;
-  nextSecret?: string;
-  previousSecret?: string;
-  merkleRoot?: string;
   blockID: number;
   time: string;
   witness: string;
-  witnessSignature?: string;
-  transactions?: TransactionRow[];
-};
-
-export type TransactionRow = {
-  key: number;
-  rank: number;
-  id: string;
-  expiration: string;
-  operations: unknown[][];
-  operationResults: unknown[];
-  refBlockPrefix: number;
-  refBlockNum: number;
-  extensions: unknown[];
-  signatures: string[];
+  transaction?: number;
 };
 
 export type BlockColumnType = {
