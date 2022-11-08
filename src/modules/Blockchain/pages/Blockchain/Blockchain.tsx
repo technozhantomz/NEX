@@ -12,27 +12,18 @@ import {
   Tabs,
   UpOutlined,
 } from "../../../../ui/src";
-import {
-  AssetsTab,
-  BlockchainTab,
-  BlockDetails,
-  CommitteeTab,
-  FeesTab,
-  SonsTab,
-  WitnessesTab,
-} from "../../components";
 
 import * as Styled from "./Blockchain.styled";
+import { BlockchainTabItems } from "./BlockchainTabItems";
 import { useBlockchainPage } from "./hooks";
-
-const { TabPane } = Tabs;
 
 const Blockchain: NextPage = () => {
   const router = useRouter();
   const [visible, setVisible] = useState<boolean>(false);
-  const { blockNumber, tab } = router.query;
-  const { pageMeta } = useBlockchainPage(tab as string);
+  const { block, tab } = router.query;
+  const { pageMeta, blockNum, transactionId } = useBlockchainPage(tab, block);
   const { sm } = useViewportContext();
+  const blockchainTabItems = BlockchainTabItems(block, blockNum, transactionId);
   const renderTabBar = (props: any, DefaultTabBar: any) => (
     <>
       {sm ? (
@@ -90,48 +81,8 @@ const Blockchain: NextPage = () => {
             router.push(`/blockchain?tab=${key}`);
             if (sm) setVisible(false);
           }}
-        >
-          <TabPane
-            tab={counterpart.translate(`pages.blocks.blockchain.blockchain`)}
-            key="blockchain"
-          >
-            {blockNumber ? (
-              <BlockDetails block={Number(blockNumber as string)} />
-            ) : (
-              <BlockchainTab routerQuery={router.query} />
-            )}
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.blocks.assets.assets`)}
-            key="assets"
-          >
-            <AssetsTab />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.blocks.witnesses.witnesses`)}
-            key="witnesses"
-          >
-            <WitnessesTab />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.blocks.committees.committees`)}
-            key="committees"
-          >
-            <CommitteeTab />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate("pages.blocks.sons.sons")}
-            key="sons"
-          >
-            <SonsTab />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.blocks.fees.fees`)}
-            key="fees"
-          >
-            <FeesTab />
-          </TabPane>
-        </Tabs>
+          items={blockchainTabItems}
+        />
       </Styled.BlockchainCard>
     </Layout>
   );

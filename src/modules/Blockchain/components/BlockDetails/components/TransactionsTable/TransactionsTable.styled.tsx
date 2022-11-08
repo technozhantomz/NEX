@@ -47,6 +47,9 @@ export const TransactionHeader = styled(DataTableHeader)``;
 export const DownloadLinks = styled(DataTableDownloadLinks)``;
 
 export const TransactionsTable = styled(DataTable)`
+  .pointer {
+    cursor: pointer;
+  }
   max-width: 100%;
 `;
 
