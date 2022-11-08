@@ -157,7 +157,7 @@ export function useBlockchainTab(
     return () => {
       clearInterval(blockchainInterval);
     };
-  }, [defaultAsset, getBlockchainData, routerQuery]);
+  }, [getBlockchainData, routerQuery]);
 
   return {
     loading,

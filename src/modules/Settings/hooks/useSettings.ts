@@ -56,7 +56,7 @@ export function useSettings(): UseSettingsResult {
     const values = generalSettingsForm.getFieldsValue();
     const newSettings = createNewSettings();
     setSettings(newSettings);
-    if (values.selectedLanguage) {
+    if (newSettings.language !== settings.language) {
       setLocale(values.selectedLanguage);
     }
     setShowSuccessMessage(true);
@@ -64,7 +64,15 @@ export function useSettings(): UseSettingsResult {
     setTimeout(() => {
       setShowSuccessMessage(false);
     }, 2000);
-  }, [generalSettingsForm, setLocale, setSettings, setShowSuccessMessage]);
+  }, [
+    generalSettingsForm,
+    setLocale,
+    setSettings,
+    setShowSuccessMessage,
+    createNewSettings,
+    _setIsSettingChanged,
+    settings,
+  ]);
 
   return {
     updateSettings,

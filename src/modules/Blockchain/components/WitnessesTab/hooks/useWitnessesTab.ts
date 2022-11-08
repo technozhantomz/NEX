@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { isArrayEqual } from "../../../../../api/utils";
 import {
   useAccount,
   useArrayLimiter,
@@ -84,7 +85,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
           const nextVoteTime = new Date(
             blockData.next_maintenance_time
           ).getTime();
-          const nextVoteDistance = nextVoteTime - now;
+          const nextVoteDistance = now - nextVoteTime;
           const currentWitness = await getUserNameById(
             blockData.current_witness
           );
@@ -125,7 +126,9 @@ export function useWitnessesTab(): UseWitnessesTabResult {
               rewardAmount
             ).toFixed(defaultAsset.precision);
             setWitnessTableRows(witnessesRows);
-            setSearchDataSource(witnessesRows);
+            if (isArrayEqual(witnessTableRows, searchDataSource)) {
+              setSearchDataSource(witnessesRows);
+            }
             setActiveWitnesses(activeWitnesses.length);
             setReward(rewardAmount);
             setEarnings(Number(earnings));
@@ -186,6 +189,8 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     setEarnings,
     setWitnessStats,
     setLoading,
+    searchDataSource,
+    witnessTableRows,
   ]);
 
   useEffect(() => {
@@ -193,7 +198,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     return () => {
       clearInterval(witnessInterval);
     };
-  }, [defaultAsset]);
+  }, [getWitnessData]);
 
   return {
     loading,
