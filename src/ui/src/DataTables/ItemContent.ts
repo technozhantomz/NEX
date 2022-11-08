@@ -5,7 +5,7 @@ import { colors } from "../colors";
 export const DataItemContent = styled.div`
   margin: 18px 0 25px;
   .item-info {
-    margin: 5px 0;
+    margin: 8px 0;
     display: flex;
     .item-info-title {
       font-weight: 300;
