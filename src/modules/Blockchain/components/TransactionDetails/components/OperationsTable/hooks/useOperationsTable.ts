@@ -35,7 +35,7 @@ export function useOperationsTable(
                 number: index + 1,
                 id: operation[0] as number,
                 type: operationDetails.ts as string,
-                fees: fees as string,
+                fees: fees,
                 details: JSON.stringify(operation),
                 results: operationResults.toString() as string,
               };

@@ -1,5 +1,4 @@
 import { TableHeading } from "../../../../../../common/components";
-// import { TransactionRow } from "../../../BlockchainTab/hooks/useBlockchainTab.types";
 
 import * as Styled from "./TransactionsTable.styled";
 

@@ -90,7 +90,7 @@ export const TransactionDetails = ({
             statsData={[0]}
           />
           <StatsCard
-            noData={transactionDetails.operations.length < 0}
+            noData={transactionDetails.operations.length === 0}
             title={counterpart.translate(`tableHead.operations`)}
             data={`${transactionDetails.operations.length}`}
             statsData={[transactionDetails.operations.length]}
