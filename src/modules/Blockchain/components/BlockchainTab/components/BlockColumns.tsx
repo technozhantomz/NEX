@@ -4,7 +4,7 @@ import { BlockColumnType, DataTableRow } from "../hooks";
 const headings = ["block_id", "time", "witness", "transaction"];
 const keys = ["blockID", "time", "witness", "transaction"];
 const renders = [
-  undefined,
+  (blockID: string): JSX.Element => <a>{blockID}</a>,
   undefined,
   (witness: string): JSX.Element => (
     <a href={`/user/${witness}`} target="_blank">

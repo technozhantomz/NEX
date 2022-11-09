@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
 import { breakpoint } from "../breakpoints";
+import { colors } from "../colors";
 
 export const DataTableHeaderBar = styled.div`
   margin-top: 25px;
-
+  .ant-input-suffix {
+    color: ${colors.borderColorBase};
+  }
   display: block;
   .ant-input-group-wrapper {
     margin: 0;
@@ -20,8 +23,9 @@ export const DataTableHeaderBar = styled.div`
     align-items: center;
     align-content: center;
     .ant-input-affix-wrapper {
-      width: 50%;
+      width: 220px;
       margin-right: 25px;
+      border-radius: 4px;
     }
   }
 `;
