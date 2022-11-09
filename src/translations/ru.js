@@ -854,6 +854,7 @@ export const ru = {
       from: "из",
     },
     labels: {
+      blockchain: "Блокчейн",
       swap_fee_info: "Для завершения обмена применяются следующие сборы",
       generate_btc_deposit_address:
         "Создайте биткойн-адрес, чтобы вы могли внести BTC на свою учетную запись Peerplays.",
