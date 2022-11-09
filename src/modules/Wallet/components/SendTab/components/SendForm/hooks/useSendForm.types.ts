@@ -1,13 +1,12 @@
-// import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
-import { Asset } from "../../../../../../../common/types";
+import { Asset, SignerKey } from "../../../../../../../common/types";
 import {
   BaseOptionType,
   DefaultOptionType,
   FormInstance,
+  Rule,
 } from "../../../../../../../ui/src";
-
-// import { Account, SignerKey } from "../../../types";
 
 export type UseSendFormResult = {
   assets: Asset[];
@@ -24,19 +23,20 @@ export type UseSendFormResult = {
   sendForm: FormInstance<SendForm>;
   selectedAssetSymbol: string | undefined;
   selectedAsset: Asset | undefined;
-
-  // feeAmount: number;
-  // formValdation: FormValidation;
-  // handleValuesChange: (changedValues: any) => void;
-  // setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  // transactionErrorMessage: string;
-  // setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  // transactionSuccessMessage: string;
-  // transfer: (signerKey: SignerKey) => Promise<void>;
-  // loadingTransaction: boolean;
-  // toAccount: Account | undefined;
-  // amount: string;
-  // transferFee: number;
+  handleValuesChange: (changedValues: any) => void;
+  onBlockchainChange: (value: unknown) => void;
+  selectedBlockchain: string | undefined;
+  formValdation: FormValidation;
+  feeAmount: number;
+  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
+  transactionErrorMessage: string;
+  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  transactionSuccessMessage: string;
+  loadingTransaction: boolean;
+  send: (signerKey: SignerKey) => Promise<void>;
+  amount: string;
+  localStorageAccount: string;
+  toAccount: string;
 };
 export type SendForm = {
   asset: string;
@@ -46,17 +46,10 @@ export type SendForm = {
   memo?: string;
 };
 
-// export type FormField = {
-//   field: string;
-//   fullField: string;
-//   type: string;
-//   validator: unknown;
-// };
-
-// export type FormValidation = {
-//   from: Rule[];
-//   to: Rule[];
-//   amount: Rule[];
-//   asset: Rule[];
-//   memo: Rule[];
-// };
+export type FormValidation = {
+  asset: Rule[];
+  to: Rule[];
+  amount: Rule[];
+  memo: Rule[];
+  blockchain: Rule[];
+};

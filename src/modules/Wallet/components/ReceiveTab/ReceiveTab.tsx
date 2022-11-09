@@ -2,6 +2,11 @@ import counterpart from "counterpart";
 
 import { AssetsTable, AssetTitle } from "..";
 import {
+  BITCOIN_ASSET_SYMBOL,
+  HBD_ASSET_SYMBOL,
+  HIVE_ASSET_SYMBOL,
+} from "../../../../api/params";
+import {
   AddressGenerated,
   DownloadBitcoinKeys,
   HIVEAndHBDDeposit,
@@ -76,12 +81,12 @@ export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
   };
 
   const renderDeposit = (asset: string) => {
-    if (asset === "BTC") {
+    if (asset === BITCOIN_ASSET_SYMBOL) {
       return renderBtcDeposit(
         hasBTCDepositAddress,
         bitcoinSidechainAccount as SidechainAcccount
       );
-    } else if (asset === "HIVE" || asset === "HBD") {
+    } else if (asset === HIVE_ASSET_SYMBOL || asset === HBD_ASSET_SYMBOL) {
       return <HIVEAndHBDDeposit assetSymbol={asset} />;
     } else {
       return (

@@ -1,7 +1,12 @@
 import { useCallback } from "react";
 
 import { useAsset } from "..";
-import { defaultToken } from "../../../api/params";
+import {
+  BITCOIN_ASSET_SYMBOL,
+  defaultToken,
+  HBD_ASSET_SYMBOL,
+  HIVE_ASSET_SYMBOL,
+} from "../../../api/params";
 import { usePeerplaysApiContext } from "../../providers";
 import {
   Asset,
@@ -56,14 +61,14 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         const threeLetterAsset = rawAssets.find(
           (asset) =>
             asset.symbol !== defaultToken &&
-            asset.symbol !== "BTC" &&
-            asset.symbol !== "HBD" &&
+            asset.symbol !== BITCOIN_ASSET_SYMBOL &&
+            asset.symbol !== HBD_ASSET_SYMBOL &&
             asset.symbol.length === 3
         );
         const fourLetterAsset = rawAssets.find(
           (asset) =>
             asset.symbol !== defaultToken &&
-            asset.symbol !== "HIVE" &&
+            asset.symbol !== HIVE_ASSET_SYMBOL &&
             asset.symbol.length === 4
         );
         const otherAsset = rawAssets.find(

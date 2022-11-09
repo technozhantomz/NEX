@@ -39,9 +39,9 @@ const renders: (
         );
       default:
         return (
-          <>
-            <div>Hi</div>
-          </>
+          <Link href={`/wallet/${record.symbol}?tab=send`}>
+            <a>{counterpart.translate(`pages.wallet.select_this_asset`)}</a>
+          </Link>
         );
     }
   },

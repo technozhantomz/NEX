@@ -10,6 +10,7 @@ type Props = {
   asset: string;
   to: string;
   amount: string;
+  blockchain: string;
 };
 
 export const Transfer = ({
@@ -18,6 +19,7 @@ export const Transfer = ({
   asset,
   to,
   amount,
+  blockchain,
 }: Props): JSX.Element => {
   return (
     <>
@@ -26,6 +28,10 @@ export const Transfer = ({
         <Link href={`/user/${account}`}>
           <a>{account}</a>
         </Link>
+      </Styled.DetailContainer>
+      <Styled.DetailContainer>
+        <p>{counterpart.translate(`field.labels.blockchain`)}</p>
+        <p>{blockchain}</p>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.placeholder.to`)}</p>

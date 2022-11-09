@@ -1,3 +1,9 @@
+import {
+  BITCOIN_NETWORK,
+  defaultNetwork,
+  HBD_ASSET_SYMBOL,
+  HIVE_ASSET_SYMBOL,
+} from "../../../../api/params";
 import BitcoinCashIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinCashIcon.svg";
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import BitsharesIcon from "../../../../ui/src/icons/Cryptocurrencies/BitsharesIcon.svg";
@@ -42,11 +48,11 @@ export const AssetTitle = ({
   const AssetNames: {
     [symbol: string]: string;
   } = {
-    BTC: "Bitcoin",
-    TEST: "Peerplays",
-    PPY: "Peerplays",
-    HIVE: "Hive",
-    HBD: "HBD",
+    BTC: BITCOIN_NETWORK,
+    TEST: defaultNetwork,
+    PPY: defaultNetwork,
+    HIVE: HIVE_ASSET_SYMBOL,
+    HBD: HBD_ASSET_SYMBOL,
   };
 
   return (

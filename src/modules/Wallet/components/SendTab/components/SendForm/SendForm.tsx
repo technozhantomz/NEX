@@ -1,6 +1,12 @@
 import counterpart from "counterpart";
 
+import { BITCOIN_NETWORK, defaultNetwork } from "../../../../../../api/params";
 import { utils } from "../../../../../../api/utils";
+import {
+  PasswordModal,
+  TransactionModal,
+} from "../../../../../../common/components";
+import { useHandleTransactionForm } from "../../../../../../common/hooks";
 import { Form, Input } from "../../../../../../ui/src";
 import BitcoinIcon from "../../../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
@@ -8,16 +14,6 @@ import PPYIcon from "../../../../../../ui/src/icons/Cryptocurrencies/PPYIcon.svg
 
 import * as Styled from "./SendForm.styled";
 import { useSendForm } from "./hooks";
-
-// import { utils } from "../../../api/utils";
-// import { Form, Input } from "../../../ui/src";
-// import { useHandleTransactionForm } from "../../hooks";
-// import { useAssetsContext, useUserContext } from "../../providers";
-// import { PasswordModal } from "../PasswordModal";
-// import { TransactionModal } from "../TransactionModal";
-
-// import * as Styled from "./TransferForm.styled";
-//import { useTransferForm } from "./hooks";
 
 type Props = {
   assetSymbol?: string;
@@ -31,6 +27,20 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     sendForm,
     selectedAssetSymbol,
     selectedAsset,
+    handleValuesChange,
+    onBlockchainChange,
+    selectedBlockchain,
+    formValdation,
+    feeAmount,
+    send,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    transactionErrorMessage,
+    transactionSuccessMessage,
+    loadingTransaction,
+    localStorageAccount,
+    amount,
+    toAccount,
   } = useSendForm({
     assetSymbol,
   });
@@ -41,28 +51,28 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     Hive: <HIVEIcon height="20" width="20" />,
     Bitcoin: <BitcoinIcon height="20" width="20" />,
   };
-  //   const { localStorageAccount } = useUserContext();
-  //   const {
-  //     isPasswordModalVisible,
-  //     isTransactionModalVisible,
-  //     showPasswordModal,
-  //     hidePasswordModal,
-  //     handleFormFinish,
-  //     hideTransactionModal,
-  //   } = useHandleTransactionForm({
-  //     handleTransactionConfirmation: transfer,
-  //     setTransactionErrorMessage,
-  //     setTransactionSuccessMessage,
-  //     neededKeyType: "active",
-  //   });
-  console.log("assetSymbol", assetSymbol);
+
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: send,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    neededKeyType: "active",
+  });
   return (
-    <Form.Provider>
+    <Form.Provider onFormFinish={handleFormFinish}>
       <Styled.SendForm
         size="large"
         form={sendForm}
-        // onValuesChange={handleValuesChange}
-        // validateTrigger={["onBlur", "onSubmit"]}
+        onFinish={showPasswordModal}
+        onValuesChange={handleValuesChange}
+        validateTrigger={["onChange", "onBlur", "onSubmit"]}
         initialValues={{
           asset: assetSymbol,
         }}
@@ -70,10 +80,8 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
         <div className="two-input-row">
           <Form.Item
             name="asset"
-            // rules={formValdation.from}
+            rules={formValdation.asset}
             validateFirst={true}
-            validateTrigger="onBlur"
-            // initialValue={localStorageAccount}
           >
             <Styled.AssetSelector
               placeholder={counterpart.translate(`pages.wallet.select_asset`)}
@@ -91,53 +99,19 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
               })}
             </Styled.AssetSelector>
           </Form.Item>
-          <Form.Item
-            name="amount"
-            validateFirst={true}
-            //rules={formValdation.amount}
-            validateTrigger="onBlur"
-          >
-            <Input
-              placeholder={counterpart.translate(`field.placeholder.amount`)}
-              type="number"
-              min={0}
-              onKeyPress={utils.ensureInputNumberValidity}
-              step="any"
-              autoComplete="off"
-            />
-          </Form.Item>
-        </div>
-        <Styled.AvailableAssetWrapper>
-          <Styled.AvailableAssetLabel>
-            {counterpart.translate(`pages.wallet.available_to_send`)}
-          </Styled.AvailableAssetLabel>
-          <Styled.AvailableAssetAmount>
-            {selectedAsset ? selectedAsset.amount : 0}
-          </Styled.AvailableAssetAmount>
-        </Styled.AvailableAssetWrapper>
-        <div className="two-input-row">
-          <Form.Item
-            name="to"
-            validateFirst={true}
-            //rules={formValdation.to}
-            validateTrigger="onBlur"
-          >
-            <Input
-              placeholder={counterpart.translate(`field.placeholder.to`)}
-              autoComplete="off"
-            />
-          </Form.Item>
+
           <Form.Item
             name="blockchain"
+            rules={formValdation.blockchain}
             validateFirst={true}
-            validateTrigger="onBlur"
           >
             <Styled.BlockchainSelector
               placeholder={counterpart.translate(
                 `pages.wallet.select_blockchain`
               )}
-              //onChange={onAssetChange}
+              onChange={onBlockchainChange}
               disabled={assetSymbol ? false : true}
+              value={selectedBlockchain}
             >
               {assetBlockchains.map((blockchain, index) => {
                 return (
@@ -154,31 +128,87 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             </Styled.BlockchainSelector>
           </Form.Item>
         </div>
-        {/* <p>{counterpart.translate(`field.comments.public_memo`)}</p>
-        <Styled.MemoFormItem
-          name="memo"
-          validateFirst={true}
-          rules={formValdation.memo}
-          validateTrigger="onChange"
-        >
-          <Styled.Memo
-            placeholder={counterpart.translate(`field.placeholder.memo`)}
-            maxLength={256}
-          />
-        </Styled.MemoFormItem>
-        <p>
+
+        <Styled.AvailableAssetWrapper>
+          <Styled.AvailableAssetLabel>
+            {counterpart.translate(`pages.wallet.available_to_send`)}
+          </Styled.AvailableAssetLabel>
+          <Styled.AvailableAssetAmount>
+            {selectedAsset ? selectedAsset.amount : 0}
+          </Styled.AvailableAssetAmount>
+        </Styled.AvailableAssetWrapper>
+
+        <div className="two-input-row">
+          <Form.Item
+            name="amount"
+            validateFirst={true}
+            rules={formValdation.amount}
+          >
+            <Input
+              placeholder={counterpart.translate(`field.placeholder.amount`)}
+              type="number"
+              min={0}
+              onKeyPress={utils.ensureInputNumberValidity}
+              step="any"
+              autoComplete="off"
+            />
+          </Form.Item>
+
+          <Form.Item name="to" validateFirst={true} rules={formValdation.to}>
+            <Input
+              placeholder={counterpart.translate(`field.placeholder.to`)}
+              autoComplete="off"
+              disabled={selectedBlockchain === BITCOIN_NETWORK}
+            />
+          </Form.Item>
+        </div>
+        <p>{counterpart.translate(`field.comments.public_memo`)}</p>
+        <Styled.MemoWrapper>
+          <Styled.MemoFormItem
+            name="memo"
+            validateFirst={true}
+            rules={formValdation.memo}
+            validateTrigger="onChange"
+          >
+            <Styled.Memo
+              placeholder={counterpart.translate(`field.placeholder.memo`)}
+              maxLength={256}
+              disabled={selectedBlockchain !== defaultNetwork}
+            />
+          </Styled.MemoFormItem>
+        </Styled.MemoWrapper>
+        {/* <p>
           {counterpart.translate(`field.labels.fees`, {
             feeAmount: transferFee,
             defaultAsset: defaultAsset ? defaultAsset.symbol : "",
           })}
-        </p>
+        </p> */}
 
         <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">
             {counterpart.translate(`buttons.send`)}
           </Styled.TransferFormButton>
-        </Styled.FormItem>*/}
+        </Styled.FormItem>
       </Styled.SendForm>
+      <PasswordModal
+        neededKeyType="active"
+        visible={isPasswordModalVisible}
+        onCancel={hidePasswordModal}
+      />
+      <TransactionModal
+        visible={isTransactionModalVisible}
+        onCancel={hideTransactionModal}
+        transactionErrorMessage={transactionErrorMessage}
+        transactionSuccessMessage={transactionSuccessMessage}
+        loadingTransaction={loadingTransaction}
+        account={localStorageAccount}
+        fee={feeAmount}
+        asset={selectedAssetSymbol}
+        to={toAccount}
+        amount={amount}
+        blockchain={selectedBlockchain}
+        transactionType="transfer"
+      />
     </Form.Provider>
   );
 };

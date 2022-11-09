@@ -1,7 +1,14 @@
-import { CardForm, Option, Select, styled } from "../../../../../../ui/src";
+import {
+  CardForm,
+  CardFormButton,
+  Form,
+  Input,
+  Option,
+  Select,
+  styled,
+} from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
-// import { CardForm, CardFormButton, Form, Input, styled } from "../../../ui/src";
 
 export const SendForm = styled(CardForm)`
   margin: 0 0 20px 0;
@@ -76,39 +83,40 @@ export const IconWrapper = styled.div`
   margin-right: 20px;
 `;
 
-// export const TransferFormButton = styled(CardFormButton)`
-//   width: 100%;
-//   height: 100%;
-// `;
+export const MemoWrapper = styled.div`
+  margin-bottom: 15px;
+`;
+export const MemoFormItem = styled(Form.Item)`
+  .ant-form-item-control-input-content {
+    height: 65px;
+  }
+`;
 
-// export const FormItem = styled(CardForm.Item)`
-//   width: 255px;
-//   margin-left: auto;
-//   margin-right: auto;
-//   .ant-form-item-control-input-content {
-//     height: 35px;
-//   }
-//   .ant-btn-lg {
-//     padding: 0px;
-//   }
-//   ${breakpoint.sm} {
-//     margin-left: 245px;
-//     width: 290px;
-//     .ant-form-item-control-input-content {
-//       height: 45px;
-//     }
-//   }
-// `;
+export const Memo = styled(Input.TextArea)`
+  resize: none;
+  scroll: auto;
+  height: 100% !important;
+`;
 
-// export const MemoFormItem = styled(Form.Item)`
-//   ${breakpoint.sm} {
-//     .ant-form-item-control-input-content {
-//       height: 60px;
-//     }
-//   }
-// `;
+export const TransferFormButton = styled(CardFormButton)`
+  height: 100%;
+  ${breakpoint.sm} {
+    width: 290px;
+  }
+`;
 
-// export const Memo = styled(Input.TextArea)`
-//   resize: none;
-//   scroll: auto;
-// `;
+export const FormItem = styled(CardForm.Item)`
+  margin-left: auto;
+  margin-right: auto;
+  .ant-form-item-control-input-content {
+    height: 35px;
+  }
+  .ant-btn-lg {
+    padding: 0px;
+  }
+  ${breakpoint.sm} {
+    .ant-form-item-control-input-content {
+      height: 45px;
+    }
+  }
+`;

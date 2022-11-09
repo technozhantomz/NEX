@@ -1,5 +1,6 @@
 import counterpart from "counterpart";
 
+import { HIVE_ASSET_SYMBOL } from "../../../api/params";
 import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import { useUserContext } from "../../providers";
 
@@ -11,7 +12,7 @@ type Props = {
 };
 
 export const HIVEAndHBDDeposit = ({
-  assetSymbol = "HIVE",
+  assetSymbol = HIVE_ASSET_SYMBOL,
 }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
 

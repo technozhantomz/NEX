@@ -884,6 +884,7 @@ export const en = {
       from: "From",
     },
     labels: {
+      blockchain: "Blockchain",
       swap_fee_info:
         "In order to complete swap the following fees is applicable",
       generate_btc_deposit_address:
@@ -991,6 +992,10 @@ export const en = {
       account_updated: "account updated",
     },
     errors: {
+      first_select_asset: "Please first select an asset",
+      first_select_blockchain: "Please first select a blockchain",
+      first_generate_deposit_addresses:
+        "Please first generate Bitcoin addresses on the Dashboard Deposit tab",
       loading_sidechain_accounts: "Please wait for sidechain accounts to load",
       unable_to_create_account:
         "Unable to create an account. Please try again later",
@@ -1061,6 +1066,9 @@ export const en = {
         "These keys are already in used for %(role)s permissions",
       need_to_vest_gpos: "You need to Vest some GPOS balance first",
       asset_required: "Asset is required",
+      blockchain_required: "Blockchain is required",
+      choose_another_blockchain:
+        "Please choose another blockchain for withdrawal",
       cannot_send_yourself: "Can not send to yourself!",
       unable_transaction: "Unable to process the transaction!",
 

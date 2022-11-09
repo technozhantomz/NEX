@@ -9,7 +9,7 @@ import {
   PasswordModal,
   TransactionModal,
 } from "..";
-import { defaultToken } from "../../../api/params";
+import { BITCOIN_ASSET_SYMBOL, defaultToken } from "../../../api/params";
 import { utils } from "../../../api/utils";
 import { Form, Input } from "../../../ui/src";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
@@ -95,7 +95,7 @@ export const WithdrawForm = ({
   );
 
   const feeLabel =
-    selectedAsset === "BTC"
+    selectedAsset === BITCOIN_ASSET_SYMBOL
       ? counterpart.translate(`field.labels.estimated_fees_label`)
       : counterpart.translate(`field.labels.fees_label`);
 
@@ -120,11 +120,13 @@ export const WithdrawForm = ({
       : `${withdrawFee}
     ${defaultToken}`;
 
-    return selectedAsset === "BTC" ? BtcFeeSummary : HiveFeeSummary;
+    return selectedAsset === BITCOIN_ASSET_SYMBOL
+      ? BtcFeeSummary
+      : HiveFeeSummary;
   };
 
   const transactionModalFee =
-    selectedAsset === "BTC"
+    selectedAsset === BITCOIN_ASSET_SYMBOL
       ? `${withdrawFee} ${defaultToken} + ${btcTransferFee} BTC`
       : `${withdrawFee}
   ${defaultToken}`;
@@ -136,7 +138,7 @@ export const WithdrawForm = ({
     </>
   );
   const confirmationTime =
-    selectedAsset === "BTC"
+    selectedAsset === BITCOIN_ASSET_SYMBOL
       ? counterpart.translate(`field.labels.btc_withdrawal_confirmation_time`)
       : counterpart.translate(`field.labels.hive_withdrawal_confirmation_time`);
 
@@ -310,7 +312,8 @@ export const WithdrawForm = ({
     </>
   );
 
-  const formBody = selectedAsset === "BTC" ? btcFormBody : hiveFormBody;
+  const formBody =
+    selectedAsset === BITCOIN_ASSET_SYMBOL ? btcFormBody : hiveFormBody;
 
   const formBodyWithLoading = loadingSidechainAccounts ? (
     <Styled.LoadingIndicatorContainer>
@@ -395,7 +398,7 @@ export const WithdrawForm = ({
         />
       </Form.Provider>
       {isLoggedIn &&
-        selectedAsset === "BTC" &&
+        selectedAsset === BITCOIN_ASSET_SYMBOL &&
         !hasBTCDepositAddress &&
         !loadingSidechainAccounts && (
           <GenerateBitcoinAddress getSidechainAccounts={getSidechainAccounts} />

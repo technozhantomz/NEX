@@ -1,6 +1,7 @@
 import counterpart from "counterpart";
 import React from "react";
 
+import { BITCOIN_ASSET_SYMBOL } from "../../../../api/params";
 import {
   AddressGenerated,
   DashboardLoginButton,
@@ -69,13 +70,14 @@ export const DepositTab = (): JSX.Element => {
   );
 
   const loginText =
-    selectedAsset === "BTC"
+    selectedAsset === BITCOIN_ASSET_SYMBOL
       ? counterpart.translate(`buttons.login_and_generate_bitcoin_address`)
       : counterpart.translate(`buttons.log_in_deposit_hbd_hive`, {
           assetSymbol: selectedAsset,
         });
 
-  const deposit = selectedAsset === "BTC" ? BTCDeposit : HIVEDeposit;
+  const deposit =
+    selectedAsset === BITCOIN_ASSET_SYMBOL ? BTCDeposit : HIVEDeposit;
   const depositWithLoading = loadingSidechainAccounts ? (
     <Styled.LoadingIndicatorContainer>
       <LoadingIndicator type="three-bounce" />

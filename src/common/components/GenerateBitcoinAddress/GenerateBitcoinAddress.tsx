@@ -2,6 +2,7 @@ import counterpart from "counterpart";
 import React from "react";
 
 import { PasswordModal, TransactionModal } from "..";
+import { BITCOIN_NETWORK } from "../../../api/params";
 import { Form } from "../../../ui/src";
 import { useHandleTransactionForm } from "../../hooks";
 import { useUserContext } from "../../providers";
@@ -70,7 +71,7 @@ export const GenerateBitcoinAddress = ({
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
           fee={0}
-          sidechain="Bitcoin"
+          sidechain={BITCOIN_NETWORK}
           transactionType="sidechain_address_add"
         />
       </Form.Provider>

@@ -961,6 +961,9 @@ export const ru = {
       account_updated: "аккаунт обновлен",
     },
     errors: {
+      first_select_asset: "Сначала выберите объект",
+      first_generate_deposit_addresses:
+        "Сначала сгенерируйте биткойн-адреса на вкладке «Депозит» на панели управления.",
       loading_sidechain_accounts:
         "Подождите, пока загрузятся сайдчейн-аккаунты.",
       unable_to_create_account:
@@ -1034,6 +1037,9 @@ export const ru = {
       keys_already_used: "Эти ключи уже используются для %(role)s разрешения",
       need_to_vest_gpos: "Сначала вам нужно пополнить баланс GPOS.",
       asset_required: "Требуется актив",
+      blockchain_required: "Требуется блокчейн",
+      choose_another_blockchain:
+        "Пожалуйста, выберите другой блокчейн для вывода",
       cannot_send_yourself: "Не могу отправить себе",
       unable_transaction: "Невозможно обработать транзакцию!",
       not_added_to_whalevault: "Эта учетная запись не добавлена в WhaleVault",
