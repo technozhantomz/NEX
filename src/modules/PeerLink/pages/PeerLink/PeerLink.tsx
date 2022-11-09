@@ -1,6 +1,8 @@
+import counterpart from "counterpart";
 import { NextPage } from "next";
 
 import { Layout } from "../../../../common/components";
+import { usePeerLinkContext } from "../../../../common/providers";
 import {
   CheckOutlined,
   InfoCircleOutlined,
@@ -12,17 +14,18 @@ import MetaMaskIcon from "../../../../ui/src/icons/Cryptocurrencies/MetaMaskIcon
 import * as Styled from "./PeerLink.styled";
 
 const PeerLink: NextPage = () => {
+  const { metaMask, connectToMetaMask } = usePeerLinkContext();
   return (
     <Layout
       title={"connect"}
       type="card"
-      heading={"Connect"}
+      heading={counterpart.translate(`pages.peerlink.connect.heading`)}
       description="PeerLink Connect"
       layout="peerlink"
     >
       <Styled.ConnectCard>
         <Styled.ConnectButtons>
-          <Styled.ConnectButton>
+          <Styled.ConnectButton className="required">
             <HIVEIcon width="39" height="39" />
             <Styled.ConnectButtonTextWrapper>
               <Styled.ConnectButtonTitle>
@@ -34,17 +37,26 @@ const PeerLink: NextPage = () => {
             </Styled.ConnectButtonTextWrapper>
             <RightOutlined />
           </Styled.ConnectButton>
-          <Styled.ConnectButton className="connected">
+          <Styled.ConnectButton
+            className={metaMask.isConnected ? "connected" : "required"}
+            onClick={connectToMetaMask}
+          >
             <MetaMaskIcon width="39" height="39" />
             <Styled.ConnectButtonTextWrapper>
               <Styled.ConnectButtonTitle>
-                Connect MetaMask
+                {counterpart.translate(
+                  `pages.peerlink.connect.connect_metamask`
+                )}
               </Styled.ConnectButtonTitle>
-              <Styled.ConnectButtonStatus className="connected">
-                connected
+              <Styled.ConnectButtonStatus
+                className={metaMask.isConnected ? "connected" : "required"}
+              >
+                {metaMask.isConnected
+                  ? counterpart.translate(`pages.peerlink.connect.connected`)
+                  : counterpart.translate(`pages.peerlink.connect.required`)}
               </Styled.ConnectButtonStatus>
             </Styled.ConnectButtonTextWrapper>
-            <CheckOutlined />
+            {metaMask.isConnected ? <CheckOutlined /> : <RightOutlined />}
           </Styled.ConnectButton>
         </Styled.ConnectButtons>
         <Styled.ConnectInfoWrapper>
@@ -62,28 +74,26 @@ const PeerLink: NextPage = () => {
               refresh the page
             </span>
           </Styled.ConnectInfo>
-          <Styled.ConnectInfo>
-            <InfoCircleOutlined />
-            <span>
-              Metamask wallet was not found please check your Hive wallet plugin
-              and refresh the page
-            </span>
-          </Styled.ConnectInfo>
+          {metaMask.isConnected ? (
+            <Styled.ConnectInfo>
+              <InfoCircleOutlined />
+              <span>
+                Metamask wallet was not found please check your Hive wallet
+                plugin and refresh the page
+              </span>
+            </Styled.ConnectInfo>
+          ) : (
+            ""
+          )}
         </Styled.ConnectInfoWrapper>
         <Styled.ConnectDownloads>
           <p>
             Download{" "}
-            <a
-              target="_blank"
-              href="https://chrome.google.com/webstore/detail/hive-keychain/jcacnejopjdphbnjgfaaobbfafkihpep"
-            >
+            <a target="_blank" href="https://hive-keychain.com/">
               Hive Wallet
             </a>{" "}
             or{" "}
-            <a
-              target="blank"
-              href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn"
-            >
+            <a target="blank" href="https://metamask.io/download/">
               MetaMask
             </a>
           </p>

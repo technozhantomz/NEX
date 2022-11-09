@@ -6,8 +6,11 @@ import {
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
+// import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
+import MetaMaskIcon from "../../../../../../ui/src/icons/Cryptocurrencies/MetaMaskIcon.svg";
 import {
   useMenuContext,
+  usePeerLinkContext,
   useUserContext,
   useUserSettingsContext,
   useViewportContext,
@@ -20,6 +23,7 @@ import * as Styled from "./MainNavBar.styled";
 
 export const MainNavBar = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
+  const { metaMask } = usePeerLinkContext();
   const { sm } = useViewportContext();
   const {
     openMenu,
@@ -96,6 +100,17 @@ export const MainNavBar = (): JSX.Element => {
     </div>
   );
 
+  const metaMaskBadge = sm ? (
+    <div>
+      <MetaMaskIcon width="39" height="39" />
+    </div>
+  ) : (
+    <div>
+      <MetaMaskIcon width="39" height="39" />
+      {metaMask.selectedAddress}
+    </div>
+  );
+
   const userItems = (
     <>
       {notificationItem}
@@ -126,6 +141,7 @@ export const MainNavBar = (): JSX.Element => {
   return (
     <>
       <Styled.MainNavBar>
+        {metaMask.isConnected ? metaMaskBadge : ""}
         {localStorageAccount ? userItems : ""}
         {mainMenuItem}
       </Styled.MainNavBar>

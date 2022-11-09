@@ -26,7 +26,7 @@ export const ConnectButtons = styled.div`
     flex-direction: row;
   }
 `;
-export const ConnectButton = styled.div`
+export const ConnectButton = styled.button`
   width: 100%;
   max-width: 300px;
   display: flex;
@@ -36,6 +36,13 @@ export const ConnectButton = styled.div`
   border-radius: 4px;
   padding: 20px 29px;
   margin: 10px 0;
+  text-align: left;
+  &.required {
+    background-color: ${colors.white};
+  }
+  &.connected {
+    background-color: ${colors.inactiveColor};
+  }
   .anticon {
     font-size: 20px;
   }
@@ -43,9 +50,6 @@ export const ConnectButton = styled.div`
   }
   .anticon-check {
     color: ${colors.successColor};
-  }
-  &.connected {
-    background-color: ${colors.inactiveColor};
   }
 `;
 export const ConnectButtonTextWrapper = styled.div`
