@@ -40,6 +40,12 @@ export const Page = styled.section`
           display: block;
         }
       }
+      ${breakpoint.sm} {
+        .card-layout {
+          max-width: 700px;
+          padding: 0;
+        }
+      }
     }
   }
 `;
