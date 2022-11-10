@@ -113,7 +113,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       try {
         setLoadingTradingPairs(true);
         const initPairs: string[] =
-          exchanges.list.length > 0 ? exchanges.list : await getDefaultPairs();
+          exchanges.list.length > 0 ? exchanges.list : getDefaultPairs();
         const tradingPairsStats = await Promise.all(
           initPairs.map(formPairStats)
         );
