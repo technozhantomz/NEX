@@ -218,7 +218,7 @@ export function useAccount(): UseAccountResult {
       const user: Account = (await dbApi("get_accounts", [[userID]]))[0];
       return user.name;
     },
-    [dbApi]
+    [localStorageAccount, getAccountByName]
   );
 
   const validateWhaleVaultPubKeys = useCallback(

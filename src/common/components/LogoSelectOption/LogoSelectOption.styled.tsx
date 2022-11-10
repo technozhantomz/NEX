@@ -1,7 +1,7 @@
-import { Option, Select, styled } from "../../../ui/src";
+import { Option, styled, Select as UiSelect } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 
-export const SelectContainer = styled(Select)``;
+export const Select = styled(UiSelect)``;
 
 export const SelectOptionContainer = styled(Option)`
   font-size: 16px;

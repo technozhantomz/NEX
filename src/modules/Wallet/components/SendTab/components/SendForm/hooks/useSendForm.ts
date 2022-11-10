@@ -387,7 +387,6 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
   };
   const validateTo = async (_: unknown, value: string) => {
     const selectionError = validateChainAndAssetSelection();
-    console.log(selectionError);
     if (selectionError) {
       return Promise.reject(new Error(selectionError));
     }

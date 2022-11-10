@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
-import { ReceiveTab, SendTab } from "../../components";
+import { NFTsTable, ReceiveTab, SendTab } from "../../components";
 import { AssetsTable } from "../../components/AssetsTable";
 
 import * as Styled from "./WalletPage.styled";
@@ -79,9 +79,12 @@ const WalletPage: NextPage = () => {
             tab={counterpart.translate(`pages.wallet.assets`)}
             key="assets"
           >
-            <AssetsTable
-              title={counterpart.translate(`field.labels.coins_token`)}
-            />
+            <Styled.AssetTabWrapper>
+              <AssetsTable
+                title={counterpart.translate(`field.labels.coins_token`)}
+              />
+              <NFTsTable />
+            </Styled.AssetTabWrapper>
           </TabPane>
           <TabPane tab={counterpart.translate(`pages.wallet.send`)} key="send">
             <SendTab assetSymbol={assetSymbol}></SendTab>
