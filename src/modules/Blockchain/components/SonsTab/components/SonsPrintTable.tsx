@@ -1,22 +1,28 @@
 import { ColumnsType } from "antd/lib/table";
-import React, { RefObject } from "react";
+import React from "react";
 
 import * as Styled from "../SonsTab.styled";
-import { SonsTableRow, useSonsTab } from "../hooks";
+import { SonsTableRow } from "../hooks";
 
-import { SonsColumns } from "./SonsColumns";
+import { SonColumnType } from ".";
 
-export const SonsPrintTable = React.forwardRef((_props, ref) => {
-  const { loading, sonsTableRows } = useSonsTab();
+type Props = {
+  loading: boolean;
+  sonsTableRows: SonsTableRow[];
+  sonsColumns: SonColumnType[];
+};
 
-  return (
-    <div ref={ref as RefObject<HTMLDivElement>}>
-      <Styled.SonsTable
-        dataSource={sonsTableRows}
-        columns={SonsColumns as ColumnsType<SonsTableRow>}
-        loading={loading}
-        pagination={false}
-      />
-    </div>
-  );
-});
+export const SonsPrintTable = React.forwardRef(
+  (props: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
+    return (
+      <div ref={ref}>
+        <Styled.SonsTable
+          dataSource={props.sonsTableRows}
+          columns={props.sonsColumns as ColumnsType<SonsTableRow>}
+          loading={props.loading}
+          pagination={false}
+        />
+      </div>
+    );
+  }
+);

@@ -18,7 +18,7 @@
     "@next/bundle-analyzer": "^12.1.0",
     "@svgr/webpack": "^6.2.1",
     "ant-table-extensions": "^1.1.7",
-    "antd": "^4.23.0",
+    "antd": "^4.24.1",
     "assert": "^2.0.0",
     "babel-preset-next": "^1.4.0",
     "bip32": "^3.0.1",

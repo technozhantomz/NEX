@@ -44,6 +44,7 @@ type Props = {
   withdrawAddress?: string;
   sidechain?: string;
   afterClose?: () => void;
+  blockchain?: string;
 };
 
 export const TransactionModal = ({
@@ -72,6 +73,7 @@ export const TransactionModal = ({
   withdrawAddress,
   sidechain,
   afterClose,
+  blockchain,
 }: Props): JSX.Element => {
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
@@ -143,6 +145,7 @@ export const TransactionModal = ({
         asset={asset as string}
         to={to as string}
         amount={amount as string}
+        blockchain={blockchain as string}
       />
     ),
     withdraw: (

@@ -93,7 +93,35 @@ const sorters = [
   },
 ];
 
-export const FeesColumns = headings.map((heading, index) => {
+export type FeeColumnType = {
+  title: () => JSX.Element;
+  dataIndex: string;
+  key: string;
+  render:
+    | ((category: string) => JSX.Element)
+    | ((types: string[], record: FeesTableRow) => JSX.Element);
+  filters:
+    | {
+        text: string;
+        value: string;
+      }[]
+    | undefined;
+  filterMode: string | undefined;
+  filterSearch: boolean | undefined;
+  onFilter: ((value: string, record: FeesTableRow) => boolean) | undefined;
+  sorter:
+    | ((
+        a: {
+          fees: string;
+        },
+        b: {
+          fees: string;
+        }
+      ) => number)
+    | undefined;
+};
+
+export const FeesColumns: FeeColumnType[] = headings.map((heading, index) => {
   return {
     title: (): JSX.Element => <TableHeading heading={heading} />,
     dataIndex: keys[index],
