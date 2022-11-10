@@ -16,16 +16,29 @@ export const Page = styled.section`
         #01245f 100%
       )
       0% 0% no-repeat padding-box;
-    &.dex-layout {
+    &.dex {
       background: #f4f4f4 0% 0% no-repeat padding-box;
       .top-bar {
         background-color: #01245f;
+        .dex-logo {
+          display: block;
+        }
       }
       .page-heading {
         color: ${colors.textColor};
         letter-spacing: 0px;
         font-size: 24px;
         font: normal normal medium 24px/29px Inter;
+      }
+    }
+    &.peerlink {
+      .top-bar {
+        .peerplays-logo .plays {
+          display: none;
+        }
+        .link-logo {
+          display: block;
+        }
       }
     }
   }

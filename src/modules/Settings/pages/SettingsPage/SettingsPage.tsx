@@ -75,7 +75,7 @@ const SettingPage: NextPage = () => {
       type="card-lrg"
       heading={counterpart.translate(`pages.settings.heading`)}
       description="Settings Page"
-      dexLayout={true}
+      layout="dex"
       onClick={() => {
         if (sm) {
           visible && setVisible(false);
