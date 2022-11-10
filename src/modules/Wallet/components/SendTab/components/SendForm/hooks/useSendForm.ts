@@ -58,6 +58,9 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
   const [amount, setAmount] = useState<string>("0");
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
+  const [selectedAssetPrecission, _setSelectedAssetPrecission] =
+    useState<number>(5);
+  const [btcTransferFee, _setBtcTransferFee] = useState<number>(0.0003);
 
   const assetBlockchains: {
     [assetSymbol: string]: string[];
@@ -107,17 +110,19 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
 
   const handleValuesChange = useCallback(
     (changedValues: any) => {
-      if (changedValues.amount) {
-        const amount = limitByPrecision(
+      if (changedValues.amount !== undefined) {
+        let amount = limitByPrecision(
           changedValues.amount,
           selectedAsset?.precision
         );
         sendForm.setFieldsValue({
           amount: amount,
         });
+        amount = amount ? amount : "0";
+        setAmount(amount);
       }
     },
-    [limitByPrecision, selectedAsset, sendForm]
+    [limitByPrecision, selectedAsset, sendForm, setAmount]
   );
 
   const buildSendFormTransaction = useCallback(
@@ -237,20 +242,26 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     ]
   );
 
+  const setSelectedAssetPrecission = useCallback(() => {
+    if (selectedAsset) {
+      _setSelectedAssetPrecission(selectedAsset.precision);
+    }
+  }, [selectedAsset, _setSelectedAssetPrecission]);
+
   /*********  Validation Funcations ***************/
-  const validateChainAndAssetSelection = useCallback(() => {
+  const validateChainAndAssetSelection = () => {
     if (!selectedAssetSymbol) {
       return counterpart.translate(`field.errors.first_select_asset`);
     }
     if (!selectedBlockchain) {
       return counterpart.translate(`field.errors.first_select_blockchain`);
     }
-    return "";
-  }, [selectedAssetSymbol, selectedBlockchain]);
+    return undefined;
+  };
 
   const commonlyValidateAmount = (value: string) => {
     const selectionError = validateChainAndAssetSelection();
-    if (selectionError !== "") {
+    if (selectionError) {
       return selectionError;
     }
     if (Number(value) <= 0) {
@@ -259,14 +270,14 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     if (!selectedAsset) {
       return counterpart.translate(`field.errors.balance_not_enough`);
     }
-    return "";
+    return undefined;
   };
   const validateDefaultAssetAmount = (value: string) => {
     const total = Number(value) + feeAmount;
     if ((selectedAsset?.amount as number) < total) {
       return counterpart.translate(`field.errors.balance_not_enough`);
     }
-    return "";
+    return undefined;
   };
   const validateSideBlockchainsAmount = (value: string) => {
     if ((selectedAsset?.amount as number) < Number(value)) {
@@ -297,25 +308,24 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
       }
     }
 
-    return "";
+    return undefined;
   };
   const validateAmount = async (_: unknown, value: string) => {
     const commonErrorMessage = commonlyValidateAmount(value);
-    if (commonErrorMessage !== "") {
+    if (commonErrorMessage) {
       return Promise.reject(new Error(commonErrorMessage));
     }
-    setAmount(value);
 
     const isDefaultAsset = selectedAssetSymbol === defaultToken;
     if (isDefaultAsset) {
       const defaultAssetError = validateDefaultAssetAmount(value);
-      if (defaultAssetError !== "") {
+      if (defaultAssetError) {
         return Promise.reject(new Error(defaultAssetError));
       }
       return Promise.resolve();
     } else {
       const sideBlockchainsError = validateSideBlockchainsAmount(value);
-      if (sideBlockchainsError !== "") {
+      if (sideBlockchainsError) {
         return Promise.reject(new Error(sideBlockchainsError));
       }
       return Promise.resolve();
@@ -353,7 +363,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
       if (!isSonNetworkOk) {
         return counterpart.translate(`field.errors.sons_not_available`);
       }
-      return "";
+      return undefined;
     }
   };
   const validateToInBitcoin = () => {
@@ -373,33 +383,37 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     } catch (e) {
       console.log(e);
     }
-    return "";
+    return undefined;
   };
   const validateTo = async (_: unknown, value: string) => {
     const selectionError = validateChainAndAssetSelection();
-    if (selectionError !== "") {
-      Promise.reject(new Error(selectionError));
+    console.log(selectionError);
+    if (selectionError) {
+      return Promise.reject(new Error(selectionError));
     }
 
     if (selectedBlockchain === defaultNetwork) {
       const errorMessage = await validateToInPeerplays(value);
-      return errorMessage !== ""
+      return errorMessage
         ? Promise.reject(new Error(errorMessage))
         : Promise.resolve();
     } else {
       setToAccount(sonAccount);
       const sonCheckError = validateSonStatus();
-      if (sonCheckError !== "") {
+      if (sonCheckError) {
         return Promise.reject(new Error(sonCheckError));
       }
 
       if (selectedBlockchain === BITCOIN_NETWORK) {
         const bitcoinError = validateToInBitcoin();
-        return bitcoinError !== ""
+        return bitcoinError
           ? Promise.reject(new Error(bitcoinError))
           : Promise.resolve();
       } else {
-        await validateToInHive(value);
+        const hiveError = await validateToInHive(value);
+        return hiveError
+          ? Promise.reject(new Error(hiveError))
+          : Promise.resolve();
       }
     }
   };
@@ -486,6 +500,10 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     setSelectedAsset(assets.find((asset) => asset.symbol === assetSymbol));
   }, [assetSymbol, assets, assets.length]);
 
+  useEffect(() => {
+    setSelectedAssetPrecission();
+  }, [setSelectedAssetPrecission]);
+
   return {
     assets,
     onAssetChange,
@@ -507,5 +525,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     amount,
     localStorageAccount,
     toAccount: sendForm.getFieldsValue().to,
+    selectedAssetPrecission,
+    btcTransferFee,
   };
 }

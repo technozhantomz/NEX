@@ -347,7 +347,7 @@ export const WithdrawForm = ({
                   type="number"
                   step="any"
                   min={0}
-                  onKeyPress={utils.ensureInputNumberValidity}
+                  //onKeyPress={utils.ensureInputNumberValidity}
                   prefix={
                     <Styled.WithdrawFormAsset>
                       <LogoSelectOption

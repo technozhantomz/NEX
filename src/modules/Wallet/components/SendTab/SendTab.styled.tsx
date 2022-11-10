@@ -14,6 +14,10 @@ export const SendTabWrapper = styled.div`
 
 export const SendFormWrapper = styled.div`
   max-width: 710px;
+  margin-bottom: 40px;
+  ${breakpoint.sm} {
+    margin-bottom: 60px;
+  }
 `;
 
 export const HeaderWrapper = styled.div`

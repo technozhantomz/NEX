@@ -37,6 +37,8 @@ export type UseSendFormResult = {
   amount: string;
   localStorageAccount: string;
   toAccount: string;
+  selectedAssetPrecission: number;
+  btcTransferFee: number;
 };
 export type SendForm = {
   asset: string;

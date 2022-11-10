@@ -1,12 +1,20 @@
 import counterpart from "counterpart";
 
-import { BITCOIN_NETWORK, defaultNetwork } from "../../../../../../api/params";
+import {
+  BITCOIN_NETWORK,
+  defaultNetwork,
+  defaultToken,
+  HIVE_NETWORK,
+} from "../../../../../../api/params";
 import { utils } from "../../../../../../api/utils";
 import {
   PasswordModal,
   TransactionModal,
 } from "../../../../../../common/components";
-import { useHandleTransactionForm } from "../../../../../../common/hooks";
+import {
+  useAsset,
+  useHandleTransactionForm,
+} from "../../../../../../common/hooks";
 import { Form, Input } from "../../../../../../ui/src";
 import BitcoinIcon from "../../../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
@@ -41,9 +49,12 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     localStorageAccount,
     amount,
     toAccount,
+    selectedAssetPrecission,
+    btcTransferFee,
   } = useSendForm({
     assetSymbol,
   });
+  const { limitByPrecision } = useAsset();
   const icons: {
     [blockchain: string]: JSX.Element;
   } = {
@@ -65,6 +76,89 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     setTransactionSuccessMessage,
     neededKeyType: "active",
   });
+
+  const precisedAmount = limitByPrecision(
+    String(amount),
+    selectedAssetPrecission
+  );
+
+  //done
+  const feeLabel =
+    selectedBlockchain === BITCOIN_NETWORK
+      ? counterpart.translate(`field.labels.estimated_fees_label`)
+      : counterpart.translate(`field.labels.fees_label`);
+  //done
+  const feeSummary: (inTotal?: boolean) => string | JSX.Element = (
+    inTotal = false
+  ) => {
+    const bitcoinNetworkFeeSummary = inTotal ? (
+      <>
+        <div>{`+ ${feeAmount} ${defaultToken}`}</div>
+        <div>+ {`${btcTransferFee} BTC`}</div>
+      </>
+    ) : (
+      <>
+        <div>{`${feeAmount} ${defaultToken}`}</div>
+        <div>+ {`${btcTransferFee} BTC`}</div>
+      </>
+    );
+
+    const otherNetworksFeeSummary = inTotal
+      ? `+ ${feeAmount}
+    ${defaultToken}`
+      : `${feeAmount}
+    ${defaultToken}`;
+
+    return selectedBlockchain === BITCOIN_NETWORK
+      ? bitcoinNetworkFeeSummary
+      : otherNetworksFeeSummary;
+  };
+
+  const transactionModalFee =
+    selectedBlockchain === BITCOIN_NETWORK
+      ? `${feeAmount} ${defaultToken} + ${btcTransferFee} BTC`
+      : `${feeAmount}
+  ${defaultToken}`;
+
+  //done
+  const totalTransaction = (
+    <>
+      <div>{`${precisedAmount} ${selectedAssetSymbol}`}</div>
+      <>{feeSummary(true)}</>
+    </>
+  );
+
+  const sideChainConfirmationTime =
+    selectedBlockchain === BITCOIN_NETWORK
+      ? counterpart.translate(`field.labels.btc_withdrawal_confirmation_time`)
+      : counterpart.translate(`field.labels.hive_withdrawal_confirmation_time`);
+  const confirmationTime =
+    selectedBlockchain === HIVE_NETWORK ||
+    selectedBlockchain === BITCOIN_NETWORK
+      ? sideChainConfirmationTime
+      : counterpart.translate(`field.labels.peerplays_confirmation_time`);
+
+  const transactionDetails = (
+    <Styled.TransactionDetails>
+      <Styled.DetailsWrapper>
+        <Styled.DetailsLabelWrapper>{feeLabel}</Styled.DetailsLabelWrapper>
+        <Styled.AmountsWrapper>{feeSummary()}</Styled.AmountsWrapper>
+      </Styled.DetailsWrapper>
+      <Styled.DetailsWrapper>
+        <Styled.DetailsLabelWrapper>
+          {counterpart.translate(`field.labels.total_transaction`)}
+        </Styled.DetailsLabelWrapper>
+        <Styled.AmountsWrapper>{totalTransaction}</Styled.AmountsWrapper>
+      </Styled.DetailsWrapper>
+      <Styled.DetailsWrapper>
+        <Styled.DetailsLabelWrapper>
+          {counterpart.translate(`field.labels.withdrawal_confirmation_time`)}
+        </Styled.DetailsLabelWrapper>
+        <Styled.AmountsWrapper>{confirmationTime}</Styled.AmountsWrapper>
+      </Styled.DetailsWrapper>
+    </Styled.TransactionDetails>
+  );
+
   return (
     <Form.Provider onFormFinish={handleFormFinish}>
       <Styled.SendForm
@@ -128,7 +222,6 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             </Styled.BlockchainSelector>
           </Form.Item>
         </div>
-
         <Styled.AvailableAssetWrapper>
           <Styled.AvailableAssetLabel>
             {counterpart.translate(`pages.wallet.available_to_send`)}
@@ -137,7 +230,6 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             {selectedAsset ? selectedAsset.amount : 0}
           </Styled.AvailableAssetAmount>
         </Styled.AvailableAssetWrapper>
-
         <div className="two-input-row">
           <Form.Item
             name="amount"
@@ -177,13 +269,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             />
           </Styled.MemoFormItem>
         </Styled.MemoWrapper>
-        {/* <p>
-          {counterpart.translate(`field.labels.fees`, {
-            feeAmount: transferFee,
-            defaultAsset: defaultAsset ? defaultAsset.symbol : "",
-          })}
-        </p> */}
-
+        {transactionDetails}
         <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">
             {counterpart.translate(`buttons.send`)}
@@ -202,7 +288,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
         transactionSuccessMessage={transactionSuccessMessage}
         loadingTransaction={loadingTransaction}
         account={localStorageAccount}
-        fee={feeAmount}
+        fee={transactionModalFee}
         asset={selectedAssetSymbol}
         to={toAccount}
         amount={amount}

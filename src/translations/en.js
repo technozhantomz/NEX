@@ -910,6 +910,7 @@ export const en = {
       withdrawal_confirmation_time: "Confirmation Time: ",
       btc_withdrawal_confirmation_time: "~10 minutes",
       hive_withdrawal_confirmation_time: "~3 minutes",
+      peerplays_confirmation_time: "~3 seconds",
       estimated_fees_label: "Estimated Fees:",
       fees: "Fees: %(feeAmount)s %(defaultAsset)s",
       market_fee: "Market Fee",
