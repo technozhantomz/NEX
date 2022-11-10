@@ -23,7 +23,7 @@ const DefaultBrowserHistoryState: BrowserHistoryContextType = {
   pathname: "",
   privatePaths: [
     "/wallet",
-    "/wallet/[asset]",
+    "/wallet/[[...asset]]",
     "/settings?tab=key-management",
     "/settings?tab=membership",
     "/voting",

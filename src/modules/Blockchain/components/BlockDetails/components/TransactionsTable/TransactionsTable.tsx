@@ -1,18 +1,15 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { TablePaginationConfig } from "antd";
+import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  CSSProperties,
-  ReactInstance,
-  ReactNode,
-  RefObject,
-  useRef,
-} from "react";
+import { ReactInstance, RefObject, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
+import { renderPaginationConfig } from "../../../../../../common/components";
 import { useViewportContext } from "../../../../../../common/providers";
 import {
   DownloadOutlined,
@@ -82,6 +79,12 @@ export const TransactionsTable = ({
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
+          pagination={
+            renderPaginationConfig({
+              loading: loadingBlockDetails,
+              pageSize: 2,
+            }) as PaginationConfig
+          }
           loading={loadingBlockDetails}
           renderItem={(item) => (
             <Link href={`/blockchain/${block}/${item.rank}`}>
@@ -168,36 +171,10 @@ export const TransactionsTable = ({
             };
           }}
           pagination={
-            !loadingBlockDetails
-              ? {
-                  hideOnSinglePage: true,
-                  showSizeChanger: false,
-                  size: "small",
-                  pageSize: 5,
-                  showLessItems: true,
-                  itemRender: (
-                    _page: number,
-                    type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                    element: ReactNode
-                  ) => {
-                    if (type === "prev") {
-                      return (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.previous`)}
-                        </a>
-                      );
-                    }
-                    if (type === "next") {
-                      return (
-                        <a style={{ marginLeft: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.next`)}
-                        </a>
-                      );
-                    }
-                    return element;
-                  },
-                }
-              : false
+            renderPaginationConfig({
+              loading: loadingBlockDetails,
+              pageSize: 5,
+            }) as false | TablePaginationConfig
           }
         />
       )}

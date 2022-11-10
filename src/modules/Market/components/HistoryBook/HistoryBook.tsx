@@ -34,17 +34,27 @@ export const HistoryBook = ({
   });
   const dataSource = forUser ? userOrderHistoryRows : orderHistoryRows;
   const desktopScrollForUserHistories =
-    dataSource.length > 24
-      ? { y: 230, x: true, scrollToFirstRowOnChange: false }
+    dataSource.length > 11
+      ? {
+          y: 290,
+          x: true,
+          scrollToFirstRowOnChange: false,
+        }
       : { x: true, scrollToFirstRowOnChange: false };
+
   const desktopScrollForHistories =
     dataSource.length > 24
-      ? { y: 677, x: true, scrollToFirstRowOnChange: false }
+      ? { y: 770, x: true, scrollToFirstRowOnChange: false }
       : { x: true, scrollToFirstRowOnChange: false };
   const desktopScroll = forUser
     ? desktopScrollForUserHistories
     : desktopScrollForHistories;
-  const scroll = md ? ({ x: true } as Scroll) : (desktopScroll as Scroll);
+
+  const mobileScroll =
+    dataSource.length > 6
+      ? ({ y: 300, x: true, scrollToFirstRowOnChange: false } as Scroll)
+      : ({ x: true, scrollToFirstRowOnChange: false } as Scroll);
+  const scroll = md ? mobileScroll : (desktopScroll as Scroll);
 
   return (
     <>

@@ -1,22 +1,26 @@
 import { ColumnsType } from "antd/lib/table";
-import React, { RefObject } from "react";
+import React from "react";
 
 import * as Styled from "../AssetsTab.styled";
-import { AssetTableRow, useAssetsTab } from "../hooks";
+import { AssetColumnType, AssetTableRow } from "../hooks";
 
-import { AssetsColumns } from "./AssetsColumns";
+type Props = {
+  loading: boolean;
+  assetsColumns: AssetColumnType[];
+  assetTableRows: AssetTableRow[];
+};
 
-export const AssetsPrintTable = React.forwardRef((_props, ref) => {
-  const { loading, assetTableRows } = useAssetsTab();
-
-  return (
-    <div ref={ref as RefObject<HTMLDivElement>}>
-      <Styled.AssetsTable
-        dataSource={assetTableRows}
-        columns={AssetsColumns as ColumnsType<AssetTableRow>}
-        loading={loading}
-        pagination={false}
-      />
-    </div>
-  );
-});
+export const AssetsPrintTable = React.forwardRef(
+  (props: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
+    return (
+      <div ref={ref}>
+        <Styled.AssetsTable
+          dataSource={props.assetTableRows}
+          columns={props.assetsColumns as ColumnsType<AssetTableRow>}
+          loading={props.loading}
+          pagination={false}
+        />
+      </div>
+    );
+  }
+);

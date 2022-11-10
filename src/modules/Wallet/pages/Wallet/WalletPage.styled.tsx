@@ -106,3 +106,5 @@ export const WalletCard = styled(UiCard)`
 export const ActivityTable = styled(UiActivityTable)`
   margin: 0 35px 20px 35px;
 `;
+
+export const AssetTabWrapper = styled.div``;
