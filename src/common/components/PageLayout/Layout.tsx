@@ -5,7 +5,7 @@ import React, { FunctionComponent, ReactNode } from "react";
 
 import { Footer } from "./Footer";
 import * as Styled from "./Layout.styled";
-import { SocialBar } from "./SocialBar";
+// import { SocialBar } from "./SocialBar";
 import { TopBar } from "./TopBar";
 
 moment.locale("en");
@@ -62,7 +62,7 @@ export const Layout: FunctionComponent<Props> = ({
             )}
             {children}
           </Styled.Layout>
-          {layout === "peerlink" ? <SocialBar /> : ""}
+          {/* {layout === "peerlink" ? <SocialBar /> : ""} */}
           <Footer />
         </Styled.Page>
       </ConfigProvider>
