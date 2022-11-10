@@ -11,18 +11,44 @@ export const TopBar = styled.nav`
     margin: 23px 0 0 20px;
     display: flex;
     align-items: center;
-    .logo {
-      font-size: 10em;
+    .peerplays-logo {
       display: flex;
-      color: ${colors.white};
+      align-items: center;
+      .logo-link {
+        display: flex;
+        align-items: center;
+        color: ${colors.white};
+        .logo {
+          font-size: 10em;
+          display: flex;
+          color: ${colors.white};
+          margin-right: 6px;
+          ${breakpoint.sm} {
+            margin-right: 12px;
+          }
+        }
+        .peer {
+          color: ${colors.white};
+          letter-spacing: 1px;
+          font-size: 1.25rem;
+          margin: 0;
+          .plays {
+            font-weight: 200;
+          }
+        }
+      }
     }
-    .dex-logo {
-      display: block;
-      margin: 0 0 0 5px;
+    .dex-logo,
+    .link-logo {
+      display: none;
+      margin: 0 0 0 6px;
       font-size: 1.25rem;
       font-weight: 200;
       color: #ff903e;
       letter-spacing: 1px;
+      ${breakpoint.sm} {
+        margin: 0 0 0 15px;
+      }
     }
   }
   .topbar-right {
