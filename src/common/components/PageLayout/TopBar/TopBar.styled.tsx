@@ -35,12 +35,16 @@ export const TopBar = styled.nav`
           .plays {
             font-weight: 200;
           }
+          .link {
+            font-size: 1.25rem;
+            font-weight: 200;
+            color: #ff903e;
+            letter-spacing: 1px;
+          }
         }
       }
     }
-    .dex-logo,
-    .link-logo {
-      display: none;
+    .dex-logo {
       margin: 0 0 0 6px;
       font-size: 1.25rem;
       font-weight: 200;

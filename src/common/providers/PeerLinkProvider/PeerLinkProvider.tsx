@@ -25,11 +25,14 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
   const [metaMask, setMetaMask] = useState<MetaMask>(
     defaultPeerLinkState.metaMask
   );
-  const { ethereum, connect } = useMetaMask();
+  const { ethereum, status, connect } = useMetaMask();
 
   const connectToMetaMask = async () => {
     const accounts = await connect();
     if (accounts?.length) {
+      // const { account, chainId } = useConnectedMetaMask();
+      // console.log("account:", account);
+      // console.log("chainId:", chainId);
       setMetaMask({
         isConnected: ethereum.selectedAddress ? true : false,
         selectedAddress: ethereum.selectedAddress,
@@ -39,6 +42,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
 
   useEffect(() => {
     if (ethereum) {
+      console.log("status:", status);
       setMetaMask({
         isConnected: ethereum.selectedAddress ? true : false,
         selectedAddress: ethereum.selectedAddress,

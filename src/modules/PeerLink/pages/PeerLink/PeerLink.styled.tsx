@@ -1,10 +1,11 @@
 import { Card, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const ConnectCard = styled(Card)`
   min-height: 291px;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   margin: 0 auto;
   .ant-card-body {
     padding: 25px 15px 45px;
@@ -33,7 +34,7 @@ export const ConnectButton = styled.button`
   align-items: center;
   justify-content: space-between;
   border: 1px solid ${colors.borderColorBase};
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   padding: 20px 29px;
   margin: 10px 0;
   text-align: left;

@@ -32,14 +32,6 @@ export const Page = styled.section`
       }
     }
     &.peerlink {
-      .top-bar {
-        .peerplays-logo .plays {
-          display: none;
-        }
-        .link-logo {
-          display: block;
-        }
-      }
       ${breakpoint.sm} {
         .card-layout {
           max-width: 700px;

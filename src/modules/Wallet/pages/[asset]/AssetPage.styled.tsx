@@ -32,7 +32,7 @@ export const AssetCard = styled(UiCard)`
   }
   .ant-tabs-content-holder {
     min-height: 564px;
-    border-radius: 4px;
+    ${mixIns.borderRadius}
   }
   ${breakpoint.sm} {
     .ant-form {
@@ -49,7 +49,7 @@ export const AssetCard = styled(UiCard)`
       }
     }
     .ant-tabs {
-      border-radius: 4px;
+      ${mixIns.borderRadius}
       opacity: 1;
       max-width: 1070px;
     }

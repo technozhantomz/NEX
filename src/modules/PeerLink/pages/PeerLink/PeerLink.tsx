@@ -1,5 +1,6 @@
 import counterpart from "counterpart";
 import { NextPage } from "next";
+// import Link from "next/link";
 
 import { Layout } from "../../../../common/components";
 import { usePeerLinkContext } from "../../../../common/providers";
@@ -60,13 +61,22 @@ const PeerLink: NextPage = () => {
           </Styled.ConnectButton>
         </Styled.ConnectButtons>
         <Styled.ConnectInfoWrapper>
-          <Styled.ConnectInfo>
+          {/* commented well waiting on requirement updates */}
+          {/* <Styled.ConnectInfo>
+            <InfoCircleOutlined />
+            <span>
+              A PeerPlays Account is Required you can{" "}
+              <Link href={"/login"}>Login</Link> or we will create a new account
+              for you using your hive account name.
+            </span>
+          </Styled.ConnectInfo> */}
+          {/* <Styled.ConnectInfo>
             <InfoCircleOutlined />
             <span>
               Hive wallet and Metamask are required to transfer tokens
               cross-chain <a>Why?</a>
             </span>
-          </Styled.ConnectInfo>
+          </Styled.ConnectInfo> */}
           <Styled.ConnectInfo>
             <InfoCircleOutlined />
             <span>
