@@ -27,7 +27,7 @@ export function useSonsTab(): UseSonsTabResult {
 
   const { getSons } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
-  const { formAssetBalanceById, setPrecision } = useAsset();
+  const { formKnownAssetBalanceById, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { getChain, getAvgBlockTime, getBlockData } = useBlockchain();
   const { formLocalDate } = useFormDate();
@@ -40,8 +40,10 @@ export function useSonsTab(): UseSonsTabResult {
   const getSonsData = useCallback(async () => {
     if (defaultAsset) {
       try {
-        const chain = await getChain();
-        const blockData = await getBlockData();
+        const [chain, blockData] = await Promise.all([
+          getChain(),
+          getBlockData(),
+        ]);
         if (chain && blockData) {
           const { sons, sonsIds } = await getSons();
           const budgetAmount = setPrecision(
@@ -58,11 +60,10 @@ export function useSonsTab(): UseSonsTabResult {
             sons.sort((a, b) => b.total_votes - a.total_votes);
             const sonsRows: SonsTableRow[] = [];
             let index = 0;
-            const sonsVotesAsset = await Promise.all(
-              sons.map((son) => {
-                return formAssetBalanceById(defaultAsset.id, son.total_votes);
-              })
-            );
+            const sonsVotesAsset = sons.map((son) => {
+              return formKnownAssetBalanceById(defaultAsset, son.total_votes);
+            });
+
             for (const son of sons) {
               sonsRows.push({
                 key: index,
@@ -115,7 +116,7 @@ export function useSonsTab(): UseSonsTabResult {
     searchDataSource,
     getChain,
     setPrecision,
-    formAssetBalanceById,
+    formKnownAssetBalanceById,
     getAvgBlockTime,
     getDaysInThisMonth,
     setSonsTableRows,

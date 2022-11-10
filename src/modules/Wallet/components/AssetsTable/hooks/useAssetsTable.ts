@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { utils } from "../../../../../api/utils";
 import { useAccount, useAsset } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
-import { Asset } from "../../../../../common/types";
+import { Asset, FullAccount } from "../../../../../common/types";
 import { AssetColumnType, createAssetsColumns } from "../../AssetsColumns";
 
 import { AssetTableRow, UseAssetsTabResult } from "./useAssetsTable.types";
@@ -21,6 +21,7 @@ export function useAssetsTable({
   const [assetsTableRows, _setAssetsTableRows] = useState<AssetTableRow[]>([]);
   const [searchDataSource, setSearchDataSource] = useState<AssetTableRow[]>([]);
   const [assetsColumns, setAssetsColumns] = useState<AssetColumnType[]>([]);
+  const [fullAccount, _setFullAccount] = useState<FullAccount | undefined>();
 
   const [loading, setLoading] = useState<boolean>(true);
   const { assets, localStorageAccount } = useUserContext();
@@ -28,9 +29,8 @@ export function useAssetsTable({
   const { setPrecision } = useAsset();
 
   const formAssetRow = useCallback(
-    async (asset: Asset): Promise<AssetTableRow> => {
+    (asset: Asset): AssetTableRow => {
       const available = asset.amount as number;
-      const fullAccount = await getFullAccount(localStorageAccount, false);
       let inOrders = 0;
       if (fullAccount) {
         const limitOrders = fullAccount.limit_orders;
@@ -51,18 +51,17 @@ export function useAssetsTable({
         inOrders: inOrders,
       };
     },
-    [localStorageAccount, getFullAccount, setPrecision]
+    [fullAccount, setPrecision]
   );
 
-  const setAssetsTableRows = useCallback(async () => {
-    if (assets && assets.length) {
+  const setAssetsTableRows = useCallback(() => {
+    if (fullAccount && assets && assets.length) {
       try {
         setLoading(true);
-        const assetsRows = await Promise.all(
-          assets
-            .filter((asset) => asset.symbol !== filterAsset)
-            .map(formAssetRow)
-        );
+        const assetsRows = assets
+          .filter((asset) => asset.symbol !== filterAsset)
+          .map(formAssetRow);
+
         const symbols = assetsRows.map((asset) => asset.symbol);
         const allNames = assetsRows.map((row) => row.name);
         const uniqNames = uniq(allNames);
@@ -102,7 +101,17 @@ export function useAssetsTable({
     setAssetsColumns,
     filterAsset,
     setSearchDataSource,
+    fullAccount,
   ]);
+
+  const setFullAccount = useCallback(async () => {
+    const fullAccount = await getFullAccount(localStorageAccount, false);
+    _setFullAccount(fullAccount);
+  }, [getFullAccount, localStorageAccount, _setFullAccount]);
+
+  useEffect(() => {
+    setFullAccount();
+  }, [setFullAccount]);
 
   useEffect(() => {
     setAssetsTableRows();

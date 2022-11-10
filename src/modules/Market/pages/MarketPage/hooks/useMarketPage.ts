@@ -88,10 +88,12 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       try {
         setLoadingSelectedPair(true);
         const quoteBase = await getAssetsBySymbols(assets);
-        const quote = quoteBase[0];
-        const base = quoteBase[1];
-        setCurrentBase(base as Asset);
-        setCurrentQuote(quote as Asset);
+        if (quoteBase.length > 1) {
+          const quote = quoteBase[0];
+          const base = quoteBase[1];
+          setCurrentBase(base as Asset);
+          setCurrentQuote(quote as Asset);
+        }
         setLoadingSelectedPair(false);
       } catch (e) {
         setLoadingSelectedPair(false);
