@@ -1,7 +1,6 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { defaultToken } from "../../../../api/params";
 import * as Styled from "../TransactionModal.styled";
 
 type Props = {
@@ -49,7 +48,7 @@ export const Transfer = ({
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.labels.fee`)}</p>
-        <p>{`${fee} ${defaultToken}`}</p>
+        <p>{`${fee}`}</p>
       </Styled.DetailContainer>
     </>
   );
