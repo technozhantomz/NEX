@@ -40,7 +40,7 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
-              `pages.blocks.assets.search_assets`
+              `pages.blocks.block_details.search_transaction`
             ),
             suffix: <SearchOutlined />,
           }}

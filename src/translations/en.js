@@ -599,6 +599,7 @@ export const en = {
         previous_secret: "Previous Secret",
         next_secret: "Next Secret",
         witness_signature: "Witness Signature",
+        search_transaction: "Search transaction",
       },
       assets: {
         heading: "PeerPlays Assets",

@@ -557,6 +557,7 @@ export const ru = {
         merkle_root: "Корень Меркла",
         previous_secret: "Предыдущий секрет",
         witness_signature: "Подпись свидетеля",
+        search_transaction: "Поиск транзакции",
       },
       assets: {
         heading: "Активы PeerPlays",

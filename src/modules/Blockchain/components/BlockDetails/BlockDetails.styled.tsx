@@ -68,6 +68,7 @@ export const TwoColumns = styled.div`
 export const BlockInfoTitle = styled.h3`
   font-size: 1em;
   font-weight: 200;
+  color: ${colors.textColorSecondary};
 `;
 
 export const BlockInfo = styled.div`
