@@ -69,6 +69,9 @@ export const ButtonFormItem = styled.div`
 
 export const PasswordInput = styled(UiInput.Password)`
   height: 50px;
+  border-radius: 4px;
+  opacity: 1;
+  border: 2px solid ${colors.borderColorBase};
 `;
 
 export const NoKey = styled.div`
@@ -78,6 +81,7 @@ export const NoKey = styled.div`
 
 export const SubmitButton = styled(CardFormButton)`
   margin: 0;
+  width: 290px;
 `;
 
 export const PublicKeyWrapper = styled.div`
@@ -97,6 +101,9 @@ export const GeneratedKeyInput = styled(KeyInput)`
   width: 100%;
   margin-top: 24px;
   margin-bottom: 24px;
+  border-radius: 4px;
+  opacity: 1;
+  border: 2px solid ${colors.borderColorBase};
   span.anticon {
     margin-right: 10px;
     ${breakpoint.sm} {
