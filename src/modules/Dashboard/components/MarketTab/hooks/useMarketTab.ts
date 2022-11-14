@@ -9,20 +9,26 @@ export function useMarketTab(): UseMarketTabResult {
   const [pairs, setPairs] = useState<PairNameAndMarketStats[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const { getDefaultPairs, formPairStats } = useMarketPairStats();
+  const {
+    getDefaultPairs,
+    formPairStats,
+    loading: pairLoading,
+  } = useMarketPairStats();
 
   const getMarketPairStatsForPairs = useCallback(async () => {
-    try {
-      setLoading(true);
-      const pairs = await getDefaultPairs();
-      const updatedPairs = await Promise.all(pairs.map(formPairStats));
-      setPairs(updatedPairs);
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
+    if (!pairLoading) {
+      try {
+        setLoading(true);
+        const pairs = getDefaultPairs();
+        const updatedPairs = await Promise.all(pairs.map(formPairStats));
+        setPairs(updatedPairs);
+        setLoading(false);
+      } catch (e) {
+        console.log(e);
+        setLoading(false);
+      }
     }
-  }, [setPairs, formPairStats, getDefaultPairs, setLoading]);
+  }, [setPairs, formPairStats, getDefaultPairs, setLoading, pairLoading]);
 
   useEffect(() => {
     getMarketPairStatsForPairs();

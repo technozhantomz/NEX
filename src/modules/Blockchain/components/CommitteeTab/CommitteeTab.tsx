@@ -1,10 +1,13 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { TablePaginationConfig } from "antd";
+import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
+import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
+import { renderPaginationConfig } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import {
   DownloadOutlined,
@@ -80,6 +83,11 @@ export const CommitteeTab = (): JSX.Element => {
           itemLayout="vertical"
           dataSource={searchDataSource}
           loading={loading}
+          pagination={
+            renderPaginationConfig({ loading, pageSize: 5 }) as
+              | false
+              | PaginationConfig
+          }
           renderItem={(item) => (
             <Styled.CommiteeListItem key={item.key}>
               <Styled.CommiteeItemContent>
@@ -133,41 +141,20 @@ export const CommitteeTab = (): JSX.Element => {
           columns={CommitteeColumns as ColumnsType<unknown>}
           loading={loading}
           pagination={
-            !loading
-              ? {
-                  hideOnSinglePage: true,
-                  showSizeChanger: false,
-                  size: "small",
-                  pageSize: 15,
-                  showLessItems: true,
-                  itemRender: (
-                    _page: number,
-                    type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                    element: ReactNode
-                  ) => {
-                    if (type === "prev") {
-                      return (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.previous`)}
-                        </a>
-                      );
-                    }
-                    if (type === "next") {
-                      return (
-                        <a style={{ marginLeft: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.next`)}
-                        </a>
-                      );
-                    }
-                    return element;
-                  },
-                }
-              : false
+            renderPaginationConfig({
+              loading,
+              pageSize: 15,
+            }) as false | TablePaginationConfig
           }
         />
       )}
       <Styled.PrintTable>
-        <CommitteePrintTable ref={componentRef} />
+        <CommitteePrintTable
+          ref={componentRef}
+          loading={loading}
+          committeeColumns={CommitteeColumns}
+          committeeTableRows={committeeTableRows}
+        />
       </Styled.PrintTable>
     </Styled.CommitteeTabWrapper>
   );

@@ -20,26 +20,49 @@ export const SwapContainer = styled.div`
 `;
 
 export const SwapForm = styled(swapForm)`
-  .ant-input-affix-wrapper-status-error .ant-input-prefix {
-    color: inherit;
+  .ant-input-group.ant-input-group-compact {
+    display: flex;
+    padding: 4px 11px;
   }
   .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
     .ant-select-selector {
     border-color: transparent !important;
   }
-  .ant-form-item-with-help .ant-form-item-explain {
+  .ant-form-item-explain {
     display: none;
   }
-  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper,
-  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper:hover {
-    border-color: ${colors.borderColorBase};
-  }
-  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper:focus,
-  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper-focused {
-    box-shadow: unset;
-  }
+
   .ant-form-item .ant-form-item-margin-offset {
     margin-bottom: -24px !important;
+  }
+
+  .ant-input-group.ant-input-group-compact {
+    display: flex;
+    align-items: center;
+    height: 70px;
+    border: 1px solid ${colors.borderColorBase};
+    border-radius: 4px;
+    ${breakpoint.sm} {
+      height: 85px;
+    }
+    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:focus,
+    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input-focused,
+    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
+    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+      border: none !important;
+      box-shadow: none !important;
+    }
+    .ant-input {
+      border: none;
+      box-shadow: none;
+      text-align: right;
+      direction: ltr;
+      padding-right: 30px;
+      font-size: 16px;
+      ${breakpoint.sm} {
+        font-size: 20px;
+      }
+    }
   }
 `;
 
@@ -48,17 +71,7 @@ export const SwapItem = styled(swapForm.Item)`
     background: ${colors.white} 0% 0% no-repeat padding-box;
     ${mixIns.borderRadius}
     min-height: 65px;
-    .ant-input-prefix {
-      min-width: 200px;
-      ${breakpoint.sm} {
-        min-width: 240px;
-      }
-      width: fit-content;
-    }
-    .ant-input {
-      text-align: right;
-      direction: ltr;
-    }
+
     ${breakpoint.sm} {
       min-height: 85px;
     }
@@ -72,10 +85,17 @@ export const SwapSellItem = styled(SwapItem)`
 `;
 
 export const AssetSelectContainer = styled.div`
-  width: 100%;
   margin-bottom: 0;
   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
     padding: 0;
+  }
+  min-width: 200px;
+  ${breakpoint.sm} {
+    min-width: 240px;
+  }
+  width: fit-content;
+  .ant-select {
+    width: 100%;
   }
 `;
 
@@ -96,7 +116,7 @@ export const SwapButton = styled(Button)`
   transform: rotate(90deg);
   position: absolute;
   z-index: 2;
-  margin-top: 60px;
+  margin-top: 66px;
   ${breakpoint.sm} {
     margin-top: 80px;
   }

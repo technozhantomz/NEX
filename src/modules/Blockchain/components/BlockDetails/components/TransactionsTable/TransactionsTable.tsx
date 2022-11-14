@@ -1,9 +1,15 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { TablePaginationConfig } from "antd";
+import { PaginationConfig } from "antd/lib/pagination";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { ReactInstance, RefObject, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
+import { renderPaginationConfig } from "../../../../../../common/components";
 import { useViewportContext } from "../../../../../../common/providers";
 import {
   DownloadOutlined,
@@ -11,21 +17,29 @@ import {
   List,
   SearchOutlined,
 } from "../../../../../../ui/src";
-import { TransactionRow } from "../../../BlockchainTab/hooks/useBlockchainTab.types";
+import { TransactionRow } from "../../hooks";
 
 import { TransactionsColumns } from "./TransactionsColumns";
 import * as Styled from "./TransactionsTable.styled";
 import { useTransactionsTable } from "./hooks";
 
 type Props = {
+  block: number;
   transactionRows: TransactionRow[];
+  loadingBlockDetails: boolean;
 };
 
-export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
-  const { loading, searchDataSource, setSearchDataSource } =
+export const TransactionsTable = ({
+  block,
+  transactionRows,
+  loadingBlockDetails,
+}: Props): JSX.Element => {
+  const { searchDataSource, setSearchDataSource } =
     useTransactionsTable(transactionRows);
   const { sm } = useViewportContext();
-  const componentRef = useRef<HTMLDivElement>(null);
+  const componentRef = useRef();
+  const transactionsColumns = TransactionsColumns(block);
+  const router = useRouter();
 
   return (
     <Styled.TableWrapper>
@@ -35,12 +49,12 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
           <InfoCircleOutlined />
         </Styled.TransactionHeader>
         <SearchTableInput
-          columns={TransactionsColumns}
+          columns={transactionsColumns as ColumnsType<TransactionRow>}
           dataSource={transactionRows}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
-              `pages.blocks.assets.search_assets`
+              `pages.blocks.block_details.search_transactions`
             ),
             suffix: <SearchOutlined />,
           }}
@@ -65,108 +79,111 @@ export const TransactionsTable = ({ transactionRows }: Props): JSX.Element => {
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          pagination={
+            renderPaginationConfig({
+              loading: loadingBlockDetails,
+              pageSize: 2,
+            }) as PaginationConfig
+          }
+          loading={loadingBlockDetails}
           renderItem={(item) => (
-            <Styled.TransactionListItem key={item.rank}>
-              <Styled.TransactionItemContent>
-                <div className="item-info">
+            <Link href={`/blockchain/${block}/${item.rank}`}>
+              <a>
+                <Styled.TransactionListItem key={item.rank}>
+                  <Styled.TransactionItemContent>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[0].title()}
+                      </span>
+                      <span className="item-info-value">{item.rank}</span>
+                    </div>
+                    {/* <div className="item-info">
                   <span className="item-info-title">
-                    {TransactionsColumns[0].title()}
-                  </span>
-                  <span className="item-info-value">{item.rank}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {TransactionsColumns[1].title()}
+                    {transactionsColumns[1].title()}
                   </span>
                   <span className="item-info-value">
-                    <a target="_blank" href={`/transaction/${item.id}`}>
+                    <a
+                      target="_blank"
+                      href={`/blockchain/${block}/${item.rank}`}
+                    >
                       <Styled.CenterEllipsis>
                         <span className="ellipsis">{item.id}</span>
                         <span className="indent">{item.id}</span>
                       </Styled.CenterEllipsis>
                     </a>
                   </span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {TransactionsColumns[2].title()}
-                  </span>
-                  <span className="item-info-value">{item.expiration}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {TransactionsColumns[3].title()}
-                  </span>
-                  <span className="item-info-value">{item.operations}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {TransactionsColumns[4].title()}
-                  </span>
-                  <span className="item-info-value">{item.refBlockPrefix}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {TransactionsColumns[5].title()}
-                  </span>
-                  <span className="item-info-value">{item.refBlockNum}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {TransactionsColumns[6].title()}
-                  </span>
-                  <span className="item-info-value">{item.extensions}</span>
-                </div>
-              </Styled.TransactionItemContent>
-            </Styled.TransactionListItem>
+                </div> */}
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[1].title()}
+                      </span>
+                      <span className="item-info-value">{item.expiration}</span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[2].title()}
+                      </span>
+                      <span className="item-info-value">
+                        {item.operations.length}
+                      </span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[3].title()}
+                      </span>
+                      <span className="item-info-value">
+                        {item.refBlockPrefix}
+                      </span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[4].title()}
+                      </span>
+                      <span className="item-info-value">
+                        {item.refBlockNum}
+                      </span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[5].title()}
+                      </span>
+                      <span className="item-info-value">
+                        {item.extensions.length}
+                      </span>
+                    </div>
+                  </Styled.TransactionItemContent>
+                </Styled.TransactionListItem>
+              </a>
+            </Link>
           )}
         />
       ) : (
         <Styled.TransactionsTable
           dataSource={searchDataSource}
-          columns={TransactionsColumns}
-          loading={loading}
+          columns={transactionsColumns as ColumnsType<TransactionRow>}
+          loading={loadingBlockDetails}
+          rowClassName={(_record) => "pointer"}
+          onRow={(record) => {
+            return {
+              onClick: (_event) => {
+                router.push(`/blockchain/${block}/${record.rank}`);
+              },
+            };
+          }}
           pagination={
-            !loading
-              ? {
-                  hideOnSinglePage: true,
-                  showSizeChanger: false,
-                  size: "small",
-                  pageSize: 5,
-                  showLessItems: true,
-                  itemRender: (
-                    _page: number,
-                    type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                    element: ReactNode
-                  ) => {
-                    if (type === "prev") {
-                      return (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.previous`)}
-                        </a>
-                      );
-                    }
-                    if (type === "next") {
-                      return (
-                        <a style={{ marginLeft: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.next`)}
-                        </a>
-                      );
-                    }
-                    return element;
-                  },
-                }
-              : false
+            renderPaginationConfig({
+              loading: loadingBlockDetails,
+              pageSize: 5,
+            }) as false | TablePaginationConfig
           }
         />
       )}
       <Styled.PrintTable>
-        <div ref={componentRef}>
+        <div ref={componentRef as unknown as RefObject<HTMLDivElement>}>
           <Styled.TransactionsTable
             dataSource={transactionRows}
-            columns={TransactionsColumns}
-            loading={loading}
+            columns={transactionsColumns as ColumnsType<TransactionRow>}
+            loading={loadingBlockDetails}
             pagination={false}
           />
         </div>

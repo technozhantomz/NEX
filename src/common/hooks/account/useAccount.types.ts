@@ -38,4 +38,5 @@ export type UseAccountResult = {
   getAccounts: (
     idsOrNames: string[]
   ) => Promise<(Account | undefined)[] | undefined>;
+  getUserNamesByIds: (ids: string[]) => Promise<string[]>;
 };
