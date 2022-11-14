@@ -1,194 +1,113 @@
+import { SearchTableInput } from "ant-table-extensions";
+import { TablePaginationConfig } from "antd";
+import { PaginationConfig } from "antd/lib/pagination";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
+import { ReactInstance, ReactNode, useRef } from "react";
+import { CSVLink } from "react-csv";
+import ReactToPrint from "react-to-print";
 
-import { TableHeading } from "../../../../common/components";
-import {
-  useAssetsContext,
-  useViewportContext,
-} from "../../../../common/providers";
-import { List } from "../../../../ui/src";
-import { AssetActionButton } from "../AssetActionButton";
+import { AssetsPrintTable } from "..";
+import { renderPaginationConfig } from "../../../../common/components";
+import { useViewportContext } from "../../../../common/providers";
+import { DownloadOutlined, List, SearchOutlined } from "../../../../ui/src";
 import { AssetTitle } from "../AssetTitle";
 
 import * as Styled from "./AssetsTable.styled";
-import { IAssetRow, useAssetsTable } from "./hooks";
+import { AssetTableRow, useAssetsTable } from "./hooks";
 
 type Props = {
-  showActions?: boolean;
-  fillterAsset?: string;
+  className?: string;
+  title: string;
+  actionType?: "send_receive" | "receive_select" | "send_select";
+  filterAsset?: string;
 };
 
 export const AssetsTable = ({
-  showActions = true,
-  fillterAsset = "",
+  className = "",
+  title,
+  actionType = "send_receive",
+  filterAsset = "",
 }: Props): JSX.Element => {
-  const { tableAssets, loading } = useAssetsTable();
+  const {
+    loading,
+    assetsColumns,
+    assetsTableRows,
+    searchDataSource,
+    setSearchDataSource,
+  } = useAssetsTable({ filterAsset, actionType });
   const { sm } = useViewportContext();
-  const { sidechainAssets } = useAssetsContext();
-  const columns = [
-    {
-      title: (): JSX.Element => <TableHeading heading={"asset"} />,
-      dataIndex: "asset",
-      key: "asset",
-    },
-    {
-      title: (): JSX.Element => <TableHeading heading={"available"} />,
-      dataIndex: "available",
-      key: "available",
-    },
-    {
-      title: (): JSX.Element => <TableHeading heading={"quote_asset"} />,
-      dataIndex: "quoteAsset",
-      key: "quoteAsset",
-    },
-    {
-      title: (): JSX.Element => <TableHeading heading={"price"} />,
-      dataIndex: "price",
-      key: "price",
-    },
-    {
-      title: (): JSX.Element => <TableHeading heading={"change"} />,
-      dataIndex: "change",
-      key: "change",
-    },
-    {
-      title: (): JSX.Element => <TableHeading heading={"volume"} />,
-      dataIndex: "volume",
-      key: "volume",
-    },
-    {
-      title: "",
-      dataIndex: "transfer",
-      key: "transfer",
-      render: (_value: any, record: any) => (
-        <AssetActionButton
-          txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}
-          href={`/wallet/${record.asset}?tab=transfer`}
-        />
-      ),
-    },
-    {
-      title: "",
-      dataIndex: "withdraw",
-      key: "withdraw",
-      render: (_value: any, record: any) => {
-        const hasWithdraw = sidechainAssets
-          .map((asset) => asset?.symbol)
-          .includes(record.asset);
-        if (hasWithdraw) {
-          return (
-            <AssetActionButton
-              txt={counterpart.translate(`buttons.withdraw`)}
-              href={`/wallet/${record.asset}?tab=withdraw`}
-            />
-          );
-        } else {
-          return "";
-        }
-      },
-    },
-    {
-      title: "",
-      dataIndex: "deposit",
-      key: "deposit",
-      render: (_value: any, record: any) => {
-        const hasDeposit = sidechainAssets
-          .map((asset) => asset?.symbol)
-          .includes(record.asset);
-        if (hasDeposit) {
-          return (
-            <AssetActionButton
-              txt={counterpart.translate(`buttons.deposit`)}
-              href={`/wallet/${record.asset}?tab=deposit`}
-            />
-          );
-        }
-      },
-    },
-  ];
-
-  const renderAssetsActions = (item: IAssetRow) => {
-    if (sidechainAssets.map((asset) => asset?.symbol).includes(item.asset)) {
-      return [
-        <AssetActionButton
-          txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}
-          href={`/wallet/${item.asset}?tab=transfer`}
-        />,
-        <AssetActionButton
-          txt={counterpart.translate(`buttons.withdraw`)}
-          href={`/wallet/${item.asset}?tab=withdraw`}
-        />,
-        <AssetActionButton
-          txt={counterpart.translate(`buttons.deposit`)}
-          href={`/wallet/${item.asset}?tab=deposit`}
-        />,
-      ];
-    } else {
-      return [
-        <AssetActionButton
-          txt={counterpart.translate(`transaction.trxTypes.transfer.title`)}
-          href={`/wallet/${item.asset}?tab=transfer`}
-        />,
-      ];
-    }
-  };
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
-    <>
+    <Styled.AssetsWrapper className={className}>
+      <Styled.AssetHeaderBar>
+        <Styled.AssetHeader>{title}</Styled.AssetHeader>
+        <SearchTableInput
+          columns={assetsColumns as ColumnsType<AssetTableRow>}
+          dataSource={assetsTableRows}
+          setDataSource={setSearchDataSource}
+          inputProps={{
+            placeholder: counterpart.translate(
+              `pages.blocks.assets.search_assets`
+            ),
+            suffix: <SearchOutlined />,
+          }}
+        />
+        <Styled.DownloadLinks>
+          <DownloadOutlined />
+          <ReactToPrint
+            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
+            content={() => componentRef.current as unknown as ReactInstance}
+          />
+
+          {` / `}
+          <CSVLink
+            filename={"AssetsTable.csv"}
+            data={assetsTableRows}
+            className="btn btn-primary"
+          >
+            {counterpart.translate(`links.csv`)}
+          </CSVLink>
+        </Styled.DownloadLinks>
+      </Styled.AssetHeaderBar>
       {sm ? (
         <List
           itemLayout="vertical"
-          dataSource={
-            fillterAsset === ""
-              ? tableAssets
-              : tableAssets.filter((item) => item.asset === fillterAsset)
-          }
+          dataSource={searchDataSource}
           loading={loading}
+          pagination={
+            renderPaginationConfig({ loading, pageSize: 2 }) as
+              | false
+              | PaginationConfig
+          }
           renderItem={(item) => (
             <Styled.AssetListItem
               key={item.key}
-              actions={showActions ? renderAssetsActions(item) : []}
+              actions={
+                [
+                  (
+                    assetsColumns[4].render as (
+                      _text: string,
+                      record: AssetTableRow
+                    ) => JSX.Element
+                  )("", item),
+                ] as ReactNode[]
+              }
             >
-              <AssetTitle symbol={item.asset} />
+              <AssetTitle symbol={item.symbol} />
               <Styled.AssetsItemContent>
                 <div className="asset-info">
                   <span className="asset-info-title">
-                    {typeof columns[1].title === "string"
-                      ? columns[1].title
-                      : columns[1].title()}
+                    {assetsColumns[2].title()}
                   </span>
                   <span className="asset-info-value">{item.available}</span>
                 </div>
                 <div className="asset-info">
                   <span className="asset-info-title">
-                    {typeof columns[2].title === "string"
-                      ? columns[2].title
-                      : columns[2].title()}
+                    {assetsColumns[3].title()}
                   </span>
-                  <span className="asset-info-value">{item.quoteAsset}</span>
-                </div>
-                <div className="asset-info">
-                  <span className="asset-info-title">
-                    {typeof columns[3].title === "string"
-                      ? columns[3].title
-                      : columns[3].title()}
-                  </span>
-                  <span className="asset-info-value">{item.price}</span>
-                </div>
-                <div className="asset-info">
-                  <span className="asset-info-title">
-                    {typeof columns[4].title === "string"
-                      ? columns[4].title
-                      : columns[4].title()}
-                  </span>
-                  <span className="asset-info-value">{item.change}</span>
-                </div>
-                <div className="asset-info">
-                  <span className="asset-info-title">
-                    {typeof columns[5].title === "string"
-                      ? columns[5].title
-                      : columns[5].title()}
-                  </span>
-                  <span className="asset-info-value">{item.volume}</span>
+                  <span className="asset-info-value">{item.inOrders}</span>
                 </div>
               </Styled.AssetsItemContent>
             </Styled.AssetListItem>
@@ -196,19 +115,25 @@ export const AssetsTable = ({
         />
       ) : (
         <Styled.AssetsTable
-          columns={
-            showActions ? columns : columns.filter((item) => item.title !== "")
-          }
-          dataSource={
-            fillterAsset === ""
-              ? tableAssets
-              : tableAssets.filter((item) => item.asset === fillterAsset)
-          }
+          dataSource={searchDataSource}
+          columns={assetsColumns as ColumnsType<AssetTableRow>}
           loading={loading}
-          pagination={false}
+          pagination={
+            renderPaginationConfig({ loading, pageSize: 2 }) as
+              | false
+              | TablePaginationConfig
+          }
           size="small"
         />
       )}
-    </>
+      <Styled.PrintTable>
+        <AssetsPrintTable
+          ref={componentRef}
+          assetsTableRows={assetsTableRows}
+          loading={loading}
+          assetsColumns={assetsColumns}
+        />
+      </Styled.PrintTable>
+    </Styled.AssetsWrapper>
   );
 };

@@ -25,3 +25,4 @@ export * from "./BookedOrder";
 export * from "./Node";
 export * from "./PeerplaysJS";
 export * from "./Scroll";
+export * from "./NFT";

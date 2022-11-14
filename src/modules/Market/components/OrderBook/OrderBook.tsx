@@ -3,8 +3,11 @@ import { Dispatch, SetStateAction } from "react";
 
 import { PasswordModal, TransactionModal } from "../../../../common/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
-import { useUserContext } from "../../../../common/providers";
-import { Asset } from "../../../../common/types";
+import {
+  useUserContext,
+  useViewportContext,
+} from "../../../../common/providers";
+import { Asset, Scroll } from "../../../../common/types";
 import { DownOutlined, Form, Tooltip } from "../../../../ui/src";
 import { Order, OrderRow } from "../../types";
 
@@ -78,10 +81,33 @@ export const OrderBook = ({
     setTransactionSuccessMessage,
     neededKeyType: "active",
   });
-
+  const { md } = useViewportContext();
   const { localStorageAccount } = useUserContext();
 
   const dataSource = forUser ? userOrdersRows : ordersRows;
+
+  const desktopScrollForUserHistories =
+    dataSource.length > 11
+      ? {
+          y: 290,
+          x: true,
+          scrollToFirstRowOnChange: false,
+        }
+      : { x: true, scrollToFirstRowOnChange: false };
+
+  const desktopScrollForHistories =
+    dataSource.length > 27
+      ? { y: 730, x: true, scrollToFirstRowOnChange: false }
+      : { x: true, scrollToFirstRowOnChange: false };
+  const desktopScroll = forUser
+    ? desktopScrollForUserHistories
+    : desktopScrollForHistories;
+
+  const mobileScroll =
+    dataSource.length > 6
+      ? ({ y: 300, x: true, scrollToFirstRowOnChange: false } as Scroll)
+      : ({ x: true, scrollToFirstRowOnChange: false } as Scroll);
+  const scroll = md ? mobileScroll : (desktopScroll as Scroll);
 
   const types: OrderType[] = ["total", "sell", "buy"];
 
@@ -151,12 +177,13 @@ export const OrderBook = ({
           </Styled.Flex>
         </Styled.FilterContainer>
       )}
-      <Styled.TableContainer forUser={forUser}>
+      <Styled.TableContainer>
         <Styled.Table
           loading={forUser ? loadingUserOrderRows : loadingOrderRows}
           pagination={false}
           columns={columns}
-          scroll={{ x: true }}
+          scroll={scroll}
+          bordered={false}
           dataSource={dataSource}
           rowClassName={(record: any) => {
             return record.isBuyOrder ? "buy" : "sell";

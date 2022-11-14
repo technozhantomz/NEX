@@ -26,7 +26,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
     CommitteeTableRow[]
   >([]);
   const { dbApi } = usePeerplaysApiContext();
-  const { formAssetBalanceById } = useAsset();
+  const { formKnownAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { getCommittees } = useMembers();
@@ -41,8 +41,8 @@ export function useCommitteeTab(): UseCommitteeTabResult {
 
           const committeeRows = await Promise.all(
             committees.map(async (committee, index) => {
-              const votesAsset = await formAssetBalanceById(
-                defaultAsset.id,
+              const votesAsset = formKnownAssetBalanceById(
+                defaultAsset,
                 Number(committee.total_votes)
               );
               return {
@@ -75,7 +75,7 @@ export function useCommitteeTab(): UseCommitteeTabResult {
     }
   }, [
     dbApi,
-    formAssetBalanceById,
+    formKnownAssetBalanceById,
     setCommitteeTableRows,
     setActiveCommittee,
     setCommitteeStats,
