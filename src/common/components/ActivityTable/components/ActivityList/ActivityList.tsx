@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { CSSProperties, ReactNode } from "react";
+import React, { CSSProperties, ReactNode } from "react";
 
 import { ActivityRow } from "../../../../types";
 import { ActivityColumns as columns } from "../ActivityColumns/";

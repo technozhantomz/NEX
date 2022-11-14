@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Activity Tag renders correctly for account creation 1`] = `
+<DocumentFragment>
+  <span
+    class="sc-eDWCr eyHJDB"
+  >
+    missing translation: en.transaction.trxTypes.account_create.title
+  </span>
+</DocumentFragment>
+`;
+
+exports[`Activity Tag renders correctly for account update 1`] = `
+<DocumentFragment>
+  <span
+    class="sc-eDWCr eyHJDB"
+  >
+    missing translation: en.transaction.trxTypes.account_update.title
+  </span>
+</DocumentFragment>
+`;
