@@ -1,13 +1,12 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { defaultToken } from "../../../../api/params";
 import * as Styled from "../TransactionModal.styled";
 
 import { ItemDetails } from "./ItemDetails";
 
 type Props = {
-  fee: number;
+  fee: string;
   account: string;
   price?: string;
   sell?: string;
@@ -21,8 +20,6 @@ export const CreateSwapOrder = ({
   sell,
   buy,
 }: Props): JSX.Element => {
-  const feeValue = String(fee) + " " + defaultToken;
-
   return (
     <>
       {price && (
@@ -52,7 +49,7 @@ export const CreateSwapOrder = ({
 
       <ItemDetails
         label={counterpart.translate(`field.labels.fee`)}
-        value={feeValue}
+        value={fee}
       />
     </>
   );

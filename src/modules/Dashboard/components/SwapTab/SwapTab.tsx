@@ -137,6 +137,13 @@ export const SwapTab = (): JSX.Element => {
     />
   );
 
+  const transactionModalMarketFee =
+    Number(buyAssetMarketFee) > 0
+      ? `+ ${buyAssetMarketFee} ${selectedAssetsSymbols.buyAssetSymbol}`
+      : "";
+
+  const transactionModalFee = `${swapOrderFee} ${defaultToken} ${transactionModalMarketFee}`;
+
   const feeSummary = (
     <>
       <div>{`${swapOrderFee} ${defaultToken}`}</div>
@@ -280,7 +287,7 @@ export const SwapTab = (): JSX.Element => {
           transactionSuccessMessage={transactionSuccessMessage}
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
-          fee={swapOrderFee}
+          fee={transactionModalFee}
           transactionType="swap_order_create"
           sell={`${transactionModalSellAmount} ${selectedAssetsSymbols.sellAssetSymbol}`}
           buy={`${transactionModalBuyAmount} ${selectedAssetsSymbols.buyAssetSymbol}`}

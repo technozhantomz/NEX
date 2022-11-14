@@ -104,7 +104,7 @@ export const TransactionModal = ({
     swap_order_create: (
       <CreateSwapOrder
         account={account as string}
-        fee={fee as number}
+        fee={fee as string}
         price={price as string}
         sell={sell as string}
         buy={buy as string}
