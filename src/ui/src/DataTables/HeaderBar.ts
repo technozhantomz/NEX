@@ -24,7 +24,7 @@ export const DataTableHeaderBar = styled.div`
     align-items: center;
     align-content: center;
     .ant-input-affix-wrapper {
-      width: 220px;
+      width: 45%;
       margin-right: 25px;
       border-radius: 4px;
     }

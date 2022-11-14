@@ -41,7 +41,6 @@ export const SettingsCard = styled(UiCard)`
     .ant-tabs-extra-content {
       justify-content: center;
       padding: 33px 28px 10px;
-      width: 240px;
     }
   }
   ${breakpoint.sm} {

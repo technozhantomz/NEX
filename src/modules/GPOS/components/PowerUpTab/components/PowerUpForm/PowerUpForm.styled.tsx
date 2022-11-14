@@ -28,13 +28,11 @@ export const PowerUpForm = styled(CardForm)`
     ${breakpoint.sm} {
       padding: 20px;
       font-size: 20px;
-      height: 65px;
-      width: 610px;
     }
   }
 
   .ant-input-group-wrapper {
-    width: 610px;
+    width: 100%;
     .ant-input-wrapper input {
       text-align: center;
       height: 50px;

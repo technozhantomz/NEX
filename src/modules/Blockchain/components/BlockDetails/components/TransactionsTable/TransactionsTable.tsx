@@ -54,7 +54,7 @@ export const TransactionsTable = ({
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
-              `pages.blocks.block_details.search_transaction`
+              `pages.blocks.block_details.search_transactions`
             ),
             suffix: <SearchOutlined />,
           }}

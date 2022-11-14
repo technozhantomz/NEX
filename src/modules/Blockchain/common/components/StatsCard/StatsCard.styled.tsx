@@ -6,7 +6,7 @@ export const StatsCard = styled.div`
   transition: 0.3s;
   height: 120px;
   min-width: 220px;
-  border: 2px solid ${colors.borderColorBase};
+  border: 1px solid ${colors.borderColorBase};
   ${mixIns.borderRadius}
   padding: 15px;
   &:hover {
