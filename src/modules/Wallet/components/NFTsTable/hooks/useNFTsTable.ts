@@ -33,12 +33,9 @@ export function useNFTsTable(): UseNFTsTableresult {
     if (id) {
       try {
         // get All user NFTS
-
         const rawNFTs = await getNFTsByOwner(id);
-
         if (rawNFTs && rawNFTs.length > 0) {
           const NFTsMetaDataIds = rawNFTs.map((nft) => nft.nft_metadata_id);
-
           const NFTsMetaData = await getMetaDataByIds(NFTsMetaDataIds);
 
           let NFTsOwners: string[] = [];
@@ -49,7 +46,6 @@ export function useNFTsTable(): UseNFTsTableresult {
           }
 
           // create NFT rows
-          const startTime = performance.now();
           const NFTS = await Promise.all(
             rawNFTs.map(async (nft, index) => {
               const nftMetaData = NFTsMetaData?.find(
@@ -104,10 +100,7 @@ export function useNFTsTable(): UseNFTsTableresult {
               };
             })
           );
-          const endTime = performance.now();
-          console.log(
-            `Call to doSomething took ${endTime - startTime} milliseconds`
-          );
+
           const makers = uniq(NFTS.map((nft) => nft.maker));
           const collections = uniq(NFTS.map((nft) => nft.collection));
           const updatedNFTColumns = NFTColumns.map((column) => {
