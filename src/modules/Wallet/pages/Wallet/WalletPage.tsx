@@ -80,9 +80,11 @@ const WalletPage: NextPage = () => {
             key="assets"
           >
             <Styled.AssetTabWrapper>
-              <AssetsTable
-                title={counterpart.translate(`field.labels.coins_token`)}
-              />
+              <Styled.AssetsTableWrapper>
+                <AssetsTable
+                  title={counterpart.translate(`field.labels.coins_token`)}
+                />
+              </Styled.AssetsTableWrapper>
               <NFTsTable />
             </Styled.AssetTabWrapper>
           </TabPane>

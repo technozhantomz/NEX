@@ -13,7 +13,13 @@ import {
 
 export const NFTsTableWrapper = styled(DataTabWrapper)``;
 export const NFTsHeaderBar = styled(DataTableHeaderBar)``;
-export const NFTsHeader = styled(DataTableHeader)``;
+export const NFTsHeader = styled(DataTableHeader)`
+  display: flex;
+  align-items: center;
+`;
+export const NFTLinkWrapper = styled.div`
+  margin-left: 16px;
+`;
 export const NFTsTable = styled(DataTable)``;
 export const NFTsListItem = styled(UiListItem)``;
 export const NFTsItemContent = styled(DataItemContent)``;

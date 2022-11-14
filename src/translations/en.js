@@ -1174,6 +1174,8 @@ export const en = {
     remove: "Remove",
     pending_add: "Pending Add",
     pending_remove: "Pending Remove",
+    not_for_sale: "Not for sale",
+    on_sale: "On sale",
   },
   tooltips: {
     copy: "copy",
