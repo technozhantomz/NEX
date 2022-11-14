@@ -91,8 +91,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         if (quoteBase.length > 1) {
           const quote = quoteBase[0];
           const base = quoteBase[1];
-          setCurrentBase(base as Asset);
-          setCurrentQuote(quote as Asset);
+          setCurrentBase(base);
+          setCurrentQuote(quote);
         }
         setLoadingSelectedPair(false);
       } catch (e) {
