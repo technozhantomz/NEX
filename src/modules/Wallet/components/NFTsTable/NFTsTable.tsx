@@ -1,12 +1,14 @@
 import { SearchTableInput } from "ant-table-extensions";
-import { Image } from "antd";
+import { Image, TablePaginationConfig } from "antd";
+import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
-import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
+import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
+import { renderPaginationConfig } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import {
   Avatar,
@@ -34,9 +36,11 @@ export const NFTsTable = (): JSX.Element => {
       <Styled.NFTsHeaderBar>
         <Styled.NFTsHeader>
           {counterpart.translate(`pages.wallet.nfts`)}{" "}
-          <a target="_blank" href="https://tradehands.peerplays.download/">
-            {counterpart.translate(`pages.wallet.nft_store`)}
-          </a>
+          <Styled.NFTLinkWrapper>
+            <a target="_blank" href="https://tradehands.peerplays.download/">
+              {counterpart.translate(`pages.wallet.nft_store`)}
+            </a>
+          </Styled.NFTLinkWrapper>
         </Styled.NFTsHeader>
         <SearchTableInput
           columns={nftColumns as ColumnsType<unknown>}
@@ -68,6 +72,11 @@ export const NFTsTable = (): JSX.Element => {
           itemLayout="vertical"
           dataSource={searchDataSource}
           loading={loading}
+          pagination={
+            renderPaginationConfig({ loading, pageSize: 2 }) as
+              | false
+              | PaginationConfig
+          }
           renderItem={(item) => (
             <Styled.NFTsListItem key={item.key}>
               <Styled.NFTsItemContent>
@@ -105,11 +114,17 @@ export const NFTsTable = (): JSX.Element => {
                   <span className="item-info-title">
                     {nftColumns[4].title()}
                   </span>
-                  <span className="item-info-value">{item.quantity}</span>
+                  <span className="item-info-value">{item.bestOffer}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
                     {nftColumns[5].title()}
+                  </span>
+                  <span className="item-info-value">{item.quantity}</span>
+                </div>
+                <div className="item-info">
+                  <span className="item-info-title">
+                    {nftColumns[6].title()}
                   </span>
                   <span className="item-info-value">
                     {item.onSale === true ? <Styled.ActiveIcon /> : ``}
@@ -125,36 +140,9 @@ export const NFTsTable = (): JSX.Element => {
           columns={nftColumns as ColumnsType<unknown>}
           loading={loading}
           pagination={
-            !loading
-              ? {
-                  hideOnSinglePage: true,
-                  showSizeChanger: false,
-                  size: "small",
-                  pageSize: 15,
-                  showLessItems: true,
-                  itemRender: (
-                    _page: number,
-                    type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                    element: ReactNode
-                  ) => {
-                    if (type === "prev") {
-                      return (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.previous`)}
-                        </a>
-                      );
-                    }
-                    if (type === "next") {
-                      return (
-                        <a style={{ marginLeft: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.next`)}
-                        </a>
-                      );
-                    }
-                    return element;
-                  },
-                }
-              : false
+            renderPaginationConfig({ loading, pageSize: 2 }) as
+              | false
+              | TablePaginationConfig
           }
         />
       )}

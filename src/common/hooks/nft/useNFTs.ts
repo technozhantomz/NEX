@@ -36,7 +36,7 @@ export function useNFTs(): UseNFTsResult {
     [dbApi]
   );
 
-  const getMultipleMetaData = useCallback(
+  const getMetaDataByIds = useCallback(
     async (metaDataIds: string[]) => {
       try {
         const NFTMetaData: NFTMetaData[] = await dbApi("get_objects", [
@@ -85,6 +85,6 @@ export function useNFTs(): UseNFTsResult {
     getMetaData,
     getQuantity,
     getOffers,
-    getMultipleMetaData,
+    getMetaDataByIds,
   };
 }

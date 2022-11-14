@@ -221,6 +221,48 @@ export function useAccount(): UseAccountResult {
     [localStorageAccount, getAccountByName]
   );
 
+  const getUserNamesByIds = useCallback(
+    async (ids: string[]) => {
+      const names = [...ids];
+      const witnessesIds = ids.filter((id) => id.includes("1.6."));
+      let witnesses: WitnessAccount[] = [];
+      let witnessesAccounts: Account[] = [];
+      const accountIds = ids.filter((id) => !id.includes("1.6."));
+      const accounts: Account[] = await dbApi("get_accounts", [accountIds]);
+      if (witnessesIds.length > 0) {
+        witnesses = await dbApi("get_witnesses", [witnessesIds]);
+        witnessesAccounts = await dbApi("get_accounts", [
+          witnesses.map((wit) => wit.witness_account),
+        ]);
+      }
+      const activeUser = await getAccountByName(localStorageAccount);
+      const activeUserId = activeUser?.id ?? "";
+      for (let i = 0; i < ids.length; i++) {
+        const id = ids[i];
+        if (activeUserId === id) {
+          names[i] = activeUserId;
+          continue;
+        }
+        if (id.includes("1.6.")) {
+          const witness = witnesses.find(
+            (wit) => wit.id === id
+          ) as WitnessAccount;
+          const witnessAccount = witnessesAccounts.find(
+            (account) => account.id === witness.witness_account
+          ) as Account;
+          names[i] = witnessAccount.name;
+          continue;
+        }
+        names[i] = (
+          accounts.find((account) => account.id === id) as Account
+        ).name;
+      }
+
+      return names;
+    },
+    [getAccountByName, localStorageAccount]
+  );
+
   const validateWhaleVaultPubKeys = useCallback(
     (pubkeys: WhaleVaultPubKeys, account: Account, keyType?: KeyType) => {
       let isValid = false;
@@ -312,5 +354,6 @@ export function useAccount(): UseAccountResult {
     validateWhaleVaultPubKeys,
     _validateUseWhaleVault,
     getAccounts,
+    getUserNamesByIds,
   };
 }
