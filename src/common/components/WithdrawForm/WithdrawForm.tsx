@@ -336,32 +336,34 @@ export const WithdrawForm = ({
         >
           {withAssetSelector ? (
             <>
-              <Styled.WithdrawFormAssetAmount
-                name="amount"
-                validateFirst={true}
-                rules={formValdation.amount}
-                withassetselector={withAssetSelector}
-              >
-                <Input
-                  placeholder="0.0"
-                  type="number"
-                  step="any"
-                  min={0}
-                  onKeyPress={utils.ensureInputNumberValidity}
-                  prefix={
-                    <Styled.WithdrawFormAsset>
-                      <LogoSelectOption
-                        assets={sidechainAssets as Asset[]}
-                        value={selectedAsset}
-                        onChange={handleAssetChange}
-                      />
-                      {renderUserBalance}
-                    </Styled.WithdrawFormAsset>
-                  }
-                  disabled={!isLoggedIn}
-                  autoComplete="off"
-                />
-              </Styled.WithdrawFormAssetAmount>
+              <Form.Item>
+                <Input.Group compact>
+                  <Styled.WithdrawFormAsset>
+                    <LogoSelectOption
+                      assets={sidechainAssets as Asset[]}
+                      value={selectedAsset}
+                      onChange={handleAssetChange}
+                    />
+                    {renderUserBalance}
+                  </Styled.WithdrawFormAsset>
+                  <Styled.WithdrawFormAssetAmount
+                    name="amount"
+                    validateFirst={true}
+                    rules={formValdation.amount}
+                    noStyle
+                  >
+                    <Input
+                      placeholder="0.0"
+                      type="number"
+                      step="any"
+                      min={0}
+                      onKeyPress={utils.ensureInputNumberValidity}
+                      disabled={!isLoggedIn}
+                      autoComplete="off"
+                    />
+                  </Styled.WithdrawFormAssetAmount>
+                </Input.Group>
+              </Form.Item>
             </>
           ) : (
             ""

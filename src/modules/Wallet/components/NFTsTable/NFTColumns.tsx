@@ -1,11 +1,10 @@
-// import counterpart from "counterpart";
-
 import { Image } from "antd";
 import Link from "next/link";
 
 import { TableHeading } from "../../../../common/components";
 import { Avatar } from "../../../../ui/src";
 
+import * as Styled from "./NFTsTable.styled";
 import { NFTColumnsType, NFTRow } from "./hooks";
 
 const headings = [
@@ -42,7 +41,9 @@ const renders = [
   undefined,
   // undefined,
   undefined,
-  undefined,
+  (onSale: boolean): JSX.Element => (
+    <>{onSale === true ? <Styled.ActiveIcon /> : ``}</>
+  ),
 ];
 const filters = [
   undefined,
@@ -52,16 +53,7 @@ const filters = [
   undefined,
   // undefined,
   undefined,
-  [
-    {
-      text: "On Sale",
-      value: true,
-    },
-    {
-      text: "Not For Sale",
-      value: false,
-    },
-  ],
+  undefined,
 ];
 const filterModes = [
   undefined,
@@ -71,7 +63,7 @@ const filterModes = [
   undefined,
   // undefined,
   undefined,
-  "menu",
+  undefined,
 ];
 const filterSearch = [
   undefined,

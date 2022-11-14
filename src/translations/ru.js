@@ -1138,6 +1138,8 @@ export const ru = {
     remove: "Удалить",
     pending_add: "Ожидание добавления",
     pending_remove: "Ожидание удаления",
+    not_for_sale: "Не продается",
+    on_sale: "В продаже",
   },
   tooltips: {
     copy: "копировать",
