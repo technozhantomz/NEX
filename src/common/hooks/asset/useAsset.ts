@@ -85,14 +85,30 @@ export function useAsset(): UseAssetResult {
     [dbApi, cache, setAssetsCache, assetsCacheExists]
   );
 
+  const getAllAssets = useCallback(async () => {
+    try {
+      const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
+      return allAssets.filter(
+        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi, symbolsToBeExcepted]);
+
   const getAssetsBySymbols = useCallback(
     async (symbols: string[]) => {
-      const assets = await Promise.all(
-        symbols.map((symbol) => getAssetBySymbol(symbol))
-      );
-      return assets;
+      const allAssets = await getAllAssets();
+      if (allAssets) {
+        const assets = allAssets.filter((asset) =>
+          symbols.includes(asset.symbol)
+        );
+        return assets;
+      } else {
+        return [] as Asset[];
+      }
     },
-    [getAssetBySymbol]
+    [getAllAssets]
   );
 
   /**
@@ -184,17 +200,17 @@ export function useAsset(): UseAssetResult {
     },
     [getAssetById, setPrecision]
   );
-
-  const getAllAssets = useCallback(async () => {
-    try {
-      const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-      return allAssets.filter(
-        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  }, [dbApi]);
+  const formKnownAssetBalanceById = useCallback(
+    (asset: Asset, amount: number) => {
+      if (asset) {
+        return {
+          ...asset,
+          amount: setPrecision(false, amount, asset.precision),
+        } as Asset;
+      }
+    },
+    [setPrecision]
+  );
 
   const ceilPrecision: (num: string | number, precision?: number) => string =
     useCallback((num: string | number, precision = 5) => {
@@ -215,5 +231,6 @@ export function useAsset(): UseAssetResult {
     ceilPrecision,
     getAssetsBySymbols,
     roundNum,
+    formKnownAssetBalanceById,
   };
 }

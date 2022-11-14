@@ -5,6 +5,48 @@ import { InfoCircleOutlined, Tag, Tooltip } from "../../../../../ui/src";
 import { colors } from "../../../../../ui/src/colors";
 import { AssetTableRow } from "../hooks/useAssetsTab.types";
 
+export type AssetColumnType = {
+  title: () => JSX.Element;
+  dataIndex: string;
+  key: string;
+  render: ((symbol: string) => JSX.Element) | undefined;
+  filters:
+    | {
+        text: string;
+        value: string;
+      }[]
+    | undefined;
+  filterMode: string | undefined;
+  filterSearch: boolean | undefined;
+  onFilter: ((value: string, record: AssetTableRow) => boolean) | undefined;
+  sorter:
+    | ((
+        a: {
+          id: string;
+        },
+        b: {
+          id: string;
+        }
+      ) => number)
+    | ((
+        a: {
+          maxSupply: number;
+        },
+        b: {
+          maxSupply: number;
+        }
+      ) => number)
+    | ((
+        a: {
+          precision: number;
+        },
+        b: {
+          precision: number;
+        }
+      ) => number)
+    | undefined;
+};
+
 const headings = [
   "id",
   "symbol",
@@ -53,36 +95,15 @@ const renders = [
 const filters = [
   undefined,
   undefined,
-  [
-    {
-      text: "Bitcoin",
-      value: "Bitcoin",
-    },
-    {
-      text: "Hive",
-      value: "Hive",
-    },
-    {
-      text: "EOSIO",
-      value: "EOSIO",
-    },
-    {
-      text: "Ethereum",
-      value: "Ethereum",
-    },
-    {
-      text: "PeerPlays",
-      value: "PeerPlays",
-    },
-  ],
+  undefined,
   undefined,
   undefined,
   undefined,
   undefined,
 ];
 const filterModes = [
-  "menu",
   undefined,
+  "menu",
   "menu",
   undefined,
   undefined,
@@ -90,8 +111,8 @@ const filterModes = [
   undefined,
 ];
 const filterSearch = [
-  true,
   undefined,
+  false,
   false,
   undefined,
   undefined,
@@ -99,11 +120,12 @@ const filterSearch = [
   undefined,
 ];
 const onFilters = [
-  (value: string, record: AssetTableRow): boolean =>
-    record.symbol.includes(value),
   undefined,
   (value: string, record: AssetTableRow): boolean =>
+    record.symbol.includes(value),
+  (value: string, record: AssetTableRow): boolean =>
     record.name.includes(value),
+  undefined,
   undefined,
   undefined,
   (value: string, record: AssetTableRow): boolean =>
@@ -124,16 +146,18 @@ const sorters = [
   undefined,
 ];
 
-export const AssetsColumns = headings.map((heading, index) => {
-  return {
-    title: (): JSX.Element => <TableHeading heading={heading} />,
-    dataIndex: keys[index],
-    key: keys[index],
-    render: renders[index],
-    filters: filters[index],
-    filterMode: filterModes[index],
-    filterSearch: filterSearch[index],
-    onFilter: onFilters[index],
-    sorter: sorters[index],
-  };
-});
+export const AssetsColumns: AssetColumnType[] = headings.map(
+  (heading, index) => {
+    return {
+      title: (): JSX.Element => <TableHeading heading={heading} />,
+      dataIndex: keys[index],
+      key: keys[index],
+      render: renders[index],
+      filters: filters[index],
+      filterMode: filterModes[index],
+      filterSearch: filterSearch[index],
+      onFilter: onFilters[index],
+      sorter: sorters[index],
+    };
+  }
+);

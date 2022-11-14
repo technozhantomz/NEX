@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { SON_ACCOUNT_NAME } from "../../../../api/params";
+
 type Props = {
   infoString: string;
 };
@@ -44,7 +46,7 @@ export const HIVEAndHBDDepositInfo = ({ infoString }: Props): JSX.Element => {
       {stringParts.map((stringPart, index) => {
         if (stringPart.includes("userlink")) {
           return getUserLink(stringPart, index);
-        } else if (stringPart.includes("son-account")) {
+        } else if (stringPart.includes(SON_ACCOUNT_NAME)) {
           return getSonAccountLink(index);
         } else {
           return <span key={index}>{stringPart}</span>;

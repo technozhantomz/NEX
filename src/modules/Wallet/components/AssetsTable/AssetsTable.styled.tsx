@@ -1,8 +1,28 @@
-import { styled, List as UiList, Table as UiTable } from "../../../../ui/src";
+import {
+  DataTableDownloadLinks,
+  DataTableHeader,
+  DataTableHeaderBar,
+  DataTabWrapper,
+  styled,
+  List as UiList,
+  PrintTable as UiPrintTable,
+  DataTable as UiTable,
+} from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
+export const AssetsWrapper = styled(DataTabWrapper)``;
+
+export const AssetHeaderBar = styled(DataTableHeaderBar)`
+  margin-bottom: 24px;
+`;
+
+export const AssetHeader = styled(DataTableHeader)``;
+
+export const DownloadLinks = styled(DataTableDownloadLinks)``;
+
+export const PrintTable = styled(UiPrintTable)``;
+
 export const AssetsTable = styled(UiTable)`
-  margin: 0 35px 20px 35px;
   .ant-table-thead > tr > th {
     background: transparent;
     color: ${colors.textColorSecondary};

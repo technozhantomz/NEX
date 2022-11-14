@@ -1,14 +1,19 @@
-export interface IAssetRow {
+import { Dispatch, SetStateAction } from "react";
+
+import { AssetColumnType } from "../../AssetsColumns";
+
+export type AssetTableRow = {
   key: string;
-  asset: string;
-  quoteAsset: string;
+  symbol: string;
+  name: string;
   available: number;
-  price: string;
-  change: string;
-  volume: string;
-}
+  inOrders: number;
+};
 
 export type UseAssetsTabResult = {
-  tableAssets: IAssetRow[];
   loading: boolean;
+  assetsColumns: AssetColumnType[];
+  assetsTableRows: AssetTableRow[];
+  searchDataSource: AssetTableRow[];
+  setSearchDataSource: Dispatch<SetStateAction<AssetTableRow[]>>;
 };
