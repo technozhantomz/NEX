@@ -45,7 +45,10 @@ export const InputNumber = styled(UiInput)`
     height: 100%;
     text-align: right;
     direction: ltr;
-    font-size: 20px;
+    font-size: 14px;
+    ${breakpoint.md} {
+      font-size: 20px;
+    }
   }
 `;
 

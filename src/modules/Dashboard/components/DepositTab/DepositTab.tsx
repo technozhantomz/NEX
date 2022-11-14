@@ -1,6 +1,7 @@
 import counterpart from "counterpart";
 import React from "react";
 
+import { BITCOIN_ASSET_SYMBOL } from "../../../../api/params";
 import {
   AddressGenerated,
   DashboardLoginButton,
@@ -10,7 +11,7 @@ import {
   LoadingIndicator,
 } from "../../../../common/components";
 import { useAssetsContext, useUserContext } from "../../../../common/providers";
-import { SidechainAcccount } from "../../../../common/types";
+import { Asset, SidechainAcccount } from "../../../../common/types";
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 
 import * as Styled from "./DepositTab.styled";
@@ -69,15 +70,18 @@ export const DepositTab = (): JSX.Element => {
   );
 
   const loginText =
-    selectedAsset === "BTC"
+    selectedAsset === BITCOIN_ASSET_SYMBOL
       ? counterpart.translate(`buttons.login_and_generate_bitcoin_address`)
       : counterpart.translate(`buttons.log_in_deposit_hbd_hive`, {
           assetSymbol: selectedAsset,
         });
 
-  const deposit = selectedAsset === "BTC" ? BTCDeposit : HIVEDeposit;
+  const deposit =
+    selectedAsset === BITCOIN_ASSET_SYMBOL ? BTCDeposit : HIVEDeposit;
   const depositWithLoading = loadingSidechainAccounts ? (
-    <LoadingIndicator />
+    <Styled.LoadingIndicatorContainer>
+      <LoadingIndicator type="three-bounce" />
+    </Styled.LoadingIndicatorContainer>
   ) : (
     deposit
   );
@@ -85,7 +89,7 @@ export const DepositTab = (): JSX.Element => {
   return (
     <Styled.DepositFormContainer>
       <Styled.LogoSelect
-        assets={sidechainAssets}
+        assets={sidechainAssets as Asset[]}
         value={selectedAsset}
         onChange={handleAssetChange}
       />

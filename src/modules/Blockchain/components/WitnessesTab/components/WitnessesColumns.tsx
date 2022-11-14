@@ -1,6 +1,7 @@
 import counterpart from "counterpart";
 
 import { TableHeading } from "../../../../../common/components";
+import { Tooltip } from "../../../../../ui/src";
 import { Key } from "../../../../../ui/src/icons";
 import * as Styled from "../WitnessesTab.styled";
 import { WitnessTableRow } from "../hooks";
@@ -9,20 +10,20 @@ const headings = [
   "rank",
   "name",
   "active",
-  "url",
+  "total_votes",
   "last_block",
   "missed_blocks",
-  "total_votes",
+  "url",
   "key",
 ];
 const keys = [
   "rank",
   "name",
   "active",
-  "url",
+  "totalVotes",
   "lastBlock",
   "missedBlocks",
-  "totalVotes",
+  "url",
   "publicKey",
 ];
 const renders = [
@@ -35,6 +36,13 @@ const renders = [
   (active: boolean): JSX.Element => (
     <span>{active === true ? <Styled.ActiveIcon /> : ``}</span>
   ),
+  undefined,
+  (lastBlock: string): JSX.Element => (
+    <Styled.LastBlock>{lastBlock}</Styled.LastBlock>
+  ),
+  (missedBlocks: string): JSX.Element => (
+    <Styled.MissedBlocks>{missedBlocks}</Styled.MissedBlocks>
+  ),
   (url: string): JSX.Element => (
     <>
       {!url || url === "" ? (
@@ -46,17 +54,12 @@ const renders = [
       )}
     </>
   ),
-  (lastBlock: string): JSX.Element => (
-    <Styled.LastBlock>{lastBlock}</Styled.LastBlock>
-  ),
-  (missedBlocks: string): JSX.Element => (
-    <Styled.MissedBlocks>{missedBlocks}</Styled.MissedBlocks>
-  ),
-  undefined,
   (publicKey: string): JSX.Element => (
-    <a href={`${publicKey}`} target="_blank">
-      <Key />
-    </a>
+    <Tooltip placement="top" title={publicKey}>
+      <span>
+        <Key />
+      </span>
+    </Tooltip>
   ),
 ];
 const filters = [
@@ -112,26 +115,81 @@ const sorters = [
   (a: { rank: number }, b: { rank: number }) => a.rank - b.rank,
   undefined,
   undefined,
-  undefined,
+  (a: { totalVotes: string }, b: { totalVotes: string }) =>
+    parseFloat(a.totalVotes) - parseFloat(b.totalVotes),
   (a: { lastBlock: string }, b: { lastBlock: string }) =>
     parseFloat(a.lastBlock) - parseFloat(b.lastBlock),
   (a: { missedBlocks: string }, b: { missedBlocks: string }) =>
     parseFloat(a.missedBlocks) - parseFloat(b.missedBlocks),
-  (a: { totalVotes: string }, b: { totalVotes: string }) =>
-    parseFloat(a.totalVotes) - parseFloat(b.totalVotes),
+  undefined,
   undefined,
 ];
 
-export const WitnessesColumns = headings.map((heading, index) => {
-  return {
-    title: (): JSX.Element => <TableHeading heading={heading} />,
-    dataIndex: keys[index],
-    key: keys[index],
-    render: renders[index],
-    filters: filters[index],
-    filterMode: filterModes[index],
-    filterSearch: filterSearch[index],
-    onFilter: onFilters[index],
-    sorter: sorters[index],
-  };
-});
+export type WitnessColumnType = {
+  title: () => JSX.Element;
+  dataIndex: string;
+  key: string;
+  render:
+    | ((name: string) => JSX.Element)
+    | ((active: boolean) => JSX.Element)
+    | undefined;
+  filters:
+    | {
+        text: string;
+        value: boolean;
+      }[]
+    | undefined;
+  filterMode: string | undefined;
+  filterSearch: boolean | undefined;
+  onFilter: ((value: boolean, record: WitnessTableRow) => boolean) | undefined;
+  sorter:
+    | ((
+        a: {
+          rank: number;
+        },
+        b: {
+          rank: number;
+        }
+      ) => number)
+    | ((
+        a: {
+          lastBlock: string;
+        },
+        b: {
+          lastBlock: string;
+        }
+      ) => number)
+    | ((
+        a: {
+          missedBlocks: string;
+        },
+        b: {
+          missedBlocks: string;
+        }
+      ) => number)
+    | ((
+        a: {
+          totalVotes: string;
+        },
+        b: {
+          totalVotes: string;
+        }
+      ) => number)
+    | undefined;
+};
+
+export const WitnessesColumns: WitnessColumnType[] = headings.map(
+  (heading, index) => {
+    return {
+      title: (): JSX.Element => <TableHeading heading={heading} />,
+      dataIndex: keys[index],
+      key: keys[index],
+      render: renders[index],
+      filters: filters[index],
+      filterMode: filterModes[index],
+      filterSearch: filterSearch[index],
+      onFilter: onFilters[index],
+      sorter: sorters[index],
+    };
+  }
+);

@@ -15,21 +15,21 @@ export type UsePowerDownFormResult = {
   loadingTransaction: boolean;
   handleWithdraw: (signerKey: SignerKey) => Promise<void>;
   feeAmount: number;
-  withdrawAmount: number;
-  newBalance: number;
-  newAvailableBalance: number;
+  withdrawAmount: string;
+  newBalance: string;
+  newAvailableBalance: string;
 };
 
 export type UsePowerDownFormArgs = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
-  getGposInfo: () => Promise<void>;
+  calculateGposBalances: () => Promise<void>;
 };
 
 export type PowerDownForm = {
   openingBalance: string;
   availableBalance: string;
-  withdrawAmount: number;
+  withdrawAmount: string;
   newBalance: string;
 };
 

@@ -11,6 +11,10 @@ export const MarketContainer = styled.div`
   margin: 10px;
   padding: 10px;
   text-align: center;
+  min-height: 232px;
+  ${breakpoint.sm} {
+    min-height: 333px;
+  }
 `;
 
 export const Row = styled(UiRow)``;

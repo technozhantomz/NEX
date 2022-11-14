@@ -24,22 +24,18 @@ type Args = {
   currentBase: Asset | undefined;
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
-  getOrderBook: (base: Asset, quote: Asset) => Promise<void>;
   asks: Order[];
   bids: Order[];
   setOrdersRows: Dispatch<SetStateAction<OrderRow[]>>;
-  getUserOrderBook: (base: Asset, quote: Asset) => Promise<void>;
 };
 
 export function useOrderBook({
   currentBase,
   currentQuote,
   loadingSelectedPair,
-  getOrderBook,
   asks,
   bids,
   setOrdersRows,
-  getUserOrderBook,
 }: Args): UseOrderBookResult {
   const [cancelOrderfeeAmount, setCancelOrderfeeAmount] = useState<number>(0);
   const [orderType, setOrderType] = useState<OrderType>("total");
@@ -57,7 +53,7 @@ export function useOrderBook({
   const { buildTrx } = useTransactionBuilder();
   const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
   const { calculateCancelLimitOrderFee } = useFees();
-  const { limitByPrecision, ceilPrecision } = useAsset();
+  const { ceilPrecision, roundNum } = useAsset();
 
   const handleFilterChange = useCallback(
     (type: OrderType) => {
@@ -90,10 +86,7 @@ export function useOrderBook({
         if (repeatedPriceIndex === -1) {
           previousOrders.push({
             ...currentOrder,
-            price: ceilPrecision(
-              Number(currentOrder.base) / Number(currentOrder.quote),
-              currentBase.precision
-            ),
+            price: ceilPrecision(currentOrder.price, currentBase.precision),
           });
         } else {
           const orderWithRepeatedPrice = previousOrders[repeatedPriceIndex];
@@ -114,12 +107,12 @@ export function useOrderBook({
       return reducedOrders.map((order) => {
         return {
           ...order,
-          quote: limitByPrecision(order.quote, currentQuote.precision),
-          base: limitByPrecision(order.base, currentBase.precision),
+          quote: roundNum(order.quote, currentQuote.precision),
+          base: roundNum(order.base, currentBase.precision),
         };
       });
     },
-    []
+    [ceilPrecision, roundNum]
   );
 
   const selectOrdersForThresholdAndFilter = useCallback(() => {
@@ -191,7 +184,6 @@ export function useOrderBook({
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
-        getUserOrderBook(currentBase as Asset, currentQuote as Asset);
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
           counterpart.translate(`field.success.canceled_limit_order`, {
@@ -215,7 +207,6 @@ export function useOrderBook({
       buildTrx,
       formAccountBalancesByName,
       localStorageAccount,
-      getUserOrderBook,
       currentBase,
       currentQuote,
     ]
@@ -244,19 +235,8 @@ export function useOrderBook({
           key: "base",
         },
       ]);
-      getOrderBook(currentBase, currentQuote);
-
-      // user section
-      getUserOrderBook(currentBase, currentQuote);
     }
-  }, [
-    loadingSelectedPair,
-    currentBase,
-    currentQuote,
-    getOrderBook,
-    getUserOrderBook,
-    setOrderColumns,
-  ]);
+  }, [loadingSelectedPair, currentBase, currentQuote, setOrderColumns]);
 
   useEffect(() => {
     selectOrdersForThresholdAndFilter();

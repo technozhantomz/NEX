@@ -2,6 +2,7 @@ import counterpart from "counterpart";
 import React from "react";
 
 import { PasswordModal, TransactionModal } from "..";
+import { BITCOIN_NETWORK } from "../../../api/params";
 import { Form } from "../../../ui/src";
 import { useHandleTransactionForm } from "../../hooks";
 import { useUserContext } from "../../providers";
@@ -11,9 +12,11 @@ import { useGenerateBitcoinAddress } from "./hooks";
 
 type Props = {
   getSidechainAccounts: (accountId: string) => Promise<void>;
+  className?: string;
 };
 
 export const GenerateBitcoinAddress = ({
+  className,
   getSidechainAccounts,
 }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
@@ -46,6 +49,7 @@ export const GenerateBitcoinAddress = ({
         <Styled.DepositForm
           name="generateAddressForm"
           onFinish={showPasswordModal}
+          className={className}
         >
           <Styled.FormItem>
             <Styled.Button type="primary" htmlType="submit">
@@ -67,7 +71,7 @@ export const GenerateBitcoinAddress = ({
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
           fee={0}
-          sidechain="Bitcoin"
+          sidechain={BITCOIN_NETWORK}
           transactionType="sidechain_address_add"
         />
       </Form.Provider>

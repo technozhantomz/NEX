@@ -63,7 +63,44 @@ const sorters = [
     parseFloat(a.totalVotes) - parseFloat(b.totalVotes),
 ];
 
-export const SonsColumns = headings.map((heading, index) => {
+export type SonColumnType = {
+  title: () => JSX.Element;
+  dataIndex: string;
+  key: string;
+  render:
+    | ((name: string) => JSX.Element)
+    | ((active: boolean) => JSX.Element)
+    | undefined;
+  filters:
+    | {
+        text: string;
+        value: boolean;
+      }[]
+    | undefined;
+  filterMode: string | undefined;
+  filterSearch: boolean | undefined;
+  onFilter: ((value: boolean, record: SonsTableRow) => boolean) | undefined;
+  sorter:
+    | ((
+        a: {
+          rank: number;
+        },
+        b: {
+          rank: number;
+        }
+      ) => number)
+    | ((
+        a: {
+          totalVotes: string;
+        },
+        b: {
+          totalVotes: string;
+        }
+      ) => number)
+    | undefined;
+};
+
+export const SonsColumns: SonColumnType[] = headings.map((heading, index) => {
   return {
     title: (): JSX.Element => <TableHeading heading={heading} />,
     dataIndex: keys[index],

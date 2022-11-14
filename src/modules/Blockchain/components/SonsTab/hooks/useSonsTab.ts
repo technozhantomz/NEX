@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { isArrayEqual } from "../../../../../api/utils";
 import {
   useArrayLimiter,
   useAsset,
@@ -26,7 +27,7 @@ export function useSonsTab(): UseSonsTabResult {
 
   const { getSons } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
-  const { formAssetBalanceById, setPrecision } = useAsset();
+  const { formKnownAssetBalanceById, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { getChain, getAvgBlockTime, getBlockData } = useBlockchain();
   const { formLocalDate } = useFormDate();
@@ -39,8 +40,10 @@ export function useSonsTab(): UseSonsTabResult {
   const getSonsData = useCallback(async () => {
     if (defaultAsset) {
       try {
-        const chain = await getChain();
-        const blockData = await getBlockData();
+        const [chain, blockData] = await Promise.all([
+          getChain(),
+          getBlockData(),
+        ]);
         if (chain && blockData) {
           const { sons, sonsIds } = await getSons();
           const budgetAmount = setPrecision(
@@ -52,16 +55,15 @@ export function useSonsTab(): UseSonsTabResult {
           const nextVoteTime = new Date(
             blockData.next_maintenance_time
           ).getTime();
-          const nextVoteDistance = nextVoteTime - now;
+          const nextVoteDistance = now - nextVoteTime;
           if (sons && sons.length > 0) {
             sons.sort((a, b) => b.total_votes - a.total_votes);
             const sonsRows: SonsTableRow[] = [];
             let index = 0;
-            const sonsVotesAsset = await Promise.all(
-              sons.map((son) => {
-                return formAssetBalanceById(defaultAsset.id, son.total_votes);
-              })
-            );
+            const sonsVotesAsset = sons.map((son) => {
+              return formKnownAssetBalanceById(defaultAsset, son.total_votes);
+            });
+
             for (const son of sons) {
               sonsRows.push({
                 key: index,
@@ -69,14 +71,16 @@ export function useSonsTab(): UseSonsTabResult {
                 name: sonsIds.filter((sonId) => sonId[1] === son.id)[0][0],
                 active: son.status === "active" ? true : false,
                 url: son.url,
-                totalVotes: `${sonsVotesAsset[index].amount} ${sonsVotesAsset[index].symbol}`,
+                totalVotes: `${sonsVotesAsset[index]?.amount} ${sonsVotesAsset[index]?.symbol}`,
               } as SonsTableRow);
               index = index + 1;
             }
 
             const activeSones = sonsRows.filter((son) => son.active === true);
             setSonsTableRows(sonsRows);
-            setSearchDataSource(sonsRows);
+            if (isArrayEqual(searchDataSource, sonsTableRows)) {
+              setSearchDataSource(sonsRows);
+            }
             setActiveSons(activeSones.length);
             setBudget(budgetAmount);
             setNextVote(
@@ -112,13 +116,14 @@ export function useSonsTab(): UseSonsTabResult {
     searchDataSource,
     getChain,
     setPrecision,
-    formAssetBalanceById,
+    formKnownAssetBalanceById,
     getAvgBlockTime,
     getDaysInThisMonth,
     setSonsTableRows,
     setActiveSons,
     setSonsStats,
     setLoading,
+    sonsTableRows,
   ]);
 
   useEffect(() => {
@@ -126,7 +131,7 @@ export function useSonsTab(): UseSonsTabResult {
     return () => {
       clearInterval(sonsInterval);
     };
-  }, [defaultAsset]);
+  }, [getSonsData]);
 
   return {
     loading,

@@ -224,7 +224,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         const fullAccounts = await dbApi("get_full_accounts", [[name], true]);
         if (fullAccounts && fullAccounts.length) {
           const fullAccount: FullAccount = fullAccounts[0][1];
-          const assets: Asset[] = await Promise.all(
+          const assets = await Promise.all(
             fullAccount.balances.map((balance) => {
               return formAssetBalanceById(balance.asset_type, balance.balance);
             })
@@ -233,7 +233,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
           updateAccount(
             fullAccount.account.id,
             fullAccount.account.name,
-            assets,
+            assets.filter((asset) => asset !== undefined) as Asset[],
             fullAccount.account
           );
         } else {

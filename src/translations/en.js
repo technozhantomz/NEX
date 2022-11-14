@@ -18,6 +18,18 @@ export const en = {
     check_latency_feedback_world:
       "Latency check in each region (%(pinged)s/%(totalToPing)s nodes)",
     connecting: "Connecting to API server: %(server)s",
+    sync_error: {
+      title: "Failed to sync with the API server",
+      first_description: "Please verify that your computer clock is correct",
+      second_description:
+        "Once you've synchronized your clock, please refresh this page",
+    },
+    connection_error: {
+      title: "Application initialization issues",
+      first_description:
+        "Coming soon: Node manual selection and Adding a personal node",
+      second_description: "Please check your connection and refresh the page",
+    },
   },
   transaction: {
     trade: "Trade",
@@ -70,7 +82,7 @@ export const en = {
         description: "%(issuer)s, %(status)s the account, %(listed)s",
       },
       affiliate_payout: {
-        title: "payout affiliate",
+        title: "Payout affiliate",
       },
       affiliate_referral_payout: {
         title: "Payout referral affiliate",
@@ -530,6 +542,7 @@ export const en = {
     previous: "Previous",
     next: "Next",
     show_only_unread: "Show only unread",
+    receive: "Receive",
   },
   connection: {
     automatic_reconnect:
@@ -599,7 +612,17 @@ export const en = {
         previous_secret: "Previous Secret",
         next_secret: "Next Secret",
         witness_signature: "Witness Signature",
-        search_transaction: "Search transaction",
+        search_transactions: "Search Transactions",
+      },
+      transaction_detials: {
+        transaction: "Transaction",
+        transaction_id: "Transaction ID",
+        ref_block_prefix: "Ref block prefix",
+        ref_block_num: "Ref block number",
+        signatures: "Signatures",
+        see_details: "See Details here",
+        details: "Details",
+        results: "Results",
       },
       assets: {
         heading: "PeerPlays Assets",
@@ -645,7 +668,25 @@ export const en = {
       heading: "Wallet",
       activities: "Activities",
       assets: "Assets",
+      send: "Send",
+      receive: "Receive",
       back_to_assets: "Back to Assets",
+      nfts: "NFTs",
+      nft_store: "NFT Store",
+      nft_search: "Search NFTs",
+      available_assets: "Available assets",
+      receive_assets: "Receive assets",
+      select_this_asset: "Select this asset",
+      select_to_receive: "Select an asset to receive",
+      no_btc_address:
+        "A Bitcoin address is not yet associated with your account",
+      receive_selected_asset_instruction:
+        "To receive %(assetSymbol)s send funds to , %(account)s, on the Peerplays blockchain",
+      send_assets: "Send assets",
+      clear_form: "Clear form",
+      select_asset: "Select an asset",
+      select_blockchain: "Select a blockchain",
+      available_to_send: "Available to send:",
     },
     market: {
       heading: "Market",
@@ -739,7 +780,7 @@ export const en = {
         gpos_balance: "GPOS Balance",
         voting_performance: "Voting Performance",
         qualified_reward: "Qualified Reward",
-        estimated_rake_reward: "Estimated Rake Reward",
+        estimated_participation_reward: "Estimated Participation Reward",
         available_balance: "Available Balance:",
         read_less: "Read less",
         read_more: "Read more",
@@ -846,6 +887,7 @@ export const en = {
       from: "From",
     },
     labels: {
+      blockchain: "Blockchain",
       swap_fee_info:
         "In order to complete swap the following fees is applicable",
       generate_btc_deposit_address:
@@ -871,6 +913,7 @@ export const en = {
       withdrawal_confirmation_time: "Confirmation Time: ",
       btc_withdrawal_confirmation_time: "~10 minutes",
       hive_withdrawal_confirmation_time: "~3 minutes",
+      peerplays_confirmation_time: "~3 seconds",
       estimated_fees_label: "Estimated Fees:",
       fees: "Fees: %(feeAmount)s %(defaultAsset)s",
       market_fee: "Market Fee",
@@ -928,6 +971,7 @@ export const en = {
       wallet_lock: "Wallet lock (Minutes)",
       use_whalevault: "Use WhaleVault extension",
       unsaved_changes: "You have unsaved changes to your settings",
+      coins_token: "Coins/Tokens",
     },
     comments: {
       deposit_hbd:
@@ -952,6 +996,11 @@ export const en = {
       account_updated: "account updated",
     },
     errors: {
+      first_select_asset: "Please first select an asset",
+      first_select_blockchain: "Please first select a blockchain",
+      first_generate_deposit_addresses:
+        "Please first generate Bitcoin addresses on the Dashboard Deposit tab",
+      loading_sidechain_accounts: "Please wait for sidechain accounts to load",
       unable_to_create_account:
         "Unable to create an account. Please try again later",
       invalid_bitcoin_public_key:
@@ -1021,6 +1070,9 @@ export const en = {
         "These keys are already in used for %(role)s permissions",
       need_to_vest_gpos: "You need to Vest some GPOS balance first",
       asset_required: "Asset is required",
+      blockchain_required: "Blockchain is required",
+      choose_another_blockchain:
+        "Please choose another blockchain for withdrawal",
       cannot_send_yourself: "Can not send to yourself!",
       unable_transaction: "Unable to process the transaction!",
 
@@ -1096,10 +1148,22 @@ export const en = {
     category: "Category",
     active: "Active",
     key: "key",
+    actions: "Actions",
+    in_orders: "In orders",
     ref_block_prefix: "Ref block prefix",
     ref_block_num: "Ref block #",
     extensions: "Extensions",
     status: "Status",
+    img: "Image",
+    maker: "Maker",
+    collection: "Collection",
+    best_offer: "Best offer",
+    quantity: "Quantity",
+    on_sale: "On sale",
+    number: "#",
+    operation_id: "Operation ID",
+    operation_type: "Operation Type",
+    fees: "Fees",
   },
   tableFilters: {
     avtive: "Avtive",
@@ -1110,6 +1174,8 @@ export const en = {
     remove: "Remove",
     pending_add: "Pending Add",
     pending_remove: "Pending Remove",
+    not_for_sale: "Not for sale",
+    on_sale: "On sale",
   },
   tooltips: {
     copy: "copy",

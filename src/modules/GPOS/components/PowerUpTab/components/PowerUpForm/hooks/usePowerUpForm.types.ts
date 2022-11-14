@@ -15,20 +15,20 @@ export type UsePowerUpFormResult = {
   handleVesting: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   feeAmount: number;
-  depositAmount: number;
-  newBalance: number;
+  depositAmount: string;
+  newBalance: string;
   userAvailableBalance: number;
 };
 
 export type UsePowerUpFormArgs = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
-  getGposInfo: () => Promise<void>;
+  calculateGposBalances: () => Promise<void>;
 };
 
 export type PowerUpForm = {
   openingBalance: string;
-  depositAmount: number;
+  depositAmount: string;
   newBalance: string;
   availableBalance: string;
 };

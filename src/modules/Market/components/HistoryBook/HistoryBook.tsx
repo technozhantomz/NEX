@@ -10,10 +10,8 @@ type Props = {
   currentBase: Asset | undefined;
   currentQuote: Asset | undefined;
   loadingSelectedPair: boolean;
-  getHistory: (base: Asset, quote: Asset) => Promise<void>;
   orderHistoryRows: OrderHistoryRow[];
   loadingOrderHistoryRows: boolean;
-  getUserHistory: (base: Asset, quote: Asset) => Promise<void>;
   userOrderHistoryRows: OrderHistoryRow[];
   loadingUserHistoryRows: boolean;
 };
@@ -23,10 +21,8 @@ export const HistoryBook = ({
   currentBase,
   currentQuote,
   loadingSelectedPair,
-  getHistory,
   orderHistoryRows,
   loadingOrderHistoryRows,
-  getUserHistory,
   userOrderHistoryRows,
   loadingUserHistoryRows,
 }: Props): JSX.Element => {
@@ -35,15 +31,30 @@ export const HistoryBook = ({
     currentBase,
     currentQuote,
     loadingSelectedPair,
-    getHistory,
-    getUserHistory,
   });
   const dataSource = forUser ? userOrderHistoryRows : orderHistoryRows;
-  const desktopScroll =
-    dataSource.length > 24
-      ? { y: 540, x: true, scrollToFirstRowOnChange: false }
+  const desktopScrollForUserHistories =
+    dataSource.length > 11
+      ? {
+          y: 290,
+          x: true,
+          scrollToFirstRowOnChange: false,
+        }
       : { x: true, scrollToFirstRowOnChange: false };
-  const scroll = md ? ({ x: true } as Scroll) : (desktopScroll as Scroll);
+
+  const desktopScrollForHistories =
+    dataSource.length > 24
+      ? { y: 770, x: true, scrollToFirstRowOnChange: false }
+      : { x: true, scrollToFirstRowOnChange: false };
+  const desktopScroll = forUser
+    ? desktopScrollForUserHistories
+    : desktopScrollForHistories;
+
+  const mobileScroll =
+    dataSource.length > 6
+      ? ({ y: 300, x: true, scrollToFirstRowOnChange: false } as Scroll)
+      : ({ x: true, scrollToFirstRowOnChange: false } as Scroll);
+  const scroll = md ? mobileScroll : (desktopScroll as Scroll);
 
   return (
     <>

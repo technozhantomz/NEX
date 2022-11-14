@@ -1,6 +1,5 @@
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
-import { KeyboardEvent } from "react";
 
 import { utils } from "../../../../../../api/utils";
 import {
@@ -21,13 +20,13 @@ import { usePowerDownForm } from "./hooks";
 type Props = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
-  getGposInfo: () => Promise<void>;
+  calculateGposBalances: () => Promise<void>;
 };
 
 export const PowerDownForm = ({
   gposBalances,
   loading,
-  getGposInfo,
+  calculateGposBalances,
 }: Props): JSX.Element => {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
@@ -48,7 +47,7 @@ export const PowerDownForm = ({
   } = usePowerDownForm({
     gposBalances,
     loading,
-    getGposInfo,
+    calculateGposBalances,
   });
   const {
     isPasswordModalVisible,
@@ -83,7 +82,7 @@ export const PowerDownForm = ({
           size="large"
           initialValues={{
             openingBalance: "",
-            withdrawAmount: 0,
+            withdrawAmount: "0",
             newBalance: "",
             availableBalance: "",
           }}
@@ -143,11 +142,8 @@ export const PowerDownForm = ({
               type="number"
               min={0}
               step="any"
-              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e)) {
-                  e.preventDefault();
-                }
-              }}
+              onKeyPress={utils.ensureInputNumberValidity}
+              autoComplete="off"
             />
           </Form.Item>
           <Form.Item

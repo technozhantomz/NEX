@@ -57,10 +57,11 @@ export function useBlockchainTab(
     try {
       const recentBlocks = getRecentBlocks();
 
-      const chain = await getChain();
-      const blockData = await getBlockData();
-      const dynamic = await getDynamic();
-
+      const [chain, blockData, dynamic] = await Promise.all([
+        getChain(),
+        getBlockData(),
+        getDynamic(),
+      ]);
       const chainAvgTime = getAvgBlockTime();
 
       const blockRows: DataTableRow[] = recentBlocks.map((block) => {
@@ -156,7 +157,7 @@ export function useBlockchainTab(
     return () => {
       clearInterval(blockchainInterval);
     };
-  }, [defaultAsset, getBlockchainData, routerQuery]);
+  }, [getBlockchainData, routerQuery]);
 
   return {
     loading,

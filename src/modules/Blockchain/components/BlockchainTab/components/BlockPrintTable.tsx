@@ -1,22 +1,26 @@
 import { ColumnsType } from "antd/lib/table";
-import React, { RefObject } from "react";
+import React from "react";
 
 import * as Styled from "../BlockchainTab.styled";
-import { DataTableRow, useBlockchainTab } from "../hooks";
+import { BlockColumnType, DataTableRow } from "../hooks";
 
-import { BlockColumns } from "./BlockColumns";
+type Props = {
+  loading: boolean;
+  blockColumns: BlockColumnType[];
+  blockchainTableRows: DataTableRow[];
+};
 
-export const BlockPrintTable = React.forwardRef((_props, ref) => {
-  const { loading, blockchainTableRows } = useBlockchainTab();
-
-  return (
-    <div ref={ref as RefObject<HTMLDivElement>}>
-      <Styled.BlockTable
-        dataSource={blockchainTableRows}
-        columns={BlockColumns as ColumnsType<DataTableRow>}
-        loading={loading}
-        pagination={false}
-      />
-    </div>
-  );
-});
+export const BlockPrintTable = React.forwardRef(
+  (props: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
+    return (
+      <div ref={ref}>
+        <Styled.BlockTable
+          dataSource={props.blockchainTableRows}
+          columns={props.blockColumns as ColumnsType<DataTableRow>}
+          loading={props.loading}
+          pagination={false}
+        />
+      </div>
+    );
+  }
+);

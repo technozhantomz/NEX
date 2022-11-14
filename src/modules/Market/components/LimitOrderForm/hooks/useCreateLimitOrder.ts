@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
-  roundNum,
   useAccount,
   useAsset,
   useFees,
@@ -24,8 +23,6 @@ export function useCreateLimitOrder({
   currentQuote,
   loadingSelectedPair,
   isBuyOrder,
-  refreshHistory,
-  refreshOrderBook,
   orderForm,
 }: UseCreateLimitOrderArgs): UseCreateLimitOrderResult {
   const [feeAmount, setFeeAmount] = useState<number>(0);
@@ -45,7 +42,7 @@ export function useCreateLimitOrder({
   const { localStorageAccount, assets, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
   const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
-  const { limitByPrecision } = useAsset();
+  const { limitByPrecision, roundNum } = useAsset();
 
   const handleFieldAssetPrecission = useCallback(
     (fieldValue: number, fieldName: string, assetPrecission: number) => {
@@ -118,7 +115,7 @@ export function useCreateLimitOrder({
         }
       }
     },
-    [orderForm, currentBase, currentQuote, limitByPrecision]
+    [orderForm, currentBase, currentQuote]
   );
 
   const handleValuesChange = useCallback(
@@ -195,16 +192,12 @@ export function useCreateLimitOrder({
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
-        refreshOrderBook();
-        refreshHistory();
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
           counterpart.translate(`field.success.limit_order_successfully`)
         );
         setLoadingTransaction(false);
       } else {
-        refreshOrderBook();
-        refreshHistory();
         setTransactionErrorMessage(
           counterpart.translate(`field.errors.unable_transaction`)
         );
@@ -223,8 +216,6 @@ export function useCreateLimitOrder({
       setLoadingTransaction,
       localStorageAccount,
       formAccountBalancesByName,
-      refreshOrderBook,
-      refreshHistory,
       setTransactionSuccessMessage,
     ]
   );

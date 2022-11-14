@@ -14,9 +14,10 @@ import { UseVotingResult } from "./useVoting.types";
 export function useVoting(): UseVotingResult {
   const [fullAccount, setFullAccount] = useState<FullAccount>();
   const [serverApprovedVotes, setServerApprovedVotes] = useState<Vote[]>([]);
+  const [loadingUserVotes, setLoadingUserVotes] = useState<boolean>(true);
   const [allMembers, setAllMembers] = useState<Vote[]>([]);
   const [allMembersIds, setAllMembersIds] = useState<[string, string][]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingMembers, setLoadingMembers] = useState<boolean>(true);
   const [totalGpos, setTotalGpos] = useState<number>(0);
   const [proxy, setProxy] = useState<Proxy>({
     name: "",
@@ -63,63 +64,79 @@ export function useVoting(): UseVotingResult {
     }
   }, [dbApi, id, getAssetById, setTotalGpos, setPrecision]);
 
-  const getVotes = useCallback(async () => {
+  const getAllMembers = useCallback(async () => {
     try {
-      setLoading(true);
-      const fullAccount = await getFullAccount(localStorageAccount, false);
-      setFullAccount(fullAccount);
-      if (fullAccount !== undefined) {
-        await getProxyAccount(fullAccount.account.options.voting_account);
-      }
+      setLoadingMembers(true);
       let allMembers: Vote[] = [];
       let allMembersIds: [string, string][] = [];
-      const { committees, committeesIds } = await getCommittees();
-      const { sons, sonsIds } = await getSons();
-      const { witnesses, witnessesIds } = await getWitnesses();
+      const [
+        { committees, committeesIds },
+        { sons, sonsIds },
+        { witnesses, witnessesIds },
+      ] = await Promise.all([getCommittees(), getSons(), getWitnesses()]);
       allMembers = [...committees, ...sons, ...witnesses];
       allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
 
       setAllMembers(allMembers);
       setAllMembersIds(allMembersIds);
-
-      if (fullAccount !== undefined) {
-        const votes = fullAccount.votes;
-        setServerApprovedVotes(votes);
-      }
-      setLoading(false);
+      setLoadingMembers(false);
     } catch (e) {
       console.log(e);
-      setLoading(false);
+      setLoadingMembers(false);
     }
   }, [
-    setLoading,
-    localStorageAccount,
-    setFullAccount,
+    setLoadingMembers,
     getCommittees,
     getSons,
     getWitnesses,
     setAllMembers,
     setAllMembersIds,
+  ]);
+
+  const getUserVotes = useCallback(async () => {
+    try {
+      setLoadingUserVotes(true);
+      const fullAccount = await getFullAccount(localStorageAccount, false);
+      setFullAccount(fullAccount);
+      if (fullAccount !== undefined) {
+        await getProxyAccount(fullAccount.account.options.voting_account);
+        const votes = fullAccount.votes;
+        setServerApprovedVotes(votes);
+      }
+
+      setLoadingUserVotes(false);
+    } catch (e) {
+      console.log(e);
+      setLoadingUserVotes(false);
+    }
+  }, [
+    setLoadingUserVotes,
+    localStorageAccount,
+    setFullAccount,
     setServerApprovedVotes,
   ]);
 
   useEffect(() => {
-    getVotes();
-  }, [getVotes]);
+    getAllMembers();
+  }, [getAllMembers]);
+
+  useEffect(() => {
+    getUserVotes();
+  }, [getUserVotes]);
 
   useEffect(() => {
     getUserTotalGpos();
   }, [getUserTotalGpos]);
 
   return {
-    loading,
+    loadingUserVotes,
     serverApprovedVotes,
     allMembers,
     fullAccount,
     allMembersIds,
     totalGpos,
     proxy,
-    getVotes,
-    getProxyAccount,
+    getUserVotes,
+    loadingMembers,
   };
 }

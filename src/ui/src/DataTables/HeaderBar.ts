@@ -17,6 +17,7 @@ export const DataTableHeaderBar = styled.div`
     height: 50px;
     max-width: 341px;
     margin-right: 15px;
+    border-radius: 4px;
   }
   ${breakpoint.sm} {
     display: flex;
