@@ -23,6 +23,7 @@ import {
   Transaction,
   Vote,
   VoteType,
+  WitnessAccount,
 } from "../../../../../../common/types";
 import { VoteRow } from "../../../../types";
 
@@ -273,6 +274,7 @@ export function useVoteTab({
     ): VoteRow => {
       let voteType: VoteType;
       let voteActive: boolean;
+      let missedBlocks = 0;
       switch (parseInt(vote.vote_id.charAt(0))) {
         case 0:
           voteType = "committees";
@@ -296,6 +298,7 @@ export function useVoteTab({
             globalProperties["active_witnesses"].indexOf(vote.id) >= 0
               ? true
               : false;
+          missedBlocks = (vote as WitnessAccount).total_missed;
       }
       const name = votesIds.filter((voteId) => voteId[1] === vote.id)[0][0];
 
@@ -312,6 +315,7 @@ export function useVoteTab({
         name: name,
         url: vote.url,
         votes: `${votesAsset?.amount} ${votesAsset?.symbol}`,
+        missedBlocks: missedBlocks,
         action: action,
         active: voteActive,
         status: action === "remove" ? "approved" : "unapproved",
