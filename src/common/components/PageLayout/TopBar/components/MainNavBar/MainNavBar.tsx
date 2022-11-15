@@ -8,7 +8,7 @@ import {
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
-// import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
+import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import MetaMaskIcon from "../../../../../../ui/src/icons/Cryptocurrencies/MetaMaskIcon.svg";
 import {
   useMenuContext,
@@ -26,7 +26,7 @@ import * as Styled from "./MainNavBar.styled";
 export const MainNavBar = (): JSX.Element => {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
-  const { metaMask } = usePeerLinkContext();
+  const { metaMask, hive } = usePeerLinkContext();
   const { sm } = useViewportContext();
   const {
     openMenu,
@@ -116,21 +116,23 @@ export const MainNavBar = (): JSX.Element => {
     </Styled.PeerLinkWalletBadge>
   );
 
-  // const hiveBadge = sm ? (
-  //   <Styled.PeerLinkWalletBadge>
-  //     <HIVEIcon width="39" height="39" />
-  //   </Styled.PeerLinkWalletBadge>
-  // ) : (
-  //   <Styled.PeerLinkWalletBadge>
-  //     <HIVEIcon width="39" height="39" />
-  //     {/* {metaMask.selectedAddress} */}
-  //   </Styled.PeerLinkWalletBadge>
-  // );
+  const hiveBadge = sm ? (
+    <Styled.PeerLinkWalletBadge>
+      <HIVEIcon width="25" height="25" />
+    </Styled.PeerLinkWalletBadge>
+  ) : (
+    <Styled.PeerLinkWalletBadge>
+      <HIVEIcon width="30" height="30" />
+      <Styled.PeerLinkWalletAccount>
+        {hive.userName}
+      </Styled.PeerLinkWalletAccount>
+    </Styled.PeerLinkWalletBadge>
+  );
 
   const peerLinkBadge = (
     <Styled.PeerLinkBadgeWrapper>
+      {hive.isConnected ? hiveBadge : ""}
       {metaMask.isConnected ? metaMaskBadge : ""}
-      {/* {hive.isConnected ? hiveBadge : ""} */}
     </Styled.PeerLinkBadgeWrapper>
   );
 

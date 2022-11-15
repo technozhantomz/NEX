@@ -827,6 +827,7 @@ export const ru = {
         connected: "Подключено",
         required: "Обязательно",
         connect_metamask: "Соединять MetaMask",
+        connect_hive: "Соединять Hive",
       },
       transfer: {
         heading: "Передача",
