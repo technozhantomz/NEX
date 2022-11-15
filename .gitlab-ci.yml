@@ -90,6 +90,8 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
+    - echo "Logging coverage..."
+    - sed -i "s|<source>\/app\/NEX<\/source>|<source>$CI_PROJECT_DIR\/NEX<\/source>|g" ./build/coverage.xml
     - sonar-scanner
   only:
     - merge_requests
