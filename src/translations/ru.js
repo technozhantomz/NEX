@@ -488,6 +488,7 @@ export const ru = {
     },
   },
   buttons: {
+    reconfirm_votes: "Подтвердить голоса",
     enter_amount: "Введите сумму",
     swap_coins: "Обменять монеты",
     login_and_swap_coins: "Войти и поменять монеты",
@@ -1147,6 +1148,8 @@ export const ru = {
     mark_read: "пометить, как прочитанное",
     mark_unread: "отметить как непрочитанное",
     swap_transaction_type: "Тип сделки: своп",
+    proxied_account: "Вы проксировали свое право голоса",
+    zero_votes: "Вы не одобрили ни одного участника",
   },
   file_content: {
     btc_withdraw_account: "Счет для вывода биткойнов",

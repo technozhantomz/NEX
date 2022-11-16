@@ -5,16 +5,28 @@ import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
 import Link from "next/link";
-import { ReactInstance, useRef } from "react";
+import { Dispatch, ReactInstance, SetStateAction, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
-import { renderPaginationConfig } from "../../../../../common/components";
+import { DEFAULT_PROXY_ID } from "../../../../../api/params";
+import {
+  PasswordModal,
+  renderPaginationConfig,
+  TransactionModal,
+} from "../../../../../common/components";
+import { useHandleTransactionForm } from "../../../../../common/hooks";
 import {
   useUserContext,
   useViewportContext,
 } from "../../../../../common/providers";
-import { DownloadOutlined, SearchOutlined } from "../../../../../ui/src";
+import { Proxy, SignerKey } from "../../../../../common/types";
+import {
+  DownloadOutlined,
+  Form,
+  SearchOutlined,
+  Tooltip,
+} from "../../../../../ui/src";
 import { VoteRow } from "../../../types";
 
 import * as Styled from "./VoteTable.styled";
@@ -28,6 +40,16 @@ type Props = {
   loading: boolean;
   addChange: (voteId: string) => void;
   cancelChange: (voteId: string) => void;
+  name: string;
+  handleReconfirmVoting: (signerKey: SignerKey) => Promise<void>;
+  loadingTransaction: boolean;
+  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
+  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  transactionErrorMessage: string;
+  transactionSuccessMessage: string;
+  reconfirmFee: number;
+  proxy: Proxy;
+  desiredMembers: number;
 };
 
 export const VoteTable = ({
@@ -37,13 +59,40 @@ export const VoteTable = ({
   loading,
   addChange,
   cancelChange,
+  name,
+  handleReconfirmVoting,
+  loadingTransaction,
+  setTransactionErrorMessage,
+  setTransactionSuccessMessage,
+  transactionErrorMessage,
+  transactionSuccessMessage,
+  reconfirmFee,
+  proxy,
+  desiredMembers,
 }: Props): JSX.Element => {
-  const { searchDataSource, setSearchDataSource, getActionString } =
-    useVoteTable({ votes });
+  const {
+    searchDataSource,
+    setSearchDataSource,
+    getActionString,
+    reconfirmVoteForm,
+  } = useVoteTable({ votes });
   const { sm } = useViewportContext();
   const { localStorageAccount } = useUserContext();
   const columns = showVotesColumns(addChange, cancelChange, getActionString);
   const componentRef = useRef<HTMLDivElement>(null);
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleReconfirmVoting,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    neededKeyType: "active",
+  });
 
   const renderCancelActionRows = (item: VoteRow) =>
     item.status === "unapproved" ? (
@@ -76,15 +125,17 @@ export const VoteTable = ({
   return (
     <Styled.VoteTableWrapper>
       <Styled.VoteHeaderBar>
-        <Styled.Title>
-          {type === "pendingChanges"
-            ? counterpart.translate(`field.labels.pending_changes`, {
-                localStorageAccount,
-              })
-            : capitalize(counterpart.translate(`pages.voting.${tab}.heading`))}
-        </Styled.Title>
-        {type === "allVotes" ? (
+        {type === "pendingChanges" ? (
+          <Styled.Title>
+            {counterpart.translate(`field.labels.pending_changes`, {
+              localStorageAccount,
+            })}
+          </Styled.Title>
+        ) : (
           <>
+            <Styled.Title>
+              {capitalize(counterpart.translate(`pages.voting.${tab}.heading`))}{" "}
+            </Styled.Title>
             <SearchTableInput
               columns={columns as ColumnsType<unknown>}
               dataSource={votes}
@@ -96,6 +147,55 @@ export const VoteTable = ({
                 suffix: <SearchOutlined />,
               }}
             />
+            <Form.Provider onFormFinish={handleFormFinish}>
+              <Form
+                form={reconfirmVoteForm}
+                name="reconfirmVoteForm"
+                onFinish={showPasswordModal}
+              >
+                {proxy.id !== DEFAULT_PROXY_ID || !desiredMembers ? (
+                  <Tooltip
+                    placement="top"
+                    title={
+                      proxy.id !== DEFAULT_PROXY_ID
+                        ? counterpart.translate(`tooltips.proxied_account`)
+                        : counterpart.translate(`tooltips.zero_votes`)
+                    }
+                  >
+                    <Styled.Reconfirm
+                      type="primary"
+                      htmlType="submit"
+                      disabled={true}
+                    >
+                      {counterpart.translate(`buttons.reconfirm_votes`)}
+                    </Styled.Reconfirm>
+                  </Tooltip>
+                ) : (
+                  <Styled.Reconfirm type="primary" htmlType="submit">
+                    {counterpart.translate(`buttons.reconfirm_votes`)}
+                  </Styled.Reconfirm>
+                )}
+
+                <PasswordModal
+                  visible={isPasswordModalVisible}
+                  onCancel={hidePasswordModal}
+                  neededKeyType="active"
+                />
+                <TransactionModal
+                  visible={isTransactionModalVisible}
+                  onCancel={hideTransactionModal}
+                  transactionErrorMessage={transactionErrorMessage}
+                  transactionSuccessMessage={transactionSuccessMessage}
+                  loadingTransaction={loadingTransaction}
+                  account={name}
+                  fee={reconfirmFee}
+                  transactionType="account_update"
+                  proxy={proxy}
+                  desiredMembers={desiredMembers}
+                  memberType={tab}
+                />
+              </Form>
+            </Form.Provider>
             <Styled.DownloadLinks>
               <DownloadOutlined />
               <ReactToPrint
@@ -114,8 +214,6 @@ export const VoteTable = ({
               </CSVLink>
             </Styled.DownloadLinks>
           </>
-        ) : (
-          ""
         )}
       </Styled.VoteHeaderBar>
       <Styled.Container>

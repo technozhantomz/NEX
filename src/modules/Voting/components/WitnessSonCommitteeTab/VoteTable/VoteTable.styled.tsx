@@ -1,4 +1,5 @@
 import {
+  Button,
   Col as col,
   DataItemContent,
   DataTable,
@@ -23,6 +24,17 @@ export const VoteTableWrapper = styled.div`
   margin: 0 25px;
   ${breakpoint.sm} {
     margin: 0 35px;
+  }
+`;
+
+export const Reconfirm = styled(Button)`
+  height: 50px;
+  min-width: 60%;
+  margin-right: 16px;
+  margin-bottom: 8px;
+  ${breakpoint.sm} {
+    min-width: 165px;
+    margin-bottom: 0;
   }
 `;
 
@@ -111,7 +123,11 @@ export const Xmark = styled(xmark)`
   }
 `;
 
-export const VoteHeaderBar = styled(DataTableHeaderBar)``;
+export const VoteHeaderBar = styled(DataTableHeaderBar)`
+  .ant-tooltip-disabled-compatible-wrapper {
+    width: 100%;
+  }
+`;
 export const DownloadLinks = styled(DataTableDownloadLinks)``;
 export const PrintTable = styled(UiPrintTable)``;
 export const urlIcon = styled(DataTableUrlIcon)``;

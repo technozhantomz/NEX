@@ -505,6 +505,7 @@ export const en = {
     },
   },
   buttons: {
+    reconfirm_votes: "Reconfirm votes",
     enter_amount: "Enter an amount",
     swap_coins: "Swap coins",
     login_and_swap_coins: "Login & swap coins",
@@ -1183,6 +1184,8 @@ export const en = {
     mark_read: "mark as read",
     mark_unread: "mark as unread",
     swap_transaction_type: "Transaction Type : Swap",
+    proxied_account: "You have proxied your voting power",
+    zero_votes: "You haven't approved any members",
   },
   file_content: {
     btc_withdraw_account: "Bitcoin Withdraw Account",
