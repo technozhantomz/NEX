@@ -95,7 +95,12 @@ export const VoteTab = ({
               transactionSuccessMessage={transactionSuccessMessage}
               updateAccountFee={updateAccountFee}
               proxy={proxy}
-              desiredMembers={pendingChanges.length}
+              approvedMembers={
+                pendingChanges.filter((e) => e.status === "approved").length
+              }
+              removedMembers={
+                pendingChanges.filter((e) => e.status === "unapproved").length
+              }
               votes={pendingChanges}
               afterSuccessTransactionModalClose={
                 afterSuccessTransactionModalClose

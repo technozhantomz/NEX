@@ -972,6 +972,8 @@ export const en = {
       use_whalevault: "Use WhaleVault extension",
       unsaved_changes: "You have unsaved changes to your settings",
       coins_token: "Coins/Tokens",
+      approved: "Approved",
+      removed: "Removed",
     },
     comments: {
       deposit_hbd:

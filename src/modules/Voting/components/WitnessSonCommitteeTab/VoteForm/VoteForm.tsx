@@ -28,9 +28,10 @@ type Props = {
   name: string;
   updateAccountFee: number;
   proxy: Proxy;
-  desiredMembers: number;
   votes: VoteRow[];
   afterSuccessTransactionModalClose?: () => void;
+  approvedMembers: number;
+  removedMembers: number;
 };
 
 export const VoteForm = ({
@@ -46,8 +47,9 @@ export const VoteForm = ({
   name,
   updateAccountFee,
   proxy,
-  desiredMembers,
   afterSuccessTransactionModalClose,
+  approvedMembers,
+  removedMembers,
 }: Props): JSX.Element => {
   const { voteForm } = useVoteForm();
 
@@ -127,7 +129,8 @@ export const VoteForm = ({
             fee={updateAccountFee}
             transactionType="account_update"
             proxy={proxy}
-            desiredMembers={desiredMembers}
+            approvedMembers={approvedMembers}
+            removedMembers={removedMembers}
             memberType={tab}
             afterClose={afterSuccessTransactionModalClose}
           />
