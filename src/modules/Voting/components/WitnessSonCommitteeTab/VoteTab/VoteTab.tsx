@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { capitalize } from "lodash";
+import { capitalize, filter } from "lodash";
 import Link from "next/link";
 
 import { VoteForm, VoteTable } from "..";
@@ -96,10 +96,10 @@ export const VoteTab = ({
               updateAccountFee={updateAccountFee}
               proxy={proxy}
               approvedMembers={
-                pendingChanges.filter((e) => e.status === "approved").length
+                filter(pendingChanges, { status: "approved" }).length
               }
               removedMembers={
-                pendingChanges.filter((e) => e.status === "unapproved").length
+                filter(pendingChanges, { status: "unapproved" }).length
               }
               votes={pendingChanges}
               afterSuccessTransactionModalClose={
