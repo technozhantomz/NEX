@@ -67,6 +67,7 @@ export const AssetsTab = (): JSX.Element => {
           />
 
           {` / `}
+
           <CSVLink
             filename={"AssetsTable.csv"}
             data={assetTableRows}

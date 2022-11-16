@@ -239,7 +239,7 @@ export const LimitOrderForm = ({
                 {counterpart.translate(`buttons.dont_have_peerplays_account`)}
               </span>
               <Link href="/signup">
-                <a>{counterpart.translate(`links.create_account`)}</a>
+                {counterpart.translate(`links.create_account`)}
               </Link>
             </FormDisclamer>
           )}

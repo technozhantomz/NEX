@@ -28,9 +28,7 @@ export const CreateVestingBalance = ({
       {account && (
         <Styled.DetailContainer>
           <p>{counterpart.translate(`field.labels.account_name`)}</p>
-          <Link href={`/user/${account}`}>
-            <a>{account}</a>
-          </Link>
+          <Link href={`/user/${account}`}>{account}</Link>
         </Styled.DetailContainer>
       )}
 

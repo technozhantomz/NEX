@@ -1,29 +1,8 @@
 // @ts-check
 /** @type {import('next').NextConfig} */
-const nextBundleAnalyzer = require("@next/bundle-analyzer");
-const withPlugins = require("next-compose-plugins");
+
 const withLess = require("next-with-less");
 const { PHASE_DEVELOPMENT_SERVER } = require("next/constants");
-
-const withBundleAnalyzer = nextBundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
-});
-
-const plugins = [
-  [
-    withBundleAnalyzer,
-    {
-      enabled: process.env.ANALYZE === "true",
-    },
-  ],
-  [
-    withLess,
-    {
-      excludeFile: (str) => /\*.{spec,test,stories}.tsx?/.test(str),
-      lessLoaderOptions: {},
-    },
-  ],
-];
 
 const generateBuildId = async () => {
   if (process.env.BUILD_ID) {
@@ -33,29 +12,43 @@ const generateBuildId = async () => {
   }
 };
 
-const nextConfig = {
-  reactStrictMode: true,
-  devIndicators: {
-    buildActivity: false,
-  },
-  ["!" + PHASE_DEVELOPMENT_SERVER]: {
+module.exports = module.exports = (phase, { _defaultConfig }) => {
+  const commonConfigs = {
+    reactStrictMode: true,
+    devIndicators: {
+      buildActivity: false,
+    },
+    webpack: (
+      config,
+      { _buildId, _dev, _isServer, _defaultLoaders, _nextRuntime, _webpack }
+    ) => {
+      config.module.rules.push({
+        test: /\.ya?ml$/,
+        type: "json",
+        use: "yaml-loader",
+      });
+      config.module.rules.push({
+        test: /\.svg$/,
+        use: "@svgr/webpack",
+      });
+      config.experiments = { asyncWebAssembly: true };
+      // Important: return the modified config
+      return config;
+    },
+  };
+  if (phase === PHASE_DEVELOPMENT_SERVER) {
+    return withLess({
+      lessLoaderOptions: {},
+      ...commonConfigs,
+      /* development only config options here */
+    });
+  }
+
+  return withLess({
+    lessLoaderOptions: {},
+    ...commonConfigs,
     distDir: "build",
     generateBuildId: generateBuildId,
-  },
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.ya?ml$/,
-      type: "json",
-      use: "yaml-loader",
-    });
-
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: "@svgr/webpack",
-    });
-    config.experiments = { asyncWebAssembly: true };
-    return config;
-  },
+    /* config options for all phases except development here */
+  });
 };
-
-module.exports = withPlugins(plugins, nextConfig);

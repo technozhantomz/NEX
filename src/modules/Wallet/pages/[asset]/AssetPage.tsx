@@ -197,7 +197,7 @@ const AssetPage: NextPage = () => {
             tabBarExtraContent={
               <span className="back-link">
                 <Link href="/wallet">
-                  <a>{counterpart.translate(`pages.wallet.back_to_assets`)}</a>
+                  {counterpart.translate(`pages.wallet.back_to_assets`)}
                 </Link>
               </span>
             }

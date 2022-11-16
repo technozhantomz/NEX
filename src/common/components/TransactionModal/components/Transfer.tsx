@@ -23,15 +23,11 @@ export const Transfer = ({
     <>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.placeholder.from`)}</p>
-        <Link href={`/user/${account}`}>
-          <a>{account}</a>
-        </Link>
+        <Link href={`/user/${account}`}>{account}</Link>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.placeholder.to`)}</p>
-        <Link href={`/user/${to}`}>
-          <a>{to}</a>
-        </Link>
+        <Link href={`/user/${to}`}>{to}</Link>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.placeholder.amount`)}</p>

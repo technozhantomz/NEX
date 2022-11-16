@@ -57,7 +57,7 @@ export const ProfileMenu = (): JSX.Element => {
         ) : (
           <li className={"link"}>
             <Link href={`/user/${localStorageAccount}`}>
-              <a>{counterpart.translate(`links.see_all_account_activity`)}</a>
+              {counterpart.translate(`links.see_all_account_activity`)}
             </Link>
           </li>
         )}
@@ -72,7 +72,7 @@ export const ProfileMenu = (): JSX.Element => {
         {sm ? (
           <li className={"link"}>
             <Link href={`/user/${localStorageAccount}`}>
-              <a>{counterpart.translate(`links.see_all_account_activity`)}</a>
+              {counterpart.translate(`links.see_all_account_activity`)}
             </Link>
           </li>
         ) : (

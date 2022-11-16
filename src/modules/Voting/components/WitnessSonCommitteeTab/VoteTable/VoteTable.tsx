@@ -138,7 +138,7 @@ export const VoteTable = ({
                     </span>
                     <span className="item-info-value">
                       <Link href={`/user/${(item as VoteRow).name}`}>
-                        <a>{(item as VoteRow).name}</a>
+                        {(item as VoteRow).name}
                       </Link>
                     </span>
                   </div>
@@ -166,9 +166,7 @@ export const VoteTable = ({
                         passHref
                         target="_blank"
                       >
-                        <a target="_blank">
-                          <Styled.urlIcon rotate={45} />
-                        </a>
+                        <Styled.urlIcon rotate={45} />
                       </Link>
                     </span>
                   </div>

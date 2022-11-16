@@ -20,7 +20,7 @@ export const MembershipInfo = ({ infoString }: Props): JSX.Element => {
     );
     return (
       <Link key={key} href={`/user/${userName}`}>
-        <a>{userName}</a>
+        {userName}
       </Link>
     );
   };

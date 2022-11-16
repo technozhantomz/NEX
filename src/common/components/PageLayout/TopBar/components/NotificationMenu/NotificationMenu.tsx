@@ -195,7 +195,7 @@ export const NotificationMenu = (): JSX.Element => {
 
       <Styled.AllActivityContainer>
         <Link href={`/user/${localStorageAccount}`}>
-          <a>{counterpart.translate(`links.see_all_account_activity`)}</a>
+          {counterpart.translate(`links.see_all_account_activity`)}
         </Link>
       </Styled.AllActivityContainer>
     </Styled.NotificationMenuCard>

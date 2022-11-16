@@ -45,11 +45,7 @@ export const showVotesColumns = (
 
   const renders = [
     undefined,
-    (name: string): JSX.Element => (
-      <Link href={`/user/${name}`}>
-        <a>{name}</a>
-      </Link>
-    ),
+    (name: string): JSX.Element => <Link href={`/user/${name}`}>{name}</Link>,
     (active: boolean): JSX.Element => (
       <span>{active === true ? <Styled.ActiveIcon /> : ``}</span>
     ),
@@ -59,9 +55,7 @@ export const showVotesColumns = (
           <span>{counterpart.translate(`field.labels.not_available`)}</span>
         ) : (
           <Link href={`${url}`} passHref target="_blank">
-            <a target="_blank">
-              <Styled.urlIcon rotate={45} />
-            </a>
+            <Styled.urlIcon rotate={45} />
           </Link>
         )}
       </>

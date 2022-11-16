@@ -28,32 +28,30 @@ export const TradingPairCard = ({
 
   return (
     <Link href={`/market/${tradingPair.replace("/", "_")}`}>
-      <a>
-        <Styled.Card
-          className="trading-card"
-          onMouseEnter={handleMouseHover}
-          onMouseLeave={handleMouseOut}
-          theme={changeBackgroundColor ? positiveTheme : negativeTheme}
+      <Styled.Card
+        className="trading-card"
+        onMouseEnter={handleMouseHover}
+        onMouseLeave={handleMouseOut}
+        theme={changeBackgroundColor ? positiveTheme : negativeTheme}
+      >
+        <Styled.ContentHeader>
+          <Styled.TradingPair>{tradingPair}</Styled.TradingPair>
+          {showChangeAndVolume && (
+            <Styled.PercentChange
+              theme={changeBackgroundColor ? positiveTheme : negativeTheme}
+            >
+              {changeBackgroundColor ? "+" : ""}
+              {percentChange}
+            </Styled.PercentChange>
+          )}
+        </Styled.ContentHeader>
+        <Styled.Price
+          theme={showChangeAndVolume ? positiveTheme : negativeTheme}
         >
-          <Styled.ContentHeader>
-            <Styled.TradingPair>{tradingPair}</Styled.TradingPair>
-            {showChangeAndVolume && (
-              <Styled.PercentChange
-                theme={changeBackgroundColor ? positiveTheme : negativeTheme}
-              >
-                {changeBackgroundColor ? "+" : ""}
-                {percentChange}
-              </Styled.PercentChange>
-            )}
-          </Styled.ContentHeader>
-          <Styled.Price
-            theme={showChangeAndVolume ? positiveTheme : negativeTheme}
-          >
-            {price}
-          </Styled.Price>
-          {showChangeAndVolume && <Styled.Volume>{volume}</Styled.Volume>}
-        </Styled.Card>
-      </a>
+          {price}
+        </Styled.Price>
+        {showChangeAndVolume && <Styled.Volume>{volume}</Styled.Volume>}
+      </Styled.Card>
     </Link>
   );
 };
