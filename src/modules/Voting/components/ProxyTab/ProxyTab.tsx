@@ -68,6 +68,8 @@ export const ProxyTab = ({
         searchValue={searchValue}
         isSameAccount={isSameAccount}
         accountAlreadyAdded={accountAlreadyAdded}
+        approvedMembers={serverProxy.name === "" ? 1 : 0}
+        removedMembers={serverProxy.name !== "" ? 1 : 0}
       />
       <ProxyTable
         loading={loading}

@@ -33,6 +33,8 @@ type Props = {
   searchValue: string;
   isSameAccount: boolean;
   accountAlreadyAdded: boolean;
+  approvedMembers: number;
+  removedMembers: number;
 };
 
 export const ProxyForm = ({
@@ -55,6 +57,8 @@ export const ProxyForm = ({
   resetChanges,
   isSameAccount,
   accountAlreadyAdded,
+  approvedMembers,
+  removedMembers,
 }: Props): JSX.Element => {
   const [proxyForm] = Form.useForm();
   const {
@@ -157,7 +161,8 @@ export const ProxyForm = ({
           transactionType="account_update"
           proxy={proxy}
           memberType="proxy"
-          desiredMembers={1}
+          approvedMembers={approvedMembers}
+          removedMembers={removedMembers}
         />
       </Form.Provider>
     </>
