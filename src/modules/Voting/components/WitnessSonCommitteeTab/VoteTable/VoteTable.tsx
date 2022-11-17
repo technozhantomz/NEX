@@ -1,5 +1,4 @@
 import { SearchTableInput } from "ant-table-extensions";
-import { TablePaginationConfig } from "antd";
 import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
@@ -243,12 +242,6 @@ export const VoteTable = ({
             columns={columns as ColumnsType<unknown>}
             dataSource={searchDataSource}
             loading={loading}
-            pagination={
-              renderPaginationConfig({ loading, pageSize: 5 }) as
-                | false
-                | TablePaginationConfig
-            }
-            size="small"
           />
         )}
       </Styled.Container>
