@@ -15,7 +15,7 @@ import {
   useAsset,
   useHandleTransactionForm,
 } from "../../../../../../common/hooks";
-import { Form, Input } from "../../../../../../ui/src";
+import { Form, Input, Progress } from "../../../../../../ui/src";
 import BitcoinIcon from "../../../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import PPYIcon from "../../../../../../ui/src/icons/Cryptocurrencies/PPYIcon.svg";
@@ -51,6 +51,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     toAccount,
     selectedAssetPrecission,
     btcTransferFee,
+    afterTransactionModalClose,
   } = useSendForm({
     assetSymbol,
   });
@@ -120,7 +121,6 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
       : `${feeAmount}
   ${defaultToken}`;
 
-  //done
   const totalTransaction = (
     <>
       <div>{`${precisedAmount} ${selectedAssetSymbol}`}</div>
@@ -222,14 +222,25 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             </Styled.BlockchainSelector>
           </Form.Item>
         </div>
-        <Styled.AvailableAssetWrapper>
-          <Styled.AvailableAssetLabel>
-            {counterpart.translate(`pages.wallet.available_to_send`)}
-          </Styled.AvailableAssetLabel>
-          <Styled.AvailableAssetAmount>
-            {selectedAsset ? selectedAsset.amount : 0}
-          </Styled.AvailableAssetAmount>
-        </Styled.AvailableAssetWrapper>
+        <Styled.AvailableAssetAndProgressWrapper>
+          <Styled.AvailableAssetWrapper>
+            <Styled.AvailableAssetLabel>
+              {counterpart.translate(`pages.wallet.available_to_send`)}
+            </Styled.AvailableAssetLabel>
+            <Styled.AvailableAssetAmount>
+              {selectedAsset ? selectedAsset.amount : 0}
+            </Styled.AvailableAssetAmount>
+          </Styled.AvailableAssetWrapper>
+          <Progress
+            percent={
+              selectedAsset && selectedAsset.amount && amount
+                ? Number(
+                    ((Number(amount) / selectedAsset.amount) * 100).toFixed(1)
+                  )
+                : 0
+            }
+          />
+        </Styled.AvailableAssetAndProgressWrapper>
         <div className="two-input-row">
           <Form.Item
             name="amount"
@@ -237,7 +248,9 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             rules={formValdation.amount}
           >
             <Input
-              placeholder={counterpart.translate(`field.placeholder.amount`)}
+              placeholder={counterpart.translate(
+                `field.placeholder.enter_amount`
+              )}
               type="number"
               min={0}
               onKeyPress={utils.ensureInputNumberValidity}
@@ -248,7 +261,9 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
 
           <Form.Item name="to" validateFirst={true} rules={formValdation.to}>
             <Input
-              placeholder={counterpart.translate(`field.placeholder.to`)}
+              placeholder={counterpart.translate(
+                `field.placeholder.enter_recipient`
+              )}
               autoComplete="off"
               disabled={selectedBlockchain === BITCOIN_NETWORK}
             />
@@ -294,6 +309,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
         amount={amount}
         blockchain={selectedBlockchain}
         transactionType="transfer"
+        afterClose={afterTransactionModalClose}
       />
     </Form.Provider>
   );
