@@ -47,7 +47,7 @@ export const GPOSContent = styled.div`
   width: 85%;
   margin: 25px auto;
   ${breakpoint.sm} {
-    max-width: 266px;
+    max-width: 300px;
     width: 100%;
     margin: 0 40px 0 0;
   }
@@ -70,6 +70,7 @@ export const GPOSDetailsTitle = styled.span`
 `;
 export const GPOSDetailsValue = styled.span`
   font-size: 12px;
+  word-break: break-all;
   color: ${colors.textColor};
   font-weight: normal;
   &.max-rewards,

@@ -399,7 +399,7 @@ export const en = {
         title: "Update SON",
       },
       son_wallet_deposit_create: {
-        title: "Create deposit son wallet",
+        title: "Create deposit SON wallet",
       },
       son_wallet_deposit_process: {
         title: "Process deposit SON wallet",
