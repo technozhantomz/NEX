@@ -1,4 +1,4 @@
-import { Button, Divider as UiDivider } from "antd";
+import { Alert, Button, Divider as UiDivider } from "antd";
 
 import { LogoSelectOption } from "../../../../common/components";
 import {
@@ -288,5 +288,10 @@ export const Divider = styled(UiDivider)`
 `;
 
 export const MaxButton = styled(Button)`
+  border: none;
+`;
+
+export const ErrorMessage = styled(Alert)`
+  background-color: transparent;
   border: none;
 `;

@@ -169,6 +169,12 @@ const PeerLinkTransfer: NextPage = () => {
             </Styled.Col>
           </Styled.Row>
         </Styled.TransferForm>
+        <Styled.ErrorMessage
+          message=" Display error message here if any"
+          type="warning"
+          showIcon
+          closable
+        />
       </Styled.TransferCard>
     </Layout>
   );
