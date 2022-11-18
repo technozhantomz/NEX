@@ -222,6 +222,7 @@ export const WithdrawForm = ({
             step="any"
             min={0}
             onKeyPress={utils.ensureInputNumberValidity}
+            onPaste={utils.numberedInputsPasteHandler}
             disabled={localStorageAccount ? false : true}
             autoComplete="off"
           />
@@ -291,6 +292,7 @@ export const WithdrawForm = ({
             step="any"
             min={0}
             onKeyPress={utils.ensureInputNumberValidity}
+            onPaste={utils.numberedInputsPasteHandler}
             disabled={localStorageAccount ? false : true}
           />
         </Form.Item>
@@ -358,6 +360,7 @@ export const WithdrawForm = ({
                       step="any"
                       min={0}
                       onKeyPress={utils.ensureInputNumberValidity}
+                      onPaste={utils.numberedInputsPasteHandler}
                       disabled={!isLoggedIn}
                       autoComplete="off"
                     />

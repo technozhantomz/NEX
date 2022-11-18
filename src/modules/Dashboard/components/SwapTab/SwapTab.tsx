@@ -231,6 +231,7 @@ export const SwapTab = (): JSX.Element => {
                   }}
                   autoComplete="off"
                   onKeyPress={utils.ensureInputNumberValidity}
+                  onPaste={utils.numberedInputsPasteHandler}
                   disabled={!isLoggedIn}
                 />
               </Styled.SwapSellItem>
@@ -264,6 +265,7 @@ export const SwapTab = (): JSX.Element => {
                     e.target.select();
                   }}
                   onKeyPress={utils.ensureInputNumberValidity}
+                  onPaste={utils.numberedInputsPasteHandler}
                   autoComplete="off"
                   disabled={!isLoggedIn}
                 />

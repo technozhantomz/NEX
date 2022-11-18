@@ -241,6 +241,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
               type="number"
               min={0}
               onKeyPress={utils.ensureInputNumberValidity}
+              onPaste={utils.numberedInputsPasteHandler}
               step="any"
               autoComplete="off"
             />
