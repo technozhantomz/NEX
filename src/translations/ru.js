@@ -875,8 +875,10 @@ export const ru = {
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
       hive_blockchain_account: "учетная запись Hive",
+      enter_amount: "Введите сумму для отправки",
       amount: "количество",
       quantity: "Количество",
+      enter_recipient: "Введите получателя",
       to: "К",
       memo: "Памятка",
       price: "Цена",
@@ -980,7 +982,7 @@ export const ru = {
     comments: {
       deposit_hbd:
         "Чтобы перевести, %(assetSymbol)s , на , %(accountName)s, отправьте свои средства на , son-account, в блокчейне Hive с памяткой , %(accountName)s",
-      public_memo: "Эта памятка общедоступна",
+      public_memo: "Эта памятка общедоступна (по желанию)",
     },
     checkBoxes: {
       cannot_recover_my_lost_password:
