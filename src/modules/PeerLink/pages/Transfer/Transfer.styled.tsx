@@ -30,11 +30,12 @@ export const Row = styled(UiRow)`
 export const FromCol = styled(UiCol)`
   width: 100%;
   justify-content: center;
-  padding-bottom: 25px;
+  padding-bottom: 30px;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-color: #c9c9c9;
   ${breakpoint.md} {
+    padding-bottom: 25px;
     border-right-style: solid;
     border-right-width: 1px;
     border-bottom-width: 0;
@@ -47,11 +48,18 @@ export const FromCol = styled(UiCol)`
 export const ToCol = styled(UiCol)`
   width: 100%;
   justify-content: center;
-  ${breakpoint.md} {
+  padding-top: 30px;
+  padding-bottom: 20px;
+  ${breakpoint.sm} {
+    padding-top: 30px;
     padding-left: 8px;
     padding-right: 8px;
   }
-  padding-bottom: 0px;
+  ${breakpoint.md} {
+    padding-top: 0px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
 `;
 
 export const Col = styled(UiCol)`
@@ -67,9 +75,12 @@ export const SwapButton = styled(Button)`
   transform: rotate(90deg);
   position: absolute;
   z-index: 2;
-  margin-top: 295px;
+  margin-top: 320px;
   background-color: ${colors.primaryColor};
   color: white;
+  ${breakpoint.sm} {
+    margin-top: 260px;
+  }
   ${breakpoint.md} {
     margin-top: 10px;
     transform: rotate(0deg);
@@ -79,18 +90,17 @@ export const SwapButton = styled(Button)`
 export const Heading = styled.p`
   text-align: center;
   color: ${colors.textColor};
-  font-size: 14px;
+  font-size: 22px;
   font-weight: 500;
-  margin-top: 10px;
   ${breakpoint.sm} {
-    font-size: 18x;
+    font-size: 18px;
   }
 `;
 
 export const SubHeading = styled.p`
   text-align: left;
   color: ${colors.textColorSecondary};
-  font-size: 12px;
+  font-size: 16px;
   margin-top: 5px;
   ${breakpoint.sm} {
     font-size: 14px;
@@ -103,6 +113,9 @@ export const BodyText = styled.p`
   font-weight: 400;
   font-size: 12px;
   margin-top: 5px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
 `;
 
 export const LeftSubText = styled.p`
@@ -259,6 +272,10 @@ export const AssetSelectContainer = styled.div`
 
 export const TransferButtonFormItem = styled(transferForm.Item)`
   width: 100%;
+  .ant-btn {
+    height: 45px;
+    width: 100%;
+  }
   ${breakpoint.sm} {
     margin-top: 25px;
   }
@@ -266,6 +283,7 @@ export const TransferButtonFormItem = styled(transferForm.Item)`
 
 export const TransferLinkFormItem = styled(transferForm.Item)`
   width: 100%;
+  margin-bottom: 15px;
   ${breakpoint.sm} {
     margin-top: 10px;
     margin-bottom: 25px;
@@ -291,7 +309,19 @@ export const MaxButton = styled(Button)`
   border: none;
 `;
 
+export const ErrorMessageContainer = styled(Row)`
+  justify-content: center;
+  padding-left: 0px;
+  padding-right: 0px;
+  ${breakpoint.md} {
+    justify-content: start;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+`;
+
 export const ErrorMessage = styled(Alert)`
+  margin-bottom: 10px;
   background-color: transparent;
   border: none;
 `;

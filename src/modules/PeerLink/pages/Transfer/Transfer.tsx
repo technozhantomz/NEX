@@ -185,12 +185,14 @@ const PeerLinkTransfer: NextPage = () => {
             </Styled.Col>
           </Styled.Row>
         </Styled.TransferForm>
-        <Styled.ErrorMessage
-          message={counterpart.translate(`transfer.error_message`)}
-          type="warning"
-          showIcon
-          closable
-        />
+        <Styled.ErrorMessageContainer>
+          <Styled.ErrorMessage
+            message={counterpart.translate(`transfer.error_message`)}
+            type="warning"
+            showIcon
+            closable
+          />
+        </Styled.ErrorMessageContainer>
       </Styled.TransferCard>
     </Layout>
   );
