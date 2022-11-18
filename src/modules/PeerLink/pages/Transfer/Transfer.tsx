@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { NextPage } from "next";
 
 import { utils } from "../../../../api/utils";
@@ -32,9 +33,7 @@ const PeerLinkTransfer: NextPage = () => {
       description="PeerLink Transfer"
       layout="peerlink"
     >
-      {/* Main Content */}
       <Styled.TransferCard>
-        {/* Transfer Fields */}
         <Styled.TransferForm
           form={transferForm}
           name="transferForm"
@@ -51,11 +50,15 @@ const PeerLinkTransfer: NextPage = () => {
         >
           <Styled.Row>
             <Styled.FromCol sm={24} md={12}>
-              <Styled.Heading>From</Styled.Heading>
+              <Styled.Heading>
+                {counterpart.translate(`transfer.from`)}
+              </Styled.Heading>
               <Styled.Row gutter={[6, 6]}>
                 <Styled.Col span={12}>
                   <Form.Item>
-                    <Styled.SubHeading>Network</Styled.SubHeading>
+                    <Styled.SubHeading>
+                      {counterpart.translate(`transfer.network`)}
+                    </Styled.SubHeading>
                     <Styled.LogoSelect
                       id="toToken"
                       assets={sidechainAssets as Asset[]}
@@ -66,7 +69,9 @@ const PeerLinkTransfer: NextPage = () => {
                 </Styled.Col>
                 <Styled.Col span={12}>
                   <Form.Item>
-                    <Styled.SubHeading>Token</Styled.SubHeading>
+                    <Styled.SubHeading>
+                      {counterpart.translate(`transfer.token`)}
+                    </Styled.SubHeading>
                     <Styled.LogoSelect
                       id="fromToken"
                       assets={sidechainAssets as Asset[]}
@@ -106,13 +111,17 @@ const PeerLinkTransfer: NextPage = () => {
               </Styled.Row>
               <Styled.SubTextContainer>
                 <Styled.Col span={12}>
-                  <Styled.LeftSubText>Available:</Styled.LeftSubText>
+                  <Styled.LeftSubText>
+                    {counterpart.translate(`transfer.available`)}:
+                  </Styled.LeftSubText>
                   <Styled.LeftSubText>
                     {"0.00"} {selectedFromToken}
                   </Styled.LeftSubText>
                 </Styled.Col>
                 <Styled.Col span={12}>
-                  <Styled.RightSubText>Approx. Value:</Styled.RightSubText>
+                  <Styled.RightSubText>
+                    {counterpart.translate(`transfer.approx_value`)}:
+                  </Styled.RightSubText>
                   <Styled.RightSubText>{"0.00"}</Styled.RightSubText>
                 </Styled.Col>
               </Styled.SubTextContainer>
@@ -124,10 +133,14 @@ const PeerLinkTransfer: NextPage = () => {
             />
 
             <Styled.ToCol sm={24} md={12}>
-              <Styled.Heading>To</Styled.Heading>
+              <Styled.Heading>
+                {counterpart.translate(`transfer.to`)}
+              </Styled.Heading>
               <Styled.Row>
                 <Form.Item>
-                  <Styled.SubHeading>Network</Styled.SubHeading>
+                  <Styled.SubHeading>
+                    {counterpart.translate(`transfer.network`)}
+                  </Styled.SubHeading>
                   <Styled.LogoSelect
                     id="toNetwork"
                     assets={sidechainAssets as Asset[]}
@@ -137,11 +150,14 @@ const PeerLinkTransfer: NextPage = () => {
                 </Form.Item>
               </Styled.Row>
               <Styled.LeftSubText>
-                Available: {"0.00"} {selectedFromToken}
+                {counterpart.translate(`transfer.available`)}: {"0.00"}{" "}
+                {selectedFromToken}
               </Styled.LeftSubText>
               <Styled.FeesContainer>
                 <Styled.SpacedTextContainer>
-                  <Styled.BodyText>Estimated transfer fees:</Styled.BodyText>
+                  <Styled.BodyText>
+                    {counterpart.translate(`transfer.estimated_transfer_fees`)}
+                  </Styled.BodyText>
                   <Styled.BodyText>
                     {"0.00"} {selectedFromToken}
                   </Styled.BodyText>
@@ -158,19 +174,19 @@ const PeerLinkTransfer: NextPage = () => {
                   htmlType="submit"
                   disabled={false}
                 >
-                  Transfer
+                  {counterpart.translate(`transfer.transfer`)}
                 </CardFormButton>
               </Styled.TransferButtonFormItem>
               <Styled.TransferLinkFormItem>
                 <CardFormButton type="link" htmlType="button" disabled={false}>
-                  See Full Transfer History
+                  {counterpart.translate(`transfer.see_full_transfer_history`)}
                 </CardFormButton>
               </Styled.TransferLinkFormItem>
             </Styled.Col>
           </Styled.Row>
         </Styled.TransferForm>
         <Styled.ErrorMessage
-          message=" Display error message here if any"
+          message={counterpart.translate(`transfer.error_message`)}
           type="warning"
           showIcon
           closable
