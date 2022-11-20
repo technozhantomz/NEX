@@ -34,7 +34,7 @@ export const PasswordModal = ({
       title={counterpart.translate(`pages.modal.password_modal.heading`, {
         neededKeyType: neededKeyType,
       })}
-      visible={visible}
+      open={visible}
       centered={true}
       onOk={() => {
         passwordModalForm.submit();

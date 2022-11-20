@@ -5,9 +5,13 @@ import { useGenerateBitcoinAddress } from "../../GenerateBitcoinAddress/hooks";
 
 import { UseDownloadBitcoinKeysResult } from "./useDownloadBitcoinKeys.types";
 
-export function useDownloadBitcoinKeys(
-  getSidechainAccounts: (accountId: string) => Promise<void>
-): UseDownloadBitcoinKeysResult {
+type Args = {
+  getSidechainAccounts: (accountId: string) => Promise<void>;
+};
+
+export function useDownloadBitcoinKeys({
+  getSidechainAccounts,
+}: Args): UseDownloadBitcoinKeysResult {
   const [downloaded, setDownloaded] = useState<boolean>(true);
   const { bitcoinSidechainAccounts, setBitcoinSidechainAccounts } =
     useGenerateBitcoinAddress(getSidechainAccounts);

@@ -1,9 +1,8 @@
 import { PaginationConfig } from "antd/lib/pagination";
 import counterpart from "counterpart";
 import Link from "next/link";
-import { CSSProperties, ReactNode } from "react";
 
-import { AvtivityInfo } from "../../../..";
+import { renderPaginationConfig, UserLinkExtractor } from "../../../..";
 import { Checkbox, List, Switch, Tooltip } from "../../../../../../ui/src";
 import { useFormDate } from "../../../../../hooks";
 import {
@@ -66,49 +65,6 @@ export const NotificationMenu = (): JSX.Element => {
     );
   };
 
-  const notificationPagination = {
-    position: "bottom",
-    showSizeChanger: false,
-    size: "small",
-    pageSize: 2,
-    hideOnSinglePage: true,
-    showLessItems: true,
-    itemRender: (
-      _page: number,
-      type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-      element: ReactNode
-    ) => {
-      if (type === "prev") {
-        return (
-          <>
-            {" "}
-            {_page > 0 ? (
-              <a
-                style={
-                  {
-                    marginRight: "8px",
-                  } as CSSProperties
-                }
-              >
-                {counterpart.translate(`buttons.previous`)}
-              </a>
-            ) : (
-              ""
-            )}
-          </>
-        );
-      }
-      if (type === "next") {
-        return (
-          <a style={{ marginLeft: "8px" } as CSSProperties}>
-            {counterpart.translate(`buttons.next`)}
-          </a>
-        );
-      }
-      return element;
-    },
-  } as PaginationConfig;
-
   return (
     <Styled.NotificationMenuCard
       onClick={(e) => {
@@ -144,7 +100,10 @@ export const NotificationMenu = (): JSX.Element => {
                   <List
                     loading={loadingNotifications}
                     pagination={
-                      !loadingNotifications ? notificationPagination : false
+                      renderPaginationConfig({
+                        loading: loadingNotifications,
+                        pageSize: 2,
+                      }) as false | PaginationConfig
                     }
                     itemLayout="vertical"
                     dataSource={dataSource}
@@ -172,7 +131,9 @@ export const NotificationMenu = (): JSX.Element => {
                                 }}
                               ></Checkbox>
                               <span className="activity-info-value">
-                                <AvtivityInfo infoString={item.activity.info} />
+                                <UserLinkExtractor
+                                  infoString={item.activity.info}
+                                />
                               </span>
                             </Tooltip>
                           </div>

@@ -2,7 +2,12 @@ import * as bitcoin from "bitcoinjs-lib";
 import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
-import { defaultToken, testnetCheck } from "../../../../api/params";
+import {
+  BITCOIN_ASSET_SYMBOL,
+  defaultToken,
+  SON_ACCOUNT_NAME,
+  testnetCheck,
+} from "../../../../api/params";
 import { utils } from "../../../../api/utils";
 import { Form } from "../../../../ui/src";
 import {
@@ -94,11 +99,11 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       ) as Account;
       const to = sonAccount
         ? sonAccount
-        : ((await getAccountByName("son-account")) as Account);
+        : ((await getAccountByName(SON_ACCOUNT_NAME)) as Account);
       const asset = assets.filter((asset) => asset.symbol === selectedAsset)[0];
 
       let memo = "";
-      if (selectedAsset !== "BTC") {
+      if (selectedAsset !== BITCOIN_ASSET_SYMBOL) {
         memo = values.withdrawAddress;
       }
       const trx = buildTransferTransaction(
@@ -145,7 +150,10 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       values.withdrawAddress !== bitcoinSidechainAccount?.withdraw_address ||
       values.withdrawPublicKey !== bitcoinSidechainAccount?.withdraw_public_key;
 
-    if (selectedAsset === "BTC" && btcSidechainAddressesChanged) {
+    if (
+      selectedAsset === BITCOIN_ASSET_SYMBOL &&
+      btcSidechainAddressesChanged
+    ) {
       const transactions: Transaction[] = [];
       const deleteTrx = buildDeletingBitcoinSidechainTransaction(
         id,
@@ -372,7 +380,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       }
     }
     setWithdrawAddress(value);
-    if (selectedAsset === "BTC") {
+    if (selectedAsset === BITCOIN_ASSET_SYMBOL) {
       const error = validateBtcWithdrawAddress(value);
       if (error !== "") {
         return Promise.reject(new Error(error));
@@ -448,7 +456,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
 
   useEffect(() => {
     if (
-      selectedAsset === "BTC" &&
+      selectedAsset === BITCOIN_ASSET_SYMBOL &&
       !loadingSidechainAccounts &&
       bitcoinSidechainAccount &&
       hasBTCDepositAddress

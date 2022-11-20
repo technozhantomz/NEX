@@ -14,8 +14,9 @@ export const DownloadBitcoinKeys = ({
   bitcoinSidechainAccount,
   getSidechainAccounts,
 }: Props): JSX.Element => {
-  const { downloaded, downloadPrivateKeys } =
-    useDownloadBitcoinKeys(getSidechainAccounts);
+  const { downloaded, downloadPrivateKeys } = useDownloadBitcoinKeys({
+    getSidechainAccounts,
+  });
 
   return (
     <>

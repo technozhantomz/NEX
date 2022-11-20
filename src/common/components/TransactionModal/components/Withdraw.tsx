@@ -1,6 +1,7 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 
+import { BITCOIN_ASSET_SYMBOL } from "../../../../api/params";
 import * as Styled from "../TransactionModal.styled";
 
 type Props = {
@@ -26,7 +27,7 @@ export const Withdraw = ({
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>
-          {asset === "BTC"
+          {asset === BITCOIN_ASSET_SYMBOL
             ? counterpart.translate(`field.placeholder.withdraw_address`)
             : counterpart.translate(
                 `field.placeholder.hive_blockchain_account`

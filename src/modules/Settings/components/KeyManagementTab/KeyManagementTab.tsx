@@ -44,7 +44,7 @@ export const KeyManagementTab = (): JSX.Element => {
         </Styled.PasswordFormItem>
 
         <Styled.LabelWrapper>
-          <Styled.Label strong>
+          <Styled.Label>
             {counterpart.translate(`field.labels.select_keys`)}
             <InfoCircleOutlined />
           </Styled.Label>

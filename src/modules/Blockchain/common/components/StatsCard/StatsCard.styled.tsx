@@ -3,6 +3,7 @@ import { colors } from "../../../../../ui/src/colors";
 import { mixIns } from "../../../../../ui/src/mixins";
 
 export const StatsCard = styled.div`
+  transition: 0.3s;
   height: 120px;
   min-width: 260px;
   border: 1px solid ${colors.borderColorBase};

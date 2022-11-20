@@ -3,13 +3,16 @@ import Link from "next/link";
 import React from "react";
 
 import { defaultToken } from "../../../../api/params";
-import { PasswordModal, TransactionModal } from "../../../../common/components";
+import {
+  PasswordModal,
+  TransactionModal,
+  UserLinkExtractor,
+} from "../../../../common/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
 import { InfoCircleOutlined } from "../../../../ui/src";
 
 import * as Styled from "./MembershipTab.styled";
-import { MembershipInfo } from "./components";
-import { useMembershipTab } from "./hooks/useMembershipTab";
+import { useMembershipTab } from "./hooks";
 
 export const MembershipTab = (): JSX.Element => {
   const {
@@ -121,7 +124,7 @@ export const MembershipTab = (): JSX.Element => {
               <InfoCircleOutlined />
             </Styled.Heading>
             <Styled.Paragraph>
-              <MembershipInfo
+              <UserLinkExtractor
                 infoString={counterpart.translate(
                   `pages.settings.membership.fee_allocation_description`,
                   {
@@ -219,7 +222,7 @@ export const MembershipTab = (): JSX.Element => {
               {counterpart.translate(`pages.settings.membership.pending_fees`)}
             </Styled.Heading>
             <Styled.Paragraph>
-              <MembershipInfo
+              <UserLinkExtractor
                 infoString={counterpart.translate(
                   `pages.settings.membership.pending_fee_description`,
                   {

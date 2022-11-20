@@ -1,7 +1,6 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { defaultToken } from "../../../../api/params";
 import * as Styled from "../TransactionModal.styled";
 
 type Props = {
@@ -10,6 +9,7 @@ type Props = {
   asset: string;
   to: string;
   amount: string;
+  blockchain: string;
 };
 
 export const Transfer = ({
@@ -18,12 +18,17 @@ export const Transfer = ({
   asset,
   to,
   amount,
+  blockchain,
 }: Props): JSX.Element => {
   return (
     <>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.placeholder.from`)}</p>
         <Link href={`/user/${account}`}>{account}</Link>
+      </Styled.DetailContainer>
+      <Styled.DetailContainer>
+        <p>{counterpart.translate(`field.labels.blockchain`)}</p>
+        <p>{blockchain}</p>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.placeholder.to`)}</p>
@@ -39,7 +44,7 @@ export const Transfer = ({
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.labels.fee`)}</p>
-        <p>{`${fee} ${defaultToken}`}</p>
+        <p>{`${fee}`}</p>
       </Styled.DetailContainer>
     </>
   );

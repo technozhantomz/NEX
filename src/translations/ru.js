@@ -525,6 +525,7 @@ export const ru = {
     next: "следующий",
     previous: "предыдущий",
     show_only_unread: "Показать только непрочитанные",
+    receive: "Получать",
   },
   pages: {
     logout: {
@@ -578,6 +579,17 @@ export const ru = {
         merkle_root: "Корень Меркла",
         previous_secret: "Предыдущий секрет",
         witness_signature: "Подпись свидетеля",
+        search_transactions: "Поиск транзакций",
+      },
+      transaction_detials: {
+        transaction: "Транзакция",
+        transaction_id: "Идентификатор транзакции",
+        ref_block_prefix: "Префикс блока ссылки",
+        ref_block_num: "Номер блока ссылок",
+        signatures: "Подписи",
+        see_details: "Подробности здесь",
+        details: "Подробности",
+        results: "Результаты",
       },
       assets: {
         heading: "Активы PeerPlays",
@@ -623,7 +635,24 @@ export const ru = {
       heading: "Бумажник",
       activities: "мероприятия",
       assets: "Ресурсы",
+      send: "Отправлять",
+      receive: "Получать",
       back_to_assets: "Назад к активам",
+      nfts: "NFTs",
+      nft_store: "Магазин NFT",
+      nft_search: "Поиск NFTs",
+      available_assets: "Доступные активы",
+      receive_assets: "Получить активы",
+      select_this_asset: "Выберите этот объект",
+      select_to_receive: "Выберите актив для получения",
+      no_btc_address: "Биткойн-адрес еще не связан с вашей учетной записью",
+      receive_selected_asset_instruction:
+        "Чтобы получить %(assetSymbol)s, отправьте средства на %(account)s в блокчейне Peerplays",
+      send_assets: "Отправить активы",
+      clear_form: "Наглядная форма",
+      select_asset: "Выберите актив",
+      select_blockchain: "Выберите блокчейн",
+      available_to_send: "Доступно для отправки:",
     },
     market: {
       heading: "Рынок",
@@ -828,6 +857,7 @@ export const ru = {
       from: "из",
     },
     labels: {
+      blockchain: "Блокчейн",
       swap_fee_info: "Для завершения обмена применяются следующие сборы",
       generate_btc_deposit_address:
         "Создайте биткойн-адрес, чтобы вы могли внести BTC на свою учетную запись Peerplays.",
@@ -850,8 +880,9 @@ export const ru = {
       fees_label: "Сборы: ",
       total_transaction: "Всего транзакций: ",
       withdrawal_confirmation_time: "Время подтверждения: ",
-      btc_withdrawal_confirmation_time: "~10 minutes",
-      hive_withdrawal_confirmation_time: "~3 minutes",
+      btc_withdrawal_confirmation_time: "~10 минуты",
+      hive_withdrawal_confirmation_time: "~3 минуты",
+      peerplays_confirmation_time: "~3 секунды",
       estimated_fees_label: "Расчетные сборы: ",
       fees: "Сборы: %(feeAmount)s %(defaultAsset)s",
       market_fee: "Рыночная комиссия",
@@ -910,6 +941,7 @@ export const ru = {
       wallet_lock: "Блокировка кошелька (минуты)",
       use_whalevault: "Используйте расширение WhaleVault",
       unsaved_changes: "У вас есть несохраненные изменения в настройках",
+      coins_token: "Монеты/Жетоны",
     },
     comments: {
       deposit_hbd:
@@ -934,6 +966,9 @@ export const ru = {
       account_updated: "аккаунт обновлен",
     },
     errors: {
+      first_select_asset: "Сначала выберите объект",
+      first_generate_deposit_addresses:
+        "Сначала сгенерируйте биткойн-адреса на вкладке «Депозит» на панели управления.",
       loading_sidechain_accounts:
         "Подождите, пока загрузятся сайдчейн-аккаунты.",
       unable_to_create_account:
@@ -1007,6 +1042,9 @@ export const ru = {
       keys_already_used: "Эти ключи уже используются для %(role)s разрешения",
       need_to_vest_gpos: "Сначала вам нужно пополнить баланс GPOS.",
       asset_required: "Требуется актив",
+      blockchain_required: "Требуется блокчейн",
+      choose_another_blockchain:
+        "Пожалуйста, выберите другой блокчейн для вывода",
       cannot_send_yourself: "Не могу отправить себе",
       unable_transaction: "Невозможно обработать транзакцию!",
       not_added_to_whalevault: "Эта учетная запись не добавлена в WhaleVault",
@@ -1074,10 +1112,22 @@ export const ru = {
     category: "категория",
     active: "Активный",
     key: "ключ",
+    actions: "Действия",
+    in_orders: "В заказах",
     ref_block_prefix: "Префикс блока ссылок",
     ref_block_num: "Блок ссылок №",
     extensions: "Расширения",
     status: "Статус",
+    img: "Изображение",
+    maker: "Мастер",
+    collection: "Коллекция",
+    best_offer: "Лучшее предложение",
+    quantity: "Количество",
+    on_sale: "В продаже",
+    number: "#",
+    operation_id: "Идентификатор операции",
+    operation_type: "Тип операции",
+    fees: "Сборы",
   },
   tableFilters: {
     avtive: "Активный",
@@ -1088,6 +1138,8 @@ export const ru = {
     remove: "Удалить",
     pending_add: "Ожидание добавления",
     pending_remove: "Ожидание удаления",
+    not_for_sale: "Не продается",
+    on_sale: "В продаже",
   },
   tooltips: {
     copy: "копировать",

@@ -33,6 +33,25 @@ export const PairModal = ({
     handleValuesChange,
   } = usePairModal({ setIsVisible, currentPair });
 
+  const footerButtons = [
+    <Styled.PairModalFormButton
+      key="submit"
+      type="primary"
+      onClick={() => {
+        pairModalForm.submit();
+      }}
+    >
+      {counterpart.translate(`buttons.confirm`)}
+    </Styled.PairModalFormButton>,
+    <Styled.PairModalFormButton
+      key="back"
+      onClick={handleCancel}
+      className="cancel"
+    >
+      {counterpart.translate(`buttons.cancel`)}
+    </Styled.PairModalFormButton>,
+  ];
+
   useResetFormOnOpenModal(pairModalForm, isVisible);
   return (
     <Styled.PairModal
@@ -41,6 +60,7 @@ export const PairModal = ({
       centered={true}
       onOk={pairModalForm.submit}
       onCancel={handleCancel}
+      footer={footerButtons}
     >
       <Styled.PairModalForm
         form={pairModalForm}
