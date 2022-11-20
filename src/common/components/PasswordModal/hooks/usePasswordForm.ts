@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
-import { CheckboxChangeEvent, Form, FormInstance } from "../../../../ui/src";
+import { CheckboxChangeEvent, Form } from "../../../../ui/src";
 import { useAccount } from "../../../hooks";
 import { useUserContext } from "../../../providers";
 import { KeyType } from "../../../types";
@@ -18,22 +18,9 @@ export function usePasswordForm({ neededKeyType }: Props): IUsePasswordForm {
   const { validateAccountPassword, _validateUseWhaleVault } = useAccount();
   const [useWhaleVault, setUseWhaleVault] = useState<boolean>(false);
 
-  const useResetFormOnCloseModal = (
-    form: FormInstance<PasswordForm>,
-    visible: boolean
-  ) => {
-    const prevVisibleRef = useRef<boolean>();
-    useEffect(() => {
-      prevVisibleRef.current = visible;
-    }, [visible]);
-    const prevVisible = prevVisibleRef.current;
-
-    useEffect(() => {
-      if (!visible && prevVisible) {
-        form.resetFields();
-      }
-    }, [visible]);
-  };
+  const resetForm = useCallback(() => {
+    passwordModalForm.resetFields();
+  }, [passwordModalForm]);
 
   const onChangeUseWhaleVault = (e: CheckboxChangeEvent) => {
     setUseWhaleVault(e.target.checked);
@@ -99,8 +86,8 @@ export function usePasswordForm({ neededKeyType }: Props): IUsePasswordForm {
   return {
     passwordModalForm,
     formValidation,
-    useResetFormOnCloseModal,
     onChangeUseWhaleVault,
     useWhaleVault,
+    resetForm,
   };
 }

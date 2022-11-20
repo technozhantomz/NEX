@@ -95,7 +95,6 @@ export function SettingsProvider({
   const [latencyChecks, setLatencyChecks] = useLocalStorage(
     "latency_checks"
   ) as [number, (value: number) => void];
-
   const [connectedNode, _setConnectedNode] = useState<string>("");
 
   const setConnectedNode = useCallback(
@@ -197,11 +196,16 @@ export function SettingsProvider({
     });
   }, []);
 
+  let didInit = false;
+
   useEffect(() => {
-    setLoading(true);
-    initApplication().then(() => {
-      setLoading(false);
-    });
+    if (!didInit) {
+      didInit = true;
+      setLoading(true);
+      initApplication().then(() => {
+        setLoading(false);
+      });
+    }
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Notification } from "../../../../../../types";
 
@@ -14,13 +14,10 @@ export function useNotificationMenu({
   loadingNotifications,
 }: Props): UseNotificationMenuResult {
   const [showUnreadOnly, setShowUnreadOnly] = useState<boolean>(false);
-  const [groupedNotificationsByDate, setGroupedNotificationsByDate] = useState<{
-    [time: string]: Notification[];
-  }>({});
 
-  const clusterNotificationsByDate = useCallback(() => {
+  const groupedNotificationsByDate = useMemo(() => {
     if (!loadingNotifications && notifications && notifications.length) {
-      const groupedNotificationsByDate = notifications.reduce(
+      const _groupedNotificationsByDate = notifications.reduce(
         (previousValue, currentValue) => {
           const time = new Date(currentValue.activity.time).toDateString();
 
@@ -41,21 +38,16 @@ export function useNotificationMenu({
           [time: string]: Notification[];
         }
       );
-      setGroupedNotificationsByDate(groupedNotificationsByDate);
+      return _groupedNotificationsByDate;
     } else {
-      setGroupedNotificationsByDate({});
+      return {};
     }
   }, [
     notifications,
     notifications && notifications.length,
     loadingNotifications,
-    setGroupedNotificationsByDate,
     showUnreadOnly,
   ]);
-
-  useEffect(() => {
-    clusterNotificationsByDate();
-  }, [clusterNotificationsByDate]);
 
   return {
     showUnreadOnly,

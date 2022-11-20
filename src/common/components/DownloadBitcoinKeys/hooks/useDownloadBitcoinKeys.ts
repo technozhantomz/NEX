@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useGenerateBitcoinAddress } from "../../GenerateBitcoinAddress/hooks";
 
@@ -12,9 +12,9 @@ export function useDownloadBitcoinKeys(
   const { bitcoinSidechainAccounts, setBitcoinSidechainAccounts } =
     useGenerateBitcoinAddress(getSidechainAccounts);
 
-  useEffect(() => {
-    if (bitcoinSidechainAccounts) setDownloaded(false);
-  }, [bitcoinSidechainAccounts]);
+  if (bitcoinSidechainAccounts && downloaded) {
+    setDownloaded(false);
+  }
 
   const downloadPrivateKeys = (sidechainDepositAddress: string): void => {
     const element = document.createElement("a");

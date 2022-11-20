@@ -14,10 +14,10 @@ import { ApisInstanceType, BlockData } from "../../types";
 
 import { ChainStoreContextType } from "./ChainStoreProvider.types";
 
-interface Props {
+type Props = {
   children: React.ReactNode;
   apiInstance: ApisInstanceType | undefined;
-}
+};
 
 const defaultChainStoreState: ChainStoreContextType =
   {} as ChainStoreContextType;

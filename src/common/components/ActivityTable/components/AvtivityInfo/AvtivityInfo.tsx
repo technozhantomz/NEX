@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 import { useUserContext } from "../../../../providers";
 
@@ -8,13 +7,9 @@ type Props = {
 };
 
 export const AvtivityInfo = ({ infoString }: Props): JSX.Element => {
-  const [stringParts, setStringParts] = useState<string[]>([]);
-
   const { localStorageAccount } = useUserContext();
 
-  useEffect(() => {
-    setStringParts(infoString.split(","));
-  }, [infoString]);
+  const stringParts = infoString.split(",");
 
   const getUserLink = (userLink: string, key: number) => {
     const trimedUserLink = userLink.replace(/\s/g, "");

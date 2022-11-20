@@ -13,7 +13,7 @@ export function useActivityTable({
   userName,
   isWalletActivityTable = false,
 }: UseActivityTableArgs): UseActivityTableResult {
-  const [activitiesRows, _setActivitiesRows] = useState<ActivityRow[]>([]);
+  const [activitiesRows, setActivitiesRows] = useState<ActivityRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const { getActivitiesRows } = useActivity();
@@ -48,12 +48,11 @@ export function useActivityTable({
         localDate.getMonth() + 1
       }-${localDate.getDate()} ${dateObj.time}`;
     },
-    [sm]
+    [sm, convertUTCDateToLocalDate]
   );
 
-  const setActivitiesRows = useCallback(async () => {
+  const formActivitiesRows = useCallback(async () => {
     try {
-      setLoading(true);
       const activityRows = await getActivitiesRows(
         userName as string,
         isWalletActivityTable
@@ -64,16 +63,30 @@ export function useActivityTable({
           time: formDate(activityRow.time),
         } as ActivityRow;
       });
-      _setActivitiesRows(timeModifiedActivityRows);
-      setLoading(false);
+      return timeModifiedActivityRows;
     } catch (e) {
-      setLoading(false);
       console.log(e);
+      return [] as ActivityRow[];
     }
-  }, [setLoading, _setActivitiesRows, isWalletActivityTable, userName]);
+  }, [getActivitiesRows, isWalletActivityTable, userName, formDate]);
 
   useEffect(() => {
-    setActivitiesRows();
+    let ignore = false;
+
+    async function startFormingActivityRows() {
+      setLoading(true);
+      const _activitiesRows = await formActivitiesRows();
+      if (!ignore) {
+        setActivitiesRows(_activitiesRows);
+        setLoading(false);
+      }
+    }
+
+    startFormingActivityRows();
+
+    return () => {
+      ignore = true;
+    };
   }, [userName]);
 
   return { activitiesRows, loading };
