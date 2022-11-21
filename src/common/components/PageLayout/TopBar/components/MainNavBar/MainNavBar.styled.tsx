@@ -5,6 +5,7 @@ import {
 } from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
+import { mixIns } from "../../../../../../ui/src/mixins";
 
 export const MainNavBar = styled.div`
   display: flex;
@@ -13,7 +14,7 @@ export const MainNavBar = styled.div`
   justify-content: space-around;
   color: ${colors.white};
   .hambuger {
-    font-size: 2em;
+    font-size: 2.4em;
     font-weight: bold;
     margin-left: 8px;
   }
@@ -76,7 +77,7 @@ export const MenuWrapper = styled.div`{
           right:110px;
           width:325px;
           min-height:311px;
-          border-radius: 4px;
+          ${mixIns.borderRadius}
       }
   }
 `;
@@ -105,4 +106,36 @@ export const TopBar = styled.div`
 
 export const MainNavBarAvatar = styled(UiAvatar)`
   cursor: pointer;
+`;
+
+export const PeerLinkBadgeWrapper = styled.div`
+  margin-right: 12px;
+  ${breakpoint.sm} {
+    margin-right: 35px;
+  }
+`;
+
+export const PeerLinkWalletBadge = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  ${mixIns.borderRadius}
+  background-color: ${colors.successTag};
+  .metamask-badge {
+    margin-left: 19px;
+  }
+  ${breakpoint.sm} {
+    padding: 12px 21px;
+  }
+`;
+
+export const PeerLinkWalletAccount = styled.span`
+  max-width: 106px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: ${colors.textColor};
+  font-sixe: 16px;
+  font-weight: 400;
+  margin-left: 13px;
 `;

@@ -5,7 +5,11 @@ import { Logo } from "../../../../ui/src/icons";
 import * as Styled from "./TopBar.styled";
 import { MainNavBar } from "./components/MainNavBar";
 
-export const TopBar = (): JSX.Element => {
+type Props = {
+  layout?: string;
+};
+
+export const TopBar = ({ layout }: Props): JSX.Element => {
   return (
     <Styled.TopBar className="top-bar">
       <div className={"topbar-left"}>
@@ -14,12 +18,16 @@ export const TopBar = (): JSX.Element => {
             <a className="logo-link">
               <Logo className={"logo"} />
               <h1 className="peer">
-                PEER<span className="plays">PLAYS</span>
+                PEER
+                {layout === "peerlink" ? (
+                  <span className="link">LINK</span>
+                ) : (
+                  <span className="plays">PLAYS</span>
+                )}
               </h1>
             </a>
           </Link>
-          <p className="dex-logo">DEX</p>
-          <p className="link-logo">LINK</p>
+          {layout === "dex" ? <p className="dex-logo">DEX</p> : ""}
         </div>
       </div>
       <div className={"topbar-right"}>
