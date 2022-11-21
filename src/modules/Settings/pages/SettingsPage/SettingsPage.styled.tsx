@@ -35,7 +35,7 @@ export const SettingsCard = styled(UiCard)`
   .ant-card-body {
     padding: 0;
     width: 100%;
-    border-radius: 4px;
+    ${mixIns.borderRadius}
     opacity: 1;
     .ant-tabs-tab,
     .ant-tabs-extra-content {
