@@ -130,6 +130,13 @@ export const VoteTable = ({
             itemLayout="vertical"
             dataSource={searchDataSource}
             loading={loading}
+            pagination={
+              renderPaginationConfig({
+                loading,
+                pageSize: 10,
+                showSizeChanger: true,
+              }) as false | PaginationConfig
+            }
             renderItem={(item) => (
               <Styled.VoteListItem key={(item as VoteRow).key}>
                 <Styled.VoteItemContent>
@@ -307,11 +314,6 @@ export const VoteTable = ({
                 </Styled.VoteItemContent>
               </Styled.VoteListItem>
             )}
-            pagination={
-              renderPaginationConfig({ loading, pageSize: 3 }) as
-                | false
-                | PaginationConfig
-            }
           />
         ) : (
           <Styled.VoteTable
@@ -319,9 +321,11 @@ export const VoteTable = ({
             dataSource={searchDataSource}
             loading={loading}
             pagination={
-              renderPaginationConfig({ loading, pageSize: 5 }) as
-                | false
-                | TablePaginationConfig
+              renderPaginationConfig({
+                loading,
+                pageSize: 10,
+                showSizeChanger: true,
+              }) as false | TablePaginationConfig
             }
             size="small"
           />
