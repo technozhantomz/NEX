@@ -851,6 +851,18 @@ export const en = {
         heading: "Your password or %(neededKeyType)s key is needed",
       },
     },
+    peerlink: {
+      heading: "PeerLink",
+      connect: {
+        heading: "Connect",
+        connected: "Connected",
+        required: "Required",
+        connect_metamask: "Connect MetaMask",
+      },
+      transfer: {
+        heading: "Transfer",
+      },
+    },
   },
   links: {
     create_account: "Create account",

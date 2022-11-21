@@ -820,6 +820,18 @@ export const ru = {
         heading: "Требуется ваш пароль или ключ %(neededKeyType)s",
       },
     },
+    peerlink: {
+      heading: "PeerLink",
+      connect: {
+        heading: "Соединять",
+        connected: "Подключено",
+        required: "Обязательно",
+        connect_metamask: "Соединять MetaMask",
+      },
+      transfer: {
+        heading: "Передача",
+      },
+    },
   },
   links: {
     create_account: "Зарегистрироваться",
