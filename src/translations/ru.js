@@ -1167,4 +1167,17 @@ export const ru = {
       "Используется для создания депозитного адреса PeerPlays с мультиподписью выше.",
     peerplays_btc_deposit_address: "Адрес депозита PeerPlays",
   },
+  transfer: {
+    transfer: "Передача",
+    network: "Сеть",
+    token: "Токен",
+    from: "Из",
+    to: "К",
+    max: "Макс",
+    available: "Доступный",
+    estimated_transfer_fees: "Ориентировочная комиссия за перевод",
+    approx_value: "Приблиз. значение",
+    error_message: "Показать здесь сообщение об ошибке, если таковое имеется",
+    see_full_transfer_history: "Посмотреть полную историю переводов",
+  },
 };

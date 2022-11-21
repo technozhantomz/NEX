@@ -18,9 +18,11 @@ export const defaultChainParams = {
   address_prefix: defaultToken,
 };
 
-export const HIVE_NETWORK = "Hive";
 export const BITCOIN_NETWORK = "Bitcoin";
 export const BITCOIN_ASSET_SYMBOL = "BTC";
+export const ETHEREUM_NETWORK = "Ethereum";
+export const ETHEREUM_ASSET_SYMBOL = "ETH";
+export const HIVE_NETWORK = "Hive";
 export const HIVE_ASSET_SYMBOL = "HIVE";
 export const HBD_ASSET_SYMBOL = "HBD";
 export const SON_ACCOUNT_NAME = "son-account";
