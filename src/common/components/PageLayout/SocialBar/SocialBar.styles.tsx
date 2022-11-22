@@ -20,6 +20,7 @@ export const SocialLinks = styled.div`
 `;
 
 export const SocialLink = styled.a`
+  align-items: center;
   display: flex;
   .anticon {
     color: ${colors.white};
