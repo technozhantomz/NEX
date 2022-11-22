@@ -38,11 +38,17 @@ export const VoteTable = ({
   addChange,
   cancelChange,
 }: Props): JSX.Element => {
+  const isWitnessTab = tab === "witnesses";
   const { searchDataSource, setSearchDataSource, getActionString } =
     useVoteTable({ votes });
   const { sm } = useViewportContext();
   const { localStorageAccount } = useUserContext();
-  const columns = showVotesColumns(addChange, cancelChange, getActionString);
+  const columns = showVotesColumns(
+    addChange,
+    cancelChange,
+    getActionString,
+    isWitnessTab
+  );
   const componentRef = useRef<HTMLDivElement>(null);
 
   const renderCancelActionRows = (item: VoteRow) =>
@@ -124,6 +130,13 @@ export const VoteTable = ({
             itemLayout="vertical"
             dataSource={searchDataSource}
             loading={loading}
+            pagination={
+              renderPaginationConfig({
+                loading,
+                pageSize: 10,
+                showSizeChanger: true,
+              }) as false | PaginationConfig
+            }
             renderItem={(item) => (
               <Styled.VoteListItem key={(item as VoteRow).key}>
                 <Styled.VoteItemContent>
@@ -183,60 +196,124 @@ export const VoteTable = ({
                       {(item as VoteRow).votes}
                     </span>
                   </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {columns[5].title()}
-                    </span>
-                    <span className="item-info-value">
-                      {(item as VoteRow).action === "cancel"
-                        ? renderCancelActionRows(item as VoteRow)
-                        : renderAddActionRows(item as VoteRow)}
-                    </span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {columns[6].title()}
-                    </span>
-                    <span className="item-info-value">
-                      {(item as VoteRow).action === "add" ||
-                      (item as VoteRow).action === "remove" ||
-                      (item as VoteRow).action === "cancel" ? (
-                        <Styled.VoteActionButton
-                          onClick={() => {
-                            if ((item as VoteRow).action === "cancel") {
-                              cancelChange((item as VoteRow).id);
-                            } else {
-                              addChange((item as VoteRow).id);
-                            }
-                          }}
-                        >
-                          {getActionString(
-                            (item as VoteRow).action
-                          ).toUpperCase()}
-                        </Styled.VoteActionButton>
-                      ) : (
-                        <span>
-                          {(item as VoteRow).action === "pending add"
-                            ? counterpart
-                                .translate(`pages.voting.actions.pending_add`)
-                                .toUpperCase()
-                            : counterpart
-                                .translate(
-                                  `pages.voting.actions.pending_remove`
-                                )
-                                .toUpperCase()}
+                  {!isWitnessTab ? (
+                    <>
+                      {" "}
+                      <div className="item-info">
+                        <span className="item-info-title">
+                          {columns[5].title()}
                         </span>
-                      )}
-                    </span>
-                  </div>
+                        <span className="item-info-value">
+                          {(item as VoteRow).action === "cancel"
+                            ? renderCancelActionRows(item as VoteRow)
+                            : renderAddActionRows(item as VoteRow)}
+                        </span>
+                      </div>
+                      <div className="item-info">
+                        <span className="item-info-title">
+                          {columns[6].title()}
+                        </span>
+                        <span className="item-info-value">
+                          {(item as VoteRow).action === "add" ||
+                          (item as VoteRow).action === "remove" ||
+                          (item as VoteRow).action === "cancel" ? (
+                            <Styled.VoteActionButton
+                              onClick={() => {
+                                if ((item as VoteRow).action === "cancel") {
+                                  cancelChange((item as VoteRow).id);
+                                } else {
+                                  addChange((item as VoteRow).id);
+                                }
+                              }}
+                            >
+                              {getActionString(
+                                (item as VoteRow).action
+                              ).toUpperCase()}
+                            </Styled.VoteActionButton>
+                          ) : (
+                            <span>
+                              {(item as VoteRow).action === "pending add"
+                                ? counterpart
+                                    .translate(
+                                      `pages.voting.actions.pending_add`
+                                    )
+                                    .toUpperCase()
+                                : counterpart
+                                    .translate(
+                                      `pages.voting.actions.pending_remove`
+                                    )
+                                    .toUpperCase()}
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <div className="item-info">
+                        <span className="item-info-title">
+                          {columns[5].title()}
+                        </span>
+                        <span className="item-info-value">
+                          <Styled.MissedBlocks>
+                            {(item as VoteRow).missedBlocks}
+                          </Styled.MissedBlocks>
+                        </span>
+                      </div>
+                      <div className="item-info">
+                        <span className="item-info-title">
+                          {columns[6].title()}
+                        </span>
+                        <span className="item-info-value">
+                          {(item as VoteRow).action === "cancel"
+                            ? renderCancelActionRows(item as VoteRow)
+                            : renderAddActionRows(item as VoteRow)}
+                        </span>
+                      </div>
+                      <div className="item-info">
+                        <span className="item-info-title">
+                          {columns[7].title()}
+                        </span>
+                        <span className="item-info-value">
+                          {(item as VoteRow).action === "add" ||
+                          (item as VoteRow).action === "remove" ||
+                          (item as VoteRow).action === "cancel" ? (
+                            <Styled.VoteActionButton
+                              onClick={() => {
+                                if ((item as VoteRow).action === "cancel") {
+                                  cancelChange((item as VoteRow).id);
+                                } else {
+                                  addChange((item as VoteRow).id);
+                                }
+                              }}
+                            >
+                              {getActionString(
+                                (item as VoteRow).action
+                              ).toUpperCase()}
+                            </Styled.VoteActionButton>
+                          ) : (
+                            <span>
+                              {(item as VoteRow).action === "pending add"
+                                ? counterpart
+                                    .translate(
+                                      `pages.voting.actions.pending_add`
+                                    )
+                                    .toUpperCase()
+                                : counterpart
+                                    .translate(
+                                      `pages.voting.actions.pending_remove`
+                                    )
+                                    .toUpperCase()}
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </Styled.VoteItemContent>
               </Styled.VoteListItem>
             )}
-            pagination={
-              renderPaginationConfig({ loading, pageSize: 3 }) as
-                | false
-                | PaginationConfig
-            }
           />
         ) : (
           <Styled.VoteTable
@@ -244,9 +321,11 @@ export const VoteTable = ({
             dataSource={searchDataSource}
             loading={loading}
             pagination={
-              renderPaginationConfig({ loading, pageSize: 5 }) as
-                | false
-                | TablePaginationConfig
+              renderPaginationConfig({
+                loading,
+                pageSize: 10,
+                showSizeChanger: true,
+              }) as false | TablePaginationConfig
             }
             size="small"
           />
