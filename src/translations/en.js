@@ -863,6 +863,9 @@ export const en = {
         heading: "Transfer",
       },
     },
+    profile: {
+      heading: "Profile",
+    },
   },
   links: {
     create_account: "Create account",

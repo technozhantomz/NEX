@@ -832,6 +832,9 @@ export const ru = {
         heading: "Передача",
       },
     },
+    profile: {
+      heading: "Profile",
+    },
   },
   links: {
     create_account: "Зарегистрироваться",

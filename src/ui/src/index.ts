@@ -58,6 +58,7 @@ export {
   SearchOutlined,
   TwitterOutlined,
   GithubOutlined,
+  ProfileOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";
