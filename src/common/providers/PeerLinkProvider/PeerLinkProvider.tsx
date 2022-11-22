@@ -5,6 +5,13 @@ import { useSessionStorage } from "../../hooks";
 
 import { Hive, MetaMask, PeerLinkContextType } from "./PeerLinkProvider.types";
 
+declare global {
+  interface Window {
+    hive_keychain: any;
+    ethereum: any;
+  }
+}
+
 type Props = {
   children: React.ReactNode;
 };
@@ -63,7 +70,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
     };
 
     try {
-      if (window.hive_keychain) {
+      if (window.hive_keychain as unknown) {
         const keychain = window.hive_keychain;
         keychain.requestSignBuffer(
           args.account,
