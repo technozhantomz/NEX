@@ -1,5 +1,6 @@
 import counterpart from "counterpart";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import { Layout } from "../../../../common/components";
@@ -7,10 +8,13 @@ import { useViewportContext } from "../../../../common/providers";
 
 import * as Styled from "./ProfilePage.styled";
 
+const { TabPane } = Styled.Tabs;
+
 const ProfilePage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
-
+  const router = useRouter();
+  const { tab } = router.query;
   return (
     <Layout
       title="Profile"
@@ -25,7 +29,23 @@ const ProfilePage: NextPage = () => {
       }}
     >
       <Styled.ProfileCard>
-        <p>Profile Page</p>
+        <Styled.Tabs
+          activeKey={`${tab ? tab : "orders"}`}
+          onTabClick={(key) => {
+            router.push(`/profile?tab=${key}`);
+            if (sm) setVisible(false);
+          }}
+        >
+          <TabPane tab="orders" key="orders">
+            <p>orders Tab</p>
+          </TabPane>
+          <TabPane tab="activity" key="activity">
+            <p>activity Tab</p>
+          </TabPane>
+          <TabPane tab="notifications" key="notifications">
+            <p>notifications Tab</p>
+          </TabPane>
+        </Styled.Tabs>
       </Styled.ProfileCard>
     </Layout>
   );
