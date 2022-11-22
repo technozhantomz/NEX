@@ -40,7 +40,7 @@ export const LoginForm: React.FC = () => {
         validateTrigger={["onChange", "onSubmit"]}
       >
         <Input
-          autoComplete="new-password"
+          autoComplete="off"
           placeholder={counterpart.translate(`field.placeholder.user_name`)}
         />
       </Form.Item>
@@ -53,7 +53,7 @@ export const LoginForm: React.FC = () => {
             validateTrigger="onSubmit"
           >
             <Input.Password
-              autoComplete="new-password"
+              autoComplete="off"
               placeholder={counterpart.translate(
                 `field.placeholder.master_password_private_key`
               )}

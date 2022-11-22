@@ -9,13 +9,13 @@ import { PowerUpForm } from "./components";
 type Props = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
-  getGposInfo: () => Promise<void>;
+  calculateGposBalances: () => Promise<void>;
 };
 
 export const PowerUpTab = ({
   gposBalances,
   loading,
-  getGposInfo,
+  calculateGposBalances,
 }: Props): JSX.Element => {
   return (
     <Styled.PowerUpTabWrapper>
@@ -68,7 +68,7 @@ export const PowerUpTab = ({
         <PowerUpForm
           gposBalances={gposBalances}
           loading={loading}
-          getGposInfo={getGposInfo}
+          calculateGposBalances={calculateGposBalances}
         />
       </Styled.PowerUpTabFormWrapper>
     </Styled.PowerUpTabWrapper>

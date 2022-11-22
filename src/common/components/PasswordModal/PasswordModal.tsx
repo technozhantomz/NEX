@@ -36,7 +36,7 @@ export const PasswordModal = ({
       title={counterpart.translate(`pages.modal.password_modal.heading`, {
         neededKeyType: neededKeyType,
       })}
-      visible={visible}
+      open={visible}
       centered={true}
       onOk={() => {
         passwordModalForm.submit();
@@ -60,7 +60,7 @@ export const PasswordModal = ({
         <Form.Item name="username">
           <Input
             disabled={true}
-            autoComplete="new-password"
+            autoComplete="off"
             placeholder={counterpart.translate(`field.placeholder.user_name`)}
           />
         </Form.Item>
@@ -78,7 +78,7 @@ export const PasswordModal = ({
                   neededKeyType: neededKeyType,
                 }
               )}
-              autoComplete="new-password"
+              autoComplete="off"
             />
           </Form.Item>
         )}

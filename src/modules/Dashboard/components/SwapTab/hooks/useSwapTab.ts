@@ -1,10 +1,9 @@
 import counterpart from "counterpart";
 import { sum } from "lodash";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
-  roundNum,
   useAccount,
   useAsset,
   useFees,
@@ -15,6 +14,7 @@ import {
 } from "../../../../../common/hooks";
 import {
   useAssetsContext,
+  usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
 import { Asset, BookedOrder, SignerKey } from "../../../../../common/types";
@@ -40,6 +40,7 @@ export function useSwap(): UseSwapResult {
       sellAssetSymbol: exchanges.swapPair?.split("_")[1],
       buyAssetSymbol: exchanges.swapPair?.split("_")[0],
     });
+  const previousPair = useRef<string>(exchanges.swapPair);
   const [lastChangedField, setLastChangedField] =
     useState<SwapInputType>("sellAsset");
   const [loadingSwapData, setLoadingSwapData] = useState<boolean>(false);
@@ -70,7 +71,8 @@ export function useSwap(): UseSwapResult {
   const { getAllAssets } = useAsset();
   const { getOrderBook } = useOrderBook();
   const { defaultAsset } = useAssetsContext();
-  const { limitByPrecision } = useAsset();
+  const { limitByPrecision, roundNum } = useAsset();
+  const { dbApi } = usePeerplaysApiContext();
 
   const calculateBasePairSellLiquidity = useCallback((asks: BookedOrder[]) => {
     const sellLiquidityVolume = sum(asks.map((ask) => Number(ask.base)));
@@ -291,9 +293,7 @@ export function useSwap(): UseSwapResult {
             const { calculatedPrice, orderPrice } =
               calculateBasePairPriceForSellAmount(numberedInputedAmount, asks);
             setCalculatedPrice(
-              Number(
-                limitByPrecision(String(calculatedPrice), sellAsset.precision)
-              )
+              Number(roundNum(calculatedPrice, sellAsset.precision))
             );
             swapForm.setFieldsValue({
               buyAmount: limitByPrecision(
@@ -315,12 +315,10 @@ export function useSwap(): UseSwapResult {
             const { calculatedPrice, orderPrice } =
               calculateBasePairPriceForBuyAmount(numberedInputedAmount, asks);
             setCalculatedPrice(
-              Number(
-                limitByPrecision(String(calculatedPrice), sellAsset.precision)
-              )
+              Number(roundNum(calculatedPrice, sellAsset.precision))
             );
             swapForm.setFieldsValue({
-              sellAmount: roundNum(
+              sellAmount: limitByPrecision(
                 String(numberedInputedAmount * calculatedPrice),
                 sellAsset.precision
               ),
@@ -399,9 +397,7 @@ export function useSwap(): UseSwapResult {
                 coreToBuyAsks
               );
             setCalculatedPrice(
-              Number(
-                limitByPrecision(String(calculatedPrice), sellAsset.precision)
-              )
+              Number(roundNum(calculatedPrice, sellAsset.precision))
             );
             swapForm.setFieldsValue({
               buyAmount: limitByPrecision(
@@ -430,9 +426,7 @@ export function useSwap(): UseSwapResult {
                 coreToBuyAsks
               );
             setCalculatedPrice(
-              Number(
-                limitByPrecision(String(calculatedPrice), sellAsset.precision)
-              )
+              Number(roundNum(calculatedPrice, sellAsset.precision))
             );
             swapForm.setFieldsValue({
               sellAmount: limitByPrecision(
@@ -529,7 +523,9 @@ export function useSwap(): UseSwapResult {
           setLastChangedField("sellAsset");
           const sellAmount = limitByPrecision(
             changedValues.sellAmount,
-            sellAsset.precision - 3
+            sellAsset.precision - 3 > 0
+              ? sellAsset.precision - 3
+              : sellAsset.precision - 2
           );
           swapForm.setFieldsValue({
             sellAmount: sellAmount,
@@ -546,7 +542,9 @@ export function useSwap(): UseSwapResult {
           setLastChangedField("buyAsset");
           const buyAmount = limitByPrecision(
             changedValues.buyAmount,
-            buyAsset.precision - 3
+            buyAsset.precision - 3 > 0
+              ? buyAsset.precision - 3
+              : buyAsset.precision - 2
           );
           swapForm.setFieldsValue({
             buyAmount: buyAmount,
@@ -588,6 +586,7 @@ export function useSwap(): UseSwapResult {
 
   const handleSellAssetChange = useCallback(
     (value: unknown) => {
+      previousPair.current = `${selectedAssetsSymbols.buyAssetSymbol}_${selectedAssetsSymbols.sellAssetSymbol}`;
       if (String(value) === selectedAssetsSymbols.buyAssetSymbol) {
         setSelectedAssetsSymbols({
           buyAssetSymbol: selectedAssetsSymbols.sellAssetSymbol,
@@ -605,6 +604,7 @@ export function useSwap(): UseSwapResult {
 
   const handleBuyAssetChange = useCallback(
     (value: unknown) => {
+      previousPair.current = `${selectedAssetsSymbols.buyAssetSymbol}_${selectedAssetsSymbols.sellAssetSymbol}`;
       if (String(value) === selectedAssetsSymbols.sellAssetSymbol) {
         setSelectedAssetsSymbols({
           sellAssetSymbol: selectedAssetsSymbols.buyAssetSymbol,
@@ -622,6 +622,7 @@ export function useSwap(): UseSwapResult {
   );
 
   const handleSwapAssets = useCallback(() => {
+    previousPair.current = `${selectedAssetsSymbols.buyAssetSymbol}_${selectedAssetsSymbols.sellAssetSymbol}`;
     setSelectedAssetsSymbols({
       buyAssetSymbol: selectedAssetsSymbols.sellAssetSymbol,
       sellAssetSymbol: selectedAssetsSymbols.buyAssetSymbol,
@@ -1107,6 +1108,97 @@ export function useSwap(): UseSwapResult {
     buyAmount: [{ validator: validateBuyAmount }],
   };
 
+  const subscribeToMarket = useCallback(async () => {
+    try {
+      await handleAssetChange();
+      if (
+        selectedAssetsSymbols.sellAssetSymbol === defaultToken ||
+        selectedAssetsSymbols.buyAssetSymbol === defaultToken
+      ) {
+        await dbApi("subscribe_to_market", [
+          async () => {
+            try {
+              await handleAssetChange();
+            } catch (e) {
+              console.log(e);
+            }
+          },
+          selectedAssetsSymbols.sellAssetSymbol,
+          selectedAssetsSymbols.buyAssetSymbol,
+        ]);
+      } else {
+        await Promise.all([
+          dbApi("subscribe_to_market", [
+            async () => {
+              try {
+                await handleAssetChange();
+              } catch (e) {
+                console.log(e);
+              }
+            },
+            defaultToken,
+            selectedAssetsSymbols.buyAssetSymbol,
+          ]),
+          dbApi("subscribe_to_market", [
+            async () => {
+              try {
+                await handleAssetChange();
+              } catch (e) {
+                console.log(e);
+              }
+            },
+            defaultToken,
+            selectedAssetsSymbols.sellAssetSymbol,
+          ]),
+        ]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [handleAssetChange, selectedAssetsSymbols, defaultToken, dbApi]);
+
+  const unsubscribeFromMarket = useCallback(async () => {
+    const previousBaseSymbol = previousPair.current.split("_")[1];
+    const previousQuoteSymbol = previousPair.current.split("_")[0];
+    if (
+      previousBaseSymbol === defaultToken ||
+      previousQuoteSymbol === defaultToken
+    ) {
+      try {
+        await dbApi("unsubscribe_from_market", [
+          () => {
+            console.log("unsubscribing");
+          },
+          previousBaseSymbol,
+          previousQuoteSymbol,
+        ]);
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      try {
+        await Promise.all([
+          dbApi("unsubscribe_from_market", [
+            () => {
+              console.log("unsubscribing");
+            },
+            previousBaseSymbol,
+            defaultToken,
+          ]),
+          dbApi("unsubscribe_from_market", [
+            () => {
+              console.log("unsubscribing");
+            },
+            previousQuoteSymbol,
+            defaultToken,
+          ]),
+        ]);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, [dbApi, defaultToken, previousPair, previousPair.current]);
+
   useEffect(() => {
     setAllAssets();
   }, [setAllAssets]);
@@ -1127,8 +1219,11 @@ export function useSwap(): UseSwapResult {
   }, [calculateSelectedAssetsSwapFee]);
 
   useEffect(() => {
-    handleAssetChange();
-  }, [selectedAssetsSymbols]);
+    subscribeToMarket();
+    return () => {
+      unsubscribeFromMarket();
+    };
+  }, [selectedAssetsSymbols, allAssets]);
 
   useEffect(() => {
     calculateBuyAssetMarketFee();

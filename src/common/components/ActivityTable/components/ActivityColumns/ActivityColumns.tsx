@@ -1,6 +1,6 @@
 import { TableHeading } from "../../../";
+import { UserLinkExtractor } from "../../../UserLinkExtractor";
 import { ActivityTag } from "../ActivityTag";
-import { AvtivityInfo } from "../AvtivityInfo";
 
 export const ActivityColumns = [
   {
@@ -18,7 +18,9 @@ export const ActivityColumns = [
     title: (): JSX.Element => <TableHeading heading={"info"} />,
     dataIndex: "info",
     key: "info",
-    render: (value: string): JSX.Element => <AvtivityInfo infoString={value} />,
+    render: (value: string): JSX.Element => (
+      <UserLinkExtractor infoString={value} />
+    ),
   },
   {
     title: (): JSX.Element => <TableHeading heading={"id"} />,

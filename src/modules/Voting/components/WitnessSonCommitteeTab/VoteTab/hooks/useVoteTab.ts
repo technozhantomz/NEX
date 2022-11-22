@@ -16,6 +16,7 @@ import {
 } from "../../../../../../common/providers";
 import {
   AccountOptions,
+  Asset,
   FullAccount,
   GlobalProperties,
   SignerKey,
@@ -29,10 +30,10 @@ import { UseVoteTabResult } from "./useVoteTab.types";
 
 type Args = {
   tab: string;
-  serverApprovedVotes: Vote[];
+  tabServerApprovedVotes: Vote[];
   allMembers: Vote[];
   fullAccount: FullAccount | undefined;
-  getVotes: () => Promise<void>;
+  getUserVotes: () => Promise<void>;
   allMembersIds: [string, string][];
   votesLoading: boolean;
   totalGpos: number;
@@ -40,12 +41,13 @@ type Args = {
 
 export function useVoteTab({
   tab,
-  serverApprovedVotes,
+  tabServerApprovedVotes,
   allMembers,
   allMembersIds,
   fullAccount,
-  getVotes,
+  getUserVotes,
   totalGpos,
+  votesLoading,
 }: Args): UseVoteTabResult {
   const [pendingChanges, setPendingChanges] = useState<VoteRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -59,9 +61,12 @@ export function useVoteTab({
     useState<string>("");
   const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const [globalProperties, _setGlobalProperties] = useState<
+    GlobalProperties | undefined
+  >();
   const afterCloseTransactionModal = useRef<() => void>();
 
-  const { formAssetBalanceById } = useAsset();
+  const { formKnownAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { formAccountBalancesByName } = useAccount();
   const { id, assets, name, localStorageAccount } = useUserContext();
@@ -208,7 +213,7 @@ export function useVoteTab({
         }
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
-          await getVotes();
+          getUserVotes();
           setIsVotesChanged(false);
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
@@ -239,7 +244,7 @@ export function useVoteTab({
       pendingTransaction,
       formAccountBalancesByName,
       localStorageAccount,
-      getVotes,
+      getUserVotes,
       setServerApprovedRows,
     ]
   );
@@ -253,7 +258,7 @@ export function useVoteTab({
   }, []);
 
   const formVoteRow = useCallback(
-    async (
+    (
       vote: Vote,
       votesIds: [string, string][],
       action:
@@ -262,99 +267,103 @@ export function useVoteTab({
         | "pending add"
         | "pending remove"
         | "cancel"
-        | ""
-    ): Promise<VoteRow> => {
-      try {
-        const gpo: GlobalProperties = await dbApi("get_global_properties");
-        if (defaultAsset !== undefined) {
-          let voteType: VoteType;
-          let voteActive: boolean;
-          switch (parseInt(vote.vote_id.charAt(0))) {
-            case 0:
-              voteType = "committees";
-              voteActive =
-                gpo["active_committee_members"].indexOf(vote.id) >= 0
-                  ? true
-                  : false;
-              break;
-            case 3:
-              voteType = "sons";
-              voteActive =
-                gpo.active_sons.find((son) => son.son_id === vote.id) !==
-                undefined
-                  ? true
-                  : false;
-              break;
-            default:
-              voteType = "witnesses";
-              voteActive =
-                gpo["active_witnesses"].indexOf(vote.id) >= 0 ? true : false;
-          }
-          const name = votesIds.filter((voteId) => voteId[1] === vote.id)[0][0];
-
-          const votesAsset = await formAssetBalanceById(
-            defaultAsset.id,
-            Number(vote.total_votes)
-          );
-
-          return {
-            id: vote.vote_id,
-            key: vote.vote_id,
-            rank: 0,
-            type: voteType,
-            name: name,
-            url: vote.url,
-            votes: `${votesAsset.amount} ${votesAsset.symbol}`,
-            action: action,
-            active: voteActive,
-            status: action === "remove" ? "approved" : "unapproved",
-          } as VoteRow;
-        } else {
-          return {} as VoteRow;
-        }
-      } catch (e) {
-        console.log(e);
-        return {} as VoteRow;
+        | "",
+      defaultAsset: Asset,
+      globalProperties: GlobalProperties
+    ): VoteRow => {
+      let voteType: VoteType;
+      let voteActive: boolean;
+      switch (parseInt(vote.vote_id.charAt(0))) {
+        case 0:
+          voteType = "committees";
+          voteActive =
+            globalProperties["active_committee_members"].indexOf(vote.id) >= 0
+              ? true
+              : false;
+          break;
+        case 3:
+          voteType = "sons";
+          voteActive =
+            globalProperties.active_sons.find(
+              (son) => son.son_id === vote.id
+            ) !== undefined
+              ? true
+              : false;
+          break;
+        default:
+          voteType = "witnesses";
+          voteActive =
+            globalProperties["active_witnesses"].indexOf(vote.id) >= 0
+              ? true
+              : false;
       }
+      const name = votesIds.filter((voteId) => voteId[1] === vote.id)[0][0];
+
+      const votesAsset = formKnownAssetBalanceById(
+        defaultAsset,
+        Number(vote.total_votes)
+      );
+
+      return {
+        id: vote.vote_id,
+        key: vote.vote_id,
+        rank: 0,
+        type: voteType,
+        name: name,
+        url: vote.url,
+        votes: `${votesAsset?.amount} ${votesAsset?.symbol}`,
+        action: action,
+        active: voteActive,
+        status: action === "remove" ? "approved" : "unapproved",
+      } as VoteRow;
     },
-    [formAssetBalanceById, defaultAsset]
+    [formKnownAssetBalanceById]
   );
 
-  const formTableRows = useCallback(async () => {
-    try {
+  const formTableRows = useCallback(() => {
+    if (
+      !votesLoading &&
+      defaultAsset !== undefined &&
+      globalProperties !== undefined
+    ) {
       setLoading(true);
-      const allMembersRows = await Promise.all(
-        allMembers.map((member) => {
-          return formVoteRow(
-            member,
-            allMembersIds,
-            fullAccount?.votes.some((vote) => vote.id === member.id)
-              ? "remove"
-              : "add"
-          );
-        })
-      );
+      const allMembersRows = allMembers.map((member) => {
+        return formVoteRow(
+          member,
+          allMembersIds,
+          fullAccount?.votes.some((vote) => vote.id === member.id)
+            ? "remove"
+            : "add",
+          defaultAsset,
+          globalProperties
+        );
+      });
+
       setAllMembersRows(sortVotesRows(allMembersRows));
-      const serverApprovedRows = await Promise.all(
-        serverApprovedVotes.map((vote) => {
-          return formVoteRow(vote, allMembersIds, "remove");
-        })
-      );
+      const serverApprovedRows = tabServerApprovedVotes.map((vote) => {
+        return formVoteRow(
+          vote,
+          allMembersIds,
+          "remove",
+          defaultAsset,
+          globalProperties
+        );
+      });
       setServerApprovedRows(sortVotesRows([...serverApprovedRows]));
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
       setLoading(false);
     }
   }, [
+    votesLoading,
     setLoading,
     formVoteRow,
     allMembers,
     setAllMembersRows,
     allMembersIds,
-    serverApprovedVotes,
+    tabServerApprovedVotes,
     setServerApprovedRows,
     sortVotesRows,
+    defaultAsset,
+    globalProperties,
   ]);
 
   const checkVotesChanged = useCallback(
@@ -457,6 +466,19 @@ export function useVoteTab({
     });
     setAllMembersRows(updatedMembersRows);
   };
+
+  const setGlobalProperties = useCallback(async () => {
+    try {
+      const gpo: GlobalProperties = await dbApi("get_global_properties");
+      _setGlobalProperties(gpo);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi, _setGlobalProperties]);
+
+  useEffect(() => {
+    setGlobalProperties();
+  }, []);
 
   useEffect(() => {
     if (isArrayEqual(serverApprovedRows, pendingChanges)) {

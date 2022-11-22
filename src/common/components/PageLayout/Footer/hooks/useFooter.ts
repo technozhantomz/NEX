@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-//import { useConnectionManager } from "../../../../hooks";
 import {
   useChainStoreContext,
   useConnectionManagerContext,
@@ -13,7 +12,7 @@ export function useFooter(): UseFooterResult {
   const [isOutOfSyncModalVisible, setIsOutOfSyncModalVisible] =
     useState<boolean>(false);
   const [connected, _setConnected] = useState<boolean>(() => {
-    return !(rpcConnectionStatus === "closed");
+    return rpcConnectionStatus !== "closed";
   });
   const [hasOutOfSyncModalBeenShownOnce, setHasOutOfSyncModalBeenShownOnce] =
     useState<boolean>(false);
@@ -84,12 +83,12 @@ export function useFooter(): UseFooterResult {
   }, []);
 
   const setConnected = useCallback(() => {
-    const connected = !(rpcConnectionStatus === "closed");
+    const connected = rpcConnectionStatus !== "closed";
     _setConnected(connected);
   }, [rpcConnectionStatus, _setConnected]);
 
   const ensureConnectivity = useCallback(() => {
-    const connected = !(rpcConnectionStatus === "closed");
+    const connected = rpcConnectionStatus !== "closed";
 
     if (!connected && !connectionTimeout.current) {
       connectionTimeout.current = setTimeout(() => {

@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useBlockchain, useFormDate } from "../../../../../common/hooks";
-import { DataTableRow } from "../../BlockchainTab/hooks";
 
-import { UseBlockDetailsResult } from "./useBlockDetails.types";
+import {
+  BlockDetailsType,
+  TransactionRow,
+  UseBlockDetailsResult,
+} from "./useBlockDetails.types";
 
 export function useBlockDetails(block: number): UseBlockDetailsResult {
   const [hasNextBlock, setHasNextBlock] = useState<boolean>(false);
   const [hasPreviousBlock, setHasPreviousBlock] = useState<boolean>(false);
-  const [blockDetails, setBlockDetails] = useState<DataTableRow>({
+  const [blockDetails, setBlockDetails] = useState<BlockDetailsType>({
     key: block,
     nextSecret: "",
     previousSecret: "",
@@ -18,10 +21,10 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
     witness: "",
     witnessSignature: "",
     transactions: [],
-    transaction: 0,
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSideBlocks, setLoadingSideBlocks] = useState<boolean>(true);
+
   const { formLocalDate } = useFormDate();
   const { getBlock } = useBlockchain();
 
@@ -30,17 +33,22 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
       setLoading(true);
       const rawBlock = await getBlock(Number(block));
       if (rawBlock) {
-        const transactions = rawBlock.transactions.map((transaction, index) => {
-          return {
-            rank: index + 1,
-            id: transaction.signatures[0],
-            expiration: transaction.expiration,
-            operations: transaction.operations.length,
-            refBlockPrefix: transaction.ref_block_prefix,
-            refBlockNum: transaction.ref_block_num,
-            extensions: transaction.extensions.length,
-          };
-        });
+        const transactions: TransactionRow[] = rawBlock.transactions.map(
+          (transaction, index) => {
+            return {
+              key: index + 1,
+              rank: index + 1,
+              id: index.toString(),
+              expiration: transaction.expiration,
+              operations: transaction.operations,
+              operationResults: transaction.operation_results,
+              refBlockPrefix: transaction.ref_block_prefix,
+              refBlockNum: transaction.ref_block_num,
+              extensions: transaction.extensions,
+              signatures: transaction.signatures,
+            };
+          }
+        );
         setBlockDetails({
           key: block,
           nextSecret: rawBlock.next_secret_hash as string,
@@ -56,7 +64,6 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
           witness: rawBlock.witness_account_name,
           witnessSignature: rawBlock.witness_signature,
           transactions: transactions,
-          transaction: transactions.length,
         });
         setLoading(false);
       } else {
@@ -93,7 +100,7 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
 
   useEffect(() => {
     getBlockDetails();
-  }, [block]);
+  }, [getBlockDetails]);
 
   useEffect(() => {
     getSideBlocks();

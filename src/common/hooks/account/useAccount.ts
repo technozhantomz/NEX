@@ -49,6 +49,20 @@ export function useAccount(): UseAccountResult {
     [dbApi]
   );
 
+  const getAccounts = useCallback(
+    async (idsOrNames: string[]) => {
+      try {
+        const accounts: (Account | undefined)[] = await dbApi("get_accounts", [
+          idsOrNames,
+        ]);
+        return accounts;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
+  );
+
   const getAccountByName = useCallback(
     async (name: string) => {
       try {
@@ -72,7 +86,7 @@ export function useAccount(): UseAccountResult {
     async (fullAccount: FullAccount, password: string, keyType: KeyType) => {
       try {
         setLoading(true);
-        const assets: Asset[] = await Promise.all(
+        const assets = await Promise.all(
           fullAccount.balances.map((balance) => {
             return formAssetBalanceById(balance.asset_type, balance.balance);
           })
@@ -80,7 +94,7 @@ export function useAccount(): UseAccountResult {
         updateAccount(
           fullAccount.account.id,
           fullAccount.account.name,
-          assets,
+          assets.filter((asset) => asset !== undefined) as Asset[],
           fullAccount.account
         );
         savePassword(password, keyType);
@@ -99,7 +113,7 @@ export function useAccount(): UseAccountResult {
         setLoading(true);
         const fullAccount = await getFullAccount(name, subscription);
         if (fullAccount) {
-          const assets: Asset[] = await Promise.all(
+          const assets = await Promise.all(
             fullAccount.balances.map((balance) => {
               return formAssetBalanceById(balance.asset_type, balance.balance);
             })
@@ -107,7 +121,7 @@ export function useAccount(): UseAccountResult {
           updateAccount(
             fullAccount.account.id,
             fullAccount.account.name,
-            assets,
+            assets.filter((asset) => asset !== undefined) as Asset[],
             fullAccount.account
           );
         }
@@ -204,7 +218,49 @@ export function useAccount(): UseAccountResult {
       const user: Account = (await dbApi("get_accounts", [[userID]]))[0];
       return user.name;
     },
-    [dbApi]
+    [localStorageAccount, getAccountByName]
+  );
+
+  const getUserNamesByIds = useCallback(
+    async (ids: string[]) => {
+      const names = [...ids];
+      const witnessesIds = ids.filter((id) => id.includes("1.6."));
+      let witnesses: WitnessAccount[] = [];
+      let witnessesAccounts: Account[] = [];
+      const accountIds = ids.filter((id) => !id.includes("1.6."));
+      const accounts: Account[] = await dbApi("get_accounts", [accountIds]);
+      if (witnessesIds.length > 0) {
+        witnesses = await dbApi("get_witnesses", [witnessesIds]);
+        witnessesAccounts = await dbApi("get_accounts", [
+          witnesses.map((wit) => wit.witness_account),
+        ]);
+      }
+      const activeUser = await getAccountByName(localStorageAccount);
+      const activeUserId = activeUser?.id ?? "";
+      for (let i = 0; i < ids.length; i++) {
+        const id = ids[i];
+        if (activeUserId === id) {
+          names[i] = activeUserId;
+          continue;
+        }
+        if (id.includes("1.6.")) {
+          const witness = witnesses.find(
+            (wit) => wit.id === id
+          ) as WitnessAccount;
+          const witnessAccount = witnessesAccounts.find(
+            (account) => account.id === witness.witness_account
+          ) as Account;
+          names[i] = witnessAccount.name;
+          continue;
+        }
+        names[i] = (
+          accounts.find((account) => account.id === id) as Account
+        ).name;
+      }
+
+      return names;
+    },
+    [getAccountByName, localStorageAccount]
   );
 
   const validateWhaleVaultPubKeys = useCallback(
@@ -263,27 +319,21 @@ export function useAccount(): UseAccountResult {
               );
               if (!isValidKeys) {
                 response = "field.errors.wrong_whalevault_keys";
-                isValid = false;
               } else {
-                response = "";
                 isValid = true;
               }
             } else {
               response = "field.errors.not_added_to_whalevault";
-              isValid = false;
             }
           } else {
             response = "field.errors.whalevault_connection_error";
-            isValid = false;
           }
         } catch (e) {
           console.log(e);
           response = "field.errors.whalevault_connection_error";
-          isValid = false;
         }
       } else {
         response = "field.errors.whalevault_not_installed";
-        isValid = false;
       }
       return { response, isValid };
     },
@@ -303,5 +353,7 @@ export function useAccount(): UseAccountResult {
     getUserNameById,
     validateWhaleVaultPubKeys,
     _validateUseWhaleVault,
+    getAccounts,
+    getUserNamesByIds,
   };
 }

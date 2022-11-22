@@ -1,6 +1,6 @@
-import counterpart from "counterpart";
-import { CSSProperties, ReactNode } from "react";
+import { TablePaginationConfig } from "antd";
 
+import { renderPaginationConfig } from "..";
 import { useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityTable.styled";
@@ -34,35 +34,9 @@ export const ActivityTable = ({
           dataSource={activitiesRows}
           loading={loading}
           pagination={
-            !loading
-              ? {
-                  showSizeChanger: false,
-                  size: "small",
-                  pageSize: 15,
-                  showLessItems: true,
-                  itemRender: (
-                    _page: number,
-                    type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                    element: ReactNode
-                  ) => {
-                    if (type === "prev") {
-                      return (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.previous`)}
-                        </a>
-                      );
-                    }
-                    if (type === "next") {
-                      return (
-                        <a style={{ marginLeft: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.next`)}
-                        </a>
-                      );
-                    }
-                    return element;
-                  },
-                }
-              : false
+            renderPaginationConfig({ loading, pageSize: 15 }) as
+              | false
+              | TablePaginationConfig
           }
           size="small"
           className={`activity-table ${className ? className : ""}`}
