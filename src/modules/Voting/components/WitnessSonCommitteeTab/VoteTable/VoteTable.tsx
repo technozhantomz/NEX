@@ -314,6 +314,11 @@ export const VoteTable = ({
                 </Styled.VoteItemContent>
               </Styled.VoteListItem>
             )}
+            pagination={
+              renderPaginationConfig({ loading, pageSize: 3 }) as
+                | false
+                | PaginationConfig
+            }
           />
         ) : (
           <Styled.VoteTable
