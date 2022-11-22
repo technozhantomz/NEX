@@ -4,32 +4,30 @@ import { colors } from "../../../ui/src/colors";
 
 export const WithdrawForm = styled(CardForm)`
   .form-input {
-    font-size: 12px;
+    font-size: 14px;
     ${breakpoint.sm} {
       font-size: 20px;
     }
   }
-`;
-
-type AssetAmountProps = {
-  withassetselector: boolean;
-};
-
-export const WithdrawFormAssetAmount = styled(CardForm.Item)<AssetAmountProps>`
-  margin-bottom: 25px;
-  ${breakpoint.sm} {
-    margin-bottom: 35px;
-  }
-  .ant-input-affix-wrapper {
-    padding: 0;
-    .ant-input-prefix {
-      min-width: 200px;
-      ${breakpoint.sm} {
-        min-width: 240px;
-      }
-      width: fit-content;
+  .ant-input-group.ant-input-group-compact {
+    display: flex;
+    align-items: center;
+    height: 70px;
+    border: 1px solid ${colors.borderColorBase};
+    border-radius: 4px;
+    ${breakpoint.sm} {
+      height: 85px;
+    }
+    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:focus,
+    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input-focused,
+    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
+    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+      border: none !important;
+      box-shadow: none !important;
     }
     .ant-input {
+      border: none;
+      box-shadow: none;
       text-align: right;
       direction: ltr;
       padding-right: 30px;
@@ -37,24 +35,28 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)<AssetAmountProps>`
       ${breakpoint.sm} {
         font-size: 20px;
       }
-      height: 70px !important;
-      ${breakpoint.sm} {
-        height: 85px !important;
-      }
-    }
-    .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
-      .ant-select-selector {
-      border-color: transparent !important;
     }
   }
 `;
+
 export const WithdrawFormAsset = styled.div`
   width: 100%;
   margin-bottom: 0;
-  &.ant-form-item-has-error
-    .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
+  min-width: 200px;
+  ${breakpoint.sm} {
+    min-width: 240px;
+  }
+  width: fit-content;
+  .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer)
     .ant-select-selector {
-    border-color: none !important;
+    border: none;
+  }
+`;
+
+export const WithdrawFormAssetAmount = styled(CardForm.Item)`
+  margin-bottom: 25px;
+  ${breakpoint.sm} {
+    margin-bottom: 35px;
   }
 `;
 
@@ -82,7 +84,7 @@ export const ButtonFormItem = styled(FormItem)`
 
 export const Balance = styled.div`
   text-align: left;
-  padding-left: 50px;
+  padding-left: 15px;
   font-size: 14px;
 `;
 
@@ -121,4 +123,10 @@ export const AmountsWrapper = styled.div`
 
 export const TransactionDetails = styled.div`
   margin-bottom: 24px;
+`;
+
+export const LoadingIndicatorContainer = styled.div`
+  text-align: center;
+  display: "flex";
+  justifycontent: "center";
 `;

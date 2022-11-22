@@ -1,7 +1,6 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { KeyboardEvent } from "react";
 
 import { utils } from "../../../../api/utils";
 import {
@@ -26,8 +25,6 @@ type Props = {
   loadingSelectedPair: boolean;
   isBuyOrder: boolean;
   showTitle?: boolean;
-  refreshHistory: () => void;
-  refreshOrderBook: () => void;
   orderForm: FormInstance<OrderForm>;
 };
 
@@ -38,8 +35,6 @@ export const LimitOrderForm = ({
   loadingSelectedPair,
   isBuyOrder,
   showTitle = true,
-  refreshHistory,
-  refreshOrderBook,
   orderForm,
 }: Props): JSX.Element => {
   const router = useRouter();
@@ -65,8 +60,6 @@ export const LimitOrderForm = ({
     currentQuote,
     loadingSelectedPair,
     isBuyOrder,
-    refreshHistory,
-    refreshOrderBook,
     orderForm,
   });
 
@@ -136,11 +129,8 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
-                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                  if (!utils.isNumberKey(e)) {
-                    e.preventDefault();
-                  }
-                }}
+                onKeyPress={utils.ensureInputNumberValidity}
+                autoComplete="off"
               />
             </Styled.FormItem>
             <Styled.FormItem
@@ -165,11 +155,8 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
-                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                  if (!utils.isNumberKey(e)) {
-                    e.preventDefault();
-                  }
-                }}
+                onKeyPress={utils.ensureInputNumberValidity}
+                autoComplete="off"
               />
             </Styled.FormItem>
             <Styled.FormItem
@@ -194,11 +181,7 @@ export const LimitOrderForm = ({
                 onFocus={(e) => {
                   e.target.select();
                 }}
-                onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                  if (!utils.isNumberKey(e)) {
-                    e.preventDefault();
-                  }
-                }}
+                onKeyPress={utils.ensureInputNumberValidity}
                 disabled={true}
               />
             </Styled.FormItem>

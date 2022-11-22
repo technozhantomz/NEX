@@ -55,7 +55,7 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
   };
 
   return (
-    <Styled.SelectContainer
+    <Styled.Select
       onChange={props.onChange}
       bordered={false}
       className={props.className}
@@ -102,6 +102,6 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
               </Styled.OptionDiv>
             </Styled.SelectOptionContainer>
           ))}
-    </Styled.SelectContainer>
+    </Styled.Select>
   );
 };

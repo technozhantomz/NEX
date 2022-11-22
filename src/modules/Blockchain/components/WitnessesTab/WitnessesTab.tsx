@@ -1,16 +1,20 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { TablePaginationConfig } from "antd";
+import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
+import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
+import { renderPaginationConfig } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import {
   DownloadOutlined,
   InfoCircleOutlined,
   List,
   SearchOutlined,
+  Tooltip,
 } from "../../../../ui/src";
 import { Key } from "../../../../ui/src/icons";
 import { StatsCard } from "../../common";
@@ -122,6 +126,11 @@ export const WitnessesTab = (): JSX.Element => {
           itemLayout="vertical"
           dataSource={searchDataSource}
           loading={loading}
+          pagination={
+            renderPaginationConfig({ loading, pageSize: 5 }) as
+              | false
+              | PaginationConfig
+          }
           renderItem={(item) => (
             <Styled.WitnessListItem key={item.key}>
               <Styled.WitnessesItemContent>
@@ -153,11 +162,7 @@ export const WitnessesTab = (): JSX.Element => {
                   <span className="item-info-title">
                     {WitnessesColumns[3].title()}
                   </span>
-                  <span className="item-info-value">
-                    <a href={`${item.url}`} target="_blank">
-                      <Styled.urlIcon rotate={45} />
-                    </a>
-                  </span>
+                  <span className="item-info-value">{item.totalVotes}</span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
@@ -181,16 +186,22 @@ export const WitnessesTab = (): JSX.Element => {
                   <span className="item-info-title">
                     {WitnessesColumns[6].title()}
                   </span>
-                  <span className="item-info-value">{item.totalVotes}</span>
+                  <span className="item-info-value">
+                    <a href={`${item.url}`} target="_blank">
+                      <Styled.urlIcon rotate={45} />
+                    </a>
+                  </span>
                 </div>
                 <div className="item-info">
                   <span className="item-info-title">
                     {WitnessesColumns[7].title()}
                   </span>
                   <span className="item-info-value">
-                    <a href={`${item.publicKey}`} target="_blank">
-                      <Key />
-                    </a>
+                    <Tooltip placement="top" title={item.publicKey}>
+                      <span>
+                        <Key />
+                      </span>
+                    </Tooltip>
                   </span>
                 </div>
               </Styled.WitnessesItemContent>
@@ -203,40 +214,20 @@ export const WitnessesTab = (): JSX.Element => {
           columns={WitnessesColumns as ColumnsType<unknown>}
           loading={loading}
           pagination={
-            !loading
-              ? {
-                  showSizeChanger: false,
-                  size: "small",
-                  pageSize: 15,
-                  showLessItems: true,
-                  itemRender: (
-                    _page: number,
-                    type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                    element: ReactNode
-                  ) => {
-                    if (type === "prev") {
-                      return (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.previous`)}
-                        </a>
-                      );
-                    }
-                    if (type === "next") {
-                      return (
-                        <a style={{ marginLeft: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.next`)}
-                        </a>
-                      );
-                    }
-                    return element;
-                  },
-                }
-              : false
+            renderPaginationConfig({
+              loading,
+              pageSize: 15,
+            }) as TablePaginationConfig
           }
         />
       )}
       <Styled.PrintTable>
-        <WitnessesPrintTable ref={componentRef} />
+        <WitnessesPrintTable
+          ref={componentRef}
+          loading={loading}
+          witnessesColumns={WitnessesColumns}
+          witnessTableRows={witnessTableRows}
+        />
       </Styled.PrintTable>
     </Styled.WitnessesTabWrapper>
   );

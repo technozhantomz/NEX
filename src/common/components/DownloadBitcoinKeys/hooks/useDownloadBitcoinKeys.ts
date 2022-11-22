@@ -5,16 +5,16 @@ import { useGenerateBitcoinAddress } from "../../GenerateBitcoinAddress/hooks";
 
 import { UseDownloadBitcoinKeysResult } from "./useDownloadBitcoinKeys.types";
 
-export function useDownloadBitcoinKeys(
-  getSidechainAccounts: (accountId: string) => Promise<void>
-): UseDownloadBitcoinKeysResult {
+type Args = {
+  getSidechainAccounts: (accountId: string) => Promise<void>;
+};
+
+export function useDownloadBitcoinKeys({
+  getSidechainAccounts,
+}: Args): UseDownloadBitcoinKeysResult {
   const [downloaded, setDownloaded] = useState<boolean>(true);
   const { bitcoinSidechainAccounts, setBitcoinSidechainAccounts } =
     useGenerateBitcoinAddress(getSidechainAccounts);
-
-  useEffect(() => {
-    if (bitcoinSidechainAccounts) setDownloaded(false);
-  }, [bitcoinSidechainAccounts]);
 
   const downloadPrivateKeys = (sidechainDepositAddress: string): void => {
     const element = document.createElement("a");
@@ -54,6 +54,10 @@ export function useDownloadBitcoinKeys(
     setDownloaded(true);
     setBitcoinSidechainAccounts(undefined);
   };
+
+  useEffect(() => {
+    if (bitcoinSidechainAccounts) setDownloaded(false);
+  }, [bitcoinSidechainAccounts, setDownloaded]);
 
   return { downloaded, downloadPrivateKeys };
 }

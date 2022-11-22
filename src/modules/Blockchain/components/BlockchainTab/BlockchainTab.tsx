@@ -1,14 +1,17 @@
 import { ParsedUrlQuery } from "querystring";
 
 import { SearchTableInput } from "ant-table-extensions";
+import { TablePaginationConfig } from "antd";
+import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { CSSProperties, ReactInstance, ReactNode, useRef } from "react";
+import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
+import { renderPaginationConfig } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import {
   DownloadOutlined,
@@ -116,6 +119,11 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
           itemLayout="vertical"
           dataSource={searchDataSource}
           loading={loading}
+          pagination={
+            renderPaginationConfig({ loading, pageSize: 5 }) as
+              | false
+              | PaginationConfig
+          }
           renderItem={(item) => (
             <Link href={`/blockchain/${item.blockID}`}>
               <a>
@@ -149,7 +157,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
                         {blockColumns[3].title()}
                       </span>
                       <span className="item-info-value">
-                        {item.transaction}
+                        {item.transaction ? item.transaction : 0}
                       </span>
                     </div>
                   </Styled.BlockItemContent>
@@ -165,35 +173,9 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
           rowKey={(record) => record.blockID}
           loading={loading}
           pagination={
-            !loading
-              ? {
-                  showSizeChanger: false,
-                  size: "small",
-                  pageSize: 15,
-                  showLessItems: true,
-                  itemRender: (
-                    _page: number,
-                    type: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-                    element: ReactNode
-                  ) => {
-                    if (type === "prev") {
-                      return (
-                        <a style={{ marginRight: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.previous`)}
-                        </a>
-                      );
-                    }
-                    if (type === "next") {
-                      return (
-                        <a style={{ marginLeft: "8px" } as CSSProperties}>
-                          {counterpart.translate(`buttons.next`)}
-                        </a>
-                      );
-                    }
-                    return element;
-                  },
-                }
-              : false
+            renderPaginationConfig({ loading, pageSize: 15 }) as
+              | false
+              | TablePaginationConfig
           }
           onRow={(record, _rowIndex) => {
             return {
@@ -205,7 +187,12 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
         />
       )}
       <Styled.PrintTable>
-        <BlockPrintTable ref={componentRef} />
+        <BlockPrintTable
+          ref={componentRef}
+          blockColumns={blockColumns}
+          blockchainTableRows={blockchainTableRows}
+          loading={loading}
+        />
       </Styled.PrintTable>
     </Styled.BlockTabWrapper>
   );

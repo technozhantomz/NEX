@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { isArrayEqual } from "../../../../../api/utils";
 import {
   useAccount,
   useArrayLimiter,
@@ -12,7 +13,7 @@ import {
   useAssetsContext,
   usePeerplaysApiContext,
 } from "../../../../../common/providers";
-import { GlobalProperties } from "../../../../../common/types";
+import { BlockData, GlobalProperties } from "../../../../../common/types";
 
 import {
   UseWitnessesTabResult,
@@ -46,7 +47,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const { getUserNameById } = useAccount();
   const { getWitnesses } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
-  const { formAssetBalanceById, setPrecision } = useAsset();
+  const { formKnownAssetBalanceById, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { getChain, getAvgBlockTime, getBlockData } = useBlockchain();
   const { formLocalDate } = useFormDate();
@@ -59,9 +60,15 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const getWitnessData = useCallback(async () => {
     if (defaultAsset) {
       try {
-        const gpo: GlobalProperties = await dbApi("get_global_properties");
-        const chain = await getChain();
-        const blockData = await getBlockData();
+        const [gpo, chain, blockData]: [
+          GlobalProperties,
+          GlobalProperties | undefined,
+          BlockData | undefined
+        ] = await Promise.all([
+          dbApi("get_global_properties"),
+          getChain(),
+          getBlockData(),
+        ]);
         if (chain && blockData) {
           const rewardAmount = setPrecision(
             false,
@@ -78,17 +85,17 @@ export function useWitnessesTab(): UseWitnessesTabResult {
           const nextVoteTime = new Date(
             blockData.next_maintenance_time
           ).getTime();
-          const nextVoteDistance = nextVoteTime - now;
+          const nextVoteDistance = now - nextVoteTime;
           const currentWitness = await getUserNameById(
-            blockData.current_witness as string
+            blockData.current_witness
           );
           if (witnesses && witnesses.length > 0) {
             witnesses.sort((a, b) => b.total_votes - a.total_votes);
             const witnessesRows: WitnessTableRow[] = [];
             let index = 0;
             for (const witness of witnesses) {
-              const votesAsset = await formAssetBalanceById(
-                defaultAsset.id,
+              const votesAsset = formKnownAssetBalanceById(
+                defaultAsset,
                 Number(witness.total_votes)
               );
               witnessesRows.push({
@@ -104,7 +111,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
                 url: witness.url,
                 lastBlock: witness.last_confirmed_block_num,
                 missedBlocks: witness.total_missed,
-                totalVotes: `${votesAsset.amount} ${votesAsset.symbol}`,
+                totalVotes: `${votesAsset?.amount} ${votesAsset?.symbol}`,
                 publicKey: witness.signing_key,
               } as WitnessTableRow);
               index = index + 1;
@@ -119,7 +126,9 @@ export function useWitnessesTab(): UseWitnessesTabResult {
               rewardAmount
             ).toFixed(defaultAsset.precision);
             setWitnessTableRows(witnessesRows);
-            setSearchDataSource(witnessesRows);
+            if (isArrayEqual(witnessTableRows, searchDataSource)) {
+              setSearchDataSource(witnessesRows);
+            }
             setActiveWitnesses(activeWitnesses.length);
             setReward(rewardAmount);
             setEarnings(Number(earnings));
@@ -171,7 +180,6 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     defaultAsset,
     getChain,
     setPrecision,
-    formAssetBalanceById,
     getAvgBlockTime,
     getDaysInThisMonth,
     setWitnessTableRows,
@@ -180,6 +188,8 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     setEarnings,
     setWitnessStats,
     setLoading,
+    searchDataSource,
+    witnessTableRows,
   ]);
 
   useEffect(() => {
@@ -187,7 +197,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     return () => {
       clearInterval(witnessInterval);
     };
-  }, [defaultAsset]);
+  }, [getWitnessData]);
 
   return {
     loading,

@@ -35,15 +35,16 @@ type Props = {
   sell?: string;
   buy?: string;
   expiration?: string;
-  vestingAmount?: number;
-  withdrawalAmount?: number;
+  vestingAmount?: string;
+  withdrawalAmount?: string;
   asset?: string;
   to?: string;
-  amount?: number;
+  amount?: string;
   orderId?: string;
   withdrawAddress?: string;
   sidechain?: string;
   afterClose?: () => void;
+  blockchain?: string;
 };
 
 export const TransactionModal = ({
@@ -72,6 +73,7 @@ export const TransactionModal = ({
   withdrawAddress,
   sidechain,
   afterClose,
+  blockchain,
 }: Props): JSX.Element => {
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
@@ -102,7 +104,7 @@ export const TransactionModal = ({
     swap_order_create: (
       <CreateSwapOrder
         account={account as string}
-        fee={fee as number}
+        fee={fee as string}
         price={price as string}
         sell={sell as string}
         buy={buy as string}
@@ -142,7 +144,8 @@ export const TransactionModal = ({
         fee={fee as number}
         asset={asset as string}
         to={to as string}
-        amount={amount as number}
+        amount={amount as string}
+        blockchain={blockchain as string}
       />
     ),
     withdraw: (
@@ -151,7 +154,7 @@ export const TransactionModal = ({
         fee={fee as string}
         asset={asset as string}
         withdrawAddress={withdrawAddress as string}
-        amount={amount as number}
+        amount={amount as string}
       />
     ),
   };
@@ -197,7 +200,7 @@ export const TransactionModal = ({
     <>
       <Styled.TransactionModal
         title={counterpart.translate(`pages.modal.transaction_modal.heading`)}
-        visible={visible}
+        open={visible}
         onOk={() => {
           transactionModalForm.submit();
         }}

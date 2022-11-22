@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { Apis, ChainStore } from "peerplaysjs-lib";
 import React, {
   createContext,
@@ -153,7 +154,28 @@ export const ChainStoreProvider = ({
         OUT_OF_SYNC_LIMIT,
       }}
     >
-      {syncFail ? <div>Sync error</div> : children}
+      {syncFail ? (
+        <div
+          style={{
+            height: "100px",
+            margin: "0",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <h1>{counterpart.translate(`app_init.sync_error.title`)}</h1>
+          <div>
+            {counterpart.translate(`app_init.sync_error.first_description`)}
+          </div>
+          <div>
+            {counterpart.translate(`app_init.sync_error.second_description`)}
+          </div>
+        </div>
+      ) : (
+        children
+      )}
     </ChainStoreContext.Provider>
   );
 };

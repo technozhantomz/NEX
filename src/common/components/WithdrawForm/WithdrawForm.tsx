@@ -1,5 +1,4 @@
 import counterpart from "counterpart";
-import { KeyboardEvent } from "react";
 
 import {
   DashboardLoginButton,
@@ -10,14 +9,14 @@ import {
   PasswordModal,
   TransactionModal,
 } from "..";
-import { defaultToken } from "../../../api/params";
+import { BITCOIN_ASSET_SYMBOL, defaultToken } from "../../../api/params";
 import { utils } from "../../../api/utils";
 import { Form, Input } from "../../../ui/src";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import { useAsset, useHandleTransactionForm } from "../../hooks";
 import { useAssetsContext, useUserContext } from "../../providers";
-import { SidechainAcccount } from "../../types";
+import { Asset, SidechainAcccount } from "../../types";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -96,7 +95,7 @@ export const WithdrawForm = ({
   );
 
   const feeLabel =
-    selectedAsset === "BTC"
+    selectedAsset === BITCOIN_ASSET_SYMBOL
       ? counterpart.translate(`field.labels.estimated_fees_label`)
       : counterpart.translate(`field.labels.fees_label`);
 
@@ -121,11 +120,13 @@ export const WithdrawForm = ({
       : `${withdrawFee}
     ${defaultToken}`;
 
-    return selectedAsset === "BTC" ? BtcFeeSummary : HiveFeeSummary;
+    return selectedAsset === BITCOIN_ASSET_SYMBOL
+      ? BtcFeeSummary
+      : HiveFeeSummary;
   };
 
   const transactionModalFee =
-    selectedAsset === "BTC"
+    selectedAsset === BITCOIN_ASSET_SYMBOL
       ? `${withdrawFee} ${defaultToken} + ${btcTransferFee} BTC`
       : `${withdrawFee}
   ${defaultToken}`;
@@ -137,7 +138,7 @@ export const WithdrawForm = ({
     </>
   );
   const confirmationTime =
-    selectedAsset === "BTC"
+    selectedAsset === BITCOIN_ASSET_SYMBOL
       ? counterpart.translate(`field.labels.btc_withdrawal_confirmation_time`)
       : counterpart.translate(`field.labels.hive_withdrawal_confirmation_time`);
 
@@ -190,7 +191,7 @@ export const WithdrawForm = ({
           placeholder={counterpart.translate(
             `field.placeholder.withdraw_public_key`
           )}
-          autoComplete="new-password"
+          autoComplete="off"
           className="form-input"
           disabled={!isLoggedIn}
         />
@@ -206,6 +207,7 @@ export const WithdrawForm = ({
           )}
           className="form-input"
           disabled={localStorageAccount ? false : true}
+          autoComplete="off"
         />
       </Form.Item>
       {!withAssetSelector ? (
@@ -219,12 +221,9 @@ export const WithdrawForm = ({
             type="number"
             step="any"
             min={0}
-            onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-              if (!utils.isNumberKey(e)) {
-                e.preventDefault();
-              }
-            }}
+            onKeyPress={utils.ensureInputNumberValidity}
             disabled={localStorageAccount ? false : true}
+            autoComplete="off"
           />
         </Form.Item>
       ) : (
@@ -291,11 +290,7 @@ export const WithdrawForm = ({
             type="number"
             step="any"
             min={0}
-            onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-              if (!utils.isNumberKey(e)) {
-                e.preventDefault();
-              }
-            }}
+            onKeyPress={utils.ensureInputNumberValidity}
             disabled={localStorageAccount ? false : true}
           />
         </Form.Item>
@@ -317,10 +312,13 @@ export const WithdrawForm = ({
     </>
   );
 
-  const formBody = selectedAsset === "BTC" ? btcFormBody : hiveFormBody;
+  const formBody =
+    selectedAsset === BITCOIN_ASSET_SYMBOL ? btcFormBody : hiveFormBody;
 
   const formBodyWithLoading = loadingSidechainAccounts ? (
-    <LoadingIndicator />
+    <Styled.LoadingIndicatorContainer>
+      <LoadingIndicator type="three-bounce" />
+    </Styled.LoadingIndicatorContainer>
   ) : (
     formBody
   );
@@ -338,36 +336,34 @@ export const WithdrawForm = ({
         >
           {withAssetSelector ? (
             <>
-              <Styled.WithdrawFormAssetAmount
-                name="amount"
-                validateFirst={true}
-                rules={formValdation.amount}
-                withassetselector={withAssetSelector}
-              >
-                <Input
-                  placeholder="0.0"
-                  type="number"
-                  step="any"
-                  min={0}
-                  onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                    if (!utils.isNumberKey(e)) {
-                      e.preventDefault();
-                    }
-                  }}
-                  prefix={
-                    <Styled.WithdrawFormAsset>
-                      <LogoSelectOption
-                        assets={sidechainAssets}
-                        value={selectedAsset}
-                        onChange={handleAssetChange}
-                      />
-                      {renderUserBalance}
-                    </Styled.WithdrawFormAsset>
-                  }
-                  disabled={!isLoggedIn}
-                  autoComplete="new-password"
-                />
-              </Styled.WithdrawFormAssetAmount>
+              <Form.Item>
+                <Input.Group compact>
+                  <Styled.WithdrawFormAsset>
+                    <LogoSelectOption
+                      assets={sidechainAssets as Asset[]}
+                      value={selectedAsset}
+                      onChange={handleAssetChange}
+                    />
+                    {renderUserBalance}
+                  </Styled.WithdrawFormAsset>
+                  <Styled.WithdrawFormAssetAmount
+                    name="amount"
+                    validateFirst={true}
+                    rules={formValdation.amount}
+                    noStyle
+                  >
+                    <Input
+                      placeholder="0.0"
+                      type="number"
+                      step="any"
+                      min={0}
+                      onKeyPress={utils.ensureInputNumberValidity}
+                      disabled={!isLoggedIn}
+                      autoComplete="off"
+                    />
+                  </Styled.WithdrawFormAssetAmount>
+                </Input.Group>
+              </Form.Item>
             </>
           ) : (
             ""
@@ -404,7 +400,7 @@ export const WithdrawForm = ({
         />
       </Form.Provider>
       {isLoggedIn &&
-        selectedAsset === "BTC" &&
+        selectedAsset === BITCOIN_ASSET_SYMBOL &&
         !hasBTCDepositAddress &&
         !loadingSidechainAccounts && (
           <GenerateBitcoinAddress getSidechainAccounts={getSidechainAccounts} />

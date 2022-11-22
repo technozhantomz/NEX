@@ -1,5 +1,7 @@
 import { KeyboardEvent } from "react";
 
+import { BITCOIN_NETWORK, defaultNetwork, HIVE_NETWORK } from "../params";
+
 const id_regex = /\b\d+\.\d+\.(\d+)\b/;
 
 export const utils = {
@@ -35,12 +37,20 @@ export const utils = {
     }
     return false;
   },
+  ensureInputNumberValidity: (e: KeyboardEvent<HTMLInputElement>): void => {
+    if (
+      !utils.isNumberKey(e) ||
+      (e.target as any).value.split(".")[0].length >= 6
+    ) {
+      e.preventDefault();
+    }
+  },
   getBlockchainFromSymbol: (symbol: string): string => {
     const blockchains: Record<string, string> = {
-      BTC: "Bitcoin",
-      PBTC: "Bitcoin",
-      HIVE: "Hive",
-      HBD: "Hive",
+      BTC: BITCOIN_NETWORK,
+      PBTC: defaultNetwork,
+      HIVE: HIVE_NETWORK,
+      HBD: HIVE_NETWORK,
       PEOS: "EOSIO",
       EOS: "EOSIO",
       PETH: "Ethereum",

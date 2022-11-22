@@ -1,3 +1,9 @@
+import {
+  BITCOIN_NETWORK,
+  defaultNetwork,
+  HBD_ASSET_SYMBOL,
+  HIVE_ASSET_SYMBOL,
+} from "../../../../api/params";
 import BitcoinCashIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinCashIcon.svg";
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import BitsharesIcon from "../../../../ui/src/icons/Cryptocurrencies/BitsharesIcon.svg";
@@ -13,9 +19,13 @@ import * as Styled from "./AssetTitle.styled";
 
 type Props = {
   symbol: string;
+  showTitle?: boolean;
 };
 
-export const AssetTitle = ({ symbol }: Props): JSX.Element => {
+export const AssetTitle = ({
+  symbol,
+  showTitle = true,
+}: Props): JSX.Element => {
   const icons: {
     [symbol: string]: JSX.Element;
   } = {
@@ -38,20 +48,24 @@ export const AssetTitle = ({ symbol }: Props): JSX.Element => {
   const AssetNames: {
     [symbol: string]: string;
   } = {
-    BTC: "Bitcoin",
-    TEST: "Peerplays",
-    PPY: "Peerplays",
-    HIVE: "Hive",
-    HBD: "HBD",
+    BTC: BITCOIN_NETWORK,
+    TEST: defaultNetwork,
+    PPY: defaultNetwork,
+    HIVE: HIVE_ASSET_SYMBOL,
+    HBD: HBD_ASSET_SYMBOL,
   };
 
   return (
     <Styled.AssetTitle
       avatar={icons[symbol] !== undefined ? icons[symbol] : icons["Default"]}
       title={
-        <>
-          {AssetNames[symbol]} <span className="asset-symbol">{symbol}</span>
-        </>
+        showTitle ? (
+          <>
+            {AssetNames[symbol]} <span className="asset-symbol">{symbol}</span>
+          </>
+        ) : (
+          ""
+        )
       }
     />
   );

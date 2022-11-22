@@ -14,11 +14,11 @@ export const TransactionModal = styled(Modal)`
     padding: 35px 30px;
     border-radius: 4px;
     border-bottom: unset;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     .ant-modal-title {
       font-size: 18px;
       ${breakpoint.sm} {
-        font-size: 24px;
+        font-size: 22px;
       }
     }
   }
@@ -30,7 +30,7 @@ export const TransactionModal = styled(Modal)`
   }
   .ant-modal-body {
     padding: 0 30px;
-    margin-bottom: 100px;
+    margin-bottom: 60px;
   }
   .ant-modal-footer {
     border-top: unset;

@@ -15,7 +15,7 @@ export type UseWithdrawFormResult = {
   transactionSuccessMessage: string;
   handleWithdraw: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
-  amount: number;
+  amount: string;
   withdrawAddress: string;
   userBalance: number;
   withdrawFee: number;

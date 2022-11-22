@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { KeyboardEvent, useState } from "react";
+import { useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import { utils } from "../../../../api/utils";
@@ -12,6 +12,7 @@ import {
 import { useHandleTransactionForm } from "../../../../common/hooks";
 import {
   CardFormButton,
+  Form,
   InfoCircleOutlined,
   Input,
   SwapOutlined,
@@ -136,6 +137,13 @@ export const SwapTab = (): JSX.Element => {
     />
   );
 
+  const transactionModalMarketFee =
+    Number(buyAssetMarketFee) > 0
+      ? `+ ${buyAssetMarketFee} ${selectedAssetsSymbols.buyAssetSymbol}`
+      : "";
+
+  const transactionModalFee = `${swapOrderFee} ${defaultToken} ${transactionModalMarketFee}`;
+
   const feeSummary = (
     <>
       <div>{`${swapOrderFee} ${defaultToken}`}</div>
@@ -194,76 +202,75 @@ export const SwapTab = (): JSX.Element => {
             shape="circle"
             onClick={handleSwapAssets}
           />
-          <Styled.SwapSellItem
-            name="sellAmount"
-            rules={formValidation.sellAmount}
-            validateFirst={true}
-            help={""}
-            validateStatus={""}
-          >
-            <Input
-              placeholder="0.0"
-              onFocus={(e) => {
-                e.target.select();
-              }}
-              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e)) {
-                  e.preventDefault();
-                }
-              }}
-              autoComplete="off"
-              disabled={!isLoggedIn}
-              prefix={
-                <Styled.AssetSelectContainer>
-                  <LogoSelectOption
-                    id="sellAsset"
-                    value={selectedAssetsSymbols.sellAssetSymbol}
-                    assets={allAssets.filter(
-                      (asset) =>
-                        asset.symbol !== selectedAssetsSymbols.buyAssetSymbol
-                    )}
-                    onChange={handleSellAssetChange}
-                  />
-                  {renderUserSellAssetBalance}
-                </Styled.AssetSelectContainer>
-              }
-            />
-          </Styled.SwapSellItem>
-          <Styled.SwapItem
-            name="buyAmount"
-            rules={formValidation.buyAmount}
-            validateFirst={true}
-            help={""}
-            validateStatus={""}
-          >
-            <Input
-              placeholder="0.0"
-              onFocus={(e) => {
-                e.target.select();
-              }}
-              onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
-                if (!utils.isNumberKey(e)) {
-                  e.preventDefault();
-                }
-              }}
-              autoComplete="off"
-              disabled={!isLoggedIn}
-              prefix={
-                <Styled.AssetSelectContainer>
-                  <LogoSelectOption
-                    id="buyAsset"
-                    value={selectedAssetsSymbols.buyAssetSymbol}
-                    assets={allAssets.filter(
-                      (asset) =>
-                        asset.symbol !== selectedAssetsSymbols.sellAssetSymbol
-                    )}
-                    onChange={handleBuyAssetChange}
-                  />
-                  {renderUserBuyAssetBalance}
-                </Styled.AssetSelectContainer>
-              }
-            />
-          </Styled.SwapItem>
+          <Form.Item>
+            <Input.Group compact>
+              <Styled.AssetSelectContainer>
+                <LogoSelectOption
+                  id="sellAsset"
+                  value={selectedAssetsSymbols.sellAssetSymbol}
+                  assets={allAssets.filter(
+                    (asset) =>
+                      asset.symbol !== selectedAssetsSymbols.buyAssetSymbol
+                  )}
+                  onChange={handleSellAssetChange}
+                />
+                {renderUserSellAssetBalance}
+              </Styled.AssetSelectContainer>
+              <Styled.SwapSellItem
+                name="sellAmount"
+                rules={formValidation.sellAmount}
+                validateFirst={true}
+                help={""}
+                validateStatus={""}
+                noStyle
+              >
+                <Input
+                  placeholder="0.0"
+                  onFocus={(e) => {
+                    e.target.select();
+                  }}
+                  autoComplete="off"
+                  onKeyPress={utils.ensureInputNumberValidity}
+                  disabled={!isLoggedIn}
+                />
+              </Styled.SwapSellItem>
+            </Input.Group>
+          </Form.Item>
+          <Form.Item>
+            <Input.Group compact>
+              <Styled.AssetSelectContainer>
+                <LogoSelectOption
+                  id="buyAsset"
+                  value={selectedAssetsSymbols.buyAssetSymbol}
+                  assets={allAssets.filter(
+                    (asset) =>
+                      asset.symbol !== selectedAssetsSymbols.sellAssetSymbol
+                  )}
+                  onChange={handleBuyAssetChange}
+                />
+                {renderUserBuyAssetBalance}
+              </Styled.AssetSelectContainer>
+              <Styled.SwapItem
+                name="buyAmount"
+                rules={formValidation.buyAmount}
+                validateFirst={true}
+                help={""}
+                validateStatus={""}
+                noStyle
+              >
+                <Input
+                  placeholder="0.0"
+                  onFocus={(e) => {
+                    e.target.select();
+                  }}
+                  onKeyPress={utils.ensureInputNumberValidity}
+                  autoComplete="off"
+                  disabled={!isLoggedIn}
+                />
+              </Styled.SwapItem>
+            </Input.Group>
+          </Form.Item>
+
           {isLoggedIn ? (
             <Styled.PriceContainer>{renderPrice}</Styled.PriceContainer>
           ) : (
@@ -280,7 +287,7 @@ export const SwapTab = (): JSX.Element => {
           transactionSuccessMessage={transactionSuccessMessage}
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
-          fee={swapOrderFee}
+          fee={transactionModalFee}
           transactionType="swap_order_create"
           sell={`${transactionModalSellAmount} ${selectedAssetsSymbols.sellAssetSymbol}`}
           buy={`${transactionModalBuyAmount} ${selectedAssetsSymbols.buyAssetSymbol}`}

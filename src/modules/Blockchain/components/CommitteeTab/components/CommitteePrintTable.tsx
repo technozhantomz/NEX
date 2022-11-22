@@ -1,22 +1,28 @@
 import { ColumnsType } from "antd/lib/table";
-import React, { RefObject } from "react";
+import React from "react";
 
 import * as Styled from "../CommitteeTab.styled";
-import { CommitteeTableRow, useCommitteeTab } from "../hooks";
+import { CommitteeTableRow } from "../hooks";
 
-import { CommitteeColumns } from "./CommitteeColumns";
+import { CommitteeColumnType } from ".";
 
-export const CommitteePrintTable = React.forwardRef((_props, ref) => {
-  const { loading, committeeTableRows } = useCommitteeTab();
+type Props = {
+  loading: boolean;
+  committeeColumns: CommitteeColumnType[];
+  committeeTableRows: CommitteeTableRow[];
+};
 
-  return (
-    <div ref={ref as RefObject<HTMLDivElement>}>
-      <Styled.CommitteeTable
-        dataSource={committeeTableRows}
-        columns={CommitteeColumns as ColumnsType<CommitteeTableRow>}
-        loading={loading}
-        pagination={false}
-      />
-    </div>
-  );
-});
+export const CommitteePrintTable = React.forwardRef(
+  (props: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
+    return (
+      <div ref={ref}>
+        <Styled.CommitteeTable
+          dataSource={props.committeeTableRows}
+          columns={props.committeeColumns as ColumnsType<CommitteeTableRow>}
+          loading={props.loading}
+          pagination={false}
+        />
+      </div>
+    );
+  }
+);

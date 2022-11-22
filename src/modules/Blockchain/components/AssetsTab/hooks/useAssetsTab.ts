@@ -2,9 +2,12 @@ import { uniq } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
 import { utils } from "../../../../../api/utils";
-import { useArrayLimiter, useAsset } from "../../../../../common/hooks";
+import {
+  useAccount,
+  useArrayLimiter,
+  useAsset,
+} from "../../../../../common/hooks";
 import { usePeerplaysApiContext } from "../../../../../common/providers";
-import { Account } from "../../../../../common/types";
 import { AssetsColumns } from "../components";
 
 import {
@@ -19,46 +22,51 @@ export function useAssetsTab(): UseAssetsTabResult {
   const [assetTableRows, setAssetTableRows] = useState<AssetTableRow[]>([]);
   const [assetsStats, setAssetsStats] = useState<number[]>([]);
   const [assetsColumns, setAssetsColumns] = useState<AssetColumnType[]>([]);
+
   const { dbApi } = usePeerplaysApiContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { getAllAssets } = useAsset();
+  const { getAccounts } = useAccount();
 
   const getAssetRows = useCallback(async () => {
     try {
       const rawAssets = await getAllAssets();
       if (rawAssets && rawAssets.length > 0) {
-        const assetsRows = await Promise.all(
-          rawAssets.map(async (asset) => {
-            const issuer: Account[] = await dbApi("get_accounts", [
-              [asset.issuer],
-            ]);
-            return {
-              key: asset.id,
-              id: asset.id,
-              symbol: asset.symbol,
-              name: utils.getBlockchainFromSymbol(asset.symbol),
-              maxSupply: Number(asset.options.max_supply),
-              precision: asset.precision,
-              issuer: issuer && issuer.length > 0 ? issuer[0].name : "",
-              info: asset.options.description,
-            } as AssetTableRow;
-          })
+        const rawAssetsIssuersIds = rawAssets.map((asset) => asset.issuer);
+        const rawAssetsIssuersAccounnts = await getAccounts(
+          rawAssetsIssuersIds
         );
+        const assetsRows = rawAssets.map((asset) => {
+          const issuer = rawAssetsIssuersAccounnts?.find(
+            (account) => account?.id === asset.issuer
+          );
+          return {
+            key: asset.id,
+            id: asset.id,
+            symbol: asset.symbol,
+            name: utils.getBlockchainFromSymbol(asset.symbol),
+            maxSupply: Number(asset.options.max_supply),
+            precision: asset.precision,
+            issuer: issuer ? issuer.name : "",
+            info: asset.options.description,
+          } as AssetTableRow;
+        });
+
         const symbols = rawAssets.map((asset) => asset.symbol);
-        const allIssuers = await Promise.all(
-          rawAssets.map(async (asset) => {
-            const issuer: Account[] = await dbApi("get_accounts", [
-              [asset.issuer],
-            ]);
-            return issuer && issuer.length > 0 ? issuer[0].name : "";
-          })
-        );
+        const allIssuers = assetsRows.map((row) => row.issuer);
         const uniqIssuers = uniq(allIssuers);
+        const allNames = assetsRows.map((row) => row.name);
+        const uniqNames = uniq(allNames);
         const updatedColumns = AssetsColumns.map((column) => {
           switch (true) {
             case column.key === "symbol":
               column.filters = symbols.map((symbol) => {
                 return { text: symbol, value: symbol };
+              });
+              break;
+            case column.key === "name":
+              column.filters = uniqNames.map((name) => {
+                return { text: name, value: name };
               });
               break;
             case column.key === "issuer":
