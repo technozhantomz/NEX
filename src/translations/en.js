@@ -399,7 +399,7 @@ export const en = {
         title: "Update SON",
       },
       son_wallet_deposit_create: {
-        title: "Create deposit son wallet",
+        title: "Create deposit SON wallet",
       },
       son_wallet_deposit_process: {
         title: "Process deposit SON wallet",
@@ -884,8 +884,10 @@ export const en = {
       withdraw_public_key: "Withdraw public key",
       withdraw_address: "Withdraw address",
       hive_blockchain_account: "Hive account",
+      enter_amount: "Enter amount to send",
       amount: "Amount",
       quantity: "Quantity",
+      enter_recipient: "Enter recipient",
       to: "To",
       memo: "Memo",
       price: "Price",
@@ -988,7 +990,7 @@ export const en = {
     comments: {
       deposit_hbd:
         "To deposit, %(assetSymbol)s , to , %(accountName)s, please send your funds to , son-account, on the Hive blockchain with the memo , %(accountName)s",
-      public_memo: "This memo is public",
+      public_memo: "This memo is public (optional)",
     },
     checkBoxes: {
       cannot_recover_my_lost_password:

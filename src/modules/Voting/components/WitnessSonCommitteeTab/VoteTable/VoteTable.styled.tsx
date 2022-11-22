@@ -6,6 +6,7 @@ import {
   DataTableDownloadLinks,
   DataTableHeader,
   DataTableHeaderBar,
+  DataTableMissedBlocks,
   DataTableUrlIcon,
   Row as row,
   styled,
@@ -18,6 +19,8 @@ import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 import { Check as check, Xmark as xmark } from "../../../../../ui/src/icons";
 import { mixIns } from "../../../../../ui/src/mixins";
+
+export const MissedBlocks = styled(DataTableMissedBlocks)``;
 
 export const VoteTableWrapper = styled.div`
   margin: 0 25px;

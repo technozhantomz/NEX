@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   BITCOIN_ASSET_SYMBOL,
@@ -61,6 +61,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
   const [selectedAssetPrecission, _setSelectedAssetPrecission] =
     useState<number>(5);
   const [btcTransferFee, _setBtcTransferFee] = useState<number>(0.0003);
+  const afterTransactionModalClose = useRef<() => void>();
 
   const assetBlockchains: {
     [assetSymbol: string]: string[];
@@ -121,6 +122,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
         amount = amount ? amount : "0";
         setAmount(amount);
       }
+      afterTransactionModalClose.current = undefined;
     },
     [limitByPrecision, selectedAsset, sendForm, setAmount]
   );
@@ -209,6 +211,9 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
         setLoadingTransaction(false);
       }
       if (trxResult) {
+        afterTransactionModalClose.current = () => {
+          sendForm.resetFields();
+        };
         formAccountBalancesByName(localStorageAccount);
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
@@ -526,5 +531,6 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     toAccount: sendForm.getFieldsValue().to,
     selectedAssetPrecission,
     btcTransferFee,
+    afterTransactionModalClose: afterTransactionModalClose.current,
   };
 }

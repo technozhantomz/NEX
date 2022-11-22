@@ -28,6 +28,7 @@ export {
   Tooltip,
   Card,
   Checkbox,
+  Progress,
   Radio,
   Space,
   Switch,
