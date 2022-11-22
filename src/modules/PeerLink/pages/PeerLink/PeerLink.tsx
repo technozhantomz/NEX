@@ -122,7 +122,6 @@ const PeerLink: NextPage = () => {
           </p>
         </Styled.ConnectDownloads>
       </Styled.ConnectCard>
-      {/* <Modal open={isModalOpen}></Modal> */}
     </Layout>
   );
 };

@@ -1204,4 +1204,17 @@ export const en = {
       "Used to create the above PeerPlays multi-signature deposit address",
     peerplays_btc_deposit_address: "PeerPlays Deposit Address",
   },
+  transfer: {
+    transfer: "Transfer",
+    network: "Network",
+    token: "Token",
+    from: "From",
+    to: "To",
+    max: "Max",
+    available: "Available",
+    estimated_transfer_fees: "Estimated transfer fees",
+    approx_value: "Approx. Value",
+    error_message: "Display error message here if any",
+    see_full_transfer_history: "See full transfer history",
+  },
 };

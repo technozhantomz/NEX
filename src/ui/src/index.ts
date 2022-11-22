@@ -17,6 +17,7 @@ export { Input } from "./Input";
 export { Form } from "./Form";
 export { PrintTable } from "./PrintTable";
 export * from "./DataTables";
+export * from "./icons";
 
 export {
   Badge,
@@ -58,6 +59,8 @@ export {
   SearchOutlined,
   TwitterOutlined,
   GithubOutlined,
+  YoutubeOutlined,
+  RedditOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";
