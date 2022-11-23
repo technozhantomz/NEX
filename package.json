@@ -11,7 +11,8 @@
     "format": "eslint ./src --fix",
     "ts-lint": "tsc --noEmit --incremental",
     "test": "jest --watch",
-    "test:ci": "jest --ci"
+    "test:ci": "jest --ci",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
