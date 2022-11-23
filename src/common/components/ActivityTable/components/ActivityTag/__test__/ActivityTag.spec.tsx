@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import React from "react";
 
-import { ActivityTag } from "./ActivityTag";
+import { ActivityTag } from "../ActivityTag";
 
 describe("Activity Tag", () => {
   it("renders correctly for account creation", () => {

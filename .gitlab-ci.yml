@@ -33,6 +33,7 @@ build-qa:
     - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
     - npm install
+    - npm run test
     - npm run build --debug
     - cd .. && tar czf nex-qa.tar.gz NEX/
     - cp nex-qa.tar.gz NEX/ && cd NEX
@@ -90,8 +91,6 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
-    - echo "Logging coverage..."
-    - sed -i "s|<source>\/app\/NEX<\/source>|<source>$CI_PROJECT_DIR\/NEX<\/source>|g" ./build/coverage.xml
     - sonar-scanner
   only:
     - merge_requests
