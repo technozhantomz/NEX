@@ -1,9 +1,12 @@
 import counterpart from "counterpart";
 import { NextPage } from "next";
-// import Link from "next/link";
+import Link from "next/link";
 
 import { Layout } from "../../../../common/components";
-import { usePeerLinkContext } from "../../../../common/providers";
+import {
+  usePeerLinkContext,
+  useUserContext,
+} from "../../../../common/providers";
 import {
   CheckOutlined,
   InfoCircleOutlined,
@@ -15,7 +18,10 @@ import MetaMaskIcon from "../../../../ui/src/icons/Cryptocurrencies/MetaMaskIcon
 import * as Styled from "./PeerLink.styled";
 
 const PeerLink: NextPage = () => {
-  const { metaMask, connectToMetaMask } = usePeerLinkContext();
+  const { metaMask, hive, connectToMetaMask, connectToHive } =
+    usePeerLinkContext();
+  const { localStorageAccount } = useUserContext();
+
   return (
     <Layout
       title={"connect"}
@@ -26,14 +32,21 @@ const PeerLink: NextPage = () => {
     >
       <Styled.ConnectCard>
         <Styled.ConnectButtons>
-          <Styled.ConnectButton className="required">
+          <Styled.ConnectButton
+            className={hive.isConnected ? "connected" : "required"}
+            onClick={connectToHive}
+          >
             <HIVEIcon width="39" height="39" />
             <Styled.ConnectButtonTextWrapper>
               <Styled.ConnectButtonTitle>
-                Connect Hive wallet
+                {counterpart.translate(`pages.peerlink.connect.connect_hive`)}
               </Styled.ConnectButtonTitle>
-              <Styled.ConnectButtonStatus className="required">
-                Required
+              <Styled.ConnectButtonStatus
+                className={hive.isConnected ? "connected" : "required"}
+              >
+                {hive.isConnected
+                  ? counterpart.translate(`pages.peerlink.connect.connected`)
+                  : counterpart.translate(`pages.peerlink.connect.required`)}
               </Styled.ConnectButtonStatus>
             </Styled.ConnectButtonTextWrapper>
             <RightOutlined />
@@ -61,30 +74,32 @@ const PeerLink: NextPage = () => {
           </Styled.ConnectButton>
         </Styled.ConnectButtons>
         <Styled.ConnectInfoWrapper>
-          {/* commented well waiting on requirement updates */}
-          {/* <Styled.ConnectInfo>
-            <InfoCircleOutlined />
-            <span>
-              A PeerPlays Account is Required you can{" "}
-              <Link href={"/login"}>Login</Link> or we will create a new account
-              for you using your hive account name.
-            </span>
-          </Styled.ConnectInfo> */}
-          {/* <Styled.ConnectInfo>
-            <InfoCircleOutlined />
-            <span>
-              Hive wallet and Metamask are required to transfer tokens
-              cross-chain <a>Why?</a>
-            </span>
-          </Styled.ConnectInfo> */}
-          <Styled.ConnectInfo>
-            <InfoCircleOutlined />
-            <span>
-              Hive wallet was not found please check your Hive wallet plugin and
-              refresh the page
-            </span>
-          </Styled.ConnectInfo>
+          {localStorageAccount ? (
+            ""
+          ) : (
+            <Styled.ConnectInfo>
+              <InfoCircleOutlined />
+              <span>
+                A PeerPlays Account is Required you can{" "}
+                <Link href={"/login"}>Login</Link> or we will create an account
+                for you using your hive account name.
+              </span>
+            </Styled.ConnectInfo>
+          )}
+          {hive.isConnected ? (
+            ""
+          ) : (
+            <Styled.ConnectInfo>
+              <InfoCircleOutlined />
+              <span>
+                Hive wallet was not found please check your Hive wallet plugin
+                and refresh the page
+              </span>
+            </Styled.ConnectInfo>
+          )}
           {metaMask.isConnected ? (
+            ""
+          ) : (
             <Styled.ConnectInfo>
               <InfoCircleOutlined />
               <span>
@@ -92,8 +107,6 @@ const PeerLink: NextPage = () => {
                 plugin and refresh the page
               </span>
             </Styled.ConnectInfo>
-          ) : (
-            ""
           )}
         </Styled.ConnectInfoWrapper>
         <Styled.ConnectDownloads>

@@ -109,10 +109,7 @@ export const MainNavBarAvatar = styled(UiAvatar)`
 `;
 
 export const PeerLinkBadgeWrapper = styled.div`
-  margin-right: 12px;
-  ${breakpoint.sm} {
-    margin-right: 35px;
-  }
+  display: flex;
 `;
 
 export const PeerLinkWalletBadge = styled.div`
@@ -121,21 +118,20 @@ export const PeerLinkWalletBadge = styled.div`
   padding: 3px;
   ${mixIns.borderRadius}
   background-color: ${colors.successTag};
-  .metamask-badge {
-    margin-left: 19px;
-  }
+  margin-right: 14px;
   ${breakpoint.sm} {
     padding: 12px 21px;
+    margin-right: 20px;
   }
 `;
 
 export const PeerLinkWalletAccount = styled.span`
-  max-width: 106px;
+  max-width: 77px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   color: ${colors.textColor};
-  font-sixe: 16px;
+  font-size: 16px;
   font-weight: 400;
   margin-left: 13px;
 `;
