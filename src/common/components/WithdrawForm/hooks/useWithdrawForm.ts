@@ -98,12 +98,30 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
 
   const handleAssetChange = useCallback(
     (value: unknown) => {
-      setSelectedAsset(String(value));
-      withdrawForm.setFieldsValue({
+      const withdrawFormValues: { [segment: string]: string | undefined } = {
         amount: "0",
-      });
+      };
+      if (String(value) === BITCOIN_ASSET_SYMBOL) {
+        withdrawFormValues["withdrawAddress"] =
+          bitcoinSidechainAccount?.withdraw_address;
+        withdrawFormValues["withdrawPublicKey"] =
+          bitcoinSidechainAccount?.withdraw_public_key;
+        setWithdrawPublicKey(
+          bitcoinSidechainAccount?.withdraw_public_key ?? ""
+        );
+        setWithdrawAddress(bitcoinSidechainAccount?.withdraw_address ?? "");
+      } else {
+        withdrawFormValues["withdrawAddress"] = "";
+      }
+      setSelectedAsset(String(value));
+      withdrawForm.setFieldsValue(withdrawFormValues);
     },
-    [setSelectedAsset]
+    [
+      setSelectedAsset,
+      BITCOIN_ASSET_SYMBOL,
+      bitcoinSidechainAccount,
+      withdrawForm,
+    ]
   );
 
   const buildWithdrawFormTransaction = useCallback(async () => {
@@ -454,18 +472,12 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         withdrawAddress: bitcoinSidechainAccount?.withdraw_address,
         withdrawPublicKey: bitcoinSidechainAccount?.withdraw_public_key,
       });
-      setWithdrawPublicKey(bitcoinSidechainAccount?.withdraw_public_key);
-      setWithdrawAddress(bitcoinSidechainAccount?.withdraw_address);
-    } else {
-      withdrawForm.setFieldsValue({
-        withdrawAddress: "",
-      });
     }
   }, [
     loadingSidechainAccounts,
     sidechainAccounts,
     bitcoinSidechainAccount,
-    selectedAsset,
+    hasBTCDepositAddress,
   ]);
 
   return {

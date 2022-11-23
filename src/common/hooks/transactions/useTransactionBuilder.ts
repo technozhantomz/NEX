@@ -3,6 +3,7 @@ import { useCallback } from "react";
 
 import { useAsset } from "../../hooks";
 import { useAssetsContext } from "../../providers";
+import { SignerKey } from "../../types";
 
 import { ITransactionBuilder } from "./useTransactionBuilder.types";
 
@@ -10,7 +11,7 @@ export function useTransactionBuilder(): ITransactionBuilder {
   const { setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
 
-  const buildTrx = useCallback(async (trx, keys) => {
+  const buildTrx = useCallback(async (trx: any, keys: SignerKey[]) => {
     const tr = new TransactionBuilder();
 
     await trx.forEach((elem: any) =>
@@ -23,7 +24,7 @@ export function useTransactionBuilder(): ITransactionBuilder {
   }, []);
 
   const getTrxFee = useCallback(
-    async (trx) => {
+    async (trx: any) => {
       if (defaultAsset !== undefined) {
         try {
           const tr = new TransactionBuilder();

@@ -62,7 +62,7 @@ export function useCreateLimitOrder({
   );
 
   const handleAssetPrecission = useCallback(
-    (changedValues) => {
+    (changedValues: any) => {
       if (
         !loadingSelectedPair &&
         currentBase !== undefined &&
@@ -93,7 +93,7 @@ export function useCreateLimitOrder({
   );
 
   const handleRelationsBetweenInputs = useCallback(
-    (changedValues, allValues) => {
+    (changedValues: any, allValues: any) => {
       let baseRoundTo = 5;
       if (
         !loadingSelectedPair &&
