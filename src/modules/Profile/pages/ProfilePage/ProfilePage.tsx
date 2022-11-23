@@ -5,6 +5,7 @@ import React, { useState } from "react";
 
 import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
+import { OpenOrdersTabel } from "../../components/OpenOrdersTable";
 
 import * as Styled from "./ProfilePage.styled";
 
@@ -37,7 +38,7 @@ const ProfilePage: NextPage = () => {
           }}
         >
           <TabPane tab="Orders" key="orders">
-            <p>orders Tab</p>
+            <OpenOrdersTabel />
           </TabPane>
           <TabPane tab="Activity" key="activity">
             <p>activity Tab</p>
