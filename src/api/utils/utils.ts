@@ -1,4 +1,4 @@
-import { KeyboardEvent } from "react";
+import { ClipboardEvent, KeyboardEvent } from "react";
 
 import { BITCOIN_NETWORK, defaultNetwork, HIVE_NETWORK } from "../params";
 
@@ -30,17 +30,33 @@ export const utils = {
         : num;
     return parseFloat(subString as string);
   },
-  isNumberKey: (e: KeyboardEvent<HTMLInputElement>): boolean => {
+  isNumber: (input: string): boolean => {
     const numbers = "0123456789.";
-    if (numbers.includes(e.key)) {
+    if (numbers.includes(input)) {
       return true;
     }
     return false;
+  },
+  isNumberKey: (e: KeyboardEvent<HTMLInputElement>): boolean => {
+    return utils.isNumber(e.key);
   },
   ensureInputNumberValidity: (e: KeyboardEvent<HTMLInputElement>): void => {
     if (
       !utils.isNumberKey(e) ||
       (e.target as any).value.split(".")[0].length >= 6
+    ) {
+      e.preventDefault();
+    }
+  },
+  numberedInputsPasteHandler: (e: ClipboardEvent<HTMLInputElement>): void => {
+    const clipBoardData = e.clipboardData.getData("text");
+    const isNumber = Array.from(clipBoardData)
+      .map((char: string) => utils.isNumber(char))
+      .every((_isNumber) => _isNumber);
+
+    if (
+      !isNumber ||
+      ((e.target as any).value as string).length + clipBoardData.length >= 6
     ) {
       e.preventDefault();
     }

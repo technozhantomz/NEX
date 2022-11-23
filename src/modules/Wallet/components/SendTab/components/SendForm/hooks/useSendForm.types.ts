@@ -39,6 +39,7 @@ export type UseSendFormResult = {
   toAccount: string;
   selectedAssetPrecission: number;
   btcTransferFee: number;
+  afterTransactionModalClose?: () => void;
 };
 export type SendForm = {
   asset: string;

@@ -56,9 +56,27 @@ export const SendForm = styled(CardForm)`
 export const AssetSelector = styled(Select)``;
 export const AssetOption = styled(Option)``;
 
-export const AvailableAssetWrapper = styled.div`
+export const AvailableAssetAndProgressWrapper = styled.div`
   margin-bottom: 15px;
+  ${breakpoint.sm} {
+    display: flex;
+    justify-content: space-between;
+    > div {
+      flex-grow: 1;
+      width: 50%;
+    }
+    > div:first-child {
+      margin-right: 15px;
+    }
+  }
+`;
+export const AvailableAssetWrapper = styled.div`
   display: flex;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+  ${breakpoint.sm} {
+    margin-bottom: 0px;
+  }
 `;
 export const AvailableAssetLabel = styled.div`
   color: ${colors.textColorSecondary};

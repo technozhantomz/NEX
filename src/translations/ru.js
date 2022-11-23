@@ -278,6 +278,9 @@ export const ru = {
         description:
           "%(user)s, купленный %(paysAmount)s за %(receivesAmmount)s за заказ #%(id)s",
       },
+      finalize_offer: {
+        title: "Завершить предложение",
+      },
       game_move: {
         title: "Ход игры",
       },
@@ -338,6 +341,9 @@ export const ru = {
       nft_set_approval_for_all: {
         title: "Установить одобрение для всех nft",
       },
+      offer: {
+        title: "Предложение",
+      },
       proposal_create: {
         title: "Создать предложение",
       },
@@ -392,11 +398,23 @@ export const ru = {
       son_update: {
         title: "Обновлять SON",
       },
+      son_wallet_deposit_create: {
+        title: "Создать депозитный кошелек SON",
+      },
+      son_wallet_deposit_process: {
+        title: "Обработка депозита SON кошелька",
+      },
       son_wallet_recreate: {
         title: "Воссоздать SON бумажник",
       },
       son_wallet_update: {
         title: "Обновлять SON бумажник",
+      },
+      son_wallet_withdraw_create: {
+        title: "Создать кошелек для вывода SON",
+      },
+      son_wallet_withdraw_process: {
+        title: "Процесс вывода SON кошелька",
       },
       sport_create: {
         title: "Создать вид спорта",
@@ -527,6 +545,21 @@ export const ru = {
     previous: "предыдущий",
     show_only_unread: "Показать только непрочитанные",
     receive: "Получать",
+  },
+  connection: {
+    automatic_reconnect:
+      "Через %(reconnect_in_seconds)s секунд будет автоматически предпринята попытка переподключения.",
+    manual_reconnect: "Попробуйте переподключиться сейчас",
+    manual_ping_and_narrow_down: "Сузить узлы и пинговать",
+    title_out_of_sync: "Соединение не синхронизировано",
+    out_of_sync:
+      "Ваше соединение не синхронизировано в течение %(out_of_sync_seconds)s секунд.",
+    want_to_reconnect:
+      "Если соединение можно восстановить, это сообщение автоматически исчезнет.",
+  },
+  footer: {
+    no_connection: "Нет подключения к блокчейну",
+    nosync: "Ваш активный узел не синхронизирован",
   },
   pages: {
     logout: {
@@ -814,6 +847,7 @@ export const ru = {
       discription: "Страница профиля",
     },
     modal: {
+      cancel: "Отмена",
       transaction_modal: {
         heading: "Пожалуйста, подтвердите транзакцию",
       },
@@ -842,8 +876,10 @@ export const ru = {
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
       hive_blockchain_account: "учетная запись Hive",
+      enter_amount: "Введите сумму для отправки",
       amount: "количество",
       quantity: "Количество",
+      enter_recipient: "Введите получателя",
       to: "К",
       memo: "Памятка",
       price: "Цена",
@@ -947,7 +983,7 @@ export const ru = {
     comments: {
       deposit_hbd:
         "Чтобы перевести, %(assetSymbol)s , на , %(accountName)s, отправьте свои средства на , son-account, в блокчейне Hive с памяткой , %(accountName)s",
-      public_memo: "Эта памятка общедоступна",
+      public_memo: "Эта памятка общедоступна (по желанию)",
     },
     checkBoxes: {
       cannot_recover_my_lost_password:
@@ -968,6 +1004,7 @@ export const ru = {
     },
     errors: {
       first_select_asset: "Сначала выберите объект",
+      first_select_blockchain: "Сначала выберите блокчейн",
       first_generate_deposit_addresses:
         "Сначала сгенерируйте биткойн-адреса на вкладке «Депозит» на панели управления.",
       loading_sidechain_accounts:
@@ -1073,6 +1110,11 @@ export const ru = {
       successfully_generate_btc_addresses:
         "Вы успешно сгенерировали адреса ввода и вывода биткойнов",
     },
+  },
+  settings: {
+    api_closest: "Выбрать ближайший автоматически",
+    connection_error:
+      "Не удается подключиться к узлу API %(url)s, возвращаясь к известным рабочим узлам. Ошибка: %(error)s",
   },
   tableHead: {
     block_id: "Идентификатор блока",
