@@ -21,4 +21,6 @@ export type UseVoteTabResult = {
   loadingTransaction: boolean;
   pendingChanges: VoteRow[];
   afterSuccessTransactionModalClose?: () => void;
+  handleReconfirmVoting: (signerKey: SignerKey) => Promise<void>;
+  reconfirmFee: number;
 };
