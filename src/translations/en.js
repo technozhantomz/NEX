@@ -858,6 +858,7 @@ export const en = {
         connected: "Connected",
         required: "Required",
         connect_metamask: "Connect MetaMask",
+        connect_hive: "Connect Hive",
       },
       transfer: {
         heading: "Transfer",

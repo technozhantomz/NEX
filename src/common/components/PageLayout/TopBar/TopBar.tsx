@@ -14,7 +14,7 @@ export const TopBar = ({ layout }: Props): JSX.Element => {
     <Styled.TopBar className="top-bar">
       <div className={"topbar-left"}>
         <div className="peerplays-logo">
-          <Link href="/">
+          <Link href={layout === "peerlink" ? "/peerlink" : "/"}>
             <a className="logo-link">
               <Logo className={"logo"} />
               <h1 className="peer">

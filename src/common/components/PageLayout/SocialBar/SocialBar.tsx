@@ -1,11 +1,11 @@
 import { YoutubeFilled } from "@ant-design/icons";
 
-import { TwitterOutlined } from "../../../../ui/src";
 import {
   RedditFilledIcon,
   TelegramIcon,
   TiktokFilledIcon,
-} from "../../../../ui/src/icons";
+  TwitterOutlined,
+} from "../../../../ui/src";
 
 import * as Styled from "./SocialBar.styles";
 
