@@ -38,27 +38,27 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
   );
 
   return (
-    <SettingsProvider>
-      <PeerplaysApiProvider>
-        <ConnectionManagerProvider>
-          <AssetsProvider>
-            <UserProvider>
-              <FeesProvider>
-                <UserSettingsProvider>
-                  <BrowserHistoryProvider>
-                    <ViewportProvider>
+    <ViewportProvider>
+      <SettingsProvider>
+        <PeerplaysApiProvider>
+          <ConnectionManagerProvider>
+            <AssetsProvider>
+              <UserProvider>
+                <FeesProvider>
+                  <UserSettingsProvider>
+                    <BrowserHistoryProvider>
                       <MenuProvider>
                         <Component {...pageProps} />
                       </MenuProvider>
-                    </ViewportProvider>
-                  </BrowserHistoryProvider>
-                </UserSettingsProvider>
-              </FeesProvider>
-            </UserProvider>
-          </AssetsProvider>
-        </ConnectionManagerProvider>
-      </PeerplaysApiProvider>
-    </SettingsProvider>
+                    </BrowserHistoryProvider>
+                  </UserSettingsProvider>
+                </FeesProvider>
+              </UserProvider>
+            </AssetsProvider>
+          </ConnectionManagerProvider>
+        </PeerplaysApiProvider>
+      </SettingsProvider>
+    </ViewportProvider>
   );
 }
 
