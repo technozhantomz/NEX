@@ -3,6 +3,7 @@ import { TablePaginationConfig } from "antd";
 import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
+import Link from "next/link";
 import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
@@ -132,9 +133,9 @@ export const AssetsTab = (): JSX.Element => {
                     {assetsColumns[5].title()}
                   </span>
                   <span className="item-info-value">
-                    <a href={`/user/${item.issuer}`} target="_blank">
+                    <Link href={`/user/${item.issuer}`} target="_blank">
                       {item.issuer}
-                    </a>
+                    </Link>
                   </span>
                 </div>
                 <div className="item-info">

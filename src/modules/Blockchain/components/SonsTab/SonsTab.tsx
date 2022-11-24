@@ -3,6 +3,7 @@ import { TablePaginationConfig } from "antd";
 import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
+import Link from "next/link";
 import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
@@ -113,9 +114,9 @@ export const SonsTab = (): JSX.Element => {
                     {SonsColumns[1].title()}
                   </span>
                   <span className="item-info-value">
-                    <a target="_blank" href={`/user/${item.name}`}>
+                    <Link target="_blank" href={`/user/${item.name}`}>
                       {item.name}
-                    </a>
+                    </Link>
                   </span>
                 </div>
                 <div className="item-info">

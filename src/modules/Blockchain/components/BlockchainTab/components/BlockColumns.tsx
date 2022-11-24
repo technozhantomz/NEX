@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { TableHeading } from "../../../../../common/components";
 import { BlockColumnType, DataTableRow } from "../hooks";
 
@@ -7,9 +9,9 @@ const renders = [
   (blockID: string): JSX.Element => <a>{blockID}</a>,
   undefined,
   (witness: string): JSX.Element => (
-    <a href={`/user/${witness}`} target="_blank">
+    <Link href={`/user/${witness}`} target="_blank">
       {witness}
-    </a>
+    </Link>
   ),
   undefined,
 ];

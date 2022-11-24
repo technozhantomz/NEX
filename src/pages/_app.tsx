@@ -44,15 +44,15 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
           <AssetsProvider>
             <UserProvider>
               <FeesProvider>
-                <BrowserHistoryProvider>
-                  <UserSettingsProvider>
+                <UserSettingsProvider>
+                  <BrowserHistoryProvider>
                     <ViewportProvider>
                       <MenuProvider>
                         <Component {...pageProps} />
                       </MenuProvider>
                     </ViewportProvider>
-                  </UserSettingsProvider>
-                </BrowserHistoryProvider>
+                  </BrowserHistoryProvider>
+                </UserSettingsProvider>
               </FeesProvider>
             </UserProvider>
           </AssetsProvider>
