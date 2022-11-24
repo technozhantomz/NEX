@@ -2,7 +2,6 @@ import { TableHeading } from "../../../../common/components";
 import { AssetTableRow } from "../../../Wallet/components";
 
 const headings = [
-  "key",
   "date",
   "pair",
   "type",
@@ -15,7 +14,6 @@ const headings = [
 ];
 
 const keys = [
-  "key",
   "date",
   "pair",
   "type",
@@ -37,10 +35,8 @@ const renders = [
   undefined,
   undefined,
   undefined,
-  undefined,
 ];
 const filters = [
-  undefined,
   undefined,
   undefined,
   undefined,
@@ -61,12 +57,10 @@ const filterModes = [
   undefined,
   undefined,
   undefined,
-  undefined,
 ];
 const filterSearch = [
   false,
   false,
-  undefined,
   undefined,
   undefined,
   undefined,
@@ -88,7 +82,6 @@ const onFilters = [
   undefined,
   undefined,
   undefined,
-  undefined,
 ];
 const sorters = [
   undefined,
@@ -96,7 +89,6 @@ const sorters = [
   (a: { available: number }, b: { available: number }) =>
     a.available - b.available,
   (a: { inOrders: number }, b: { inOrders: number }) => a.inOrders - b.inOrders,
-  undefined,
   undefined,
   undefined,
   undefined,

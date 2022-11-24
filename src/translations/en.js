@@ -1179,6 +1179,12 @@ export const en = {
     operation_id: "Operation ID",
     operation_type: "Operation Type",
     fees: "Fees",
+    pair: "Pair",
+    side: "Side",
+    amount: "Amount",
+    filled: "Filled",
+    total: "Total",
+    status_actions: "Status/Actions",
   },
   tableFilters: {
     avtive: "Avtive",
