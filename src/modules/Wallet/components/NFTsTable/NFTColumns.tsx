@@ -33,8 +33,8 @@ const renders = [
   ),
   undefined,
   (maker: string): JSX.Element => (
-    <Link target="_blank" href={`/user/${maker}`}>
-      {maker}
+    <Link href={`/user/${maker}`}>
+      <a target="_blank">{maker}</a>
     </Link>
   ),
   undefined,

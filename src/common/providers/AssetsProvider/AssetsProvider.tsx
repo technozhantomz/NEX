@@ -27,31 +27,36 @@ const defaultAssetsState: AssetsContextType = {
 const AssetsContext = createContext<AssetsContextType>(defaultAssetsState);
 
 export const AssetsProvider = ({ children }: Props): JSX.Element => {
-  const [loadingDefaultAsset, setLoadingDefaultAsset] = useState<boolean>(true);
-  const [defaultAsset, _setDefaultAsset] = useState<Asset>();
+  const [defaultAsset, setDefaultAsset] = useState<Asset>();
+  const [sidechainAssets, setSidechainAssets] = useState<(Asset | undefined)[]>(
+    []
+  );
   const [loadingSidechainAssets, setLoadingSidechainAssets] =
     useState<boolean>(true);
-  const [sidechainAssets, _setSidechainAssets] = useState<
-    (Asset | undefined)[]
-  >([]);
+  const [loadingDefaultAsset, setLoadingDefaultAsset] = useState<boolean>(true);
 
   const { dbApi } = usePeerplaysApiContext();
   const { getAssetById, getAssetBySymbol } = useAsset();
 
   const getDefaultAsset = useCallback(async () => {
     try {
+      setLoadingDefaultAsset(true);
       const defaultAsset = await getAssetBySymbol(defaultToken as string);
-      return defaultAsset;
+      setDefaultAsset(defaultAsset);
+      setLoadingDefaultAsset(false);
     } catch (e) {
       console.log(e);
+      setLoadingDefaultAsset(false);
     }
-  }, [getAssetBySymbol]);
+  }, [getAssetBySymbol, setDefaultAsset]);
 
   const getSidechainAssets = useCallback(async () => {
     try {
+      setLoadingSidechainAssets(true);
       const globalProperties: GlobalProperties = await dbApi(
         "get_global_properties"
       );
+
       const btcAssetId = globalProperties.parameters.extensions.btc_asset;
       const hbdAssetId = globalProperties.parameters.extensions.hbd_asset;
       const hiveAssetId = globalProperties.parameters.extensions.hive_asset;
@@ -61,48 +66,21 @@ export const AssetsProvider = ({ children }: Props): JSX.Element => {
       const sidechainAssets = await Promise.all(
         sidechainAssetsIds.map(getAssetById)
       );
-      return sidechainAssets;
+      setSidechainAssets(sidechainAssets);
+      setLoadingSidechainAssets(false);
     } catch (e) {
       console.log(e);
+      setLoadingSidechainAssets(false);
     }
-  }, [dbApi, getAssetById]);
+  }, [dbApi, getAssetById, setSidechainAssets, setLoadingSidechainAssets]);
 
   useEffect(() => {
-    let ignore = false;
-    async function setDefaultAsset() {
-      setLoadingDefaultAsset(true);
-      const defaultAsset = await getDefaultAsset();
-      if (!ignore) {
-        _setDefaultAsset(defaultAsset);
-        setLoadingDefaultAsset(false);
-      }
-    }
-    setDefaultAsset();
-    return () => {
-      ignore = true;
-    };
-  }, [getDefaultAsset, setLoadingDefaultAsset, _setDefaultAsset]);
+    getDefaultAsset();
+  }, [getDefaultAsset]);
 
   useEffect(() => {
-    let ignore = false;
-
-    async function setSidechainAssets() {
-      setLoadingSidechainAssets(true);
-      const sidechainAssets = await getSidechainAssets();
-      if (!ignore) {
-        if (sidechainAssets) {
-          _setSidechainAssets(sidechainAssets);
-        }
-        setLoadingSidechainAssets(false);
-      }
-    }
-
-    setSidechainAssets();
-
-    return () => {
-      ignore = true;
-    };
-  }, [getSidechainAssets, setLoadingSidechainAssets, _setSidechainAssets]);
+    getSidechainAssets();
+  }, [getSidechainAssets]);
 
   return (
     <AssetsContext.Provider

@@ -23,14 +23,18 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
 
   const renderPreviousBlockLink = hasPreviousBlock ? (
     <Link href={`/blockchain/${Number(block) - 1}`}>
-      <LeftOutlined />
+      <a>
+        <LeftOutlined />
+      </a>
     </Link>
   ) : (
     ""
   );
   const renderNextBlockLink = hasNextBlock ? (
     <Link href={`/blockchain/${Number(block) + 1}`}>
-      <RightOutlined />
+      <a>
+        <RightOutlined />
+      </a>
     </Link>
   ) : (
     ""

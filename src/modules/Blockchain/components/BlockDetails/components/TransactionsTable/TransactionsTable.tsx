@@ -88,20 +88,21 @@ export const TransactionsTable = ({
           loading={loadingBlockDetails}
           renderItem={(item) => (
             <Link href={`/blockchain/${block}/${item.rank}`}>
-              <Styled.TransactionListItem key={item.rank}>
-                <Styled.TransactionItemContent>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[0].title()}
-                    </span>
-                    <span className="item-info-value">{item.rank}</span>
-                  </div>
-                  {/* <div className="item-info">
+              <a>
+                <Styled.TransactionListItem key={item.rank}>
+                  <Styled.TransactionItemContent>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[0].title()}
+                      </span>
+                      <span className="item-info-value">{item.rank}</span>
+                    </div>
+                    {/* <div className="item-info">
                   <span className="item-info-title">
                     {transactionsColumns[1].title()}
                   </span>
                   <span className="item-info-value">
-                    <Link
+                    <a
                       target="_blank"
                       href={`/blockchain/${block}/${item.rank}`}
                     >
@@ -112,44 +113,47 @@ export const TransactionsTable = ({
                     </Link>
                   </span>
                 </div> */}
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[1].title()}
-                    </span>
-                    <span className="item-info-value">{item.expiration}</span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[2].title()}
-                    </span>
-                    <span className="item-info-value">
-                      {item.operations.length}
-                    </span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[3].title()}
-                    </span>
-                    <span className="item-info-value">
-                      {item.refBlockPrefix}
-                    </span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[4].title()}
-                    </span>
-                    <span className="item-info-value">{item.refBlockNum}</span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[5].title()}
-                    </span>
-                    <span className="item-info-value">
-                      {item.extensions.length}
-                    </span>
-                  </div>
-                </Styled.TransactionItemContent>
-              </Styled.TransactionListItem>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[1].title()}
+                      </span>
+                      <span className="item-info-value">{item.expiration}</span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[2].title()}
+                      </span>
+                      <span className="item-info-value">
+                        {item.operations.length}
+                      </span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[3].title()}
+                      </span>
+                      <span className="item-info-value">
+                        {item.refBlockPrefix}
+                      </span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[4].title()}
+                      </span>
+                      <span className="item-info-value">
+                        {item.refBlockNum}
+                      </span>
+                    </div>
+                    <div className="item-info">
+                      <span className="item-info-title">
+                        {transactionsColumns[5].title()}
+                      </span>
+                      <span className="item-info-value">
+                        {item.extensions.length}
+                      </span>
+                    </div>
+                  </Styled.TransactionItemContent>
+                </Styled.TransactionListItem>
+              </a>
             </Link>
           )}
         />

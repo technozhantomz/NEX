@@ -34,13 +34,13 @@ const renders: (
       case "receive_select":
         return (
           <Link href={`/wallet/${record.symbol}?tab=receive`}>
-            {counterpart.translate(`pages.wallet.select_this_asset`)}
+            <a>{counterpart.translate(`pages.wallet.select_this_asset`)}</a>
           </Link>
         );
       default:
         return (
           <Link href={`/wallet/${record.symbol}?tab=send`}>
-            {counterpart.translate(`pages.wallet.select_this_asset`)}
+            <a>{counterpart.translate(`pages.wallet.select_this_asset`)}</a>
           </Link>
         );
     }

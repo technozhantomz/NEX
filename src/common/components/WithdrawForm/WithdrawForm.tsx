@@ -23,9 +23,13 @@ import { useWithdrawForm } from "./hooks";
 
 type Props = {
   asset: string;
+  withAssetSelector?: boolean;
 };
 
-export const WithdrawForm = ({ asset }: Props): JSX.Element => {
+export const WithdrawForm = ({
+  asset,
+  withAssetSelector,
+}: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { sidechainAssets } = useAssetsContext();
   const { limitByPrecision } = useAsset();
@@ -133,7 +137,6 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
       <>{feeSummary(true)}</>
     </>
   );
-
   const confirmationTime =
     selectedAsset === BITCOIN_ASSET_SYMBOL
       ? counterpart.translate(`field.labels.btc_withdrawal_confirmation_time`)
@@ -167,14 +170,18 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
         rules={formValdation.from}
         validateFirst={true}
         initialValue={localStorageAccount}
-        hidden={true}
+        hidden={withAssetSelector ? true : false}
       >
         <Input disabled={true} placeholder="From" />
       </Form.Item>
-      <p className="label">
-        {counterpart.translate(`field.labels.withdraw_public_key_address`)}
-      </p>
-
+      {/* fieldLabel */}
+      {withAssetSelector ? (
+        <p className="label">
+          {counterpart.translate(`field.labels.withdraw_public_key_address`)}
+        </p>
+      ) : (
+        ""
+      )}
       <Form.Item
         name="withdrawPublicKey"
         validateFirst={true}
@@ -203,7 +210,25 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
           autoComplete="off"
         />
       </Form.Item>
-
+      {!withAssetSelector ? (
+        <Form.Item
+          name="amount"
+          validateFirst={true}
+          rules={formValdation.amount}
+        >
+          <Input
+            placeholder={counterpart.translate(`field.placeholder.amount`)}
+            type="number"
+            step="any"
+            min={0}
+            onKeyPress={utils.ensureInputNumberValidity}
+            disabled={localStorageAccount ? false : true}
+            autoComplete="off"
+          />
+        </Form.Item>
+      ) : (
+        ""
+      )}
       <Styled.WithdrawalInstruction>
         <Styled.IconWrapper>
           <BitcoinIcon height="30" width="30" />
@@ -230,14 +255,17 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
         rules={formValdation.from}
         validateFirst={true}
         initialValue={localStorageAccount}
-        hidden={true}
+        hidden={withAssetSelector ? true : false}
       >
         <Input disabled={true} placeholder="From" />
       </Form.Item>
-      <p className="label">
-        {counterpart.translate(`field.labels.hive_blockchain_account`)}
-      </p>
-
+      {withAssetSelector ? (
+        <p className="label">
+          {counterpart.translate(`field.labels.hive_blockchain_account`)}
+        </p>
+      ) : (
+        ""
+      )}
       <Form.Item
         name="withdrawAddress"
         validateFirst={true}
@@ -251,6 +279,24 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
           disabled={localStorageAccount ? false : true}
         />
       </Form.Item>
+      {!withAssetSelector ? (
+        <Form.Item
+          name="amount"
+          validateFirst={true}
+          rules={formValdation.amount}
+        >
+          <Input
+            placeholder={counterpart.translate(`field.placeholder.amount`)}
+            type="number"
+            step="any"
+            min={0}
+            onKeyPress={utils.ensureInputNumberValidity}
+            disabled={localStorageAccount ? false : true}
+          />
+        </Form.Item>
+      ) : (
+        ""
+      )}
       <Styled.WithdrawalInstruction>
         <Styled.IconWrapper>
           <HIVEIcon width="30" height="30" />
@@ -288,34 +334,40 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
           size="large"
           validateTrigger={["onChange", "onSubmit"]}
         >
-          <Form.Item>
-            <Input.Group compact>
-              <Styled.WithdrawFormAsset>
-                <LogoSelectOption
-                  assets={sidechainAssets as Asset[]}
-                  value={selectedAsset}
-                  onChange={handleAssetChange}
-                />
-                {renderUserBalance}
-              </Styled.WithdrawFormAsset>
-              <Styled.WithdrawFormAssetAmount
-                name="amount"
-                validateFirst={true}
-                rules={formValdation.amount}
-                noStyle
-              >
-                <Input
-                  placeholder="0.0"
-                  type="number"
-                  step="any"
-                  min={0}
-                  onKeyPress={utils.ensureInputNumberValidity}
-                  disabled={!isLoggedIn}
-                  autoComplete="off"
-                />
-              </Styled.WithdrawFormAssetAmount>
-            </Input.Group>
-          </Form.Item>
+          {withAssetSelector ? (
+            <>
+              <Form.Item>
+                <Input.Group compact>
+                  <Styled.WithdrawFormAsset>
+                    <LogoSelectOption
+                      assets={sidechainAssets as Asset[]}
+                      value={selectedAsset}
+                      onChange={handleAssetChange}
+                    />
+                    {renderUserBalance}
+                  </Styled.WithdrawFormAsset>
+                  <Styled.WithdrawFormAssetAmount
+                    name="amount"
+                    validateFirst={true}
+                    rules={formValdation.amount}
+                    noStyle
+                  >
+                    <Input
+                      placeholder="0.0"
+                      type="number"
+                      step="any"
+                      min={0}
+                      onKeyPress={utils.ensureInputNumberValidity}
+                      disabled={!isLoggedIn}
+                      autoComplete="off"
+                    />
+                  </Styled.WithdrawFormAssetAmount>
+                </Input.Group>
+              </Form.Item>
+            </>
+          ) : (
+            ""
+          )}
 
           {isLoggedIn ? (
             <>{formBodyWithLoading}</>

@@ -8,7 +8,7 @@ import * as Styled from "./WithdrawTab.styled";
 export const WithdrawTab = (): JSX.Element => {
   return (
     <Styled.WithdrawContainer>
-      <WithdrawForm asset={BITCOIN_ASSET_SYMBOL} />
+      <WithdrawForm withAssetSelector={true} asset={BITCOIN_ASSET_SYMBOL} />
     </Styled.WithdrawContainer>
   );
 };

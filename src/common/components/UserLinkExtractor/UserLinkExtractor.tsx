@@ -1,11 +1,16 @@
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 type Props = {
   infoString: string;
 };
 
 export const UserLinkExtractor = ({ infoString }: Props): JSX.Element => {
-  const stringParts = infoString.split(",");
+  const [stringParts, setStringParts] = useState<string[]>([]);
+
+  useEffect(() => {
+    setStringParts(infoString.split(","));
+  }, [infoString]);
 
   const getUserLink = (userLink: string, key: number) => {
     const trimedUserLink = userLink.replace(/\s/g, "");
