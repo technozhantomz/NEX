@@ -99,8 +99,8 @@ export const NFTsTable = (): JSX.Element => {
                     {nftColumns[2].title()}
                   </span>
                   <span className="item-info-value">
-                    <Link href={`/user/${item.maker}`}>
-                      <a target="_blank">{item.maker}</a>
+                    <Link target="_blank" href={`/user/${item.maker}`}>
+                      {item.maker}
                     </Link>
                   </span>
                 </div>

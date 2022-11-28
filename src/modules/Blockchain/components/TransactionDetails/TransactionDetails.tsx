@@ -27,18 +27,14 @@ export const TransactionDetails = ({
 
   const renderPreviousTransaction = hasPreviousTransition ? (
     <Link href={`/blockchain/${Number(block)}/${Number(transaction) - 1}`}>
-      <a>
-        <LeftOutlined />
-      </a>
+      <LeftOutlined />
     </Link>
   ) : (
     ""
   );
   const renderNextTransaction = hasNextTransition ? (
     <Link href={`/blockchain/${Number(block)}/${Number(transaction) + 1}`}>
-      <a>
-        <RightOutlined />
-      </a>
+      <RightOutlined />
     </Link>
   ) : (
     ""

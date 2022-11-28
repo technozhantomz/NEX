@@ -31,10 +31,6 @@ export const Transfer = ({
         <p>{blockchain}</p>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
-        <p>{counterpart.translate(`field.labels.blockchain`)}</p>
-        <p>{blockchain}</p>
-      </Styled.DetailContainer>
-      <Styled.DetailContainer>
         <p>{counterpart.translate(`field.placeholder.to`)}</p>
         <Link href={`/user/${to}`}>{to}</Link>
       </Styled.DetailContainer>
