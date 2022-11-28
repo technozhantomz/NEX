@@ -39,6 +39,15 @@ export const DataTable = styled(UiTable)`
   .standard-fee {
     text-align: right;
   }
+  .ant-pagination.ant-pagination-mini .ant-pagination-options {
+    display: inline-block;
+    margin-inline-start: 16px;
+    vertical-align: middle;
+    .ant-select-single.ant-select-sm:not(.ant-select-customize-input)
+      .ant-select-selector {
+      border-radius: 4px;
+    }
+  }
 `;
 
 export const DataTableLastBlock = styled.span`

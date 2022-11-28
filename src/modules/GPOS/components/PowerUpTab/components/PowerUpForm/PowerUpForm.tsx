@@ -144,6 +144,7 @@ export const PowerUpForm = ({
               min={0}
               step="any"
               onKeyPress={utils.ensureInputNumberValidity}
+              onPaste={utils.numberedInputsPasteHandler}
             />
           </Form.Item>
           <Form.Item

@@ -23,6 +23,7 @@ import {
   Transaction,
   Vote,
   VoteType,
+  WitnessAccount,
 } from "../../../../../../common/types";
 import { VoteRow } from "../../../../types";
 
@@ -55,11 +56,14 @@ export function useVoteTab({
   const [serverApprovedRows, setServerApprovedRows] = useState<VoteRow[]>([]);
   const [isVotesChanged, setIsVotesChanged] = useState<boolean>(false);
   const [updateAccountFee, setUpdateAccountFee] = useState<number>(0);
+  const [reconfirmFee, setReconfirmFee] = useState<number>(0);
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
+  const [reconfirmPendingTransaction, setReconfirmPendingTransaction] =
+    useState<Transaction>();
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [globalProperties, _setGlobalProperties] = useState<
     GlobalProperties | undefined
@@ -74,6 +78,141 @@ export function useVoteTab({
     useUpdateAccountTransactionBuilder();
   const { getTrxFee, buildTrx } = useTransactionBuilder();
   const { dbApi } = usePeerplaysApiContext();
+
+  const updateAllMembersRows = useCallback(
+    (memberId: string, changeType: "add" | "cancel" | "update") => {
+      const newAllMembersRows = [...allMembersRows];
+      const selectedRow = allMembersRows.find((vote) => vote.id === memberId);
+      const selectedRowIndex = allMembersRows.findIndex(
+        (vote) => vote.id === memberId
+      );
+      switch (changeType) {
+        case "add":
+          newAllMembersRows[selectedRowIndex].action =
+            selectedRow?.action === "add" ? "pending add" : "pending remove";
+          break;
+        case "cancel":
+          newAllMembersRows[selectedRowIndex].action =
+            selectedRow?.action === "pending add" ? "add" : "remove";
+          break;
+        case "update":
+          newAllMembersRows[selectedRowIndex].action =
+            selectedRow?.action === "pending add" ? "remove" : "add";
+          newAllMembersRows[selectedRowIndex].status =
+            selectedRow?.action === "remove" ? "approved" : "unapproved";
+          break;
+      }
+      setAllMembersRows(newAllMembersRows);
+    },
+    [allMembersRows, setAllMembersRows]
+  );
+
+  const validateVoting = useCallback(
+    (votingFee: number) => {
+      const userDefaultAsset = assets.find(
+        (asset) => asset.symbol === defaultToken
+      );
+      if (
+        userDefaultAsset === undefined ||
+        (userDefaultAsset.amount as number) < votingFee
+      ) {
+        return counterpart.translate(`field.errors.balance_not_enough_to_pay`);
+      }
+      if (totalGpos <= 0) {
+        return counterpart.translate(`field.errors.need_to_vest_gpos`);
+      }
+      return undefined;
+    },
+    [assets, defaultToken, totalGpos]
+  );
+
+  const getReconfirmTrx = useCallback(() => {
+    if (fullAccount !== undefined && id) {
+      const new_options = {
+        extensions: [...fullAccount.account.options.extensions],
+        memo_key: fullAccount.account.options.memo_key,
+        num_committee: fullAccount.account.options.num_committee,
+        num_witness: fullAccount.account.options.num_witness,
+        num_son: fullAccount.account.options.num_son,
+        votes: [...fullAccount.account.options.votes],
+        voting_account: fullAccount.account.options.voting_account,
+      } as AccountOptions;
+
+      const trx = buildUpdateAccountTransaction(
+        {
+          new_options,
+          extensions: { value: { update_last_voting_time: true } },
+        },
+        id
+      );
+
+      setReconfirmPendingTransaction(trx);
+      return trx;
+    }
+  }, [
+    fullAccount,
+    id,
+    buildUpdateAccountTransaction,
+    setReconfirmPendingTransaction,
+  ]);
+
+  const getReconfirmFee = useCallback(async () => {
+    const trx = getReconfirmTrx();
+
+    if (trx !== undefined) {
+      const fee = await getTrxFee([trx]);
+      if (fee !== undefined) {
+        setReconfirmFee(fee);
+      }
+    }
+  }, [getReconfirmTrx, getTrxFee, setReconfirmFee]);
+
+  const handleReconfirmVoting = useCallback(
+    async (signerKey: SignerKey) => {
+      const votingErrorMessage = validateVoting(reconfirmFee);
+      if (votingErrorMessage) {
+        setTransactionErrorMessage(votingErrorMessage);
+        return;
+      }
+      setTransactionErrorMessage("");
+      let trxResult;
+      try {
+        setLoadingTransaction(true);
+        trxResult = await buildTrx([reconfirmPendingTransaction], [signerKey]);
+      } catch (error) {
+        console.log(error);
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.unable_transaction`)
+        );
+        setLoadingTransaction(false);
+      }
+      if (trxResult) {
+        formAccountBalancesByName(localStorageAccount);
+        getUserVotes();
+        setTransactionErrorMessage("");
+        setTransactionSuccessMessage(
+          counterpart.translate(`field.success.published_votes`)
+        );
+        setLoadingTransaction(false);
+      } else {
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.unable_transaction`)
+        );
+        setLoadingTransaction(false);
+      }
+    },
+    [
+      validateVoting,
+      reconfirmFee,
+      setTransactionErrorMessage,
+      setLoadingTransaction,
+      buildTrx,
+      reconfirmPendingTransaction,
+      formAccountBalancesByName,
+      localStorageAccount,
+      getUserVotes,
+    ]
+  );
 
   const getUpdateAccountTrx = useCallback(() => {
     const membersIdentifiers: {
@@ -182,70 +321,60 @@ export function useVoteTab({
 
   const handlePublishChanges = useCallback(
     async (signerKey: SignerKey) => {
-      const userDefaultAsset = assets.find(
-        (asset) => asset.symbol === defaultToken
-      );
-      if (
-        userDefaultAsset === undefined ||
-        (userDefaultAsset.amount as number) < updateAccountFee
-      ) {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.balance_not_enough_to_pay`)
-        );
+      const votingErrorMessage = validateVoting(updateAccountFee);
+      if (votingErrorMessage) {
+        setTransactionErrorMessage(votingErrorMessage);
         return;
       }
-      if (totalGpos <= 0) {
+
+      setTransactionErrorMessage("");
+      let trxResult;
+      try {
+        setLoadingTransaction(true);
+        trxResult = await buildTrx([pendingTransaction], [signerKey]);
+      } catch (error) {
+        console.log(error);
         setTransactionErrorMessage(
-          counterpart.translate(`field.errors.need_to_vest_gpos`)
+          counterpart.translate(`field.errors.unable_transaction`)
         );
-      } else {
+        setLoadingTransaction(false);
+      }
+      if (trxResult) {
+        formAccountBalancesByName(localStorageAccount);
+        getUserVotes();
+        setIsVotesChanged(false);
         setTransactionErrorMessage("");
-        let trxResult;
-        try {
-          setLoadingTransaction(true);
-          trxResult = await buildTrx([pendingTransaction], [signerKey]);
-        } catch (error) {
-          console.log(error);
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.unable_transaction`)
-          );
-          setLoadingTransaction(false);
-        }
-        if (trxResult) {
-          formAccountBalancesByName(localStorageAccount);
-          getUserVotes();
-          setIsVotesChanged(false);
-          setTransactionErrorMessage("");
-          setTransactionSuccessMessage(
-            counterpart.translate(`field.success.published_votes`)
-          );
-          setLoadingTransaction(false);
-          pendingChanges.forEach((vote) =>
-            updateAllMembersRows(vote.id, "update")
-          );
-          afterCloseTransactionModal.current = () => {
-            setPendingChanges([]);
-          };
-        } else {
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.unable_transaction`)
-          );
-          setLoadingTransaction(false);
-        }
+        setTransactionSuccessMessage(
+          counterpart.translate(`field.success.published_votes`)
+        );
+        setLoadingTransaction(false);
+        pendingChanges.forEach((vote) =>
+          updateAllMembersRows(vote.id, "update")
+        );
+        afterCloseTransactionModal.current = () => {
+          setPendingChanges([]);
+        };
+      } else {
+        setTransactionErrorMessage(
+          counterpart.translate(`field.errors.unable_transaction`)
+        );
+        setLoadingTransaction(false);
       }
     },
     [
-      assets,
+      validateVoting,
       updateAccountFee,
       setTransactionErrorMessage,
-      totalGpos,
       setLoadingTransaction,
       buildTrx,
       pendingTransaction,
       formAccountBalancesByName,
       localStorageAccount,
       getUserVotes,
-      setServerApprovedRows,
+      setIsVotesChanged,
+      pendingChanges,
+      updateAllMembersRows,
+      setPendingChanges,
     ]
   );
 
@@ -273,6 +402,7 @@ export function useVoteTab({
     ): VoteRow => {
       let voteType: VoteType;
       let voteActive: boolean;
+      let missedBlocks = 0;
       switch (parseInt(vote.vote_id.charAt(0))) {
         case 0:
           voteType = "committees";
@@ -296,6 +426,7 @@ export function useVoteTab({
             globalProperties["active_witnesses"].indexOf(vote.id) >= 0
               ? true
               : false;
+          missedBlocks = (vote as WitnessAccount).total_missed;
       }
       const name = votesIds.filter((voteId) => voteId[1] === vote.id)[0][0];
 
@@ -312,6 +443,7 @@ export function useVoteTab({
         name: name,
         url: vote.url,
         votes: `${votesAsset?.amount} ${votesAsset?.symbol}`,
+        missedBlocks: missedBlocks,
         action: action,
         active: voteActive,
         status: action === "remove" ? "approved" : "unapproved",
@@ -422,34 +554,6 @@ export function useVoteTab({
     setIsVotesChanged(false);
   }, [serverApprovedRows, setIsVotesChanged]);
 
-  const updateAllMembersRows = useCallback(
-    (memberId: string, changeType: "add" | "cancel" | "update") => {
-      const newAllMembersRows = [...allMembersRows];
-      const selectedRow = allMembersRows.find((vote) => vote.id === memberId);
-      const selectedRowIndex = allMembersRows.findIndex(
-        (vote) => vote.id === memberId
-      );
-      switch (changeType) {
-        case "add":
-          newAllMembersRows[selectedRowIndex].action =
-            selectedRow?.action === "add" ? "pending add" : "pending remove";
-          break;
-        case "cancel":
-          newAllMembersRows[selectedRowIndex].action =
-            selectedRow?.action === "pending add" ? "add" : "remove";
-          break;
-        case "update":
-          newAllMembersRows[selectedRowIndex].action =
-            selectedRow?.action === "pending add" ? "remove" : "add";
-          newAllMembersRows[selectedRowIndex].status =
-            selectedRow?.action === "remove" ? "approved" : "unapproved";
-          break;
-      }
-      setAllMembersRows(newAllMembersRows);
-    },
-    [allMembersRows, setAllMembersRows]
-  );
-
   const clearPendingActions = () => {
     const updatedMembersRows = allMembersRows.map((row) => {
       switch (row.action) {
@@ -478,7 +582,7 @@ export function useVoteTab({
 
   useEffect(() => {
     setGlobalProperties();
-  }, []);
+  }, [setGlobalProperties]);
 
   useEffect(() => {
     if (isArrayEqual(serverApprovedRows, pendingChanges)) {
@@ -489,6 +593,10 @@ export function useVoteTab({
   useEffect(() => {
     getUpdateAccountFee();
   }, [tab, pendingChanges, allMembers, fullAccount]);
+
+  useEffect(() => {
+    getReconfirmFee();
+  }, [getReconfirmFee]);
 
   useEffect(() => {
     if (afterCloseTransactionModal.current) {
@@ -514,5 +622,7 @@ export function useVoteTab({
     loadingTransaction,
     pendingChanges,
     afterSuccessTransactionModalClose: afterCloseTransactionModal.current,
+    handleReconfirmVoting,
+    reconfirmFee,
   };
 }

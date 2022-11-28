@@ -36,6 +36,9 @@ export const WithdrawForm = styled(CardForm)`
         font-size: 20px;
       }
     }
+    .ant-input[disabled] {
+      background-color: unset;
+    }
   }
 `;
 

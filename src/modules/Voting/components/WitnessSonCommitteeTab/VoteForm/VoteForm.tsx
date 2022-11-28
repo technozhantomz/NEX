@@ -92,7 +92,7 @@ export const VoteForm = ({
             {proxy.id !== DEFAULT_PROXY_ID ? (
               <Tooltip
                 placement="top"
-                title={"You have proxied your voting power"}
+                title={counterpart.translate(`tooltips.proxied_account`)}
               >
                 <Styled.Publish
                   type="primary"
