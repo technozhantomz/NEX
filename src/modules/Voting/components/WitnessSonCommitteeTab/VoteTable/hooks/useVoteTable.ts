@@ -1,9 +1,10 @@
 import counterpart from "counterpart";
 import { useEffect, useState } from "react";
 
+import { Form } from "../../../../../../ui/src";
 import { VoteRow } from "../../../../types";
 
-import { UseVoteTableResult } from "./useVoteTable.types";
+import { ReconfirmVoteForm, UseVoteTableResult } from "./useVoteTable.types";
 
 type Args = {
   votes: VoteRow[];
@@ -11,6 +12,8 @@ type Args = {
 
 export function useVoteTable({ votes }: Args): UseVoteTableResult {
   const [searchDataSource, setSearchDataSource] = useState<VoteRow[]>([]);
+
+  const [reconfirmVoteForm] = Form.useForm<ReconfirmVoteForm>();
 
   const getActionString = (action: string): string => {
     switch (action) {
@@ -35,5 +38,6 @@ export function useVoteTable({ votes }: Args): UseVoteTableResult {
     searchDataSource,
     setSearchDataSource,
     getActionString,
+    reconfirmVoteForm,
   };
 }

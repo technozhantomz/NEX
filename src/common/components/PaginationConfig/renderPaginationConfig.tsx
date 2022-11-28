@@ -4,14 +4,19 @@ import { CSSProperties, ReactNode } from "react";
 type Args = {
   loading: boolean;
   pageSize: number;
+  showSizeChanger?: boolean;
 };
-export function renderPaginationConfig({ loading, pageSize }: Args):
+export function renderPaginationConfig({
+  loading,
+  pageSize,
+  showSizeChanger = false,
+}: Args):
   | false
   | {
       hideOnSinglePage: boolean;
       showSizeChanger: boolean;
       size: string;
-      pageSize: number;
+      defaultPageSize: number;
       showLessItems: boolean;
       itemRender: (
         _page: number,
@@ -21,10 +26,10 @@ export function renderPaginationConfig({ loading, pageSize }: Args):
     } {
   return !loading
     ? {
-        hideOnSinglePage: true,
-        showSizeChanger: false,
+        hideOnSinglePage: !showSizeChanger,
+        showSizeChanger: showSizeChanger,
+        defaultPageSize: pageSize,
         size: "small",
-        pageSize: pageSize,
         showLessItems: true,
         itemRender: (
           _page: number,
