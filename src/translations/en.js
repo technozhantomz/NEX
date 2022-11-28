@@ -505,7 +505,10 @@ export const en = {
     },
   },
   buttons: {
-    reconfirm_votes: "Reconfirm votes",
+    confirmed: "Confirmed",
+    reconfirm_votes: "Reconfirm",
+    confirm_votes: "Confirm",
+    proxied_account: "Proxied account",
     enter_amount: "Enter an amount",
     swap_coins: "Swap coins",
     login_and_swap_coins: "Login & swap coins",
@@ -975,6 +978,8 @@ export const en = {
       use_whalevault: "Use WhaleVault extension",
       unsaved_changes: "You have unsaved changes to your settings",
       coins_token: "Coins/Tokens",
+      approved: "Approved",
+      removed: "Removed",
     },
     comments: {
       deposit_hbd:

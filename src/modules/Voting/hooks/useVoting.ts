@@ -13,7 +13,9 @@ import { UseVotingResult } from "./useVoting.types";
 
 export function useVoting(): UseVotingResult {
   const [fullAccount, setFullAccount] = useState<FullAccount>();
-  const [serverApprovedVotes, setServerApprovedVotes] = useState<Vote[]>([]);
+  const [serverApprovedVotesIds, setServerApprovedVotesIds] = useState<
+    string[]
+  >([]);
   const [loadingUserVotes, setLoadingUserVotes] = useState<boolean>(true);
   const [allMembers, setAllMembers] = useState<Vote[]>([]);
   const [allMembersIds, setAllMembersIds] = useState<[string, string][]>([]);
@@ -97,11 +99,12 @@ export function useVoting(): UseVotingResult {
     try {
       setLoadingUserVotes(true);
       const fullAccount = await getFullAccount(localStorageAccount, false);
-      setFullAccount(fullAccount);
+      console.log("fullAccount", fullAccount);
       if (fullAccount !== undefined) {
         await getProxyAccount(fullAccount.account.options.voting_account);
-        const votes = fullAccount.votes;
-        setServerApprovedVotes(votes);
+        const votesIds = fullAccount.votes.map((vote) => vote.vote_id);
+        setServerApprovedVotesIds(votesIds);
+        setFullAccount(fullAccount);
       }
 
       setLoadingUserVotes(false);
@@ -113,7 +116,7 @@ export function useVoting(): UseVotingResult {
     setLoadingUserVotes,
     localStorageAccount,
     setFullAccount,
-    setServerApprovedVotes,
+    setServerApprovedVotesIds,
   ]);
 
   useEffect(() => {
@@ -130,7 +133,7 @@ export function useVoting(): UseVotingResult {
 
   return {
     loadingUserVotes,
-    serverApprovedVotes,
+    serverApprovedVotesIds,
     allMembers,
     fullAccount,
     allMembersIds,

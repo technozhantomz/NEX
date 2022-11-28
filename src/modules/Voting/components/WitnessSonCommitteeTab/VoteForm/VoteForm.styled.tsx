@@ -9,15 +9,14 @@ import {
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 import { Reset as UiReset } from "../../../../../ui/src/icons";
-import { mixIns } from "../../../../../ui/src/mixins";
 
 export const VoteFormWrapper = styled.div`
-  margin-bottom: 25px;
-  padding: 0 25px 19px;
-  ${mixIns.hairline}
+  padding: 0 25px;
+  background-color: ${colors.white};
   ${breakpoint.sm} {
-    border: none;
     padding: 0 35px;
+    background-color: unset;
+    min-height: 86px;
   }
 `;
 
@@ -27,14 +26,27 @@ export const VoteSearch = styled(TableSearch)`
 
 export const VoteForm = styled(Form)`
   max-width: 100%;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  ${breakpoint.sm} {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 `;
 
 export const ActionsContainer = styled.div`
   display: flex;
   justify-content: center;
-  flex-wrap: wrap-reverse;
+  flex-wrap: wrap;
   ${breakpoint.sm} {
-    justify-content: flex-end;
+    justify-content: flex-start;
+  }
+  .ant-tooltip-disabled-compatible-wrapper {
+    min-width: 85%;
+    text-align: center;
+    ${breakpoint.sm} {
+      min-width: unset;
+    }
   }
 `;
 

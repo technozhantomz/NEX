@@ -9,6 +9,8 @@ import {
   DataTableHeaderBar,
   DataTableMissedBlocks,
   DataTableUrlIcon,
+  LikeFilled,
+  LikeOutlined,
   Row as row,
   styled,
   Button as UiButton,
@@ -21,12 +23,25 @@ import { colors } from "../../../../../ui/src/colors";
 import { Check as check, Xmark as xmark } from "../../../../../ui/src/icons";
 import { mixIns } from "../../../../../ui/src/mixins";
 
+export const LikeFilledIcon = styled(LikeFilled)`
+  font-size: 16px;
+  color: ${colors.textColorSecondary};
+`;
+
+export const LikeOutlinedIcon = styled(LikeOutlined)`
+  font-size: 16px;
+  color: ${colors.textColorSecondary};
+`;
+
 export const MissedBlocks = styled(DataTableMissedBlocks)``;
 
 export const VoteTableWrapper = styled.div`
   margin: 0 25px;
   ${breakpoint.sm} {
     margin: 0 35px;
+  }
+  .cursor-pointer {
+    cursor: pointer;
   }
 `;
 
@@ -64,7 +79,9 @@ export const VoteList = styled(UiList)`
   }
 `;
 
-export const VoteListItem = styled(UiListItem)``;
+export const VoteListItem = styled(UiListItem)`
+  border-bottom: 0.25px solid ${colors.borderColorBase} !important;
+`;
 
 export const VoteItemContent = styled(DataItemContent)``;
 
@@ -83,7 +100,7 @@ export const VoteActionButton = styled(UiButton)`
 `;
 
 export const Container = styled.div`
-  margin-bottom: 25px;
+  margin-bottom: 0px;
 `;
 
 export const Title = styled(DataTableHeader)``;

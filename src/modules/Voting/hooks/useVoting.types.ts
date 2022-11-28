@@ -2,7 +2,7 @@ import { FullAccount, Proxy, Vote } from "../../../common/types";
 
 export type UseVotingResult = {
   loadingUserVotes: boolean;
-  serverApprovedVotes: Vote[];
+  serverApprovedVotesIds: string[];
   allMembers: Vote[];
   fullAccount: FullAccount | undefined;
   allMembersIds: [string, string][];
