@@ -77,10 +77,27 @@ export const VoteList = styled(UiList)`
   .ant-pagination-item-active {
     border-right: 2px solid ${colors.borderColorBase};
   }
+  .ant-pagination-options {
+    display: inline-block;
+  }
+
+  .ant-list-pagination {
+    text-align: center;
+  }
+
+  .ant-pagination.ant-pagination-mini .ant-pagination-options {
+    margin-left: 16px;
+    padding-top: 4px;
+    ${breakpoint.sm} {
+      padding-top: 0;
+    }
+  }
 `;
 
 export const VoteListItem = styled(UiListItem)`
-  border-bottom: 0.25px solid ${colors.borderColorBase} !important;
+  :not(:last-child) {
+    border-bottom: 0.25px solid ${colors.borderColorBase} !important;
+  }
 `;
 
 export const VoteItemContent = styled(DataItemContent)``;

@@ -99,7 +99,6 @@ export function useVoting(): UseVotingResult {
     try {
       setLoadingUserVotes(true);
       const fullAccount = await getFullAccount(localStorageAccount, false);
-      console.log("fullAccount", fullAccount);
       if (fullAccount !== undefined) {
         await getProxyAccount(fullAccount.account.options.voting_account);
         const votesIds = fullAccount.votes.map((vote) => vote.vote_id);

@@ -1,6 +1,4 @@
 import { SearchTableInput } from "ant-table-extensions";
-import { TablePaginationConfig } from "antd";
-import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
@@ -9,7 +7,7 @@ import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
-import { renderPaginationConfig } from "../../../../../common/components";
+import { renderPaginationItem } from "../../../../../common/components";
 import { useViewportContext } from "../../../../../common/providers";
 import { DownloadOutlined, SearchOutlined } from "../../../../../ui/src";
 import { VoteRow } from "../../../types";
@@ -86,13 +84,14 @@ export const VoteTable = ({
             itemLayout="vertical"
             dataSource={searchDataSource}
             loading={loading}
-            pagination={
-              renderPaginationConfig({
-                loading,
-                pageSize: 10,
-                showSizeChanger: true,
-              }) as false | PaginationConfig
-            }
+            pagination={{
+              defaultPageSize: 10,
+              defaultCurrent: 1,
+              showSizeChanger: true,
+              showLessItems: true,
+              size: "small",
+              itemRender: renderPaginationItem(),
+            }}
             renderItem={(item) => (
               <Styled.VoteListItem key={(item as VoteRow).key}>
                 <Styled.VoteItemContent>
@@ -288,13 +287,14 @@ export const VoteTable = ({
             columns={columns as ColumnsType<unknown>}
             dataSource={searchDataSource}
             loading={loading}
-            pagination={
-              renderPaginationConfig({
-                loading,
-                pageSize: 10,
-                showSizeChanger: true,
-              }) as false | TablePaginationConfig
-            }
+            pagination={{
+              defaultPageSize: 20,
+              defaultCurrent: 1,
+              showSizeChanger: true,
+              size: "small",
+              showLessItems: true,
+              itemRender: renderPaginationItem(),
+            }}
             size="small"
           />
         )}
