@@ -1,5 +1,4 @@
 import {
-  Button,
   Col as col,
   DataItemContent,
   DataTable,
@@ -9,6 +8,8 @@ import {
   DataTableHeaderBar,
   DataTableMissedBlocks,
   DataTableUrlIcon,
+  LikeFilled,
+  LikeOutlined,
   Row as row,
   styled,
   Button as UiButton,
@@ -21,6 +22,16 @@ import { colors } from "../../../../../ui/src/colors";
 import { Check as check, Xmark as xmark } from "../../../../../ui/src/icons";
 import { mixIns } from "../../../../../ui/src/mixins";
 
+export const LikeFilledIcon = styled(LikeFilled)`
+  font-size: 16px;
+  color: ${colors.textColorSecondary};
+`;
+
+export const LikeOutlinedIcon = styled(LikeOutlined)`
+  font-size: 16px;
+  color: ${colors.textColorSecondary};
+`;
+
 export const MissedBlocks = styled(DataTableMissedBlocks)``;
 
 export const VoteTableWrapper = styled.div`
@@ -28,16 +39,8 @@ export const VoteTableWrapper = styled.div`
   ${breakpoint.sm} {
     margin: 0 35px;
   }
-`;
-
-export const Reconfirm = styled(Button)`
-  height: 50px;
-  min-width: 60%;
-  margin-right: 16px;
-  margin-bottom: 8px;
-  ${breakpoint.sm} {
-    min-width: 165px;
-    margin-bottom: 0;
+  .cursor-pointer {
+    cursor: pointer;
   }
 `;
 
@@ -64,7 +67,9 @@ export const VoteList = styled(UiList)`
   }
 `;
 
-export const VoteListItem = styled(UiListItem)``;
+export const VoteListItem = styled(UiListItem)`
+  border-bottom: 0.25px solid ${colors.borderColorBase} !important;
+`;
 
 export const VoteItemContent = styled(DataItemContent)``;
 
@@ -83,7 +88,7 @@ export const VoteActionButton = styled(UiButton)`
 `;
 
 export const Container = styled.div`
-  margin-bottom: 25px;
+  margin-bottom: 0px;
 `;
 
 export const Title = styled(DataTableHeader)``;
