@@ -12,7 +12,8 @@ import * as Styled from "./OpenOrdersTable.styled";
 import { OpenOrdersTableRow, useOpenOrdersTable } from "./hooks";
 
 export const OpenOrdersTabel = (): JSX.Element => {
-  const { loading, openOrdersColumns } = useOpenOrdersTable();
+  const { loading, openOrdersColumns, openOrdersTableRows } =
+    useOpenOrdersTable();
 
   const componentRef = useRef<HTMLDivElement>(null);
 
@@ -38,7 +39,7 @@ export const OpenOrdersTabel = (): JSX.Element => {
         </Styled.DownloadLinks>
       </Styled.OpenOrdersHeaderBar>
       <Styled.OpenOrdersTable
-        // dataSource={openOrdersTableRows}
+        dataSource={openOrdersTableRows}
         columns={openOrdersColumns as ColumnsType<OpenOrdersTableRow>}
         loading={loading}
         pagination={
