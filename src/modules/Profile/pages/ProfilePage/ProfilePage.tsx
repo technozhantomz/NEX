@@ -30,7 +30,6 @@ const ProfilePage: NextPage = () => {
       }}
     >
       <Styled.ProfileCard>
-        <p>Profile Page</p>
         <Styled.Tabs
           activeKey={`${tab ? tab : "orders"}`}
           onTabClick={(key) => {
@@ -38,13 +37,13 @@ const ProfilePage: NextPage = () => {
             if (sm) setVisible(false);
           }}
         >
-          <TabPane tab="orders" key="orders">
+          <TabPane tab="Orders" key="orders">
             <p>orders Tab</p>
           </TabPane>
-          <TabPane tab="activity" key="activity">
+          <TabPane tab="Activity" key="activity">
             <p>activity Tab</p>
           </TabPane>
-          <TabPane tab="notifications" key="notifications">
+          <TabPane tab="Notifications" key="notifications">
             <p>notifications Tab</p>
           </TabPane>
         </Styled.Tabs>
