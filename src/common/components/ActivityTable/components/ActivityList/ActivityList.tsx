@@ -1,6 +1,4 @@
-import { PaginationConfig } from "antd/lib/pagination";
-
-import { renderPaginationConfig, UserLinkExtractor } from "../../..";
+import { renderPaginationItem, UserLinkExtractor } from "../../..";
 import { ActivityRow } from "../../../../types";
 import { ActivityColumns as columns } from "../ActivityColumns/";
 import { ActivityTag } from "../ActivityTag";
@@ -21,11 +19,15 @@ export const ActivityList = ({
       itemLayout="vertical"
       dataSource={activitiesRows}
       loading={loading}
-      pagination={
-        renderPaginationConfig({ loading, pageSize: 2 }) as
-          | false
-          | PaginationConfig
-      }
+      pagination={{
+        hideOnSinglePage: true,
+        defaultPageSize: 2,
+        defaultCurrent: 1,
+        showLessItems: true,
+        showSizeChanger: false,
+        size: "small",
+        itemRender: renderPaginationItem(),
+      }}
       renderItem={(item) => {
         const activityRow = item as ActivityRow;
         return (

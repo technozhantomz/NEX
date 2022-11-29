@@ -1,6 +1,5 @@
 import { SearchTableInput } from "ant-table-extensions";
-import { Image, TablePaginationConfig } from "antd";
-import { PaginationConfig } from "antd/lib/pagination";
+import { Image } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
@@ -8,7 +7,7 @@ import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
-import { renderPaginationConfig } from "../../../../common/components";
+import { renderPaginationItem } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import {
   Avatar,
@@ -72,11 +71,15 @@ export const NFTsTable = (): JSX.Element => {
           itemLayout="vertical"
           dataSource={searchDataSource}
           loading={loading}
-          pagination={
-            renderPaginationConfig({ loading, pageSize: 2 }) as
-              | false
-              | PaginationConfig
-          }
+          pagination={{
+            hideOnSinglePage: true,
+            defaultPageSize: 2,
+            defaultCurrent: 1,
+            showLessItems: true,
+            showSizeChanger: false,
+            size: "small",
+            itemRender: renderPaginationItem(),
+          }}
           renderItem={(item) => (
             <Styled.NFTsListItem key={item.key}>
               <Styled.NFTsItemContent>
@@ -139,11 +142,15 @@ export const NFTsTable = (): JSX.Element => {
           dataSource={searchDataSource}
           columns={nftColumns as ColumnsType<unknown>}
           loading={loading}
-          pagination={
-            renderPaginationConfig({ loading, pageSize: 2 }) as
-              | false
-              | TablePaginationConfig
-          }
+          pagination={{
+            hideOnSinglePage: true,
+            defaultPageSize: 2,
+            defaultCurrent: 1,
+            showSizeChanger: false,
+            showLessItems: true,
+            size: "small",
+            itemRender: renderPaginationItem(),
+          }}
         />
       )}
       <Styled.PrintTable>

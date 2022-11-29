@@ -1,6 +1,4 @@
 import { SearchTableInput } from "ant-table-extensions";
-import { TablePaginationConfig } from "antd";
-import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
@@ -9,7 +7,7 @@ import { ReactInstance, RefObject, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
-import { renderPaginationConfig } from "../../../../../../common/components";
+import { renderPaginationItem } from "../../../../../../common/components";
 import { useViewportContext } from "../../../../../../common/providers";
 import {
   DownloadOutlined,
@@ -79,12 +77,15 @@ export const TransactionsTable = ({
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          pagination={
-            renderPaginationConfig({
-              loading: loadingBlockDetails,
-              pageSize: 2,
-            }) as PaginationConfig
-          }
+          pagination={{
+            hideOnSinglePage: true,
+            defaultPageSize: 2,
+            defaultCurrent: 1,
+            showLessItems: true,
+            showSizeChanger: false,
+            size: "small",
+            itemRender: renderPaginationItem(),
+          }}
           loading={loadingBlockDetails}
           renderItem={(item) => (
             <Link href={`/blockchain/${block}/${item.rank}`}>
@@ -170,12 +171,15 @@ export const TransactionsTable = ({
               },
             };
           }}
-          pagination={
-            renderPaginationConfig({
-              loading: loadingBlockDetails,
-              pageSize: 5,
-            }) as false | TablePaginationConfig
-          }
+          pagination={{
+            hideOnSinglePage: true,
+            defaultPageSize: 5,
+            defaultCurrent: 1,
+            showSizeChanger: false,
+            showLessItems: true,
+            size: "small",
+            itemRender: renderPaginationItem(),
+          }}
         />
       )}
       <Styled.PrintTable>

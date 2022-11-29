@@ -1,6 +1,4 @@
-import { TablePaginationConfig } from "antd";
-
-import { renderPaginationConfig } from "..";
+import { renderPaginationItem } from "..";
 import { useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityTable.styled";
@@ -33,11 +31,15 @@ export const ActivityTable = ({
           columns={columns}
           dataSource={activitiesRows}
           loading={loading}
-          pagination={
-            renderPaginationConfig({ loading, pageSize: 15 }) as
-              | false
-              | TablePaginationConfig
-          }
+          pagination={{
+            hideOnSinglePage: true,
+            defaultPageSize: 15,
+            defaultCurrent: 1,
+            showSizeChanger: false,
+            showLessItems: true,
+            size: "small",
+            itemRender: renderPaginationItem(),
+          }}
           size="small"
           className={`activity-table ${className ? className : ""}`}
         />
