@@ -855,6 +855,9 @@ export const ru = {
         heading: "Требуется ваш пароль или ключ %(neededKeyType)s",
       },
     },
+    profile: {
+      heading: "Профиль",
+    },
   },
   links: {
     create_account: "Зарегистрироваться",

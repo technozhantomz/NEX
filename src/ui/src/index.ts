@@ -57,6 +57,7 @@ export {
   LoadingOutlined,
   DownloadOutlined,
   SearchOutlined,
+  ProfileOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";

@@ -852,6 +852,9 @@ export const en = {
         heading: "Your password or %(neededKeyType)s key is needed",
       },
     },
+    profile: {
+      heading: "Profile",
+    },
   },
   links: {
     create_account: "Create account",
