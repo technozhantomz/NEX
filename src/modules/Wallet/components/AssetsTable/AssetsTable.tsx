@@ -1,6 +1,4 @@
 import { SearchTableInput } from "ant-table-extensions";
-import { TablePaginationConfig } from "antd";
-import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { ReactInstance, ReactNode, useRef } from "react";
@@ -8,7 +6,7 @@ import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
 import { AssetsPrintTable } from "..";
-import { renderPaginationConfig } from "../../../../common/components";
+import { renderPaginationItem } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { DownloadOutlined, List, SearchOutlined } from "../../../../ui/src";
 import { AssetTitle } from "../AssetTitle";
@@ -76,11 +74,15 @@ export const AssetsTable = ({
           itemLayout="vertical"
           dataSource={searchDataSource}
           loading={loading}
-          pagination={
-            renderPaginationConfig({ loading, pageSize: 2 }) as
-              | false
-              | PaginationConfig
-          }
+          pagination={{
+            hideOnSinglePage: true,
+            defaultPageSize: 2,
+            defaultCurrent: 1,
+            showLessItems: true,
+            showSizeChanger: false,
+            size: "small",
+            itemRender: renderPaginationItem(),
+          }}
           renderItem={(item) => (
             <Styled.AssetListItem
               key={item.key}
@@ -118,11 +120,15 @@ export const AssetsTable = ({
           dataSource={searchDataSource}
           columns={assetsColumns as ColumnsType<AssetTableRow>}
           loading={loading}
-          pagination={
-            renderPaginationConfig({ loading, pageSize: 2 }) as
-              | false
-              | TablePaginationConfig
-          }
+          pagination={{
+            hideOnSinglePage: true,
+            defaultPageSize: 2,
+            defaultCurrent: 1,
+            showSizeChanger: false,
+            showLessItems: true,
+            size: "small",
+            itemRender: renderPaginationItem(),
+          }}
           size="small"
         />
       )}
