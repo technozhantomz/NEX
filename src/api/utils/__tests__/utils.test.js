@@ -2,95 +2,85 @@ import { utils } from "../";
 import { isArrayEqual } from "../isArrayEqual";
 
 //Test: isArrayEqual
-//test1
-test("[3,2,1] is equal to [5,1] => 3+2+1=6 == 5+1=6", () => {
-  expect(isArrayEqual([3, 2, 1], [3, 2, 1])).toBe(true);
-});
-//test2
-test("[3,2,1] is equal to [1,2,3] => 3 + 2 + 1 = 6 == 1+2+3 = 6", () => {
-  expect(isArrayEqual([3, 2, 1], [1, 2, 3])).toBe(true);
-});
-//test3
-test("[3,2,1] is not equal to [5,1,4] => 3 + 2 + 1 = 6 == 5+1+4 = 10", () => {
-  expect(isArrayEqual([3, 2, 1], [5, 1, 4])).toBe(false);
-});
-//test4
-test("[] is equal to []", () => {
-  expect(isArrayEqual([], [])).toBe(true);
-});
-//test5
-test("null is equal to null", () => {
-  expect(isArrayEqual(null, null)).toBe(true);
-});
-//test6
-test("undefined is equal to undefined", () => {
-  expect(isArrayEqual(undefined, undefined)).toBe(true);
+describe("isArrayEqual", () => {
+  it("[3,2,1] is equal to [5,1] => 3+2+1=6 == 5+1=6", () => {
+    expect(isArrayEqual([3, 2, 1], [3, 2, 1])).toBe(true);
+  });
+  it("[3,2,1] is equal to [1,2,3] => 3 + 2 + 1 = 6 == 1+2+3 = 6", () => {
+    expect(isArrayEqual([3, 2, 1], [1, 2, 3])).toBe(true);
+  });
+  it("[3,2,1] is not equal to [5,1,4] => 3 + 2 + 1 = 6 == 5+1+4 = 10", () => {
+    expect(isArrayEqual([3, 2, 1], [5, 1, 4])).toBe(false);
+  });
+
+  it("[] is equal to []", () => {
+    expect(isArrayEqual([], [])).toBe(true);
+  });
+  it("null is equal to null", () => {
+    expect(isArrayEqual(null, null)).toBe(true);
+  });
+  it("undefined is equal to undefined", () => {
+    expect(isArrayEqual(undefined, undefined)).toBe(true);
+  });
 });
 
 //Test: utils.isNumber
-//test1
-test('"block" writes to => "block"', () => {
-  expect(utils.isNumber("1")).toBe(true);
-});
-//test2
-test('"one" => false', () => {
-  expect(utils.isNumber("one")).toBe(false);
-});
-//test3
-test("1 => true", () => {
-  expect(utils.isNumber(1)).toBe(true);
+describe("isNumber", () => {
+  it("1 expects true", () => {
+    expect(utils.isNumber(1)).toBe(true);
+  });
+  it('"1" expects true"', () => {
+    expect(utils.isNumber("1")).toBe(true);
+  });
+  it('"one" expects false', () => {
+    expect(utils.isNumber("one")).toBe(false);
+  });
 });
 
 //Test: utils.isUrlsEqual
-//test1
-test('"www.google.com" && "www.google.com" are the same', () => {
-  expect(utils.isUrlsEqual("www.google.com", "www.google.com")).toBe(true);
-});
-//test2
-test('"www.google.com" && "www.google.ca" are not the same', () => {
-  expect(utils.isUrlsEqual("www.google.com", "www.google.ca")).toBe(false);
-});
-//test3
-test('"" && "" are the same', () => {
-  expect(utils.isUrlsEqual("", "")).toBe(true);
+describe("isUrlsEqual", () => {
+  it('"www.google.com" && "www.google.com" are the same', () => {
+    expect(utils.isUrlsEqual("www.google.com", "www.google.com")).toBe(true);
+  });
+  it('"www.google.com" && "www.google.ca" are not the same', () => {
+    expect(utils.isUrlsEqual("www.google.com", "www.google.ca")).toBe(false);
+  });
+  it('"" && "" are the same', () => {
+    expect(utils.isUrlsEqual("", "")).toBe(true);
+  });
 });
 
 //Test: utils.getBlockchainFromSymbol
-//test1
-test('"www.google.com" && "www.google.com" are the same', () => {
-  expect(utils.getBlockchainFromSymbol("HIVE")).toBe("Hive");
-});
-
-//test2
-test('the blockchain for the symbol "ETH" is Ethereum', () => {
-  expect(utils.getBlockchainFromSymbol("ETH")).toBe("Ethereum");
-});
-
-//test3
-test('the blockchain for the symbol "eth" is Ethereum', () => {
-  expect(utils.getBlockchainFromSymbol("eth")).toBe("Ethereum");
-});
-
-//test4
-test('the blockchain for the symbol "BTC" is Bitcoin', () => {
-  expect(utils.getBlockchainFromSymbol("BTC")).toBe("Bitcoin");
-});
-
-//test5
-test('the blockchain for the symbol "btc" is Bitcoin', () => {
-  expect(utils.getBlockchainFromSymbol("btc")).toBe("Bitcoin");
+describe("trimNum", () => {
+  it('the blockchain for "HIVE" is Hive', () => {
+    expect(utils.getBlockchainFromSymbol("HIVE")).toBe("Hive");
+  });
+  it('the blockchain for "Hive" is Hive', () => {
+    expect(utils.getBlockchainFromSymbol("Hive")).toBe("Hive");
+  });
+  it('the blockchain for the symbol "ETH" is Ethereum', () => {
+    expect(utils.getBlockchainFromSymbol("ETH")).toBe("Ethereum");
+  });
+  it('the blockchain for the symbol "eth" is Ethereum', () => {
+    expect(utils.getBlockchainFromSymbol("eth")).toBe("Ethereum");
+  });
+  it('the blockchain for the symbol "BTC" is Bitcoin', () => {
+    expect(utils.getBlockchainFromSymbol("BTC")).toBe("Bitcoin");
+  });
+  it('the blockchain for the symbol "btc" is Bitcoin', () => {
+    expect(utils.getBlockchainFromSymbol("btc")).toBe("Bitcoin");
+  });
 });
 
 //Test: utils.trimNum
-//test1
-test("1 => 1", () => {
-  expect(utils.trimNum(1)).toBe(1);
-});
-//test1
-test("1.0 => 1", () => {
-  expect(utils.trimNum(1.0)).toBe(1);
-});
-//test1
-test("1000.000 => 1000", () => {
-  expect(utils.trimNum(1000.0)).toBe(1000);
+describe("trimNum", () => {
+  it("1 => 1", () => {
+    expect(utils.trimNum(1)).toBe(1);
+  });
+  it("1.0 => 1", () => {
+    expect(utils.trimNum(1.0)).toBe(1);
+  });
+  it("1000.0 expects 1000", () => {
+    expect(utils.trimNum(1000.0)).toBe(1000);
+  });
 });
