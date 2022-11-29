@@ -5,28 +5,13 @@ import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
 import Link from "next/link";
-import { Dispatch, ReactInstance, SetStateAction, useRef } from "react";
+import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
-import { DEFAULT_PROXY_ID } from "../../../../../api/params";
-import {
-  PasswordModal,
-  renderPaginationConfig,
-  TransactionModal,
-} from "../../../../../common/components";
-import { useHandleTransactionForm } from "../../../../../common/hooks";
-import {
-  useUserContext,
-  useViewportContext,
-} from "../../../../../common/providers";
-import { Proxy, SignerKey } from "../../../../../common/types";
-import {
-  DownloadOutlined,
-  Form,
-  SearchOutlined,
-  Tooltip,
-} from "../../../../../ui/src";
+import { renderPaginationConfig } from "../../../../../common/components";
+import { useViewportContext } from "../../../../../common/providers";
+import { DownloadOutlined, SearchOutlined } from "../../../../../ui/src";
 import { VoteRow } from "../../../types";
 
 import * as Styled from "./VoteTable.styled";
@@ -35,193 +20,65 @@ import { useVoteTable } from "./hooks";
 
 type Props = {
   tab: string;
-  votes: VoteRow[];
-  type: "pendingChanges" | "allVotes";
+  votesRows: VoteRow[];
   loading: boolean;
-  addChange: (voteId: string) => void;
-  cancelChange: (voteId: string) => void;
-  name: string;
-  handleReconfirmVoting: (signerKey: SignerKey) => Promise<void>;
-  loadingTransaction: boolean;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  transactionErrorMessage: string;
-  transactionSuccessMessage: string;
-  reconfirmFee: number;
-  proxy: Proxy;
-  desiredMembers: number;
+  addVote: (voteId: string) => void;
+  removeVote: (voteId: string) => void;
+  localApprovedVotesIds: string[];
 };
 
 export const VoteTable = ({
   tab,
-  votes,
-  type,
+  votesRows,
   loading,
-  addChange,
-  cancelChange,
-  name,
-  handleReconfirmVoting,
-  loadingTransaction,
-  setTransactionErrorMessage,
-  setTransactionSuccessMessage,
-  transactionErrorMessage,
-  transactionSuccessMessage,
-  reconfirmFee,
-  proxy,
-  desiredMembers,
+  addVote,
+  removeVote,
+  localApprovedVotesIds,
 }: Props): JSX.Element => {
-  const {
-    searchDataSource,
-    setSearchDataSource,
-    getActionString,
-    reconfirmVoteForm,
-  } = useVoteTable({ votes });
+  const { searchDataSource, setSearchDataSource } = useVoteTable({ votesRows });
   const isWitnessTab = tab === "witnesses";
 
   const { sm } = useViewportContext();
-  const { localStorageAccount } = useUserContext();
   const columns = showVotesColumns(
-    addChange,
-    cancelChange,
-    getActionString,
+    localApprovedVotesIds,
+    addVote,
+    removeVote,
     isWitnessTab
   );
   const componentRef = useRef<HTMLDivElement>(null);
-  const {
-    isPasswordModalVisible,
-    isTransactionModalVisible,
-    showPasswordModal,
-    hidePasswordModal,
-    handleFormFinish,
-    hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleReconfirmVoting,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    neededKeyType: "active",
-  });
-
-  const renderCancelActionRows = (item: VoteRow) =>
-    item.status === "unapproved" ? (
-      <Styled.ApprovedStatus>
-        {counterpart.translate(`pages.voting.status.pending_add`)}
-      </Styled.ApprovedStatus>
-    ) : (
-      <Styled.NotApprovedStatus>
-        {counterpart.translate(`pages.voting.status.pending_remove`)}
-      </Styled.NotApprovedStatus>
-    );
-
-  const renderAddActionRows = (item: VoteRow) =>
-    item.status === "unapproved" ? (
-      <>
-        <Styled.Xmark></Styled.Xmark>
-        <Styled.NotApprovedStatus>
-          {counterpart.translate(`pages.voting.status.not_approved`)}
-        </Styled.NotApprovedStatus>
-      </>
-    ) : (
-      <>
-        <Styled.Check></Styled.Check>
-        <Styled.ApprovedStatus>
-          {counterpart.translate(`pages.voting.status.approved`)}
-        </Styled.ApprovedStatus>
-      </>
-    );
 
   return (
     <Styled.VoteTableWrapper>
       <Styled.VoteHeaderBar>
-        {type === "pendingChanges" ? (
-          <Styled.Title>
-            {counterpart.translate(`field.labels.pending_changes`, {
-              localStorageAccount,
-            })}
-          </Styled.Title>
-        ) : (
-          <>
-            <Styled.Title>
-              {capitalize(counterpart.translate(`pages.voting.${tab}.heading`))}{" "}
-            </Styled.Title>
-            <SearchTableInput
-              columns={columns as ColumnsType<unknown>}
-              dataSource={votes}
-              setDataSource={setSearchDataSource}
-              inputProps={{
-                placeholder: counterpart.translate(
-                  `pages.blocks.${tab}.search_${tab}`
-                ),
-                suffix: <SearchOutlined />,
-              }}
-            />
-            <Form.Provider onFormFinish={handleFormFinish}>
-              <Form
-                form={reconfirmVoteForm}
-                name="reconfirmVoteForm"
-                onFinish={showPasswordModal}
-              >
-                {proxy.id !== DEFAULT_PROXY_ID || !desiredMembers ? (
-                  <Tooltip
-                    placement="top"
-                    title={
-                      proxy.id !== DEFAULT_PROXY_ID
-                        ? counterpart.translate(`tooltips.proxied_account`)
-                        : counterpart.translate(`tooltips.zero_votes`)
-                    }
-                  >
-                    <Styled.Reconfirm
-                      type="primary"
-                      htmlType="submit"
-                      disabled={true}
-                    >
-                      {counterpart.translate(`buttons.reconfirm_votes`)}
-                    </Styled.Reconfirm>
-                  </Tooltip>
-                ) : (
-                  <Styled.Reconfirm type="primary" htmlType="submit">
-                    {counterpart.translate(`buttons.reconfirm_votes`)}
-                  </Styled.Reconfirm>
-                )}
-
-                <PasswordModal
-                  visible={isPasswordModalVisible}
-                  onCancel={hidePasswordModal}
-                  neededKeyType="active"
-                />
-                <TransactionModal
-                  visible={isTransactionModalVisible}
-                  onCancel={hideTransactionModal}
-                  transactionErrorMessage={transactionErrorMessage}
-                  transactionSuccessMessage={transactionSuccessMessage}
-                  loadingTransaction={loadingTransaction}
-                  account={name}
-                  fee={reconfirmFee}
-                  transactionType="account_update"
-                  proxy={proxy}
-                  desiredMembers={desiredMembers}
-                  memberType={tab}
-                />
-              </Form>
-            </Form.Provider>
-            <Styled.DownloadLinks>
-              <DownloadOutlined />
-              <ReactToPrint
-                trigger={() => (
-                  <a href="#">{counterpart.translate(`links.pdf`)}</a>
-                )}
-                content={() => componentRef.current as unknown as ReactInstance}
-              />
-              {` / `}
-              <CSVLink
-                filename={"WitnessesTable.csv"}
-                data={votes}
-                className="btn btn-primary"
-              >
-                {counterpart.translate(`links.csv`)}
-              </CSVLink>
-            </Styled.DownloadLinks>
-          </>
-        )}
+        <Styled.Title>
+          {capitalize(counterpart.translate(`pages.voting.${tab}.heading`))}{" "}
+        </Styled.Title>
+        <SearchTableInput
+          columns={columns as ColumnsType<unknown>}
+          dataSource={votesRows}
+          setDataSource={setSearchDataSource}
+          inputProps={{
+            placeholder: counterpart.translate(
+              `pages.blocks.${tab}.search_${tab}`
+            ),
+            suffix: <SearchOutlined />,
+          }}
+        />
+        <Styled.DownloadLinks>
+          <DownloadOutlined />
+          <ReactToPrint
+            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
+            content={() => componentRef.current as unknown as ReactInstance}
+          />
+          {` / `}
+          <CSVLink
+            filename={"WitnessesTable.csv"}
+            data={votesRows}
+            className="btn btn-primary"
+          >
+            {counterpart.translate(`links.csv`)}
+          </CSVLink>
+        </Styled.DownloadLinks>
       </Styled.VoteHeaderBar>
       <Styled.Container>
         {sm ? (
@@ -303,9 +160,25 @@ export const VoteTable = ({
                           {columns[5].title()}
                         </span>
                         <span className="item-info-value">
-                          {(item as VoteRow).action === "cancel"
-                            ? renderCancelActionRows(item as VoteRow)
-                            : renderAddActionRows(item as VoteRow)}
+                          {(item as VoteRow).status === "unapproved" ? (
+                            <>
+                              <Styled.Xmark></Styled.Xmark>
+                              <Styled.NotApprovedStatus>
+                                {counterpart.translate(
+                                  `pages.voting.status.not_approved`
+                                )}
+                              </Styled.NotApprovedStatus>
+                            </>
+                          ) : (
+                            <>
+                              <Styled.Check></Styled.Check>
+                              <Styled.ApprovedStatus>
+                                {counterpart.translate(
+                                  `pages.voting.status.approved`
+                                )}
+                              </Styled.ApprovedStatus>
+                            </>
+                          )}
                         </span>
                       </div>
                       <div className="item-info">
@@ -313,36 +186,26 @@ export const VoteTable = ({
                           {columns[6].title()}
                         </span>
                         <span className="item-info-value">
-                          {(item as VoteRow).action === "add" ||
-                          (item as VoteRow).action === "remove" ||
-                          (item as VoteRow).action === "cancel" ? (
-                            <Styled.VoteActionButton
+                          {!localApprovedVotesIds.includes(
+                            (item as VoteRow).id
+                          ) ? (
+                            <div
+                              className="cursor-pointer"
                               onClick={() => {
-                                if ((item as VoteRow).action === "cancel") {
-                                  cancelChange((item as VoteRow).id);
-                                } else {
-                                  addChange((item as VoteRow).id);
-                                }
+                                addVote((item as VoteRow).id);
                               }}
                             >
-                              {getActionString(
-                                (item as VoteRow).action
-                              ).toUpperCase()}
-                            </Styled.VoteActionButton>
+                              <Styled.LikeOutlinedIcon />
+                            </div>
                           ) : (
-                            <span>
-                              {(item as VoteRow).action === "pending add"
-                                ? counterpart
-                                    .translate(
-                                      `pages.voting.actions.pending_add`
-                                    )
-                                    .toUpperCase()
-                                : counterpart
-                                    .translate(
-                                      `pages.voting.actions.pending_remove`
-                                    )
-                                    .toUpperCase()}
-                            </span>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => {
+                                removeVote((item as VoteRow).id);
+                              }}
+                            >
+                              <Styled.LikeFilledIcon />
+                            </div>
                           )}
                         </span>
                       </div>
@@ -365,9 +228,25 @@ export const VoteTable = ({
                           {columns[6].title()}
                         </span>
                         <span className="item-info-value">
-                          {(item as VoteRow).action === "cancel"
-                            ? renderCancelActionRows(item as VoteRow)
-                            : renderAddActionRows(item as VoteRow)}
+                          {(item as VoteRow).status === "unapproved" ? (
+                            <>
+                              <Styled.Xmark></Styled.Xmark>
+                              <Styled.NotApprovedStatus>
+                                {counterpart.translate(
+                                  `pages.voting.status.not_approved`
+                                )}
+                              </Styled.NotApprovedStatus>
+                            </>
+                          ) : (
+                            <>
+                              <Styled.Check></Styled.Check>
+                              <Styled.ApprovedStatus>
+                                {counterpart.translate(
+                                  `pages.voting.status.approved`
+                                )}
+                              </Styled.ApprovedStatus>
+                            </>
+                          )}
                         </span>
                       </div>
                       <div className="item-info">
@@ -375,36 +254,26 @@ export const VoteTable = ({
                           {columns[7].title()}
                         </span>
                         <span className="item-info-value">
-                          {(item as VoteRow).action === "add" ||
-                          (item as VoteRow).action === "remove" ||
-                          (item as VoteRow).action === "cancel" ? (
-                            <Styled.VoteActionButton
+                          {!localApprovedVotesIds.includes(
+                            (item as VoteRow).id
+                          ) ? (
+                            <div
+                              className="cursor-pointer"
                               onClick={() => {
-                                if ((item as VoteRow).action === "cancel") {
-                                  cancelChange((item as VoteRow).id);
-                                } else {
-                                  addChange((item as VoteRow).id);
-                                }
+                                addVote((item as VoteRow).id);
                               }}
                             >
-                              {getActionString(
-                                (item as VoteRow).action
-                              ).toUpperCase()}
-                            </Styled.VoteActionButton>
+                              <Styled.LikeOutlinedIcon />
+                            </div>
                           ) : (
-                            <span>
-                              {(item as VoteRow).action === "pending add"
-                                ? counterpart
-                                    .translate(
-                                      `pages.voting.actions.pending_add`
-                                    )
-                                    .toUpperCase()
-                                : counterpart
-                                    .translate(
-                                      `pages.voting.actions.pending_remove`
-                                    )
-                                    .toUpperCase()}
-                            </span>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => {
+                                removeVote((item as VoteRow).id);
+                              }}
+                            >
+                              <Styled.LikeFilledIcon />
+                            </div>
                           )}
                         </span>
                       </div>
@@ -430,20 +299,17 @@ export const VoteTable = ({
           />
         )}
       </Styled.Container>
-      {type === "allVotes" ? (
-        <Styled.PrintTable>
-          <div ref={componentRef}>
-            <Styled.VoteTable
-              dataSource={votes}
-              columns={columns as ColumnsType<unknown>}
-              loading={loading}
-              pagination={false}
-            />
-          </div>
-        </Styled.PrintTable>
-      ) : (
-        ""
-      )}
+
+      <Styled.PrintTable>
+        <div ref={componentRef}>
+          <Styled.VoteTable
+            dataSource={votesRows}
+            columns={columns as ColumnsType<unknown>}
+            loading={loading}
+            pagination={false}
+          />
+        </div>
+      </Styled.PrintTable>
     </Styled.VoteTableWrapper>
   );
 };
