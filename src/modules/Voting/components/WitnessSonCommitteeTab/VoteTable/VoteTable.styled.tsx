@@ -1,5 +1,4 @@
 import {
-  Button,
   Col as col,
   DataItemContent,
   DataTable,
@@ -42,17 +41,6 @@ export const VoteTableWrapper = styled.div`
   }
   .cursor-pointer {
     cursor: pointer;
-  }
-`;
-
-export const Reconfirm = styled(Button)`
-  height: 50px;
-  min-width: 60%;
-  margin-right: 16px;
-  margin-bottom: 8px;
-  ${breakpoint.sm} {
-    min-width: 165px;
-    margin-bottom: 0;
   }
 `;
 
