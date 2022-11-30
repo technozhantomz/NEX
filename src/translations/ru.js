@@ -982,6 +982,7 @@ export const ru = {
       use_whalevault: "Используйте расширение WhaleVault",
       unsaved_changes: "У вас есть несохраненные изменения в настройках",
       coins_token: "Монеты/Жетоны",
+      open_orders: "Открытые ордера",
     },
     comments: {
       deposit_hbd:

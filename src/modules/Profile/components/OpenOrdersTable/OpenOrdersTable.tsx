@@ -20,7 +20,9 @@ export const OpenOrdersTabel = (): JSX.Element => {
   return (
     <Styled.OpenOrdersWrapper>
       <Styled.OpenOrdersHeaderBar>
-        <Styled.OpenOrdersHeader>open orders</Styled.OpenOrdersHeader>
+        <Styled.OpenOrdersHeader>
+          {counterpart.translate(`field.labels.coins_token`)}
+        </Styled.OpenOrdersHeader>
         <Styled.DownloadLinks>
           <DownloadOutlined />
           <ReactToPrint
