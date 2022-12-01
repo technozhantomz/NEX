@@ -4,6 +4,7 @@ import {
   DataTableHeaderBar,
   DataTabWrapper,
   styled,
+  PrintTable as UiPrintTable,
   DataTable as UiTable,
 } from "../../../ui/src";
 import { colors } from "../../../ui/src/colors";
@@ -36,3 +37,5 @@ export const DownloadLinks = styled(DataTableDownloadLinks)``;
 export const ActivityTableHeaderBar = styled(DataTableHeaderBar)`
   margin-bottom: 24px;
 `;
+
+export const PrintTable = styled(UiPrintTable)``;

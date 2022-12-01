@@ -1,3 +1,4 @@
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
@@ -72,6 +73,16 @@ export const ActivityTable = ({
           className={`activity-table ${className ? className : ""}`}
         />
       )}
+      <Styled.PrintTable>
+        <div ref={componentRef}>
+          <Styled.ActivityTable
+            dataSource={activitiesRows}
+            columns={columns as ColumnsType<unknown>}
+            loading={loading}
+            pagination={false}
+          />
+        </div>
+      </Styled.PrintTable>
     </Styled.ActivityTableWrapper>
   );
 };
