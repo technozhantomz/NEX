@@ -91,10 +91,7 @@ const PeerLink: NextPage = () => {
           ) : (
             <Styled.ConnectInfo>
               <InfoCircleOutlined />
-              <span>
-                Hive wallet was not found please check your Hive wallet plugin
-                and refresh the page
-              </span>
+              <span>Connect Hive Wallet</span>
             </Styled.ConnectInfo>
           )}
           {metaMask.isConnected ? (
