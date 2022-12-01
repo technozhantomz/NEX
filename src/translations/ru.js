@@ -506,7 +506,10 @@ export const ru = {
     },
   },
   buttons: {
-    reconfirm_votes: "Подтвердить голоса",
+    confirmed: "Подтвержденный",
+    reconfirm_votes: "Подтвердить",
+    confirm_votes: "Подтверждать",
+    proxied_account: "Прокси-аккаунт",
     enter_amount: "Введите сумму",
     swap_coins: "Обменять монеты",
     login_and_swap_coins: "Войти и поменять монеты",
@@ -982,6 +985,8 @@ export const ru = {
       use_whalevault: "Используйте расширение WhaleVault",
       unsaved_changes: "У вас есть несохраненные изменения в настройках",
       coins_token: "Монеты/Жетоны",
+      approved: "Одобренный",
+      removed: "удаленный",
     },
     comments: {
       deposit_hbd:

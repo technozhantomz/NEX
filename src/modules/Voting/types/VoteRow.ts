@@ -4,11 +4,11 @@ export type VoteRow = {
   key: string;
   rank: number;
   type: "witnesses" | "sons" | "committees";
+  status: "approved" | "unapproved";
   name: string;
   url: string;
   votes: string;
   missedBlocks?: number;
-  action: "add" | "remove" | "pending add" | "pending remove" | "cancel" | "";
-  status: "approved" | "unapproved";
   active: boolean;
+  possibleAction: undefined;
 };

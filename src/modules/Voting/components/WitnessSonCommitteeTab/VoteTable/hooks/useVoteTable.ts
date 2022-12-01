@@ -1,43 +1,23 @@
-import counterpart from "counterpart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Form } from "../../../../../../ui/src";
 import { VoteRow } from "../../../../types";
 
-import { ReconfirmVoteForm, UseVoteTableResult } from "./useVoteTable.types";
+import { UseVoteTableResult } from "./useVoteTable.types";
 
 type Args = {
-  votes: VoteRow[];
+  votesRows: VoteRow[];
 };
 
-export function useVoteTable({ votes }: Args): UseVoteTableResult {
+export function useVoteTable({ votesRows }: Args): UseVoteTableResult {
   const [searchDataSource, setSearchDataSource] = useState<VoteRow[]>([]);
-
-  const [reconfirmVoteForm] = Form.useForm<ReconfirmVoteForm>();
-
-  const getActionString = (action: string): string => {
-    switch (action) {
-      case "add":
-        return counterpart.translate(`pages.voting.actions.add`);
-      case "remove":
-        return counterpart.translate(`pages.voting.actions.remove`);
-      case "cancel":
-        return counterpart.translate(`pages.voting.actions.cancel`);
-      default:
-        return counterpart.translate(`pages.voting.actions.add`);
-    }
-  };
-
-  useEffect(() => {
-    if (votes.length > 0) {
-      setSearchDataSource(votes);
-    }
-  }, [votes]);
+  const [prevVotesRows, setPrevVotesRows] = useState<VoteRow[]>(votesRows);
+  if (votesRows !== prevVotesRows) {
+    setPrevVotesRows(votesRows);
+    setSearchDataSource(votesRows);
+  }
 
   return {
     searchDataSource,
     setSearchDataSource,
-    getActionString,
-    reconfirmVoteForm,
   };
 }

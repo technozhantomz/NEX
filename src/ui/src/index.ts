@@ -57,6 +57,9 @@ export {
   LoadingOutlined,
   DownloadOutlined,
   SearchOutlined,
+  LikeOutlined,
+  LikeFilled,
+  DislikeOutlined,
   ProfileOutlined,
 } from "@ant-design/icons";
 
