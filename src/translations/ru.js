@@ -987,6 +987,7 @@ export const ru = {
       coins_token: "Монеты/Жетоны",
       approved: "Одобренный",
       removed: "удаленный",
+      my_activity: "Моя деятельность",
     },
     comments: {
       deposit_hbd:

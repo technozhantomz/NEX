@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-import { Layout } from "../../../../common/components";
+import { ActivityTable, Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 
 import * as Styled from "./ProfilePage.styled";
@@ -41,7 +41,7 @@ const ProfilePage: NextPage = () => {
             <p>orders Tab</p>
           </TabPane>
           <TabPane tab="Activity" key="activity">
-            <p>activity Tab</p>
+            <ActivityTable userName={"newdemo1"} />
           </TabPane>
           <TabPane tab="Notifications" key="notifications">
             <p>notifications Tab</p>

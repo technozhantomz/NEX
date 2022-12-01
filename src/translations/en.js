@@ -983,6 +983,7 @@ export const en = {
       coins_token: "Coins/Tokens",
       approved: "Approved",
       removed: "Removed",
+      my_activity: "My activity",
     },
     comments: {
       deposit_hbd:
