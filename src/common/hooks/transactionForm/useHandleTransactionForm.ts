@@ -42,15 +42,25 @@ export function useHandleTransactionForm({
     setTransactionErrorMessage("");
     setTransactionSuccessMessage("");
     setIsTransactionModalVisible(false);
-  }, [setIsTransactionModalVisible]);
+  }, [
+    setIsTransactionModalVisible,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+  ]);
+
+  const hidePasswordModal = useCallback(() => {
+    setIsPasswordModalVisible(false);
+  }, [setIsPasswordModalVisible]);
 
   const showPasswordModal = useCallback(() => {
+    // There is no saved password or needed key
     if (
       !password ||
       password === "" ||
       (savedKeyType !== "password" && savedKeyType !== neededKeyType)
     ) {
       setIsPasswordModalVisible(true);
+      // Needed key exists
     } else {
       setIsPasswordModalVisible(false);
       setIsTransactionModalVisible(true);
@@ -62,10 +72,6 @@ export function useHandleTransactionForm({
     neededKeyType,
     setIsTransactionModalVisible,
   ]);
-
-  const hidePasswordModal = useCallback(() => {
-    setIsPasswordModalVisible(false);
-  }, [setIsPasswordModalVisible]);
 
   const handleFormFinish = (name: string, info: any) => {
     const { values, forms } = info;
