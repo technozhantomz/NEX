@@ -14,6 +14,7 @@ export function useActivityTable({
   isWalletActivityTable = false,
 }: UseActivityTableArgs): UseActivityTableResult {
   const [activitiesRows, _setActivitiesRows] = useState<ActivityRow[]>([]);
+  const [searchDataSource, setSearchDataSource] = useState<ActivityRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const { getActivitiesRows } = useActivity();
@@ -65,6 +66,7 @@ export function useActivityTable({
         } as ActivityRow;
       });
       _setActivitiesRows(timeModifiedActivityRows);
+      setSearchDataSource(timeModifiedActivityRows);
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -76,5 +78,5 @@ export function useActivityTable({
     setActivitiesRows();
   }, [userName]);
 
-  return { activitiesRows, loading };
+  return { activitiesRows, loading, searchDataSource, setSearchDataSource };
 }
