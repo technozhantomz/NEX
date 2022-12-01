@@ -115,6 +115,7 @@ const PeerLinkTransfer: NextPage = () => {
                     {counterpart.translate(`transfer.available`)}:
                   </Styled.LeftSubText>
                   <Styled.LeftSubText>
+                    {"~"}
                     {"0.00"} {selectedFromToken}
                   </Styled.LeftSubText>
                 </Styled.Col>
@@ -150,8 +151,8 @@ const PeerLinkTransfer: NextPage = () => {
                 </Form.Item>
               </Styled.Row>
               <Styled.LeftSubText>
-                {counterpart.translate(`transfer.available`)}: {"0.00"}{" "}
-                {selectedFromToken}
+                {counterpart.translate(`transfer.available`)}: {"~"}
+                {"0.00"} {selectedFromToken}
               </Styled.LeftSubText>
               <Styled.FeesContainer>
                 <Styled.SpacedTextContainer>
@@ -159,6 +160,7 @@ const PeerLinkTransfer: NextPage = () => {
                     {counterpart.translate(`transfer.estimated_transfer_fees`)}
                   </Styled.BodyText>
                   <Styled.BodyText>
+                    {"~"}
                     {"0.00"} {selectedFromToken}
                   </Styled.BodyText>
                 </Styled.SpacedTextContainer>
