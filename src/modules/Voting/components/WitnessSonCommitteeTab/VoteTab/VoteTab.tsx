@@ -118,13 +118,13 @@ export const VoteTab = ({
       <Styled.VoteTabCard>
         <VoteTable
           tab={tab}
-          loading={votesLoading}
+          loading={votesLoading || tableRows.length === 0}
           votesRows={tableRows}
           addVote={addVote}
           removeVote={removeVote}
           localApprovedVotesIds={localApprovedVotesIds}
         />
-        {!votesLoading ? renderVotesForm : ""}
+        {!(votesLoading || tableRows.length === 0) ? renderVotesForm : ""}
       </Styled.VoteTabCard>
     </Styled.Container>
   );
