@@ -34,7 +34,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     assetBlockchains,
     sendForm,
     selectedAssetSymbol,
-    selectedAsset,
+    userAsset,
     handleValuesChange,
     onBlockchainChange,
     selectedBlockchain,
@@ -228,15 +228,14 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
               {counterpart.translate(`pages.wallet.available_to_send`)}
             </Styled.AvailableAssetLabel>
             <Styled.AvailableAssetAmount>
-              {selectedAsset ? selectedAsset.amount : 0}
+              {userAsset ? userAsset.amount : 0}
             </Styled.AvailableAssetAmount>
           </Styled.AvailableAssetWrapper>
           <Progress
+            status="normal"
             percent={
-              selectedAsset && selectedAsset.amount && amount
-                ? Number(
-                    ((Number(amount) / selectedAsset.amount) * 100).toFixed(1)
-                  )
+              userAsset && userAsset.amount && amount
+                ? Number(((Number(amount) / userAsset.amount) * 100).toFixed(1))
                 : 0
             }
           />
@@ -275,7 +274,6 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
           <Styled.MemoFormItem
             name="memo"
             validateFirst={true}
-            rules={formValdation.memo}
             validateTrigger="onChange"
           >
             <Styled.Memo
