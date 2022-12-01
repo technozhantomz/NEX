@@ -11,9 +11,7 @@ import { colors } from "../../../../ui/src/colors";
 
 export const OpenOrdersWrapper = styled(DataTabWrapper)``;
 
-export const OpenOrdersHeaderBar = styled(DataTableHeaderBar)`
-  margin-bottom: 24px;
-`;
+export const OpenOrdersHeaderBar = styled(DataTableHeaderBar)``;
 
 export const OpenOrdersHeader = styled(DataTableHeader)``;
 

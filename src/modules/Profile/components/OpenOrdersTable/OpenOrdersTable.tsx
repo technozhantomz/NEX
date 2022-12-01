@@ -1,12 +1,8 @@
 import { TablePaginationConfig } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
 
 import { renderPaginationConfig } from "../../../../common/components";
-import { DownloadOutlined } from "../../../../ui/src";
 
 import * as Styled from "./OpenOrdersTable.styled";
 import { OpenOrdersTableRow, useOpenOrdersTable } from "./hooks";
@@ -15,30 +11,12 @@ export const OpenOrdersTabel = (): JSX.Element => {
   const { loading, openOrdersColumns, openOrdersTableRows } =
     useOpenOrdersTable();
 
-  const componentRef = useRef<HTMLDivElement>(null);
-
   return (
     <Styled.OpenOrdersWrapper>
       <Styled.OpenOrdersHeaderBar>
         <Styled.OpenOrdersHeader>
-          {counterpart.translate(`field.labels.coins_token`)}
+          {counterpart.translate(`field.labels.open_orders`)}
         </Styled.OpenOrdersHeader>
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"OpenOrdersTable.csv"}
-            data={""}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
       </Styled.OpenOrdersHeaderBar>
       <Styled.OpenOrdersTable
         dataSource={openOrdersTableRows}
