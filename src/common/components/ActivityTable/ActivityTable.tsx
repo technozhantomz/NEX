@@ -18,6 +18,7 @@ type Props = {
   isWalletActivityTable?: boolean;
   className?: string;
   showHeader?: boolean;
+  isNotificationTab: boolean;
 };
 
 export const ActivityTable = ({
@@ -25,6 +26,7 @@ export const ActivityTable = ({
   isWalletActivityTable = false,
   className,
   showHeader = false,
+  isNotificationTab,
 }: Props): JSX.Element => {
   const {
     activitiesRows,
@@ -44,7 +46,13 @@ export const ActivityTable = ({
       {showHeader ? (
         <Styled.ActivityTableHeaderBar>
           <Styled.ActivityTableHeader>
-            {counterpart.translate(`pages.profile.activity.my_activity`)}
+            {counterpart.translate(
+              `pages.profile.${
+                isNotificationTab
+                  ? `notification.my_notification`
+                  : `activity.my_activity`
+              }`
+            )}
           </Styled.ActivityTableHeader>
           <SearchTableInput
             columns={activityColumns as ColumnsType<unknown>}
@@ -52,29 +60,37 @@ export const ActivityTable = ({
             setDataSource={setSearchDataSource}
             inputProps={{
               placeholder: counterpart.translate(
-                `pages.profile.activity.search_activitys`
+                `pages.profile.${
+                  isNotificationTab
+                    ? `notification.search_notifications`
+                    : `activity.search_activities`
+                }`
               ),
               suffix: <SearchOutlined />,
             }}
           />
-          <Styled.DownloadLinks>
-            <DownloadOutlined />
-            <ReactToPrint
-              trigger={() => (
-                <a href="#">{counterpart.translate(`links.pdf`)}</a>
-              )}
-              content={() => componentRef.current as unknown as ReactInstance}
-            />
+          {!isNotificationTab ? (
+            <Styled.DownloadLinks>
+              <DownloadOutlined />
+              <ReactToPrint
+                trigger={() => (
+                  <a href="#">{counterpart.translate(`links.pdf`)}</a>
+                )}
+                content={() => componentRef.current as unknown as ReactInstance}
+              />
 
-            {` / `}
-            <CSVLink
-              filename={"ActivityTable.csv"}
-              data={activitiesRows}
-              className="btn btn-primary"
-            >
-              {counterpart.translate(`links.csv`)}
-            </CSVLink>
-          </Styled.DownloadLinks>
+              {` / `}
+              <CSVLink
+                filename={"ActivityTable.csv"}
+                data={activitiesRows}
+                className="btn btn-primary"
+              >
+                {counterpart.translate(`links.csv`)}
+              </CSVLink>
+            </Styled.DownloadLinks>
+          ) : (
+            ""
+          )}
         </Styled.ActivityTableHeaderBar>
       ) : (
         ""

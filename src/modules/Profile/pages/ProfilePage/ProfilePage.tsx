@@ -45,10 +45,18 @@ const ProfilePage: NextPage = () => {
             <p>orders Tab</p>
           </TabPane>
           <TabPane tab="Activity" key="activity">
-            <ActivityTable userName={localStorageAccount} showHeader={true} />
+            <ActivityTable
+              userName={localStorageAccount}
+              showHeader={true}
+              isNotificationTab={false}
+            />
           </TabPane>
           <TabPane tab="Notifications" key="notifications">
-            <p>notifications Tab</p>
+            <ActivityTable
+              userName={localStorageAccount}
+              showHeader={true}
+              isNotificationTab={true}
+            />
           </TabPane>
         </Styled.Tabs>
       </Styled.ProfileCard>
