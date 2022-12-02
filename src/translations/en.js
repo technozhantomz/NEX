@@ -855,6 +855,13 @@ export const en = {
         heading: "Your password or %(neededKeyType)s key is needed",
       },
     },
+    profile: {
+      heading: "Profile",
+      activity: {
+        my_activity: "My Activity",
+        search_activitys: "Search Activities",
+      },
+    },
   },
   links: {
     create_account: "Create account",
@@ -980,6 +987,7 @@ export const en = {
       coins_token: "Coins/Tokens",
       approved: "Approved",
       removed: "Removed",
+      my_activity: "My activity",
     },
     comments: {
       deposit_hbd:

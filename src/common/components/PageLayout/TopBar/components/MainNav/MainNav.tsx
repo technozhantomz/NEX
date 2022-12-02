@@ -4,6 +4,7 @@ import {
   DollarOutlined,
   MenuCard,
   PoweroffOutlined,
+  ProfileOutlined,
   SettingOutlined,
   Switch,
   UserOutlined,
@@ -96,6 +97,13 @@ export const MainNav = (): JSX.Element => {
                 href="/wallet"
                 icon={<DollarOutlined className={"menu-icon"} />}
                 label={counterpart.translate(`pages.wallet.heading`)}
+              />
+            </li>
+            <li>
+              <MenuItem
+                href="/profile"
+                icon={<ProfileOutlined className={"menu-icon"} />}
+                label={counterpart.translate(`pages.profile.heading`)}
               />
             </li>
             {sm ? (
