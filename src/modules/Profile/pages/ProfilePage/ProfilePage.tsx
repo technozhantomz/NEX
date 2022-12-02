@@ -45,7 +45,7 @@ const ProfilePage: NextPage = () => {
             <p>orders Tab</p>
           </TabPane>
           <TabPane tab="Activity" key="activity">
-            <ActivityTable userName={localStorageAccount} />
+            <ActivityTable userName={localStorageAccount} showHeader={true} />
           </TabPane>
           <TabPane tab="Notifications" key="notifications">
             <p>notifications Tab</p>

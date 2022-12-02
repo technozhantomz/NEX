@@ -859,7 +859,7 @@ export const en = {
       heading: "Profile",
       activity: {
         my_activity: "My Activity",
-        search_activitys: "Search Activitys",
+        search_activitys: "Search Activities",
       },
     },
   },

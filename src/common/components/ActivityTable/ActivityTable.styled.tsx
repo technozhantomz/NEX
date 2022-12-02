@@ -24,6 +24,13 @@ export const ActivityTable = styled(UiTable)`
     border: none;
     font-weight: 500;
   }
+
+  .ant-table-container table > thead > tr:first-child th:first-child {
+    width: 150px;
+  }
+  .ant-table-container table > thead > tr:first-child th:last-child {
+    min-width: 110px;
+  }
 `;
 
 export const ActivityTableWrapper = styled(DataTabWrapper)``;
