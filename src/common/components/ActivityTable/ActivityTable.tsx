@@ -37,6 +37,7 @@ export const ActivityTable = ({
   } = useActivityTable({
     userName,
     isWalletActivityTable,
+    isNotificationTab,
   });
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);

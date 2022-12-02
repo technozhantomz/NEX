@@ -29,40 +29,89 @@ export type ActivityColumnType = {
     | undefined;
 };
 
-const headings = ["time", "type", "info", "id", "fee"];
+export const ActivityColumns = (
+  isNotificationTab: boolean
+): ActivityColumnType[] => {
+  const headings = isNotificationTab
+    ? ["time", "type", "info", "id", "fee", "status"]
+    : ["time", "type", "info", "id", "fee"];
 
-const keys = ["time", "type", "info", "id", "fee"];
+  const keys = isNotificationTab
+    ? ["time", "type", "info", "id", "fee", "status"]
+    : ["time", "type", "info", "id", "fee"];
 
-const renders = [
-  undefined,
-  (type: string): JSX.Element => <ActivityTag type={type} />,
-  (value: string): JSX.Element => <UserLinkExtractor infoString={value} />,
-  undefined,
-  undefined,
-];
+  const renders = isNotificationTab
+    ? [
+        undefined,
+        (type: string): JSX.Element => <ActivityTag type={type} />,
+        (value: string): JSX.Element => (
+          <UserLinkExtractor infoString={value} />
+        ),
+        undefined,
+        undefined,
+        (): JSX.Element => <p>read</p>, //Status Implementation Pending
+      ]
+    : [
+        undefined,
+        (type: string): JSX.Element => <ActivityTag type={type} />,
+        (value: string): JSX.Element => (
+          <UserLinkExtractor infoString={value} />
+        ),
+        undefined,
+        undefined,
+      ];
 
-const filters = [undefined, undefined, undefined, undefined, undefined];
-const filterModes = [undefined, "menu", undefined, undefined, undefined];
-const filterSearch = [undefined, false, undefined, undefined, undefined];
+  const filters = isNotificationTab
+    ? [undefined, undefined, undefined, undefined, undefined, undefined]
+    : [undefined, undefined, undefined, undefined, undefined];
 
-const onFilters = [
-  undefined,
-  (value: string, record: ActivityRow): boolean => record.type.includes(value),
-  undefined,
-  undefined,
-  undefined,
-];
-const sorters = [
-  (a: { time: string }, b: { time: string }) =>
-    new Date(a.time).getTime() - new Date(b.time).getTime(),
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-];
+  const filterModes = isNotificationTab
+    ? [undefined, "menu", undefined, undefined, undefined, undefined]
+    : [undefined, "menu", undefined, undefined, undefined];
 
-export const ActivityColumns: ActivityColumnType[] = headings.map(
-  (heading, index) => {
+  const filterSearch = isNotificationTab
+    ? [undefined, false, undefined, undefined, undefined, undefined]
+    : [undefined, false, undefined, undefined, undefined];
+
+  const onFilters = isNotificationTab
+    ? [
+        undefined,
+        (value: string, record: ActivityRow): boolean =>
+          record.type.includes(value),
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ]
+    : [
+        undefined,
+        (value: string, record: ActivityRow): boolean =>
+          record.type.includes(value),
+        undefined,
+        undefined,
+        undefined,
+      ];
+
+  const sorters = isNotificationTab
+    ? [
+        (a: { time: string }, b: { time: string }) =>
+          new Date(a.time).getTime() - new Date(b.time).getTime(),
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ]
+    : [
+        (a: { time: string }, b: { time: string }) =>
+          new Date(a.time).getTime() - new Date(b.time).getTime(),
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ];
+
+  return headings.map((heading, index) => {
     return {
       title: (): JSX.Element => <TableHeading heading={heading} />,
       dataIndex: keys[index],
@@ -74,5 +123,5 @@ export const ActivityColumns: ActivityColumnType[] = headings.map(
       onFilter: onFilters[index],
       sorter: sorters[index],
     };
-  }
-);
+  });
+};

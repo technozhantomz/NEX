@@ -14,4 +14,5 @@ export type UseActivityTableResult = {
 export type UseActivityTableArgs = {
   userName?: string;
   isWalletActivityTable?: boolean;
+  isNotificationTab: boolean;
 };

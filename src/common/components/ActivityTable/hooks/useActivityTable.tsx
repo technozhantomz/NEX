@@ -15,6 +15,7 @@ import {
 export function useActivityTable({
   userName,
   isWalletActivityTable = false,
+  isNotificationTab,
 }: UseActivityTableArgs): UseActivityTableResult {
   const [activitiesRows, _setActivitiesRows] = useState<ActivityRow[]>([]);
   const [activityColumns, setActivityColumns] = useState<ActivityColumnType[]>(
@@ -27,6 +28,7 @@ export function useActivityTable({
   const { getActivitiesRows } = useActivity();
   const { sm } = useViewportContext();
   const { convertUTCDateToLocalDate } = useFormDate();
+  const columns = ActivityColumns(isNotificationTab);
 
   const formDate = useCallback(
     (
@@ -76,7 +78,7 @@ export function useActivityTable({
         (activity) => activity.type
       );
       const uniqTypes = uniq(allTypes);
-      const updatedColumns = ActivityColumns.map((column) => {
+      const updatedColumns = columns.map((column) => {
         switch (true) {
           case column.key === "type":
             column.filters = uniqTypes.map((type) => {
