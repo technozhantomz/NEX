@@ -20,26 +20,10 @@ export type ActivityColumnType = {
   sorter:
     | ((
         a: {
-          id: string;
+          time: string;
         },
         b: {
-          id: string;
-        }
-      ) => number)
-    | ((
-        a: {
-          maxSupply: number;
-        },
-        b: {
-          maxSupply: number;
-        }
-      ) => number)
-    | ((
-        a: {
-          precision: number;
-        },
-        b: {
-          precision: number;
+          time: string;
         }
       ) => number)
     | undefined;
@@ -58,14 +42,19 @@ const renders = [
 ];
 
 const filters = [undefined, undefined, undefined, undefined, undefined];
-const filterModes = [undefined, "menu", "menu", undefined, undefined];
-const filterSearch = [undefined, false, false, undefined, undefined];
+const filterModes = [undefined, "menu", undefined, undefined, undefined];
+const filterSearch = [undefined, false, undefined, undefined, undefined];
 
-const onFilters = [undefined, undefined, undefined, undefined, undefined];
+const onFilters = [
+  undefined,
+  (value: string, record: ActivityRow): boolean => record.type.includes(value),
+  undefined,
+  undefined,
+  undefined,
+];
 const sorters = [
-  (a: { id: string }, b: { id: string }) =>
-    parseInt(a.id.charAt(a.id.length - 1)) -
-    parseInt(b.id.charAt(b.id.length - 1)),
+  (a: { time: string }, b: { time: string }) =>
+    new Date(a.time).getTime() - new Date(b.time).getTime(),
   undefined,
   undefined,
   undefined,

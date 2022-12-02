@@ -1,8 +1,11 @@
+import counterpart from "counterpart";
+import { uniq } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
 import { useActivity, useFormDate } from "../../../hooks";
 import { useViewportContext } from "../../../providers";
 import { ActivityRow } from "../../../types";
+import { ActivityColumns, ActivityColumnType } from "../components";
 
 import {
   UseActivityTableArgs,
@@ -14,6 +17,10 @@ export function useActivityTable({
   isWalletActivityTable = false,
 }: UseActivityTableArgs): UseActivityTableResult {
   const [activitiesRows, _setActivitiesRows] = useState<ActivityRow[]>([]);
+  const [activityColumns, setActivityColumns] = useState<ActivityColumnType[]>(
+    []
+  );
+
   const [loading, setLoading] = useState<boolean>(true);
 
   const { getActivitiesRows } = useActivity();
@@ -64,6 +71,26 @@ export function useActivityTable({
           time: formDate(activityRow.time),
         } as ActivityRow;
       });
+      const allTypes = timeModifiedActivityRows.map(
+        (activity) => activity.type
+      );
+      const uniqTypes = uniq(allTypes);
+      const updatedColumns = ActivityColumns.map((column) => {
+        switch (true) {
+          case column.key === "type":
+            column.filters = uniqTypes.map((type) => {
+              return {
+                text: counterpart.translate(
+                  `transaction.trxTypes.${type}.title`
+                ),
+                value: type,
+              };
+            });
+            break;
+        }
+        return { ...column };
+      });
+      setActivityColumns(updatedColumns);
       _setActivitiesRows(timeModifiedActivityRows);
       setLoading(false);
     } catch (e) {
@@ -76,5 +103,5 @@ export function useActivityTable({
     setActivitiesRows();
   }, [userName]);
 
-  return { activitiesRows, loading };
+  return { activitiesRows, loading, activityColumns };
 }

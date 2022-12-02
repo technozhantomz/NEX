@@ -9,7 +9,7 @@ import { DownloadOutlined } from "../../../ui/src";
 import { useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityTable.styled";
-import { ActivityList, ActivityColumns as columns } from "./components";
+import { ActivityList } from "./components";
 import { useActivityTable } from "./hooks";
 
 type Props = {
@@ -23,7 +23,7 @@ export const ActivityTable = ({
   isWalletActivityTable = false,
   className,
 }: Props): JSX.Element => {
-  const { activitiesRows, loading } = useActivityTable({
+  const { activitiesRows, loading, activityColumns } = useActivityTable({
     userName,
     isWalletActivityTable,
   });
@@ -57,7 +57,7 @@ export const ActivityTable = ({
         <ActivityList activitiesRows={activitiesRows} loading={loading} />
       ) : (
         <Styled.ActivityTable
-          columns={columns}
+          columns={activityColumns as ColumnsType<unknown>}
           dataSource={activitiesRows}
           loading={loading}
           pagination={{
@@ -77,7 +77,7 @@ export const ActivityTable = ({
         <div ref={componentRef}>
           <Styled.ActivityTable
             dataSource={activitiesRows}
-            columns={columns as ColumnsType<unknown>}
+            columns={activityColumns as ColumnsType<unknown>}
             loading={loading}
             pagination={false}
           />
