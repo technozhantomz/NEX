@@ -60,6 +60,7 @@ export {
   LikeOutlined,
   LikeFilled,
   DislikeOutlined,
+  ProfileOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";

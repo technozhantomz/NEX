@@ -858,6 +858,13 @@ export const ru = {
         heading: "Требуется ваш пароль или ключ %(neededKeyType)s",
       },
     },
+    profile: {
+      heading: "Профиль",
+      activity: {
+        my_activity: "Моя деятельность",
+        search_activitys: "Поисковая активность",
+      },
+    },
   },
   links: {
     create_account: "Зарегистрироваться",
@@ -984,6 +991,7 @@ export const ru = {
       coins_token: "Монеты/Жетоны",
       approved: "Одобренный",
       removed: "удаленный",
+      my_activity: "Моя деятельность",
     },
     comments: {
       deposit_hbd:
