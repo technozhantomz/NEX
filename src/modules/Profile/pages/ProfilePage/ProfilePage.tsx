@@ -4,7 +4,10 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import { ActivityTable, Layout } from "../../../../common/components";
-import { useViewportContext } from "../../../../common/providers";
+import {
+  useUserContext,
+  useViewportContext,
+} from "../../../../common/providers";
 
 import * as Styled from "./ProfilePage.styled";
 
@@ -13,6 +16,7 @@ const { TabPane } = Styled.Tabs;
 const ProfilePage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
+  const { localStorageAccount } = useUserContext();
   const router = useRouter();
   const { tab } = router.query;
 
@@ -41,7 +45,7 @@ const ProfilePage: NextPage = () => {
             <p>orders Tab</p>
           </TabPane>
           <TabPane tab="Activity" key="activity">
-            <ActivityTable userName={"newdemo1"} />
+            <ActivityTable userName={localStorageAccount} />
           </TabPane>
           <TabPane tab="Notifications" key="notifications">
             <p>notifications Tab</p>

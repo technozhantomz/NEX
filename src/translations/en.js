@@ -857,6 +857,10 @@ export const en = {
     },
     profile: {
       heading: "Profile",
+      activity: {
+        my_activity: "My Activity",
+        search_activitys: "Search Activitys",
+      },
     },
   },
   links: {

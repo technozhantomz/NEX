@@ -1,3 +1,4 @@
+import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { ReactInstance, useRef } from "react";
@@ -5,7 +6,7 @@ import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
 import { renderPaginationItem } from "..";
-import { DownloadOutlined } from "../../../ui/src";
+import { DownloadOutlined, SearchOutlined } from "../../../ui/src";
 import { useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityTable.styled";
@@ -23,7 +24,13 @@ export const ActivityTable = ({
   isWalletActivityTable = false,
   className,
 }: Props): JSX.Element => {
-  const { activitiesRows, loading, activityColumns } = useActivityTable({
+  const {
+    activitiesRows,
+    loading,
+    activityColumns,
+    searchDataSource,
+    setSearchDataSource,
+  } = useActivityTable({
     userName,
     isWalletActivityTable,
   });
@@ -34,8 +41,19 @@ export const ActivityTable = ({
     <Styled.ActivityTableWrapper>
       <Styled.ActivityTableHeaderBar>
         <Styled.ActivityTableHeader>
-          {counterpart.translate(`field.labels.my_activity`)}
+          {counterpart.translate(`pages.profile.activity.my_activity`)}
         </Styled.ActivityTableHeader>
+        <SearchTableInput
+          columns={activityColumns as ColumnsType<unknown>}
+          dataSource={activitiesRows}
+          setDataSource={setSearchDataSource}
+          inputProps={{
+            placeholder: counterpart.translate(
+              `pages.profile.activity.search_activitys`
+            ),
+            suffix: <SearchOutlined />,
+          }}
+        />
         <Styled.DownloadLinks>
           <DownloadOutlined />
           <ReactToPrint
@@ -58,7 +76,7 @@ export const ActivityTable = ({
       ) : (
         <Styled.ActivityTable
           columns={activityColumns as ColumnsType<unknown>}
-          dataSource={activitiesRows}
+          dataSource={searchDataSource}
           loading={loading}
           pagination={{
             hideOnSinglePage: true,

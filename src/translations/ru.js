@@ -860,6 +860,10 @@ export const ru = {
     },
     profile: {
       heading: "Профиль",
+      activity: {
+        my_activity: "Моя деятельность",
+        search_activitys: "Поисковая активность",
+      },
     },
   },
   links: {

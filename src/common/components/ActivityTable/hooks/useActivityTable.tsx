@@ -20,6 +20,7 @@ export function useActivityTable({
   const [activityColumns, setActivityColumns] = useState<ActivityColumnType[]>(
     []
   );
+  const [searchDataSource, setSearchDataSource] = useState<ActivityRow[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -92,6 +93,7 @@ export function useActivityTable({
       });
       setActivityColumns(updatedColumns);
       _setActivitiesRows(timeModifiedActivityRows);
+      setSearchDataSource(timeModifiedActivityRows);
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -103,5 +105,11 @@ export function useActivityTable({
     setActivitiesRows();
   }, [userName]);
 
-  return { activitiesRows, loading, activityColumns };
+  return {
+    activitiesRows,
+    loading,
+    activityColumns,
+    searchDataSource,
+    setSearchDataSource,
+  };
 }
