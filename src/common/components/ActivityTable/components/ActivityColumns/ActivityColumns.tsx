@@ -1,6 +1,7 @@
 import { ActivityRow } from "../../../../types";
 import { TableHeading } from "../../../TableHeading";
 import { UserLinkExtractor } from "../../../UserLinkExtractor";
+import * as Styled from "../../ActivityTable.styled";
 import { ActivityTag } from "../ActivityTag";
 
 export type ActivityColumnType = {
@@ -30,7 +31,8 @@ export type ActivityColumnType = {
 };
 
 export const ActivityColumns = (
-  isNotificationTab: boolean
+  isNotificationTab: boolean,
+  markTheNotificationAsReadOrUnread: (id: string, unread: boolean) => void
 ): ActivityColumnType[] => {
   const headings = isNotificationTab
     ? ["time", "type", "info", "id", "fee", "status"]
@@ -49,7 +51,21 @@ export const ActivityColumns = (
         ),
         undefined,
         undefined,
-        undefined,
+        (status: string, record: any): JSX.Element => (
+          <>
+            {status ? (
+              <Styled.NotificationTableStatusButton
+                onClick={() =>
+                  markTheNotificationAsReadOrUnread(record.id, !status)
+                }
+              >
+                Unread
+              </Styled.NotificationTableStatusButton>
+            ) : (
+              "Read"
+            )}
+          </>
+        ),
       ]
     : [
         undefined,

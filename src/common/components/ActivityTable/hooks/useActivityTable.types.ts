@@ -16,4 +16,5 @@ export type UseActivityTableArgs = {
   isWalletActivityTable?: boolean;
   isNotificationTab: boolean;
   notifications: Notification[];
+  markTheNotificationAsReadOrUnread: (id: string, unread: boolean) => void;
 };

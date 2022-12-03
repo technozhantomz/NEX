@@ -1,4 +1,5 @@
 import {
+  Button,
   DataTableDownloadLinks,
   DataTableHeader,
   DataTableHeaderBar,
@@ -46,3 +47,17 @@ export const ActivityTableHeaderBar = styled(DataTableHeaderBar)`
 `;
 
 export const PrintTable = styled(UiPrintTable)``;
+
+export const NotificationTableStatusButton = styled(Button)`
+  margin: 0px;
+  border: none;
+  background: none;
+  boxshadow: none;
+  padding: 0;
+  color: ${colors.additionalBlue};
+  text-align: right;
+  vertical-align: middle;
+  &:hover {
+    background: #fafafa;
+  }
+`;

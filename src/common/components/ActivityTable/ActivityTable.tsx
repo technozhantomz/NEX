@@ -28,7 +28,8 @@ export const ActivityTable = ({
   showHeader = false,
   isNotificationTab = false,
 }: Props): JSX.Element => {
-  const { notifications } = useUserSettingsContext();
+  const { notifications, markTheNotificationAsReadOrUnread } =
+    useUserSettingsContext();
 
   const {
     activitiesRows,
@@ -41,6 +42,7 @@ export const ActivityTable = ({
     isWalletActivityTable,
     isNotificationTab,
     notifications,
+    markTheNotificationAsReadOrUnread,
   });
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);

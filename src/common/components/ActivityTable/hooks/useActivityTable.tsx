@@ -17,6 +17,7 @@ export function useActivityTable({
   isWalletActivityTable = false,
   isNotificationTab,
   notifications,
+  markTheNotificationAsReadOrUnread,
 }: UseActivityTableArgs): UseActivityTableResult {
   const [activitiesRows, _setActivitiesRows] = useState<ActivityRow[]>([]);
   const [activityColumns, setActivityColumns] = useState<ActivityColumnType[]>(
@@ -29,7 +30,10 @@ export function useActivityTable({
   const { getActivitiesRows } = useActivity();
   const { sm } = useViewportContext();
   const { convertUTCDateToLocalDate } = useFormDate();
-  const columns = ActivityColumns(isNotificationTab);
+  const columns = ActivityColumns(
+    isNotificationTab,
+    markTheNotificationAsReadOrUnread
+  );
 
   const formDate = useCallback(
     (
@@ -73,7 +77,7 @@ export function useActivityTable({
       const newNotifications = notifications.map((e) => {
         return {
           ...e.activity,
-          status: "write",
+          status: e.unread,
         } as ActivityRow;
       });
 
@@ -121,11 +125,12 @@ export function useActivityTable({
     isWalletActivityTable,
     userName,
     isNotificationTab,
+    columns,
   ]);
 
   useEffect(() => {
     setActivitiesRows();
-  }, [userName]);
+  }, [userName, notifications]);
 
   return {
     activitiesRows,
