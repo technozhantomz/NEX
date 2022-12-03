@@ -30,7 +30,6 @@ export const ActivityTable = ({
 }: Props): JSX.Element => {
   const { notifications, markTheNotificationAsReadOrUnread } =
     useUserSettingsContext();
-
   const {
     activitiesRows,
     loading,

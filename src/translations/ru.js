@@ -867,6 +867,8 @@ export const ru = {
       notification: {
         my_notification: "Мои уведомления",
         search_notifications: "Уведомления о поиске",
+        read: "Читать",
+        unread: "Не прочитано",
       },
     },
   },

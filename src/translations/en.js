@@ -864,6 +864,8 @@ export const en = {
       notification: {
         my_notification: "My notifications",
         search_notifications: "Search notifications",
+        read: "Read",
+        unread: "Unread",
       },
     },
   },

@@ -1,3 +1,5 @@
+import counterpart from "counterpart";
+
 import { ActivityRow } from "../../../../types";
 import { TableHeading } from "../../../TableHeading";
 import { UserLinkExtractor } from "../../../UserLinkExtractor";
@@ -8,7 +10,10 @@ export type ActivityColumnType = {
   title: () => JSX.Element;
   dataIndex: string;
   key: string;
-  render: ((symbol: string) => JSX.Element) | undefined;
+  render:
+    | ((value: string) => JSX.Element)
+    | ((status: boolean, record: any) => JSX.Element)
+    | undefined;
   filters:
     | {
         text: string;
@@ -51,7 +56,7 @@ export const ActivityColumns = (
         ),
         undefined,
         undefined,
-        (status: string, record: any): JSX.Element => (
+        (status: boolean, record: any): JSX.Element => (
           <>
             {status ? (
               <Styled.NotificationTableStatusButton
@@ -59,10 +64,10 @@ export const ActivityColumns = (
                   markTheNotificationAsReadOrUnread(record.id, !status)
                 }
               >
-                Unread
+                {counterpart.translate(`pages.profile.notification.unread`)}
               </Styled.NotificationTableStatusButton>
             ) : (
-              "Read"
+              counterpart.translate(`pages.profile.notification.read`)
             )}
           </>
         ),

@@ -24,9 +24,7 @@ export function useActivityTable({
     []
   );
   const [searchDataSource, setSearchDataSource] = useState<ActivityRow[]>([]);
-
   const [loading, setLoading] = useState<boolean>(true);
-
   const { getActivitiesRows } = useActivity();
   const { sm } = useViewportContext();
   const { convertUTCDateToLocalDate } = useFormDate();
