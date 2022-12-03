@@ -7,7 +7,7 @@ import ReactToPrint from "react-to-print";
 
 import { renderPaginationItem } from "..";
 import { DownloadOutlined, SearchOutlined } from "../../../ui/src";
-import { useViewportContext } from "../../providers";
+import { useUserSettingsContext, useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityTable.styled";
 import { ActivityList } from "./components";
@@ -18,7 +18,7 @@ type Props = {
   isWalletActivityTable?: boolean;
   className?: string;
   showHeader?: boolean;
-  isNotificationTab: boolean;
+  isNotificationTab?: boolean;
 };
 
 export const ActivityTable = ({
@@ -26,8 +26,10 @@ export const ActivityTable = ({
   isWalletActivityTable = false,
   className,
   showHeader = false,
-  isNotificationTab,
+  isNotificationTab = false,
 }: Props): JSX.Element => {
+  const { notifications } = useUserSettingsContext();
+
   const {
     activitiesRows,
     loading,
@@ -38,6 +40,7 @@ export const ActivityTable = ({
     userName,
     isWalletActivityTable,
     isNotificationTab,
+    notifications,
   });
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);

@@ -16,6 +16,7 @@ export function useActivityTable({
   userName,
   isWalletActivityTable = false,
   isNotificationTab,
+  notifications,
 }: UseActivityTableArgs): UseActivityTableResult {
   const [activitiesRows, _setActivitiesRows] = useState<ActivityRow[]>([]);
   const [activityColumns, setActivityColumns] = useState<ActivityColumnType[]>(
@@ -68,12 +69,25 @@ export function useActivityTable({
         userName as string,
         isWalletActivityTable
       );
+
+      const newNotifications = notifications.map((e) => {
+        return {
+          ...e.activity,
+          status: "write",
+        } as ActivityRow;
+      });
+
       const timeModifiedActivityRows = activityRows.map((activityRow) => {
         return {
           ...activityRow,
           time: formDate(activityRow.time),
         } as ActivityRow;
       });
+
+      const rowsDataSource = isNotificationTab
+        ? newNotifications
+        : timeModifiedActivityRows;
+
       const allTypes = timeModifiedActivityRows.map(
         (activity) => activity.type
       );
@@ -94,14 +108,20 @@ export function useActivityTable({
         return { ...column };
       });
       setActivityColumns(updatedColumns);
-      _setActivitiesRows(timeModifiedActivityRows);
-      setSearchDataSource(timeModifiedActivityRows);
+      _setActivitiesRows(rowsDataSource);
+      setSearchDataSource(rowsDataSource);
       setLoading(false);
     } catch (e) {
       setLoading(false);
       console.log(e);
     }
-  }, [setLoading, _setActivitiesRows, isWalletActivityTable, userName]);
+  }, [
+    setLoading,
+    _setActivitiesRows,
+    isWalletActivityTable,
+    userName,
+    isNotificationTab,
+  ]);
 
   useEffect(() => {
     setActivitiesRows();

@@ -49,7 +49,7 @@ export const ActivityColumns = (
         ),
         undefined,
         undefined,
-        (): JSX.Element => <p>read</p>, //Status Implementation Pending
+        undefined,
       ]
     : [
         undefined,

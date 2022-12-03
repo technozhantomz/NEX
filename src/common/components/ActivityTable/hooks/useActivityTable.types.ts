@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { ActivityRow } from "../../../types";
+import { ActivityRow, Notification } from "../../../types";
 import { ActivityColumnType } from "../components";
 
 export type UseActivityTableResult = {
@@ -15,4 +15,5 @@ export type UseActivityTableArgs = {
   userName?: string;
   isWalletActivityTable?: boolean;
   isNotificationTab: boolean;
+  notifications: Notification[];
 };
