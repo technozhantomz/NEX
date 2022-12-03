@@ -3,10 +3,10 @@ import counterpart from "counterpart";
 import { ActivityRow } from "../../../../types";
 import { TableHeading } from "../../../TableHeading";
 import { UserLinkExtractor } from "../../../UserLinkExtractor";
-import * as Styled from "../../ActivityTable.styled";
-import { ActivityTag } from "../ActivityTag";
+import * as Styled from "../../ActivityAndNotificationTable.styled";
+import { ActivityAndNotificationTag } from "../ActivityAndNotificationTag";
 
-export type ActivityColumnType = {
+export type ActivityAndNotificationType = {
   title: () => JSX.Element;
   dataIndex: string;
   key: string;
@@ -35,10 +35,10 @@ export type ActivityColumnType = {
     | undefined;
 };
 
-export const ActivityColumns = (
+export const ActivityAndNotificationColumns = (
   isNotificationTab: boolean,
   markTheNotificationAsReadOrUnread: (id: string, unread: boolean) => void
-): ActivityColumnType[] => {
+): ActivityAndNotificationType[] => {
   const headings = isNotificationTab
     ? ["time", "type", "info", "id", "fee", "status"]
     : ["time", "type", "info", "id", "fee"];
@@ -50,7 +50,9 @@ export const ActivityColumns = (
   const renders = isNotificationTab
     ? [
         undefined,
-        (type: string): JSX.Element => <ActivityTag type={type} />,
+        (type: string): JSX.Element => (
+          <ActivityAndNotificationTag type={type} />
+        ),
         (value: string): JSX.Element => (
           <UserLinkExtractor infoString={value} />
         ),
@@ -74,7 +76,9 @@ export const ActivityColumns = (
       ]
     : [
         undefined,
-        (type: string): JSX.Element => <ActivityTag type={type} />,
+        (type: string): JSX.Element => (
+          <ActivityAndNotificationTag type={type} />
+        ),
         (value: string): JSX.Element => (
           <UserLinkExtractor infoString={value} />
         ),
