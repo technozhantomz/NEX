@@ -10,7 +10,7 @@ import {
 } from "../../../ui/src";
 import { colors } from "../../../ui/src/colors";
 
-export const ActivityTable = styled(UiTable)`
+export const ActivityAndNotificationTable = styled(UiTable)`
   .ant-table-thead > tr > th {
     background: transparent;
     color: ${colors.textColorSecondary};
@@ -34,15 +34,15 @@ export const ActivityTable = styled(UiTable)`
   }
 `;
 
-export const ActivityTableWrapper = styled(DataTabWrapper)``;
+export const ActivityAndNotificationTableWrapper = styled(DataTabWrapper)``;
 
-export const ActivityTableHeader = styled(DataTableHeader)`
+export const ActivityAndNotificationTableHeader = styled(DataTableHeader)`
   margin-left: 10px;
 `;
 
 export const DownloadLinks = styled(DataTableDownloadLinks)``;
 
-export const ActivityTableHeaderBar = styled(DataTableHeaderBar)`
+export const ActivityAndNotificationTableHeaderBar = styled(DataTableHeaderBar)`
   margin-bottom: 24px;
 `;
 

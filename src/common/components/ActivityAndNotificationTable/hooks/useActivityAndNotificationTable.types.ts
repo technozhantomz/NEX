@@ -1,17 +1,17 @@
 import { Dispatch, SetStateAction } from "react";
 
 import { ActivityRow, Notification } from "../../../types";
-import { ActivityColumnType } from "../components";
+import { ActivityAndNotificationType } from "../components";
 
-export type UseActivityTableResult = {
-  activitiesRows: ActivityRow[];
+export type UseActivityAndNotificationResult = {
+  activitiesAndNotificationsRows: ActivityRow[];
   loading: boolean;
-  activityColumns: ActivityColumnType[];
+  activityAndNotificationColumns: ActivityAndNotificationType[];
   searchDataSource: ActivityRow[];
   setSearchDataSource: Dispatch<SetStateAction<ActivityRow[]>>;
 };
 
-export type UseActivityTableArgs = {
+export type UseActivityAndNotificationTableArgs = {
   userName?: string;
   isWalletActivityTable?: boolean;
   isNotificationTab: boolean;

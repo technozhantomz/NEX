@@ -9,9 +9,9 @@ import { renderPaginationItem } from "..";
 import { DownloadOutlined, SearchOutlined } from "../../../ui/src";
 import { useUserSettingsContext, useViewportContext } from "../../providers";
 
-import * as Styled from "./ActivityTable.styled";
+import * as Styled from "./ActivityAndNotificationTable.styled";
 import { ActivityList } from "./components";
-import { useActivityTable } from "./hooks";
+import { useActivityAndNotificationTable } from "./hooks";
 
 type Props = {
   userName?: string;
@@ -21,7 +21,7 @@ type Props = {
   isNotificationTab?: boolean;
 };
 
-export const ActivityTable = ({
+export const ActivityAndNotificationTable = ({
   userName,
   isWalletActivityTable = false,
   className,
@@ -31,12 +31,12 @@ export const ActivityTable = ({
   const { notifications, markTheNotificationAsReadOrUnread } =
     useUserSettingsContext();
   const {
-    activitiesRows,
+    activitiesAndNotificationsRows,
     loading,
-    activityColumns,
+    activityAndNotificationColumns,
     searchDataSource,
     setSearchDataSource,
-  } = useActivityTable({
+  } = useActivityAndNotificationTable({
     userName,
     isWalletActivityTable,
     isNotificationTab,
@@ -47,10 +47,10 @@ export const ActivityTable = ({
   const componentRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Styled.ActivityTableWrapper>
+    <Styled.ActivityAndNotificationTableWrapper>
       {showHeader ? (
-        <Styled.ActivityTableHeaderBar>
-          <Styled.ActivityTableHeader>
+        <Styled.ActivityAndNotificationTableHeaderBar>
+          <Styled.ActivityAndNotificationTableHeader>
             {counterpart.translate(
               `pages.profile.${
                 isNotificationTab
@@ -58,10 +58,10 @@ export const ActivityTable = ({
                   : `activity.my_activity`
               }`
             )}
-          </Styled.ActivityTableHeader>
+          </Styled.ActivityAndNotificationTableHeader>
           <SearchTableInput
-            columns={activityColumns as ColumnsType<unknown>}
-            dataSource={activitiesRows}
+            columns={activityAndNotificationColumns as ColumnsType<unknown>}
+            dataSource={activitiesAndNotificationsRows}
             setDataSource={setSearchDataSource}
             inputProps={{
               placeholder: counterpart.translate(
@@ -87,7 +87,7 @@ export const ActivityTable = ({
               {` / `}
               <CSVLink
                 filename={"ActivityTable.csv"}
-                data={activitiesRows}
+                data={activitiesAndNotificationsRows}
                 className="btn btn-primary"
               >
                 {counterpart.translate(`links.csv`)}
@@ -96,15 +96,15 @@ export const ActivityTable = ({
           ) : (
             ""
           )}
-        </Styled.ActivityTableHeaderBar>
+        </Styled.ActivityAndNotificationTableHeaderBar>
       ) : (
         ""
       )}
       {sm ? (
         <ActivityList activitiesRows={searchDataSource} loading={loading} />
       ) : (
-        <Styled.ActivityTable
-          columns={activityColumns as ColumnsType<unknown>}
+        <Styled.ActivityAndNotificationTable
+          columns={activityAndNotificationColumns as ColumnsType<unknown>}
           dataSource={searchDataSource}
           loading={loading}
           pagination={{
@@ -122,14 +122,14 @@ export const ActivityTable = ({
       )}
       <Styled.PrintTable>
         <div ref={componentRef}>
-          <Styled.ActivityTable
-            dataSource={activitiesRows}
-            columns={activityColumns as ColumnsType<unknown>}
+          <Styled.ActivityAndNotificationTable
+            dataSource={activitiesAndNotificationsRows}
+            columns={activityAndNotificationColumns as ColumnsType<unknown>}
             loading={loading}
             pagination={false}
           />
         </div>
       </Styled.PrintTable>
-    </Styled.ActivityTableWrapper>
+    </Styled.ActivityAndNotificationTableWrapper>
   );
 };

@@ -1,7 +1,7 @@
 import { renderPaginationItem, UserLinkExtractor } from "../../..";
 import { ActivityRow } from "../../../../types";
-import { ActivityColumns as columns } from "../ActivityColumns/";
-import { ActivityTag } from "../ActivityTag";
+import { ActivityColumns as columns } from "../ActivityAndNotificationColumns";
+import { ActivityTag } from "../ActivityAndNotificationTag";
 
 import * as Styled from "./ActivityList.styled";
 

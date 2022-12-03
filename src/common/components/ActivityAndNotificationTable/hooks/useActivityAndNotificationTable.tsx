@@ -5,30 +5,33 @@ import { useCallback, useEffect, useState } from "react";
 import { useActivity, useFormDate } from "../../../hooks";
 import { useViewportContext } from "../../../providers";
 import { ActivityRow } from "../../../types";
-import { ActivityColumns, ActivityColumnType } from "../components";
+import {
+  ActivityAndNotificationColumns,
+  ActivityAndNotificationType,
+} from "../components";
 
 import {
-  UseActivityTableArgs,
-  UseActivityTableResult,
-} from "./useActivityTable.types";
+  UseActivityAndNotificationResult,
+  UseActivityAndNotificationTableArgs,
+} from "./useActivityAndNotificationTable.types";
 
-export function useActivityTable({
+export function useActivityAndNotificationTable({
   userName,
   isWalletActivityTable = false,
   isNotificationTab,
   notifications,
   markTheNotificationAsReadOrUnread,
-}: UseActivityTableArgs): UseActivityTableResult {
-  const [activitiesRows, _setActivitiesRows] = useState<ActivityRow[]>([]);
-  const [activityColumns, setActivityColumns] = useState<ActivityColumnType[]>(
-    []
-  );
+}: UseActivityAndNotificationTableArgs): UseActivityAndNotificationResult {
+  const [activitiesAndNotificationsRows, _setActivitiesAndNotificationsRows] =
+    useState<ActivityRow[]>([]);
+  const [activityAndNotificationColumns, setActivityAndNotificationColumns] =
+    useState<ActivityAndNotificationType[]>([]);
   const [searchDataSource, setSearchDataSource] = useState<ActivityRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { getActivitiesRows } = useActivity();
   const { sm } = useViewportContext();
   const { convertUTCDateToLocalDate } = useFormDate();
-  const columns = ActivityColumns(
+  const columns = ActivityAndNotificationColumns(
     isNotificationTab,
     markTheNotificationAsReadOrUnread
   );
@@ -64,7 +67,7 @@ export function useActivityTable({
     [sm]
   );
 
-  const setActivitiesRows = useCallback(async () => {
+  const setActivitiesAndNotificationsRows = useCallback(async () => {
     try {
       setLoading(true);
       const activityRows = await getActivitiesRows(
@@ -72,10 +75,10 @@ export function useActivityTable({
         isWalletActivityTable
       );
 
-      const newNotifications = notifications.map((e) => {
+      const notificationsRow = notifications.map(({ activity, unread }) => {
         return {
-          ...e.activity,
-          status: e.unread,
+          ...activity,
+          status: unread,
         } as ActivityRow;
       });
 
@@ -87,7 +90,7 @@ export function useActivityTable({
       });
 
       const rowsDataSource = isNotificationTab
-        ? newNotifications
+        ? notificationsRow
         : timeModifiedActivityRows;
 
       const allTypes = timeModifiedActivityRows.map(
@@ -109,8 +112,8 @@ export function useActivityTable({
         }
         return { ...column };
       });
-      setActivityColumns(updatedColumns);
-      _setActivitiesRows(rowsDataSource);
+      setActivityAndNotificationColumns(updatedColumns);
+      _setActivitiesAndNotificationsRows(rowsDataSource);
       setSearchDataSource(rowsDataSource);
       setLoading(false);
     } catch (e) {
@@ -119,7 +122,7 @@ export function useActivityTable({
     }
   }, [
     setLoading,
-    _setActivitiesRows,
+    _setActivitiesAndNotificationsRows,
     isWalletActivityTable,
     userName,
     isNotificationTab,
@@ -127,13 +130,13 @@ export function useActivityTable({
   ]);
 
   useEffect(() => {
-    setActivitiesRows();
+    setActivitiesAndNotificationsRows();
   }, [userName, notifications]);
 
   return {
-    activitiesRows,
+    activitiesAndNotificationsRows,
     loading,
-    activityColumns,
+    activityAndNotificationColumns,
     searchDataSource,
     setSearchDataSource,
   };
