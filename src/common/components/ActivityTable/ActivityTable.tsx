@@ -1,6 +1,7 @@
 import { SearchTableInput } from "ant-table-extensions";
+import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactInstance, RefObject, useRef } from "react";
+import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
@@ -9,7 +10,7 @@ import { DownloadOutlined, SearchOutlined } from "../../../ui/src";
 import { useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityTable.styled";
-import { ActivityList, ActivityColumns as columns } from "./components";
+import { ActivityList } from "./components";
 import { useActivityTable } from "./hooks";
 
 type Props = {
@@ -25,28 +26,33 @@ export const ActivityTable = ({
   className,
   showHeader = false,
 }: Props): JSX.Element => {
-  const { activitiesRows, loading, searchDataSource, setSearchDataSource } =
-    useActivityTable({
-      userName,
-      isWalletActivityTable,
-    });
+  const {
+    activitiesRows,
+    loading,
+    activityColumns,
+    searchDataSource,
+    setSearchDataSource,
+  } = useActivityTable({
+    userName,
+    isWalletActivityTable,
+  });
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Styled.ActivitysTabWrapper>
+    <Styled.ActivityTableWrapper>
       {showHeader ? (
-        <Styled.ActivityHeaderBar>
-          <Styled.ActivityHeader>
+        <Styled.ActivityTableHeaderBar>
+          <Styled.ActivityTableHeader>
             {counterpart.translate(`pages.profile.activity.my_activity`)}
-          </Styled.ActivityHeader>
+          </Styled.ActivityTableHeader>
           <SearchTableInput
-            columns={columns}
+            columns={activityColumns as ColumnsType<unknown>}
             dataSource={activitiesRows}
             setDataSource={setSearchDataSource}
             inputProps={{
               placeholder: counterpart.translate(
-                `pages.profile.activity.search_activitys`
+                `pages.profile.activity.search_activities`
               ),
               suffix: <SearchOutlined />,
             }}
@@ -62,14 +68,14 @@ export const ActivityTable = ({
 
             {` / `}
             <CSVLink
-              filename={"ActivitysTable.csv"}
+              filename={"ActivityTable.csv"}
               data={activitiesRows}
               className="btn btn-primary"
             >
               {counterpart.translate(`links.csv`)}
             </CSVLink>
           </Styled.DownloadLinks>
-        </Styled.ActivityHeaderBar>
+        </Styled.ActivityTableHeaderBar>
       ) : (
         ""
       )}
@@ -77,7 +83,7 @@ export const ActivityTable = ({
         <ActivityList activitiesRows={searchDataSource} loading={loading} />
       ) : (
         <Styled.ActivityTable
-          columns={columns}
+          columns={activityColumns as ColumnsType<unknown>}
           dataSource={searchDataSource}
           loading={loading}
           pagination={{
@@ -94,14 +100,15 @@ export const ActivityTable = ({
         />
       )}
       <Styled.PrintTable>
-        <div ref={componentRef as unknown as RefObject<HTMLDivElement>}>
+        <div ref={componentRef}>
           <Styled.ActivityTable
-            columns={columns}
-            dataSource={searchDataSource}
+            dataSource={activitiesRows}
+            columns={activityColumns as ColumnsType<unknown>}
             loading={loading}
+            pagination={false}
           />
         </div>
       </Styled.PrintTable>
-    </Styled.ActivitysTabWrapper>
+    </Styled.ActivityTableWrapper>
   );
 };

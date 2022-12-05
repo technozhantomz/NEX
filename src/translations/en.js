@@ -859,7 +859,7 @@ export const en = {
       heading: "Profile",
       activity: {
         my_activity: "My Activity",
-        search_activitys: "Search Activitys",
+        search_activities: "Search Activities",
       },
     },
   },
@@ -988,6 +988,7 @@ export const en = {
       open_orders: "Open orders",
       approved: "Approved",
       removed: "Removed",
+      my_activity: "My activity",
     },
     comments: {
       deposit_hbd:

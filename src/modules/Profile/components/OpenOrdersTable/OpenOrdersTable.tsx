@@ -6,7 +6,7 @@ import { renderPaginationItem } from "../../../../common/components";
 import * as Styled from "./OpenOrdersTable.styled";
 import { OpenOrdersTableRow, useOpenOrdersTable } from "./hooks";
 
-export const OpenOrdersTabel = (): JSX.Element => {
+export const OpenOrdersTable = (): JSX.Element => {
   const { loading, openOrdersColumns, openOrdersTableRows } =
     useOpenOrdersTable();
 

@@ -862,7 +862,7 @@ export const ru = {
       heading: "Профиль",
       activity: {
         my_activity: "Моя деятельность",
-        search_activitys: "Поисковая активность",
+        search_activities: "Поисковая активность",
       },
     },
   },
@@ -992,6 +992,7 @@ export const ru = {
       open_orders: "Открытые ордера",
       approved: "Одобренный",
       removed: "удаленный",
+      my_activity: "Моя деятельность",
     },
     comments: {
       deposit_hbd:

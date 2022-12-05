@@ -8,7 +8,7 @@ import {
   useUserContext,
   useViewportContext,
 } from "../../../../common/providers";
-import { OpenOrdersTabel } from "../../components/OpenOrdersTable";
+import { OpenOrdersTable } from "../../components";
 
 import * as Styled from "./ProfilePage.styled";
 
@@ -16,8 +16,8 @@ const { TabPane } = Styled.Tabs;
 
 const ProfilePage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
-  const { localStorageAccount } = useUserContext();
   const { sm } = useViewportContext();
+  const { localStorageAccount } = useUserContext();
   const router = useRouter();
   const { tab } = router.query;
 
@@ -43,7 +43,7 @@ const ProfilePage: NextPage = () => {
           }}
         >
           <TabPane tab="Orders" key="orders">
-            <OpenOrdersTabel />
+            <OpenOrdersTable />
           </TabPane>
           <TabPane tab="Activity" key="activity">
             <ActivityTable userName={localStorageAccount} showHeader={true} />

@@ -1,1 +1,1 @@
-export { OpenOrdersTabel } from "./OpenOrdersTable";
+export * from "./OpenOrdersTable";
