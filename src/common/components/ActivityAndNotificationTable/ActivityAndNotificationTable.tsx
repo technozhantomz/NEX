@@ -10,7 +10,7 @@ import { DownloadOutlined, SearchOutlined } from "../../../ui/src";
 import { useUserSettingsContext, useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityAndNotificationTable.styled";
-import { ActivityList } from "./components";
+import { ActivityAndNotificationList } from "./components";
 import { useActivityAndNotificationTable } from "./hooks";
 
 type Props = {
@@ -101,7 +101,11 @@ export const ActivityAndNotificationTable = ({
         ""
       )}
       {sm ? (
-        <ActivityList activitiesRows={searchDataSource} loading={loading} />
+        <ActivityAndNotificationList
+          activitiesAndNotificationsRows={searchDataSource}
+          loading={loading}
+          isNotificationTab={isNotificationTab}
+        />
       ) : (
         <Styled.ActivityAndNotificationTable
           columns={activityAndNotificationColumns as ColumnsType<unknown>}

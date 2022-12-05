@@ -1,3 +1,3 @@
 export * from "./ActivityAndNotificationColumns";
-export * from "./ActivityList";
+export * from "./ActivityAndNotificationList";
 export * from "./ActivityAndNotificationTag";
