@@ -1,6 +1,4 @@
 import { SearchTableInput } from "ant-table-extensions";
-import { TablePaginationConfig } from "antd";
-import { PaginationConfig } from "antd/lib/pagination";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
@@ -9,11 +7,8 @@ import { ReactInstance, useRef } from "react";
 import { CSVLink } from "react-csv";
 import ReactToPrint from "react-to-print";
 
-import { renderPaginationConfig } from "../../../../../common/components";
-import {
-  useUserContext,
-  useViewportContext,
-} from "../../../../../common/providers";
+import { renderPaginationItem } from "../../../../../common/components";
+import { useViewportContext } from "../../../../../common/providers";
 import { DownloadOutlined, SearchOutlined } from "../../../../../ui/src";
 import { VoteRow } from "../../../types";
 
@@ -23,106 +18,65 @@ import { useVoteTable } from "./hooks";
 
 type Props = {
   tab: string;
-  votes: VoteRow[];
-  type: "pendingChanges" | "allVotes";
+  votesRows: VoteRow[];
   loading: boolean;
-  addChange: (voteId: string) => void;
-  cancelChange: (voteId: string) => void;
+  addVote: (voteId: string) => void;
+  removeVote: (voteId: string) => void;
+  localApprovedVotesIds: string[];
 };
 
 export const VoteTable = ({
   tab,
-  votes,
-  type,
+  votesRows,
   loading,
-  addChange,
-  cancelChange,
+  addVote,
+  removeVote,
+  localApprovedVotesIds,
 }: Props): JSX.Element => {
+  const { searchDataSource, setSearchDataSource } = useVoteTable({ votesRows });
   const isWitnessTab = tab === "witnesses";
-  const { searchDataSource, setSearchDataSource, getActionString } =
-    useVoteTable({ votes });
+
   const { sm } = useViewportContext();
-  const { localStorageAccount } = useUserContext();
   const columns = showVotesColumns(
-    addChange,
-    cancelChange,
-    getActionString,
+    localApprovedVotesIds,
+    addVote,
+    removeVote,
     isWitnessTab
   );
   const componentRef = useRef<HTMLDivElement>(null);
-
-  const renderCancelActionRows = (item: VoteRow) =>
-    item.status === "unapproved" ? (
-      <Styled.ApprovedStatus>
-        {counterpart.translate(`pages.voting.status.pending_add`)}
-      </Styled.ApprovedStatus>
-    ) : (
-      <Styled.NotApprovedStatus>
-        {counterpart.translate(`pages.voting.status.pending_remove`)}
-      </Styled.NotApprovedStatus>
-    );
-
-  const renderAddActionRows = (item: VoteRow) =>
-    item.status === "unapproved" ? (
-      <>
-        <Styled.Xmark></Styled.Xmark>
-        <Styled.NotApprovedStatus>
-          {counterpart.translate(`pages.voting.status.not_approved`)}
-        </Styled.NotApprovedStatus>
-      </>
-    ) : (
-      <>
-        <Styled.Check></Styled.Check>
-        <Styled.ApprovedStatus>
-          {counterpart.translate(`pages.voting.status.approved`)}
-        </Styled.ApprovedStatus>
-      </>
-    );
 
   return (
     <Styled.VoteTableWrapper>
       <Styled.VoteHeaderBar>
         <Styled.Title>
-          {type === "pendingChanges"
-            ? counterpart.translate(`field.labels.pending_changes`, {
-                localStorageAccount,
-              })
-            : capitalize(counterpart.translate(`pages.voting.${tab}.heading`))}
+          {capitalize(counterpart.translate(`pages.voting.${tab}.heading`))}{" "}
         </Styled.Title>
-        {type === "allVotes" ? (
-          <>
-            <SearchTableInput
-              columns={columns as ColumnsType<unknown>}
-              dataSource={votes}
-              setDataSource={setSearchDataSource}
-              inputProps={{
-                placeholder: counterpart.translate(
-                  `pages.blocks.${tab}.search_${tab}`
-                ),
-                suffix: <SearchOutlined />,
-              }}
-            />
-            <Styled.DownloadLinks>
-              <DownloadOutlined />
-              <ReactToPrint
-                trigger={() => (
-                  <a href="#">{counterpart.translate(`links.pdf`)}</a>
-                )}
-                content={() => componentRef.current as unknown as ReactInstance}
-              />
-              {` / `}
-              <CSVLink
-                filename={"WitnessesTable.csv"}
-                data={votes}
-                className="btn btn-primary"
-              >
-                {counterpart.translate(`links.csv`)}
-              </CSVLink>
-            </Styled.DownloadLinks>
-          </>
-        ) : (
-          ""
-        )}
+        <SearchTableInput
+          columns={columns as ColumnsType<unknown>}
+          dataSource={votesRows}
+          setDataSource={setSearchDataSource}
+          inputProps={{
+            placeholder: counterpart.translate(
+              `pages.blocks.${tab}.search_${tab}`
+            ),
+            suffix: <SearchOutlined />,
+          }}
+        />
+        <Styled.DownloadLinks>
+          <DownloadOutlined />
+          <ReactToPrint
+            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
+            content={() => componentRef.current as unknown as ReactInstance}
+          />
+          {` / `}
+          <CSVLink
+            filename={"WitnessesTable.csv"}
+            data={votesRows}
+            className="btn btn-primary"
+          >
+            {counterpart.translate(`links.csv`)}
+          </CSVLink>
+        </Styled.DownloadLinks>
       </Styled.VoteHeaderBar>
       <Styled.Container>
         {sm ? (
@@ -130,13 +84,14 @@ export const VoteTable = ({
             itemLayout="vertical"
             dataSource={searchDataSource}
             loading={loading}
-            pagination={
-              renderPaginationConfig({
-                loading,
-                pageSize: 10,
-                showSizeChanger: true,
-              }) as false | PaginationConfig
-            }
+            pagination={{
+              defaultPageSize: 10,
+              defaultCurrent: 1,
+              showSizeChanger: true,
+              showLessItems: true,
+              size: "small",
+              itemRender: renderPaginationItem(),
+            }}
             renderItem={(item) => (
               <Styled.VoteListItem key={(item as VoteRow).key}>
                 <Styled.VoteItemContent>
@@ -204,9 +159,25 @@ export const VoteTable = ({
                           {columns[5].title()}
                         </span>
                         <span className="item-info-value">
-                          {(item as VoteRow).action === "cancel"
-                            ? renderCancelActionRows(item as VoteRow)
-                            : renderAddActionRows(item as VoteRow)}
+                          {(item as VoteRow).status === "unapproved" ? (
+                            <>
+                              <Styled.Xmark></Styled.Xmark>
+                              <Styled.NotApprovedStatus>
+                                {counterpart.translate(
+                                  `pages.voting.status.not_approved`
+                                )}
+                              </Styled.NotApprovedStatus>
+                            </>
+                          ) : (
+                            <>
+                              <Styled.Check></Styled.Check>
+                              <Styled.ApprovedStatus>
+                                {counterpart.translate(
+                                  `pages.voting.status.approved`
+                                )}
+                              </Styled.ApprovedStatus>
+                            </>
+                          )}
                         </span>
                       </div>
                       <div className="item-info">
@@ -214,36 +185,26 @@ export const VoteTable = ({
                           {columns[6].title()}
                         </span>
                         <span className="item-info-value">
-                          {(item as VoteRow).action === "add" ||
-                          (item as VoteRow).action === "remove" ||
-                          (item as VoteRow).action === "cancel" ? (
-                            <Styled.VoteActionButton
+                          {!localApprovedVotesIds.includes(
+                            (item as VoteRow).id
+                          ) ? (
+                            <div
+                              className="cursor-pointer"
                               onClick={() => {
-                                if ((item as VoteRow).action === "cancel") {
-                                  cancelChange((item as VoteRow).id);
-                                } else {
-                                  addChange((item as VoteRow).id);
-                                }
+                                addVote((item as VoteRow).id);
                               }}
                             >
-                              {getActionString(
-                                (item as VoteRow).action
-                              ).toUpperCase()}
-                            </Styled.VoteActionButton>
+                              <Styled.LikeOutlinedIcon />
+                            </div>
                           ) : (
-                            <span>
-                              {(item as VoteRow).action === "pending add"
-                                ? counterpart
-                                    .translate(
-                                      `pages.voting.actions.pending_add`
-                                    )
-                                    .toUpperCase()
-                                : counterpart
-                                    .translate(
-                                      `pages.voting.actions.pending_remove`
-                                    )
-                                    .toUpperCase()}
-                            </span>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => {
+                                removeVote((item as VoteRow).id);
+                              }}
+                            >
+                              <Styled.LikeFilledIcon />
+                            </div>
                           )}
                         </span>
                       </div>
@@ -266,9 +227,25 @@ export const VoteTable = ({
                           {columns[6].title()}
                         </span>
                         <span className="item-info-value">
-                          {(item as VoteRow).action === "cancel"
-                            ? renderCancelActionRows(item as VoteRow)
-                            : renderAddActionRows(item as VoteRow)}
+                          {(item as VoteRow).status === "unapproved" ? (
+                            <>
+                              <Styled.Xmark></Styled.Xmark>
+                              <Styled.NotApprovedStatus>
+                                {counterpart.translate(
+                                  `pages.voting.status.not_approved`
+                                )}
+                              </Styled.NotApprovedStatus>
+                            </>
+                          ) : (
+                            <>
+                              <Styled.Check></Styled.Check>
+                              <Styled.ApprovedStatus>
+                                {counterpart.translate(
+                                  `pages.voting.status.approved`
+                                )}
+                              </Styled.ApprovedStatus>
+                            </>
+                          )}
                         </span>
                       </div>
                       <div className="item-info">
@@ -276,36 +253,26 @@ export const VoteTable = ({
                           {columns[7].title()}
                         </span>
                         <span className="item-info-value">
-                          {(item as VoteRow).action === "add" ||
-                          (item as VoteRow).action === "remove" ||
-                          (item as VoteRow).action === "cancel" ? (
-                            <Styled.VoteActionButton
+                          {!localApprovedVotesIds.includes(
+                            (item as VoteRow).id
+                          ) ? (
+                            <div
+                              className="cursor-pointer"
                               onClick={() => {
-                                if ((item as VoteRow).action === "cancel") {
-                                  cancelChange((item as VoteRow).id);
-                                } else {
-                                  addChange((item as VoteRow).id);
-                                }
+                                addVote((item as VoteRow).id);
                               }}
                             >
-                              {getActionString(
-                                (item as VoteRow).action
-                              ).toUpperCase()}
-                            </Styled.VoteActionButton>
+                              <Styled.LikeOutlinedIcon />
+                            </div>
                           ) : (
-                            <span>
-                              {(item as VoteRow).action === "pending add"
-                                ? counterpart
-                                    .translate(
-                                      `pages.voting.actions.pending_add`
-                                    )
-                                    .toUpperCase()
-                                : counterpart
-                                    .translate(
-                                      `pages.voting.actions.pending_remove`
-                                    )
-                                    .toUpperCase()}
-                            </span>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => {
+                                removeVote((item as VoteRow).id);
+                              }}
+                            >
+                              <Styled.LikeFilledIcon />
+                            </div>
                           )}
                         </span>
                       </div>
@@ -320,31 +287,29 @@ export const VoteTable = ({
             columns={columns as ColumnsType<unknown>}
             dataSource={searchDataSource}
             loading={loading}
-            pagination={
-              renderPaginationConfig({
-                loading,
-                pageSize: 10,
-                showSizeChanger: true,
-              }) as false | TablePaginationConfig
-            }
+            pagination={{
+              defaultPageSize: 20,
+              defaultCurrent: 1,
+              showSizeChanger: true,
+              size: "small",
+              showLessItems: true,
+              itemRender: renderPaginationItem(),
+            }}
             size="small"
           />
         )}
       </Styled.Container>
-      {type === "allVotes" ? (
-        <Styled.PrintTable>
-          <div ref={componentRef}>
-            <Styled.VoteTable
-              dataSource={votes}
-              columns={columns as ColumnsType<unknown>}
-              loading={loading}
-              pagination={false}
-            />
-          </div>
-        </Styled.PrintTable>
-      ) : (
-        ""
-      )}
+
+      <Styled.PrintTable>
+        <div ref={componentRef}>
+          <Styled.VoteTable
+            dataSource={votesRows}
+            columns={columns as ColumnsType<unknown>}
+            loading={loading}
+            pagination={false}
+          />
+        </div>
+      </Styled.PrintTable>
     </Styled.VoteTableWrapper>
   );
 };

@@ -6,9 +6,9 @@ import { VoteRow } from "../../../../types";
 import * as Styled from "../VoteTable.styled";
 
 export const showVotesColumns = (
-  addChange: (voteId: string) => void,
-  cancelChange: (voteId: string) => void,
-  getActionString: (action: string) => string,
+  localApprovedVotesIds: string[],
+  addVote: (voteId: string) => void,
+  removeVote: (voteId: string) => void,
   isWitnessTab?: boolean
 ): {
   title: () => JSX.Element;
@@ -47,7 +47,7 @@ export const showVotesColumns = (
         "action",
       ];
   const keys = !isWitnessTab
-    ? ["rank", "name", "active", "url", "votes", "status", "action"]
+    ? ["rank", "name", "active", "url", "votes", "status", "possibleAction"]
     : [
         "rank",
         "name",
@@ -56,11 +56,12 @@ export const showVotesColumns = (
         "votes",
         "missedBlocks",
         "status",
-        "action",
+        "possibleAction",
       ];
 
   const renders = !isWitnessTab
     ? [
+        //rank
         undefined,
         (name: string): JSX.Element => (
           <Link href={`/user/${name}`}>
@@ -83,20 +84,12 @@ export const showVotesColumns = (
             )}
           </>
         ),
+        //votes
         undefined,
+        //status
         (_value: string, _record: any): JSX.Element => (
           <>
-            {_record.action === "cancel" ? (
-              _value === "unapproved" ? (
-                <Styled.ApprovedStatus>
-                  {counterpart.translate(`pages.voting.status.pending_add`)}
-                </Styled.ApprovedStatus>
-              ) : (
-                <Styled.NotApprovedStatus>
-                  {counterpart.translate(`pages.voting.status.pending_remove`)}
-                </Styled.NotApprovedStatus>
-              )
-            ) : _value === "unapproved" ? (
+            {_value === "unapproved" ? (
               <>
                 <Styled.Xmark></Styled.Xmark>
                 <Styled.NotApprovedStatus>
@@ -113,35 +106,33 @@ export const showVotesColumns = (
             )}
           </>
         ),
-        (value: string, record: any): JSX.Element => (
+        //possibleAction
+        (_value: string, record: any): JSX.Element => (
           <>
-            {value === "add" || value === "remove" || value === "cancel" ? (
-              <Styled.VoteActionButton
+            {!localApprovedVotesIds.includes(record.id) ? (
+              <div
+                className="cursor-pointer"
                 onClick={() => {
-                  if (value === "cancel") {
-                    cancelChange(record.id as string);
-                  } else {
-                    addChange(record.id as string);
-                  }
+                  addVote(record.id as string);
                 }}
               >
-                {getActionString(value).toUpperCase()}
-              </Styled.VoteActionButton>
+                <Styled.LikeOutlinedIcon />
+              </div>
             ) : (
-              <span>
-                {value === "pending add"
-                  ? counterpart
-                      .translate(`pages.voting.actions.pending_add`)
-                      .toUpperCase()
-                  : counterpart
-                      .translate(`pages.voting.actions.pending_remove`)
-                      .toUpperCase()}
-              </span>
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  removeVote(record.id as string);
+                }}
+              >
+                <Styled.LikeFilledIcon />
+              </div>
             )}
           </>
         ),
       ]
     : [
+        //rank
         undefined,
         (name: string): JSX.Element => (
           <Link href={`/user/${name}`}>
@@ -164,23 +155,15 @@ export const showVotesColumns = (
             )}
           </>
         ),
+        //votes
         undefined,
         (missedBlocks: string): JSX.Element => (
           <Styled.MissedBlocks>{missedBlocks}</Styled.MissedBlocks>
         ),
+        //status
         (_value: string, _record: any): JSX.Element => (
           <>
-            {_record.action === "cancel" ? (
-              _value === "unapproved" ? (
-                <Styled.ApprovedStatus>
-                  {counterpart.translate(`pages.voting.status.pending_add`)}
-                </Styled.ApprovedStatus>
-              ) : (
-                <Styled.NotApprovedStatus>
-                  {counterpart.translate(`pages.voting.status.pending_remove`)}
-                </Styled.NotApprovedStatus>
-              )
-            ) : _value === "unapproved" ? (
+            {_value === "unapproved" ? (
               <>
                 <Styled.Xmark></Styled.Xmark>
                 <Styled.NotApprovedStatus>
@@ -197,30 +180,27 @@ export const showVotesColumns = (
             )}
           </>
         ),
-        (value: string, record: any): JSX.Element => (
+        //possibleAction
+        (_value: string, record: any): JSX.Element => (
           <>
-            {value === "add" || value === "remove" || value === "cancel" ? (
-              <Styled.VoteActionButton
+            {!localApprovedVotesIds.includes(record.id) ? (
+              <div
+                className="cursor-pointer"
                 onClick={() => {
-                  if (value === "cancel") {
-                    cancelChange(record.id as string);
-                  } else {
-                    addChange(record.id as string);
-                  }
+                  addVote(record.id as string);
                 }}
               >
-                {getActionString(value).toUpperCase()}
-              </Styled.VoteActionButton>
+                <Styled.LikeOutlinedIcon />
+              </div>
             ) : (
-              <span>
-                {value === "pending add"
-                  ? counterpart
-                      .translate(`pages.voting.actions.pending_add`)
-                      .toUpperCase()
-                  : counterpart
-                      .translate(`pages.voting.actions.pending_remove`)
-                      .toUpperCase()}
-              </span>
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  removeVote(record.id as string);
+                }}
+              >
+                <Styled.LikeFilledIcon />
+              </div>
             )}
           </>
         ),
@@ -228,8 +208,11 @@ export const showVotesColumns = (
 
   const filters = !isWitnessTab
     ? [
+        //rank
         undefined,
+        //name
         undefined,
+        //active
         [
           {
             text: counterpart.translate(`tableFilters.avtive`),
@@ -240,8 +223,11 @@ export const showVotesColumns = (
             value: false,
           },
         ],
+        //url
         undefined,
+        //votes
         undefined,
+        //status
         [
           {
             text: counterpart.translate(`tableFilters.approved`),
@@ -252,21 +238,8 @@ export const showVotesColumns = (
             value: "unapproved",
           },
         ],
-        [
-          { text: counterpart.translate(`tableFilters.add`), value: "add" },
-          {
-            text: counterpart.translate(`tableFilters.remove`),
-            value: "remove",
-          },
-          {
-            text: counterpart.translate(`tableFilters.pending_add`),
-            value: "pending add",
-          },
-          {
-            text: counterpart.translate(`tableFilters.pending_remove`),
-            value: "pending remove",
-          },
-        ],
+        //possibleAction
+        undefined,
       ]
     : [
         undefined,
@@ -294,21 +267,7 @@ export const showVotesColumns = (
             value: "unapproved",
           },
         ],
-        [
-          { text: counterpart.translate(`tableFilters.add`), value: "add" },
-          {
-            text: counterpart.translate(`tableFilters.remove`),
-            value: "remove",
-          },
-          {
-            text: counterpart.translate(`tableFilters.pending_add`),
-            value: "pending add",
-          },
-          {
-            text: counterpart.translate(`tableFilters.pending_remove`),
-            value: "pending remove",
-          },
-        ],
+        undefined,
       ];
   const filterModes = !isWitnessTab
     ? [undefined, undefined, "menu", undefined, undefined, "menu", "menu"]
@@ -342,7 +301,8 @@ export const showVotesColumns = (
         undefined,
         undefined,
         (value: string, record: VoteRow): boolean => record.status === value,
-        (value: string, record: VoteRow): boolean => record.action === value,
+        (value: string, record: VoteRow): boolean =>
+          record.possibleAction === value,
       ]
     : [
         undefined,
@@ -352,7 +312,8 @@ export const showVotesColumns = (
         undefined,
         undefined,
         (value: string, record: VoteRow): boolean => record.status === value,
-        (value: string, record: VoteRow): boolean => record.action === value,
+        (value: string, record: VoteRow): boolean =>
+          record.possibleAction === value,
       ];
   const sorters = !isWitnessTab
     ? [

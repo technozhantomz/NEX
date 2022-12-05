@@ -36,10 +36,10 @@ const VotingPage: NextPage = () => {
     allMembers,
     allMembersIds,
     fullAccount,
-    serverApprovedVotes,
     proxy,
     totalGpos,
     getUserVotes,
+    serverApprovedVotesIds,
   } = useVoting();
   const dropdowItems = [
     { label: counterpart.translate(`pages.voting.gpos.tab`), key: "gpos" },
@@ -128,21 +128,21 @@ const VotingPage: NextPage = () => {
                 <VoteTab
                   tab={voteTab}
                   votesLoading={loadingMembers || loadingUserVotes}
-                  tabServerApprovedVotes={serverApprovedVotes.filter(
-                    (approvedVote) =>
-                      parseInt(approvedVote.vote_id.split(":")[0]) ===
-                      voteIdentifiers[index]
-                  )}
                   fullAccount={fullAccount}
-                  allMembers={allMembers.filter(
+                  tabAllMembers={allMembers.filter(
                     (member) =>
                       parseInt(member.vote_id.split(":")[0]) ===
                       voteIdentifiers[index]
+                  )}
+                  tabServerApprovedVotesIds={serverApprovedVotesIds.filter(
+                    (voteId) =>
+                      parseInt(voteId.split(":")[0]) === voteIdentifiers[index]
                   )}
                   allMembersIds={allMembersIds}
                   getUserVotes={getUserVotes}
                   totalGpos={totalGpos}
                   proxy={proxy}
+                  key={voteTab}
                 />
               </TabPane>
             );

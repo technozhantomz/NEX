@@ -505,6 +505,10 @@ export const en = {
     },
   },
   buttons: {
+    confirmed: "Confirmed",
+    reconfirm_votes: "Reconfirm",
+    confirm_votes: "Confirm",
+    proxied_account: "Proxied account",
     enter_amount: "Enter an amount",
     swap_coins: "Swap coins",
     login_and_swap_coins: "Login & swap coins",
@@ -864,6 +868,13 @@ export const en = {
         heading: "Transfer",
       },
     },
+    profile: {
+      heading: "Profile",
+      activity: {
+        my_activity: "My Activity",
+        search_activitys: "Search Activities",
+      },
+    },
   },
   links: {
     create_account: "Create account",
@@ -987,6 +998,9 @@ export const en = {
       use_whalevault: "Use WhaleVault extension",
       unsaved_changes: "You have unsaved changes to your settings",
       coins_token: "Coins/Tokens",
+      approved: "Approved",
+      removed: "Removed",
+      my_activity: "My activity",
     },
     comments: {
       deposit_hbd:
@@ -1198,6 +1212,8 @@ export const en = {
     mark_read: "mark as read",
     mark_unread: "mark as unread",
     swap_transaction_type: "Transaction Type : Swap",
+    proxied_account: "You have proxied your voting power",
+    zero_votes: "You haven't approved any members",
   },
   file_content: {
     btc_withdraw_account: "Bitcoin Withdraw Account",

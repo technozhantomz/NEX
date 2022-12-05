@@ -62,6 +62,10 @@ export {
   GithubOutlined,
   YoutubeOutlined,
   RedditOutlined,
+  LikeOutlined,
+  LikeFilled,
+  DislikeOutlined,
+  ProfileOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";

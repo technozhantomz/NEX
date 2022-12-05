@@ -506,6 +506,10 @@ export const ru = {
     },
   },
   buttons: {
+    confirmed: "Подтвержденный",
+    reconfirm_votes: "Подтвердить",
+    confirm_votes: "Подтверждать",
+    proxied_account: "Прокси-аккаунт",
     enter_amount: "Введите сумму",
     swap_coins: "Обменять монеты",
     login_and_swap_coins: "Войти и поменять монеты",
@@ -867,6 +871,13 @@ export const ru = {
         heading: "Передача",
       },
     },
+    profile: {
+      heading: "Профиль",
+      activity: {
+        my_activity: "Моя деятельность",
+        search_activitys: "Поисковая активность",
+      },
+    },
   },
   links: {
     create_account: "Зарегистрироваться",
@@ -991,6 +1002,9 @@ export const ru = {
       use_whalevault: "Используйте расширение WhaleVault",
       unsaved_changes: "У вас есть несохраненные изменения в настройках",
       coins_token: "Монеты/Жетоны",
+      approved: "Одобренный",
+      removed: "удаленный",
+      my_activity: "Моя деятельность",
     },
     comments: {
       deposit_hbd:
@@ -1202,6 +1216,8 @@ export const ru = {
     mark_read: "пометить, как прочитанное",
     mark_unread: "отметить как непрочитанное",
     swap_transaction_type: "Тип сделки: своп",
+    proxied_account: "Вы проксировали свое право голоса",
+    zero_votes: "Вы не одобрили ни одного участника",
   },
   file_content: {
     btc_withdraw_account: "Счет для вывода биткойнов",

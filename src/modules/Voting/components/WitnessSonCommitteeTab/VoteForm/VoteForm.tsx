@@ -9,47 +9,52 @@ import {
 import { useHandleTransactionForm } from "../../../../../common/hooks";
 import { Proxy, SignerKey } from "../../../../../common/types";
 import { Tooltip } from "../../../../../ui/src";
-import { VoteRow } from "../../../types";
 
 import * as Styled from "./VoteForm.styled";
 import { useVoteForm } from "./hooks";
 
 type Props = {
+  confirmed: boolean;
   tab: string;
-  loading: boolean;
   isVotesChanged: boolean;
   resetChanges: () => void;
-  handlePublishChanges: (signerKey: SignerKey) => Promise<void>;
+  handleVoting: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   transactionErrorMessage: string;
   transactionSuccessMessage: string;
   name: string;
-  updateAccountFee: number;
+  updateAccountFee?: number;
   proxy: Proxy;
-  desiredMembers: number;
-  votes: VoteRow[];
-  afterSuccessTransactionModalClose?: () => void;
+  localApprovedVotesIds: string[];
+  tabServerApprovedVotesIds: string[];
+  afterSuccessTransactionModalClose: (() => void) | undefined;
 };
 
 export const VoteForm = ({
+  confirmed,
   tab,
   isVotesChanged,
   resetChanges,
   setTransactionErrorMessage,
   setTransactionSuccessMessage,
-  handlePublishChanges,
+  handleVoting,
   transactionErrorMessage,
   transactionSuccessMessage,
   loadingTransaction,
   name,
   updateAccountFee,
   proxy,
-  desiredMembers,
+  localApprovedVotesIds,
+  tabServerApprovedVotesIds,
   afterSuccessTransactionModalClose,
 }: Props): JSX.Element => {
-  const { voteForm } = useVoteForm();
+  const { voteForm, approvedMembers, removedMembers } = useVoteForm({
+    localApprovedVotesIds,
+    tabServerApprovedVotesIds,
+    isVotesChanged,
+  });
 
   const {
     isPasswordModalVisible,
@@ -59,11 +64,42 @@ export const VoteForm = ({
     handleFormFinish,
     hideTransactionModal,
   } = useHandleTransactionForm({
-    handleTransactionConfirmation: handlePublishChanges,
+    handleTransactionConfirmation: handleVoting,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
     neededKeyType: "active",
   });
+
+  const renderReconfirmActionButton = tabServerApprovedVotesIds.length ? (
+    <Styled.Publish type="primary" htmlType="submit">
+      {counterpart.translate(`buttons.reconfirm_votes`)}
+    </Styled.Publish>
+  ) : (
+    <Tooltip
+      placement="top"
+      title={counterpart.translate(`tooltips.zero_votes`)}
+    >
+      <Styled.Publish type="primary" htmlType="submit" disabled={true}>
+        {counterpart.translate(`buttons.reconfirm_votes`)}
+      </Styled.Publish>
+    </Tooltip>
+  );
+
+  const renderNotConfirmedActionButton = isVotesChanged ? (
+    <Styled.Publish type="primary" htmlType="submit">
+      {counterpart.translate(`buttons.confirm_votes`)}
+    </Styled.Publish>
+  ) : (
+    renderReconfirmActionButton
+  );
+
+  const renderNotProxiedActionButton = confirmed ? (
+    <Styled.Publish type="primary" htmlType="submit" disabled={true}>
+      {counterpart.translate(`buttons.confirmed`)}
+    </Styled.Publish>
+  ) : (
+    renderNotConfirmedActionButton
+  );
 
   return (
     <Styled.VoteFormWrapper>
@@ -74,6 +110,22 @@ export const VoteForm = ({
           onFinish={showPasswordModal}
         >
           <Styled.ActionsContainer>
+            {proxy.id !== DEFAULT_PROXY_ID ? (
+              <Tooltip
+                placement="top"
+                title={counterpart.translate(`tooltips.proxied_account`)}
+              >
+                <Styled.Publish
+                  type="primary"
+                  htmlType="submit"
+                  disabled={true}
+                >
+                  {counterpart.translate(`buttons.proxied_account`)}
+                </Styled.Publish>
+              </Tooltip>
+            ) : (
+              renderNotProxiedActionButton
+            )}
             {!isVotesChanged ? (
               <Styled.CardFormLinkButtonDisabled>
                 <Styled.Reset />
@@ -89,28 +141,6 @@ export const VoteForm = ({
                 {counterpart.translate(`buttons.reset_changes`)}
               </Styled.CardFormLinkButton>
             )}
-            {proxy.id !== DEFAULT_PROXY_ID ? (
-              <Tooltip
-                placement="top"
-                title={"You have proxied your voting power"}
-              >
-                <Styled.Publish
-                  type="primary"
-                  htmlType="submit"
-                  disabled={true}
-                >
-                  {counterpart.translate(`buttons.publish_changes`)}
-                </Styled.Publish>
-              </Tooltip>
-            ) : (
-              <Styled.Publish
-                type="primary"
-                htmlType="submit"
-                disabled={!isVotesChanged}
-              >
-                {counterpart.translate(`buttons.publish_changes`)}
-              </Styled.Publish>
-            )}
           </Styled.ActionsContainer>
           <PasswordModal
             visible={isPasswordModalVisible}
@@ -124,11 +154,12 @@ export const VoteForm = ({
             transactionSuccessMessage={transactionSuccessMessage}
             loadingTransaction={loadingTransaction}
             account={name}
-            fee={updateAccountFee}
+            fee={updateAccountFee as number}
             transactionType="account_update"
             proxy={proxy}
-            desiredMembers={desiredMembers}
             memberType={tab}
+            approvedMembers={approvedMembers}
+            removedMembers={removedMembers}
             afterClose={afterSuccessTransactionModalClose}
           />
         </Styled.VoteForm>
