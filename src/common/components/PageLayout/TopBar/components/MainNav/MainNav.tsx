@@ -99,13 +99,18 @@ export const MainNav = (): JSX.Element => {
                 label={counterpart.translate(`pages.wallet.heading`)}
               />
             </li>
-            <li>
-              <MenuItem
-                href="/profile"
-                icon={<ProfileOutlined className={"menu-icon"} />}
-                label={counterpart.translate(`pages.profile.heading`)}
-              />
-            </li>
+            {!sm ? (
+              <li>
+                <MenuItem
+                  href="/profile"
+                  icon={<ProfileOutlined className={"menu-icon"} />}
+                  label={counterpart.translate(`pages.profile.heading`)}
+                />
+              </li>
+            ) : (
+              ""
+            )}
+
             {sm ? (
               <li>
                 <MenuItem
@@ -114,7 +119,7 @@ export const MainNav = (): JSX.Element => {
                     openMenu("profile");
                   }}
                   icon={<UserOutlined className={"menu-icon avitar"} />}
-                  label={counterpart.translate(`links.profile`)}
+                  label={counterpart.translate(`pages.profile.heading`)}
                 />
               </li>
             ) : (

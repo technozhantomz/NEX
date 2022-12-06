@@ -2,6 +2,7 @@ export const en = {
   general: {
     yes: "Yes",
     no: "No",
+    limit: "Limit",
   },
   app_init: {
     check_latency: "Running latency checks...",
@@ -857,7 +858,21 @@ export const en = {
     },
     profile: {
       heading: "Profile",
+      my_profile: "My profile",
+      orders: "Orders",
+      activities: "Activities",
+      notifications: "Notifications",
       activity: {
+        my_activity: "My Activity",
+        search_activities: "Search Activities",
+      },
+      orders_tab: {
+        buy: "Buy",
+        sell: "Sell",
+        partial: "Partial",
+        complete: "Complete",
+        open_orders: "Open orders",
+        order_history: "Order history",
         my_activity: "My activity",
         search_activities: "Search activities",
       },
@@ -991,6 +1006,7 @@ export const en = {
       use_whalevault: "Use WhaleVault extension",
       unsaved_changes: "You have unsaved changes to your settings",
       coins_token: "Coins/Tokens",
+      open_orders: "Open orders",
       approved: "Approved",
       removed: "Removed",
       my_activity: "My activity",
@@ -1186,6 +1202,12 @@ export const en = {
     operation_id: "Operation ID",
     operation_type: "Operation Type",
     fees: "Fees",
+    pair: "Pair",
+    side: "Side",
+    amount: "Amount",
+    filled: "Filled",
+    total: "Total",
+    status_actions: "Status/Actions",
   },
   tableFilters: {
     avtive: "Avtive",
