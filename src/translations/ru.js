@@ -876,6 +876,13 @@ export const ru = {
         complete: "Полный",
         open_orders: "Открытые ордера",
         order_history: "История заказов",
+        search_activities: "Поисковая деятельность",
+      },
+      notification: {
+        my_notification: "Мои уведомления",
+        search_notifications: "Уведомления о поиске",
+        read: "Читать",
+        unread: "Не прочитано",
       },
     },
   },

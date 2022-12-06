@@ -72,7 +72,6 @@ export function useOpenOrdersTab(): UseOrdersTabResult {
     ) => {
       const blockHeader = await getBlockHeader(filledOrder.block_num);
       const operationDetails = filledOrder.op[1];
-      let price = "0";
       let amount = 0;
       let total = 0;
       let filled = "";
@@ -105,7 +104,7 @@ export function useOpenOrdersTab(): UseOrdersTabResult {
           defaultAsset.precision
         );
       }
-      price = ceilPrecision(total / amount, defaultAsset.precision);
+      const price = ceilPrecision(total / amount, defaultAsset.precision);
       if (openOrder) {
         numberdFilled =
           (operationDetails.pays.amount / openOrder.sell_price.base.amount) *
@@ -419,15 +418,17 @@ export function useOpenOrdersTab(): UseOrdersTabResult {
     let ignore = false;
 
     async function setOrdersRows() {
-      setLoading(true);
-      const { openOrdersRows, historiesRows } = await getOrdersRows();
-      if (!ignore) {
-        setOpenOrdersTableRows(openOrdersRows);
-        updateOpenOrdersColumns(openOrdersRows);
-        setOrdersHistoriesTableRows(historiesRows);
-        updateOrdersHistoriesColumns(historiesRows);
-        setLoading(false);
-        setSubmited(false);
+      if (id && localStorageAccount) {
+        setLoading(true);
+        const { openOrdersRows, historiesRows } = await getOrdersRows();
+        if (!ignore) {
+          setOpenOrdersTableRows(openOrdersRows);
+          updateOpenOrdersColumns(openOrdersRows);
+          setOrdersHistoriesTableRows(historiesRows);
+          updateOrdersHistoriesColumns(historiesRows);
+          setLoading(false);
+          setSubmited(false);
+        }
       }
     }
 

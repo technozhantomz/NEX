@@ -73,31 +73,31 @@ export const OrdersTable = ({
                 <Styled.OrderItemContent>
                   <div className="activity-info">
                     <span className="activity-info-title">
-                      {ordersColumns[0].title()}
+                      {ordersColumns[0]?.title()}
                     </span>
                     <span className="activity-info-value">{orderRow.date}</span>
                   </div>
                   <div className="activity-info">
                     <span className="activity-info-title">
-                      {ordersColumns[1].title()}
+                      {ordersColumns[1]?.title()}
                     </span>
                     <span className="activity-info-value">{orderRow.pair}</span>
                   </div>
                   <div className="activity-info">
                     <span className="activity-info-title">
-                      {ordersColumns[2].title()}
+                      {ordersColumns[2]?.title()}
                     </span>
                     <span className="activity-info-value">{orderRow.type}</span>
                   </div>
                   <div className="activity-info">
                     <span className="activity-info-title">
-                      {ordersColumns[3].title()}
+                      {ordersColumns[3]?.title()}
                     </span>
                     <span className="activity-info-value">{orderRow.side}</span>
                   </div>
                   <div className="activity-info">
                     <span className="activity-info-title">
-                      {ordersColumns[4].title()}
+                      {ordersColumns[4]?.title()}
                     </span>
                     <span className="activity-info-value">
                       {orderRow.price}
@@ -105,7 +105,7 @@ export const OrdersTable = ({
                   </div>
                   <div className="activity-info">
                     <span className="activity-info-title">
-                      {ordersColumns[5].title()}
+                      {ordersColumns[5]?.title()}
                     </span>
                     <span className="activity-info-value">
                       {orderRow.amount}
@@ -113,7 +113,7 @@ export const OrdersTable = ({
                   </div>
                   <div className="activity-info">
                     <span className="activity-info-title">
-                      {ordersColumns[6].title()}
+                      {ordersColumns[6]?.title()}
                     </span>
                     <span className="activity-info-value">
                       {orderRow.filled}
@@ -121,7 +121,7 @@ export const OrdersTable = ({
                   </div>
                   <div className="activity-info">
                     <span className="activity-info-title">
-                      {ordersColumns[7].title()}
+                      {ordersColumns[7]?.title()}
                     </span>
                     <span className="activity-info-value">
                       {orderRow.total}
@@ -129,7 +129,7 @@ export const OrdersTable = ({
                   </div>
                   <div className="activity-info">
                     <span className="activity-info-title">
-                      {ordersColumns[8].title()}
+                      {ordersColumns[8]?.title()}
                     </span>
                     <span className="activity-info-value">
                       {!onCancelClick ? (
