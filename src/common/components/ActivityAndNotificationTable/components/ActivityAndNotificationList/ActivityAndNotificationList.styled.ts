@@ -1,4 +1,4 @@
-import { styled, List as UiList } from "../../../../../ui/src";
+import { Button, styled, List as UiList } from "../../../../../ui/src";
 import { breakpoint } from "../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../ui/src/colors";
 
@@ -44,5 +44,19 @@ export const ActivitysItemContent = styled.div`
   }
   ${breakpoint.sm} {
     margin: 18px 0 25px;
+  }
+`;
+
+export const NotificationTableStatusButton = styled(Button)`
+  margin: 0px;
+  border: none;
+  background: none;
+  boxshadow: none;
+  padding: 0;
+  color: ${colors.primaryColor};
+  text-align: right;
+  vertical-align: middle;
+  &:hover {
+    background: #fafafa;
   }
 `;

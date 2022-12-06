@@ -3,7 +3,10 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-import { ActivityTable, Layout } from "../../../../common/components";
+import {
+  ActivityAndNotificationTable,
+  Layout,
+} from "../../../../common/components";
 import {
   useUserContext,
   useViewportContext,
@@ -45,10 +48,17 @@ const ProfilePage: NextPage = () => {
             <p>orders Tab</p>
           </TabPane>
           <TabPane tab="Activity" key="activity">
-            <ActivityTable userName={localStorageAccount} showHeader={true} />
+            <ActivityAndNotificationTable
+              userName={localStorageAccount}
+              showHeader={true}
+              isNotificationTab={false}
+            />
           </TabPane>
           <TabPane tab="Notifications" key="notifications">
-            <p>notifications Tab</p>
+            <ActivityAndNotificationTable
+              showHeader={true}
+              isNotificationTab={true}
+            />
           </TabPane>
         </Styled.Tabs>
       </Styled.ProfileCard>

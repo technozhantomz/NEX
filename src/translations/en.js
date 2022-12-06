@@ -858,8 +858,14 @@ export const en = {
     profile: {
       heading: "Profile",
       activity: {
-        my_activity: "My Activity",
-        search_activitys: "Search Activities",
+        my_activity: "My activity",
+        search_activities: "Search activities",
+      },
+      notification: {
+        my_notification: "My notifications",
+        search_notifications: "Search notifications",
+        read: "Read",
+        unread: "Unread",
       },
     },
   },

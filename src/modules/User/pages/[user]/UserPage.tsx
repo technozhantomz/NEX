@@ -2,7 +2,10 @@ import counterpart from "counterpart";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import { ActivityTable, Layout } from "../../../../common/components";
+import {
+  ActivityAndNotificationTable,
+  Layout,
+} from "../../../../common/components";
 
 import * as Styled from "./UserPage.styled";
 
@@ -21,7 +24,7 @@ const UserPage: NextPage = () => {
       dexLayout={true}
     >
       <Styled.UserCard>
-        <ActivityTable userName={user as string} />
+        <ActivityAndNotificationTable userName={user as string} />
       </Styled.UserCard>
     </Layout>
   );

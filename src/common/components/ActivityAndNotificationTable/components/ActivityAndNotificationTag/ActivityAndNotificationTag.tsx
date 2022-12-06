@@ -6,7 +6,7 @@ type Props = {
   type: string;
 };
 
-export const ActivityTag = ({ type }: Props): JSX.Element => {
+export const ActivityAndNotificationTag = ({ type }: Props): JSX.Element => {
   return (
     <Tag key={type}>
       {counterpart.translate(`transaction.trxTypes.${type}.title`)}

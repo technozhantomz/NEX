@@ -862,7 +862,13 @@ export const ru = {
       heading: "Профиль",
       activity: {
         my_activity: "Моя деятельность",
-        search_activitys: "Поисковая активность",
+        search_activities: "Поисковая деятельность",
+      },
+      notification: {
+        my_notification: "Мои уведомления",
+        search_notifications: "Уведомления о поиске",
+        read: "Читать",
+        unread: "Не прочитано",
       },
     },
   },
