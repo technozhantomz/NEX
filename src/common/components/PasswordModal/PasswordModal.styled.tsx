@@ -27,6 +27,7 @@ export const PasswordModal = styled(UIModal)`
     }
     .ant-modal-title {
       font-size: 18px;
+      margin-right: 8px;
       ${breakpoint.sm} {
         font-size: 22px;
       }
