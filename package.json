@@ -2,6 +2,7 @@
   "name": "peerplays-nex",
   "private": true,
   "scripts": {
+    "test": "jest",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
