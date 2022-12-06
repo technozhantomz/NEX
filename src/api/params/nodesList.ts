@@ -33,7 +33,7 @@ export const nodeRegions = [
 
 // node location could be the city name
 
-const testnetNodes: Node[] = [
+export const testnetNodes: Node[] = [
   {
     url: "wss://fake.automatic-selection.com",
     location: counterpart.translate("settings.api_closest"),
@@ -60,7 +60,7 @@ const testnetNodes: Node[] = [
   },
 ];
 
-const prodNodes: Node[] = [
+export const prodNodes: Node[] = [
   {
     url: "wss://fake.automatic-selection.com",
     location: counterpart.translate("settings.api_closest"),
