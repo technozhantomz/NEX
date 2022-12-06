@@ -28,6 +28,7 @@ const DefaultBrowserHistoryState: BrowserHistoryContextType = {
     "/settings?tab=membership",
     "/voting",
     "/gpos",
+    "/profile",
   ],
   pageLoading: true,
   handleLoginRedirect: function (): void {

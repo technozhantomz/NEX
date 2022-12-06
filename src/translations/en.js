@@ -2,6 +2,7 @@ export const en = {
   general: {
     yes: "Yes",
     no: "No",
+    limit: "Limit",
   },
   app_init: {
     check_latency: "Running latency checks...",
@@ -857,9 +858,21 @@ export const en = {
     },
     profile: {
       heading: "Profile",
+      my_profile: "My profile",
+      orders: "Orders",
+      activities: "Activities",
+      notifications: "Notifications",
       activity: {
         my_activity: "My Activity",
         search_activities: "Search Activities",
+      },
+      orders_tab: {
+        buy: "Buy",
+        sell: "Sell",
+        partial: "Partial",
+        complete: "Complete",
+        open_orders: "Open orders",
+        order_history: "Order history",
       },
     },
   },
