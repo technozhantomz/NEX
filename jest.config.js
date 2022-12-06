@@ -16,7 +16,14 @@ const customJestConfig = {
   // moduleDirectories: ["node_modules", "<rootDir>/"],
   testEnvironment: "jest-environment-jsdom",
   collectCoverage: true,
-  collectCoverageFrom: ["**/*.tsx", "!**/node_modules/**"],
+  collectCoverageFrom: [
+    "**/*.tsx",
+    "**/*.ts",
+    "!**/node_modules/**",
+    "!**/index.ts",
+    "!**/*.styled.tsx",
+    "!./src/pages/**/**.tsx",
+  ],
   coverageReporters: ["clover", "json", "lcov", "text"],
 };
 
