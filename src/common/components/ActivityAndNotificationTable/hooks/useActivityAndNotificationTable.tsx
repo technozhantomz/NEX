@@ -5,28 +5,36 @@ import { useCallback, useEffect, useState } from "react";
 import { useActivity, useFormDate } from "../../../hooks";
 import { useViewportContext } from "../../../providers";
 import { ActivityRow } from "../../../types";
-import { ActivityColumns, ActivityColumnType } from "../components";
+import {
+  ActivityAndNotificationColumns,
+  ActivityAndNotificationType,
+} from "../components";
 
 import {
-  UseActivityTableArgs,
-  UseActivityTableResult,
-} from "./useActivityTable.types";
+  UseActivityAndNotificationResult,
+  UseActivityAndNotificationTableArgs,
+} from "./useActivityAndNotificationTable.types";
 
-export function useActivityTable({
+export function useActivityAndNotificationTable({
   userName,
   isWalletActivityTable = false,
-}: UseActivityTableArgs): UseActivityTableResult {
-  const [activitiesRows, _setActivitiesRows] = useState<ActivityRow[]>([]);
-  const [activityColumns, setActivityColumns] = useState<ActivityColumnType[]>(
-    []
-  );
+  isNotificationTab,
+  notifications,
+  markTheNotificationAsReadOrUnread,
+}: UseActivityAndNotificationTableArgs): UseActivityAndNotificationResult {
+  const [activitiesAndNotificationsRows, _setActivitiesAndNotificationsRows] =
+    useState<ActivityRow[]>([]);
+  const [activityAndNotificationColumns, setActivityAndNotificationColumns] =
+    useState<ActivityAndNotificationType[]>([]);
   const [searchDataSource, setSearchDataSource] = useState<ActivityRow[]>([]);
-
   const [loading, setLoading] = useState<boolean>(true);
-
   const { getActivitiesRows } = useActivity();
   const { sm } = useViewportContext();
   const { convertUTCDateToLocalDate } = useFormDate();
+  const columns = ActivityAndNotificationColumns(
+    isNotificationTab,
+    markTheNotificationAsReadOrUnread
+  );
 
   const formDate = useCallback(
     (
@@ -59,24 +67,37 @@ export function useActivityTable({
     [sm]
   );
 
-  const setActivitiesRows = useCallback(async () => {
+  const setActivitiesAndNotificationsRows = useCallback(async () => {
     try {
       setLoading(true);
       const activityRows = await getActivitiesRows(
         userName as string,
         isWalletActivityTable
       );
+
+      const notificationsRow = notifications.map(({ activity, unread }) => {
+        return {
+          ...activity,
+          status: unread,
+        } as ActivityRow;
+      });
+
       const timeModifiedActivityRows = activityRows.map((activityRow) => {
         return {
           ...activityRow,
           time: formDate(activityRow.time),
         } as ActivityRow;
       });
+
+      const rowsDataSource = isNotificationTab
+        ? notificationsRow
+        : timeModifiedActivityRows;
+
       const allTypes = timeModifiedActivityRows.map(
         (activity) => activity.type
       );
       const uniqTypes = uniq(allTypes);
-      const updatedColumns = ActivityColumns.map((column) => {
+      const updatedColumns = columns.map((column) => {
         switch (true) {
           case column.key === "type":
             column.filters = uniqTypes.map((type) => {
@@ -91,24 +112,31 @@ export function useActivityTable({
         }
         return { ...column };
       });
-      setActivityColumns(updatedColumns);
-      _setActivitiesRows(timeModifiedActivityRows);
-      setSearchDataSource(timeModifiedActivityRows);
+      setActivityAndNotificationColumns(updatedColumns);
+      _setActivitiesAndNotificationsRows(rowsDataSource);
+      setSearchDataSource(rowsDataSource);
       setLoading(false);
     } catch (e) {
       setLoading(false);
       console.log(e);
     }
-  }, [setLoading, _setActivitiesRows, isWalletActivityTable, userName]);
+  }, [
+    setLoading,
+    _setActivitiesAndNotificationsRows,
+    isWalletActivityTable,
+    userName,
+    isNotificationTab,
+    columns,
+  ]);
 
   useEffect(() => {
-    setActivitiesRows();
-  }, [userName]);
+    setActivitiesAndNotificationsRows();
+  }, [userName, notifications]);
 
   return {
-    activitiesRows,
+    activitiesAndNotificationsRows,
     loading,
-    activityColumns,
+    activityAndNotificationColumns,
     searchDataSource,
     setSearchDataSource,
   };
