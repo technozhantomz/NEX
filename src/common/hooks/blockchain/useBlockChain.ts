@@ -6,6 +6,7 @@ import {
   Account,
   Block,
   BlockData,
+  BlockHeader,
   Dynamic,
   GlobalProperties,
   WitnessAccount,
@@ -143,6 +144,20 @@ export function useBlockchain(): UseBlockchainResult {
     [dbApi]
   );
 
+  const getBlockHeader = useCallback(
+    async (blockNumber: number) => {
+      try {
+        const blockHeader: BlockHeader = await dbApi("get_block_header", [
+          blockNumber,
+        ]);
+        return blockHeader;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
+  );
+
   return {
     getChain,
     getBlockData,
@@ -151,5 +166,6 @@ export function useBlockchain(): UseBlockchainResult {
     getAvgBlockTime,
     getBlock,
     getBlocks,
+    getBlockHeader,
   };
 }

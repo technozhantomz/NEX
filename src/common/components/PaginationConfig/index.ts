@@ -1,1 +1,1 @@
-export * from "./renderPaginationConfig";
+export * from "./renderPaginationItem";
