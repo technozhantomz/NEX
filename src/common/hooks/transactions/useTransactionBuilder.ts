@@ -14,11 +14,9 @@ export function useTransactionBuilder(): ITransactionBuilder {
   const buildTrx = useCallback(async (trx: any, keys: SignerKey[]) => {
     const tr = new TransactionBuilder();
 
-    await trx.forEach((elem: any) =>
-      tr.add_type_operation(elem.type, elem.params)
-    );
+    trx.forEach((elem: any) => tr.add_type_operation(elem.type, elem.params));
     await tr.set_required_fees();
-    await keys.forEach((elem: any) => tr.add_signer(elem));
+    keys.forEach((elem: any) => tr.add_signer(elem));
 
     return tr.broadcast();
   }, []);
@@ -28,7 +26,7 @@ export function useTransactionBuilder(): ITransactionBuilder {
       if (defaultAsset !== undefined) {
         try {
           const tr = new TransactionBuilder();
-          await trx.forEach((elem: any) =>
+          trx.forEach((elem: any) =>
             tr.add_type_operation(elem.type, elem.params)
           );
           await tr.set_required_fees();

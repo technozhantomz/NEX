@@ -66,20 +66,6 @@ export const StatsCard = ({
     };
   };
 
-  // const config = {
-  //   width: 188,
-  //   height: 30,
-  //   autoFit: false,
-  //   data: statsData,
-  //   smooth: true,
-  //   line: {
-  //     color: "#FF6CB3",
-  //   },
-  //   areaStyle: {
-  //     fill: "l(270) 0:#ffffff 1:#FF6CB3",
-  //   },
-  // };
-
   const { defaultAsset } = useAssetsContext();
 
   return (

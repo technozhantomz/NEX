@@ -7,10 +7,9 @@ import React, {
   useState,
 } from "react";
 
-import { usePeerplaysApiContext } from "..";
 import { defaultToken } from "../../../api/params";
-import { useAsset } from "../../hooks";
-import { Asset, GlobalProperties } from "../../types";
+import { useAsset, useBlockchain } from "../../hooks";
+import { Asset } from "../../types";
 
 import { AssetsContextType } from "./AssetsProvider.types";
 
@@ -36,7 +35,7 @@ export const AssetsProvider = ({ children }: Props): JSX.Element => {
     (Asset | undefined)[]
   >([]);
 
-  const { dbApi } = usePeerplaysApiContext();
+  const { getGlobalProperties } = useBlockchain();
   const { getAssetById, getAssetBySymbol } = useAsset();
 
   const getDefaultAsset = useCallback(async () => {
@@ -50,23 +49,23 @@ export const AssetsProvider = ({ children }: Props): JSX.Element => {
 
   const getSidechainAssets = useCallback(async () => {
     try {
-      const globalProperties: GlobalProperties = await dbApi(
-        "get_global_properties"
-      );
-      const btcAssetId = globalProperties.parameters.extensions.btc_asset;
-      const hbdAssetId = globalProperties.parameters.extensions.hbd_asset;
-      const hiveAssetId = globalProperties.parameters.extensions.hive_asset;
+      const globalProperties = await getGlobalProperties();
+      if (globalProperties) {
+        const btcAssetId = globalProperties.parameters.extensions.btc_asset;
+        const hbdAssetId = globalProperties.parameters.extensions.hbd_asset;
+        const hiveAssetId = globalProperties.parameters.extensions.hive_asset;
 
-      const sidechainAssetsIds = [btcAssetId, hbdAssetId, hiveAssetId];
+        const sidechainAssetsIds = [btcAssetId, hbdAssetId, hiveAssetId];
 
-      const sidechainAssets = await Promise.all(
-        sidechainAssetsIds.map(getAssetById)
-      );
-      return sidechainAssets;
+        const sidechainAssets = await Promise.all(
+          sidechainAssetsIds.map(getAssetById)
+        );
+        return sidechainAssets;
+      }
     } catch (e) {
       console.log(e);
     }
-  }, [dbApi, getAssetById]);
+  }, [getGlobalProperties, getAssetById]);
 
   useEffect(() => {
     let ignore = false;
