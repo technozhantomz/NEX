@@ -1,4 +1,5 @@
-/** @format */
+//done
+//Should change to useReducer
 
 import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
@@ -6,13 +7,13 @@ import { useCallback, useEffect, useState } from "react";
 import {
   useAccount,
   useAsset,
+  useBlockchain,
   useFees,
   useMaintenance,
   useTransactionBuilder,
 } from "../../../../../common/hooks";
 import {
   useAssetsContext,
-  usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../common/providers";
 import {
@@ -22,7 +23,10 @@ import {
 } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 
-import { UseMembershipTabResult } from "./useMembershipTab.types";
+import {
+  MembershipStatus,
+  UseMembershipTabResult,
+} from "./useMembershipTab.types";
 
 export function useMembershipTab(): UseMembershipTabResult {
   const { setPrecision } = useAsset();
@@ -30,9 +34,9 @@ export function useMembershipTab(): UseMembershipTabResult {
   const { name, id, assets, localStorageAccount } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
   const { getFullAccount, formAccountBalancesByName } = useAccount();
-  const { dbApi } = usePeerplaysApiContext();
   const { calculateAccountUpgradeFee } = useFees();
   const { maintenanceInterval, nextMaintenanceTime } = useMaintenance();
+  const { getGlobalProperties } = useBlockchain();
 
   const [membershipForm] = Form.useForm();
   const [loadingAccountMembership, setLoadingAccountMembership] =
@@ -58,16 +62,57 @@ export function useMembershipTab(): UseMembershipTabResult {
   const [paidFees, setPaidFees] = useState<number>(0);
   const [expirationDate, setExpirationDate] = useState<string>("");
 
-  const getAccountMembership = useCallback(async () => {
-    try {
-      setLoadingAccountMembership(true);
+  const _setMembershipStatus = useCallback(
+    (membershipStatus?: MembershipStatus) => {
+      if (membershipStatus) {
+        if (membershipStatus.memberShipPrice) {
+          setMembershipPrice(membershipStatus.memberShipPrice);
+        }
+        setExpirationDate(membershipStatus.expirationDate);
+        setLifetimeReferrerName(membershipStatus.lifetimeReferrerName);
+        setReferrerName(membershipStatus.referrerName);
+        setRegistrarName(membershipStatus.registrarName);
+        setPaidFees(membershipStatus.paidFees);
+        setIsLifetimeMember(membershipStatus.isLifetimeMember);
+        setFeesCashback(membershipStatus.feesCashback);
+        setNetworkFee(membershipStatus.networkFee);
+        setLifetimeFee(membershipStatus.lifeTimeFee);
+        setReferrerTotalFee(membershipStatus.referrerTotalFee);
+        setReferrerFee(membershipStatus.referrerFee);
+        setRegistrarFee(membershipStatus.registrarFee);
+        setVestingThreshold(membershipStatus.vestingThreshold);
+        setVestingPeriod(membershipStatus.vestingPeriod);
+      }
+    },
+    [
+      setExpirationDate,
+      setFeesCashback,
+      setIsLifetimeMember,
+      setLifetimeFee,
+      setLifetimeReferrerName,
+      setMembershipPrice,
+      setNetworkFee,
+      setPaidFees,
+      setReferrerName,
+      setReferrerTotalFee,
+      setReferrerFee,
+      setRegistrarFee,
+      setRegistrarName,
+      setVestingThreshold,
+      setVestingPeriod,
+    ]
+  );
 
-      const [fullAccount, gpo]: [FullAccount | undefined, GlobalProperties] =
-        await Promise.all([
-          getFullAccount(name, false),
-          dbApi("get_global_properties"),
-        ]);
-      if (fullAccount && defaultAsset) {
+  const getAccountMembershipStatus = useCallback(async () => {
+    try {
+      const [fullAccount, gpo]: [
+        FullAccount | undefined,
+        GlobalProperties | undefined
+      ] = await Promise.all([
+        getFullAccount(name, false),
+        getGlobalProperties(),
+      ]);
+      if (fullAccount && gpo && defaultAsset) {
         let expirationDate = fullAccount.account.membership_expiration_date;
         if (expirationDate === "1970-01-01T00:00:00") {
           expirationDate = "N/A";
@@ -94,58 +139,39 @@ export function useMembershipTab(): UseMembershipTabResult {
           10000;
         const registrarFee = 100 - referrerFee - lifeTimeFee - networkFee;
         const memberShipPrice = calculateAccountUpgradeFee();
-        if (memberShipPrice) {
-          setMembershipPrice(memberShipPrice);
-        }
-        setExpirationDate(expirationDate);
-        setLifetimeReferrerName(lifetimeReferrerName);
-        setReferrerName(referrerName);
-        setRegistrarName(registrarName);
-        setPaidFees(paidFees);
-        setIsLifetimeMember(isLifetimeMember);
-        setFeesCashback(100 - networkFee);
-        setNetworkFee(networkFee);
-        setLifetimeFee(lifeTimeFee);
-        setReferrerTotalFee(referrerTotalFee);
-        setReferrerFee(referrerFee);
-        setRegistrarFee(registrarFee);
-        setVestingThreshold(
-          setPrecision(
+        const membershipStatus: MembershipStatus = {
+          memberShipPrice,
+          expirationDate,
+          lifetimeReferrerName,
+          referrerName,
+          registrarName,
+          paidFees,
+          isLifetimeMember,
+          feesCashback: 100 - networkFee,
+          networkFee,
+          lifeTimeFee,
+          referrerTotalFee,
+          referrerFee,
+          registrarFee,
+          vestingThreshold: setPrecision(
             false,
             gpo.parameters.cashback_vesting_threshold,
             defaultAsset.precision
-          )
-        );
-        setVestingPeriod(
-          gpo.parameters.cashback_vesting_period_seconds / (60 * 60 * 24)
-        );
-        setLoadingAccountMembership(false);
+          ),
+          vestingPeriod:
+            gpo.parameters.cashback_vesting_period_seconds / (60 * 60 * 24),
+        };
+        return membershipStatus;
       }
     } catch (e) {
       console.log(e);
-      setLoadingAccountMembership(false);
     }
   }, [
     calculateAccountUpgradeFee,
-    dbApi,
     defaultAsset,
     getFullAccount,
+    getGlobalProperties,
     name,
-    setFeesCashback,
-    setIsLifetimeMember,
-    setLifetimeFee,
-    setLifetimeReferrerName,
-    setMembershipPrice,
-    setNetworkFee,
-    setPaidFees,
-    setReferrerName,
-    setReferrerTotalFee,
-    setReferrerFee,
-    setRegistrarFee,
-    setRegistrarName,
-    setVestingThreshold,
-    setVestingPeriod,
-    setLoadingAccountMembership,
   ]);
 
   const handleMembershipUpgrade = useCallback(
@@ -187,7 +213,10 @@ export function useMembershipTab(): UseMembershipTabResult {
 
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
-          getAccountMembership();
+          const membershipStatus = await getAccountMembershipStatus();
+
+          _setMembershipStatus(membershipStatus);
+
           setTransactionErrorMessage("");
           setTransactionSuccessMessage(
             counterpart.translate(`field.success.account_upgraded_successfully`)
@@ -213,12 +242,31 @@ export function useMembershipTab(): UseMembershipTabResult {
       setIsLifetimeMember,
       formAccountBalancesByName,
       localStorageAccount,
+      getAccountMembershipStatus,
+      _setMembershipStatus,
     ]
   );
 
   useEffect(() => {
-    getAccountMembership();
-  }, [getAccountMembership]);
+    let ignore = false;
+    async function setMembershipStatus() {
+      setLoadingAccountMembership(true);
+      const membershipStatus = await getAccountMembershipStatus();
+      if (!ignore) {
+        _setMembershipStatus(membershipStatus);
+        setLoadingAccountMembership(false);
+      }
+    }
+    setMembershipStatus();
+
+    return () => {
+      ignore = true;
+    };
+  }, [
+    getAccountMembershipStatus,
+    setLoadingAccountMembership,
+    _setMembershipStatus,
+  ]);
 
   return {
     handleMembershipUpgrade,

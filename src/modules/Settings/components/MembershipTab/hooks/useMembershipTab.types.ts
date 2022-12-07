@@ -3,6 +3,24 @@ import { Dispatch, SetStateAction } from "react";
 import { SignerKey } from "../../../../../common/types";
 import { FormInstance } from "../../../../../ui/src";
 
+export type MembershipStatus = {
+  memberShipPrice: number | undefined;
+  expirationDate: string;
+  lifetimeReferrerName: string;
+  referrerName: string;
+  paidFees: number;
+  isLifetimeMember: boolean;
+  feesCashback: number;
+  networkFee: number;
+  lifeTimeFee: number;
+  referrerTotalFee: number;
+  referrerFee: number;
+  registrarFee: number;
+  vestingThreshold: number;
+  vestingPeriod: number;
+  registrarName: string;
+};
+
 export type UseMembershipTabResult = {
   handleMembershipUpgrade: (signerKey: SignerKey) => Promise<void>;
   loadingTransaction: boolean;

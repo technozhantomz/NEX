@@ -83,12 +83,11 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     selectedAssetPrecission
   );
 
-  //done
   const feeLabel =
     selectedBlockchain === BITCOIN_NETWORK
       ? counterpart.translate(`field.labels.estimated_fees_label`)
       : counterpart.translate(`field.labels.fees_label`);
-  //done
+
   const feeSummary: (inTotal?: boolean) => string | JSX.Element = (
     inTotal = false
   ) => {

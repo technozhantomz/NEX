@@ -1,14 +1,16 @@
 import { render } from "@testing-library/react";
 import React from "react";
 
-import { ActivityTag } from "../ActivityTag";
+import { ActivityAndNotificationTag } from "../ActivityAndNotificationTag";
 
 describe("Activity Tag", () => {
   it("renders correctly for account creation", () => {
     const dummyComponentProps = {
       type: "account_create",
     };
-    const { asFragment } = render(<ActivityTag {...dummyComponentProps} />);
+    const { asFragment } = render(
+      <ActivityAndNotificationTag {...dummyComponentProps} />
+    );
     expect(asFragment()).toMatchSnapshot();
   });
 
@@ -16,7 +18,9 @@ describe("Activity Tag", () => {
     const dummyComponentProps = {
       type: "account_update",
     };
-    const { asFragment } = render(<ActivityTag {...dummyComponentProps} />);
+    const { asFragment } = render(
+      <ActivityAndNotificationTag {...dummyComponentProps} />
+    );
     expect(asFragment()).toMatchSnapshot();
   });
 });

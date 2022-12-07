@@ -19,4 +19,5 @@ export type UseBlockchainResult = {
     limit: number
   ) => Promise<Block[] | undefined>;
   getBlockHeader: (blockNumber: number) => Promise<BlockHeader | undefined>;
+  getGlobalProperties: () => Promise<GlobalProperties | undefined>;
 };

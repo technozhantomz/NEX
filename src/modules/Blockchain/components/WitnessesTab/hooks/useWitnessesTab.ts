@@ -9,10 +9,7 @@ import {
   useFormDate,
   useMembers,
 } from "../../../../../common/hooks";
-import {
-  useAssetsContext,
-  usePeerplaysApiContext,
-} from "../../../../../common/providers";
+import { useAssetsContext } from "../../../../../common/providers";
 import { BlockData, GlobalProperties } from "../../../../../common/types";
 
 import {
@@ -43,13 +40,13 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const [nextVote, setNextVote] = useState<string>("");
   const [budget, setBudget] = useState<number>(0);
 
-  const { dbApi } = usePeerplaysApiContext();
   const { getUserNameById } = useAccount();
   const { getWitnesses } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { formKnownAssetBalanceById, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
-  const { getChain, getAvgBlockTime, getBlockData } = useBlockchain();
+  const { getChain, getAvgBlockTime, getBlockData, getGlobalProperties } =
+    useBlockchain();
   const { formLocalDate } = useFormDate();
 
   const getDaysInThisMonth = useCallback(() => {
@@ -61,15 +58,15 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     if (defaultAsset) {
       try {
         const [gpo, chain, blockData]: [
-          GlobalProperties,
+          GlobalProperties | undefined,
           GlobalProperties | undefined,
           BlockData | undefined
         ] = await Promise.all([
-          dbApi("get_global_properties"),
+          getGlobalProperties(),
           getChain(),
           getBlockData(),
         ]);
-        if (chain && blockData) {
+        if (gpo && chain && blockData) {
           const rewardAmount = setPrecision(
             false,
             chain.parameters.witness_pay_per_block,
