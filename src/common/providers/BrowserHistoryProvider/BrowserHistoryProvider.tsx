@@ -22,6 +22,7 @@ const DefaultBrowserHistoryState: BrowserHistoryContextType = {
     "/settings?tab=membership",
     "/voting",
     "/gpos",
+    "/profile",
   ],
   handleLoginRedirect: function (): void {
     throw new Error(`Function not implemented.`);

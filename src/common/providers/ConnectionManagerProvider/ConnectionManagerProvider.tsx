@@ -34,8 +34,11 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
   >("");
 
   const { apiSettings } = useSettingsContext();
-  const { willTransitionTo: _willTransitionTo, apiInstance } =
-    usePeerplaysApiContext();
+  const {
+    willTransitionTo: _willTransitionTo,
+    apiInstance,
+    dbApi,
+  } = usePeerplaysApiContext();
 
   const statusCallback = useCallback(
     (status: string | { background: boolean; key: string } | boolean) => {
@@ -159,7 +162,7 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
       {!apiConnected ? (
         renderNotConnectedScreen
       ) : (
-        <ChainStoreProvider apiInstance={apiInstance}>
+        <ChainStoreProvider apiInstance={apiInstance} dbApi={dbApi}>
           {children}
         </ChainStoreProvider>
       )}

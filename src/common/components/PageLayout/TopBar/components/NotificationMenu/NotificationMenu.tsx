@@ -1,8 +1,7 @@
-import { PaginationConfig } from "antd/lib/pagination";
 import counterpart from "counterpart";
 import Link from "next/link";
 
-import { renderPaginationConfig, UserLinkExtractor } from "../../../..";
+import { renderPaginationItem, UserLinkExtractor } from "../../../..";
 import { Checkbox, List, Switch, Tooltip } from "../../../../../../ui/src";
 import { useFormDate } from "../../../../../hooks";
 import {
@@ -100,10 +99,17 @@ export const NotificationMenu = (): JSX.Element => {
                   <List
                     loading={loadingNotifications}
                     pagination={
-                      renderPaginationConfig({
-                        loading: loadingNotifications,
-                        pageSize: 2,
-                      }) as false | PaginationConfig
+                      loadingNotifications
+                        ? false
+                        : {
+                            hideOnSinglePage: true,
+                            defaultPageSize: 2,
+                            defaultCurrent: 1,
+                            showLessItems: true,
+                            showSizeChanger: false,
+                            size: "small",
+                            itemRender: renderPaginationItem(),
+                          }
                     }
                     itemLayout="vertical"
                     dataSource={dataSource}

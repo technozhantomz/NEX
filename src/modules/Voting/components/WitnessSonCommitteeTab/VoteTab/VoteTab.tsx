@@ -1,8 +1,10 @@
+import { Affix } from "antd";
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
 import Link from "next/link";
 
 import { VoteForm, VoteTable } from "..";
+import { useViewportContext } from "../../../../../common/providers";
 import { FullAccount, Proxy, Vote } from "../../../../../common/types";
 import { InfoCircleOutlined } from "../../../../../ui/src";
 
@@ -12,55 +14,96 @@ import { useVoteTab } from "./hooks";
 type Props = {
   tab: string;
   votesLoading: boolean;
-  tabServerApprovedVotes: Vote[];
-  allMembers: Vote[];
+  tabAllMembers: Vote[];
   fullAccount: FullAccount | undefined;
   getUserVotes: () => Promise<void>;
   allMembersIds: [string, string][];
   totalGpos: number;
   proxy: Proxy;
+  tabServerApprovedVotesIds: string[];
 };
 
 export const VoteTab = ({
   tab,
   votesLoading,
-  tabServerApprovedVotes,
-  allMembers,
+  tabAllMembers,
   fullAccount,
   getUserVotes,
   allMembersIds,
   totalGpos,
   proxy,
+  tabServerApprovedVotesIds,
 }: Props): JSX.Element => {
   const {
-    loading,
-    allMembersRows,
+    name,
+    confirmed,
+    tableRows,
+    localApprovedVotesIds,
     isVotesChanged,
-    addChange,
-    cancelChange,
     resetChanges,
-    handlePublishChanges,
-    loadingTransaction,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    addVote,
+    removeVote,
+    handleVoting,
     transactionErrorMessage,
     transactionSuccessMessage,
-    name,
+    setTransactionErrorMessage,
+    setTransactionSuccessMessage,
+    loadingTransaction,
     updateAccountFee,
-    pendingChanges,
     afterSuccessTransactionModalClose,
-    handleReconfirmVoting,
-    reconfirmFee,
   } = useVoteTab({
     tab,
     votesLoading,
-    tabServerApprovedVotes,
-    allMembers,
+    tabAllMembers,
     fullAccount,
     getUserVotes,
     allMembersIds,
     totalGpos,
+    tabServerApprovedVotesIds,
   });
+  const { sm } = useViewportContext();
+
+  const renderVotesForm = !sm ? (
+    <VoteForm
+      confirmed={confirmed}
+      tab={tab}
+      isVotesChanged={isVotesChanged}
+      resetChanges={resetChanges}
+      name={name}
+      handleVoting={handleVoting}
+      loadingTransaction={loadingTransaction}
+      setTransactionErrorMessage={setTransactionErrorMessage}
+      setTransactionSuccessMessage={setTransactionSuccessMessage}
+      transactionErrorMessage={transactionErrorMessage}
+      transactionSuccessMessage={transactionSuccessMessage}
+      updateAccountFee={updateAccountFee}
+      proxy={proxy}
+      localApprovedVotesIds={localApprovedVotesIds}
+      tabServerApprovedVotesIds={tabServerApprovedVotesIds}
+      afterSuccessTransactionModalClose={afterSuccessTransactionModalClose}
+    />
+  ) : (
+    <Affix offsetBottom={0}>
+      <VoteForm
+        confirmed={confirmed}
+        tab={tab}
+        isVotesChanged={isVotesChanged}
+        resetChanges={resetChanges}
+        name={name}
+        handleVoting={handleVoting}
+        loadingTransaction={loadingTransaction}
+        setTransactionErrorMessage={setTransactionErrorMessage}
+        setTransactionSuccessMessage={setTransactionSuccessMessage}
+        transactionErrorMessage={transactionErrorMessage}
+        transactionSuccessMessage={transactionSuccessMessage}
+        updateAccountFee={updateAccountFee}
+        proxy={proxy}
+        localApprovedVotesIds={localApprovedVotesIds}
+        tabServerApprovedVotesIds={tabServerApprovedVotesIds}
+        afterSuccessTransactionModalClose={afterSuccessTransactionModalClose}
+      />
+    </Affix>
+  );
   return (
     <Styled.Container>
       <Styled.Title>
@@ -71,69 +114,15 @@ export const VoteTab = ({
         <Link href={""}>{counterpart.translate(`links.learn_more`)}</Link>
       </Styled.Title>
       <Styled.VoteTabCard>
-        {pendingChanges.length > 0 ? (
-          <>
-            <VoteTable
-              tab={tab}
-              type="pendingChanges"
-              loading={votesLoading || loading}
-              votes={pendingChanges}
-              addChange={addChange}
-              cancelChange={cancelChange}
-              name={name}
-              handleReconfirmVoting={handleReconfirmVoting}
-              loadingTransaction={loadingTransaction}
-              setTransactionErrorMessage={setTransactionErrorMessage}
-              setTransactionSuccessMessage={setTransactionSuccessMessage}
-              transactionErrorMessage={transactionErrorMessage}
-              transactionSuccessMessage={transactionSuccessMessage}
-              reconfirmFee={reconfirmFee}
-              proxy={proxy}
-              desiredMembers={tabServerApprovedVotes.length}
-            />
-            <VoteForm
-              tab={tab}
-              loading={loading}
-              isVotesChanged={isVotesChanged}
-              resetChanges={resetChanges}
-              name={name}
-              handlePublishChanges={handlePublishChanges}
-              loadingTransaction={loadingTransaction}
-              setTransactionErrorMessage={setTransactionErrorMessage}
-              setTransactionSuccessMessage={setTransactionSuccessMessage}
-              transactionErrorMessage={transactionErrorMessage}
-              transactionSuccessMessage={transactionSuccessMessage}
-              updateAccountFee={updateAccountFee}
-              proxy={proxy}
-              desiredMembers={pendingChanges.length}
-              votes={pendingChanges}
-              afterSuccessTransactionModalClose={
-                afterSuccessTransactionModalClose
-              }
-            />
-          </>
-        ) : (
-          ""
-        )}
-
         <VoteTable
           tab={tab}
-          type="allVotes"
-          loading={votesLoading || loading}
-          votes={allMembersRows}
-          addChange={addChange}
-          cancelChange={cancelChange}
-          name={name}
-          handleReconfirmVoting={handleReconfirmVoting}
-          loadingTransaction={loadingTransaction}
-          setTransactionErrorMessage={setTransactionErrorMessage}
-          setTransactionSuccessMessage={setTransactionSuccessMessage}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          reconfirmFee={reconfirmFee}
-          proxy={proxy}
-          desiredMembers={tabServerApprovedVotes.length}
+          loading={votesLoading || tableRows.length === 0}
+          votesRows={tableRows}
+          addVote={addVote}
+          removeVote={removeVote}
+          localApprovedVotesIds={localApprovedVotesIds}
         />
+        {!(votesLoading || tableRows.length === 0) ? renderVotesForm : ""}
       </Styled.VoteTabCard>
     </Styled.Container>
   );
