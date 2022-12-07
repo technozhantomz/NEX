@@ -49,6 +49,8 @@ export const VoteTab = ({
     updateAccountFee,
     pendingChanges,
     afterSuccessTransactionModalClose,
+    handleReconfirmVoting,
+    reconfirmFee,
   } = useVoteTab({
     tab,
     votesLoading,
@@ -78,6 +80,16 @@ export const VoteTab = ({
               votes={pendingChanges}
               addChange={addChange}
               cancelChange={cancelChange}
+              name={name}
+              handleReconfirmVoting={handleReconfirmVoting}
+              loadingTransaction={loadingTransaction}
+              setTransactionErrorMessage={setTransactionErrorMessage}
+              setTransactionSuccessMessage={setTransactionSuccessMessage}
+              transactionErrorMessage={transactionErrorMessage}
+              transactionSuccessMessage={transactionSuccessMessage}
+              reconfirmFee={reconfirmFee}
+              proxy={proxy}
+              desiredMembers={tabServerApprovedVotes.length}
             />
             <VoteForm
               tab={tab}
@@ -111,6 +123,16 @@ export const VoteTab = ({
           votes={allMembersRows}
           addChange={addChange}
           cancelChange={cancelChange}
+          name={name}
+          handleReconfirmVoting={handleReconfirmVoting}
+          loadingTransaction={loadingTransaction}
+          setTransactionErrorMessage={setTransactionErrorMessage}
+          setTransactionSuccessMessage={setTransactionSuccessMessage}
+          transactionErrorMessage={transactionErrorMessage}
+          transactionSuccessMessage={transactionSuccessMessage}
+          reconfirmFee={reconfirmFee}
+          proxy={proxy}
+          desiredMembers={tabServerApprovedVotes.length}
         />
       </Styled.VoteTabCard>
     </Styled.Container>

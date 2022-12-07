@@ -180,12 +180,18 @@ export function UserSettingsProvider({
     async (notifications: Notification[], hasUnread?: boolean) => {
       try {
         const activityRows = await getActivitiesRows(localStorageAccount);
-        const updatedNotifications = notifications.map((notif) => {
-          return {
-            activity: activityRows.find((row) => row.id === notif.activity.id),
-            unread: notif.unread,
-          } as Notification;
-        });
+        const updatedNotifications = notifications
+          .filter((notif) =>
+            activityRows.find((row) => row.id === notif.activity.id)
+          )
+          .map((notif) => {
+            return {
+              activity: activityRows.find(
+                (row) => row.id === notif.activity.id
+              ),
+              unread: notif.unread,
+            } as Notification;
+          });
         setNotifications(updatedNotifications);
         if (hasUnread === undefined) {
           setHasUnreadMessages(updatedNotifications);

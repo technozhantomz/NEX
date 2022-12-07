@@ -203,7 +203,6 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
           autoComplete="off"
         />
       </Form.Item>
-
       <Styled.WithdrawalInstruction>
         <Styled.IconWrapper>
           <BitcoinIcon height="30" width="30" />

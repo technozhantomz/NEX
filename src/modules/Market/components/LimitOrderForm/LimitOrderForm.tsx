@@ -130,6 +130,7 @@ export const LimitOrderForm = ({
                   e.target.select();
                 }}
                 onKeyPress={utils.ensureInputNumberValidity}
+                onPaste={utils.numberedInputsPasteHandler}
                 autoComplete="off"
               />
             </Styled.FormItem>
@@ -156,6 +157,7 @@ export const LimitOrderForm = ({
                   e.target.select();
                 }}
                 onKeyPress={utils.ensureInputNumberValidity}
+                onPaste={utils.numberedInputsPasteHandler}
                 autoComplete="off"
               />
             </Styled.FormItem>
@@ -182,6 +184,7 @@ export const LimitOrderForm = ({
                   e.target.select();
                 }}
                 onKeyPress={utils.ensureInputNumberValidity}
+                onPaste={utils.numberedInputsPasteHandler}
                 disabled={true}
               />
             </Styled.FormItem>

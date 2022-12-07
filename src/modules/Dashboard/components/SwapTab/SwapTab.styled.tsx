@@ -63,6 +63,9 @@ export const SwapForm = styled(swapForm)`
         font-size: 20px;
       }
     }
+    .ant-input[disabled] {
+      background-color: unset;
+    }
   }
 `;
 
