@@ -56,8 +56,8 @@ describe("defaultExchanges", () => {
   it("should have the correct default values", () => {
     expect(defaultExchanges).toEqual({
       active: `${defaultQuote}_${defaultToken}`,
-      list: [`${defaultQuote}/${defaultQuote}`],
-      swapPair: `${defaultQuote}_${defaultQuote}`,
+      list: [`${defaultQuote}/${defaultToken}`],
+      swapPair: `${defaultQuote}_${defaultToken}`,
     });
   });
 });
