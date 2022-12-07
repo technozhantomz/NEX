@@ -8,19 +8,21 @@ import * as Styled from "../TransactionModal.styled";
 type Props = {
   fee: number;
   account: string;
-  desiredMembers?: number;
   proxy?: Proxy;
   memberType?: string;
   generatedKeys?: GeneratedKey[];
+  approvedMembers?: number;
+  removedMembers?: number;
 };
 
 export const AccountUpdate = ({
   account,
   fee,
-  desiredMembers,
   memberType,
   proxy,
   generatedKeys,
+  approvedMembers,
+  removedMembers,
 }: Props): JSX.Element => {
   return (
     <>
@@ -48,10 +50,22 @@ export const AccountUpdate = ({
           </p>
         </Styled.DetailContainer>
       )}
-      {desiredMembers !== undefined && desiredMembers >= 0 ? (
+      {approvedMembers ? (
         <Styled.DetailContainer>
-          <p>{counterpart.translate(`field.labels.desired_${memberType}`)}</p>
-          <p>{`${desiredMembers}`}</p>
+          <p>
+            {counterpart.translate(`field.labels.approved`)} {memberType}
+          </p>
+          <p>{`${approvedMembers}`}</p>
+        </Styled.DetailContainer>
+      ) : (
+        ""
+      )}
+      {removedMembers ? (
+        <Styled.DetailContainer>
+          <p>
+            {counterpart.translate(`field.labels.removed`)} {memberType}
+          </p>
+          <p>{`${removedMembers}`}</p>
         </Styled.DetailContainer>
       ) : (
         ""

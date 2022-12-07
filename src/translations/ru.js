@@ -2,6 +2,7 @@ export const ru = {
   general: {
     yes: "Да",
     no: "Нет",
+    limit: "Ограничение",
   },
   app_init: {
     check_latency: "Запуск проверки задержки...",
@@ -506,7 +507,10 @@ export const ru = {
     },
   },
   buttons: {
-    reconfirm_votes: "Подтвердить голоса",
+    confirmed: "Подтвержденный",
+    reconfirm_votes: "Подтвердить",
+    confirm_votes: "Подтверждать",
+    proxied_account: "Прокси-аккаунт",
     enter_amount: "Введите сумму",
     swap_coins: "Обменять монеты",
     login_and_swap_coins: "Войти и поменять монеты",
@@ -855,6 +859,32 @@ export const ru = {
         heading: "Требуется ваш пароль или ключ %(neededKeyType)s",
       },
     },
+    profile: {
+      heading: "Профиль",
+      my_profile: "Мой профиль",
+      orders: "Заказы",
+      activities: "мероприятия",
+      notifications: "Уведомления",
+      activity: {
+        my_activity: "Моя деятельность",
+        search_activities: "Поисковая активность",
+      },
+      orders_tab: {
+        buy: "Купить",
+        sell: "Продавать",
+        partial: "Частичный",
+        complete: "Полный",
+        open_orders: "Открытые ордера",
+        order_history: "История заказов",
+        search_activities: "Поисковая деятельность",
+      },
+      notification: {
+        my_notification: "Мои уведомления",
+        search_notifications: "Уведомления о поиске",
+        read: "Читать",
+        unread: "Не прочитано",
+      },
+    },
   },
   links: {
     create_account: "Зарегистрироваться",
@@ -979,6 +1009,10 @@ export const ru = {
       use_whalevault: "Используйте расширение WhaleVault",
       unsaved_changes: "У вас есть несохраненные изменения в настройках",
       coins_token: "Монеты/Жетоны",
+      open_orders: "Открытые ордера",
+      approved: "Одобренный",
+      removed: "удаленный",
+      my_activity: "Моя деятельность",
     },
     comments: {
       deposit_hbd:
@@ -1171,6 +1205,12 @@ export const ru = {
     operation_id: "Идентификатор операции",
     operation_type: "Тип операции",
     fees: "Сборы",
+    pair: "Пара",
+    side: "Сторона",
+    amount: "Количество",
+    filled: "Заполненный",
+    total: "Общий",
+    status_actions: "Статус/Действия",
   },
   tableFilters: {
     avtive: "Активный",

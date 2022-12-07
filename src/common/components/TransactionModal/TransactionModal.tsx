@@ -28,7 +28,6 @@ type Props = {
   account?: string;
   fee: number | string;
   proxy?: Proxy;
-  desiredMembers?: number;
   memberType?: string;
   generatedKeys?: GeneratedKey[];
   price?: string;
@@ -45,6 +44,8 @@ type Props = {
   sidechain?: string;
   afterClose?: () => void;
   blockchain?: string;
+  approvedMembers?: number;
+  removedMembers?: number;
 };
 
 export const TransactionModal = ({
@@ -57,7 +58,6 @@ export const TransactionModal = ({
   account,
   fee,
   proxy,
-  desiredMembers,
   memberType,
   generatedKeys,
   price,
@@ -74,6 +74,8 @@ export const TransactionModal = ({
   sidechain,
   afterClose,
   blockchain,
+  approvedMembers,
+  removedMembers,
 }: Props): JSX.Element => {
   const transactionDetails: {
     [transactionType: string]: JSX.Element;
@@ -86,7 +88,8 @@ export const TransactionModal = ({
         account={account as string}
         fee={fee as number}
         proxy={proxy}
-        desiredMembers={desiredMembers}
+        approvedMembers={approvedMembers}
+        removedMembers={removedMembers}
         memberType={memberType}
         generatedKeys={generatedKeys}
       />

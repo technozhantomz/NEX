@@ -6,7 +6,7 @@ export * from "./PageLayout";
 export * from "./PasswordModal";
 export * from "./WithdrawForm";
 export * from "./HIVEAndHBDDeposit";
-export * from "./ActivityTable";
+export * from "./ActivityAndNotificationTable";
 export * from "./TradingPairCard";
 export * from "./TransactionModal";
 export * from "./CopyButton";

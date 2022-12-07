@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   Card,
   PoweroffOutlined,
+  ProfileOutlined,
   SettingOutlined,
 } from "../../../../../../ui/src";
 import { Vote } from "../../../../../../ui/src/icons";
@@ -39,6 +40,13 @@ export const ProfileMenu = (): JSX.Element => {
       <ul>
         {sm ? (
           <>
+            <li>
+              <MenuItem
+                href="/profile"
+                icon={<ProfileOutlined className={"menu-icon"} />}
+                label={counterpart.translate(`pages.profile.my_profile`)}
+              />
+            </li>
             <li>
               <MenuItem
                 href="/voting"

@@ -57,6 +57,10 @@ export {
   LoadingOutlined,
   DownloadOutlined,
   SearchOutlined,
+  ProfileOutlined,
+  LikeOutlined,
+  LikeFilled,
+  DislikeOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";
