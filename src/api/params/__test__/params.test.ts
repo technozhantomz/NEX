@@ -1,4 +1,6 @@
-import { getPassedTime, utils } from "../../utils";
+import { KeyboardEvent } from "react";
+
+import { copyText, getPassedTime, utils } from "../../utils";
 import { config as Config } from "../config";
 import {
   defaultApiLatencies,
@@ -280,5 +282,152 @@ describe("utils", () => {
 
     expect(utils.trimNum(num, 2)).toEqual(123.45);
     expect(utils.trimNum(num, 3)).toEqual(123.456);
+  });
+
+  describe("isNumberKey", () => {
+    it("should return true for number keys", () => {
+      const e = {
+        key: "1",
+      };
+      expect(utils.isNumberKey(e as KeyboardEvent<HTMLInputElement>)).toBe(
+        true
+      );
+    });
+
+    it("should return false for non-number keys", () => {
+      const e = {
+        key: "a",
+      };
+      expect(utils.isNumberKey(e as KeyboardEvent<HTMLInputElement>)).toBe(
+        false
+      );
+    });
+  });
+
+  describe("ensureInputNumberValidity", () => {
+    beforeEach(() => {
+      jest.spyOn(utils, "isNumberKey").mockReturnValue(true);
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it("should prevent non-number keys from being entered", () => {
+      const e = {
+        preventDefault: jest.fn(),
+        target: { value: "a" },
+      };
+
+      utils.ensureInputNumberValidity(e as any);
+
+      expect(e.preventDefault).not.toHaveBeenCalled();
+    });
+
+    it("should allow number keys to be entered", () => {
+      const e = {
+        preventDefault: jest.fn(),
+        target: { value: "1" },
+      };
+
+      utils.ensureInputNumberValidity(e as any);
+
+      expect(e.preventDefault).not.toHaveBeenCalled();
+    });
+
+    it("should prevent input with more than 6 digits before the decimal point", () => {
+      const e = {
+        preventDefault: jest.fn(),
+        target: { value: "1234567.12" },
+      };
+      utils.ensureInputNumberValidity(e);
+      expect(e.preventDefault).toHaveBeenCalled();
+    });
+  });
+
+  describe("numberedInputsPasteHandler", () => {
+    it("prevents default if the clipboard data contains non-numeric characters", () => {
+      const e = {
+        preventDefault: jest.fn(),
+        target: { value: "1234" },
+        clipboardData: {
+          getData: jest.fn(() => "12a34"),
+        },
+      };
+
+      utils.numberedInputsPasteHandler(e as any);
+
+      expect(e.preventDefault).toHaveBeenCalled();
+    });
+
+    it("prevents default if the clipboard data contains numeric characters but the input value has more than 6 digits before the decimal point after adding the clipboard data", () => {
+      const e = {
+        preventDefault: jest.fn(),
+        target: { value: "123456" },
+        clipboardData: {
+          getData: jest.fn(() => "7"),
+        },
+      };
+
+      utils.numberedInputsPasteHandler(e as any);
+
+      expect(e.preventDefault).toHaveBeenCalled();
+    });
+  });
+
+  describe("validateGrapheneAccountName", () => {
+    it("should return true for valid Graphene account names", () => {
+      expect(utils.validateGrapheneAccountName("abcd1234")).toBe(true);
+      expect(utils.validateGrapheneAccountName("ab-cd-12-34")).toBe(true);
+      expect(utils.validateGrapheneAccountName("ab.cd.12.34")).toBe(true);
+      expect(
+        utils.validateGrapheneAccountName(
+          "abcdefghijklmnopqrstuvwxyz1234567890"
+        )
+      ).toBe(true);
+    });
+  });
+
+  describe("isUrlsEqual", () => {
+    it("should return true for URLs that are equal ignoring trailing slashes and the protocol part of the URL", () => {
+      expect(
+        utils.isUrlsEqual("https://www.abc.com", "http://www.abc.com/")
+      ).toBe(true);
+      expect(
+        utils.isUrlsEqual(
+          "https://www.abc.com/path1/",
+          "http://www.abc.com/path1"
+        )
+      ).toBe(true);
+      expect(
+        utils.isUrlsEqual(
+          "https://www.abc.com/path1/path2/",
+          "http://www.abc.com/path1/path2"
+        )
+      ).toBe(true);
+    });
+  });
+});
+
+describe("copyText", () => {
+  beforeEach(() => {
+    navigator.clipboard = {
+      writeText: jest.fn(),
+    };
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it("should call navigator.clipboard.writeText with the correct argument", () => {
+    const value = "mw9asoJCfzKBNrktcg6DyqCdj3SDz9Yx7N";
+    copyText(value);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(value);
+  });
+
+  it("should not throw an error if navigator.clipboard is undefined", () => {
+    navigator.clipboard = undefined;
+    expect(() => copyText("mw9asoJCfzKBNrktcg6DyqCdj3SDz9Yx7N")).not.toThrow();
   });
 });
