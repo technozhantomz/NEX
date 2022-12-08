@@ -5,7 +5,7 @@ exports[`Activity Tag renders correctly for account creation 1`] = `
   <span
     class="Tag-sc-5420511e-0 JuGDv"
   >
-    missing translation: en.transaction.trxTypes.account_create.title
+    Create account
   </span>
 </DocumentFragment>
 `;
@@ -15,7 +15,7 @@ exports[`Activity Tag renders correctly for account update 1`] = `
   <span
     class="Tag-sc-5420511e-0 JuGDv"
   >
-    missing translation: en.transaction.trxTypes.account_update.title
+    Update account
   </span>
 </DocumentFragment>
 `;
