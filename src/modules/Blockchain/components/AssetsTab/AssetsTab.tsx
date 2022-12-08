@@ -39,9 +39,9 @@ export const AssetsTab = (): JSX.Element => {
     <Styled.AssetsTabWrapper>
       <Styled.StatsCardsDeck>
         <StatsCard
-          noData={assetTableRows.length === 0}
+          noData={!assetTableRows}
           title={counterpart.translate(`pages.blocks.assets.assets`)}
-          data={`${assetTableRows.length}`}
+          data={`${assetTableRows?.length}`}
           statsData={assetsStats}
         />
       </Styled.StatsCardsDeck>
@@ -72,7 +72,7 @@ export const AssetsTab = (): JSX.Element => {
 
           <CSVLink
             filename={"AssetsTable.csv"}
-            data={assetTableRows}
+            data={assetTableRows ?? []}
             className="btn btn-primary"
           >
             {counterpart.translate(`links.csv`)}
@@ -83,7 +83,7 @@ export const AssetsTab = (): JSX.Element => {
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={loading && !assetTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -164,7 +164,7 @@ export const AssetsTab = (): JSX.Element => {
         <Styled.AssetsTable
           dataSource={searchDataSource}
           columns={assetsColumns as ColumnsType<AssetTableRow>}
-          loading={loading}
+          loading={loading && !assetTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -179,8 +179,8 @@ export const AssetsTab = (): JSX.Element => {
       <Styled.PrintTable>
         <AssetsPrintTable
           ref={componentRef}
-          assetTableRows={assetTableRows}
-          loading={loading}
+          assetTableRows={assetTableRows ?? []}
+          loading={loading && !assetTableRows}
           assetsColumns={assetsColumns}
         />
       </Styled.PrintTable>
