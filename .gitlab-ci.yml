@@ -158,7 +158,7 @@ deployToStaging:
     - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-staging || true
     - pm2 start npm --name nex-staging -- run start
-  dependencies: [build-production]
+  dependencies: [build-qa]
   environment:
     name: staging
     url: https://nex-staging.peerplays.download
