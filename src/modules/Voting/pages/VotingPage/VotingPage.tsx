@@ -20,8 +20,6 @@ import { useVoting } from "../../hooks";
 import * as Styled from "./VotingPage.styled";
 import { useVotingPageMeta } from "./hooks";
 
-const { TabPane } = Tabs;
-
 const VotingPage: NextPage = () => {
   const router = useRouter();
   const [visible, setVisible] = useState<boolean>(false);
@@ -88,6 +86,54 @@ const VotingPage: NextPage = () => {
       )}
     </>
   );
+  const tabItems = [
+    {
+      label: counterpart.translate(`pages.voting.gpos.tab`),
+      key: "gpos",
+      children: <GPOSTab />,
+    },
+    ...voteTabs.map((voteTab, index) => {
+      return {
+        label: capitalize(
+          counterpart.translate(`pages.voting.lower_case_${voteTab}`)
+        ),
+        key: voteTab,
+        children: (
+          <VoteTab
+            tab={voteTab}
+            votesLoading={loadingMembers || loadingUserVotes}
+            fullAccount={fullAccount}
+            tabAllMembers={allMembers.filter(
+              (member) =>
+                parseInt(member.vote_id.split(":")[0]) ===
+                voteIdentifiers[index]
+            )}
+            tabServerApprovedVotesIds={serverApprovedVotesIds.filter(
+              (voteId) =>
+                parseInt(voteId.split(":")[0]) === voteIdentifiers[index]
+            )}
+            allMembersIds={allMembersIds}
+            getUserVotes={getUserVotes}
+            totalGpos={totalGpos}
+            proxy={proxy}
+            key={voteTab}
+          />
+        ),
+      };
+    }),
+    {
+      label: counterpart.translate(`pages.voting.proxy.tab`),
+      key: "proxy",
+      children: (
+        <ProxyTab
+          serverProxy={proxy}
+          totalGpos={totalGpos}
+          getUserVotes={getUserVotes}
+          loading={loadingMembers || loadingUserVotes}
+        />
+      ),
+    },
+  ];
 
   return (
     <Layout
@@ -110,55 +156,8 @@ const VotingPage: NextPage = () => {
             router.push(`/voting?tab=${key}`);
             if (sm) setVisible(false);
           }}
-        >
-          <TabPane
-            tab={counterpart.translate(`pages.voting.gpos.tab`)}
-            key="gpos"
-          >
-            <GPOSTab />
-          </TabPane>
-          {voteTabs.map((voteTab, index) => {
-            return (
-              <TabPane
-                tab={capitalize(
-                  counterpart.translate(`pages.voting.lower_case_${voteTab}`)
-                )}
-                key={voteTab}
-              >
-                <VoteTab
-                  tab={voteTab}
-                  votesLoading={loadingMembers || loadingUserVotes}
-                  fullAccount={fullAccount}
-                  tabAllMembers={allMembers.filter(
-                    (member) =>
-                      parseInt(member.vote_id.split(":")[0]) ===
-                      voteIdentifiers[index]
-                  )}
-                  tabServerApprovedVotesIds={serverApprovedVotesIds.filter(
-                    (voteId) =>
-                      parseInt(voteId.split(":")[0]) === voteIdentifiers[index]
-                  )}
-                  allMembersIds={allMembersIds}
-                  getUserVotes={getUserVotes}
-                  totalGpos={totalGpos}
-                  proxy={proxy}
-                  key={voteTab}
-                />
-              </TabPane>
-            );
-          })}
-          <TabPane
-            tab={counterpart.translate(`pages.voting.proxy.tab`)}
-            key="proxy"
-          >
-            <ProxyTab
-              serverProxy={proxy}
-              totalGpos={totalGpos}
-              getUserVotes={getUserVotes}
-              loading={loadingMembers || loadingUserVotes}
-            />
-          </TabPane>
-        </Tabs>
+          items={tabItems}
+        />
       </Styled.VotingPageCard>
     </Layout>
   );
