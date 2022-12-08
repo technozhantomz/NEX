@@ -82,6 +82,7 @@ const Blockchain: NextPage = () => {
             if (sm) setVisible(false);
           }}
           items={blockchainTabItems}
+          destroyInactiveTabPane={true}
         />
       </Styled.BlockchainCard>
     </Layout>

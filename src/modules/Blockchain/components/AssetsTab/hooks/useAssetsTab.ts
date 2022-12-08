@@ -1,3 +1,4 @@
+//done
 import { uniq } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
@@ -7,7 +8,6 @@ import {
   useArrayLimiter,
   useAsset,
 } from "../../../../../common/hooks";
-import { usePeerplaysApiContext } from "../../../../../common/providers";
 import { AssetsColumns } from "../components";
 
 import {
@@ -19,16 +19,47 @@ import {
 export function useAssetsTab(): UseAssetsTabResult {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchDataSource, setSearchDataSource] = useState<AssetTableRow[]>([]);
-  const [assetTableRows, setAssetTableRows] = useState<AssetTableRow[]>([]);
+  const [assetTableRows, setAssetTableRows] = useState<AssetTableRow[]>();
   const [assetsStats, setAssetsStats] = useState<number[]>([]);
   const [assetsColumns, setAssetsColumns] = useState<AssetColumnType[]>([]);
 
-  const { dbApi } = usePeerplaysApiContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { getAllAssets } = useAsset();
   const { getAccounts } = useAccount();
 
-  const getAssetRows = useCallback(async () => {
+  const formAssetsColumns = useCallback(
+    (assetsRows: AssetTableRow[]) => {
+      const symbols = assetsRows.map((asset) => asset.symbol);
+      const allIssuers = assetsRows.map((row) => row.issuer);
+      const uniqIssuers = uniq(allIssuers);
+      const allNames = assetsRows.map((row) => row.name);
+      const uniqNames = uniq(allNames);
+      const updatedColumns: AssetColumnType[] = AssetsColumns.map((column) => {
+        switch (true) {
+          case column.key === "symbol":
+            column.filters = symbols.map((symbol) => {
+              return { text: symbol, value: symbol };
+            });
+            break;
+          case column.key === "name":
+            column.filters = uniqNames.map((name) => {
+              return { text: name, value: name };
+            });
+            break;
+          case column.key === "issuer":
+            column.filters = uniqIssuers.map((issuer) => {
+              return { text: issuer, value: issuer };
+            });
+            break;
+        }
+        return { ...column };
+      });
+      return updatedColumns;
+    },
+    [AssetsColumns]
+  );
+
+  const getAssetsRows = useCallback(async () => {
     try {
       const rawAssets = await getAllAssets();
       if (rawAssets && rawAssets.length > 0) {
@@ -51,58 +82,49 @@ export function useAssetsTab(): UseAssetsTabResult {
             info: asset.options.description,
           } as AssetTableRow;
         });
+        return assetsRows;
+      }
+      return [];
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
+  }, [getAllAssets, getAccounts, utils]);
 
-        const symbols = rawAssets.map((asset) => asset.symbol);
-        const allIssuers = assetsRows.map((row) => row.issuer);
-        const uniqIssuers = uniq(allIssuers);
-        const allNames = assetsRows.map((row) => row.name);
-        const uniqNames = uniq(allNames);
-        const updatedColumns = AssetsColumns.map((column) => {
-          switch (true) {
-            case column.key === "symbol":
-              column.filters = symbols.map((symbol) => {
-                return { text: symbol, value: symbol };
-              });
-              break;
-            case column.key === "name":
-              column.filters = uniqNames.map((name) => {
-                return { text: name, value: name };
-              });
-              break;
-            case column.key === "issuer":
-              column.filters = uniqIssuers.map((issuer) => {
-                return { text: issuer, value: issuer };
-              });
-              break;
-          }
-          return { ...column };
-        });
+  useEffect(() => {
+    let ignore = false;
+
+    async function setAssetRows() {
+      setLoading(true);
+      const assetsRows = await getAssetsRows();
+      if (!ignore) {
+        const updatedColumns = formAssetsColumns(assetsRows);
         setAssetsColumns(updatedColumns);
         setAssetTableRows(assetsRows);
         setSearchDataSource(assetsRows);
         setAssetsStats(
           updateArrayWithLimit(assetsStats, assetsRows.length, 99)
         );
+
         setLoading(false);
       }
-    } catch (e) {
-      setLoading(false);
-      console.log(e);
     }
-  }, [
-    dbApi,
-    setAssetsStats,
-    setAssetTableRows,
-    updateArrayWithLimit,
-    setLoading,
-  ]);
+    setAssetRows();
+    const assetInterval = setInterval(() => setAssetRows(), 3000);
 
-  useEffect(() => {
-    const assetInterval = setInterval(() => getAssetRows(), 3000);
     return () => {
+      ignore = true;
       clearInterval(assetInterval);
     };
-  }, []);
+  }, [
+    getAssetsRows,
+    formAssetsColumns,
+    setAssetsColumns,
+    setAssetTableRows,
+    setSearchDataSource,
+    setAssetsStats,
+    setLoading,
+  ]);
 
   return {
     loading,
