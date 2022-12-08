@@ -126,6 +126,7 @@ export type ActivityRow = {
   info: string;
   id: string;
   fee: string;
+  status: boolean;
 };
 
 export type KeyType =

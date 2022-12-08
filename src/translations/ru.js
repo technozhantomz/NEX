@@ -2,6 +2,7 @@ export const ru = {
   general: {
     yes: "Да",
     no: "Нет",
+    limit: "Ограничение",
   },
   app_init: {
     check_latency: "Запуск проверки задержки...",
@@ -873,9 +874,28 @@ export const ru = {
     },
     profile: {
       heading: "Профиль",
+      my_profile: "Мой профиль",
+      orders: "Заказы",
+      activities: "мероприятия",
+      notifications: "Уведомления",
       activity: {
         my_activity: "Моя деятельность",
-        search_activitys: "Поисковая активность",
+        search_activities: "Поисковая активность",
+      },
+      orders_tab: {
+        buy: "Купить",
+        sell: "Продавать",
+        partial: "Частичный",
+        complete: "Полный",
+        open_orders: "Открытые ордера",
+        order_history: "История заказов",
+        search_activities: "Поисковая деятельность",
+      },
+      notification: {
+        my_notification: "Мои уведомления",
+        search_notifications: "Уведомления о поиске",
+        read: "Читать",
+        unread: "Не прочитано",
       },
     },
   },
@@ -1002,6 +1022,7 @@ export const ru = {
       use_whalevault: "Используйте расширение WhaleVault",
       unsaved_changes: "У вас есть несохраненные изменения в настройках",
       coins_token: "Монеты/Жетоны",
+      open_orders: "Открытые ордера",
       approved: "Одобренный",
       removed: "удаленный",
       my_activity: "Моя деятельность",
@@ -1197,6 +1218,12 @@ export const ru = {
     operation_id: "Идентификатор операции",
     operation_type: "Тип операции",
     fees: "Сборы",
+    pair: "Пара",
+    side: "Сторона",
+    amount: "Количество",
+    filled: "Заполненный",
+    total: "Общий",
+    status_actions: "Статус/Действия",
   },
   tableFilters: {
     avtive: "Активный",
