@@ -1,6 +1,12 @@
+import { getPassedTime, utils } from "../../utils";
 import { config as Config } from "../config";
-import { defaultApiSettings } from "../defaultApiSettings";
+import {
+  defaultApiLatencies,
+  defaultApiSettings,
+  defaultLatencyPreferences,
+} from "../defaultApiSettings";
 import { defaultExchanges } from "../defaultExchanges";
+import { defaultLocales } from "../defaultLocales";
 import { defaultNotifications } from "../defaultNotifications";
 import { defaultSettings } from "../defaultSettings";
 import {
@@ -102,6 +108,16 @@ describe("defaultSettings", () => {
       walletLock: 0,
     });
   });
+
+  it("should be defined and be an object", () => {
+    expect(defaultApiLatencies).toBeDefined();
+    expect(typeof defaultApiLatencies).toBe("object");
+  });
+
+  it("should be defined and be an object", () => {
+    expect(defaultLatencyPreferences).toBeDefined();
+    expect(typeof defaultLatencyPreferences).toBe("object");
+  });
 });
 describe("symbolsToBeExcepted", () => {
   it("should have the correct default values", () => {
@@ -167,5 +183,102 @@ describe("nodeList", () => {
 
   it("defaultNodesList should have the correct default values", () => {
     expect(defaultNodesList).toBe(testnetCheck ? testnetNodes : prodNodes);
+  });
+});
+
+describe("defaultLocales", () => {
+  it("should be defined and be an array", () => {
+    expect(defaultLocales).toBeDefined();
+    expect(Array.isArray(defaultLocales)).toBe(true);
+  });
+
+  it("should have two elements", () => {
+    expect(defaultLocales.length).toBe(2);
+  });
+
+  it("first element should have correct properties and values", () => {
+    const firstLocale = defaultLocales[0];
+    expect(firstLocale).toBeDefined();
+    expect(firstLocale.title).toBe("English");
+    expect(firstLocale.type).toBe("en");
+  });
+
+  it("second element should have correct properties and values", () => {
+    const secondLocale = defaultLocales[1];
+    expect(secondLocale).toBeDefined();
+    expect(secondLocale.title).toBe("Russian");
+    expect(secondLocale.type).toBe("ru");
+  });
+});
+
+describe("getPassedTime", () => {
+  it("should correctly calculate the passed time", () => {
+    const start = new Date();
+    const passedTime = getPassedTime(start);
+    const expectedPassedTime = new Date().valueOf() - start.valueOf();
+
+    expect(passedTime).toEqual(expectedPassedTime);
+  });
+});
+
+describe("utils", () => {
+  it("should correctly sort object IDs", () => {
+    const a = "1.2.3";
+    const b = "1.2.4";
+    const c = "1.2.5";
+    const num = 123.4567;
+    const validObjectID = "1.2.3";
+    const invalidObjectID1 = "1.2";
+    const invalidObjectID2 = "1.2.3.4";
+    const invalidObjectID3 = "hello";
+    const numString1 = "123";
+    const numString2 = "123.456";
+    const numString3 = "hello";
+    const numString4 = "";
+
+    expect(utils.sortID(a, b)).toEqual(-1);
+    expect(utils.sortID(b, a)).toEqual(1);
+    expect(utils.sortID(b, c)).toEqual(-1);
+    expect(utils.sortID(a, c)).toEqual(-2);
+
+    expect(utils.sortID(a, b, true)).toEqual(1);
+    expect(utils.sortID(b, a, true)).toEqual(-1);
+    expect(utils.sortID(b, c, true)).toEqual(1);
+    expect(utils.sortID(a, c, true)).toEqual(2);
+
+    expect(utils.trimNum(num, 2)).toEqual(123.45);
+    expect(utils.trimNum(num, 3)).toEqual(123.456);
+    expect(utils.trimNum(num, 4)).toEqual(123.4567);
+
+    expect(utils.trimNum(NaN, 2)).toEqual(0);
+    expect(utils.is_object_id(validObjectID)).toBe(true);
+    expect(utils.is_object_id(invalidObjectID1)).toBe(false);
+    expect(utils.is_object_id(validObjectID)).toBe(true);
+    expect(utils.is_object_id(invalidObjectID1)).toBe(false);
+    expect(utils.is_object_id(invalidObjectID2)).toBe(false);
+    expect(utils.is_object_id(invalidObjectID3)).toBe(false);
+    expect(utils.isNumber(numString1)).toBe(true);
+    expect(utils.isNumber(numString2)).toBe(false);
+    expect(utils.isNumber(numString3)).toBe(false);
+    expect(utils.isNumber(numString4)).toBe(true);
+  });
+
+  it("should correctly check if a string is a valid object ID", () => {
+    const validObjectID = "1.2.3";
+    const invalidObjectID1 = "1.2";
+    const invalidObjectID2 = "1.2.3.4";
+    const invalidObjectID3 = "hello";
+
+    expect(utils.is_object_id(validObjectID)).toBe(true);
+    expect(utils.is_object_id(invalidObjectID1)).toBe(false);
+    expect(utils.is_object_id(invalidObjectID2)).toBe(false);
+    expect(utils.is_object_id(invalidObjectID3)).toBe(false);
+  });
+
+  it("should correctly trim a number to the specified number of digits", () => {
+    const num = 123.4567;
+
+    expect(utils.trimNum(num, 2)).toEqual(123.45);
+    expect(utils.trimNum(num, 3)).toEqual(123.456);
   });
 });
