@@ -14,7 +14,7 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
       deposit_address: string,
       withdraw_public_key: string,
       withdraw_address: string,
-      sidechain?: string
+      sidechain: string
     ) => {
       const trx: Transaction = {
         type: "sidechain_address_add",
@@ -40,10 +40,9 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
 
   const buildDeletingSidechainTransaction = useCallback(
     (
-      payer: string,
-      sidechain: string,
+      user_account_id: string,
       sidechain_address_id: string,
-      sidechain_address_account: string
+      sidechain: string
     ) => {
       const trx: Transaction = {
         type: "sidechain_address_delete",
@@ -52,9 +51,9 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
             amount: 0,
             asset_id: defaultAsset?.id,
           },
-          payer,
+          payer: user_account_id,
           sidechain_address_id,
-          sidechain_address_account,
+          sidechain_address_account: user_account_id,
           sidechain,
         },
       };
