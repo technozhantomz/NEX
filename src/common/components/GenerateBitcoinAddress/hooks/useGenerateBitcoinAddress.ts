@@ -29,8 +29,7 @@ export function useGenerateBitcoinAddress(
   const { buildTrx } = useTransactionBuilder();
   const { id } = useUserContext();
   const { getSonNetworkStatus } = useSonNetwork();
-  const { buildAddingBitcoinSidechainTransaction } =
-    useSidechainTransactionBuilder();
+  const { buildAddingSidechainTransaction } = useSidechainTransactionBuilder();
   const { bitcoinSidechainAccounts, setBitcoinSidechainAccounts } =
     useUserContext();
 
@@ -82,10 +81,11 @@ export function useGenerateBitcoinAddress(
 
       setBitcoinSidechainAccounts({ deposit, withdraw });
 
-      const trx = buildAddingBitcoinSidechainTransaction(
+      const trx = buildAddingSidechainTransaction(
         id,
         id,
         deposit.pubKey,
+        deposit.address,
         withdraw.pubKey,
         withdraw.address
       );
@@ -120,7 +120,7 @@ export function useGenerateBitcoinAddress(
       }
     },
     [
-      buildAddingBitcoinSidechainTransaction,
+      buildAddingSidechainTransaction,
       buildTrx,
       getSidechainAccounts,
       setBitcoinSidechainAccounts,

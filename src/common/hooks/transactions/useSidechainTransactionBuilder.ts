@@ -7,13 +7,14 @@ import { UseSidechainTransactionBuilderResult } from "./useSidechainTransactionB
 
 export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilderResult {
   const { defaultAsset } = useAssetsContext();
-  const buildAddingBitcoinSidechainTransaction = useCallback(
+  const buildAddingSidechainTransaction = useCallback(
     (
-      payer: string,
-      sidechain_address_account: string,
+      user_account_id: string,
       deposit_public_key: string,
+      deposit_address: string,
       withdraw_public_key: string,
-      withdraw_address: string
+      withdraw_address: string,
+      sidechain?: string
     ) => {
       const trx: Transaction = {
         type: "sidechain_address_add",
@@ -22,11 +23,11 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
             amount: 0,
             asset_id: defaultAsset?.id,
           },
-          payer,
-          sidechain_address_account,
-          sidechain: "bitcoin",
+          payer: user_account_id,
+          sidechain_address_account: user_account_id,
+          sidechain,
           deposit_public_key,
-          deposit_address: "",
+          deposit_address,
           deposit_address_data: "",
           withdraw_public_key,
           withdraw_address,
@@ -37,9 +38,10 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
     [defaultAsset]
   );
 
-  const buildDeletingBitcoinSidechainTransaction = useCallback(
+  const buildDeletingSidechainTransaction = useCallback(
     (
       payer: string,
+      sidechain: string,
       sidechain_address_id: string,
       sidechain_address_account: string
     ) => {
@@ -53,7 +55,7 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
           payer,
           sidechain_address_id,
           sidechain_address_account,
-          sidechain: "bitcoin",
+          sidechain,
         },
       };
       return trx;
@@ -61,7 +63,7 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
     [defaultAsset]
   );
   return {
-    buildAddingBitcoinSidechainTransaction,
-    buildDeletingBitcoinSidechainTransaction,
+    buildAddingSidechainTransaction,
+    buildDeletingSidechainTransaction,
   };
 }

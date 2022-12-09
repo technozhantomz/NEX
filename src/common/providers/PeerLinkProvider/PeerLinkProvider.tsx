@@ -1,7 +1,8 @@
 import { useMetaMask } from "metamask-react";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { useSessionStorage } from "../../hooks";
+import { useSessionStorage, useSidechainTransactionBuilder } from "../../hooks";
+import { useUserContext } from "../UserProvider";
 
 import { Hive, MetaMask, PeerLinkContextType } from "./PeerLinkProvider.types";
 
@@ -47,15 +48,29 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
     "PL-hiveUserName"
   ) as [string, (value: string) => void];
   const { ethereum, connect } = useMetaMask();
-  //TODO: will need to add metamask and hive side chain info to user provider
+
+  const { localStorageAccount, id } = useUserContext();
+  const { buildAddingSidechainTransaction } = useSidechainTransactionBuilder();
 
   const connectToMetaMask = async () => {
     const accounts = await connect();
     if (accounts?.length) {
-      setMetaMask({
-        isConnected: ethereum.selectedAddress ? true : false,
-        selectedAddress: ethereum.selectedAddress,
-      });
+      if (ethereum) {
+        setMetaMask({
+          isConnected: ethereum.selectedAddress ? true : false,
+          selectedAddress: ethereum.selectedAddress,
+        });
+      }
+    }
+    if (localStorageAccount !== "") {
+      buildAddingSidechainTransaction(
+        id,
+        metaMask.selectedAddress,
+        metaMask.selectedAddress,
+        metaMask.selectedAddress,
+        metaMask.selectedAddress,
+        "ethereum"
+      );
     }
   };
 
@@ -63,7 +78,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
     console.log("connect to hive");
     const args = {
       title: "Sign In",
-      message: `Clisk "Confirm" to sign in with Hive Keychain`,
+      message: `Click "Confirm" to sign in with Hive Keychain`,
       key: "Posting",
       account: null,
       rpc: null,
