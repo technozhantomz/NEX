@@ -6,11 +6,11 @@ import React, {
   useState,
 } from "react";
 
-import { useSettingsContext, useUserContext } from "..";
+import { useAppSettingsContext, useUserContext } from "..";
 import { useActivity, useFormDate, useLocalStorage } from "../../hooks";
 import { Notification } from "../../types";
 
-type UserSettingsContextType = {
+type NotificationsContextType = {
   hasUnreadMessages: boolean;
   notifications: Notification[];
   loadingNotifications: boolean;
@@ -18,15 +18,15 @@ type UserSettingsContextType = {
   markTheNotificationAsReadOrUnread: (id: string, unread: boolean) => void;
 };
 
-const userSettingsContext = createContext<UserSettingsContextType>(
-  {} as UserSettingsContextType
+const NotificationsContext = createContext<NotificationsContextType>(
+  {} as NotificationsContextType
 );
 
-export function useUserSettingsContext(): UserSettingsContextType {
-  return useContext(userSettingsContext);
+export function useNotificationsContext(): NotificationsContextType {
+  return useContext(NotificationsContext);
 }
 
-export function UserSettingsProvider({
+export function NotificationsProvider({
   children,
 }: {
   children: React.ReactNode;
@@ -34,7 +34,7 @@ export function UserSettingsProvider({
   const { localStorageAccount } = useUserContext();
   const { getActivitiesRows } = useActivity();
   const { formLocalDate } = useFormDate();
-  const { chainId, settings } = useSettingsContext();
+  const { chainId, settings } = useAppSettingsContext();
 
   const [notifications, setNotifications] = useLocalStorage(
     `${chainId.slice(0, 8)}_notifications_${localStorageAccount}`
@@ -239,7 +239,7 @@ export function UserSettingsProvider({
   ]);
 
   return (
-    <userSettingsContext.Provider
+    <NotificationsContext.Provider
       value={{
         hasUnreadMessages,
         notifications,
@@ -249,6 +249,6 @@ export function UserSettingsProvider({
       }}
     >
       {children}
-    </userSettingsContext.Provider>
+    </NotificationsContext.Provider>
   );
 }

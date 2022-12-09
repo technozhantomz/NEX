@@ -5,7 +5,7 @@ import React, { useState } from "react";
 
 import { Layout } from "../../../../common/components";
 import {
-  useSettingsContext,
+  useAppSettingsContext,
   useUserContext,
   useViewportContext,
 } from "../../../../common/providers";
@@ -24,7 +24,7 @@ const SettingPage: NextPage = () => {
   const router = useRouter();
   const [visible, setVisible] = useState<boolean>(false);
   const { tab } = router.query;
-  const { settings } = useSettingsContext();
+  const { settings } = useAppSettingsContext();
   const { localStorageAccount } = useUserContext();
 
   const { sm } = useViewportContext();

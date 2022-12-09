@@ -5,7 +5,7 @@ import {
   renderPaginationItem,
   UserLinkExtractor,
 } from "../../..";
-import { useUserSettingsContext } from "../../../../providers";
+import { useNotificationsContext } from "../../../../providers";
 import { ActivityRow } from "../../../../types";
 import { ActivityAndNotificationTag } from "../ActivityAndNotificationTag";
 
@@ -22,7 +22,7 @@ export const ActivityAndNotificationList = ({
   loading,
   isNotificationTab,
 }: Props): JSX.Element => {
-  const { markTheNotificationAsReadOrUnread } = useUserSettingsContext();
+  const { markTheNotificationAsReadOrUnread } = useNotificationsContext();
   const columns = ActivityAndNotificationColumns(
     isNotificationTab,
     markTheNotificationAsReadOrUnread

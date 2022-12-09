@@ -1,15 +1,15 @@
 import type { AppProps } from "next/app";
 
 import {
+  AppSettingsProvider,
   AssetsProvider,
   BrowserHistoryProvider,
   ConnectionManagerProvider,
   FeesProvider,
   MenuProvider,
+  NotificationsProvider,
   PeerplaysApiProvider,
-  SettingsProvider,
   UserProvider,
-  UserSettingsProvider,
   ViewportProvider,
 } from "../common/providers";
 import "../ui/src/ui.less";
@@ -17,25 +17,25 @@ import "../ui/src/ui.less";
 function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ViewportProvider>
-      <SettingsProvider>
+      <AppSettingsProvider>
         <PeerplaysApiProvider>
           <ConnectionManagerProvider>
             <AssetsProvider>
-              <UserProvider>
-                <FeesProvider>
+              <FeesProvider>
+                <UserProvider>
                   <BrowserHistoryProvider>
-                    <UserSettingsProvider>
+                    <NotificationsProvider>
                       <MenuProvider>
                         <Component {...pageProps} />
                       </MenuProvider>
-                    </UserSettingsProvider>
+                    </NotificationsProvider>
                   </BrowserHistoryProvider>
-                </FeesProvider>
-              </UserProvider>
+                </UserProvider>
+              </FeesProvider>
             </AssetsProvider>
           </ConnectionManagerProvider>
         </PeerplaysApiProvider>
-      </SettingsProvider>
+      </AppSettingsProvider>
     </ViewportProvider>
   );
 }
