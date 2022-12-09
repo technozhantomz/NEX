@@ -16,8 +16,6 @@ import { OrdersTab } from "../../components";
 
 import * as Styled from "./ProfilePage.styled";
 
-const { TabPane } = Styled.Tabs;
-
 const ProfilePage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
@@ -57,6 +55,34 @@ const ProfilePage: NextPage = () => {
       )}
     </>
   );
+  const tabItems = [
+    {
+      label: counterpart.translate(`pages.profile.orders_tab.heading`),
+      key: "orders",
+      children: <OrdersTab />,
+    },
+    {
+      label: counterpart.translate(`pages.profile.activity.heading`),
+      key: "activities",
+      children: (
+        <ActivityAndNotificationTable
+          userName={localStorageAccount}
+          showHeader={true}
+          isNotificationTab={false}
+        />
+      ),
+    },
+    {
+      label: counterpart.translate(`pages.profile.notification.heading`),
+      key: "notifications",
+      children: (
+        <ActivityAndNotificationTable
+          showHeader={true}
+          isNotificationTab={true}
+        />
+      ),
+    },
+  ];
 
   return (
     <Layout
@@ -79,24 +105,8 @@ const ProfilePage: NextPage = () => {
             if (sm) setVisible(false);
           }}
           renderTabBar={renderTabBar}
-        >
-          <TabPane tab="Orders" key="orders">
-            <OrdersTab />
-          </TabPane>
-          <TabPane tab="Activities" key="activities">
-            <ActivityAndNotificationTable
-              userName={localStorageAccount}
-              showHeader={true}
-              isNotificationTab={false}
-            />
-          </TabPane>
-          <TabPane tab="Notifications" key="notifications">
-            <ActivityAndNotificationTable
-              showHeader={true}
-              isNotificationTab={true}
-            />
-          </TabPane>
-        </Styled.Tabs>
+          items={tabItems}
+        />
       </Styled.ProfileCard>
     </Layout>
   );

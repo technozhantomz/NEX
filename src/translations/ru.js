@@ -866,10 +866,12 @@ export const ru = {
       activities: "мероприятия",
       notifications: "Уведомления",
       activity: {
+        heading: "мероприятия",
         my_activity: "Моя деятельность",
         search_activities: "Поисковая активность",
       },
       orders_tab: {
+        heading: "Заказы",
         buy: "Купить",
         sell: "Продавать",
         partial: "Частичный",
@@ -879,6 +881,7 @@ export const ru = {
         search_activities: "Поисковая деятельность",
       },
       notification: {
+        heading: "Уведомления",
         my_notification: "Мои уведомления",
         search_notifications: "Уведомления о поиске",
         read: "Читать",

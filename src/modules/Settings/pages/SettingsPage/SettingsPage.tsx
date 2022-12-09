@@ -20,8 +20,6 @@ import { GeneralTab, KeyManagementTab, MembershipTab } from "../../components";
 
 import * as Styled from "./SettingsPage.styled";
 
-const { TabPane } = Tabs;
-
 const SettingPage: NextPage = () => {
   const router = useRouter();
   const [visible, setVisible] = useState<boolean>(false);
@@ -68,6 +66,28 @@ const SettingPage: NextPage = () => {
       )}
     </>
   );
+  let tabItems = [
+    {
+      label: counterpart.translate(`pages.settings.general.heading`),
+      key: "general",
+      children: <GeneralTab />,
+    },
+  ];
+  if (localStorageAccount && localStorageAccount !== "") {
+    tabItems = [
+      ...tabItems,
+      {
+        label: counterpart.translate(`pages.settings.key_management.heading`),
+        key: "key-management",
+        children: <KeyManagementTab />,
+      },
+      {
+        label: counterpart.translate(`pages.settings.membership.heading`),
+        key: "membership",
+        children: <MembershipTab />,
+      },
+    ];
+  }
 
   return (
     <Layout
@@ -90,34 +110,8 @@ const SettingPage: NextPage = () => {
             router.push(`/settings?tab=${key}`);
             if (sm) setVisible(false);
           }}
-        >
-          <TabPane
-            tab={counterpart.translate(`pages.settings.general.heading`)}
-            key="general"
-          >
-            <GeneralTab />
-          </TabPane>
-          {localStorageAccount && localStorageAccount !== "" ? (
-            <>
-              <TabPane
-                tab={counterpart.translate(
-                  `pages.settings.key_management.heading`
-                )}
-                key="key-management"
-              >
-                <KeyManagementTab />
-              </TabPane>
-              <TabPane
-                tab={counterpart.translate(`pages.settings.membership.heading`)}
-                key="membership"
-              >
-                <MembershipTab />
-              </TabPane>{" "}
-            </>
-          ) : (
-            ""
-          )}
-        </Tabs>
+          items={tabItems}
+        />
       </Styled.SettingsCard>
     </Layout>
   );
