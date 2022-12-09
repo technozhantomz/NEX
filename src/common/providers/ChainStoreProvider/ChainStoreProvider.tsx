@@ -9,15 +9,15 @@ import React, {
   useState,
 } from "react";
 
-import { useBlockchain } from "../../hooks";
 import { ApisInstanceType, BlockData } from "../../types";
 
 import { ChainStoreContextType } from "./ChainStoreProvider.types";
 
-interface Props {
+type Props = {
   children: React.ReactNode;
   apiInstance: ApisInstanceType | undefined;
-}
+  dbApi: (request: string, data?: any) => Promise<any> | undefined;
+};
 
 const defaultChainStoreState: ChainStoreContextType =
   {} as ChainStoreContextType;
@@ -31,23 +31,16 @@ const OUT_OF_SYNC_LIMIT = 7;
 export const ChainStoreProvider = ({
   children,
   apiInstance,
+  dbApi,
 }: Props): JSX.Element => {
-  const [syncFail, setSyncFail] = useState<boolean>(() => {
-    return ChainStore.subError &&
-      ChainStore.subError.message ===
-        "ChainStore sync error, please check your system clock"
-      ? true
-      : false;
-  });
+  const [syncFail, setSyncFail] = useState<boolean>(false);
   const [synced, setSynced] = useState<boolean>(true);
   const [rpcConnectionStatus, setRpcConnectionStatus] = useState<
     string | undefined
   >("open");
   const dynGlobalObject = useRef<BlockData>();
 
-  const { getBlockData } = useBlockchain();
-
-  const getBlockTime = () => {
+  const getBlockTime = useCallback(() => {
     if (dynGlobalObject.current) {
       let blockTime = dynGlobalObject.current.time;
       if (!/Z$/.test(blockTime)) {
@@ -57,7 +50,7 @@ export const ChainStoreProvider = ({
     } else {
       throw new Error("Blocktime not available right now");
     }
-  };
+  }, [dynGlobalObject, dynGlobalObject.current]);
 
   const getBlockTimeDelta = useCallback(() => {
     try {
@@ -70,23 +63,16 @@ export const ChainStoreProvider = ({
       console.log(e);
       return -1;
     }
-  }, [getBlockTime, apiInstance]);
+  }, [getBlockTime, ChainStore]);
 
-  const syncStatus: (setState?: boolean) => boolean = useCallback(
-    (setState = true) => {
-      const _synced = getBlockTimeDelta() < OUT_OF_SYNC_LIMIT;
-      if (setState && _synced !== synced) {
-        setSynced(_synced);
-      }
-      return synced;
-    },
-    [getBlockTimeDelta, synced, setSynced]
-  );
+  const getSyncStatus: () => boolean = useCallback(() => {
+    const _synced = getBlockTimeDelta() < OUT_OF_SYNC_LIMIT;
+    setSynced(_synced);
+    return _synced;
+  }, [getBlockTimeDelta, OUT_OF_SYNC_LIMIT, setSynced]);
+
   const chainStoreSub = useCallback(() => {
-    const _synced = syncStatus();
-    if (_synced !== synced) {
-      setSynced(_synced);
-    }
+    const _synced = getSyncStatus();
     if (ChainStore.subscribed !== _synced || ChainStore.subError) {
       const syncFail =
         ChainStore.subError &&
@@ -96,7 +82,7 @@ export const ChainStoreProvider = ({
           : false;
       setSyncFail(syncFail);
     }
-  }, [syncStatus, synced, setSynced, ChainStore, setSyncFail]);
+  }, [getSyncStatus, ChainStore, setSyncFail]);
 
   const setListeners = useCallback(() => {
     try {
@@ -104,7 +90,7 @@ export const ChainStoreProvider = ({
     } catch (e) {
       console.error("e:", e);
     }
-  }, [ChainStore, chainStoreSub, apiInstance]);
+  }, [ChainStore, chainStoreSub]);
 
   const updateRpcConnectionStatus = useCallback(
     (status?: string) => {
@@ -113,9 +99,20 @@ export const ChainStoreProvider = ({
     [setRpcConnectionStatus]
   );
 
+  const updateChainStates = useCallback(async () => {
+    try {
+      const blockData = await dbApi("get_objects", [["2.1.0"]]);
+      if (blockData && blockData.length > 0) {
+        dynGlobalObject.current = blockData[0] as BlockData;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi]);
+
   useEffect(() => {
     setListeners();
-    const syncCheckInterval = setInterval(syncStatus, 5000);
+    const syncCheckInterval = setInterval(getSyncStatus, 5000);
     return () => {
       clearInterval(syncCheckInterval as NodeJS.Timer);
     };
@@ -125,23 +122,10 @@ export const ChainStoreProvider = ({
     apiInstance?.setRpcConnectionStatusCallback(updateRpcConnectionStatus);
   }, [Apis, updateRpcConnectionStatus, apiInstance]);
 
-  const update = async () => {
-    try {
-      const _dynGlobalObject = await getBlockData();
-      if (dynGlobalObject) {
-        dynGlobalObject.current = _dynGlobalObject;
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
-    ChainStore.subscribe(update);
-    update();
-
+    ChainStore.subscribe(updateChainStates);
     return () => {
-      ChainStore.unsubscribe(update);
+      ChainStore.unsubscribe(updateChainStates);
     };
   }, [apiInstance]);
 
