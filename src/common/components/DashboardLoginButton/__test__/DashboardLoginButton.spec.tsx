@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import counterpart from "counterpart";
 import React from "react";
 
-import { DashboardLoginButton } from "../index";
+import { DashboardLoginButton } from "../DashboardLoginButton";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),

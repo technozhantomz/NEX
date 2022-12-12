@@ -19,10 +19,10 @@ const customJestConfig = {
   collectCoverageFrom: [
     "**/*.tsx",
     "**/*.ts",
-    "!**/node_modules/**",
+    "!<rootDir>/node_modules/",
     "!**/index.ts",
     "!**/*.styled.tsx",
-    "!./src/pages/**/**.tsx",
+    "!<rootDir>/src/pages/**/**.tsx",
   ],
   coverageReporters: ["clover", "json", "lcov", "text"],
 };
