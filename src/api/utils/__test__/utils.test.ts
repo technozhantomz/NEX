@@ -267,34 +267,4 @@ describe("Testing utils functions ", () => {
       expect(utils.getBlockchainFromSymbol("btc")).toBe("Bitcoin");
     });
   });
-
-  // describe("numberedInputsPasteHandler", () => {
-  //   it("prevents default if the clipboard data contains non-numeric characters", () => {
-  //     const e = {
-  //       preventDefault: jest.fn(),
-  //       target: { value: "1234" },
-  //       clipboardData: {
-  //         getData: jest.fn(() => "12a34"),
-  //       },
-  //     };
-
-  //     utils.numberedInputsPasteHandler(e as any);
-
-  //     expect(e.preventDefault).toHaveBeenCalled();
-  //   });
-
-  //   it("prevents default if the clipboard data contains numeric characters but the input value has more than 6 digits before the decimal point after adding the clipboard data", () => {
-  //     const e = {
-  //       preventDefault: jest.fn(),
-  //       target: { value: "123456" },
-  //       clipboardData: {
-  //         getData: jest.fn(() => "7"),
-  //       },
-  //     };
-
-  //     utils.numberedInputsPasteHandler(e as any);
-
-  //     expect(e.preventDefault).toHaveBeenCalled();
-  //   });
-  // });
 });
