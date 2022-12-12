@@ -13,4 +13,5 @@ export type MetaMask = {
 export type Hive = {
   isConnected: boolean;
   userName: string;
+  publicKey: string;
 };

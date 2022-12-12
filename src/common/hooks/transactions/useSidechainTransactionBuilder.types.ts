@@ -11,7 +11,7 @@ export type UseSidechainTransactionBuilderResult = {
   ) => Transaction;
   buildDeletingSidechainTransaction: (
     user_account_id: string,
-    sidechain_address_id: SVGAnimatedString,
+    sidechain_address_id: string,
     sidechain: string
   ) => Transaction;
 };

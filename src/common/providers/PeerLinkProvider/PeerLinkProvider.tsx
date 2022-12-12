@@ -25,6 +25,7 @@ const defaultPeerLinkState: PeerLinkContextType = {
   hive: {
     isConnected: false,
     userName: "",
+    publicKey: "",
   },
   connectToMetaMask: () =>
     function () {
@@ -44,6 +45,9 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
     defaultPeerLinkState.metaMask
   );
   const [hive, setHive] = useState<Hive>(defaultPeerLinkState.hive);
+  const [hivePublicKey, setHivePublicKey] = useSessionStorage(
+    "PL-hivePublicKey"
+  ) as [string, (value: string) => void];
   const [hiveUserName, setHiveUserName] = useSessionStorage(
     "PL-hiveUserName"
   ) as [string, (value: string) => void];
@@ -94,15 +98,27 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
           async (response: any) => {
             if (response.success) {
               setHiveUserName(response.data.username);
+              setHivePublicKey(response.publicKey);
               setHive({
                 isConnected: true,
                 userName: response.data.username,
+                publicKey: response.publicKey,
               });
             }
           },
           args.rpc,
           args.title
         );
+        if (localStorageAccount !== "") {
+          buildAddingSidechainTransaction(
+            id,
+            hivePublicKey,
+            hiveUserName,
+            hivePublicKey,
+            hiveUserName,
+            "hive"
+          );
+        }
       } else {
         console.warn("Hive keychain is not installed");
       }
@@ -121,13 +137,14 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
   }, [ethereum]);
 
   useEffect(() => {
-    if (hiveUserName) {
+    if (hiveUserName && hivePublicKey) {
       setHive({
         isConnected: true,
         userName: hiveUserName,
+        publicKey: hivePublicKey,
       });
     }
-  }, [hiveUserName]);
+  }, [hiveUserName, hivePublicKey]);
 
   return (
     <PeerLinkContext.Provider
