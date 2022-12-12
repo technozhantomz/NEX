@@ -29,35 +29,6 @@ exports[`Dashboard login button Deposit tab renders correctly for not logged in 
 </DocumentFragment>
 `;
 
-exports[`Dashboard login button Deposit tab renders correctly for not logged in user dashboard deposit tab(HIVE or HBD) 1`] = `
-<DocumentFragment>
-  <div
-    class="sc-dkBdza HMHcj"
-  >
-    <button
-      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-3779289f-0 sc-WKhSL dPgDWt bHmnGx"
-      type="button"
-    >
-      <span>
-        Log in & Deposit HIVE
-      </span>
-    </button>
-    <p
-      class="sc-bcXHqe cKWvWQ sc-ikHGee kPQMxZ"
-    >
-      <span>
-        Don't have a Peerplays account? 
-      </span>
-      <a
-        href="/signup"
-      >
-        Create account
-      </a>
-    </p>
-  </div>
-</DocumentFragment>
-`;
-
 exports[`Dashboard login button Deposit tab renders correctly for not logged in user dashboard deposit tab(HIVE) 1`] = `
 <DocumentFragment>
   <div
