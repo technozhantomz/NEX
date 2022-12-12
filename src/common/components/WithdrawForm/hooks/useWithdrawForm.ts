@@ -59,10 +59,8 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const { buildTrx, getTrxFee } = useTransactionBuilder();
   const { calculateTransferFee } = useFees();
   const { buildTransferTransaction } = useTransferTransactionBuilder();
-  const {
-    buildAddingBitcoinSidechainTransaction,
-    buildDeletingBitcoinSidechainTransaction,
-  } = useSidechainTransactionBuilder();
+  const { buildAddingSidechainTransaction, buildDeletingSidechainTransaction } =
+    useSidechainTransactionBuilder();
   const [withdrawForm] = Form.useForm<WithdrawForm>();
 
   const handleValuesChange = (changedValues: any) => {
@@ -155,18 +153,20 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       btcSidechainAddressesChanged
     ) {
       const transactions: Transaction[] = [];
-      const deleteTrx = buildDeletingBitcoinSidechainTransaction(
+      const deleteTrx = buildDeletingSidechainTransaction(
         id,
         bitcoinSidechainAccount?.id as string,
-        id
+        id,
+        "bitcoin"
       );
       transactions.push(deleteTrx);
-      const addTrx = buildAddingBitcoinSidechainTransaction(
+      const addTrx = buildAddingSidechainTransaction(
         id,
         id,
         bitcoinSidechainAccount?.deposit_public_key as string,
         values.withdrawPublicKey,
-        values.withdrawAddress
+        values.withdrawAddress,
+        "bitcoin"
       );
       transactions.push(addTrx);
 

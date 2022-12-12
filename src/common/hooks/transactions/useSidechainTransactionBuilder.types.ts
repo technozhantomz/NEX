@@ -1,16 +1,17 @@
 import { Transaction } from "../../types";
 
 export type UseSidechainTransactionBuilderResult = {
-  buildAddingBitcoinSidechainTransaction: (
-    payer: string,
-    sidechain_address_account: string,
+  buildAddingSidechainTransaction: (
+    user_account_id: string,
     deposit_public_key: string,
+    deposit_address: string,
     withdraw_public_key: string,
-    withdraw_address: string
+    withdraw_address: string,
+    sidechain: string
   ) => Transaction;
-  buildDeletingBitcoinSidechainTransaction: (
-    payer: string,
-    sidechain_address_id: string,
-    sidechain_address_account: string
+  buildDeletingSidechainTransaction: (
+    user_account_id: string,
+    sidechain_address_id: SVGAnimatedString,
+    sidechain: string
   ) => Transaction;
 };
