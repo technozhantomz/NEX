@@ -87,43 +87,44 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
       account: null,
       rpc: null,
     };
-
-    try {
-      if (window.hive_keychain as unknown) {
-        const keychain = window.hive_keychain;
-        keychain.requestSignBuffer(
-          args.account,
-          args.message,
-          args.key,
-          async (response: any) => {
-            if (response.success) {
-              setHiveUserName(response.data.username);
-              setHivePublicKey(response.publicKey);
-              setHive({
-                isConnected: true,
-                userName: response.data.username,
-                publicKey: response.publicKey,
-              });
-            }
-          },
-          args.rpc,
-          args.title
-        );
-        if (localStorageAccount !== "") {
-          buildAddingSidechainTransaction(
-            id,
-            hivePublicKey,
-            hiveUserName,
-            hivePublicKey,
-            hiveUserName,
-            "hive"
+    if (!hive.isConnected) {
+      try {
+        if (window.hive_keychain as unknown) {
+          const keychain = window.hive_keychain;
+          keychain.requestSignBuffer(
+            args.account,
+            args.message,
+            args.key,
+            async (response: any) => {
+              if (response.success) {
+                setHiveUserName(response.data.username);
+                setHivePublicKey(response.publicKey);
+                setHive({
+                  isConnected: true,
+                  userName: response.data.username,
+                  publicKey: response.publicKey,
+                });
+              }
+            },
+            args.rpc,
+            args.title
           );
+          if (localStorageAccount !== "") {
+            buildAddingSidechainTransaction(
+              id,
+              hivePublicKey,
+              hiveUserName,
+              hivePublicKey,
+              hiveUserName,
+              "hive"
+            );
+          }
+        } else {
+          console.warn("Hive keychain is not installed");
         }
-      } else {
-        console.warn("Hive keychain is not installed");
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
   };
 

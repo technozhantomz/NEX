@@ -49,7 +49,7 @@ const PeerLink: NextPage = () => {
                   : counterpart.translate(`pages.peerlink.connect.required`)}
               </Styled.ConnectButtonStatus>
             </Styled.ConnectButtonTextWrapper>
-            <RightOutlined />
+            {hive.isConnected ? <CheckOutlined /> : <RightOutlined />}
           </Styled.ConnectButton>
           <Styled.ConnectButton
             className={metaMask.isConnected ? "connected" : "required"}
