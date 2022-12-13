@@ -2,6 +2,7 @@ import counterpart from "counterpart";
 
 import {
   DollarOutlined,
+  // LinkOutlined,
   MenuCard,
   PoweroffOutlined,
   ProfileOutlined,
@@ -74,6 +75,13 @@ export const MainNav = (): JSX.Element => {
             label={counterpart.translate(`pages.market.heading`)}
           />
         </li>
+        {/* <li>
+          <MenuItem
+            href={`/peerlink`}
+            icon={<LinkOutlined className={"menu-icon"} />}
+            label={counterpart.translate(`pages.peerlink.heading`)}
+          />
+        </li> */}
         <li>
           <MenuItem
             href="/blockchain"

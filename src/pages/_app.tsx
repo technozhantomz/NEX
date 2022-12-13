@@ -9,6 +9,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import { MetaMaskProvider } from "metamask-react";
 import type { AppProps } from "next/app";
 
 import {
@@ -17,6 +18,7 @@ import {
   ConnectionManagerProvider,
   FeesProvider,
   MenuProvider,
+  PeerLinkProvider,
   PeerplaysApiProvider,
   SettingsProvider,
   UserProvider,
@@ -39,25 +41,29 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
 
   return (
     <ViewportProvider>
-      <SettingsProvider>
-        <PeerplaysApiProvider>
-          <ConnectionManagerProvider>
-            <AssetsProvider>
-              <UserProvider>
-                <FeesProvider>
-                  <UserSettingsProvider>
-                    <BrowserHistoryProvider>
-                      <MenuProvider>
-                        <Component {...pageProps} />
-                      </MenuProvider>
-                    </BrowserHistoryProvider>
-                  </UserSettingsProvider>
-                </FeesProvider>
-              </UserProvider>
-            </AssetsProvider>
-          </ConnectionManagerProvider>
-        </PeerplaysApiProvider>
-      </SettingsProvider>
+      <MetaMaskProvider>
+        <PeerLinkProvider>
+          <SettingsProvider>
+            <PeerplaysApiProvider>
+              <ConnectionManagerProvider>
+                <AssetsProvider>
+                  <UserProvider>
+                    <FeesProvider>
+                      <UserSettingsProvider>
+                        <BrowserHistoryProvider>
+                          <MenuProvider>
+                            <Component {...pageProps} />
+                          </MenuProvider>
+                        </BrowserHistoryProvider>
+                      </UserSettingsProvider>
+                    </FeesProvider>
+                  </UserProvider>
+                </AssetsProvider>
+              </ConnectionManagerProvider>
+            </PeerplaysApiProvider>
+          </SettingsProvider>
+        </PeerLinkProvider>
+      </MetaMaskProvider>
     </ViewportProvider>
   );
 }

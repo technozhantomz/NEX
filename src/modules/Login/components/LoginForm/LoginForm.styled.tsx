@@ -1,5 +1,6 @@
 import { CardForm, CardFormButton, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const LoginForm = styled(CardForm)`
   .ant-form-item {
@@ -21,7 +22,7 @@ export const LoginForm = styled(CardForm)`
     width: 539px;
   }
   .ant-select-selector {
-    border-radius: 4px !important;
+    ${mixIns.borderRadius} !important;
   }
   .ant-select-selection-item {
     display: flex;

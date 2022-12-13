@@ -51,7 +51,7 @@ export const Layout: FunctionComponent<Props> = ({
       </Head>
       <ConfigProvider>
         <Styled.Page className={layout} onClick={onClick}>
-          <TopBar />
+          <TopBar layout={layout} />
           <Styled.Layout className={`${getStyles()}`}>
             {heading != undefined ? (
               <Styled.PageHeading className={"page-heading"}>
