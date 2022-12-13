@@ -21,8 +21,7 @@ import { FeesColumns, FeesPrintTable } from "./components";
 import { FeesTableRow, useFeesTab } from "./hooks";
 
 export const FeesTab = (): JSX.Element => {
-  const { loading, searchDataSource, fullFeesRows, setSearchDataSource } =
-    useFeesTab();
+  const { searchDataSource, fullFeesRows, setSearchDataSource } = useFeesTab();
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +50,7 @@ export const FeesTab = (): JSX.Element => {
           {` / `}
           <CSVLink
             filename={"FeesTable.csv"}
-            data={fullFeesRows}
+            data={fullFeesRows ?? []}
             className="btn btn-primary"
           >
             {counterpart.translate(`links.csv`)}
@@ -63,7 +62,7 @@ export const FeesTab = (): JSX.Element => {
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={!fullFeesRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -138,7 +137,7 @@ export const FeesTab = (): JSX.Element => {
         <Styled.FeesTable
           dataSource={searchDataSource}
           columns={FeesColumns as ColumnsType<unknown>}
-          loading={loading}
+          loading={!fullFeesRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -153,9 +152,9 @@ export const FeesTab = (): JSX.Element => {
       <Styled.PrintTable>
         <FeesPrintTable
           ref={componentRef}
-          loading={loading}
+          loading={!fullFeesRows}
           feesColumns={FeesColumns}
-          fullFeesRows={fullFeesRows}
+          fullFeesRows={fullFeesRows ?? []}
         />
       </Styled.PrintTable>
     </Styled.FeesTabWrapper>
