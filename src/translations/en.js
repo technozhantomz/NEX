@@ -1208,6 +1208,7 @@ export const en = {
     filled: "Filled",
     total: "Total",
     status_actions: "Status/Actions",
+    translated_type: "Type",
   },
   tableFilters: {
     avtive: "Avtive",

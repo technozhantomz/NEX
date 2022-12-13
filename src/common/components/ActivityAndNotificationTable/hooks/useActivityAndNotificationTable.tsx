@@ -79,6 +79,9 @@ export function useActivityAndNotificationTable({
         return {
           ...activity,
           status: unread,
+          translatedType: counterpart.translate(
+            `transaction.trxTypes.${activity.type}.title`
+          ),
         } as ActivityRow;
       });
 
@@ -86,6 +89,9 @@ export function useActivityAndNotificationTable({
         return {
           ...activityRow,
           time: formDate(activityRow.time),
+          translatedType: counterpart.translate(
+            `transaction.trxTypes.${activityRow.type}.title`
+          ),
         } as ActivityRow;
       });
 
@@ -99,7 +105,7 @@ export function useActivityAndNotificationTable({
       const uniqTypes = uniq(allTypes);
       const updatedColumns = columns.map((column) => {
         switch (true) {
-          case column.key === "type":
+          case column.key === "translatedType":
             column.filters = uniqTypes.map((type) => {
               return {
                 text: counterpart.translate(

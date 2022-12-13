@@ -13,6 +13,7 @@ export type ActivityAndNotificationType = {
   render:
     | ((value: string) => JSX.Element)
     | ((status: boolean, record: any) => JSX.Element)
+    | ((status: string, record: any) => JSX.Element)
     | undefined;
   filters:
     | {
@@ -40,18 +41,18 @@ export const ActivityAndNotificationColumns = (
   markTheNotificationAsReadOrUnread: (id: string, unread: boolean) => void
 ): ActivityAndNotificationType[] => {
   const headings = isNotificationTab
-    ? ["time", "type", "info", "id", "fee", "status"]
-    : ["time", "type", "info", "id", "fee"];
+    ? ["time", "translated_type", "info", "id", "fee", "status"]
+    : ["time", "translated_type", "info", "id", "fee"];
 
   const keys = isNotificationTab
-    ? ["time", "type", "info", "id", "fee", "status"]
-    : ["time", "type", "info", "id", "fee"];
+    ? ["time", "translatedType", "info", "id", "fee", "status"]
+    : ["time", "translatedType", "info", "id", "fee"];
 
   const renders = isNotificationTab
     ? [
         undefined,
-        (type: string): JSX.Element => (
-          <ActivityAndNotificationTag type={type} />
+        (_type: string, record: any): JSX.Element => (
+          <ActivityAndNotificationTag type={record.type} />
         ),
         (value: string): JSX.Element => (
           <UserLinkExtractor infoString={value} />
@@ -76,8 +77,8 @@ export const ActivityAndNotificationColumns = (
       ]
     : [
         undefined,
-        (type: string): JSX.Element => (
-          <ActivityAndNotificationTag type={type} />
+        (_type: string, record: any): JSX.Element => (
+          <ActivityAndNotificationTag type={record.type} />
         ),
         (value: string): JSX.Element => (
           <UserLinkExtractor infoString={value} />
