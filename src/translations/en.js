@@ -3,6 +3,8 @@ export const en = {
     yes: "Yes",
     no: "No",
     limit: "Limit",
+    or: "or",
+    download: "Download",
   },
   app_init: {
     check_latency: "Running latency checks...",
@@ -864,6 +866,13 @@ export const en = {
         required: "Required",
         connect_metamask: "Connect MetaMask",
         connect_hive: "Connect Hive",
+        hive_keychain: "Hive Keychain",
+        metamask: "MetaMask",
+        peerplays_required: "A PeerPlays Account is Required",
+        hive_required:
+          " Hive wallet was not found please check your HiveKeyChain pluging and refresh the page",
+        metamask_required:
+          "Metamask wallet was not found please check your MetaMask wallet plugin and refresh the page",
       },
       transfer: {
         heading: "Transfer",
@@ -898,6 +907,7 @@ export const en = {
     },
   },
   links: {
+    login: "Login",
     create_account: "Create account",
     see_all_account_activity: "See all account activity",
     profile: "profile",

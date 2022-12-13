@@ -3,6 +3,8 @@ export const ru = {
     yes: "Да",
     no: "Нет",
     limit: "Ограничение",
+    or: "или же",
+    download: "Скачать",
   },
   app_init: {
     check_latency: "Запуск проверки задержки...",
@@ -867,6 +869,13 @@ export const ru = {
         required: "Обязательно",
         connect_metamask: "Соединять MetaMask",
         connect_hive: "Соединять Hive",
+        hive_keychain: "Hive Keychain",
+        metamask: "MetaMask",
+        peerplays_required: "Требуется учетная запись PeerPlays",
+        hive_required:
+          "Кошелек Hive не найден, проверьте подключение HiveKeyChain и обновите страницу",
+        metamask_required:
+          "Кошелек Metamask не найден, проверьте подключаемый модуль кошелька Metamask и обновите страницу",
       },
       transfer: {
         heading: "Передача",
@@ -900,6 +909,7 @@ export const ru = {
     },
   },
   links: {
+    login: "Авторизоваться",
     create_account: "Зарегистрироваться",
     see_all_account_activity: "Просмотреть всю активность аккаунта",
     profile: "профиль",

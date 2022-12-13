@@ -26,7 +26,7 @@ import * as Styled from "./MainNavBar.styled";
 export const MainNavBar = (): JSX.Element => {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
-  const { metaMask, hive } = usePeerLinkContext();
+  const { metaMask, hiveKeyChain } = usePeerLinkContext();
   const { sm } = useViewportContext();
   const {
     openMenu,
@@ -124,14 +124,14 @@ export const MainNavBar = (): JSX.Element => {
     <Styled.PeerLinkWalletBadge>
       <HIVEIcon width="30" height="30" />
       <Styled.PeerLinkWalletAccount>
-        {hive.userName}
+        {hiveKeyChain.userName}
       </Styled.PeerLinkWalletAccount>
     </Styled.PeerLinkWalletBadge>
   );
 
   const peerLinkBadge = (
     <Styled.PeerLinkBadgeWrapper>
-      {hive.isConnected ? hiveBadge : ""}
+      {hiveKeyChain.isConnected ? hiveBadge : ""}
       {metaMask.isConnected ? metaMaskBadge : ""}
     </Styled.PeerLinkBadgeWrapper>
   );

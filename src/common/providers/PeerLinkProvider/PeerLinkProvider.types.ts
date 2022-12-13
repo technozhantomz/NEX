@@ -1,16 +1,8 @@
+import { HiveKeyChain, MetaMask } from "../../types";
+
 export type PeerLinkContextType = {
   metaMask: MetaMask;
-  hive: Hive;
+  hiveKeyChain: HiveKeyChain;
   connectToMetaMask: () => void;
-  connectToHive: () => void;
-};
-
-export type MetaMask = {
-  isConnected: boolean;
-  selectedAddress: string;
-};
-
-export type Hive = {
-  isConnected: boolean;
-  userName: string;
+  connectToHiveKeyChain: () => void;
 };

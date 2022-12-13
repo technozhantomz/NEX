@@ -1,6 +1,10 @@
 import counterpart from "counterpart";
 import { useCallback, useState } from "react";
 
+import {
+  usePeerLinkContext,
+  useUserContext,
+} from "../../../../../common/providers";
 import { SignerKey } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 
@@ -13,6 +17,9 @@ export function usePeerLink(): UsePeerLinkResult {
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [peerLinkConnectForm] = Form.useForm<PeerLinkConnectForm>();
+  const { metaMask, hiveKeyChain, connectToMetaMask, connectToHiveKeyChain } =
+    usePeerLinkContext();
+  const { localStorageAccount } = useUserContext();
 
   const handleConnect = useCallback(
     async (signerKey: SignerKey) => {
@@ -53,6 +60,9 @@ export function usePeerLink(): UsePeerLinkResult {
   );
 
   return {
+    metaMask,
+    hiveKeyChain,
+    localStorageAccount,
     peerLinkConnectForm,
     transactionErrorMessage,
     transactionSuccessMessage,
@@ -60,5 +70,7 @@ export function usePeerLink(): UsePeerLinkResult {
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
     handleConnect,
+    connectToMetaMask,
+    connectToHiveKeyChain,
   };
 }

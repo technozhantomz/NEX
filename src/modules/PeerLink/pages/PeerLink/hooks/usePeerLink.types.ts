@@ -1,9 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { SignerKey } from "../../../../../common/types";
+import { HiveKeyChain, MetaMask, SignerKey } from "../../../../../common/types";
 import { FormInstance } from "../../../../../ui/src";
 
 export type UsePeerLinkResult = {
+  metaMask: MetaMask;
+  hiveKeyChain: HiveKeyChain;
+  localStorageAccount: string;
   peerLinkConnectForm: FormInstance<PeerLinkConnectForm>;
   transactionErrorMessage: string;
   transactionSuccessMessage: string;
@@ -11,6 +14,8 @@ export type UsePeerLinkResult = {
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   handleConnect: (signerKey: SignerKey) => Promise<void>;
+  connectToMetaMask: () => void;
+  connectToHiveKeyChain: () => void;
 };
 
 export type PeerLinkConnectForm = {

@@ -10,7 +10,11 @@ import React, {
 import { useSessionStorage, useSidechainTransactionBuilder } from "../../hooks";
 import { useUserContext } from "../UserProvider";
 
-import { Hive, MetaMask, PeerLinkContextType } from "./PeerLinkProvider.types";
+import {
+  HiveKeyChain,
+  MetaMask,
+  PeerLinkContextType,
+} from "./PeerLinkProvider.types";
 
 declare global {
   interface Window {
@@ -28,7 +32,7 @@ const defaultPeerLinkState: PeerLinkContextType = {
     isConnected: false,
     selectedAddress: "",
   },
-  hive: {
+  hiveKeyChain: {
     isConnected: false,
     userName: "",
   },
@@ -36,7 +40,7 @@ const defaultPeerLinkState: PeerLinkContextType = {
     function () {
       throw new Error(`Function not implemented.`);
     },
-  connectToHive: () =>
+  connectToHiveKeyChain: () =>
     function () {
       throw new Error(`Function not implemented.`);
     },
@@ -49,7 +53,9 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
   const [metaMask, setMetaMask] = useState<MetaMask>(
     defaultPeerLinkState.metaMask
   );
-  const [hive, setHive] = useState<Hive>(defaultPeerLinkState.hive);
+  const [hiveKeyChain, setHiveKeyChain] = useState<HiveKeyChain>(
+    defaultPeerLinkState.hiveKeyChain
+  );
   const [hiveUserName, setHiveUserName] = useSessionStorage(
     "PL-hiveUserName"
   ) as [string, (value: string) => void];
@@ -80,7 +86,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
     }
   }, [localStorageAccount, setMetaMask]);
 
-  const connectToHive = async () => {
+  const connectToHiveKeyChain = async () => {
     console.log("connect to hive");
     const args = {
       title: "Sign In",
@@ -100,7 +106,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
           async (response: any) => {
             if (response.success) {
               setHiveUserName(response.data.username);
-              setHive({
+              setHiveKeyChain({
                 isConnected: true,
                 userName: response.data.username,
               });
@@ -119,7 +125,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
 
   useEffect(() => {
     if (hiveUserName) {
-      setHive({
+      setHiveKeyChain({
         isConnected: true,
         userName: hiveUserName,
       });
@@ -134,7 +140,12 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
 
   return (
     <PeerLinkContext.Provider
-      value={{ metaMask, hive, connectToMetaMask, connectToHive }}
+      value={{
+        metaMask,
+        hiveKeyChain,
+        connectToMetaMask,
+        connectToHiveKeyChain,
+      }}
     >
       {children}
     </PeerLinkContext.Provider>
