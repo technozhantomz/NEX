@@ -33,7 +33,6 @@ build-qa:
     - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$DEV_CHAIN_ID'" >> .env
     - npm install
-    - npm run test:coverage
     - npm run build --debug
     - cd .. && tar czf nex-qa.tar.gz NEX/
     - cp nex-qa.tar.gz NEX/ && cd NEX
