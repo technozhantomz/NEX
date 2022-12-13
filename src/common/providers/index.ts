@@ -9,3 +9,4 @@ export * from "./FeesProvider";
 export * from "./NotificationsProvider";
 export * from "./ChainStoreProvider";
 export * from "./ConnectionManagerProvider";
+export * from "./PeerLinkProvider";

@@ -856,6 +856,19 @@ export const en = {
         heading: "Your password or %(neededKeyType)s key is needed",
       },
     },
+    peerlink: {
+      heading: "PeerLink",
+      connect: {
+        heading: "Connect",
+        connected: "Connected",
+        required: "Required",
+        connect_metamask: "Connect MetaMask",
+        connect_hive: "Connect Hive",
+      },
+      transfer: {
+        heading: "Transfer",
+      },
+    },
     profile: {
       heading: "Profile",
       my_profile: "My profile",
@@ -1239,5 +1252,18 @@ export const en = {
     btc_deposit_account_description:
       "Used to create the above PeerPlays multi-signature deposit address",
     peerplays_btc_deposit_address: "PeerPlays Deposit Address",
+  },
+  transfer: {
+    transfer: "Transfer",
+    network: "Network",
+    token: "Token",
+    from: "From",
+    to: "To",
+    max: "Max",
+    available: "Available",
+    estimated_transfer_fees: "Estimated transfer fees",
+    approx_value: "Approx. Value",
+    error_message: "Display error message here if any",
+    see_full_transfer_history: "See full transfer history",
   },
 };

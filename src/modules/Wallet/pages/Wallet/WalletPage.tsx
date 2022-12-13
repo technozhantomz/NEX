@@ -82,7 +82,7 @@ const WalletPage: NextPage = () => {
       type="card-lrg"
       heading={counterpart.translate(`pages.wallet.heading`)}
       description={`Wallet Page | ${tab}`}
-      dexLayout={true}
+      layout="dex"
       onClick={() => {
         if (sm) {
           visible && setVisible(false);

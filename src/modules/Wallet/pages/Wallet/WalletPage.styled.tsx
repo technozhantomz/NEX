@@ -48,7 +48,7 @@ export const Tabs = styled(UiTabs)`
 
 export const WalletCard = styled(UiCard)`
   .ant-tabs {
-    border-radius: 4px;
+    ${mixIns.borderRadius}
     opacity: 1;
     max-width: 1070px;
   }

@@ -92,7 +92,7 @@ const MarketPage: NextPage = () => {
       type="card-lrg"
       heading={counterpart.translate(`pages.market.heading`)}
       description={`Market Page | ${pair}`}
-      dexLayout={true}
+      layout="dex"
     >
       {md ? (
         <>

@@ -90,7 +90,7 @@ const ProfilePage: NextPage = () => {
       type="card-lrg"
       heading={counterpart.translate(`pages.profile.heading`)}
       description="Profile"
-      dexLayout={true}
+      layout="dex"
       onClick={() => {
         if (sm) {
           visible && setVisible(false);

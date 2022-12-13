@@ -1,3 +1,4 @@
+import { MetaMaskProvider } from "metamask-react";
 import type { AppProps } from "next/app";
 
 import {
@@ -8,6 +9,7 @@ import {
   FeesProvider,
   MenuProvider,
   NotificationsProvider,
+  PeerLinkProvider,
   PeerplaysApiProvider,
   UserProvider,
   ViewportProvider,
@@ -17,25 +19,29 @@ import "../ui/src/ui.less";
 function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ViewportProvider>
-      <AppSettingsProvider>
-        <PeerplaysApiProvider>
-          <ConnectionManagerProvider>
-            <AssetsProvider>
-              <FeesProvider>
-                <UserProvider>
-                  <BrowserHistoryProvider>
-                    <NotificationsProvider>
-                      <MenuProvider>
-                        <Component {...pageProps} />
-                      </MenuProvider>
-                    </NotificationsProvider>
-                  </BrowserHistoryProvider>
-                </UserProvider>
-              </FeesProvider>
-            </AssetsProvider>
-          </ConnectionManagerProvider>
-        </PeerplaysApiProvider>
-      </AppSettingsProvider>
+      <MetaMaskProvider>
+        <PeerLinkProvider>
+          <AppSettingsProvider>
+            <PeerplaysApiProvider>
+              <ConnectionManagerProvider>
+                <AssetsProvider>
+                  <FeesProvider>
+                    <UserProvider>
+                      <BrowserHistoryProvider>
+                        <NotificationsProvider>
+                          <MenuProvider>
+                            <Component {...pageProps} />
+                          </MenuProvider>
+                        </NotificationsProvider>
+                      </BrowserHistoryProvider>
+                    </UserProvider>
+                  </FeesProvider>
+                </AssetsProvider>
+              </ConnectionManagerProvider>
+            </PeerplaysApiProvider>
+          </AppSettingsProvider>
+        </PeerLinkProvider>
+      </MetaMaskProvider>
     </ViewportProvider>
   );
 }

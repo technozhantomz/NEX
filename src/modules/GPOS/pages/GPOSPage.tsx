@@ -101,7 +101,7 @@ const GPOSPage: NextPage = () => {
         }.heading`
       )}
       description="Peerplays (GPOS)"
-      dexLayout={true}
+      layout="dex"
       onClick={() => {
         if (sm) {
           isMobileDropdownvisible && setIsMobileDropdownvisible(false);
