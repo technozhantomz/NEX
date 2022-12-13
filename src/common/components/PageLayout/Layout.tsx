@@ -5,6 +5,7 @@ import React, { FunctionComponent, ReactNode } from "react";
 
 import { Footer } from "./Footer";
 import * as Styled from "./Layout.styled";
+import { SocialBar } from "./SocialBar";
 import { TopBar } from "./TopBar";
 
 moment.locale("en");
@@ -15,7 +16,7 @@ type Props = {
   description?: string;
   type?: string;
   heading?: string;
-  dexLayout?: boolean;
+  layout?: string;
   onClick?: () => void;
 };
 
@@ -25,7 +26,7 @@ export const Layout: FunctionComponent<Props> = ({
   description,
   type,
   heading,
-  dexLayout = false,
+  layout = "",
   onClick,
 }: Props) => {
   const getStyles = () => {
@@ -49,11 +50,8 @@ export const Layout: FunctionComponent<Props> = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ConfigProvider>
-        <Styled.Page
-          className={dexLayout ? "dex-layout" : ""}
-          onClick={onClick}
-        >
-          <TopBar />
+        <Styled.Page className={layout} onClick={onClick}>
+          <TopBar layout={layout} />
           <Styled.Layout className={`${getStyles()}`}>
             {heading != undefined ? (
               <Styled.PageHeading className={"page-heading"}>
@@ -64,6 +62,7 @@ export const Layout: FunctionComponent<Props> = ({
             )}
             {children}
           </Styled.Layout>
+          {layout === "peerlink" ? <SocialBar /> : ""}
           <Footer />
         </Styled.Page>
       </ConfigProvider>
