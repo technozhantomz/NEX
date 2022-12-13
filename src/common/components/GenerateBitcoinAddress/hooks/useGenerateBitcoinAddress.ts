@@ -10,7 +10,7 @@ import {
   useSonNetwork,
   useTransactionBuilder,
 } from "../../../hooks";
-import { useUserContext } from "../../../providers";
+import { useSideChainContext, useUserContext } from "../../../providers";
 import { BitcoinAccount, SignerKey } from "../../../types";
 
 import { UseGenerateBitcoinAddressResult } from "./useGenerateBitcoinAddress.types";
@@ -31,7 +31,7 @@ export function useGenerateBitcoinAddress(
   const { getSonNetworkStatus } = useSonNetwork();
   const { buildAddingSidechainTransaction } = useSidechainTransactionBuilder();
   const { bitcoinSidechainAccounts, setBitcoinSidechainAccounts } =
-    useUserContext();
+    useSideChainContext();
 
   const toHex = useCallback((buffer: any) => {
     return Array.from(buffer)

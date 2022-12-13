@@ -1,8 +1,13 @@
 import counterpart from "counterpart";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+// import {
+//   useSidechainTransactionBuilder,
+//   useTransactionBuilder,
+// } from "../../../../../common/hooks";
 import {
   usePeerLinkContext,
+  useSideChainContext,
   useUserContext,
 } from "../../../../../common/providers";
 import { SignerKey } from "../../../../../common/types";
@@ -19,7 +24,12 @@ export function usePeerLink(): UsePeerLinkResult {
   const [peerLinkConnectForm] = Form.useForm<PeerLinkConnectForm>();
   const { metaMask, hiveKeyChain, connectToMetaMask, connectToHiveKeyChain } =
     usePeerLinkContext();
+  const { hiveSidechainAccount, ethereumSidechainAccount } =
+    useSideChainContext();
   const { localStorageAccount } = useUserContext();
+  // const { localStorageAccount, id } = useUserContext();
+  // const { buildTrx } = useTransactionBuilder();
+  // const { buildAddingSidechainTransaction } = useSidechainTransactionBuilder();
 
   const handleConnect = useCallback(
     async (signerKey: SignerKey) => {
@@ -28,8 +38,16 @@ export function usePeerLink(): UsePeerLinkResult {
       let trxResult;
       try {
         setLoadingTransaction(true);
-        // const trx = await createUpdateAccountTrx(localApprovedVotesIds);
-        //trxResult = await buildTrx([trx], [signerKey]);
+        // const trx = buildAddingSidechainTransaction(
+        //   id,
+        //   metaMask.selectedAddress,
+        //   metaMask.selectedAddress,
+        //   metaMask.selectedAddress,
+        //   metaMask.selectedAddress,
+        //   "ethereum"
+        // );
+
+        // trxResult = await buildTrx([trx], [signerKey]);
       } catch (error) {
         console.log(error);
         setTransactionErrorMessage(
@@ -58,6 +76,22 @@ export function usePeerLink(): UsePeerLinkResult {
     },
     [setTransactionErrorMessage, setLoadingTransaction]
   );
+
+  useEffect(() => {
+    if (
+      localStorageAccount &&
+      hiveKeyChain.isConnected &&
+      metaMask.isConnected
+    ) {
+      //TODO: fix this logic?
+      if (ethereumSidechainAccount?.deposit_address !== hiveKeyChain.userName) {
+        //TODO: get signing_key then update sons
+      }
+      if (hiveSidechainAccount?.deposit_address !== metaMask.selectedAddress) {
+        //TODO: get signing_key then update sons
+      }
+    }
+  }, [localStorageAccount, metaMask, hiveKeyChain]);
 
   return {
     metaMask,

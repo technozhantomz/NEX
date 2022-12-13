@@ -25,6 +25,8 @@ const defaultSideChainState: SideChainContextType = {
   hasEthereumAddress: false,
   bitcoinSidechainAccounts: undefined,
   bitcoinSidechainAccount: undefined,
+  hiveSidechainAccount: undefined,
+  ethereumSidechainAccount: undefined,
   loadingSidechainAccounts: true,
   setBitcoinSidechainAccounts: function (value: BitcoinSidechainAccounts) {
     throw new Error(`Function not implemented. ${value},`);
@@ -45,6 +47,10 @@ export const SideChainProvider = ({ children }: Props): JSX.Element => {
     SidechainAcccount[]
   >([]);
   const [bitcoinSidechainAccount, setBitcoinSidechainAccount] =
+    useState<SidechainAcccount>();
+  const [hiveSidechainAccount, setHiveSidechainAccount] =
+    useState<SidechainAcccount>();
+  const [ethereumSidechainAccount, setEthereumSidechainAccount] =
     useState<SidechainAcccount>();
   const [loadingSidechainAccounts, setLoadingSidechainAccounts] =
     useState<boolean>(true);
@@ -107,8 +113,22 @@ export const SideChainProvider = ({ children }: Props): JSX.Element => {
           }
           break;
         case "hive":
+          setHiveSidechainAccount(sidechainAccount);
+          if (
+            sidechainAccount.deposit_address &&
+            sidechainAccount.deposit_address !== ""
+          ) {
+            setHasHiveAddress(true);
+          }
           break;
         case "ethereum":
+          setEthereumSidechainAccount(sidechainAccount);
+          if (
+            sidechainAccount.deposit_address &&
+            sidechainAccount.deposit_address !== ""
+          ) {
+            setHasEthereumAddress(true);
+          }
           break;
         default:
           break;
@@ -159,6 +179,8 @@ export const SideChainProvider = ({ children }: Props): JSX.Element => {
         getSidechainAccounts,
         loadingSidechainAccounts,
         sidechainAccounts,
+        hiveSidechainAccount,
+        ethereumSidechainAccount,
         bitcoinSidechainAccount,
         bitcoinSidechainAccounts,
         setBitcoinSidechainAccounts,

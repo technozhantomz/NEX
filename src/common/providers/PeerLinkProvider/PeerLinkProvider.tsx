@@ -7,14 +7,11 @@ import React, {
   useState,
 } from "react";
 
-import { useSessionStorage, useSidechainTransactionBuilder } from "../../hooks";
+import { useSessionStorage } from "../../hooks";
+import { HiveKeyChain, MetaMask } from "../../types";
 import { useUserContext } from "../UserProvider";
 
-import {
-  HiveKeyChain,
-  MetaMask,
-  PeerLinkContextType,
-} from "./PeerLinkProvider.types";
+import { PeerLinkContextType } from "./PeerLinkProvider.types";
 
 declare global {
   interface Window {
@@ -61,8 +58,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
   ) as [string, (value: string) => void];
   const { ethereum, connect } = useMetaMask();
 
-  const { localStorageAccount, id } = useUserContext();
-  const { buildAddingSidechainTransaction } = useSidechainTransactionBuilder();
+  const { localStorageAccount } = useUserContext();
 
   const connectToMetaMask = useCallback(async () => {
     const accounts = await connect();
@@ -73,16 +69,6 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
           selectedAddress: ethereum.selectedAddress,
         });
       }
-    }
-    if (localStorageAccount !== "") {
-      buildAddingSidechainTransaction(
-        id,
-        metaMask.selectedAddress,
-        metaMask.selectedAddress,
-        metaMask.selectedAddress,
-        metaMask.selectedAddress,
-        "ethereum"
-      );
     }
   }, [localStorageAccount, setMetaMask]);
 
@@ -136,7 +122,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
         selectedAddress: ethereum.selectedAddress,
       });
     }
-  }, [localStorageAccount, hiveUserName, ethereum]);
+  }, [hiveUserName, ethereum]);
 
   return (
     <PeerLinkContext.Provider

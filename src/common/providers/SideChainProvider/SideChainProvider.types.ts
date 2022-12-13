@@ -8,6 +8,8 @@ export type SideChainContextType = {
   hasEthereumAddress: boolean;
   sidechainAccounts: SidechainAcccount[];
   bitcoinSidechainAccount: SidechainAcccount | undefined;
+  hiveSidechainAccount: SidechainAcccount | undefined;
+  ethereumSidechainAccount: SidechainAcccount | undefined;
   loadingSidechainAccounts: boolean;
   setBitcoinSidechainAccounts: (value: BitcoinSidechainAccounts) => void;
   getSidechainAccounts: (accountId: string) => Promise<void>;
