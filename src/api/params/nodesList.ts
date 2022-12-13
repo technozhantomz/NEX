@@ -39,16 +39,6 @@ export const testnetNodes: Node[] = [
     location: counterpart.translate("settings.api_closest"),
   },
   {
-    url: "ws://192.168.20.112:8090/api",
-    location: "",
-    region: "Northern America",
-    country: "Canada",
-    user: {
-      name: "Peerplays Witnesses",
-      status: "Witness",
-    },
-  },
-  {
     url: "wss://mint.peerplays.download/api",
     location: "",
     region: "Northern America",

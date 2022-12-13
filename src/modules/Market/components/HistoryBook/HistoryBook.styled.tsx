@@ -19,9 +19,7 @@ export const Table = styled(UiTable)`
   }
   .ant-table-thead
     > tr
-    > th:not(:last-child):not(.ant-table-selection-column):not(
-      .ant-table-row-expand-icon-cell
-    ):not([colspan])::before {
+    > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
     display: none;
   }
   .ant-table-tbody > tr.ant-table-row:hover > td,

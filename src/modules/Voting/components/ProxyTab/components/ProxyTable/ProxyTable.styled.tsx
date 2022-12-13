@@ -10,9 +10,7 @@ export const ProxyTable = styled(Table)`
     color: ${colors.textColorSecondary};
     font-weight: 300;
     border: none;
-    &:not(:last-child):not(.ant-table-selection-column):not(
-        .ant-table-row-expand-icon-cell
-      ):not([colspan])::before {
+    &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
       display: none;
     }
   }
