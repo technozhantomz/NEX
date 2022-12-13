@@ -19,7 +19,10 @@ import {
   useTransactionBuilder,
   useTransferTransactionBuilder,
 } from "../../../../../../../common/hooks";
-import { useUserContext } from "../../../../../../../common/providers";
+import {
+  useSideChainContext,
+  useUserContext,
+} from "../../../../../../../common/providers";
 import { Account, Asset, SignerKey } from "../../../../../../../common/types";
 import { Form } from "../../../../../../../ui/src";
 
@@ -35,8 +38,9 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
   const { assets } = useUserContext();
   const [sendForm] = Form.useForm<SendForm>();
   const { limitByPrecision } = useAsset();
-  const { localStorageAccount, bitcoinSidechainAccount, hasBTCDepositAddress } =
-    useUserContext();
+  const { localStorageAccount } = useUserContext();
+  const { bitcoinSidechainAccount, hasBTCDepositAddress } =
+    useSideChainContext();
   const { formAccountBalancesByName, getAccountByName } = useAccount();
   const { sonAccount, getSonNetworkStatus } = useSonNetwork();
   const { calculateTransferFee } = useFees();

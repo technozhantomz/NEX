@@ -1,4 +1,4 @@
-import { Card, styled } from "../../../../ui/src";
+import { Card, Form, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 import { mixIns } from "../../../../ui/src/mixins";
@@ -16,6 +16,7 @@ export const ConnectCard = styled(Card)`
     }
   }
 `;
+export const ConnectForm = styled(Form)``;
 export const ConnectButtons = styled.div`
   display: flex;
   flex-wrap: wrap;

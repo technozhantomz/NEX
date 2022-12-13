@@ -1,5 +1,11 @@
 import { useMetaMask } from "metamask-react";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { useSessionStorage, useSidechainTransactionBuilder } from "../../hooks";
 import { useUserContext } from "../UserProvider";
@@ -52,7 +58,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
   const { localStorageAccount, id } = useUserContext();
   const { buildAddingSidechainTransaction } = useSidechainTransactionBuilder();
 
-  const connectToMetaMask = async () => {
+  const connectToMetaMask = useCallback(async () => {
     const accounts = await connect();
     if (accounts?.length) {
       if (ethereum) {
@@ -72,7 +78,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
         "ethereum"
       );
     }
-  };
+  }, [localStorageAccount, setMetaMask]);
 
   const connectToHive = async () => {
     console.log("connect to hive");
@@ -112,22 +118,19 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
   };
 
   useEffect(() => {
-    if (ethereum) {
-      setMetaMask({
-        isConnected: ethereum.selectedAddress ? true : false,
-        selectedAddress: ethereum.selectedAddress,
-      });
-    }
-  }, [ethereum]);
-
-  useEffect(() => {
     if (hiveUserName) {
       setHive({
         isConnected: true,
         userName: hiveUserName,
       });
     }
-  }, [hiveUserName]);
+    if (ethereum) {
+      setMetaMask({
+        isConnected: ethereum.selectedAddress ? true : false,
+        selectedAddress: ethereum.selectedAddress,
+      });
+    }
+  }, [localStorageAccount, hiveUserName, ethereum]);
 
   return (
     <PeerLinkContext.Provider

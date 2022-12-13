@@ -12,6 +12,7 @@ import {
   CreateSwapOrder,
   CreateVestingBalance,
   GenerateBitcoinAddresses,
+  PeerLinkConnect,
   Transfer,
   Withdraw,
   WithdrawVestingBalance,
@@ -42,6 +43,7 @@ type Props = {
   orderId?: string;
   withdrawAddress?: string;
   sidechain?: string;
+  sidechains?: string[];
   afterClose?: () => void;
   blockchain?: string;
   approvedMembers?: number;
@@ -72,6 +74,7 @@ export const TransactionModal = ({
   orderId,
   withdrawAddress,
   sidechain,
+  sidechains,
   afterClose,
   blockchain,
   approvedMembers,
@@ -139,6 +142,13 @@ export const TransactionModal = ({
         account={account as string}
         fee={fee as number}
         sidechain={sidechain as string}
+      />
+    ),
+    peer_link_connect: (
+      <PeerLinkConnect
+        account={account as string}
+        fee={fee as number}
+        sidechains={sidechains as string[]}
       />
     ),
     transfer: (

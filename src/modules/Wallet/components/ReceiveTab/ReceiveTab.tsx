@@ -13,7 +13,10 @@ import {
   LoadingIndicator,
   UserLinkExtractor,
 } from "../../../../common/components";
-import { useUserContext } from "../../../../common/providers";
+import {
+  useSideChainContext,
+  useUserContext,
+} from "../../../../common/providers";
 import { SidechainAcccount } from "../../../../common/types";
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 
@@ -30,8 +33,8 @@ export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
     hasBTCDepositAddress,
     loadingSidechainAccounts,
     getSidechainAccounts,
-    localStorageAccount,
-  } = useUserContext();
+  } = useSideChainContext();
+  const { localStorageAccount } = useUserContext();
 
   const renderBTCDepositInstruction = (instruction: string) => {
     return (

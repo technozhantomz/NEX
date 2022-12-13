@@ -10,7 +10,11 @@ import {
   HIVEAndHBDDeposit,
   LoadingIndicator,
 } from "../../../../common/components";
-import { useAssetsContext, useUserContext } from "../../../../common/providers";
+import {
+  useAssetsContext,
+  useSideChainContext,
+  useUserContext,
+} from "../../../../common/providers";
 import { Asset, SidechainAcccount } from "../../../../common/types";
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 
@@ -23,7 +27,7 @@ export const DepositTab = (): JSX.Element => {
     bitcoinSidechainAccount,
     getSidechainAccounts,
     loadingSidechainAccounts,
-  } = useUserContext();
+  } = useSideChainContext();
   const { localStorageAccount } = useUserContext();
   const { sidechainAssets } = useAssetsContext();
   const { handleAssetChange, selectedAsset } = useDepositTab();

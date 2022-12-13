@@ -19,7 +19,11 @@ import {
   useTransactionBuilder,
   useTransferTransactionBuilder,
 } from "../../../hooks";
-import { useAssetsContext, useUserContext } from "../../../providers";
+import {
+  useAssetsContext,
+  useSideChainContext,
+  useUserContext,
+} from "../../../providers";
 import { Account, SignerKey, Transaction } from "../../../types";
 
 import { UseWithdrawFormResult, WithdrawForm } from "./useWithdrawForm.types";
@@ -53,7 +57,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     hasBTCDepositAddress,
     loadingSidechainAccounts,
     getSidechainAccounts,
-  } = useUserContext();
+  } = useSideChainContext();
   const { getAccountByName, formAccountBalancesByName } = useAccount();
   const { account, localStorageAccount, assets, id } = useUserContext();
   const { buildTrx, getTrxFee } = useTransactionBuilder();
@@ -156,7 +160,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       const deleteTrx = buildDeletingSidechainTransaction(
         id,
         bitcoinSidechainAccount?.id as string,
-        id,
         "bitcoin"
       );
       transactions.push(deleteTrx);

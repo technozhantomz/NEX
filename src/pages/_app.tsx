@@ -10,6 +10,7 @@ import {
   PeerLinkProvider,
   PeerplaysApiProvider,
   SettingsProvider,
+  SideChainProvider,
   UserProvider,
   UserSettingsProvider,
   ViewportProvider,
@@ -20,27 +21,29 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ViewportProvider>
       <MetaMaskProvider>
-        <PeerLinkProvider>
-          <SettingsProvider>
-            <PeerplaysApiProvider>
-              <ConnectionManagerProvider>
-                <AssetsProvider>
-                  <UserProvider>
+        <SettingsProvider>
+          <PeerplaysApiProvider>
+            <ConnectionManagerProvider>
+              <AssetsProvider>
+                <UserProvider>
+                  <SideChainProvider>
                     <FeesProvider>
                       <BrowserHistoryProvider>
                         <UserSettingsProvider>
                           <MenuProvider>
-                            <Component {...pageProps} />
+                            <PeerLinkProvider>
+                              <Component {...pageProps} />
+                            </PeerLinkProvider>
                           </MenuProvider>
                         </UserSettingsProvider>
                       </BrowserHistoryProvider>
                     </FeesProvider>
-                  </UserProvider>
-                </AssetsProvider>
-              </ConnectionManagerProvider>
-            </PeerplaysApiProvider>
-          </SettingsProvider>
-        </PeerLinkProvider>
+                  </SideChainProvider>
+                </UserProvider>
+              </AssetsProvider>
+            </ConnectionManagerProvider>
+          </PeerplaysApiProvider>
+        </SettingsProvider>
       </MetaMaskProvider>
     </ViewportProvider>
   );

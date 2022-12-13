@@ -8,3 +8,4 @@ export * from "./CancelLimitOrder";
 export * from "./CreateSwapOrder";
 export * from "./Withdraw";
 export * from "./GenerateBitcoinAddresses";
+export * from "./PeerLinkConnect";
