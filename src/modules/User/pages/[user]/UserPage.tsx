@@ -21,7 +21,7 @@ const UserPage: NextPage = () => {
       description={`${counterpart.translate(
         `pages.user.discription`
       )} | ${user}`}
-      dexLayout={true}
+      layout="dex"
     >
       <Styled.UserCard>
         <ActivityAndNotificationTable userName={user as string} />

@@ -13,3 +13,4 @@ export { default as Xmark } from "./XmarkIcon";
 export { default as Search } from "./SearchIcon";
 export { default as Exclamation } from "./ExclamationIcon";
 export { default as SignupIcon } from "./SignupIcon";
+export * from "./Social";

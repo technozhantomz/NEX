@@ -1,18 +1,19 @@
 import { CardForm, CardFormButton, Modal, styled } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
+import { mixIns } from "../../../ui/src/mixins";
 
 export const TransactionModal = styled(Modal)`
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   ${breakpoint.md} {
     min-width: 600px;
   }
   .ant-modal-content {
-    border-radius: 4px;
+    ${mixIns.borderRadius}
   }
   .ant-modal-header {
     padding: 35px 30px;
-    border-radius: 4px;
+    ${mixIns.borderRadius}
     border-bottom: unset;
     margin-bottom: 20px;
     .ant-modal-title {
