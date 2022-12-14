@@ -76,7 +76,6 @@ export function useBlockchainTab(): UseBlockchainTabResult {
       ]);
       if (defaultAsset && chain && blockData && dynamic) {
         const chainAvgTime = getAvgBlockTime();
-        console.log("recentBlocks", recentBlocks);
         const blockRows: DataTableRow[] = recentBlocks.map((block) => {
           return {
             key: block.id as number,

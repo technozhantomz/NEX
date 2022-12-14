@@ -38,8 +38,6 @@ export const BlockchainTab = (): JSX.Element => {
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
 
-  console.log("blockchain", blockchainTableRows);
-
   return (
     <Styled.BlockTabWrapper>
       <Styled.StatsCardsDeck>
