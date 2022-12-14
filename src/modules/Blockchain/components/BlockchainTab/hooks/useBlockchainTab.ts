@@ -1,5 +1,3 @@
-import { ParsedUrlQuery } from "querystring";
-
 import { uniq } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
@@ -20,11 +18,10 @@ import {
   UseBlockchainTabResult,
 } from "./useBlockchainTab.types";
 
-export function useBlockchainTab(
-  routerQuery?: ParsedUrlQuery
-): UseBlockchainTabResult {
+export function useBlockchainTab(): UseBlockchainTabResult {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchDataSource, setSearchDataSource] = useState<DataTableRow[]>([]);
+  const [blockchainTableRows, setDataTableRows] = useState<DataTableRow[]>();
   const [currentBlock, setCurrentBlock] = useState<number>(0);
   const [lastIrreversibleBlock, setLastIrreversibleBlock] =
     useState<string>("");
@@ -33,7 +30,6 @@ export function useBlockchainTab(
     amount: 0,
     symbol: "TEST",
   });
-  const [blockchainTableRows, setDataTableRows] = useState<DataTableRow[]>([]);
   const [blockchainStats, setBlockchainStats] = useState<BlockchainStats>({
     currentBlock: [],
     lastIrreversible: [],
@@ -53,26 +49,8 @@ export function useBlockchainTab(
   const { setPrecision } = useAsset();
   const { formDate } = useFormDate();
 
-  const getBlockchainData = useCallback(async () => {
-    try {
-      const recentBlocks = getRecentBlocks();
-
-      const [chain, blockData, dynamic] = await Promise.all([
-        getChain(),
-        getBlockData(),
-        getDynamic(),
-      ]);
-      const chainAvgTime = getAvgBlockTime();
-
-      const blockRows: DataTableRow[] = recentBlocks.map((block) => {
-        return {
-          key: block.id as number,
-          blockID: block.id as number,
-          time: formDate(block.timestamp, ["month", "date", "year", "time"]),
-          witness: block.witness_account_name,
-          transaction: block.transactions.length,
-        };
-      });
+  const formBlockchainColumns = useCallback(
+    (blockRows: DataTableRow[]) => {
       const allWitnesses = blockRows.map((block) => block.witness);
       const witnesses = uniq(allWitnesses);
       const updateBlockColumns = BlockColumns.map((column) => {
@@ -81,10 +59,33 @@ export function useBlockchainTab(
             return { text: witness, value: witness };
           });
         }
-        return { ...column };
+        return { ...column } as BlockColumnType;
       });
-      setBlockColumns(updateBlockColumns);
+      return updateBlockColumns;
+    },
+    [BlockColumns]
+  );
+
+  const getBlockchainData = useCallback(async () => {
+    try {
+      const recentBlocks = getRecentBlocks();
+      const [chain, blockData, dynamic] = await Promise.all([
+        getChain(),
+        getBlockData(),
+        getDynamic(),
+      ]);
       if (defaultAsset && chain && blockData && dynamic) {
+        const chainAvgTime = getAvgBlockTime();
+        console.log("recentBlocks", recentBlocks);
+        const blockRows: DataTableRow[] = recentBlocks.map((block) => {
+          return {
+            key: block.id as number,
+            blockID: block.id as number,
+            time: formDate(block.timestamp, ["month", "date", "year", "time"]),
+            witness: block.witness_account_name,
+            transaction: block.transactions.length,
+          };
+        });
         const distance_form_irreversible =
           blockData.head_block_number - blockData.last_irreversible_block_num;
         const supplyAmount = setPrecision(
@@ -92,72 +93,96 @@ export function useBlockchainTab(
           parseInt(dynamic.current_supply),
           defaultAsset.precision
         );
-        setCurrentBlock(blockData.head_block_number);
-        setLastIrreversibleBlock(
-          blockData.last_irreversible_block_num +
+        return {
+          blockRows,
+          currentBlock: blockData.head_block_number,
+          lastIrreversibleBlock:
+            blockData.last_irreversible_block_num +
             " (-" +
             distance_form_irreversible +
-            ")"
-        );
-        setAvgTime(Number(chainAvgTime.toFixed(0)));
-        setSupply({
-          amount: supplyAmount,
-          symbol: defaultAsset.symbol,
-        });
-        setDataTableRows(blockRows);
-        setSearchDataSource(blockRows);
-        setBlockchainStats({
-          currentBlock: updateArrayWithLimit(
-            blockchainStats.currentBlock,
-            blockData.head_block_number,
-            99
-          ),
-          lastIrreversible: updateArrayWithLimit(
-            blockchainStats.lastIrreversible,
-            distance_form_irreversible,
-            99
-          ),
-          avgTime: updateArrayWithLimit(
-            blockchainStats.avgTime,
-            Number(chainAvgTime.toFixed(0)),
-            99
-          ),
-          supply: updateArrayWithLimit(
-            blockchainStats.supply,
-            supplyAmount,
-            99
-          ),
-        });
-        setLoading(false);
+            ")",
+          avgTime: Number(chainAvgTime.toFixed(0)),
+          supply: {
+            amount: supplyAmount,
+            symbol: defaultAsset.symbol,
+          },
+          blockchainStats: {
+            currentBlock: updateArrayWithLimit(
+              blockchainStats.currentBlock,
+              blockData.head_block_number,
+              99
+            ),
+            lastIrreversible: updateArrayWithLimit(
+              blockchainStats.lastIrreversible,
+              distance_form_irreversible,
+              99
+            ),
+            avgTime: updateArrayWithLimit(
+              blockchainStats.avgTime,
+              Number(chainAvgTime.toFixed(0)),
+              99
+            ),
+            supply: updateArrayWithLimit(
+              blockchainStats.supply,
+              supplyAmount,
+              99
+            ),
+          },
+        };
       }
     } catch (e) {
-      setLoading(false);
       console.log(e);
     }
   }, [
-    defaultAsset,
+    getRecentBlocks,
     getChain,
     getBlockData,
     getDynamic,
+    defaultAsset,
+    getAvgBlockTime,
+    setPrecision,
+    updateArrayWithLimit,
+  ]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function setBlockchainData() {
+      setLoading(true);
+      const blockData = await getBlockchainData();
+      if (!ignore && blockData) {
+        const updatedColumns = formBlockchainColumns(blockData.blockRows);
+        setBlockColumns(updatedColumns);
+        setDataTableRows(blockData.blockRows);
+        setSearchDataSource(blockData.blockRows);
+        setCurrentBlock(blockData.currentBlock);
+        setLastIrreversibleBlock(blockData.lastIrreversibleBlock);
+        setAvgTime(blockData.avgTime);
+        setSupply(blockData.supply);
+        setBlockchainStats(blockData.blockchainStats);
+        setLoading(false);
+      }
+    }
+    setBlockchainData();
+
+    const blockchainInterval = setInterval(() => setBlockchainData(), 3000);
+    return () => {
+      ignore = true;
+      clearInterval(blockchainInterval);
+    };
+  }, [
+    getBlockchainData,
+    formBlockchainColumns,
+    setBlockColumns,
+    setDataTableRows,
+    setSearchDataSource,
     setCurrentBlock,
     setLastIrreversibleBlock,
     setAvgTime,
     setSupply,
-    setDataTableRows,
     setBlockchainStats,
     setLoading,
   ]);
-
-  useEffect(() => {
-    const intervalTime = avgTime > 0 ? avgTime * 1000 : 3000;
-    const blockchainInterval = setInterval(
-      () => getBlockchainData(),
-      intervalTime
-    );
-    return () => {
-      clearInterval(blockchainInterval);
-    };
-  }, [getBlockchainData, routerQuery]);
 
   return {
     loading,

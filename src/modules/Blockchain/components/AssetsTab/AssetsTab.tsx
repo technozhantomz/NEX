@@ -52,7 +52,7 @@ export const AssetsTab = (): JSX.Element => {
         </Styled.AssetHeader>
         <SearchTableInput
           columns={assetsColumns as ColumnsType<AssetTableRow>}
-          dataSource={assetTableRows}
+          dataSource={assetTableRows ?? []}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(

@@ -1,5 +1,3 @@
-import { ParsedUrlQuery } from "querystring";
-
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
@@ -23,10 +21,7 @@ import * as Styled from "./BlockchainTab.styled";
 import { BlockPrintTable } from "./components";
 import { DataTableRow, useBlockchainTab } from "./hooks";
 
-type Props = {
-  routerQuery: ParsedUrlQuery;
-};
-export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
+export const BlockchainTab = (): JSX.Element => {
   const {
     loading,
     blockColumns,
@@ -38,10 +33,12 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
     supply,
     searchDataSource,
     setSearchDataSource,
-  } = useBlockchainTab(routerQuery);
+  } = useBlockchainTab();
   const router = useRouter();
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
+
+  console.log("blockchain", blockchainTableRows);
 
   return (
     <Styled.BlockTabWrapper>
@@ -86,7 +83,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
         </Styled.BlockHeader>
         <SearchTableInput
           columns={blockColumns as ColumnsType<DataTableRow>}
-          dataSource={blockchainTableRows}
+          dataSource={blockchainTableRows ?? []}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
@@ -105,7 +102,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
           {` / `}
           <CSVLink
             filename={"BlocksTable.csv"}
-            data={blockchainTableRows}
+            data={blockchainTableRows ?? []}
             className="btn btn-primary"
           >
             {counterpart.translate(`links.csv`)}
@@ -116,7 +113,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={loading && !blockchainTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -171,7 +168,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
           dataSource={searchDataSource}
           columns={blockColumns as ColumnsType<DataTableRow>}
           rowKey={(record) => record.blockID}
-          loading={loading}
+          loading={loading && !blockchainTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -194,8 +191,8 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
         <BlockPrintTable
           ref={componentRef}
           blockColumns={blockColumns}
-          blockchainTableRows={blockchainTableRows}
-          loading={loading}
+          blockchainTableRows={blockchainTableRows ?? []}
+          loading={loading && !blockchainTableRows}
         />
       </Styled.PrintTable>
     </Styled.BlockTabWrapper>
