@@ -347,6 +347,9 @@ export const en = {
       offer: {
         title: "Offer",
       },
+      peer_link_connect: {
+        title: "Add sidechain address",
+      },
       proposal_create: {
         title: "Create proposal",
       },
@@ -958,6 +961,7 @@ export const en = {
         "The private keys must be saved securely as it will be shown just once during the deposit address creation",
       bitcoin_deposit_address: "Deposit address (BTC address)",
       sidechain: "Sidechain",
+      sidechains: "Sidechains",
       fetching_price: "Fetching price",
       withdraw_public_key_address: "Compressed Withdraw Public key & Address",
       btc_withdraw_instruction:
@@ -1163,6 +1167,7 @@ export const en = {
         "You have successfully canceled #%(selectedOrderId)s order",
       successfully_generate_btc_addresses:
         "You have successfully generated bitcoin deposit and withdrawal addresses",
+      update_sidechain: "You have successfully updates your sidechain account",
     },
   },
   settings: {

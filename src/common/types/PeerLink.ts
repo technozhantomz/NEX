@@ -6,4 +6,5 @@ export type MetaMask = {
 export type HiveKeyChain = {
   isConnected: boolean;
   userName: string;
+  activePubkey: string;
 };

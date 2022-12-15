@@ -2,7 +2,6 @@ import counterpart from "counterpart";
 import { NextPage } from "next";
 import Link from "next/link";
 
-import { ETHEREUM_NETWORK, HIVE_NETWORK } from "../../../../api/params";
 import {
   Layout,
   PasswordModal,
@@ -26,11 +25,13 @@ const PeerLink: NextPage = () => {
     hiveKeyChain,
     localStorageAccount,
     peerLinkConnectForm,
+    loadingTransaction,
     transactionErrorMessage,
     transactionSuccessMessage,
+    shouldUpdateSons,
+    sidechainsUpdating,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
-    loadingTransaction,
     handleConnect,
     connectToMetaMask,
     connectToHiveKeyChain,
@@ -61,11 +62,12 @@ const PeerLink: NextPage = () => {
         <Styled.ConnectForm
           form={peerLinkConnectForm}
           name="PeerLinkConnectForm"
-          onFinish={showPasswordModal}
+          onFinish={shouldUpdateSons ? showPasswordModal : undefined}
         >
           <Styled.ConnectCard>
             <Styled.ConnectButtons>
               <Styled.ConnectButton
+                htmlType="submit"
                 className={hiveKeyChain.isConnected ? "connected" : "required"}
                 onClick={connectToHiveKeyChain}
               >
@@ -97,6 +99,7 @@ const PeerLink: NextPage = () => {
                 )}
               </Styled.ConnectButton>
               <Styled.ConnectButton
+                htmlType="submit"
                 className={metaMask.isConnected ? "connected" : "required"}
                 onClick={connectToMetaMask}
               >
@@ -131,7 +134,7 @@ const PeerLink: NextPage = () => {
                   <span>
                     {counterpart.translate(
                       "pages.peerlink.connect.peerplays_required"
-                    )}
+                    )}{" "}
                     <Link href={"/login"}>
                       {counterpart.translate("links.login")}
                     </Link>{" "}
@@ -171,11 +174,13 @@ const PeerLink: NextPage = () => {
               <p>
                 {counterpart.translate("general.download")}{" "}
                 <a target="_blank" href="https://hive-keychain.com/">
-                  {counterpart.translate("pages.peerlink.hive_keychain")}
+                  {counterpart.translate(
+                    "pages.peerlink.connect.hive_keychain"
+                  )}
                 </a>{" "}
                 {counterpart.translate("general.or")}{" "}
                 <a target="blank" href="https://metamask.io/download/">
-                  {counterpart.translate("pages.peerlink.metamask")}
+                  {counterpart.translate("pages.peerlink.connect.metamask")}
                 </a>
               </p>
             </Styled.ConnectDownloads>
@@ -194,7 +199,7 @@ const PeerLink: NextPage = () => {
           loadingTransaction={loadingTransaction}
           account={localStorageAccount}
           fee={0}
-          sidechains={[HIVE_NETWORK, ETHEREUM_NETWORK]}
+          sidechains={sidechainsUpdating}
           transactionType="peer_link_connect"
         />
       </Styled.ConnectForm.Provider>

@@ -11,6 +11,8 @@ export type UsePeerLinkResult = {
   transactionErrorMessage: string;
   transactionSuccessMessage: string;
   loadingTransaction: boolean;
+  shouldUpdateSons: boolean;
+  sidechainsUpdating: string[];
   setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
   setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   handleConnect: (signerKey: SignerKey) => Promise<void>;

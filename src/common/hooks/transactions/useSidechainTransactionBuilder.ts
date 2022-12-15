@@ -27,7 +27,12 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
           sidechain_address_account: user_account_id,
           sidechain,
           deposit_public_key,
-          deposit_address,
+          deposit_address:
+            sidechain == "bitcoin"
+              ? ""
+              : deposit_address
+              ? deposit_address
+              : "",
           deposit_address_data: "",
           withdraw_public_key,
           withdraw_address,

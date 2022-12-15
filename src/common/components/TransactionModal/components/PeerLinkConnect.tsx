@@ -24,10 +24,8 @@ export const PeerLinkConnect = ({
         </Link>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
-        <p>{counterpart.translate(`field.labels.sidechain`)}</p>
-        {sidechains.forEach((sidechain) => {
-          <p>{sidechain}</p>;
-        })}
+        <p>{counterpart.translate(`field.labels.sidechains`)}</p>
+        <p>{sidechains.toString()}</p>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.labels.fee`)}</p>

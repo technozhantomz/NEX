@@ -347,6 +347,9 @@ export const ru = {
       offer: {
         title: "Предложение",
       },
+      peer_link_connect: {
+        title: "Добавить адрес боковой цепи",
+      },
       proposal_create: {
         title: "Создать предложение",
       },
@@ -1166,6 +1169,7 @@ export const ru = {
       canceled_limit_order: "Вы успешно отменили заказ #%(selectedOrderId)s",
       successfully_generate_btc_addresses:
         "Вы успешно сгенерировали адреса ввода и вывода биткойнов",
+      update_sidechain: "Вы успешно обновили свой сайдчейн-аккаунт",
     },
   },
   settings: {

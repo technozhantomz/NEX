@@ -32,6 +32,7 @@ const defaultPeerLinkState: PeerLinkContextType = {
   hiveKeyChain: {
     isConnected: false,
     userName: "",
+    activePubkey: "",
   },
   connectToMetaMask: () =>
     function () {
@@ -56,6 +57,9 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
   const [hiveUserName, setHiveUserName] = useSessionStorage(
     "PL-hiveUserName"
   ) as [string, (value: string) => void];
+  const [hiveActivePubKey, setHiveActivePubKey] = useSessionStorage(
+    "PL-hiveActivePubKey"
+  ) as [string, (value: string) => void];
   const { ethereum, connect } = useMetaMask();
 
   const { localStorageAccount } = useUserContext();
@@ -73,11 +77,10 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
   }, [localStorageAccount, setMetaMask]);
 
   const connectToHiveKeyChain = async () => {
-    console.log("connect to hive");
     const args = {
       title: "Sign In",
       message: `Click "Confirm" to sign in with Hive Keychain`,
-      key: "Posting",
+      key: "Active",
       account: null,
       rpc: null,
     };
@@ -92,9 +95,11 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
           async (response: any) => {
             if (response.success) {
               setHiveUserName(response.data.username);
+              setHiveActivePubKey(response.publicKey);
               setHiveKeyChain({
                 isConnected: true,
                 userName: response.data.username,
+                activePubkey: response.publicKey,
               });
             }
           },
@@ -114,6 +119,7 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
       setHiveKeyChain({
         isConnected: true,
         userName: hiveUserName,
+        activePubkey: hiveActivePubKey,
       });
     }
     if (ethereum) {

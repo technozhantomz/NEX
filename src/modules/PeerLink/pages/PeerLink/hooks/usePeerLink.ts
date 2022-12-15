@@ -1,16 +1,17 @@
 import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
-// import {
-//   useSidechainTransactionBuilder,
-//   useTransactionBuilder,
-// } from "../../../../../common/hooks";
+import { ETHEREUM_NETWORK, HIVE_NETWORK } from "../../../../../api/params";
+import {
+  useSidechainTransactionBuilder,
+  useTransactionBuilder,
+} from "../../../../../common/hooks";
 import {
   usePeerLinkContext,
   useSideChainContext,
   useUserContext,
 } from "../../../../../common/providers";
-import { SignerKey } from "../../../../../common/types";
+import { SignerKey, Transaction } from "../../../../../common/types";
 import { Form } from "../../../../../ui/src";
 
 import { PeerLinkConnectForm, UsePeerLinkResult } from "./usePeerLink.types";
@@ -21,77 +22,123 @@ export function usePeerLink(): UsePeerLinkResult {
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
     useState<string>("");
   const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const [shouldUpdateSons, setShouldUpdateSons] = useState<boolean>(false);
+  const [sidechainsUpdating, setSidechainsUpdating] = useState<string[]>([]);
+  const [ethTrx, setEthTrx] = useState<Transaction | undefined>(undefined);
+  const [hiveTrx, setHiveTrx] = useState<Transaction | undefined>(undefined);
   const [peerLinkConnectForm] = Form.useForm<PeerLinkConnectForm>();
   const { metaMask, hiveKeyChain, connectToMetaMask, connectToHiveKeyChain } =
     usePeerLinkContext();
-  const { hiveSidechainAccount, ethereumSidechainAccount } =
-    useSideChainContext();
-  const { localStorageAccount } = useUserContext();
-  // const { localStorageAccount, id } = useUserContext();
-  // const { buildTrx } = useTransactionBuilder();
-  // const { buildAddingSidechainTransaction } = useSidechainTransactionBuilder();
+  const {
+    hiveSidechainAccount,
+    ethereumSidechainAccount,
+    hasHiveAddress,
+    hasEthereumAddress,
+  } = useSideChainContext();
+  const { localStorageAccount, id } = useUserContext();
+  const { buildTrx } = useTransactionBuilder();
+  const { buildAddingSidechainTransaction } = useSidechainTransactionBuilder();
 
   const handleConnect = useCallback(
     async (signerKey: SignerKey) => {
-      console.log(signerKey); //DELETE ME FROM
       setTransactionErrorMessage("");
       let trxResult;
       try {
         setLoadingTransaction(true);
-        // const trx = buildAddingSidechainTransaction(
-        //   id,
-        //   metaMask.selectedAddress,
-        //   metaMask.selectedAddress,
-        //   metaMask.selectedAddress,
-        //   metaMask.selectedAddress,
-        //   "ethereum"
-        // );
-
-        // trxResult = await buildTrx([trx], [signerKey]);
+        if (ethTrx && hiveTrx)
+          trxResult = await buildTrx([ethTrx], [signerKey]);
+        if (ethTrx && hiveTrx === undefined)
+          trxResult = await buildTrx([ethTrx], [signerKey]);
+        if (hiveTrx && ethTrx === undefined)
+          trxResult = await buildTrx([hiveTrx], [signerKey]);
       } catch (error) {
         console.log(error);
         setTransactionErrorMessage(
           counterpart.translate(`field.errors.unable_transaction`)
         );
+        setShouldUpdateSons(false);
         setLoadingTransaction(false);
       }
       if (trxResult) {
         setTransactionErrorMessage("");
         setTransactionSuccessMessage(
-          counterpart.translate(`field.success.published_votes`)
+          counterpart.translate(`field.success.update_sidechain`)
         );
+        setShouldUpdateSons(false);
         setLoadingTransaction(false);
-        // afterCloseTransactionModal.current = () => {
-        //   formAccountBalancesByName(localStorageAccount);
-        //   getUserVotes();
-        //   setIsVotesChanged(false);
-        //   setConfirmed(true);
-        // };
+        if (ethTrx && hiveTrx) {
+          setEthTrx(undefined);
+          trxResult = await buildTrx([hiveTrx], [signerKey]);
+        }
+        if (ethTrx && hiveTrx === undefined) setEthTrx(undefined);
+        if (hiveTrx && ethTrx === undefined) setHiveTrx(undefined);
+        console.log("after");
       } else {
         setTransactionErrorMessage(
           counterpart.translate(`field.errors.unable_transaction`)
         );
+        setShouldUpdateSons(false);
         setLoadingTransaction(false);
       }
     },
-    [setTransactionErrorMessage, setLoadingTransaction]
+    [ethTrx, hiveTrx, setTransactionErrorMessage, setLoadingTransaction]
   );
 
   useEffect(() => {
+    const sidechains: string[] = [];
+    setEthTrx(undefined);
+    setHiveTrx(undefined);
     if (
       localStorageAccount &&
       hiveKeyChain.isConnected &&
       metaMask.isConnected
     ) {
-      //TODO: fix this logic?
-      if (ethereumSidechainAccount?.deposit_address !== hiveKeyChain.userName) {
-        //TODO: get signing_key then update sons
+      if (
+        !hasEthereumAddress ||
+        ethereumSidechainAccount?.deposit_address !== metaMask.selectedAddress
+      ) {
+        sidechains.push(ETHEREUM_NETWORK);
+        setEthTrx(
+          buildAddingSidechainTransaction(
+            id,
+            metaMask.selectedAddress,
+            metaMask.selectedAddress,
+            metaMask.selectedAddress,
+            metaMask.selectedAddress,
+            "ethereum"
+          )
+        );
       }
-      if (hiveSidechainAccount?.deposit_address !== metaMask.selectedAddress) {
-        //TODO: get signing_key then update sons
+      if (
+        !hasHiveAddress ||
+        hiveSidechainAccount?.deposit_address !== hiveKeyChain.userName
+      ) {
+        sidechains.push(HIVE_NETWORK);
+        setHiveTrx(
+          buildAddingSidechainTransaction(
+            id,
+            hiveKeyChain.activePubkey,
+            hiveKeyChain.userName,
+            hiveKeyChain.activePubkey,
+            hiveKeyChain.userName,
+            "hive"
+          )
+        );
       }
+      setShouldUpdateSons(true);
+      setSidechainsUpdating(sidechains);
+      peerLinkConnectForm.submit();
     }
-  }, [localStorageAccount, metaMask, hiveKeyChain]);
+  }, [
+    id,
+    localStorageAccount,
+    metaMask,
+    hiveKeyChain,
+    hasEthereumAddress,
+    hasHiveAddress,
+    ethereumSidechainAccount,
+    hiveSidechainAccount,
+  ]);
 
   return {
     metaMask,
@@ -101,6 +148,8 @@ export function usePeerLink(): UsePeerLinkResult {
     transactionErrorMessage,
     transactionSuccessMessage,
     loadingTransaction,
+    shouldUpdateSons,
+    sidechainsUpdating,
     setTransactionErrorMessage,
     setTransactionSuccessMessage,
     handleConnect,

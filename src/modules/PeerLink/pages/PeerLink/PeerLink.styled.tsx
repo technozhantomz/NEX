@@ -1,4 +1,4 @@
-import { Card, Form, styled } from "../../../../ui/src";
+import { Button, Card, Form, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 import { mixIns } from "../../../../ui/src/mixins";
@@ -28,7 +28,7 @@ export const ConnectButtons = styled.div`
     flex-direction: row;
   }
 `;
-export const ConnectButton = styled.button`
+export const ConnectButton = styled(Button)`
   width: 100%;
   max-width: 300px;
   display: flex;
@@ -44,6 +44,11 @@ export const ConnectButton = styled.button`
   }
   &.connected {
     background-color: ${colors.inactiveColor};
+  }
+  &:hover,
+  &:active {
+    color: ${colors.textColor};
+    border-color: ${colors.borderColorBase};
   }
   .anticon {
     font-size: 20px;
