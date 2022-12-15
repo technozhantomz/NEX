@@ -3,25 +3,21 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-import {
-  ActivityAndNotificationTable,
-  Layout,
-} from "../../../../common/components";
+import { Layout } from "../../../../common/components";
 import {
   useUserContext,
   useViewportContext,
 } from "../../../../common/providers";
 import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
-import { OrdersTab } from "../../components";
 
 import * as Styled from "./ProfilePage.styled";
-
-const { TabPane } = Styled.Tabs;
+import { ProfileTabItems } from "./ProfileTabItems";
 
 const ProfilePage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
   const { localStorageAccount } = useUserContext();
+  const profileTabItems = ProfileTabItems(localStorageAccount);
   const router = useRouter();
   const { tab } = router.query;
   const renderTabBar = (props: any, DefaultTabBar: any) => (
@@ -79,24 +75,8 @@ const ProfilePage: NextPage = () => {
             if (sm) setVisible(false);
           }}
           renderTabBar={renderTabBar}
-        >
-          <TabPane tab="Orders" key="orders">
-            <OrdersTab />
-          </TabPane>
-          <TabPane tab="Activities" key="activities">
-            <ActivityAndNotificationTable
-              userName={localStorageAccount}
-              showHeader={true}
-              isNotificationTab={false}
-            />
-          </TabPane>
-          <TabPane tab="Notifications" key="notifications">
-            <ActivityAndNotificationTable
-              showHeader={true}
-              isNotificationTab={true}
-            />
-          </TabPane>
-        </Styled.Tabs>
+          items={profileTabItems}
+        />
       </Styled.ProfileCard>
     </Layout>
   );
