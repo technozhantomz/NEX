@@ -41,18 +41,18 @@ export const ActivityAndNotificationColumns = (
   markTheNotificationAsReadOrUnread: (id: string, unread: boolean) => void
 ): ActivityAndNotificationType[] => {
   const headings = isNotificationTab
-    ? ["time", "translated_type", "info", "id", "fee", "status"]
-    : ["time", "translated_type", "info", "id", "fee"];
+    ? ["time", "type", "info", "id", "fee", "status"]
+    : ["time", "type", "info", "id", "fee"];
 
   const keys = isNotificationTab
-    ? ["time", "translatedType", "info", "id", "fee", "status"]
-    : ["time", "translatedType", "info", "id", "fee"];
+    ? ["time", "type", "info", "id", "fee", "status"]
+    : ["time", "type", "info", "id", "fee"];
 
   const renders = isNotificationTab
     ? [
         undefined,
-        (_type: string, record: any): JSX.Element => (
-          <ActivityAndNotificationTag type={record.type} />
+        (type: string): JSX.Element => (
+          <ActivityAndNotificationTag type={type} />
         ),
         (value: string): JSX.Element => (
           <UserLinkExtractor infoString={value} />
@@ -77,8 +77,8 @@ export const ActivityAndNotificationColumns = (
       ]
     : [
         undefined,
-        (_type: string, record: any): JSX.Element => (
-          <ActivityAndNotificationTag type={record.type} />
+        (type: string): JSX.Element => (
+          <ActivityAndNotificationTag type={type} />
         ),
         (value: string): JSX.Element => (
           <UserLinkExtractor infoString={value} />

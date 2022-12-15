@@ -1224,7 +1224,6 @@ export const ru = {
     filled: "Заполненный",
     total: "Общий",
     status_actions: "Статус/Действия",
-    translated_type: "Тип",
   },
   tableFilters: {
     avtive: "Активный",
