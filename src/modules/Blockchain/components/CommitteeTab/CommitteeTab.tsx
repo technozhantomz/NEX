@@ -51,7 +51,7 @@ export const CommitteeTab = (): JSX.Element => {
         </Styled.CommitteeHeader>
         <SearchTableInput
           columns={CommitteeColumns as ColumnsType<unknown>}
-          dataSource={committeeTableRows}
+          dataSource={committeeTableRows ?? []}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
@@ -70,7 +70,7 @@ export const CommitteeTab = (): JSX.Element => {
           {` / `}
           <CSVLink
             filename={"CommitteeTable.csv"}
-            data={committeeTableRows}
+            data={committeeTableRows ?? []}
             className="btn btn-primary"
           >
             {counterpart.translate(`links.csv`)}
@@ -81,7 +81,7 @@ export const CommitteeTab = (): JSX.Element => {
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={loading && !committeeTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -142,7 +142,7 @@ export const CommitteeTab = (): JSX.Element => {
         <Styled.CommitteeTable
           dataSource={searchDataSource}
           columns={CommitteeColumns as ColumnsType<unknown>}
-          loading={loading}
+          loading={loading && !committeeTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -157,9 +157,9 @@ export const CommitteeTab = (): JSX.Element => {
       <Styled.PrintTable>
         <CommitteePrintTable
           ref={componentRef}
-          loading={loading}
+          loading={loading && !committeeTableRows}
           committeeColumns={CommitteeColumns}
-          committeeTableRows={committeeTableRows}
+          committeeTableRows={committeeTableRows ?? []}
         />
       </Styled.PrintTable>
     </Styled.CommitteeTabWrapper>

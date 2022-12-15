@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export type UseCommitteeTabResult = {
   loading: boolean;
-  committeeTableRows: CommitteeTableRow[];
+  committeeTableRows: CommitteeTableRow[] | undefined;
   activeCommittee: number;
   committeeStats: number[];
   searchDataSource: CommitteeTableRow[];

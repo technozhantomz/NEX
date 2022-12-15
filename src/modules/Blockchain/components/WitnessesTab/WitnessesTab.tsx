@@ -94,7 +94,7 @@ export const WitnessesTab = (): JSX.Element => {
         </Styled.WitnessesHeader>
         <SearchTableInput
           columns={WitnessesColumns as ColumnsType<unknown>}
-          dataSource={witnessTableRows}
+          dataSource={witnessTableRows ?? []}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
@@ -113,7 +113,7 @@ export const WitnessesTab = (): JSX.Element => {
           {` / `}
           <CSVLink
             filename={"WitnessesTable.csv"}
-            data={witnessTableRows}
+            data={witnessTableRows ?? []}
             className="btn btn-primary"
           >
             {counterpart.translate(`links.csv`)}
@@ -124,7 +124,7 @@ export const WitnessesTab = (): JSX.Element => {
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={loading && !witnessTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -215,7 +215,7 @@ export const WitnessesTab = (): JSX.Element => {
         <Styled.WitnessesTable
           dataSource={searchDataSource}
           columns={WitnessesColumns as ColumnsType<unknown>}
-          loading={loading}
+          loading={loading && !witnessTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -230,9 +230,9 @@ export const WitnessesTab = (): JSX.Element => {
       <Styled.PrintTable>
         <WitnessesPrintTable
           ref={componentRef}
-          loading={loading}
+          loading={loading && !witnessTableRows}
           witnessesColumns={WitnessesColumns}
-          witnessTableRows={witnessTableRows}
+          witnessTableRows={witnessTableRows ?? []}
         />
       </Styled.PrintTable>
     </Styled.WitnessesTabWrapper>

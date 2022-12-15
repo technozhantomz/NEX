@@ -64,7 +64,7 @@ export const SonsTab = (): JSX.Element => {
         </Styled.SonsHeader>
         <SearchTableInput
           columns={SonsColumns as ColumnsType<unknown>}
-          dataSource={sonsTableRows}
+          dataSource={sonsTableRows ?? []}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(`pages.blocks.sons.search_sons`),
@@ -81,7 +81,7 @@ export const SonsTab = (): JSX.Element => {
           {` / `}
           <CSVLink
             filename={"SonsTable.csv"}
-            data={sonsTableRows}
+            data={sonsTableRows ?? []}
             className="btn btn-primary"
           >
             {counterpart.translate(`links.csv`)}
@@ -92,7 +92,7 @@ export const SonsTab = (): JSX.Element => {
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={loading && !sonsTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -153,7 +153,7 @@ export const SonsTab = (): JSX.Element => {
         <Styled.SonsTable
           dataSource={searchDataSource}
           columns={SonsColumns as ColumnsType<unknown>}
-          loading={loading}
+          loading={loading && !sonsTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -168,8 +168,8 @@ export const SonsTab = (): JSX.Element => {
       <Styled.PrintTable>
         <SonsPrintTable
           ref={componentRef}
-          loading={loading}
-          sonsTableRows={sonsTableRows}
+          loading={loading && !sonsTableRows}
+          sonsTableRows={sonsTableRows ?? []}
           sonsColumns={SonsColumns}
         />
       </Styled.PrintTable>

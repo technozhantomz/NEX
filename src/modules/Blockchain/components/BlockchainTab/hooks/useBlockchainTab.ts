@@ -145,7 +145,6 @@ export function useBlockchainTab(): UseBlockchainTabResult {
 
   useEffect(() => {
     let ignore = false;
-
     async function setBlockchainData() {
       setLoading(true);
       const blockData = await getBlockchainData();
