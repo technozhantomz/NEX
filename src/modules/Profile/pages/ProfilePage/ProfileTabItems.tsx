@@ -20,7 +20,11 @@ export const ProfileTabItems = (
       showHeader={true}
       isNotificationTab={false}
     />,
-    <ActivityAndNotificationTable showHeader={true} isNotificationTab={true} />,
+    <ActivityAndNotificationTable
+      userName={localStorageAccount}
+      showHeader={true}
+      isNotificationTab={true}
+    />,
   ];
 
   return label.map((item, index) => {

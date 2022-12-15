@@ -13,7 +13,6 @@ export type ActivityAndNotificationType = {
   render:
     | ((value: string) => JSX.Element)
     | ((status: boolean, record: any) => JSX.Element)
-    | ((status: string, record: any) => JSX.Element)
     | undefined;
   filters:
     | {
