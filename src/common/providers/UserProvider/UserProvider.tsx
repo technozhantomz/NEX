@@ -103,6 +103,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
           accountId,
         ])) as SidechainAcccount[];
         setSidechainAccounts(accounts);
+        console.log("accounts", accounts);
         if (accounts && accounts.length) {
           const bitcoinSidechain = accounts.find(
             (account) => account.sidechain === "bitcoin"

@@ -19,6 +19,7 @@ export type UseTransferResult = {
   handleTransferSubmit: (value: unknown) => void;
 
   handleValuesChange: (value: unknown) => void;
+  handleHiveDeposit: () => Promise<void>;
 };
 
 export type TransferInputType = "transfer";
