@@ -1,5 +1,4 @@
 import counterpart from "counterpart";
-import router from "next/router";
 import { ReactNode } from "react";
 
 import {
@@ -33,7 +32,7 @@ export const BlockchainTabItems = (
             )}
           </>
         ) : (
-          <BlockchainTab routerQuery={router.query} />
+          <BlockchainTab />
         )}
       </>
     );
