@@ -8,6 +8,7 @@ import {
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const KeyManagementCard = styled.div`
   .ant-form-horizontal {
@@ -29,7 +30,7 @@ export const PasswordFormItem = styled(Form.Item)`
   margin-top: 20px;
   margin-bottom: 20px;
   background: ${colors.white} 0% 0% no-repeat padding-box;
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   align-items: center;
   ${breakpoint.sm} {
     width: 50%;

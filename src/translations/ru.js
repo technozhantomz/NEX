@@ -859,6 +859,19 @@ export const ru = {
         heading: "Требуется ваш пароль или ключ %(neededKeyType)s",
       },
     },
+    peerlink: {
+      heading: "PeerLink",
+      connect: {
+        heading: "Соединять",
+        connected: "Подключено",
+        required: "Обязательно",
+        connect_metamask: "Соединять MetaMask",
+        connect_hive: "Соединять Hive",
+      },
+      transfer: {
+        heading: "Передача",
+      },
+    },
     profile: {
       heading: "Профиль",
       my_profile: "Мой профиль",
@@ -1240,5 +1253,18 @@ export const ru = {
     btc_deposit_account_description:
       "Используется для создания депозитного адреса PeerPlays с мультиподписью выше.",
     peerplays_btc_deposit_address: "Адрес депозита PeerPlays",
+  },
+  transfer: {
+    transfer: "Передача",
+    network: "Сеть",
+    token: "Токен",
+    from: "Из",
+    to: "К",
+    max: "Макс",
+    available: "Доступный",
+    estimated_transfer_fees: "Ориентировочная комиссия за перевод",
+    approx_value: "Приблиз. значение",
+    error_message: "Показать здесь сообщение об ошибке, если таковое имеется",
+    see_full_transfer_history: "Посмотреть полную историю переводов",
   },
 };

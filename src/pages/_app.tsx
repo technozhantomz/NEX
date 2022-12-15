@@ -1,3 +1,4 @@
+import { MetaMaskProvider } from "metamask-react";
 import type { AppProps } from "next/app";
 
 import {
@@ -6,6 +7,7 @@ import {
   ConnectionManagerProvider,
   FeesProvider,
   MenuProvider,
+  PeerLinkProvider,
   PeerplaysApiProvider,
   SettingsProvider,
   UserProvider,
@@ -17,25 +19,29 @@ import "../ui/src/ui.less";
 function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ViewportProvider>
-      <SettingsProvider>
-        <PeerplaysApiProvider>
-          <ConnectionManagerProvider>
-            <AssetsProvider>
-              <UserProvider>
-                <FeesProvider>
-                  <BrowserHistoryProvider>
-                    <UserSettingsProvider>
-                      <MenuProvider>
-                        <Component {...pageProps} />
-                      </MenuProvider>
-                    </UserSettingsProvider>
-                  </BrowserHistoryProvider>
-                </FeesProvider>
-              </UserProvider>
-            </AssetsProvider>
-          </ConnectionManagerProvider>
-        </PeerplaysApiProvider>
-      </SettingsProvider>
+      <MetaMaskProvider>
+        <PeerLinkProvider>
+          <SettingsProvider>
+            <PeerplaysApiProvider>
+              <ConnectionManagerProvider>
+                <AssetsProvider>
+                  <UserProvider>
+                    <FeesProvider>
+                      <BrowserHistoryProvider>
+                        <UserSettingsProvider>
+                          <MenuProvider>
+                            <Component {...pageProps} />
+                          </MenuProvider>
+                        </UserSettingsProvider>
+                      </BrowserHistoryProvider>
+                    </FeesProvider>
+                  </UserProvider>
+                </AssetsProvider>
+              </ConnectionManagerProvider>
+            </PeerplaysApiProvider>
+          </SettingsProvider>
+        </PeerLinkProvider>
+      </MetaMaskProvider>
     </ViewportProvider>
   );
 }
