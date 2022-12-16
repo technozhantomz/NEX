@@ -11,7 +11,7 @@ import {
 export function useBlockDetails(block: number): UseBlockDetailsResult {
   const [hasNextBlock, setHasNextBlock] = useState<boolean>(false);
   const [hasPreviousBlock, setHasPreviousBlock] = useState<boolean>(false);
-  const [blockDetails, setBlockDetails] = useState<BlockDetailsType>({
+  const [blockDetails, _setBlockDetails] = useState<BlockDetailsType>({
     key: block,
     nextSecret: "",
     previousSecret: "",
@@ -26,11 +26,10 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
   const [loadingSideBlocks, setLoadingSideBlocks] = useState<boolean>(true);
 
   const { formLocalDate } = useFormDate();
-  const { getBlock } = useBlockchain();
+  const { getBlock, getBlockData } = useBlockchain();
 
   const getBlockDetails = useCallback(async () => {
     try {
-      setLoading(true);
       const rawBlock = await getBlock(Number(block));
       if (rawBlock) {
         const transactions: TransactionRow[] = rawBlock.transactions.map(
@@ -49,7 +48,7 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
             };
           }
         );
-        setBlockDetails({
+        return {
           key: block,
           nextSecret: rawBlock.next_secret_hash as string,
           previousSecret: rawBlock.previous_secret,
@@ -64,47 +63,66 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
           witness: rawBlock.witness_account_name,
           witnessSignature: rawBlock.witness_signature,
           transactions: transactions,
-        });
-        setLoading(false);
-      } else {
-        setLoading(false);
+        };
       }
     } catch (e) {
       console.log(e);
     }
-  }, [block, setBlockDetails]);
+  }, [block, getBlock]);
 
-  const getSideBlocks = useCallback(async () => {
+  const checkSideBlocksExistence = useCallback(async () => {
+    let hasPreviousBlock = false;
+    let hasNextBlock = false;
     try {
-      setLoadingSideBlocks(true);
-      const nextBlock = await getBlock(Number(block) + 1);
-      if (nextBlock) {
-        setHasNextBlock(true);
-      } else {
-        setHasNextBlock(false);
+      const blockData = await getBlockData();
+      if (block > 1) {
+        hasPreviousBlock = true;
       }
-      const previousBlock = await getBlock(Number(block) - 1);
-      if (previousBlock) {
-        setHasPreviousBlock(true);
-      } else {
-        setHasPreviousBlock(false);
+      if (blockData && block < blockData.head_block_number) {
+        hasNextBlock = true;
       }
-      setLoadingSideBlocks(false);
     } catch (e) {
       console.log(e);
-      setHasNextBlock(false);
-      setHasPreviousBlock(false);
-      setLoadingSideBlocks(false);
     }
-  }, [getBlock, block, setHasNextBlock, setHasPreviousBlock]);
+    return {
+      hasPreviousBlock,
+      hasNextBlock,
+    };
+  }, [getBlockData, block]);
 
   useEffect(() => {
-    getBlockDetails();
-  }, [getBlockDetails]);
+    let ignore = false;
+    async function setBlockDetails() {
+      setLoading(true);
+      const blockDetails = await getBlockDetails();
+      if (!ignore && blockDetails) {
+        _setBlockDetails(blockDetails);
+        setLoading(false);
+      }
+    }
+    setBlockDetails();
+    return () => {
+      ignore = true;
+    };
+  }, [getBlockDetails, setLoading, _setBlockDetails]);
 
   useEffect(() => {
-    getSideBlocks();
-  }, [getSideBlocks]);
+    let ignore = false;
+    async function setSideBlocksExistence() {
+      setLoadingSideBlocks(true);
+      const { hasPreviousBlock, hasNextBlock } =
+        await checkSideBlocksExistence();
+      if (!ignore) {
+        setHasNextBlock(hasNextBlock);
+        setHasPreviousBlock(hasPreviousBlock);
+        setLoadingSideBlocks(false);
+      }
+    }
+    setSideBlocksExistence();
+    return () => {
+      ignore = true;
+    };
+  }, [checkSideBlocksExistence]);
 
   return {
     blockDetails,
