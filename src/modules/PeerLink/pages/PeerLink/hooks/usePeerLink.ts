@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import router from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
 import { ETHEREUM_NETWORK, HIVE_NETWORK } from "../../../../../api/params";
@@ -72,7 +73,7 @@ export function usePeerLink(): UsePeerLinkResult {
         }
         if (ethTrx && hiveTrx === undefined) setEthTrx(undefined);
         if (hiveTrx && ethTrx === undefined) setHiveTrx(undefined);
-        console.log("after");
+        router.push("/peerlink/transfer");
       } else {
         setTransactionErrorMessage(
           counterpart.translate(`field.errors.unable_transaction`)
@@ -81,7 +82,7 @@ export function usePeerLink(): UsePeerLinkResult {
         setLoadingTransaction(false);
       }
     },
-    [ethTrx, hiveTrx, setTransactionErrorMessage, setLoadingTransaction]
+    [id, ethTrx, hiveTrx, setTransactionErrorMessage, setLoadingTransaction]
   );
 
   useEffect(() => {

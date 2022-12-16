@@ -3,7 +3,11 @@ import { useCallback, useState } from "react";
 
 import { useAsset } from "..";
 import { defaultToken } from "../../../api/params";
-import { usePeerplaysApiContext, useUserContext } from "../../providers";
+import {
+  usePeerplaysApiContext,
+  useSideChainContext,
+  useUserContext,
+} from "../../providers";
 import {
   Account,
   Asset,
@@ -24,8 +28,8 @@ export function useAccount(): UseAccountResult {
     savePassword,
     removePassword,
     setLocalStorageAccount,
-    setBitcoinSidechainAccounts,
   } = useUserContext();
+  const { setBitcoinSidechainAccounts } = useSideChainContext();
   const [loading, setLoading] = useState<boolean>(true);
   const { formAssetBalanceById } = useAsset();
   const { dbApi, whaleVaultInstance } = usePeerplaysApiContext();
