@@ -73,6 +73,10 @@ export const ActivityAndNotificationTable = ({
               ),
               suffix: <SearchOutlined />,
             }}
+            fuseProps={{
+              ignoreLocation: true,
+              useExtendedSearch: true,
+            }}
           />
           {!isNotificationTab ? (
             <Styled.DownloadLinks>
