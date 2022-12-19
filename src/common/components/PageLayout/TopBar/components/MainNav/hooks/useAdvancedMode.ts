@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-import { useSettingsContext } from "../../../../../../providers";
+import { useAppSettingsContext } from "../../../../../../providers";
 import { Settings } from "../../../../../../types";
 
 import { UseAdvancedModeResult } from "./useAdvancedMode.types";
 
 export function useAdvancedMode(): UseAdvancedModeResult {
-  const { settings, setSettings } = useSettingsContext();
+  const { settings, setSettings } = useAppSettingsContext();
   const [advancedMode, setAdvancedMode] = useState<boolean>(
     settings?.advancedMode
   );
