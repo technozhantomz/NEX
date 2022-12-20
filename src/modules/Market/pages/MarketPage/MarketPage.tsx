@@ -71,6 +71,7 @@ const MarketPage: NextPage = () => {
           activePair={pair as string}
           selectedAssets={selectedAssets}
           loadingSelectedPair={loadingSelectedPair}
+          showTitle={false}
           isBuyOrder={false}
           orderForm={sellOrderForm}
         />
