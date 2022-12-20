@@ -4,10 +4,6 @@ export type UsePairModalResult = {
   pairModalForm: FormInstance<PairForm>;
   allAssetsSymbols: string[];
   formValidation: FormValidation;
-  useResetFormOnOpenModal: (
-    form: FormInstance<PairForm>,
-    visible: boolean
-  ) => void;
   handleCancel: () => void;
   handleSelectPair: () => void;
   handleSelectRecent: (value: unknown) => void;
@@ -22,4 +18,5 @@ export type FormValidation = {
 export type PairForm = {
   quote: string;
   base: string;
+  recents: string;
 };

@@ -1,11 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
 
 import { SignerKey } from "../../../../../common/types";
-import { OrderColumn, OrderType } from "../../../types";
+import { OrderColumn, OrderRow, OrderType } from "../../../types";
 
 export type { OrderType } from "../../../types";
 
 export type UseOrderBookResult = {
+  ordersRows: OrderRow[];
   orderType: OrderType;
   threshold: number;
   handleThresholdChange: (menuInfo: any) => void;

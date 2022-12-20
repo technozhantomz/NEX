@@ -29,19 +29,16 @@ const MarketPage: NextPage = () => {
   const { pair } = router.query;
   const {
     tradingPairsStats,
-    loadingTradingPairs,
+    loadingTradingPairsStats,
     handleClickOnPair,
-    currentBase,
-    currentQuote,
+    selectedAssets,
     loadingSelectedPair,
     isPairModalVisible,
     setIsPairModalVisible,
     exchanges,
     asks,
     bids,
-    ordersRows,
-    setOrdersRows,
-    loadingOrderRows,
+    loadingAsksBids,
     userOrdersRows,
     loadingUserOrderRows,
     orderHistoryRows,
@@ -54,7 +51,7 @@ const MarketPage: NextPage = () => {
     pageLoaded,
   } = useMarketPage({ currentPair: pair as string });
 
-  return loadingTradingPairs && !pageLoaded ? (
+  return loadingTradingPairsStats && !pageLoaded ? (
     <LoadingIndicator />
   ) : (
     <Layout
@@ -64,6 +61,7 @@ const MarketPage: NextPage = () => {
       description={`Market Page | ${pair}`}
       layout="dex"
     >
+      {/* Mobile and tablet UI */}
       {md ? (
         <>
           <Row>
@@ -110,14 +108,11 @@ const MarketPage: NextPage = () => {
                     showStats={false}
                   />
                   <OrderTabs
-                    currentBase={currentBase}
-                    currentQuote={currentQuote}
+                    selectedAssets={selectedAssets}
                     loadingSelectedPair={loadingSelectedPair}
                     asks={asks}
                     bids={bids}
-                    ordersRows={ordersRows}
-                    setOrdersRows={setOrdersRows}
-                    loadingOrderRows={loadingOrderRows}
+                    loadingAsksBids={loadingAsksBids}
                     userOrdersRows={userOrdersRows}
                     loadingUserOrderRows={loadingUserOrderRows}
                     orderHistoryRows={orderHistoryRows}
@@ -132,15 +127,12 @@ const MarketPage: NextPage = () => {
             <Col className="gutter-row" span={24}>
               <Styled.Container>
                 <OrderTabs
-                  currentBase={currentBase}
-                  currentQuote={currentQuote}
+                  selectedAssets={selectedAssets}
                   loadingSelectedPair={loadingSelectedPair}
                   forUser={true}
                   asks={asks}
                   bids={bids}
-                  ordersRows={ordersRows}
-                  setOrdersRows={setOrdersRows}
-                  loadingOrderRows={loadingOrderRows}
+                  loadingAsksBids={loadingAsksBids}
                   userOrdersRows={userOrdersRows}
                   loadingUserOrderRows={loadingUserOrderRows}
                   orderHistoryRows={orderHistoryRows}
@@ -157,8 +149,7 @@ const MarketPage: NextPage = () => {
                   <TabPane tab="BUY" key="1">
                     <LimitOrderForm
                       activePair={pair as string}
-                      currentBase={currentBase}
-                      currentQuote={currentQuote}
+                      selectedAssets={selectedAssets}
                       loadingSelectedPair={loadingSelectedPair}
                       isBuyOrder={true}
                       showTitle={false}
@@ -168,8 +159,7 @@ const MarketPage: NextPage = () => {
                   <TabPane tab="SELL" key="2">
                     <LimitOrderForm
                       activePair={pair as string}
-                      currentBase={currentBase}
-                      currentQuote={currentQuote}
+                      selectedAssets={selectedAssets}
                       loadingSelectedPair={loadingSelectedPair}
                       isBuyOrder={false}
                       showTitle={false}
@@ -188,8 +178,10 @@ const MarketPage: NextPage = () => {
           />
         </>
       ) : (
+        // Desktop UI
         <Styled.Container>
           <Row>
+            {/* Left side (Market orders and current pair) */}
             <Col span={7}>
               <Styled.ColumnFlex>
                 <PairSelect
@@ -211,14 +203,11 @@ const MarketPage: NextPage = () => {
                   }
                 />
                 <OrderTabs
-                  currentBase={currentBase}
-                  currentQuote={currentQuote}
+                  selectedAssets={selectedAssets}
                   loadingSelectedPair={loadingSelectedPair}
                   asks={asks}
                   bids={bids}
-                  ordersRows={ordersRows}
-                  setOrdersRows={setOrdersRows}
-                  loadingOrderRows={loadingOrderRows}
+                  loadingAsksBids={loadingAsksBids}
                   userOrdersRows={userOrdersRows}
                   loadingUserOrderRows={loadingUserOrderRows}
                   orderHistoryRows={orderHistoryRows}
@@ -229,6 +218,8 @@ const MarketPage: NextPage = () => {
                 />
               </Styled.ColumnFlex>
             </Col>
+
+            {/* Right side (Market stats, Limit order forms and User orders) */}
             <Col span={17}>
               <Row>
                 <Styled.StatsCardsDeck>
@@ -247,8 +238,7 @@ const MarketPage: NextPage = () => {
                 <Col span={12}>
                   <LimitOrderForm
                     activePair={pair as string}
-                    currentBase={currentBase}
-                    currentQuote={currentQuote}
+                    selectedAssets={selectedAssets}
                     loadingSelectedPair={loadingSelectedPair}
                     isBuyOrder={true}
                     orderForm={buyOrderForm}
@@ -257,8 +247,7 @@ const MarketPage: NextPage = () => {
                 <Col span={12}>
                   <LimitOrderForm
                     activePair={pair as string}
-                    currentBase={currentBase}
-                    currentQuote={currentQuote}
+                    selectedAssets={selectedAssets}
                     loadingSelectedPair={loadingSelectedPair}
                     isBuyOrder={false}
                     orderForm={sellOrderForm}
@@ -267,15 +256,12 @@ const MarketPage: NextPage = () => {
               </Row>
               <Row>
                 <OrderTabs
-                  currentBase={currentBase}
-                  currentQuote={currentQuote}
+                  selectedAssets={selectedAssets}
                   loadingSelectedPair={loadingSelectedPair}
                   forUser={true}
                   asks={asks}
                   bids={bids}
-                  ordersRows={ordersRows}
-                  setOrdersRows={setOrdersRows}
-                  loadingOrderRows={loadingOrderRows}
+                  loadingAsksBids={loadingAsksBids}
                   userOrdersRows={userOrdersRows}
                   loadingUserOrderRows={loadingUserOrderRows}
                   orderHistoryRows={orderHistoryRows}

@@ -5,14 +5,12 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from "react";
 
 import { defaultToken } from "../../../../../api/params";
-import { useAsset } from "../../../../../common/hooks";
-import { usePeerplaysApiContext } from "../../../../../common/providers";
-import { Form, FormInstance } from "../../../../../ui/src";
+import { useAsset, useUpdateExchanges } from "../../../../../common/hooks";
+import { Form } from "../../../../../ui/src";
 
 import { PairForm, UsePairModalResult } from "./usePairModal.types";
 
@@ -25,64 +23,43 @@ export function usePairModal({
   setIsVisible,
   currentPair,
 }: Args): UsePairModalResult {
-  const [pairModalForm] = Form.useForm();
-  const [allAssetsSymbols, setAllAssetsSymbols] = useState<string[]>([]);
-  const { dbApi } = usePeerplaysApiContext();
+  const [pairModalForm] = Form.useForm<PairForm>();
+  const [allAssetsSymbols, _setAllAssetsSymbols] = useState<string[]>([]);
   const router = useRouter();
   const { getAllAssets } = useAsset();
+  const { updateExchanges } = useUpdateExchanges();
 
   const handleValuesChange = useCallback(() => {
     pairModalForm.validateFields();
   }, [pairModalForm]);
 
   const handleCancel = useCallback(() => {
+    pairModalForm.resetFields();
     setIsVisible(false);
-  }, [setIsVisible]);
+  }, [setIsVisible, pairModalForm]);
 
   const handleSelectPair = useCallback(() => {
     pairModalForm.validateFields().then(() => {
-      const values = pairModalForm.getFieldsValue();
-      const selectedPair = `${values.quote.trim()}_${values.base.trim()}`;
+      const { quote, base } = pairModalForm.getFieldsValue();
+      const selectedPair = `${quote.trim()}_${base.trim()}`;
       if (selectedPair !== currentPair) {
-        router.push(`/market/${selectedPair}`);
         setIsVisible(false);
+        updateExchanges(selectedPair);
+        pairModalForm.setFieldsValue({
+          recents: currentPair.replace("_", "/"),
+        });
+        router.push(`/market/${selectedPair}`);
       } else {
         setIsVisible(false);
       }
     });
-  }, [setIsVisible, currentPair, pairModalForm]);
-
-  const useResetFormOnOpenModal = (
-    form: FormInstance<PairForm>,
-    visible: boolean
-  ) => {
-    const prevVisibleRef = useRef<boolean>();
-    useEffect(() => {
-      prevVisibleRef.current = visible;
-    }, [visible]);
-    const prevVisible = prevVisibleRef.current;
-
-    useEffect(() => {
-      if (visible && !prevVisible) {
-        form.resetFields();
-      }
-    }, [visible]);
-  };
-
-  const getAllAssetsSymbols = useCallback(async () => {
-    const allAssets = await getAllAssets();
-    if (allAssets && allAssets.length > 0) {
-      const allAssetsSymbols = allAssets.map((asset) => asset.symbol);
-      setAllAssetsSymbols(allAssetsSymbols);
-    }
-  }, [dbApi, setAllAssetsSymbols]);
+  }, [updateExchanges, setIsVisible, currentPair, pairModalForm]);
 
   const handleSelectRecent = useCallback(
     (value: unknown) => {
       const selectedItem = value as string;
       const pair = selectedItem.split("/");
-      pairModalForm.setFieldsValue({ quote: pair[0] });
-      pairModalForm.setFieldsValue({ base: pair[1] });
+      pairModalForm.setFieldsValue({ quote: pair[0], base: pair[1] });
     },
     [pairModalForm]
   );
@@ -131,14 +108,24 @@ export function usePairModal({
   };
 
   useEffect(() => {
-    getAllAssetsSymbols();
-  }, [getAllAssetsSymbols]);
+    let ignore = false;
+    async function setAllAssetsSymbols() {
+      const allAssets = await getAllAssets();
+      if (!ignore && allAssets && allAssets.length > 0) {
+        const allAssetsSymbols = allAssets.map((asset) => asset.symbol);
+        _setAllAssetsSymbols(allAssetsSymbols);
+      }
+    }
+    setAllAssetsSymbols();
+    return () => {
+      ignore = true;
+    };
+  }, [getAllAssets, _setAllAssetsSymbols]);
 
   return {
     pairModalForm,
     formValidation,
     allAssetsSymbols,
-    useResetFormOnOpenModal,
     handleCancel,
     handleSelectPair,
     handleSelectRecent,

@@ -1,8 +1,6 @@
 import counterpart from "counterpart";
-import { Dispatch, SetStateAction } from "react";
 
-import { Asset } from "../../../../common/types";
-import { Order, OrderHistoryRow, OrderRow } from "../../types";
+import { Order, OrderHistoryRow, OrderRow, PairAssets } from "../../types";
 import { HistoryBook } from "../HistoryBook";
 import { OrderBook } from "../OrderBook";
 
@@ -11,15 +9,12 @@ import * as Styled from "./OrderTabs.styled";
 const { TabPane } = Styled.Tabs;
 
 type Props = {
-  currentBase: Asset | undefined;
-  currentQuote: Asset | undefined;
+  selectedAssets: PairAssets | undefined;
   loadingSelectedPair: boolean;
   forUser?: boolean;
   asks: Order[];
   bids: Order[];
-  ordersRows: OrderRow[];
-  setOrdersRows: Dispatch<SetStateAction<OrderRow[]>>;
-  loadingOrderRows: boolean;
+  loadingAsksBids: boolean;
   userOrdersRows: OrderRow[];
   loadingUserOrderRows: boolean;
   orderHistoryRows: OrderHistoryRow[];
@@ -31,14 +26,11 @@ type Props = {
 
 export const OrderTabs = ({
   forUser = false,
-  currentBase,
-  currentQuote,
+  selectedAssets,
   loadingSelectedPair,
   asks,
   bids,
-  ordersRows,
-  setOrdersRows,
-  loadingOrderRows,
+  loadingAsksBids,
   userOrdersRows,
   loadingUserOrderRows,
   orderHistoryRows,
@@ -59,18 +51,15 @@ export const OrderTabs = ({
             ? counterpart.translate(`pages.market.my_open_orders`)
             : counterpart.translate(`pages.market.order_book`)
         }
-        key="1"
+        key={forUser ? "user-order-book" : "order-book"}
       >
         <OrderBook
-          currentBase={currentBase}
-          currentQuote={currentQuote}
+          selectedAssets={selectedAssets}
           loadingSelectedPair={loadingSelectedPair}
           forUser={forUser}
           asks={asks}
           bids={bids}
-          ordersRows={ordersRows}
-          setOrdersRows={setOrdersRows}
-          loadingOrderRows={loadingOrderRows}
+          loadingAsksBids={loadingAsksBids}
           userOrdersRows={userOrdersRows}
           loadingUserOrderRows={loadingUserOrderRows}
           onOrderBookRowClick={onOrderBookRowClick}
@@ -82,11 +71,10 @@ export const OrderTabs = ({
             ? counterpart.translate(`pages.market.my_order_history`)
             : counterpart.translate(`pages.market.history`)
         }
-        key="2"
+        key={forUser ? "user-history-book" : "history-book"}
       >
         <HistoryBook
-          currentBase={currentBase}
-          currentQuote={currentQuote}
+          selectedAssets={selectedAssets}
           loadingSelectedPair={loadingSelectedPair}
           forUser={forUser}
           orderHistoryRows={orderHistoryRows}

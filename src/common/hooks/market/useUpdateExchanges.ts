@@ -12,12 +12,15 @@ type UseUpdateExchangesResult = {
 export function useUpdateExchanges(): UseUpdateExchangesResult {
   const { exchanges, setExchanges } = useSettingsContext();
 
-  //selectedPair in asset1_asset2 format
+  /**
+   * Update local storage exchanges item
+   * @param selectedPair (string) asset1_asset2 format
+   * @returns void
+   */
   const updateExchanges = useCallback(
     (selectedPair: string) => {
       const recentPairs = [...exchanges.list];
       const _selectedPair = selectedPair.split("_").join("/");
-
       if (recentPairs.includes(_selectedPair)) {
         const recentPairsWithoutSelectedPair = recentPairs.filter(
           (pair) => pair !== _selectedPair
