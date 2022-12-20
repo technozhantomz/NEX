@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { useSettingsContext } from "../../providers";
+import { useAppSettingsContext } from "../../providers";
 import { Exchanges } from "../../types";
 
 type UseUpdateExchangesResult = {
@@ -10,7 +10,7 @@ type UseUpdateExchangesResult = {
 };
 
 export function useUpdateExchanges(): UseUpdateExchangesResult {
-  const { exchanges, setExchanges } = useSettingsContext();
+  const { exchanges, setExchanges } = useAppSettingsContext();
 
   /**
    * Update local storage exchanges item

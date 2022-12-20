@@ -12,9 +12,9 @@ import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.s
 import MetaMaskIcon from "../../../../../../ui/src/icons/Cryptocurrencies/MetaMaskIcon.svg";
 import {
   useMenuContext,
+  useNotificationsContext,
   usePeerLinkContext,
   useUserContext,
-  useUserSettingsContext,
   useViewportContext,
 } from "../../../../../providers";
 import { MainNav } from "../MainNav";
@@ -35,7 +35,7 @@ export const MainNavBar = (): JSX.Element => {
     profileMenuOpen,
     mainMenuOpen,
   } = useMenuContext();
-  const { hasUnreadMessages } = useUserSettingsContext();
+  const { hasUnreadMessages } = useNotificationsContext();
 
   const CloseButton = (
     <>

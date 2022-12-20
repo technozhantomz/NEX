@@ -6,8 +6,6 @@ import { OrderBook } from "../OrderBook";
 
 import * as Styled from "./OrderTabs.styled";
 
-const { TabPane } = Styled.Tabs;
-
 type Props = {
   selectedAssets: PairAssets | undefined;
   loadingSelectedPair: boolean;
@@ -39,20 +37,13 @@ export const OrderTabs = ({
   loadingUserHistoryRows,
   onOrderBookRowClick,
 }: Props): JSX.Element => {
-  return (
-    <Styled.Tabs
-      defaultActiveKey="1"
-      centered={true}
-      className={forUser ? "for-user" : ""}
-    >
-      <TabPane
-        tab={
-          forUser
-            ? counterpart.translate(`pages.market.my_open_orders`)
-            : counterpart.translate(`pages.market.order_book`)
-        }
-        key={forUser ? "user-order-book" : "order-book"}
-      >
+  const tabItems = [
+    {
+      label: forUser
+        ? counterpart.translate(`pages.market.my_open_orders`)
+        : counterpart.translate(`pages.market.order_book`),
+      key: "order",
+      children: (
         <OrderBook
           selectedAssets={selectedAssets}
           loadingSelectedPair={loadingSelectedPair}
@@ -64,15 +55,14 @@ export const OrderTabs = ({
           loadingUserOrderRows={loadingUserOrderRows}
           onOrderBookRowClick={onOrderBookRowClick}
         />
-      </TabPane>
-      <TabPane
-        tab={
-          forUser
-            ? counterpart.translate(`pages.market.my_order_history`)
-            : counterpart.translate(`pages.market.history`)
-        }
-        key={forUser ? "user-history-book" : "history-book"}
-      >
+      ),
+    },
+    {
+      label: forUser
+        ? counterpart.translate(`pages.market.my_order_history`)
+        : counterpart.translate(`pages.market.history`),
+      key: "history",
+      children: (
         <HistoryBook
           selectedAssets={selectedAssets}
           loadingSelectedPair={loadingSelectedPair}
@@ -82,7 +72,16 @@ export const OrderTabs = ({
           userOrderHistoryRows={userOrderHistoryRows}
           loadingUserHistoryRows={loadingUserHistoryRows}
         />
-      </TabPane>
-    </Styled.Tabs>
+      ),
+    },
+  ];
+
+  return (
+    <Styled.Tabs
+      defaultActiveKey="1"
+      centered={true}
+      className={forUser ? "for-user" : ""}
+      items={tabItems}
+    />
   );
 };

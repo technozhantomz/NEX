@@ -9,6 +9,7 @@ import React, {
 } from "react";
 
 import {
+  config,
   defaultApiLatencies,
   defaultApiSettings,
   defaultChainId,
@@ -29,7 +30,7 @@ import {
   Settings,
 } from "../../types";
 
-export type SettingsContextType = {
+export type AppSettingsContextType = {
   settings: Settings;
   setSettings: (value: Settings) => void;
   exchanges: Exchanges;
@@ -51,24 +52,28 @@ export type SettingsContextType = {
   chainId: string;
 };
 
-const settingsContext = createContext<SettingsContextType>(
-  {} as SettingsContextType
+const AppSettingsContext = createContext<AppSettingsContextType>(
+  {} as AppSettingsContextType
 );
 
-export function useSettingsContext(): SettingsContextType {
-  return useContext(settingsContext);
+export function useAppSettingsContext(): AppSettingsContextType {
+  return useContext(AppSettingsContext);
 }
 
-export function SettingsProvider({
+export function AppSettingsProvider({
   children,
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const [loading, setLoading] = useState<boolean>(true);
+  // we use chainId to find out if all settings should set to default or already set
   const [chainId, _setChainId] = useLocalStorage("chain_id") as [
     string,
     (value: string) => void
   ];
+  const [loading, setLoading] = useState<boolean>(true);
+  const [localForceVersion, _setLocalForceVersion] = useLocalStorage(
+    "force_version"
+  ) as [string, (value: string) => void];
   const [cache, setCache] = useLocalStorage("cache") as [
     Cache,
     (value: Cache) => void
@@ -95,7 +100,6 @@ export function SettingsProvider({
   const [latencyChecks, setLatencyChecks] = useLocalStorage(
     "latency_checks"
   ) as [number, (value: number) => void];
-
   const [connectedNode, _setConnectedNode] = useState<string>("");
 
   const setConnectedNode = useCallback(
@@ -104,6 +108,12 @@ export function SettingsProvider({
     },
     [_setConnectedNode]
   );
+
+  const setLocalForceVersion = useCallback(() => {
+    if (localForceVersion !== config.forceVersion) {
+      _setLocalForceVersion(config.forceVersion as string);
+    }
+  }, [localForceVersion, config, config.forceVersion, _setLocalForceVersion]);
 
   const setChainId = useCallback(() => {
     if (chainId !== defaultChainId) {
@@ -125,8 +135,29 @@ export function SettingsProvider({
     if (chainId !== defaultChainId) {
       setSettings(defaultSettings);
       setExchanges(defaultExchanges);
+    } else if (localForceVersion !== config.forceVersion) {
+      setSettings({
+        ...defaultSettings,
+        language: settings?.language ?? defaultSettings.language,
+        darkTheme: settings?.darkTheme ?? defaultSettings.darkTheme,
+        advancedMode: settings?.advancedMode ?? defaultSettings.advancedMode,
+        nodeAutoselect:
+          settings?.nodeAutoselect ?? defaultSettings.nodeAutoselect,
+        walletLock: settings?.walletLock ?? defaultSettings.walletLock,
+      });
     }
-  }, [defaultChainId, chainId, setSettings, setExchanges]);
+  }, [
+    defaultChainId,
+    chainId,
+    setSettings,
+    defaultSettings,
+    setExchanges,
+    defaultExchanges,
+    localForceVersion,
+    config,
+    config.forceVersion,
+    settings,
+  ]);
 
   const initApiSettings = useCallback(() => {
     if (chainId !== defaultChainId) {
@@ -164,7 +195,7 @@ export function SettingsProvider({
     counterpart.setLocale(selectedLang);
   }, []);
 
-  const localeFromStorage = useCallback(() => {
+  const getlocaleFromStorage = useCallback(() => {
     let selectedLang = "";
     if (settings && settings.language) {
       selectedLang = settings.language;
@@ -184,15 +215,17 @@ export function SettingsProvider({
     defaultLocales.forEach(({ type, json }) =>
       counterpart.registerTranslations(type, json)
     );
-    setLocale(localeFromStorage());
-  }, [setLocale, localeFromStorage]);
+    setLocale(getlocaleFromStorage());
+  }, [setLocale, getlocaleFromStorage]);
 
   const initApplication = useCallback(() => {
     return new Promise((resolve, _reject) => {
+      // call orders matter
       initCache();
       initSettings();
       initApiSettings();
       initLocale();
+      setLocalForceVersion();
       resolve(true);
     });
   }, []);
@@ -205,7 +238,7 @@ export function SettingsProvider({
   }, []);
 
   return (
-    <settingsContext.Provider
+    <AppSettingsContext.Provider
       value={{
         settings,
         setSettings,
@@ -244,6 +277,6 @@ export function SettingsProvider({
       ) : (
         <>{children}</>
       )}
-    </settingsContext.Provider>
+    </AppSettingsContext.Provider>
   );
 }
