@@ -21,8 +21,6 @@ import {
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
 
-const { TabPane } = Styled.Tabs;
-
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { md } = useViewportContext();
@@ -53,6 +51,38 @@ const MarketPage: NextPage = () => {
     onOrderBookRowClick,
     pageLoaded,
   } = useMarketPage({ currentPair: pair as string });
+  const limitOrderTabItems = [
+    {
+      label: counterpart.translate(`pages.market.buy`),
+      key: "buy",
+      children: (
+        <LimitOrderForm
+          activePair={pair as string}
+          currentBase={currentBase}
+          currentQuote={currentQuote}
+          loadingSelectedPair={loadingSelectedPair}
+          isBuyOrder={true}
+          showTitle={false}
+          orderForm={buyOrderForm}
+        />
+      ),
+    },
+    {
+      label: counterpart.translate(`pages.market.sell`),
+      key: "sell",
+      children: (
+        <LimitOrderForm
+          activePair={pair as string}
+          currentBase={currentBase}
+          currentQuote={currentQuote}
+          loadingSelectedPair={loadingSelectedPair}
+          isBuyOrder={false}
+          showTitle={false}
+          orderForm={sellOrderForm}
+        />
+      ),
+    },
+  ];
 
   return loadingTradingPairs && !pageLoaded ? (
     <LoadingIndicator />
@@ -153,30 +183,7 @@ const MarketPage: NextPage = () => {
             </Col>
             <Col className="gutter-row" span={24}>
               <Styled.Container>
-                <Styled.Tabs>
-                  <TabPane tab="BUY" key="1">
-                    <LimitOrderForm
-                      activePair={pair as string}
-                      currentBase={currentBase}
-                      currentQuote={currentQuote}
-                      loadingSelectedPair={loadingSelectedPair}
-                      isBuyOrder={true}
-                      showTitle={false}
-                      orderForm={buyOrderForm}
-                    />
-                  </TabPane>
-                  <TabPane tab="SELL" key="2">
-                    <LimitOrderForm
-                      activePair={pair as string}
-                      currentBase={currentBase}
-                      currentQuote={currentQuote}
-                      loadingSelectedPair={loadingSelectedPair}
-                      isBuyOrder={false}
-                      showTitle={false}
-                      orderForm={sellOrderForm}
-                    />
-                  </TabPane>
-                </Styled.Tabs>
+                <Styled.Tabs items={limitOrderTabItems} />
               </Styled.Container>
             </Col>
           </Row>

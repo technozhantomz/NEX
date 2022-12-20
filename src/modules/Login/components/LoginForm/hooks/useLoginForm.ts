@@ -4,8 +4,8 @@ import { useState } from "react";
 
 import { useAccount } from "../../../../../common/hooks";
 import {
+  useAppSettingsContext,
   useBrowserHistoryContext,
-  useSettingsContext,
   useUserContext,
 } from "../../../../../common/providers";
 import { FullAccount, KeyType } from "../../../../../common/types";
@@ -29,7 +29,7 @@ export function useLoginForm(): UseLoginFormResult {
     _validateUseWhaleVault,
   } = useAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
-  const { setSettings, settings } = useSettingsContext();
+  const { setSettings, settings } = useAppSettingsContext();
   const { handleLoginRedirect } = useBrowserHistoryContext();
   const [loginForm] = Form.useForm<LoginForm>();
 

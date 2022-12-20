@@ -5,8 +5,8 @@ import { renderPaginationItem, UserLinkExtractor } from "../../../..";
 import { Checkbox, List, Switch, Tooltip } from "../../../../../../ui/src";
 import { useFormDate } from "../../../../../hooks";
 import {
+  useNotificationsContext,
   useUserContext,
-  useUserSettingsContext,
 } from "../../../../../providers";
 import { Notification } from "../../../../../types";
 
@@ -20,7 +20,7 @@ export const NotificationMenu = (): JSX.Element => {
     hasUnreadMessages,
     loadingNotifications,
     markTheNotificationAsReadOrUnread,
-  } = useUserSettingsContext();
+  } = useNotificationsContext();
   const { showUnreadOnly, setShowUnreadOnly, groupedNotificationsByDate } =
     useNotificationMenu({
       notifications,

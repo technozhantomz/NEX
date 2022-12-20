@@ -13,16 +13,16 @@ import { MetaMaskProvider } from "metamask-react";
 import type { AppProps } from "next/app";
 
 import {
+  AppSettingsProvider,
   AssetsProvider,
   BrowserHistoryProvider,
   ConnectionManagerProvider,
   FeesProvider,
   MenuProvider,
+  NotificationsProvider,
   PeerLinkProvider,
   PeerplaysApiProvider,
-  SettingsProvider,
   UserProvider,
-  UserSettingsProvider,
   ViewportProvider,
 } from "../common/providers";
 import "../ui/src/ui.less";
@@ -43,25 +43,25 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
     <ViewportProvider>
       <MetaMaskProvider>
         <PeerLinkProvider>
-          <SettingsProvider>
+          <AppSettingsProvider>
             <PeerplaysApiProvider>
               <ConnectionManagerProvider>
                 <AssetsProvider>
-                  <UserProvider>
-                    <FeesProvider>
-                      <UserSettingsProvider>
-                        <BrowserHistoryProvider>
+                  <FeesProvider>
+                    <UserProvider>
+                      <BrowserHistoryProvider>
+                        <NotificationsProvider>
                           <MenuProvider>
                             <Component {...pageProps} />
                           </MenuProvider>
-                        </BrowserHistoryProvider>
-                      </UserSettingsProvider>
-                    </FeesProvider>
-                  </UserProvider>
+                        </NotificationsProvider>
+                      </BrowserHistoryProvider>
+                    </UserProvider>
+                  </FeesProvider>
                 </AssetsProvider>
               </ConnectionManagerProvider>
             </PeerplaysApiProvider>
-          </SettingsProvider>
+          </AppSettingsProvider>
         </PeerLinkProvider>
       </MetaMaskProvider>
     </ViewportProvider>
