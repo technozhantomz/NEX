@@ -1,7 +1,7 @@
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useCallback, useRef } from "react";
 
 import { AssetsPrintTable } from "..";
 import {
@@ -37,6 +37,42 @@ export const AssetsTable = ({
   } = useAssetsTable({ filterAsset, actionType });
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
+  const renderListItem = useCallback(
+    (item: AssetTableRow) => {
+      return (
+        <Styled.AssetListItem
+          key={item.key}
+          actions={
+            [
+              (
+                assetsColumns[4].render as (
+                  _text: string,
+                  record: AssetTableRow
+                ) => JSX.Element
+              )("", item),
+            ] as ReactNode[]
+          }
+        >
+          <AssetTitle symbol={item.symbol} />
+          <Styled.AssetsItemContent>
+            <div className="asset-info">
+              <span className="asset-info-title">
+                {assetsColumns[2].title()}
+              </span>
+              <span className="asset-info-value">{item.available}</span>
+            </div>
+            <div className="asset-info">
+              <span className="asset-info-title">
+                {assetsColumns[3].title()}
+              </span>
+              <span className="asset-info-value">{item.inOrders}</span>
+            </div>
+          </Styled.AssetsItemContent>
+        </Styled.AssetListItem>
+      );
+    },
+    [assetsColumns]
+  );
 
   return (
     <Styled.AssetsWrapper className={className}>
@@ -72,37 +108,7 @@ export const AssetsTable = ({
             size: "small",
             itemRender: renderPaginationItem(),
           }}
-          renderItem={(item) => (
-            <Styled.AssetListItem
-              key={item.key}
-              actions={
-                [
-                  (
-                    assetsColumns[4].render as (
-                      _text: string,
-                      record: AssetTableRow
-                    ) => JSX.Element
-                  )("", item),
-                ] as ReactNode[]
-              }
-            >
-              <AssetTitle symbol={item.symbol} />
-              <Styled.AssetsItemContent>
-                <div className="asset-info">
-                  <span className="asset-info-title">
-                    {assetsColumns[2].title()}
-                  </span>
-                  <span className="asset-info-value">{item.available}</span>
-                </div>
-                <div className="asset-info">
-                  <span className="asset-info-title">
-                    {assetsColumns[3].title()}
-                  </span>
-                  <span className="asset-info-value">{item.inOrders}</span>
-                </div>
-              </Styled.AssetsItemContent>
-            </Styled.AssetListItem>
-          )}
+          renderItem={renderListItem}
         />
       ) : (
         <Styled.AssetsTable
