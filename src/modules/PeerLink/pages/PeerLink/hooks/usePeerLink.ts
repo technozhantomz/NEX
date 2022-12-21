@@ -73,7 +73,9 @@ export function usePeerLink(): UsePeerLinkResult {
         }
         if (ethTrx && hiveTrx === undefined) setEthTrx(undefined);
         if (hiveTrx && ethTrx === undefined) setHiveTrx(undefined);
-        router.push("/peerlink/transfer");
+        if (ethTrx === undefined && hiveTrx === undefined) {
+          router.push("/peerlink/transfer");
+        }
       } else {
         setTransactionErrorMessage(
           counterpart.translate(`field.errors.unable_transaction`)
