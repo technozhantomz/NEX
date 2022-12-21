@@ -1,13 +1,13 @@
 import { useCallback, useState } from "react";
 
-import { useSettingsContext } from "../../../common/providers";
+import { useAppSettingsContext } from "../../../common/providers";
 import { Settings } from "../../../common/types";
 import { Form } from "../../../ui/src";
 
 import { GeneralSettingsForm, UseSettingsResult } from "./useSettings.types";
 
 export function useSettings(): UseSettingsResult {
-  const { settings, setSettings, setLocale } = useSettingsContext();
+  const { settings, setSettings, setLocale } = useAppSettingsContext();
 
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isSettingChanged, _setIsSettingChanged] = useState<boolean>(false);
@@ -29,7 +29,7 @@ export function useSettings(): UseSettingsResult {
       ...settings,
       notifications: {
         allow: values.allowNotifications,
-        selectedNotifications: values.selectedNotifications,
+        selectedNotifications: values.selectedNotifications as string[],
       },
       walletLock: values.walletLockInMinutes,
       language: values.selectedLanguage,

@@ -1,14 +1,14 @@
 import { useCallback, useMemo } from "react";
 
 import { symbolsToBeExcepted } from "../../../api/params";
-import { usePeerplaysApiContext, useSettingsContext } from "../../providers";
+import { useAppSettingsContext, usePeerplaysApiContext } from "../../providers";
 import { Asset, Cache } from "../../types";
 
 import { UseAssetResult } from "./useAsset.types";
 
 export function useAsset(): UseAssetResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { cache, setCache: _setCache } = useSettingsContext();
+  const { cache, setCache: _setCache } = useAppSettingsContext();
 
   const assetsCacheExists = useMemo(() => {
     return Object.keys(cache).length > 0 && cache.assets.length > 0;

@@ -9,8 +9,8 @@ import React, {
 
 import {
   ChainStoreProvider,
+  useAppSettingsContext,
   usePeerplaysApiContext,
-  useSettingsContext,
 } from "..";
 import { automaticSelection } from "../../../api/params";
 import { LoadingIndicator } from "../../components";
@@ -33,7 +33,7 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
     string | { background: boolean; key: string } | boolean
   >("");
 
-  const { apiSettings } = useSettingsContext();
+  const { apiSettings } = useAppSettingsContext();
   const {
     willTransitionTo: _willTransitionTo,
     apiInstance,
