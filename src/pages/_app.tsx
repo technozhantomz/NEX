@@ -2,48 +2,49 @@ import { MetaMaskProvider } from "metamask-react";
 import type { AppProps } from "next/app";
 
 import {
+  AppSettingsProvider,
   AssetsProvider,
   BrowserHistoryProvider,
   ConnectionManagerProvider,
   FeesProvider,
   MenuProvider,
+  NotificationsProvider,
   PeerLinkProvider,
   PeerplaysApiProvider,
-  SettingsProvider,
   SideChainProvider,
   UserProvider,
-  UserSettingsProvider,
   ViewportProvider,
 } from "../common/providers";
+
 import "../ui/src/ui.less";
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ViewportProvider>
       <MetaMaskProvider>
-        <SettingsProvider>
+        <AppSettingsProvider>
           <PeerplaysApiProvider>
             <ConnectionManagerProvider>
               <AssetsProvider>
-                <UserProvider>
-                  <SideChainProvider>
-                    <FeesProvider>
-                      <BrowserHistoryProvider>
-                        <UserSettingsProvider>
-                          <MenuProvider>
-                            <PeerLinkProvider>
+                <FeesProvider>
+                  <UserProvider>
+                    <SideChainProvider>
+                      <PeerLinkProvider>
+                        <BrowserHistoryProvider>
+                          <NotificationsProvider>
+                            <MenuProvider>
                               <Component {...pageProps} />
-                            </PeerLinkProvider>
-                          </MenuProvider>
-                        </UserSettingsProvider>
-                      </BrowserHistoryProvider>
-                    </FeesProvider>
-                  </SideChainProvider>
-                </UserProvider>
+                            </MenuProvider>
+                          </NotificationsProvider>
+                        </BrowserHistoryProvider>
+                      </PeerLinkProvider>
+                    </SideChainProvider>
+                  </UserProvider>
+                </FeesProvider>
               </AssetsProvider>
             </ConnectionManagerProvider>
           </PeerplaysApiProvider>
-        </SettingsProvider>
+        </AppSettingsProvider>
       </MetaMaskProvider>
     </ViewportProvider>
   );

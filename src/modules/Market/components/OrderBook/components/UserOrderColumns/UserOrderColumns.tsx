@@ -27,6 +27,11 @@ export const showUserOrderColumns = (
       key: "base",
     },
     {
+      title: counterpart.translate(`tableHead.filled`),
+      dataIndex: "filled",
+      key: "filled",
+    },
+    {
       title: counterpart.translate(`tableHead.expiration`),
       dataIndex: "expiration",
       key: "expiration",

@@ -26,7 +26,6 @@ export const PairModal = ({
     pairModalForm,
     formValidation,
     allAssetsSymbols,
-    useResetFormOnOpenModal,
     handleCancel,
     handleSelectPair,
     handleSelectRecent,
@@ -52,7 +51,6 @@ export const PairModal = ({
     </Styled.PairModalFormButton>,
   ];
 
-  useResetFormOnOpenModal(pairModalForm, isVisible);
   return (
     <Styled.PairModal
       title={counterpart.translate(`pages.market.select_pair`)}

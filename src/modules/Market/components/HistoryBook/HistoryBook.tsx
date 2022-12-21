@@ -1,14 +1,13 @@
 import { useViewportContext } from "../../../../common/providers";
-import { Asset, Scroll } from "../../../../common/types";
-import { OrderHistoryRow } from "../../types";
+import { Scroll } from "../../../../common/types";
+import { OrderHistoryRow, PairAssets } from "../../types";
 
 import * as Styled from "./HistoryBook.styled";
 import { useHistory } from "./hooks";
 
 type Props = {
   forUser?: boolean;
-  currentBase: Asset | undefined;
-  currentQuote: Asset | undefined;
+  selectedAssets: PairAssets | undefined;
   loadingSelectedPair: boolean;
   orderHistoryRows: OrderHistoryRow[];
   loadingOrderHistoryRows: boolean;
@@ -18,8 +17,7 @@ type Props = {
 
 export const HistoryBook = ({
   forUser = false,
-  currentBase,
-  currentQuote,
+  selectedAssets,
   loadingSelectedPair,
   orderHistoryRows,
   loadingOrderHistoryRows,
@@ -28,9 +26,9 @@ export const HistoryBook = ({
 }: Props): JSX.Element => {
   const { md } = useViewportContext();
   const { columns } = useHistory({
-    currentBase,
-    currentQuote,
+    selectedAssets,
     loadingSelectedPair,
+    forUser,
   });
   const dataSource = forUser ? userOrderHistoryRows : orderHistoryRows;
   const desktopScrollForUserHistories =

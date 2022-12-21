@@ -1,28 +1,27 @@
 import { Dispatch, SetStateAction } from "react";
 
-import {
-  Asset,
-  Exchanges,
-  PairNameAndMarketStats,
-} from "../../../../../common/types";
+import { Exchanges, PairNameAndMarketStats } from "../../../../../common/types";
 import { FormInstance } from "../../../../../ui/src";
-import { Order, OrderForm, OrderHistoryRow, OrderRow } from "../../../types";
+import {
+  Order,
+  OrderForm,
+  OrderHistoryRow,
+  OrderRow,
+  PairAssets,
+} from "../../../types";
 
 export type UseMarketPageResult = {
   tradingPairsStats: PairNameAndMarketStats[];
-  loadingTradingPairs: boolean;
+  loadingTradingPairsStats: boolean;
   loadingSelectedPair: boolean;
-  currentBase: Asset | undefined;
-  currentQuote: Asset | undefined;
+  selectedAssets: PairAssets | undefined;
   isPairModalVisible: boolean;
   setIsPairModalVisible: Dispatch<SetStateAction<boolean>>;
   handleClickOnPair: () => void;
   exchanges: Exchanges;
   asks: Order[];
   bids: Order[];
-  ordersRows: OrderRow[];
-  setOrdersRows: Dispatch<SetStateAction<OrderRow[]>>;
-  loadingOrderRows: boolean;
+  loadingAsksBids: boolean;
   userOrdersRows: OrderRow[];
   loadingUserOrderRows: boolean;
   orderHistoryRows: OrderHistoryRow[];

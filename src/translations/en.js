@@ -888,10 +888,12 @@ export const en = {
       activities: "Activities",
       notifications: "Notifications",
       activity: {
+        heading: "Activities",
         my_activity: "My Activity",
         search_activities: "Search Activities",
       },
       orders_tab: {
+        heading: "Orders",
         buy: "Buy",
         sell: "Sell",
         partial: "Partial",
@@ -902,6 +904,7 @@ export const en = {
         search_activities: "Search activities",
       },
       notification: {
+        heading: "Notifications",
         my_notification: "My notifications",
         search_notifications: "Search notifications",
         read: "Read",

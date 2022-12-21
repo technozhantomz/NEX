@@ -7,7 +7,7 @@ import ReactToPrint from "react-to-print";
 
 import { renderPaginationItem } from "..";
 import { DownloadOutlined, SearchOutlined } from "../../../ui/src";
-import { useUserSettingsContext, useViewportContext } from "../../providers";
+import { useNotificationsContext, useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityAndNotificationTable.styled";
 import { ActivityAndNotificationList } from "./components";
@@ -29,7 +29,7 @@ export const ActivityAndNotificationTable = ({
   isNotificationTab = false,
 }: Props): JSX.Element => {
   const { notifications, markTheNotificationAsReadOrUnread } =
-    useUserSettingsContext();
+    useNotificationsContext();
   const {
     activitiesAndNotificationsRows,
     loading,
@@ -72,6 +72,10 @@ export const ActivityAndNotificationTable = ({
                 }`
               ),
               suffix: <SearchOutlined />,
+            }}
+            fuseProps={{
+              ignoreLocation: true,
+              useExtendedSearch: true,
             }}
           />
           {!isNotificationTab ? (
