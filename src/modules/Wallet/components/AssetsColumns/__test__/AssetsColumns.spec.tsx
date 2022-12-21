@@ -1,7 +1,7 @@
 import { AssetTableRow } from "../../AssetsTable/index";
 import { AssetColumnType, createAssetsColumns } from "../AssetsColumns";
 
-describe("ActivityAndNotificationColumns", () => {
+describe("AssetsColumns", () => {
   let assetOne: AssetTableRow;
   let assetTwo: AssetTableRow;
   let assetsColumns: AssetColumnType[];
