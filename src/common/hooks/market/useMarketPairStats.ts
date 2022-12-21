@@ -19,8 +19,7 @@ import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { getAllAssets, getAssetsBySymbols, limitByPrecision, ceilPrecision } =
-    useAsset();
+  const { getAllAssets, limitByPrecision, ceilPrecision } = useAsset();
 
   const [allAssets, _setAllAssets] = useState<Asset[] | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -119,7 +118,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         } as PairNameAndMarketStats;
       }
     },
-    [getAssetsBySymbols, allAssets]
+    [getMarketPairStats, allAssets]
   );
 
   const setAllAssets = useCallback(async () => {

@@ -29,7 +29,7 @@ import { createOrdersColumns, OrderColumnType } from "../../OrdersColumns";
 
 import { UseOrdersTabResult } from "./useOrdersTab.types";
 
-export function useOpenOrdersTab(): UseOrdersTabResult {
+export function useOrdersTab(): UseOrdersTabResult {
   const [openOrdersTableRows, setOpenOrdersTableRows] = useState<
     OrderTableRow[]
   >([]);
@@ -147,7 +147,6 @@ export function useOpenOrdersTab(): UseOrdersTabResult {
       let price = "";
       let amount = "";
       let total = "";
-      let filled = "";
       // sell (asset/PPY)
       if (openOrder.sell_price.base.asset_id === base.id) {
         amount = String(
@@ -200,7 +199,7 @@ export function useOpenOrdersTab(): UseOrdersTabResult {
           )
         );
       }
-      filled = `${(
+      const filled = `${(
         ((Number(openOrder.sell_price.base.amount) -
           Number(openOrder.for_sale)) /
           Number(openOrder.sell_price.base.amount)) *

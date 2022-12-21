@@ -5,7 +5,7 @@ import { Form } from "../../../../ui/src";
 import { OrdersTable } from "../OrdersTable";
 
 import * as Styled from "./OrdersTab.styled";
-import { useOpenOrdersTab } from "./hooks";
+import { useOrdersTab } from "./hooks";
 
 export const OrdersTab = (): JSX.Element => {
   const {
@@ -26,7 +26,7 @@ export const OrdersTab = (): JSX.Element => {
     localStorageAccount,
     cancelOrderfeeAmount,
     onCancelClick,
-  } = useOpenOrdersTab();
+  } = useOrdersTab();
 
   return (
     <Styled.OrdersTabWrapper>
