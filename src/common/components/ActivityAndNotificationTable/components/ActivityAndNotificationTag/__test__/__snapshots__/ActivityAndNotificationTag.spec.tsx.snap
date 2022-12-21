@@ -3,7 +3,7 @@
 exports[`Activity Tag renders correctly for account creation 1`] = `
 <DocumentFragment>
   <span
-    class="Tag-sc-5420511e-0 JuGDv"
+    class="Tag-sc-9e9d31f8-0 iNMWFa"
   >
     Create account
   </span>
@@ -13,7 +13,7 @@ exports[`Activity Tag renders correctly for account creation 1`] = `
 exports[`Activity Tag renders correctly for account update 1`] = `
 <DocumentFragment>
   <span
-    class="Tag-sc-5420511e-0 JuGDv"
+    class="Tag-sc-9e9d31f8-0 iNMWFa"
   >
     Update account
   </span>

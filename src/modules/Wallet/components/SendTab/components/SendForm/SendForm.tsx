@@ -207,8 +207,9 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
               value={selectedBlockchain}
             >
               {assetBlockchains.map((blockchain, index) => {
+                const key = `${blockchain}-${index}`;
                 return (
-                  <Styled.BlockchainOption key={index} value={blockchain}>
+                  <Styled.BlockchainOption key={key} value={blockchain}>
                     <Styled.contentWrapper>
                       <Styled.IconWrapper>
                         {icons[blockchain]}

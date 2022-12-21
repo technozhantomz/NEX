@@ -2,14 +2,14 @@ import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { useCallback, useRef } from "react";
 
-import { renderPaginationItem } from "../../../../common/components";
+import {
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import {
-  DownloadOutlined,
   InfoCircleOutlined,
   List,
   SearchOutlined,
@@ -20,7 +20,7 @@ import { StatsCard } from "../../common";
 
 import * as Styled from "./WitnessesTab.styled";
 import { WitnessesColumns, WitnessesPrintTable } from "./components";
-import { useWitnessesTab } from "./hooks";
+import { useWitnessesTab, WitnessTableRow } from "./hooks";
 
 export const WitnessesTab = (): JSX.Element => {
   const {
@@ -38,6 +38,83 @@ export const WitnessesTab = (): JSX.Element => {
   } = useWitnessesTab();
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
+  const renderListItem = useCallback(
+    (item: WitnessTableRow, _index: number) => (
+      <Styled.WitnessListItem key={item.key}>
+        <Styled.WitnessesItemContent>
+          <div className="item-info">
+            <span className="item-info-title">
+              {WitnessesColumns[0].title()}
+            </span>
+            <span className="item-info-value">{item.rank}</span>
+          </div>
+          <div className="item-info">
+            <span className="item-info-title">
+              {WitnessesColumns[1].title()}
+            </span>
+            <span className="item-info-value">
+              <Link href={`/user/${item.name}`} target="_blank">
+                {item.name}
+              </Link>
+            </span>
+          </div>
+          <div className="item-info">
+            <span className="item-info-title">
+              {WitnessesColumns[2].title()}
+            </span>
+            <span className="item-info-value">
+              {item.active === true ? <Styled.ActiveIcon /> : ``}
+            </span>
+          </div>
+          <div className="item-info">
+            <span className="item-info-title">
+              {WitnessesColumns[3].title()}
+            </span>
+            <span className="item-info-value">{item.totalVotes}</span>
+          </div>
+          <div className="item-info">
+            <span className="item-info-title">
+              {WitnessesColumns[4].title()}
+            </span>
+            <span className="item-info-value">
+              <Styled.LastBlock>{item.lastBlock}</Styled.LastBlock>
+            </span>
+          </div>
+          <div className="item-info">
+            <span className="item-info-title">
+              {WitnessesColumns[5].title()}
+            </span>
+            <span className="item-info-value">
+              <Styled.MissedBlocks>{item.missedBlocks}</Styled.MissedBlocks>
+            </span>
+          </div>
+          <div className="item-info">
+            <span className="item-info-title">
+              {WitnessesColumns[6].title()}
+            </span>
+            <span className="item-info-value">
+              <a href={`${item.url}`} target="_blank">
+                <Styled.urlIcon rotate={45} />
+              </a>
+            </span>
+          </div>
+          <div className="item-info">
+            <span className="item-info-title">
+              {WitnessesColumns[7].title()}
+            </span>
+            <span className="item-info-value">
+              <Tooltip placement="top" title={item.publicKey}>
+                <span>
+                  <Key />
+                </span>
+              </Tooltip>
+            </span>
+          </div>
+        </Styled.WitnessesItemContent>
+      </Styled.WitnessListItem>
+    ),
+    [WitnessesColumns]
+  );
 
   return (
     <Styled.WitnessesTabWrapper>
@@ -103,22 +180,10 @@ export const WitnessesTab = (): JSX.Element => {
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"WitnessesTable.csv"}
-            data={witnessTableRows ?? []}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={witnessTableRows}
+        ></TableDownloader>
       </Styled.WitnessesHeaderBar>
       {sm ? (
         <List
@@ -134,82 +199,7 @@ export const WitnessesTab = (): JSX.Element => {
             size: "small",
             itemRender: renderPaginationItem(),
           }}
-          renderItem={(item) => (
-            <Styled.WitnessListItem key={item.key}>
-              <Styled.WitnessesItemContent>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {WitnessesColumns[0].title()}
-                  </span>
-                  <span className="item-info-value">{item.rank}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {WitnessesColumns[1].title()}
-                  </span>
-                  <span className="item-info-value">
-                    <Link href={`/user/${item.name}`} target="_blank">
-                      {item.name}
-                    </Link>
-                  </span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {WitnessesColumns[2].title()}
-                  </span>
-                  <span className="item-info-value">
-                    {item.active === true ? <Styled.ActiveIcon /> : ``}
-                  </span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {WitnessesColumns[3].title()}
-                  </span>
-                  <span className="item-info-value">{item.totalVotes}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {WitnessesColumns[4].title()}
-                  </span>
-                  <span className="item-info-value">
-                    <Styled.LastBlock>{item.lastBlock}</Styled.LastBlock>
-                  </span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {WitnessesColumns[5].title()}
-                  </span>
-                  <span className="item-info-value">
-                    <Styled.MissedBlocks>
-                      {item.missedBlocks}
-                    </Styled.MissedBlocks>
-                  </span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {WitnessesColumns[6].title()}
-                  </span>
-                  <span className="item-info-value">
-                    <a href={`${item.url}`} target="_blank">
-                      <Styled.urlIcon rotate={45} />
-                    </a>
-                  </span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {WitnessesColumns[7].title()}
-                  </span>
-                  <span className="item-info-value">
-                    <Tooltip placement="top" title={item.publicKey}>
-                      <span>
-                        <Key />
-                      </span>
-                    </Tooltip>
-                  </span>
-                </div>
-              </Styled.WitnessesItemContent>
-            </Styled.WitnessListItem>
-          )}
+          renderItem={renderListItem}
         />
       ) : (
         <Styled.WitnessesTable

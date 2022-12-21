@@ -55,12 +55,12 @@ export const BlockchainTabItems = (
     "fees",
   ];
   const children = [
-    <BlockTab />,
-    <AssetsTab />,
-    <WitnessesTab />,
-    <CommitteeTab />,
-    <SonsTab />,
-    <FeesTab />,
+    <BlockTab key="blockchain" />,
+    <AssetsTab key="assets" />,
+    <WitnessesTab key="witnesses" />,
+    <CommitteeTab key="committees" />,
+    <SonsTab key="sons" />,
+    <FeesTab key="fees" />,
   ];
 
   return label.map((item, index) => {

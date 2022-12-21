@@ -1,14 +1,15 @@
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactInstance, ReactNode, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { ReactNode, useRef } from "react";
 
 import { AssetsPrintTable } from "..";
-import { renderPaginationItem } from "../../../../common/components";
+import {
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
-import { DownloadOutlined, List, SearchOutlined } from "../../../../ui/src";
+import { List, SearchOutlined } from "../../../../ui/src";
 import { AssetTitle } from "../AssetTitle";
 
 import * as Styled from "./AssetsTable.styled";
@@ -52,22 +53,10 @@ export const AssetsTable = ({
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"AssetsTable.csv"}
-            data={assetsTableRows}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={assetsTableRows}
+        ></TableDownloader>
       </Styled.AssetHeaderBar>
       {sm ? (
         <List

@@ -2,18 +2,14 @@ import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { useRef } from "react";
 
-import { renderPaginationItem } from "../../../../common/components";
-import { useViewportContext } from "../../../../common/providers";
 import {
-  DownloadOutlined,
-  InfoCircleOutlined,
-  List,
-  SearchOutlined,
-} from "../../../../ui/src";
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
+import { useViewportContext } from "../../../../common/providers";
+import { InfoCircleOutlined, List, SearchOutlined } from "../../../../ui/src";
 import { StatsCard } from "../../common";
 
 import * as Styled from "./SonsTab.styled";
@@ -71,22 +67,10 @@ export const SonsTab = (): JSX.Element => {
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"SonsTable.csv"}
-            data={sonsTableRows ?? []}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={sonsTableRows}
+        ></TableDownloader>
       </Styled.SonsHeaderBar>
       {sm ? (
         <List

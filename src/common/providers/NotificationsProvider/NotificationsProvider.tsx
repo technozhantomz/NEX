@@ -8,7 +8,7 @@ import React, {
 
 import { useAppSettingsContext, useUserContext } from "..";
 import { useActivity, useFormDate, useLocalStorage } from "../../hooks";
-import { Notification } from "../../types";
+import { ActivityRow, Notification } from "../../types";
 
 type NotificationsContextType = {
   hasUnreadMessages: boolean;
@@ -84,6 +84,64 @@ export function NotificationsProvider({
     setHasUnreadMessages(newNotifications);
   };
 
+  const formServerNotifications = useCallback(
+    (userSelectedserverActivities: ActivityRow[], pastThirtyDaysDate: Date) => {
+      const dateFilteredServerActivities = userSelectedserverActivities.filter(
+        (serverActivity) => {
+          return (
+            new Date(formLocalDate(serverActivity.time)) >= pastThirtyDaysDate
+          );
+        }
+      );
+      const serverNotifications = dateFilteredServerActivities.map(
+        (serverActivity) => {
+          return {
+            activity: serverActivity,
+            unread: true,
+          } as Notification;
+        }
+      );
+      return serverNotifications;
+    },
+    [formLocalDate]
+  );
+
+  const addToPreviousNotifications = useCallback(
+    (serverNotifications: Notification[], pastThirtyDaysDate: Date) => {
+      const filteredLocalNotifications = notifications
+        .filter(
+          (notification) =>
+            new Date(notification.activity.time) > pastThirtyDaysDate
+        )
+        .filter((notif) =>
+          settings.notifications.selectedNotifications.includes(
+            notif.activity.type
+          )
+        );
+      if (filteredLocalNotifications.length === 0) {
+        return {
+          notifications: serverNotifications,
+          hasUnread: true,
+        };
+      } else {
+        const lastUpdateNotificationIndex = serverNotifications.findIndex(
+          (serverNotification) =>
+            serverNotification.activity.id ===
+            filteredLocalNotifications[0].activity.id
+        );
+        const newNotifications = [
+          ...serverNotifications.slice(0, lastUpdateNotificationIndex),
+          ...filteredLocalNotifications,
+        ];
+        return {
+          notifications: newNotifications,
+          hasUnread: undefined,
+        };
+      }
+    },
+    [settings]
+  );
+
   const getNotifications: () => Promise<{
     notifications: Notification[];
     hasUnread?: boolean;
@@ -93,75 +151,43 @@ export function NotificationsProvider({
       new Date().setDate(today.getDate() - 30)
     );
     try {
+      // User allowed notifications
       if (settings.notifications.allow) {
         const userSelectedserverActivities = (
           await getActivitiesRows(localStorageAccount, false)
         ).filter((activities) =>
           settings.notifications.selectedNotifications.includes(activities.type)
         );
-        if (
-          userSelectedserverActivities &&
-          userSelectedserverActivities.length > 0
-        ) {
-          const dateFilteredServerActivities =
-            userSelectedserverActivities.filter((serverActivity) => {
-              return (
-                new Date(formLocalDate(serverActivity.time)) >=
-                pastThirtyDaysDate
-              );
-            });
-          const serverNotifications = dateFilteredServerActivities.map(
-            (serverActivity) => {
-              return {
-                activity: serverActivity,
-                unread: true,
-              } as Notification;
-            }
+
+        // User has server activities
+        if (userSelectedserverActivities.length > 0) {
+          const serverNotifications = formServerNotifications(
+            userSelectedserverActivities,
+            pastThirtyDaysDate
           );
+
+          // There is no previous notifications
           if (!notifications || notifications.length === 0) {
             return {
               notifications: serverNotifications,
               hasUnread: true,
             };
-          } else {
-            const filteredLocalNotifications = notifications
-              .filter(
-                (notification) =>
-                  new Date(notification.activity.time) > pastThirtyDaysDate
-              )
-              .filter((notif) =>
-                settings.notifications.selectedNotifications.includes(
-                  notif.activity.type
-                )
-              );
-            if (filteredLocalNotifications.length === 0) {
-              return {
-                notifications: serverNotifications,
-                hasUnread: true,
-              };
-            } else {
-              const lastUpdateNotificationIndex = serverNotifications.findIndex(
-                (serverNotification) =>
-                  serverNotification.activity.id ===
-                  filteredLocalNotifications[0].activity.id
-              );
-              const newNotifications = [
-                ...serverNotifications.slice(0, lastUpdateNotificationIndex),
-                ...filteredLocalNotifications,
-              ];
-              return {
-                notifications: newNotifications,
-                hasUnread: undefined,
-              };
-            }
+          } // end of no previous notifications
+          else {
+            return addToPreviousNotifications(
+              serverNotifications,
+              pastThirtyDaysDate
+            );
           }
-        } else {
+        } // end of user has server activities
+        else {
           return {
             notifications: [] as Notification[],
             hasUnread: false,
           };
         }
-      } else {
+      } // end of allowed Notifications
+      else {
         return {
           notifications: [] as Notification[],
           hasUnread: false,

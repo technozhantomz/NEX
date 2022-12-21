@@ -3,14 +3,14 @@ import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ReactInstance, RefObject, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { RefObject, useCallback, useRef } from "react";
 
-import { renderPaginationItem } from "../../../../../../common/components";
+import {
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../../../common/components";
 import { useViewportContext } from "../../../../../../common/providers";
 import {
-  DownloadOutlined,
   InfoCircleOutlined,
   List,
   SearchOutlined,
@@ -35,9 +35,83 @@ export const TransactionsTable = ({
   const { searchDataSource, setSearchDataSource } =
     useTransactionsTable(transactionRows);
   const { sm } = useViewportContext();
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
   const transactionsColumns = TransactionsColumns(block);
   const router = useRouter();
+  const renderListItem = useCallback(
+    (item: TransactionRow, _index: number) => (
+      <Link href={`/blockchain/${block}/${item.rank}`}>
+        <Styled.TransactionListItem key={item.rank}>
+          <Styled.TransactionItemContent>
+            <div className="item-info">
+              <span className="item-info-title">
+                {transactionsColumns[0].title()}
+              </span>
+              <span className="item-info-value">{item.rank}</span>
+            </div>
+            {/* <div className="item-info">
+            <span className="item-info-title">
+              {transactionsColumns[1].title()}
+            </span>
+            <span className="item-info-value">
+              <Link
+                target="_blank"
+                href={`/blockchain/${block}/${item.rank}`}
+              >
+                <Styled.CenterEllipsis>
+                  <span className="ellipsis">{item.id}</span>
+                  <span className="indent">{item.id}</span>
+                </Styled.CenterEllipsis>
+              </Link>
+            </span>
+          </div> */}
+            <div className="item-info">
+              <span className="item-info-title">
+                {transactionsColumns[1].title()}
+              </span>
+              <span className="item-info-value">{item.expiration}</span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">
+                {transactionsColumns[2].title()}
+              </span>
+              <span className="item-info-value">{item.operations.length}</span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">
+                {transactionsColumns[3].title()}
+              </span>
+              <span className="item-info-value">{item.refBlockPrefix}</span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">
+                {transactionsColumns[4].title()}
+              </span>
+              <span className="item-info-value">{item.refBlockNum}</span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">
+                {transactionsColumns[5].title()}
+              </span>
+              <span className="item-info-value">{item.extensions.length}</span>
+            </div>
+          </Styled.TransactionItemContent>
+        </Styled.TransactionListItem>
+      </Link>
+    ),
+    [block, transactionsColumns]
+  );
+
+  const onRow = useCallback(
+    (record: any) => {
+      return {
+        onClick: (_event: any) => {
+          router.push(`/blockchain/${block}/${record.rank}`);
+        },
+      };
+    },
+    [block]
+  );
 
   return (
     <Styled.TableWrapper>
@@ -57,21 +131,10 @@ export const TransactionsTable = ({
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-          {` / `}
-          <CSVLink
-            filename={"AssetsTable.csv"}
-            data={transactionRows}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={transactionRows}
+        ></TableDownloader>
       </Styled.TransactionHeaderBar>
       {sm ? (
         <List
@@ -87,86 +150,15 @@ export const TransactionsTable = ({
             itemRender: renderPaginationItem(),
           }}
           loading={loadingBlockDetails}
-          renderItem={(item) => (
-            <Link href={`/blockchain/${block}/${item.rank}`}>
-              <Styled.TransactionListItem key={item.rank}>
-                <Styled.TransactionItemContent>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[0].title()}
-                    </span>
-                    <span className="item-info-value">{item.rank}</span>
-                  </div>
-                  {/* <div className="item-info">
-                  <span className="item-info-title">
-                    {transactionsColumns[1].title()}
-                  </span>
-                  <span className="item-info-value">
-                    <Link
-                      target="_blank"
-                      href={`/blockchain/${block}/${item.rank}`}
-                    >
-                      <Styled.CenterEllipsis>
-                        <span className="ellipsis">{item.id}</span>
-                        <span className="indent">{item.id}</span>
-                      </Styled.CenterEllipsis>
-                    </Link>
-                  </span>
-                </div> */}
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[1].title()}
-                    </span>
-                    <span className="item-info-value">{item.expiration}</span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[2].title()}
-                    </span>
-                    <span className="item-info-value">
-                      {item.operations.length}
-                    </span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[3].title()}
-                    </span>
-                    <span className="item-info-value">
-                      {item.refBlockPrefix}
-                    </span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[4].title()}
-                    </span>
-                    <span className="item-info-value">{item.refBlockNum}</span>
-                  </div>
-                  <div className="item-info">
-                    <span className="item-info-title">
-                      {transactionsColumns[5].title()}
-                    </span>
-                    <span className="item-info-value">
-                      {item.extensions.length}
-                    </span>
-                  </div>
-                </Styled.TransactionItemContent>
-              </Styled.TransactionListItem>
-            </Link>
-          )}
+          renderItem={renderListItem}
         />
       ) : (
         <Styled.TransactionsTable
           dataSource={searchDataSource}
           columns={transactionsColumns as ColumnsType<TransactionRow>}
           loading={loadingBlockDetails}
-          rowClassName={(_record) => "pointer"}
-          onRow={(record) => {
-            return {
-              onClick: (_event) => {
-                router.push(`/blockchain/${block}/${record.rank}`);
-              },
-            };
-          }}
+          rowClassName="pointer"
+          onRow={onRow}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,

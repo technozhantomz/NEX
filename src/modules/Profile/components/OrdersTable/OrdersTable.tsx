@@ -1,13 +1,14 @@
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { useRef } from "react";
 
 import { OrderColumnType } from "..";
-import { renderPaginationItem } from "../../../../common/components";
+import {
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
-import { DeleteOutlined, DownloadOutlined, List } from "../../../../ui/src";
+import { DeleteOutlined, List } from "../../../../ui/src";
 import { OrderTableRow } from "../../types";
 import { OrdersPrintTable } from "../OrdersPrintTable";
 
@@ -35,22 +36,10 @@ export const OrdersTable = ({
     <Styled.OrdersWrapper>
       <Styled.OrdersHeaderBar>
         <Styled.OrdersHeader>{header}</Styled.OrdersHeader>
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"WitnessesTable.csv"}
-            data={ordersTableRows}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={ordersTableRows}
+        ></TableDownloader>
       </Styled.OrdersHeaderBar>
       {md ? (
         <List
