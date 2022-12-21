@@ -1,5 +1,4 @@
 import counterpart from "counterpart";
-import { Dispatch, SetStateAction } from "react";
 
 import { PasswordModal, TransactionModal } from "../../../../common/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
@@ -7,24 +6,21 @@ import {
   useUserContext,
   useViewportContext,
 } from "../../../../common/providers";
-import { Asset, Scroll } from "../../../../common/types";
+import { Scroll } from "../../../../common/types";
 import { DownOutlined, Form, Tooltip } from "../../../../ui/src";
-import { Order, OrderRow } from "../../types";
+import { Order, OrderRow, PairAssets } from "../../types";
 
 import * as Styled from "./OrderBook.styled";
 import { showUserOrderColumns } from "./components";
 import { OrderType, useOrderBook } from "./hooks";
 
 type Props = {
-  currentBase: Asset | undefined;
-  currentQuote: Asset | undefined;
+  selectedAssets: PairAssets | undefined;
   loadingSelectedPair: boolean;
   forUser?: boolean;
   asks: Order[];
   bids: Order[];
-  ordersRows: OrderRow[];
-  setOrdersRows: Dispatch<SetStateAction<OrderRow[]>>;
-  loadingOrderRows: boolean;
+  loadingAsksBids: boolean;
   userOrdersRows: OrderRow[];
   loadingUserOrderRows: boolean;
   onOrderBookRowClick: (record: OrderRow) => void;
@@ -32,19 +28,17 @@ type Props = {
 
 export const OrderBook = ({
   forUser = false,
-  currentBase,
-  currentQuote,
   loadingSelectedPair,
   asks,
   bids,
-  ordersRows,
-  setOrdersRows,
-  loadingOrderRows,
+  loadingAsksBids,
   userOrdersRows,
   loadingUserOrderRows,
   onOrderBookRowClick,
+  selectedAssets,
 }: Props): JSX.Element => {
   const {
+    ordersRows,
     orderType,
     threshold,
     handleThresholdChange,
@@ -60,12 +54,10 @@ export const OrderBook = ({
     selectedOrderId,
     handleCancelLimitOrder,
   } = useOrderBook({
-    currentBase,
-    currentQuote,
+    selectedAssets,
     loadingSelectedPair,
     asks,
     bids,
-    setOrdersRows,
   });
 
   const {
@@ -119,17 +111,16 @@ export const OrderBook = ({
     </Styled.ThresholdMenu>
   );
 
-  const userOrderColumns =
-    currentQuote && currentBase
-      ? showUserOrderColumns(
-          currentQuote.symbol,
-          currentBase.symbol,
-          (orderId) => {
-            setSelectedOrderId(orderId.split(".")[2]);
-            showPasswordModal();
-          }
-        )
-      : undefined;
+  const userOrderColumns = selectedAssets
+    ? showUserOrderColumns(
+        selectedAssets.quote.symbol,
+        selectedAssets.base.symbol,
+        (orderId) => {
+          setSelectedOrderId(orderId.split(".")[2]);
+          showPasswordModal();
+        }
+      )
+    : undefined;
 
   const columns = forUser ? userOrderColumns : orderColumns;
 
@@ -179,7 +170,7 @@ export const OrderBook = ({
       )}
       <Styled.TableContainer>
         <Styled.Table
-          loading={forUser ? loadingUserOrderRows : loadingOrderRows}
+          loading={forUser ? loadingUserOrderRows : loadingAsksBids}
           pagination={false}
           columns={columns}
           scroll={scroll}

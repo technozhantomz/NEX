@@ -1,5 +1,7 @@
-import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
+
+import { useUpdateExchanges } from "../../hooks";
 
 import * as Styled from "./TradingPairCard.styled";
 import { useTradingPairStyles } from "./hooks";
@@ -17,6 +19,9 @@ export const TradingPairCard = ({
   percentChange,
   volume,
 }: PairProps): JSX.Element => {
+  const router = useRouter();
+  const { updateExchanges } = useUpdateExchanges();
+
   const {
     handleMouseHover,
     handleMouseOut,
@@ -27,7 +32,13 @@ export const TradingPairCard = ({
   } = useTradingPairStyles(percentChange);
 
   return (
-    <Link href={`/market/${tradingPair.replace("/", "_")}`}>
+    <div
+      onClick={() => {
+        const activePair = tradingPair.replace("/", "_");
+        updateExchanges(activePair);
+        router.push(`/market/${activePair}`);
+      }}
+    >
       <Styled.Card
         className="trading-card"
         onMouseEnter={handleMouseHover}
@@ -52,6 +63,6 @@ export const TradingPairCard = ({
         </Styled.Price>
         {showChangeAndVolume && <Styled.Volume>{volume}</Styled.Volume>}
       </Styled.Card>
-    </Link>
+    </div>
   );
 };

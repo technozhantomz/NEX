@@ -21,6 +21,7 @@ export type OrderRow = {
   price: string;
   isBuyOrder: boolean;
   expiration?: string;
+  filled?: string;
 };
 
 export type OrderForm = {
