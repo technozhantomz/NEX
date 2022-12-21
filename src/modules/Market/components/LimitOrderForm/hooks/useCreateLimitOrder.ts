@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
@@ -19,15 +19,11 @@ import {
 } from "./useCreateLimitOrder.types";
 
 export function useCreateLimitOrder({
-  currentBase,
-  currentQuote,
+  selectedAssets,
   loadingSelectedPair,
   isBuyOrder,
   orderForm,
 }: UseCreateLimitOrderArgs): UseCreateLimitOrderResult {
-  const [feeAmount, setFeeAmount] = useState<number>(0);
-  const [marketFeePercent, setMarketFeePercent] = useState<number>(0);
-  const [balance, _setBalance] = useState<number>(0);
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
   const [transactionSuccessMessage, setTransactionSuccessMessage] =
@@ -43,6 +39,46 @@ export function useCreateLimitOrder({
   const { buildTrx } = useTransactionBuilder();
   const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
   const { limitByPrecision, roundNum } = useAsset();
+
+  const balance = useMemo(() => {
+    if (!loadingSelectedPair && selectedAssets && assets.length > 0) {
+      const userBaseAsset = assets.find(
+        (asset) => asset.symbol === selectedAssets.base.symbol
+      );
+      const userQuoteAsset = assets.find(
+        (asset) => asset.symbol === selectedAssets.quote.symbol
+      );
+      const userBaseAssetAmount = userBaseAsset
+        ? (userBaseAsset.amount as number)
+        : 0;
+      const userQuoteAssetAmount = userQuoteAsset
+        ? (userQuoteAsset.amount as number)
+        : 0;
+      return isBuyOrder ? userBaseAssetAmount : userQuoteAssetAmount;
+    } else {
+      return 0;
+    }
+  }, [assets, selectedAssets, loadingSelectedPair, isBuyOrder]);
+
+  const fees = useMemo(() => {
+    if (!loadingSelectedPair && selectedAssets) {
+      const createLimitOrderFee = calculateCreateLimitOrderFee(
+        selectedAssets.base,
+        selectedAssets.quote
+      );
+      if (createLimitOrderFee !== undefined) {
+        const feeAmount = createLimitOrderFee.fee;
+        const marketFeePercent = isBuyOrder
+          ? createLimitOrderFee.buyMarketFeePercent
+          : createLimitOrderFee.sellMarketFeePercent;
+        return { feeAmount, marketFeePercent };
+      } else {
+        return { feeAmount: 0, marketFeePercent: 0 };
+      }
+    } else {
+      return { feeAmount: 0, marketFeePercent: 0 };
+    }
+  }, [loadingSelectedPair, selectedAssets, calculateCreateLimitOrderFee]);
 
   const handleFieldAssetPrecission = useCallback(
     (fieldValue: number, fieldName: string, assetPrecission: number) => {
@@ -63,44 +99,36 @@ export function useCreateLimitOrder({
 
   const handleAssetPrecission = useCallback(
     (changedValues) => {
-      if (
-        !loadingSelectedPair &&
-        currentBase !== undefined &&
-        currentQuote !== undefined
-      ) {
+      if (!loadingSelectedPair && selectedAssets) {
         if (changedValues.price) {
           handleFieldAssetPrecission(
             changedValues.price,
             "price",
-            currentBase.precision
+            selectedAssets.base.precision
           );
         } else if (changedValues.total) {
           handleFieldAssetPrecission(
             changedValues.total,
             "total",
-            currentBase.precision
+            selectedAssets.base.precision
           );
         } else if (changedValues.quantity) {
           handleFieldAssetPrecission(
             changedValues.quantity,
             "quantity",
-            currentQuote.precision
+            selectedAssets.quote.precision
           );
         }
       }
     },
-    [currentBase, currentQuote, loadingSelectedPair, handleFieldAssetPrecission]
+    [selectedAssets, loadingSelectedPair, handleFieldAssetPrecission]
   );
 
   const handleRelationsBetweenInputs = useCallback(
     (changedValues, allValues) => {
       let baseRoundTo = 5;
-      if (
-        !loadingSelectedPair &&
-        currentBase !== undefined &&
-        currentQuote !== undefined
-      ) {
-        baseRoundTo = currentBase.precision;
+      if (!loadingSelectedPair && selectedAssets) {
+        baseRoundTo = selectedAssets.base.precision;
       }
       if (changedValues.price || changedValues.quantity) {
         if (
@@ -115,7 +143,7 @@ export function useCreateLimitOrder({
         }
       }
     },
-    [orderForm, currentBase, currentQuote]
+    [orderForm, selectedAssets]
   );
 
   const handleValuesChange = useCallback(
@@ -125,39 +153,6 @@ export function useCreateLimitOrder({
     },
     [handleAssetPrecission, handleRelationsBetweenInputs]
   );
-
-  const setBalance = useCallback(() => {
-    if (
-      !loadingSelectedPair &&
-      currentBase !== undefined &&
-      currentQuote !== undefined
-    ) {
-      if (assets.length > 0) {
-        const userBaseAsset = assets.find(
-          (asset) => asset.symbol === currentBase.symbol
-        );
-        const userQuoteAsset = assets.find(
-          (asset) => asset.symbol === currentQuote.symbol
-        );
-        const userBaseAssetAmount = userBaseAsset
-          ? (userBaseAsset.amount as number)
-          : 0;
-        const userQuoteAssetAmount = userQuoteAsset
-          ? (userQuoteAsset.amount as number)
-          : 0;
-        isBuyOrder
-          ? _setBalance(userBaseAssetAmount)
-          : _setBalance(userQuoteAssetAmount);
-      }
-    }
-  }, [
-    assets,
-    _setBalance,
-    currentBase,
-    currentQuote,
-    loadingSelectedPair,
-    isBuyOrder,
-  ]);
 
   const handleCreateLimitOrder = useCallback(
     async (signerKey: SignerKey) => {
@@ -171,8 +166,8 @@ export function useCreateLimitOrder({
         id,
         values.quantity,
         values.total,
-        currentBase as Asset,
-        currentQuote as Asset,
+        selectedAssets?.base as Asset,
+        selectedAssets?.quote as Asset,
         expiration,
         false,
         [],
@@ -209,8 +204,7 @@ export function useCreateLimitOrder({
       orderForm,
       buildCreateLimitOrderTransaction,
       id,
-      currentBase,
-      currentQuote,
+      selectedAssets,
       isBuyOrder,
       buildTrx,
       setLoadingTransaction,
@@ -236,7 +230,7 @@ export function useCreateLimitOrder({
       );
     }
     const userQuoteAsset = assets.find(
-      (asset) => asset.symbol === currentQuote?.symbol
+      (asset) => asset.symbol === selectedAssets?.quote.symbol
     );
     if (!isBuyOrder) {
       if (!userQuoteAsset) {
@@ -244,8 +238,11 @@ export function useCreateLimitOrder({
           new Error(counterpart.translate(`field.errors.balance_not_enough`))
         );
       }
-      if (currentQuote?.symbol === defaultToken) {
-        if (Number(value) + feeAmount > (userQuoteAsset?.amount as number)) {
+      if (selectedAssets?.quote.symbol === defaultToken) {
+        if (
+          Number(value) + fees.feeAmount >
+          (userQuoteAsset?.amount as number)
+        ) {
           return Promise.reject(
             new Error(counterpart.translate(`field.errors.balance_not_enough`))
           );
@@ -264,13 +261,13 @@ export function useCreateLimitOrder({
   const validateTotalForBuyOrders = (value: number) => {
     let errorMessage = "";
     const userBaseAsset = assets.find(
-      (asset) => asset.symbol === currentBase?.symbol
+      (asset) => asset.symbol === selectedAssets?.base.symbol
     );
     if (!userBaseAsset) {
       errorMessage = counterpart.translate(`field.errors.balance_not_enough`);
     }
-    if (currentBase?.symbol === defaultToken) {
-      if (Number(value) + feeAmount > (userBaseAsset?.amount as number)) {
+    if (selectedAssets?.base.symbol === defaultToken) {
+      if (Number(value) + fees.feeAmount > (userBaseAsset?.amount as number)) {
         errorMessage = counterpart.translate(`field.errors.balance_not_enough`);
       }
     } else {
@@ -298,7 +295,7 @@ export function useCreateLimitOrder({
     );
     if (
       userDefaultAsset === undefined ||
-      feeAmount > (userDefaultAsset?.amount as number)
+      fees.feeAmount > (userDefaultAsset?.amount as number)
     ) {
       return Promise.reject(
         new Error(
@@ -340,38 +337,8 @@ export function useCreateLimitOrder({
     ],
   };
 
-  useEffect(() => {
-    setBalance();
-    if (
-      !loadingSelectedPair &&
-      currentBase !== undefined &&
-      currentQuote !== undefined
-    ) {
-      const createLimitOrderFee = calculateCreateLimitOrderFee(
-        currentBase,
-        currentQuote
-      );
-      if (createLimitOrderFee !== undefined) {
-        setFeeAmount(createLimitOrderFee.fee);
-        isBuyOrder
-          ? setMarketFeePercent(createLimitOrderFee.buyMarketFeePercent)
-          : setMarketFeePercent(createLimitOrderFee.sellMarketFeePercent);
-      }
-    }
-  }, [
-    setBalance,
-    loadingSelectedPair,
-    currentQuote,
-    currentBase,
-    calculateCreateLimitOrderFee,
-    setFeeAmount,
-    isBuyOrder,
-    setMarketFeePercent,
-  ]);
-
   return {
-    feeAmount,
-    marketFeePercent,
+    fees,
     balance,
     formValidation,
     handleValuesChange,

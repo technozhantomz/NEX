@@ -1,54 +1,79 @@
 import counterpart from "counterpart";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
-import { Asset } from "../../../../../common/types";
-import { OrderHistoryColumn } from "../../../types";
+import { OrderHistoryColumn, PairAssets } from "../../../types";
 
 import { UseHistoryResult } from "./useHistory.types";
 
 type Args = {
-  currentBase: Asset | undefined;
-  currentQuote: Asset | undefined;
+  selectedAssets: PairAssets | undefined;
   loadingSelectedPair: boolean;
+  forUser: boolean;
 };
 
 export function useHistory({
-  currentBase,
-  currentQuote,
+  selectedAssets,
   loadingSelectedPair,
+  forUser,
 }: Args): UseHistoryResult {
-  const [columns, setColumns] = useState<OrderHistoryColumn[]>([]);
-
-  useEffect(() => {
-    if (
-      !loadingSelectedPair &&
-      currentBase !== undefined &&
-      currentQuote !== undefined
-    ) {
-      setColumns([
-        {
-          title: currentBase.symbol,
-          dataIndex: "base",
-          key: "base",
-        },
-        {
-          title: currentQuote.symbol,
-          dataIndex: "quote",
-          key: "quote",
-        },
-        {
-          title: counterpart.translate(`tableHead.price`),
-          dataIndex: "price",
-          key: "price",
-        },
-        {
-          title: counterpart.translate(`tableHead.date`),
-          dataIndex: "date",
-          key: "date",
-        },
-      ]);
+  const columns: OrderHistoryColumn[] = useMemo(() => {
+    if (!loadingSelectedPair && selectedAssets) {
+      if (forUser) {
+        return [
+          {
+            title: counterpart.translate(`tableHead.price`),
+            dataIndex: "price",
+            key: "price",
+          },
+          {
+            title: selectedAssets.quote.symbol,
+            dataIndex: "quote",
+            key: "quote",
+          },
+          {
+            title: selectedAssets.base.symbol,
+            dataIndex: "base",
+            key: "base",
+          },
+          {
+            title: counterpart.translate(`tableHead.filled`),
+            dataIndex: "filled",
+            key: "filled",
+          },
+          {
+            title: counterpart.translate(`tableHead.date`),
+            dataIndex: "date",
+            key: "date",
+          },
+        ];
+      } else {
+        return [
+          {
+            title: counterpart.translate(`tableHead.price`),
+            dataIndex: "price",
+            key: "price",
+          },
+          {
+            title: selectedAssets.quote.symbol,
+            dataIndex: "quote",
+            key: "quote",
+          },
+          {
+            title: selectedAssets.base.symbol,
+            dataIndex: "base",
+            key: "base",
+          },
+          {
+            title: counterpart.translate(`tableHead.date`),
+            dataIndex: "date",
+            key: "date",
+          },
+        ];
+      }
+    } else {
+      return [];
     }
-  }, [loadingSelectedPair, currentBase, currentQuote]);
+  }, [loadingSelectedPair, selectedAssets, forUser]);
 
   return {
     columns,
