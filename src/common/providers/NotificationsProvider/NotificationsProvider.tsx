@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -264,16 +265,24 @@ export function NotificationsProvider({
     settings.notifications.selectedNotifications.length,
   ]);
 
+  const notificationContext = useMemo(() => {
+    return {
+      hasUnreadMessages,
+      notifications,
+      loadingNotifications,
+      markAllNotificationsRead,
+      markTheNotificationAsReadOrUnread,
+    };
+  }, [
+    hasUnreadMessages,
+    notifications,
+    loadingNotifications,
+    markAllNotificationsRead,
+    markTheNotificationAsReadOrUnread,
+  ]);
+
   return (
-    <NotificationsContext.Provider
-      value={{
-        hasUnreadMessages,
-        notifications,
-        loadingNotifications,
-        markAllNotificationsRead,
-        markTheNotificationAsReadOrUnread,
-      }}
-    >
+    <NotificationsContext.Provider value={notificationContext}>
       {children}
     </NotificationsContext.Provider>
   );
