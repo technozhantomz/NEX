@@ -114,8 +114,6 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
-    - npm i
-    - npm run test:ci
     - sonar-scanner
   only:
     - merge_requests
