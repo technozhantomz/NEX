@@ -1,14 +1,15 @@
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import Link from "next/link";
+import { useRef } from "react";
 
-import { renderPaginationItem } from "../../../../common/components";
+import {
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import {
-  DownloadOutlined,
   InfoCircleOutlined,
   List,
   SearchOutlined,
@@ -38,9 +39,9 @@ export const AssetsTab = (): JSX.Element => {
     <Styled.AssetsTabWrapper>
       <Styled.StatsCardsDeck>
         <StatsCard
-          noData={assetTableRows.length === 0}
+          noData={!assetTableRows}
           title={counterpart.translate(`pages.blocks.assets.assets`)}
-          data={`${assetTableRows.length}`}
+          data={`${assetTableRows?.length}`}
           statsData={assetsStats}
         />
       </Styled.StatsCardsDeck>
@@ -51,7 +52,7 @@ export const AssetsTab = (): JSX.Element => {
         </Styled.AssetHeader>
         <SearchTableInput
           columns={assetsColumns as ColumnsType<AssetTableRow>}
-          dataSource={assetTableRows}
+          dataSource={assetTableRows ?? []}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
@@ -60,28 +61,16 @@ export const AssetsTab = (): JSX.Element => {
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"AssetsTable.csv"}
-            data={assetTableRows}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={assetTableRows}
+        ></TableDownloader>
       </Styled.AssetHeaderBar>
       {sm ? (
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={loading && !assetTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -133,9 +122,9 @@ export const AssetsTab = (): JSX.Element => {
                     {assetsColumns[5].title()}
                   </span>
                   <span className="item-info-value">
-                    <a href={`/user/${item.issuer}`} target="_blank">
+                    <Link href={`/user/${item.issuer}`} target="_blank">
                       {item.issuer}
-                    </a>
+                    </Link>
                   </span>
                 </div>
                 <div className="item-info">
@@ -162,7 +151,7 @@ export const AssetsTab = (): JSX.Element => {
         <Styled.AssetsTable
           dataSource={searchDataSource}
           columns={assetsColumns as ColumnsType<AssetTableRow>}
-          loading={loading}
+          loading={loading && !assetTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -177,8 +166,8 @@ export const AssetsTab = (): JSX.Element => {
       <Styled.PrintTable>
         <AssetsPrintTable
           ref={componentRef}
-          assetTableRows={assetTableRows}
-          loading={loading}
+          assetTableRows={assetTableRows ?? []}
+          loading={loading && !assetTableRows}
           assetsColumns={assetsColumns}
         />
       </Styled.PrintTable>

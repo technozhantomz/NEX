@@ -14,16 +14,18 @@ export const ProfileTabItems = (
   const label = ["orders", "activities", "notifications"];
   const key = ["orders", "activities", "notifications"];
   const children = [
-    <OrdersTab />,
+    <OrdersTab key="orders" />,
     <ActivityAndNotificationTable
       userName={localStorageAccount}
       showHeader={true}
       isNotificationTab={false}
+      key="activities"
     />,
     <ActivityAndNotificationTable
       userName={localStorageAccount}
       showHeader={true}
       isNotificationTab={true}
+      key="notifications"
     />,
   ];
 

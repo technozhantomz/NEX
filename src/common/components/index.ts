@@ -17,3 +17,4 @@ export * from "./DashboardLoginButton";
 export * from "./DownloadBitcoinKeys";
 export * from "./PaginationConfig";
 export * from "./UserLinkExtractor";
+export * from "./TableDownloader";

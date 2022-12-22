@@ -22,8 +22,8 @@ export type UseSendFormResult = {
   assetBlockchains: string[];
   sendForm: FormInstance<SendForm>;
   selectedAssetSymbol: string | undefined;
-  selectedAsset: Asset | undefined;
-  handleValuesChange: (changedValues: any) => void;
+  userAsset: Asset | undefined;
+  handleValuesChange: (changedValues: any) => Promise<void>;
   onBlockchainChange: (value: unknown) => void;
   selectedBlockchain: string | undefined;
   formValdation: FormValidation;
@@ -53,6 +53,5 @@ export type FormValidation = {
   asset: Rule[];
   to: Rule[];
   amount: Rule[];
-  memo: Rule[];
   blockchain: Rule[];
 };

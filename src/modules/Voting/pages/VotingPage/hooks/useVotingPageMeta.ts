@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { PageMeta } from "../../../../../common/types";
 
@@ -12,6 +12,7 @@ export function useVotingPageMeta(tab?: string): VotingPageMeta {
     description: counterpart.translate("pages.voting.gpos.heading"),
   } as PageMeta;
 
+  const [prevTab, setPrevTab] = useState<string | undefined>(tab);
   const [pageMeta, _setPageMeta] = useState<PageMeta>(defaultPageMeta);
 
   const setPageMeta = useCallback(
@@ -27,9 +28,10 @@ export function useVotingPageMeta(tab?: string): VotingPageMeta {
     [_setPageMeta]
   );
 
-  useEffect(() => {
+  if (tab !== prevTab) {
+    setPrevTab(tab);
     setPageMeta(tab);
-  }, [tab]);
+  }
 
   return { pageMeta };
 }

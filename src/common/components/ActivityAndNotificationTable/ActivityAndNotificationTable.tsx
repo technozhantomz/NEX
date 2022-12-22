@@ -1,12 +1,10 @@
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { useRef } from "react";
 
-import { renderPaginationItem } from "..";
-import { DownloadOutlined, SearchOutlined } from "../../../ui/src";
+import { renderPaginationItem, TableDownloader } from "..";
+import { SearchOutlined } from "../../../ui/src";
 import { useNotificationsContext, useViewportContext } from "../../providers";
 
 import * as Styled from "./ActivityAndNotificationTable.styled";
@@ -79,24 +77,10 @@ export const ActivityAndNotificationTable = ({
             }}
           />
           {!isNotificationTab ? (
-            <Styled.DownloadLinks>
-              <DownloadOutlined />
-              <ReactToPrint
-                trigger={() => (
-                  <a href="#">{counterpart.translate(`links.pdf`)}</a>
-                )}
-                content={() => componentRef.current as unknown as ReactInstance}
-              />
-
-              {` / `}
-              <CSVLink
-                filename={"ActivityTable.csv"}
-                data={activitiesAndNotificationsRows}
-                className="btn btn-primary"
-              >
-                {counterpart.translate(`links.csv`)}
-              </CSVLink>
-            </Styled.DownloadLinks>
+            <TableDownloader
+              componentRef={componentRef}
+              data={activitiesAndNotificationsRows}
+            ></TableDownloader>
           ) : (
             ""
           )}

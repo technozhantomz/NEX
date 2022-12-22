@@ -36,7 +36,9 @@ export const OrdersTable = styled(UiTable)`
     color: ${colors.textColorSecondary};
     font-weight: 300;
     border: none;
-    &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+    &:not(:last-child):not(.ant-table-selection-column):not(
+        .ant-table-row-expand-icon-cell
+      ):not([colspan])::before {
       display: none;
     }
   }
@@ -57,7 +59,7 @@ export const OrdersTable = styled(UiTable)`
 `;
 
 export const OrderListItem = styled(UiList.Item)`
-  padding: 25px 25px;
+  padding: 25px 0px;
   a {
     font-style: italic;
   }

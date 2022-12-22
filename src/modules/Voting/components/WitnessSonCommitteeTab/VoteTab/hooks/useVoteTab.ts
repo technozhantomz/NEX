@@ -6,12 +6,12 @@ import { isArrayEqual } from "../../../../../../api/utils";
 import {
   useAccount,
   useAsset,
+  useBlockchain,
   useTransactionBuilder,
   useUpdateAccountTransactionBuilder,
 } from "../../../../../../common/hooks";
 import {
   useAssetsContext,
-  usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../../common/providers";
 import {
@@ -70,7 +70,7 @@ export function useVoteTab({
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
   const { getTrxFee, buildTrx } = useTransactionBuilder();
-  const { dbApi } = usePeerplaysApiContext();
+  const { getGlobalProperties } = useBlockchain();
 
   const sortVotesRows = useCallback((votes: VoteRow[]) => {
     const sorter = (a: VoteRow, b: VoteRow) =>
@@ -425,15 +425,6 @@ export function useVoteTab({
       afterCloseTransactionModal.current,
     ]
   );
-
-  const getGlobalProperties = useCallback(async () => {
-    try {
-      const gpo: GlobalProperties = await dbApi("get_global_properties");
-      return gpo;
-    } catch (e) {
-      console.log(e);
-    }
-  }, [dbApi]);
 
   useEffect(() => {
     let ignore = false;

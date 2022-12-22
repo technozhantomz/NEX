@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
 import { ChainTypes } from "peerplaysjs-lib";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useAsset } from "../../../../../common/hooks";
 import {
@@ -16,15 +16,44 @@ import {
 } from "./useFeesTab.types";
 
 export function useFeesTab(): UseFeesTabResult {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [searchDataSource, setSearchDataSource] = useState<FeesTableRow[]>([]);
-  const [fullFeesRows, setFullFeesRows] = useState<FeesTableRow[]>([]);
   const { feeParameters } = useFeesContext();
   const { setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
 
-  const getFees = useCallback(async () => {
-    setLoading(true);
+  const formFeeRow = useCallback(
+    (
+      operationWithFeeParameter: OperationWithFeeParameter,
+      category: string
+    ): FeesTableRow => {
+      return {
+        key: operationWithFeeParameter.type,
+        category,
+        operation: counterpart.translate(
+          `transaction.trxTypes.${operationWithFeeParameter.type}.title`
+        ),
+        types: Object.keys(operationWithFeeParameter.feeParameter[1]).map(
+          (key) => counterpart.translate(`transaction.feeTypes.${key}`)
+        ),
+        fees: Object.values(operationWithFeeParameter.feeParameter[1]).map(
+          (feeValue) => {
+            if (feeValue === 0) {
+              return counterpart.translate("transaction.feeTypes._none");
+            } else {
+              return `${setPrecision(
+                false,
+                feeValue,
+                (defaultAsset as Asset).precision
+              ).toString()} ${defaultAsset?.symbol}`;
+            }
+          }
+        ),
+      };
+    },
+
+    [defaultAsset, setPrecision]
+  );
+
+  const fullFeesRows = useMemo(() => {
     const allOperationsTypes = Object.keys(ChainTypes.operations);
     const feeGrouping = {
       general: [
@@ -138,52 +167,17 @@ export function useFeesTab(): UseFeesTabResult {
         businessRows,
         gameRows
       );
-
-      setFullFeesRows(fullRows);
-      setSearchDataSource(fullRows);
-      setLoading(false);
+      return fullRows;
     }
-  }, [feeParameters, defaultAsset, setPrecision, setLoading, setFullFeesRows]);
-
-  const formFeeRow = useCallback(
-    (
-      operationWithFeeParameter: OperationWithFeeParameter,
-      category: string
-    ): FeesTableRow => {
-      return {
-        key: operationWithFeeParameter.type,
-        category,
-        operation: counterpart.translate(
-          `transaction.trxTypes.${operationWithFeeParameter.type}.title`
-        ),
-        types: Object.keys(operationWithFeeParameter.feeParameter[1]).map(
-          (key) => counterpart.translate(`transaction.feeTypes.${key}`)
-        ),
-        fees: Object.values(operationWithFeeParameter.feeParameter[1]).map(
-          (feeValue) => {
-            if (feeValue === 0) {
-              return counterpart.translate("transaction.feeTypes._none");
-            } else {
-              return `${setPrecision(
-                false,
-                feeValue,
-                (defaultAsset as Asset).precision
-              ).toString()} ${defaultAsset?.symbol}`;
-            }
-          }
-        ),
-      };
-    },
-
-    [defaultAsset]
-  );
-
-  useEffect(() => {
-    getFees();
-  }, [feeParameters, defaultAsset]);
+  }, [feeParameters, defaultAsset, formFeeRow]);
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [searchDataSource, setSearchDataSource] = useState<FeesTableRow[]>([]);
+  if (!loaded && fullFeesRows) {
+    setLoaded(true);
+    setSearchDataSource(fullFeesRows);
+  }
 
   return {
-    loading,
     searchDataSource,
     fullFeesRows,
     setSearchDataSource,

@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
 import { capitalize } from "lodash";
-import { useCallback, useEffect, useState } from "react";
+import { useMemo } from "react";
 
 import { PageMeta } from "../../../../../common/types";
 
@@ -10,40 +10,29 @@ export function useBlockchainPage(
   tab?: string | string[],
   block?: string | string[]
 ): BlockchainPage {
-  const [pageMeta, _setPageMeta] = useState<PageMeta>({
-    title: "PeerPlays Blockchain",
-    heading: counterpart.translate(`pages.blocks.blockchain.heading`),
-    description: "PeerPlays Blockchain",
-  });
-  const [blockNum, setBlockNum] = useState<number | undefined>(undefined);
-  const [transactionId, setTransactionId] = useState<string | undefined>(
-    undefined
-  );
-
-  const setBlockchainMeta = useCallback(
-    (tab?: string) => {
-      tab = tab ? tab.toLowerCase() : "blockchain";
-      const title = "Peerplays " + capitalize(tab);
-      _setPageMeta({
-        title: title,
-        heading: counterpart.translate("pages.blocks" + "." + tab + ".heading"),
-        description: title,
-      });
-    },
-    [_setPageMeta]
-  );
-
-  useEffect(() => {
-    setBlockchainMeta(tab as string);
+  const pageMeta: PageMeta = useMemo(() => {
+    tab = tab ? (tab as string).toLowerCase() : "blockchain";
+    const title = "Peerplays " + capitalize(tab);
+    return {
+      title: title,
+      heading: counterpart.translate("pages.blocks" + "." + tab + ".heading"),
+      description: title,
+    };
   }, [tab]);
 
-  useEffect(() => {
-    if (block !== undefined) {
+  const blockNum = useMemo(() => {
+    if (block) {
       if (block.length > 0) {
-        setBlockNum(parseInt(block[0]));
-        setTransactionId(block[1]);
+        return parseInt(block[0]);
+      } else {
+        return parseInt(block as string);
       }
-      setBlockNum(parseInt(block as string));
+    }
+  }, [block]);
+
+  const transactionId = useMemo(() => {
+    if (block && block.length > 1) {
+      return block[1];
     }
   }, [block]);
 

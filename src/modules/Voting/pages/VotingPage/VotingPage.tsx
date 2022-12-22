@@ -29,8 +29,6 @@ const VotingPage: NextPage = () => {
   const { pageMeta } = useVotingPageMeta(tab as string);
   const { sm } = useViewportContext();
   const {
-    loadingMembers,
-    loadingUserVotes,
     allMembers,
     allMembersIds,
     fullAccount,
@@ -38,6 +36,7 @@ const VotingPage: NextPage = () => {
     totalGpos,
     getUserVotes,
     serverApprovedVotesIds,
+    voteTabLoaded,
   } = useVoting();
   const dropdowItems = [
     { label: counterpart.translate(`pages.voting.gpos.tab`), key: "gpos" },
@@ -101,7 +100,7 @@ const VotingPage: NextPage = () => {
         children: (
           <VoteTab
             tab={voteTab}
-            votesLoading={loadingMembers || loadingUserVotes}
+            votesLoading={!voteTabLoaded}
             fullAccount={fullAccount}
             tabAllMembers={allMembers.filter(
               (member) =>
@@ -129,7 +128,7 @@ const VotingPage: NextPage = () => {
           serverProxy={proxy}
           totalGpos={totalGpos}
           getUserVotes={getUserVotes}
-          loading={loadingMembers || loadingUserVotes}
+          loading={!voteTabLoaded}
         />
       ),
     },
