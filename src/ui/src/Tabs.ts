@@ -18,4 +18,7 @@ export const Tabs = styled(AntdTabs)`
     color: ${colors.textColor};
     text-shadow: unset;
   }
+  .ant-tabs-tab.ant-tabs-tab-active {
+    border-bottom: 2pt solid #0a48be;
+  }
 `;
