@@ -45,12 +45,11 @@ export const VoteTableWrapper = styled.div`
 `;
 
 export const VoteTable = styled(DataTable)`
-  margin: 0 35px;
   max-width: 100%;
 `;
 
 export const VoteList = styled(UiList)`
-  padding: 0 25px 25px;
+  padding-bottom: 25px;
   ${mixIns.hairline}
   &.ant-list-split.ant-list-something-after-last-item .ant-spin-container > .ant-list-items > .ant-list-item:last-child {
     border-bottom: none;

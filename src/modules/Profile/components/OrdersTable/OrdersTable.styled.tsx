@@ -59,7 +59,7 @@ export const OrdersTable = styled(UiTable)`
 `;
 
 export const OrderListItem = styled(UiList.Item)`
-  padding: 25px 25px;
+  padding: 25px 0px;
   a {
     font-style: italic;
   }
