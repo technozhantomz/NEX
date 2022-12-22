@@ -1,5 +1,5 @@
 import { sum, uniq } from "lodash";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { utils } from "../../../../../api/utils";
 import { useAccount, useAsset } from "../../../../../common/hooks";
@@ -18,9 +18,7 @@ export function useAssetsTable({
   filterAsset,
   actionType,
 }: Args): UseAssetsTabResult {
-  const [assetsTableRows, _setAssetsTableRows] = useState<AssetTableRow[]>([]);
   const [searchDataSource, setSearchDataSource] = useState<AssetTableRow[]>([]);
-  const [assetsColumns, setAssetsColumns] = useState<AssetColumnType[]>([]);
   const [fullAccount, _setFullAccount] = useState<FullAccount | undefined>();
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -54,68 +52,57 @@ export function useAssetsTable({
     [fullAccount, setPrecision]
   );
 
-  const setAssetsTableRows = useCallback(() => {
+  const assetsTableRows = useMemo(() => {
     if (fullAccount && assets && assets.length) {
-      try {
-        setLoading(true);
-        const assetsRows = assets
-          .filter((asset) => asset.symbol !== filterAsset)
-          .map(formAssetRow);
-
-        const symbols = assetsRows.map((asset) => asset.symbol);
-        const allNames = assetsRows.map((row) => row.name);
-        const uniqNames = uniq(allNames);
-        const updatedColumns = createAssetsColumns(actionType).map((column) => {
-          switch (true) {
-            case column.key === "symbol":
-              column.filters = symbols.map((symbol) => {
-                return { text: symbol, value: symbol };
-              });
-              break;
-            case column.key === "name":
-              column.filters = uniqNames.map((name) => {
-                return { text: name, value: name };
-              });
-              break;
-          }
-          return { ...column };
-        });
-        setAssetsColumns(updatedColumns);
-        _setAssetsTableRows(assetsRows);
-        setSearchDataSource(assetsRows);
-
-        setLoading(false);
-      } catch (e) {
-        setLoading(false);
-        console.log(e);
-      }
+      const assetsRows = assets
+        .filter((asset) => asset.symbol !== filterAsset)
+        .map(formAssetRow);
+      setSearchDataSource(assetsRows);
+      return assetsRows;
     } else {
-      setLoading(false);
+      return [];
     }
-  }, [
-    formAssetRow,
-    _setAssetsTableRows,
-    createAssetsColumns,
-    setLoading,
-    assets,
-    setAssetsColumns,
-    filterAsset,
-    setSearchDataSource,
-    fullAccount,
-  ]);
+  }, [fullAccount, assets, assets.length, filterAsset, formAssetRow]);
 
-  const setFullAccount = useCallback(async () => {
-    const fullAccount = await getFullAccount(localStorageAccount, false);
-    _setFullAccount(fullAccount);
-  }, [getFullAccount, localStorageAccount, _setFullAccount]);
+  const assetsColumns = useMemo(() => {
+    const symbols = assetsTableRows.map((assetRow) => assetRow.symbol);
+    const allNames = assetsTableRows.map((assetRow) => assetRow.name);
+    const uniqNames = uniq(allNames);
+    const updatedColumns: AssetColumnType[] = createAssetsColumns(
+      actionType
+    ).map((column) => {
+      switch (true) {
+        case column.key === "symbol":
+          column.filters = symbols.map((symbol) => {
+            return { text: symbol, value: symbol };
+          });
+          break;
+        case column.key === "name":
+          column.filters = uniqNames.map((name) => {
+            return { text: name, value: name };
+          });
+          break;
+      }
+      return { ...column };
+    });
+    return updatedColumns;
+  }, [assetsTableRows, createAssetsColumns, actionType]);
 
   useEffect(() => {
+    let ignore = false;
+    async function setFullAccount() {
+      setLoading(true);
+      const fullAccount = await getFullAccount(localStorageAccount, false);
+      if (!ignore) {
+        _setFullAccount(fullAccount);
+        setLoading(false);
+      }
+    }
     setFullAccount();
-  }, [setFullAccount]);
-
-  useEffect(() => {
-    setAssetsTableRows();
-  }, [setAssetsTableRows]);
+    return () => {
+      ignore = true;
+    };
+  }, [setLoading, getFullAccount, localStorageAccount, _setFullAccount]);
 
   return {
     loading,

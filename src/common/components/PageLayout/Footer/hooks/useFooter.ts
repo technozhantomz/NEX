@@ -9,16 +9,6 @@ import {
 import { UseFooterResult } from "./useFooter.types";
 
 export function useFooter(): UseFooterResult {
-  const [isOutOfSyncModalVisible, setIsOutOfSyncModalVisible] =
-    useState<boolean>(false);
-  const [connected, _setConnected] = useState<boolean>(() => {
-    return rpcConnectionStatus !== "closed";
-  });
-  const [hasOutOfSyncModalBeenShownOnce, setHasOutOfSyncModalBeenShownOnce] =
-    useState<boolean>(false);
-  const connectionTimeout = useRef<NodeJS.Timeout>();
-  const syncTimeout = useRef<NodeJS.Timeout>();
-
   const { isTransitionInProgress, isAutoSelection } = usePeerplaysApiContext();
   const { getBlockTimeDelta, synced, rpcConnectionStatus, OUT_OF_SYNC_LIMIT } =
     useChainStoreContext();
@@ -27,6 +17,14 @@ export function useFooter(): UseFooterResult {
     setSuccessConnectionStates,
     setFailureConnectionStates,
   } = useConnectionManagerContext();
+  const connected = rpcConnectionStatus !== "closed";
+
+  const [isOutOfSyncModalVisible, setIsOutOfSyncModalVisible] =
+    useState<boolean>(false);
+  const [hasOutOfSyncModalBeenShownOnce, setHasOutOfSyncModalBeenShownOnce] =
+    useState<boolean>(false);
+  const connectionTimeout = useRef<NodeJS.Timeout>();
+  const syncTimeout = useRef<NodeJS.Timeout>();
 
   const showOutOfSyncModal = useCallback(() => {
     setIsOutOfSyncModalVisible(true);
@@ -82,11 +80,6 @@ export function useFooter(): UseFooterResult {
     return 30;
   }, []);
 
-  const setConnected = useCallback(() => {
-    const connected = rpcConnectionStatus !== "closed";
-    _setConnected(connected);
-  }, [rpcConnectionStatus, _setConnected]);
-
   const ensureConnectivity = useCallback(() => {
     const connected = rpcConnectionStatus !== "closed";
 
@@ -95,8 +88,6 @@ export function useFooter(): UseFooterResult {
         triggerReconnect();
       }, 50);
     } else if (!synced) {
-      // If the blockchain is out of sync the footer will be rerendered one last time and then
-
       const forceReconnectAfterSeconds = getForceReconnectAfterSeconds();
       const askToReconnectAfterSeconds = 10;
 
@@ -144,10 +135,6 @@ export function useFooter(): UseFooterResult {
     showOutOfSyncModal,
     hideOutOfSyncModal,
   ]);
-
-  useEffect(() => {
-    setConnected();
-  }, [setConnected]);
 
   useEffect(() => {
     ensureConnectivity();

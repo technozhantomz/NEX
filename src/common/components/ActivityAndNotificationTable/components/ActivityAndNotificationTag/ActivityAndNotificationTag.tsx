@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import React from "react";
 
 import { Tag } from "../../../../../ui/src";
 

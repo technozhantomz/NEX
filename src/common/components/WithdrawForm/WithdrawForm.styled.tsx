@@ -18,10 +18,18 @@ export const WithdrawForm = styled(CardForm)`
     ${breakpoint.sm} {
       height: 85px;
     }
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:focus,
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input-focused,
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input:focus,
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input-focused,
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input,
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input:hover {
       border: none !important;
       box-shadow: none !important;
     }
@@ -50,7 +58,9 @@ export const WithdrawFormAsset = styled.div`
     min-width: 240px;
   }
   width: fit-content;
-  .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer)
+  .ant-select-status-error.ant-select:not(.ant-select-disabled):not(
+      .ant-select-customize-input
+    ):not(.ant-pagination-size-changer)
     .ant-select-selector {
     border: none;
   }

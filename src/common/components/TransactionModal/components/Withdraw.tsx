@@ -23,9 +23,7 @@ export const Withdraw = ({
     <>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.placeholder.from`)}</p>
-        <Link href={`/user/${account}`}>
-          <a>{account}</a>
-        </Link>
+        <Link href={`/user/${account}`}>{account}</Link>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>

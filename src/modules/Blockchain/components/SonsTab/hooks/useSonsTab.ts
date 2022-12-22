@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { isArrayEqual } from "../../../../../api/utils";
 import {
   useArrayLimiter,
   useAsset,
@@ -15,7 +14,7 @@ import { SonsStats, SonsTableRow, UseSonsTabResult } from "./useSonsTab.types";
 export function useSonsTab(): UseSonsTabResult {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchDataSource, setSearchDataSource] = useState<SonsTableRow[]>([]);
-  const [sonsTableRows, setSonsTableRows] = useState<SonsTableRow[]>([]);
+  const [sonsTableRows, setSonsTableRows] = useState<SonsTableRow[]>();
   const [sonsStats, setSonsStats] = useState<SonsStats>({
     active: [],
     budget: [],
@@ -29,13 +28,8 @@ export function useSonsTab(): UseSonsTabResult {
   const { updateArrayWithLimit } = useArrayLimiter();
   const { formKnownAssetBalanceById, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
-  const { getChain, getAvgBlockTime, getBlockData } = useBlockchain();
+  const { getChain, getBlockData } = useBlockchain();
   const { formLocalDate } = useFormDate();
-
-  const getDaysInThisMonth = useCallback(() => {
-    const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  }, []);
 
   const getSonsData = useCallback(async () => {
     if (defaultAsset) {
@@ -77,61 +71,79 @@ export function useSonsTab(): UseSonsTabResult {
             }
 
             const activeSones = sonsRows.filter((son) => son.active === true);
-            setSonsTableRows(sonsRows);
-            if (isArrayEqual(searchDataSource, sonsTableRows)) {
-              setSearchDataSource(sonsRows);
-            }
-            setActiveSons(activeSones.length);
-            setBudget(budgetAmount);
-            setNextVote(
-              formLocalDate(blockData.next_maintenance_time, [
+            return {
+              sonsRows,
+              activeSons: activeSones.length,
+              budget: budgetAmount,
+              nextVote: formLocalDate(blockData.next_maintenance_time, [
                 "month",
                 "date",
                 "time",
-              ])
-            );
-            setSonsStats({
-              active: updateArrayWithLimit(
-                sonsStats.active,
-                activeSones.length,
-                99
-              ),
-              budget: updateArrayWithLimit(sonsStats.budget, budgetAmount, 99),
-              nextVote: updateArrayWithLimit(
-                sonsStats.nextVote,
-                nextVoteDistance,
-                99
-              ),
-            });
-            setLoading(false);
+              ]),
+              sonsStats: {
+                active: updateArrayWithLimit(
+                  sonsStats.active,
+                  activeSones.length,
+                  99
+                ),
+                budget: updateArrayWithLimit(
+                  sonsStats.budget,
+                  budgetAmount,
+                  99
+                ),
+                nextVote: updateArrayWithLimit(
+                  sonsStats.nextVote,
+                  nextVoteDistance,
+                  99
+                ),
+              },
+            };
           }
         }
       } catch (e) {
-        setLoading(false);
         console.log(e);
       }
     }
   }, [
     defaultAsset,
-    searchDataSource,
     getChain,
+    getBlockData,
+    getSons,
     setPrecision,
     formKnownAssetBalanceById,
-    getAvgBlockTime,
-    getDaysInThisMonth,
-    setSonsTableRows,
-    setActiveSons,
-    setSonsStats,
-    setLoading,
-    sonsTableRows,
   ]);
 
   useEffect(() => {
-    const sonsInterval = setInterval(() => getSonsData(), 3000);
+    let ignore = false;
+    async function setSonsData() {
+      setLoading(true);
+      const sonsData = await getSonsData();
+      if (!ignore && sonsData) {
+        setSonsTableRows(sonsData.sonsRows);
+        setSearchDataSource(sonsData.sonsRows);
+        setActiveSons(sonsData.activeSons);
+        setBudget(sonsData.budget);
+        setNextVote(sonsData.nextVote);
+        setSonsStats(sonsData.sonsStats);
+        setLoading(false);
+      }
+    }
+    setSonsData();
+    const sonsInterval = setInterval(() => setSonsData(), 3000);
     return () => {
+      ignore = true;
       clearInterval(sonsInterval);
     };
-  }, [getSonsData]);
+  }, [
+    setLoading,
+    getSonsData,
+    setSonsTableRows,
+    setSearchDataSource,
+    setActiveSons,
+    setBudget,
+    setNextVote,
+    setSonsStats,
+  ]);
 
   return {
     loading,

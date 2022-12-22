@@ -17,7 +17,7 @@ export const StyledList = styled(UiList)`
 `;
 
 export const ActivityListItem = styled(UiList.Item)`
-  padding: 25px 25px;
+  padding: 25px 0px;
   a {
     font-style: italic;
   }

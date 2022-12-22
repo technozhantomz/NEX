@@ -1,3 +1,4 @@
+//done
 import counterpart from "counterpart";
 import { cloneDeep } from "lodash";
 import React, {
@@ -5,6 +6,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -230,37 +232,62 @@ export function AppSettingsProvider({
     });
   }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    initApplication().then(() => {
-      setLoading(false);
-    });
-  }, []);
+  let didInit = false;
 
+  useEffect(() => {
+    if (!didInit) {
+      didInit = true;
+      setLoading(true);
+      initApplication().then(() => {
+        setLoading(false);
+      });
+    }
+  }, []);
+  const appSettings = useMemo(() => {
+    return {
+      settings,
+      setSettings,
+      exchanges,
+      setExchanges,
+      cache,
+      setCache,
+      setLocale,
+      setApiSettings,
+      apiSettings,
+      setLatencyChecks,
+      latencyChecks,
+      apiLatencies: cloneDeep(apiLatencies),
+      setApiLatencies,
+      latencyPreferences: cloneDeep(latencyPreferences),
+      setLatencyPreferences,
+      connectedNode,
+      setConnectedNode,
+      loading,
+      chainId,
+    };
+  }, [
+    settings,
+    setSettings,
+    exchanges,
+    setExchanges,
+    cache,
+    setCache,
+    setLocale,
+    setApiSettings,
+    apiSettings,
+    setLatencyChecks,
+    latencyChecks,
+    apiLatencies,
+    setApiLatencies,
+    latencyPreferences,
+    setLatencyPreferences,
+    connectedNode,
+    setConnectedNode,
+    loading,
+    chainId,
+  ]);
   return (
-    <AppSettingsContext.Provider
-      value={{
-        settings,
-        setSettings,
-        exchanges,
-        setExchanges,
-        cache,
-        setCache,
-        setLocale,
-        setApiSettings,
-        apiSettings,
-        setLatencyChecks,
-        latencyChecks,
-        apiLatencies: cloneDeep(apiLatencies),
-        setApiLatencies,
-        latencyPreferences: cloneDeep(latencyPreferences),
-        setLatencyPreferences,
-        connectedNode,
-        setConnectedNode,
-        loading,
-        chainId,
-      }}
-    >
+    <AppSettingsContext.Provider value={appSettings}>
       {loading ? (
         <h1
           style={{

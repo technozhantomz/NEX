@@ -126,7 +126,7 @@ export const CheckBoxGroup = styled(UiForm.Item)`
     margin-top: 8px;
   }
   .ant-checkbox + span {
-    font-size: 10px;
+    font-size: 12px;
   }
   ${breakpoint.sm} {
     .ant-checkbox + span {
@@ -140,7 +140,7 @@ export const CheckBoxGroup = styled(UiForm.Item)`
 
 export const TextContainer = styled.div`
   min-height: 22px;
-  font-size: 10px;
+  font-size: 12px;
   .anticon-info-circle {
     margin: 0 15px 0 0;
     color: ${colors.warningColor};

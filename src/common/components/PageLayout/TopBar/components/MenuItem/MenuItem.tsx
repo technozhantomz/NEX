@@ -19,25 +19,24 @@ export const MenuItem = ({
 }: MenuItemProps): JSX.Element => {
   const { pathname } = useBrowserHistoryContext();
   return (
-    <Link href={href}>
-      <a
-        className={`menu-item ${
-          pathname.split("/")[1] === href.split("/")[1] ? "active" : " "
-        }`}
-        onClick={onClick}
-      >
+    <Link
+      href={href}
+      className={`menu-item ${
+        pathname.split("/")[1] === href.split("/")[1] ? "active" : " "
+      }`}
+      onClick={onClick}
+    >
+      <div>
+        {icon}
+        <span>{label}</span>
+      </div>
+      {href == "/logout" ? (
+        " "
+      ) : (
         <div>
-          {icon}
-          <span>{label}</span>
+          <RightOutlined className={"menu-item-arrow"} />
         </div>
-        {href == "/logout" ? (
-          " "
-        ) : (
-          <div>
-            <RightOutlined className={"menu-item-arrow"} />
-          </div>
-        )}
-      </a>
+      )}
     </Link>
   );
 };

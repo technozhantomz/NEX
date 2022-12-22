@@ -4,7 +4,7 @@ import { CheckboxValueType, FormInstance, Rule } from "../../../../../ui/src";
 export type UseKeyManagementTabResult = {
   keyManagementForm: FormInstance<KeyManagementForm>;
   formValidation: FormValidation;
-  publicKeys: PublicKeys[];
+  publicKeys?: PublicKeys[];
   generatedKeys: GeneratedKey[];
   handleCheckboxChange: (checkedValues: CheckboxValueType[]) => void;
   downloadPrivateKeys: () => void;

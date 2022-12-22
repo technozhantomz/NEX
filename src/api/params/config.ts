@@ -47,7 +47,7 @@ export const config = {
    */
   defaultChainID: DEFAULT_CHAIN_ID,
   /**
-   * The default chain ID.
+   * Local storage version.
    *
    * @type {string}
    * @memberof Config

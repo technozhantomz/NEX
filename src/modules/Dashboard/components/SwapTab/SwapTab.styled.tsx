@@ -24,7 +24,9 @@ export const SwapForm = styled(swapForm)`
     display: flex;
     padding: 4px 11px;
   }
-  .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
+  .ant-select-status-error.ant-select:not(.ant-select-disabled):not(
+      .ant-select-customize-input
+    )
     .ant-select-selector {
     border-color: transparent !important;
   }
@@ -45,10 +47,18 @@ export const SwapForm = styled(swapForm)`
     ${breakpoint.sm} {
       height: 85px;
     }
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:focus,
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input-focused,
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input:focus,
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input-focused,
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input,
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input:hover {
       border: none !important;
       box-shadow: none !important;
     }

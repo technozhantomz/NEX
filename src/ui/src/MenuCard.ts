@@ -14,9 +14,11 @@ export const MenuCard = styled(AntdCard)`
     margin: 0;
     padding: 0;
     li {
-      ${mixIns.hairline}
       padding: 0 25px 10px;
       margin: 10px 0 0 0;
+    }
+    li:not(:last-child) {
+      ${mixIns.hairline}
     }
   }
   .menu-item {
@@ -76,7 +78,7 @@ export const MenuCard = styled(AntdCard)`
     }
     .ant-card-body > ul {
       li {
-        border-bottom: none;
+        border-bottom: none !important;
         padding: 0 0 10px 0;
       }
     }

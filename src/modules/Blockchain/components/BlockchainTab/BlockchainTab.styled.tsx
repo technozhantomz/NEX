@@ -10,6 +10,7 @@ import {
   PrintTable as UiPrintTable,
   StatsCardsDeck as UIStatsCardsDeck,
 } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 
 export const BlockTabWrapper = styled(DataTabWrapper)``;
 
@@ -28,7 +29,11 @@ export const BlockTable = styled(DataTable)`
   }
 `;
 
-export const BlockListItem = styled(UiListItem)``;
+export const BlockListItem = styled(UiListItem)`
+  :not(:last-child) {
+    border-bottom: 0.25px solid ${colors.borderColorBase} !important;
+  }
+`;
 
 export const BlockItemContent = styled(DataItemContent)``;
 

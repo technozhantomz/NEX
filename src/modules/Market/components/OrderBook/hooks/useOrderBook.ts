@@ -192,7 +192,7 @@ export function useOrderBook({
   );
 
   const handleThresholdChange = useCallback(
-    ({ key }) => {
+    ({ key }: { key: string }) => {
       setThreshold(Number(key));
     },
     [setThreshold]

@@ -52,6 +52,7 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
     setApiError(false);
     setSyncError(false);
   }, [setApiConnected, setApiError, setSyncError]);
+
   const setFailureConnectionStates = useCallback(
     (e: any) => {
       setApiConnected(false);
@@ -77,8 +78,12 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
     [_willTransitionTo, setSuccessConnectionStates, setFailureConnectionStates]
   );
 
+  let didInit = false;
   useEffect(() => {
-    willTransitionTo();
+    if (!didInit) {
+      didInit = true;
+      willTransitionTo();
+    }
   }, []);
 
   const renderLoadingScreen = () => {

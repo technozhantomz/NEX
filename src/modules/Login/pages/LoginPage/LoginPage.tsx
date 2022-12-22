@@ -20,7 +20,7 @@ const LoginPage: NextPage = () => {
         <Styled.FormDisclamer>
           <span>{counterpart.translate(`pages.login.dont_have_account`)}</span>
           <Link href="/signup">
-            <a>{counterpart.translate(`links.create_account`)}</a>
+            {counterpart.translate(`links.create_account`)}
           </Link>
         </Styled.FormDisclamer>
       </Styled.LoginFormCard>
