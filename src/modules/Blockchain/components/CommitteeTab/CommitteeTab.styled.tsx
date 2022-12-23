@@ -14,6 +14,7 @@ import {
   PrintTable as UiPrintTable,
   StatsCardsDeck as UIStatsCardsDeck,
 } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 
 export const CommitteeTabWrapper = styled(DataTabWrapper)``;
 
@@ -27,7 +28,11 @@ export const DownloadLinks = styled(DataTableDownloadLinks)``;
 
 export const CommitteeTable = styled(DataTable)``;
 
-export const CommiteeListItem = styled(UiListItem)``;
+export const CommiteeListItem = styled(UiListItem)`
+  :not(:last-child) {
+    border-bottom: 0.25px solid ${colors.borderColorBase} !important;
+  }
+`;
 
 export const CommiteeItemContent = styled(DataItemContent)``;
 

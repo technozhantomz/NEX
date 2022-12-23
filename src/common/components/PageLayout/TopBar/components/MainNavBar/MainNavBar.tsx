@@ -1,3 +1,5 @@
+import { useRouter } from "next/router";
+
 import {
   Avatar,
   Badge,
@@ -6,10 +8,13 @@ import {
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
+import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
+import MetaMaskIcon from "../../../../../../ui/src/icons/Cryptocurrencies/MetaMaskIcon.svg";
 import {
   useMenuContext,
+  useNotificationsContext,
+  usePeerLinkContext,
   useUserContext,
-  useUserSettingsContext,
   useViewportContext,
 } from "../../../../../providers";
 import { MainNav } from "../MainNav";
@@ -19,7 +24,9 @@ import { ProfileMenu } from "../ProfileMenu";
 import * as Styled from "./MainNavBar.styled";
 
 export const MainNavBar = (): JSX.Element => {
+  const router = useRouter();
   const { localStorageAccount } = useUserContext();
+  const { metaMask, hive } = usePeerLinkContext();
   const { sm } = useViewportContext();
   const {
     openMenu,
@@ -28,7 +35,7 @@ export const MainNavBar = (): JSX.Element => {
     profileMenuOpen,
     mainMenuOpen,
   } = useMenuContext();
-  const { hasUnreadMessages } = useUserSettingsContext();
+  const { hasUnreadMessages } = useNotificationsContext();
 
   const CloseButton = (
     <>
@@ -96,6 +103,39 @@ export const MainNavBar = (): JSX.Element => {
     </div>
   );
 
+  const metaMaskBadge = sm ? (
+    <Styled.PeerLinkWalletBadge>
+      <MetaMaskIcon width="25" height="25" />
+    </Styled.PeerLinkWalletBadge>
+  ) : (
+    <Styled.PeerLinkWalletBadge>
+      <MetaMaskIcon width="30" height="30" />
+      <Styled.PeerLinkWalletAccount>
+        {metaMask.selectedAddress}
+      </Styled.PeerLinkWalletAccount>
+    </Styled.PeerLinkWalletBadge>
+  );
+
+  const hiveBadge = sm ? (
+    <Styled.PeerLinkWalletBadge>
+      <HIVEIcon width="25" height="25" />
+    </Styled.PeerLinkWalletBadge>
+  ) : (
+    <Styled.PeerLinkWalletBadge>
+      <HIVEIcon width="30" height="30" />
+      <Styled.PeerLinkWalletAccount>
+        {hive.userName}
+      </Styled.PeerLinkWalletAccount>
+    </Styled.PeerLinkWalletBadge>
+  );
+
+  const peerLinkBadge = (
+    <Styled.PeerLinkBadgeWrapper>
+      {hive.isConnected ? hiveBadge : ""}
+      {metaMask.isConnected ? metaMaskBadge : ""}
+    </Styled.PeerLinkBadgeWrapper>
+  );
+
   const userItems = (
     <>
       {notificationItem}
@@ -126,6 +166,7 @@ export const MainNavBar = (): JSX.Element => {
   return (
     <>
       <Styled.MainNavBar>
+        {router.pathname.includes("peerlink") ? peerLinkBadge : ""}
         {localStorageAccount ? userItems : ""}
         {mainMenuItem}
       </Styled.MainNavBar>

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { useSettingsContext } from "../../providers";
+import { useAppSettingsContext } from "../../providers";
 import { Exchanges } from "../../types";
 
 type UseUpdateExchangesResult = {
@@ -10,14 +10,17 @@ type UseUpdateExchangesResult = {
 };
 
 export function useUpdateExchanges(): UseUpdateExchangesResult {
-  const { exchanges, setExchanges } = useSettingsContext();
+  const { exchanges, setExchanges } = useAppSettingsContext();
 
-  //selectedPair in asset1_asset2 format
+  /**
+   * Update local storage exchanges item
+   * @param selectedPair (string) asset1_asset2 format
+   * @returns void
+   */
   const updateExchanges = useCallback(
     (selectedPair: string) => {
       const recentPairs = [...exchanges.list];
       const _selectedPair = selectedPair.split("_").join("/");
-
       if (recentPairs.includes(_selectedPair)) {
         const recentPairsWithoutSelectedPair = recentPairs.filter(
           (pair) => pair !== _selectedPair

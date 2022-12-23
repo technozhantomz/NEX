@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TableHeading component TableHeading in vote table renders correctly for Vote table Name column 1`] = `
+<DocumentFragment>
+  Name
+</DocumentFragment>
+`;
+
+exports[`TableHeading component TableHeading in vote table renders correctly for Vote table rank column 1`] = `
+<DocumentFragment>
+  Rank
+</DocumentFragment>
+`;

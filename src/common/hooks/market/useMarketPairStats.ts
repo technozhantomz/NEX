@@ -19,8 +19,7 @@ import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { getAllAssets, getAssetsBySymbols, limitByPrecision, ceilPrecision } =
-    useAsset();
+  const { getAllAssets, limitByPrecision, ceilPrecision } = useAsset();
 
   const [allAssets, _setAllAssets] = useState<Asset[] | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -94,7 +93,13 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
       console.log(e);
       return pairs;
     }
-  }, [defaultToken, allAssets]);
+  }, [
+    defaultToken,
+    BITCOIN_ASSET_SYMBOL,
+    HBD_ASSET_SYMBOL,
+    HIVE_ASSET_SYMBOL,
+    allAssets,
+  ]);
 
   const formPairStats = useCallback(
     async (pair: string): Promise<PairNameAndMarketStats> => {
@@ -119,24 +124,24 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         } as PairNameAndMarketStats;
       }
     },
-    [getAssetsBySymbols, allAssets]
+    [getMarketPairStats, allAssets]
   );
 
-  const setAllAssets = useCallback(async () => {
-    try {
+  useEffect(() => {
+    let ignore = false;
+    async function setAllAssets() {
       setLoading(true);
       const allAssets = await getAllAssets();
-      _setAllAssets(allAssets);
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
+      if (!ignore) {
+        _setAllAssets(allAssets);
+        setLoading(false);
+      }
     }
-  }, [getAllAssets, _setAllAssets, setLoading]);
-
-  useEffect(() => {
     setAllAssets();
-  }, [setAllAssets]);
+    return () => {
+      ignore = true;
+    };
+  }, [getAllAssets, _setAllAssets, setLoading]);
 
   return {
     getMarketPairStats,

@@ -1,3 +1,4 @@
+//done
 import { useCallback, useEffect, useState } from "react";
 
 import { usePeerplaysApiContext } from "../../providers";
@@ -11,7 +12,7 @@ import {
 import { SonNetworkStatus, UseSonNetworkResult } from "./useSonNetwork.types";
 
 export function useSonNetwork(): UseSonNetworkResult {
-  const [sonAccount, setSonAccount] = useState<Account>();
+  const [sonAccount, _setSonAccount] = useState<Account>();
   const { dbApi } = usePeerplaysApiContext();
 
   const getSonAccount = useCallback(async () => {
@@ -19,13 +20,11 @@ export function useSonNetwork(): UseSonNetworkResult {
       const gpo: GlobalProperties = await dbApi("get_global_properties");
       const son_id = gpo.parameters.extensions.son_account;
       const son_account: Account = (await dbApi("get_accounts", [[son_id]]))[0];
-      if (son_account) {
-        setSonAccount(son_account);
-      }
+      return son_account;
     } catch (e) {
       console.log(e);
     }
-  }, [dbApi, setSonAccount]);
+  }, [dbApi]);
 
   const getSons = useCallback(
     async (
@@ -163,8 +162,21 @@ export function useSonNetwork(): UseSonNetworkResult {
   }, [dbApi, getSons, getSonsStatistics, getSonStatus]);
 
   useEffect(() => {
-    getSonAccount();
-  }, [getSonAccount]);
+    let ignore = false;
+
+    async function setSonAccount() {
+      const sonAccount = await getSonAccount();
+      if (!ignore) {
+        _setSonAccount(sonAccount);
+      }
+    }
+
+    setSonAccount();
+
+    return () => {
+      ignore = true;
+    };
+  }, [getSonAccount, _setSonAccount]);
 
   return {
     sonAccount,

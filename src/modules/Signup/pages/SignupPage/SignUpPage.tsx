@@ -23,9 +23,7 @@ const SignUpPage: NextPage = () => {
             <span>
               {counterpart.translate(`pages.signUp.already_have_account`)}
             </span>
-            <Link href="/login">
-              <a>{counterpart.translate(`buttons.login`)}</a>
-            </Link>
+            <Link href="/login">{counterpart.translate(`buttons.login`)}</Link>
           </FormDisclamer>
         </Styled.FormDisclamerContainer>
       </Styled.SignUpFormCard>

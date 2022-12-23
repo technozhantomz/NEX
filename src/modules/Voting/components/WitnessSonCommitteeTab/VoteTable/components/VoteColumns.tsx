@@ -64,9 +64,7 @@ export const showVotesColumns = (
         //rank
         undefined,
         (name: string): JSX.Element => (
-          <Link href={`/user/${name}`}>
-            <a>{name}</a>
-          </Link>
+          <Link href={`/user/${name}`}>{name}</Link>
         ),
         (active: boolean): JSX.Element => (
           <span>{active === true ? <Styled.ActiveIcon /> : ``}</span>
@@ -76,11 +74,9 @@ export const showVotesColumns = (
             {!url || url === "" ? (
               <span>{counterpart.translate(`field.labels.not_available`)}</span>
             ) : (
-              <Link href={`${url}`} passHref target="_blank">
-                <a target="_blank">
-                  <Styled.urlIcon rotate={45} />
-                </a>
-              </Link>
+              <a href={`${url}`} target="_blank">
+                <Styled.urlIcon rotate={45} />
+              </a>
             )}
           </>
         ),
@@ -135,9 +131,7 @@ export const showVotesColumns = (
         //rank
         undefined,
         (name: string): JSX.Element => (
-          <Link href={`/user/${name}`}>
-            <a>{name}</a>
-          </Link>
+          <Link href={`/user/${name}`}>{name}</Link>
         ),
         (active: boolean): JSX.Element => (
           <span>{active === true ? <Styled.ActiveIcon /> : ``}</span>
@@ -147,11 +141,9 @@ export const showVotesColumns = (
             {!url || url === "" ? (
               <span>{counterpart.translate(`field.labels.not_available`)}</span>
             ) : (
-              <Link href={`${url}`} passHref target="_blank">
-                <a target="_blank">
-                  <Styled.urlIcon rotate={45} />
-                </a>
-              </Link>
+              <a href={`${url}`} target="_blank">
+                <Styled.urlIcon rotate={45} />
+              </a>
             )}
           </>
         ),

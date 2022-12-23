@@ -11,8 +11,6 @@ import { AssetsTable } from "../../components/AssetsTable";
 
 import * as Styled from "./WalletPage.styled";
 
-const { TabPane } = Styled.Tabs;
-
 const WalletPage: NextPage = () => {
   const router = useRouter();
   const { asset, tab } = router.query;
@@ -52,6 +50,31 @@ const WalletPage: NextPage = () => {
     </>
   );
   const assetSymbol = asset && asset.length > 0 ? asset[0] : undefined;
+  const tabItems = [
+    {
+      label: counterpart.translate(`pages.wallet.assets`),
+      key: "assets",
+      children: (
+        <Styled.AssetTabWrapper>
+          <Styled.AssetsTableWrapper>
+            <AssetsTable
+              title={counterpart.translate(`field.labels.coins_token`)}
+            />
+          </Styled.AssetsTableWrapper>
+        </Styled.AssetTabWrapper>
+      ),
+    },
+    {
+      label: counterpart.translate(`pages.wallet.send`),
+      key: "send",
+      children: <SendTab assetSymbol={assetSymbol}></SendTab>,
+    },
+    {
+      label: counterpart.translate(`pages.wallet.receive`),
+      key: "receive",
+      children: <ReceiveTab assetSymbol={assetSymbol} />,
+    },
+  ];
 
   return (
     <Layout
@@ -59,7 +82,7 @@ const WalletPage: NextPage = () => {
       type="card-lrg"
       heading={counterpart.translate(`pages.wallet.heading`)}
       description={`Wallet Page | ${tab}`}
-      dexLayout={true}
+      layout="dex"
       onClick={() => {
         if (sm) {
           visible && setVisible(false);
@@ -74,29 +97,8 @@ const WalletPage: NextPage = () => {
             router.push(`/wallet?tab=${key}`);
             if (sm) setVisible(false);
           }}
-        >
-          <TabPane
-            tab={counterpart.translate(`pages.wallet.assets`)}
-            key="assets"
-          >
-            <Styled.AssetTabWrapper>
-              <Styled.AssetsTableWrapper>
-                <AssetsTable
-                  title={counterpart.translate(`field.labels.coins_token`)}
-                />
-              </Styled.AssetsTableWrapper>
-            </Styled.AssetTabWrapper>
-          </TabPane>
-          <TabPane tab={counterpart.translate(`pages.wallet.send`)} key="send">
-            <SendTab assetSymbol={assetSymbol}></SendTab>
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`pages.wallet.receive`)}
-            key="receive"
-          >
-            <ReceiveTab assetSymbol={assetSymbol} />
-          </TabPane>
-        </Styled.Tabs>
+          items={tabItems}
+        />
       </Styled.WalletCard>
     </Layout>
   );

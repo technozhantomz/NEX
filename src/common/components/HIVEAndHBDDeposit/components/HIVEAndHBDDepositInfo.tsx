@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 import { SON_ACCOUNT_NAME } from "../../../../api/params";
 
@@ -8,11 +7,7 @@ type Props = {
 };
 
 export const HIVEAndHBDDepositInfo = ({ infoString }: Props): JSX.Element => {
-  const [stringParts, setStringParts] = useState<string[]>([]);
-
-  useEffect(() => {
-    setStringParts(infoString.split(","));
-  }, [infoString]);
+  const stringParts = infoString.split(",");
 
   const getUserLink = (userLink: string, key: number) => {
     const trimedUserLink = userLink.replace(/\s/g, "");
@@ -21,10 +16,8 @@ export const HIVEAndHBDDepositInfo = ({ infoString }: Props): JSX.Element => {
       trimedUserLink.lastIndexOf("]")
     );
     return (
-      <i>
-        <Link key={key} href={`/user/${userName}`}>
-          <a>{userName}</a>
-        </Link>
+      <i key={key}>
+        <Link href={`/user/${userName}`}>{userName}</Link>
       </i>
     );
   };
@@ -36,7 +29,7 @@ export const HIVEAndHBDDepositInfo = ({ infoString }: Props): JSX.Element => {
         target="_blank"
         href={`https://hiveblockexplorer.com/@son-account`}
       >
-        <a target="_blank">son-account</a>
+        son-account
       </Link>
     );
   };

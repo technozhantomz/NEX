@@ -8,8 +8,10 @@
 /.pnp
 .pnp.js
 .env
+
 # testing
 /coverage
+test-report.xml
 
 # next.js
 /.next/
@@ -39,3 +41,8 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# sonar-scanner
+/sonar-scanner
+/.scannerwork
+/.swc

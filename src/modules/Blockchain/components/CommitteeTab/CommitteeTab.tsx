@@ -1,18 +1,15 @@
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import Link from "next/link";
+import { useRef } from "react";
 
-import { renderPaginationItem } from "../../../../common/components";
-import { useViewportContext } from "../../../../common/providers";
 import {
-  DownloadOutlined,
-  InfoCircleOutlined,
-  List,
-  SearchOutlined,
-} from "../../../../ui/src";
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
+import { useViewportContext } from "../../../../common/providers";
+import { InfoCircleOutlined, List, SearchOutlined } from "../../../../ui/src";
 import { StatsCard } from "../../common";
 
 import * as Styled from "./CommitteeTab.styled";
@@ -50,7 +47,7 @@ export const CommitteeTab = (): JSX.Element => {
         </Styled.CommitteeHeader>
         <SearchTableInput
           columns={CommitteeColumns as ColumnsType<unknown>}
-          dataSource={committeeTableRows}
+          dataSource={committeeTableRows ?? []}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
@@ -59,28 +56,16 @@ export const CommitteeTab = (): JSX.Element => {
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"CommitteeTable.csv"}
-            data={committeeTableRows}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={committeeTableRows}
+        ></TableDownloader>
       </Styled.CommitteeHeaderBar>
       {sm ? (
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={loading && !committeeTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -104,9 +89,9 @@ export const CommitteeTab = (): JSX.Element => {
                     {CommitteeColumns[1].title()}
                   </span>
                   <span className="item-info-value">
-                    <a href={`/user/${item.name}`} target="_blank">
+                    <Link href={`/user/${item.name}`} target="_blank">
                       {item.name}
-                    </a>
+                    </Link>
                   </span>
                 </div>
                 <div className="item-info">
@@ -141,7 +126,7 @@ export const CommitteeTab = (): JSX.Element => {
         <Styled.CommitteeTable
           dataSource={searchDataSource}
           columns={CommitteeColumns as ColumnsType<unknown>}
-          loading={loading}
+          loading={loading && !committeeTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -156,9 +141,9 @@ export const CommitteeTab = (): JSX.Element => {
       <Styled.PrintTable>
         <CommitteePrintTable
           ref={componentRef}
-          loading={loading}
+          loading={loading && !committeeTableRows}
           committeeColumns={CommitteeColumns}
-          committeeTableRows={committeeTableRows}
+          committeeTableRows={committeeTableRows ?? []}
         />
       </Styled.PrintTable>
     </Styled.CommitteeTabWrapper>

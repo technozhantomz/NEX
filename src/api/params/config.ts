@@ -3,6 +3,7 @@ const DEFAULT_TOKEN = process.env.NEXT_PUBLIC_DEFAULT_TOKEN;
 const DEFAULT_QUOTE = process.env.NEXT_PUBLIC_DEFAULT_QUOTE;
 const FAUCET_URL = process.env.NEXT_PUBLIC_FAUCET_URL;
 const DEFAULT_CHAIN_ID = process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID;
+const FORCE_VERSION = process.env.NEXT_PUBLIC_FORCE_VERSION;
 
 /**
  * @namespace Config
@@ -45,4 +46,11 @@ export const config = {
    * @memberof Config
    */
   defaultChainID: DEFAULT_CHAIN_ID,
+  /**
+   * Local storage version.
+   *
+   * @type {string}
+   * @memberof Config
+   */
+  forceVersion: FORCE_VERSION,
 };

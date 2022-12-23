@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export type UseWitnessesTabResult = {
   loading: boolean;
-  witnessTableRows: WitnessTableRow[];
+  witnessTableRows: WitnessTableRow[] | undefined;
   witnessStats: WitnessStats;
   activeWitnesses: number;
   reward: number;
