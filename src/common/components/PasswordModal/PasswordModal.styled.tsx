@@ -6,21 +6,22 @@ import {
 } from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
+import { mixIns } from "../../../ui/src/mixins";
 
 export const PasswordModal = styled(UIModal)`
-  border-radius: 4px;
+  ${mixIns.borderRadius}
   .ant-modal-content {
-    border-radius: 4px;
+    ${mixIns.borderRadius}
   }
   .ant-modal-content {
-    border-radius: 4px;
+    ${mixIns.borderRadius}
   }
   ${breakpoint.md} {
     min-width: 600px;
   }
   .ant-modal-header {
     padding: 35px 30px;
-    border-radius: 4px;
+    ${mixIns.borderRadius}
     border-bottom: unset;
     ${breakpoint.sm} {
       margin-bottom: 20px;

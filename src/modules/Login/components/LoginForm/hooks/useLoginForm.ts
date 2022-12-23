@@ -1,10 +1,11 @@
+//done
 import counterpart from "counterpart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useAccount } from "../../../../../common/hooks";
 import {
+  useAppSettingsContext,
   useBrowserHistoryContext,
-  useSettingsContext,
   useUserContext,
 } from "../../../../../common/providers";
 import { FullAccount, KeyType } from "../../../../../common/types";
@@ -28,9 +29,13 @@ export function useLoginForm(): UseLoginFormResult {
     _validateUseWhaleVault,
   } = useAccount();
   const { localStorageAccount, setLocalStorageAccount } = useUserContext();
-  const { setSettings, settings } = useSettingsContext();
+  const { setSettings, settings } = useAppSettingsContext();
   const { handleLoginRedirect } = useBrowserHistoryContext();
   const [loginForm] = Form.useForm<LoginForm>();
+
+  if (localStorageAccount) {
+    handleLoginRedirect();
+  }
 
   const handleLogin = async () => {
     setSubmitting(true);
@@ -55,6 +60,7 @@ export function useLoginForm(): UseLoginFormResult {
             );
           }
           setLocalStorageAccount(temporaryFullAccount.account.name);
+          handleLoginRedirect();
         }
         setSubmitting(false);
       })
@@ -143,12 +149,6 @@ export function useLoginForm(): UseLoginFormResult {
     ],
     useWhaleVault: [{ validator: validateUseWhalevault }],
   };
-
-  useEffect(() => {
-    if (localStorageAccount) {
-      handleLoginRedirect();
-    }
-  }, [localStorageAccount]);
 
   return {
     validUser,

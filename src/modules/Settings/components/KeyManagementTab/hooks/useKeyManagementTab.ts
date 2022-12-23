@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
 import { Login } from "peerplaysjs-lib";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import { useAccount } from "../../../../../common/hooks";
@@ -20,8 +20,6 @@ import {
 } from "./useKeyManagementTab.types";
 
 export function useKeyManagementTab(): UseKeyManagementTabResult {
-  // These states should go to upper hook
-  const [publicKeys, setPublicKeys] = useState<PublicKeys[]>([]);
   const [generatedKeys, setGeneratedKeys] = useState<GeneratedKey[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<CheckboxValueType[]>([]);
   const [keyManagementForm] = Form.useForm<KeyManagementForm>();
@@ -29,15 +27,7 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
 
   const { validateAccountPassword } = useAccount();
   const { account } = useUserContext();
-
-  const handleCheckboxChange = useCallback(
-    (checkedValues: CheckboxValueType[]) => {
-      setSelectedKeys(checkedValues);
-    },
-    [setSelectedKeys]
-  );
-
-  const getPublicKeys = useCallback(async () => {
+  const publicKeys = useMemo(() => {
     if (account) {
       const keys = [
         {
@@ -53,9 +43,16 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
           key: account.options.memo_key,
         },
       ];
-      setPublicKeys(keys);
+      return keys as PublicKeys[];
     }
-  }, [account, setPublicKeys]);
+  }, [account]);
+
+  const handleCheckboxChange = useCallback(
+    (checkedValues: CheckboxValueType[]) => {
+      setSelectedKeys(checkedValues);
+    },
+    [setSelectedKeys]
+  );
 
   const downloadPrivateKeys = useCallback(() => {
     const translations: Record<string, string> = {
@@ -169,10 +166,6 @@ export function useKeyManagementTab(): UseKeyManagementTabResult {
     ],
     roles: [{ validator: validateSelectKeys }],
   };
-
-  useEffect(() => {
-    getPublicKeys();
-  }, [account, setPublicKeys]);
 
   return {
     formValidation,

@@ -1,14 +1,14 @@
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { useRef } from "react";
 
-import { renderPaginationItem } from "../../../../common/components";
+import {
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import {
-  DownloadOutlined,
   InfoCircleOutlined,
   List,
   SearchOutlined,
@@ -21,8 +21,7 @@ import { FeesColumns, FeesPrintTable } from "./components";
 import { FeesTableRow, useFeesTab } from "./hooks";
 
 export const FeesTab = (): JSX.Element => {
-  const { loading, searchDataSource, fullFeesRows, setSearchDataSource } =
-    useFeesTab();
+  const { searchDataSource, fullFeesRows, setSearchDataSource } = useFeesTab();
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
 
@@ -42,28 +41,17 @@ export const FeesTab = (): JSX.Element => {
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-          {` / `}
-          <CSVLink
-            filename={"FeesTable.csv"}
-            data={fullFeesRows}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={fullFeesRows}
+        ></TableDownloader>
       </Styled.FeesHeaderBar>
 
       {sm ? (
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={!fullFeesRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -138,7 +126,7 @@ export const FeesTab = (): JSX.Element => {
         <Styled.FeesTable
           dataSource={searchDataSource}
           columns={FeesColumns as ColumnsType<unknown>}
-          loading={loading}
+          loading={!fullFeesRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -153,9 +141,9 @@ export const FeesTab = (): JSX.Element => {
       <Styled.PrintTable>
         <FeesPrintTable
           ref={componentRef}
-          loading={loading}
+          loading={!fullFeesRows}
           feesColumns={FeesColumns}
-          fullFeesRows={fullFeesRows}
+          fullFeesRows={fullFeesRows ?? []}
         />
       </Styled.PrintTable>
     </Styled.FeesTabWrapper>

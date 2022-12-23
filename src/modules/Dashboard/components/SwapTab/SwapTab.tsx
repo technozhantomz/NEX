@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { useState } from "react";
+import { FocusEvent, useCallback, useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import { utils } from "../../../../api/utils";
@@ -37,7 +37,6 @@ export const SwapTab = (): JSX.Element => {
     swapOrderFee,
     price,
     loadingSwapData,
-    //loadingAssets,
     handleValuesChange,
     handleSwapAssets,
     buyAssetBalance,
@@ -64,6 +63,12 @@ export const SwapTab = (): JSX.Element => {
     neededKeyType: "active",
   });
 
+  const selectOnFocus = useCallback(
+    (e: FocusEvent<HTMLInputElement, Element>) => {
+      e.target.select();
+    },
+    []
+  );
   const [transactionModalSellAmount, setTransactionModalSellAmount] =
     useState<string>("");
   const [transactionModalBuyAmount, setTransactionModalBuyAmount] =
@@ -226,9 +231,7 @@ export const SwapTab = (): JSX.Element => {
               >
                 <Input
                   placeholder="0.0"
-                  onFocus={(e) => {
-                    e.target.select();
-                  }}
+                  onFocus={selectOnFocus}
                   autoComplete="off"
                   onKeyPress={utils.ensureInputNumberValidity}
                   onPaste={utils.numberedInputsPasteHandler}
@@ -261,9 +264,7 @@ export const SwapTab = (): JSX.Element => {
               >
                 <Input
                   placeholder="0.0"
-                  onFocus={(e) => {
-                    e.target.select();
-                  }}
+                  onFocus={selectOnFocus}
                   onKeyPress={utils.ensureInputNumberValidity}
                   onPaste={utils.numberedInputsPasteHandler}
                   autoComplete="off"

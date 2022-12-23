@@ -1,20 +1,18 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { Asset, SignerKey } from "../../../../../common/types";
+import { SignerKey } from "../../../../../common/types";
 import { FormInstance, Rule } from "../../../../../ui/src";
-import { OrderForm } from "../../../types";
+import { OrderForm, PairAssets } from "../../../types";
 
 export type UseCreateLimitOrderArgs = {
-  currentBase: Asset | undefined;
-  currentQuote: Asset | undefined;
+  selectedAssets: PairAssets | undefined;
   loadingSelectedPair: boolean;
   isBuyOrder: boolean;
   orderForm: FormInstance<OrderForm>;
 };
 
 export type UseCreateLimitOrderResult = {
-  feeAmount: number;
-  marketFeePercent: number;
+  fees: { feeAmount: number; marketFeePercent: number };
   balance: number;
   formValidation: FormValidation;
   handleValuesChange: (changedValues: any, allValues: any) => void;

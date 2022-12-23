@@ -17,6 +17,7 @@ export { Input } from "./Input";
 export { Form } from "./Form";
 export { PrintTable } from "./PrintTable";
 export * from "./DataTables";
+export * from "./icons";
 
 export {
   Badge,
@@ -57,6 +58,10 @@ export {
   LoadingOutlined,
   DownloadOutlined,
   SearchOutlined,
+  TwitterOutlined,
+  GithubOutlined,
+  YoutubeOutlined,
+  RedditOutlined,
   ProfileOutlined,
   LikeOutlined,
   LikeFilled,

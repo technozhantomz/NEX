@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 
 import { Exchanges } from "../../../../common/types";
 import { Form, Select } from "../../../../ui/src";
@@ -26,20 +26,21 @@ export const PairModal = ({
     pairModalForm,
     formValidation,
     allAssetsSymbols,
-    useResetFormOnOpenModal,
     handleCancel,
     handleSelectPair,
     handleSelectRecent,
     handleValuesChange,
   } = usePairModal({ setIsVisible, currentPair });
 
+  const handleSubmit = useCallback(() => {
+    pairModalForm.submit();
+  }, [pairModalForm]);
+
   const footerButtons = [
     <Styled.PairModalFormButton
       key="submit"
       type="primary"
-      onClick={() => {
-        pairModalForm.submit();
-      }}
+      onClick={handleSubmit}
     >
       {counterpart.translate(`buttons.confirm`)}
     </Styled.PairModalFormButton>,
@@ -52,7 +53,6 @@ export const PairModal = ({
     </Styled.PairModalFormButton>,
   ];
 
-  useResetFormOnOpenModal(pairModalForm, isVisible);
   return (
     <Styled.PairModal
       title={counterpart.translate(`pages.market.select_pair`)}

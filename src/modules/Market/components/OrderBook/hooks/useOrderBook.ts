@@ -1,11 +1,5 @@
 import counterpart from "counterpart";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import {
   useAccount,
@@ -16,31 +10,31 @@ import {
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
 import { Asset, SignerKey } from "../../../../../common/types";
-import { Order, OrderColumn, OrderRow, OrderType } from "../../../types";
+import {
+  Order,
+  OrderColumn,
+  OrderRow,
+  OrderType,
+  PairAssets,
+} from "../../../types";
 
 import { UseOrderBookResult } from "./useOrderBook.types";
 
 type Args = {
-  currentBase: Asset | undefined;
-  currentQuote: Asset | undefined;
+  selectedAssets: PairAssets | undefined;
   loadingSelectedPair: boolean;
   asks: Order[];
   bids: Order[];
-  setOrdersRows: Dispatch<SetStateAction<OrderRow[]>>;
 };
 
 export function useOrderBook({
-  currentBase,
-  currentQuote,
+  selectedAssets,
   loadingSelectedPair,
   asks,
   bids,
-  setOrdersRows,
 }: Args): UseOrderBookResult {
-  const [cancelOrderfeeAmount, setCancelOrderfeeAmount] = useState<number>(0);
   const [orderType, setOrderType] = useState<OrderType>("total");
   const [threshold, setThreshold] = useState<number>(0.001);
-  const [orderColumns, setOrderColumns] = useState<OrderColumn[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<string>("");
   const [transactionErrorMessage, setTransactionErrorMessage] =
     useState<string>("");
@@ -54,20 +48,6 @@ export function useOrderBook({
   const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
   const { calculateCancelLimitOrderFee } = useFees();
   const { ceilPrecision, roundNum } = useAsset();
-
-  const handleFilterChange = useCallback(
-    (type: OrderType) => {
-      setOrderType(type);
-    },
-    [setOrderType]
-  );
-
-  const handleThresholdChange = useCallback(
-    ({ key }) => {
-      setThreshold(Number(key));
-    },
-    [setThreshold]
-  );
 
   const reduceOrdersByPrice = useCallback(
     (orders: Order[], currentBase: Asset, currentQuote: Asset) => {
@@ -115,15 +95,43 @@ export function useOrderBook({
     [ceilPrecision, roundNum]
   );
 
-  const selectOrdersForThresholdAndFilter = useCallback(() => {
-    if (
-      !loadingSelectedPair &&
-      currentBase !== undefined &&
-      currentQuote !== undefined
-    ) {
+  const orderColumns: OrderColumn[] = useMemo(() => {
+    if (!loadingSelectedPair && selectedAssets) {
+      return [
+        {
+          title: counterpart.translate(`tableHead.price`),
+          dataIndex: "price",
+          key: "price",
+        },
+        {
+          title: selectedAssets.quote.symbol,
+          dataIndex: "quote",
+          key: "quote",
+        },
+        {
+          title: selectedAssets.base.symbol,
+          dataIndex: "base",
+          key: "base",
+        },
+      ];
+    } else {
+      return [];
+    }
+  }, [loadingSelectedPair, selectedAssets]);
+
+  const ordersRows: OrderRow[] = useMemo(() => {
+    if (!loadingSelectedPair && selectedAssets) {
       let selectedOrders: Order[] = [];
-      const reducedAsks = reduceOrdersByPrice(asks, currentBase, currentQuote);
-      const reducedBids = reduceOrdersByPrice(bids, currentBase, currentQuote);
+      const reducedAsks = reduceOrdersByPrice(
+        asks,
+        selectedAssets.base,
+        selectedAssets.quote
+      );
+      const reducedBids = reduceOrdersByPrice(
+        bids,
+        selectedAssets.base,
+        selectedAssets.quote
+      );
       switch (orderType) {
         case "total":
           selectedOrders = [
@@ -153,7 +161,9 @@ export function useOrderBook({
           isBuyOrder: order.isBuyOrder,
         };
       });
-      setOrdersRows(orders);
+      return orders;
+    } else {
+      return [];
     }
   }, [
     orderType,
@@ -161,10 +171,32 @@ export function useOrderBook({
     bids,
     threshold,
     loadingSelectedPair,
-    currentBase,
-    currentQuote,
-    setOrdersRows,
+    selectedAssets,
+    reduceOrdersByPrice,
   ]);
+
+  const cancelOrderfeeAmount = useMemo(() => {
+    const cancelLimitOrderFee = calculateCancelLimitOrderFee();
+    if (cancelLimitOrderFee !== undefined) {
+      return cancelLimitOrderFee;
+    } else {
+      return 0;
+    }
+  }, [calculateCancelLimitOrderFee]);
+
+  const handleFilterChange = useCallback(
+    (type: OrderType) => {
+      setOrderType(type);
+    },
+    [setOrderType]
+  );
+
+  const handleThresholdChange = useCallback(
+    ({ key }: { key: string }) => {
+      setThreshold(Number(key));
+    },
+    [setThreshold]
+  );
 
   const handleCancelLimitOrder = useCallback(
     async (signerKey: SignerKey) => {
@@ -207,49 +239,12 @@ export function useOrderBook({
       buildTrx,
       formAccountBalancesByName,
       localStorageAccount,
-      currentBase,
-      currentQuote,
+      selectedAssets,
     ]
   );
 
-  useEffect(() => {
-    if (
-      !loadingSelectedPair &&
-      currentBase !== undefined &&
-      currentQuote !== undefined
-    ) {
-      setOrderColumns([
-        {
-          title: counterpart.translate(`tableHead.price`),
-          dataIndex: "price",
-          key: "price",
-        },
-        {
-          title: currentQuote.symbol,
-          dataIndex: "quote",
-          key: "quote",
-        },
-        {
-          title: currentBase.symbol,
-          dataIndex: "base",
-          key: "base",
-        },
-      ]);
-    }
-  }, [loadingSelectedPair, currentBase, currentQuote, setOrderColumns]);
-
-  useEffect(() => {
-    selectOrdersForThresholdAndFilter();
-  }, [selectOrdersForThresholdAndFilter]);
-
-  useEffect(() => {
-    const cancelLimitOrderFee = calculateCancelLimitOrderFee();
-    if (cancelLimitOrderFee !== undefined) {
-      setCancelOrderfeeAmount(cancelLimitOrderFee);
-    }
-  }, [calculateCancelLimitOrderFee, setCancelOrderfeeAmount]);
-
   return {
+    ordersRows,
     orderType,
     threshold,
     handleThresholdChange,

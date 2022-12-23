@@ -52,7 +52,11 @@ export const FeesTable = styled(DataTable)`
   }
 `;
 
-export const FeeListItem = styled(UiListItem)``;
+export const FeeListItem = styled(UiListItem)`
+  :not(:last-child) {
+    border-bottom: 0.25px solid ${colors.borderColorBase} !important;
+  }
+`;
 
 export const FeeItemContent = styled(DataItemContent)``;
 

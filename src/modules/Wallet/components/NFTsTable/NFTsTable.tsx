@@ -3,21 +3,17 @@ import { Image } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { useCallback, useRef } from "react";
 
-import { renderPaginationItem } from "../../../../common/components";
-import { useViewportContext } from "../../../../common/providers";
 import {
-  Avatar,
-  DownloadOutlined,
-  List,
-  SearchOutlined,
-} from "../../../../ui/src";
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
+import { useViewportContext } from "../../../../common/providers";
+import { Avatar, List, SearchOutlined } from "../../../../ui/src";
 
 import * as Styled from "./NFTsTable.styled";
-import { useNFTsTable } from "./hooks";
+import { NFTRow, useNFTsTable } from "./hooks";
 
 export const NFTsTable = (): JSX.Element => {
   const {
@@ -29,6 +25,53 @@ export const NFTsTable = (): JSX.Element => {
   } = useNFTsTable();
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
+  const renderListItem = useCallback(
+    (item: NFTRow) => {
+      return (
+        <Styled.NFTsListItem key={item.key}>
+          <Styled.NFTsItemContent>
+            <div className="item-info">
+              <span className="item-info-title">{nftColumns[0].title()}</span>
+              <span className="item-info-value">
+                <Avatar src={<Image src={item.img} width="30" />}></Avatar>
+              </span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">{nftColumns[1].title()}</span>
+              <span className="item-info-value">{item.name}</span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">{nftColumns[2].title()}</span>
+              <span className="item-info-value">
+                <Link target="_blank" href={`/user/${item.maker}`}>
+                  {item.maker}
+                </Link>
+              </span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">{nftColumns[3].title()}</span>
+              <span className="item-info-value">{item.collection}</span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">{nftColumns[4].title()}</span>
+              <span className="item-info-value">{item.bestOffer}</span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">{nftColumns[5].title()}</span>
+              <span className="item-info-value">{item.quantity}</span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">{nftColumns[6].title()}</span>
+              <span className="item-info-value">
+                {item.onSale === true ? <Styled.ActiveIcon /> : ``}
+              </span>
+            </div>
+          </Styled.NFTsItemContent>
+        </Styled.NFTsListItem>
+      );
+    },
+    [nftColumns]
+  );
 
   return (
     <Styled.NFTsTableWrapper>
@@ -50,21 +93,10 @@ export const NFTsTable = (): JSX.Element => {
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-          {` / `}
-          <CSVLink
-            filename={"nfts.csv"}
-            data={nftRows}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={nftRows}
+        ></TableDownloader>
       </Styled.NFTsHeaderBar>
       {sm ? (
         <List
@@ -80,62 +112,7 @@ export const NFTsTable = (): JSX.Element => {
             size: "small",
             itemRender: renderPaginationItem(),
           }}
-          renderItem={(item) => (
-            <Styled.NFTsListItem key={item.key}>
-              <Styled.NFTsItemContent>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {nftColumns[0].title()}
-                  </span>
-                  <span className="item-info-value">
-                    <Avatar src={<Image src={item.img} width="30" />}></Avatar>
-                  </span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {nftColumns[1].title()}
-                  </span>
-                  <span className="item-info-value">{item.name}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {nftColumns[2].title()}
-                  </span>
-                  <span className="item-info-value">
-                    <Link href={`/user/${item.maker}`}>
-                      <a target="_blank">{item.maker}</a>
-                    </Link>
-                  </span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {nftColumns[3].title()}
-                  </span>
-                  <span className="item-info-value">{item.collection}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {nftColumns[4].title()}
-                  </span>
-                  <span className="item-info-value">{item.bestOffer}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {nftColumns[5].title()}
-                  </span>
-                  <span className="item-info-value">{item.quantity}</span>
-                </div>
-                <div className="item-info">
-                  <span className="item-info-title">
-                    {nftColumns[6].title()}
-                  </span>
-                  <span className="item-info-value">
-                    {item.onSale === true ? <Styled.ActiveIcon /> : ``}
-                  </span>
-                </div>
-              </Styled.NFTsItemContent>
-            </Styled.NFTsListItem>
-          )}
+          renderItem={renderListItem}
         />
       ) : (
         <Styled.NFTsTable

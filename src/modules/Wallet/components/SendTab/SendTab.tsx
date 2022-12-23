@@ -20,7 +20,7 @@ export const SendTab = ({ assetSymbol }: Props): JSX.Element => {
           </Styled.Header>
           <Styled.ClearForm>
             <Link href="/wallet?tab=send">
-              <a>{counterpart.translate(`pages.wallet.clear_form`)}</a>
+              {counterpart.translate(`pages.wallet.clear_form`)}
             </Link>
           </Styled.ClearForm>
         </Styled.HeaderWrapper>

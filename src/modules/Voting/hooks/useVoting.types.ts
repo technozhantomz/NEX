@@ -10,4 +10,5 @@ export type UseVotingResult = {
   proxy: Proxy;
   getUserVotes: () => Promise<void>;
   loadingMembers: boolean;
+  voteTabLoaded: boolean;
 };

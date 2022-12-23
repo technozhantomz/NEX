@@ -1,41 +1,69 @@
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
+import { MetaMaskProvider } from "metamask-react";
 import type { AppProps } from "next/app";
 
 import {
+  AppSettingsProvider,
   AssetsProvider,
   BrowserHistoryProvider,
   ConnectionManagerProvider,
   FeesProvider,
   MenuProvider,
+  NotificationsProvider,
+  PeerLinkProvider,
   PeerplaysApiProvider,
-  SettingsProvider,
   UserProvider,
-  UserSettingsProvider,
   ViewportProvider,
 } from "../common/providers";
 import "../ui/src/ui.less";
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Filler,
+    Legend
+  );
+
   return (
     <ViewportProvider>
-      <SettingsProvider>
-        <PeerplaysApiProvider>
-          <ConnectionManagerProvider>
-            <AssetsProvider>
-              <UserProvider>
-                <FeesProvider>
-                  <BrowserHistoryProvider>
-                    <UserSettingsProvider>
-                      <MenuProvider>
-                        <Component {...pageProps} />
-                      </MenuProvider>
-                    </UserSettingsProvider>
-                  </BrowserHistoryProvider>
-                </FeesProvider>
-              </UserProvider>
-            </AssetsProvider>
-          </ConnectionManagerProvider>
-        </PeerplaysApiProvider>
-      </SettingsProvider>
+      <MetaMaskProvider>
+        <PeerLinkProvider>
+          <AppSettingsProvider>
+            <PeerplaysApiProvider>
+              <ConnectionManagerProvider>
+                <AssetsProvider>
+                  <FeesProvider>
+                    <UserProvider>
+                      <BrowserHistoryProvider>
+                        <NotificationsProvider>
+                          <MenuProvider>
+                            <Component {...pageProps} />
+                          </MenuProvider>
+                        </NotificationsProvider>
+                      </BrowserHistoryProvider>
+                    </UserProvider>
+                  </FeesProvider>
+                </AssetsProvider>
+              </ConnectionManagerProvider>
+            </PeerplaysApiProvider>
+          </AppSettingsProvider>
+        </PeerLinkProvider>
+      </MetaMaskProvider>
     </ViewportProvider>
   );
 }

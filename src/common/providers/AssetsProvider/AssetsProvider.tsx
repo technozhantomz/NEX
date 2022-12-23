@@ -1,3 +1,4 @@
+//done
 import React, {
   createContext,
   useCallback,
@@ -6,10 +7,9 @@ import React, {
   useState,
 } from "react";
 
-import { usePeerplaysApiContext } from "..";
 import { defaultToken } from "../../../api/params";
-import { useAsset } from "../../hooks";
-import { Asset, GlobalProperties } from "../../types";
+import { useAsset, useBlockchain } from "../../hooks";
+import { Asset } from "../../types";
 
 import { AssetsContextType } from "./AssetsProvider.types";
 
@@ -27,60 +27,82 @@ const defaultAssetsState: AssetsContextType = {
 const AssetsContext = createContext<AssetsContextType>(defaultAssetsState);
 
 export const AssetsProvider = ({ children }: Props): JSX.Element => {
-  const [defaultAsset, setDefaultAsset] = useState<Asset>();
-  const [sidechainAssets, setSidechainAssets] = useState<(Asset | undefined)[]>(
-    []
-  );
+  const [loadingDefaultAsset, setLoadingDefaultAsset] = useState<boolean>(true);
+  const [defaultAsset, _setDefaultAsset] = useState<Asset>();
   const [loadingSidechainAssets, setLoadingSidechainAssets] =
     useState<boolean>(true);
-  const [loadingDefaultAsset, setLoadingDefaultAsset] = useState<boolean>(true);
+  const [sidechainAssets, _setSidechainAssets] = useState<
+    (Asset | undefined)[]
+  >([]);
 
-  const { dbApi } = usePeerplaysApiContext();
+  const { getGlobalProperties } = useBlockchain();
   const { getAssetById, getAssetBySymbol } = useAsset();
 
   const getDefaultAsset = useCallback(async () => {
     try {
-      setLoadingDefaultAsset(true);
       const defaultAsset = await getAssetBySymbol(defaultToken as string);
-      setDefaultAsset(defaultAsset);
-      setLoadingDefaultAsset(false);
+      return defaultAsset;
     } catch (e) {
       console.log(e);
-      setLoadingDefaultAsset(false);
     }
-  }, [getAssetBySymbol, setDefaultAsset]);
+  }, [getAssetBySymbol]);
 
   const getSidechainAssets = useCallback(async () => {
     try {
-      setLoadingSidechainAssets(true);
-      const globalProperties: GlobalProperties = await dbApi(
-        "get_global_properties"
-      );
+      const globalProperties = await getGlobalProperties();
+      if (globalProperties) {
+        const btcAssetId = globalProperties.parameters.extensions.btc_asset;
+        const hbdAssetId = globalProperties.parameters.extensions.hbd_asset;
+        const hiveAssetId = globalProperties.parameters.extensions.hive_asset;
 
-      const btcAssetId = globalProperties.parameters.extensions.btc_asset;
-      const hbdAssetId = globalProperties.parameters.extensions.hbd_asset;
-      const hiveAssetId = globalProperties.parameters.extensions.hive_asset;
+        const sidechainAssetsIds = [btcAssetId, hbdAssetId, hiveAssetId];
 
-      const sidechainAssetsIds = [btcAssetId, hbdAssetId, hiveAssetId];
-
-      const sidechainAssets = await Promise.all(
-        sidechainAssetsIds.map(getAssetById)
-      );
-      setSidechainAssets(sidechainAssets);
-      setLoadingSidechainAssets(false);
+        const sidechainAssets = await Promise.all(
+          sidechainAssetsIds.map(getAssetById)
+        );
+        return sidechainAssets;
+      }
     } catch (e) {
       console.log(e);
-      setLoadingSidechainAssets(false);
     }
-  }, [dbApi, getAssetById, setSidechainAssets, setLoadingSidechainAssets]);
+  }, [getGlobalProperties, getAssetById]);
 
   useEffect(() => {
-    getDefaultAsset();
-  }, [getDefaultAsset]);
+    let ignore = false;
+    async function setDefaultAsset() {
+      setLoadingDefaultAsset(true);
+      const defaultAsset = await getDefaultAsset();
+      if (!ignore) {
+        _setDefaultAsset(defaultAsset);
+        setLoadingDefaultAsset(false);
+      }
+    }
+    setDefaultAsset();
+    return () => {
+      ignore = true;
+    };
+  }, [getDefaultAsset, setLoadingDefaultAsset, _setDefaultAsset]);
 
   useEffect(() => {
-    getSidechainAssets();
-  }, [getSidechainAssets]);
+    let ignore = false;
+
+    async function setSidechainAssets() {
+      setLoadingSidechainAssets(true);
+      const sidechainAssets = await getSidechainAssets();
+      if (!ignore) {
+        if (sidechainAssets) {
+          _setSidechainAssets(sidechainAssets);
+        }
+        setLoadingSidechainAssets(false);
+      }
+    }
+
+    setSidechainAssets();
+
+    return () => {
+      ignore = true;
+    };
+  }, [getSidechainAssets, setLoadingSidechainAssets, _setSidechainAssets]);
 
   return (
     <AssetsContext.Provider

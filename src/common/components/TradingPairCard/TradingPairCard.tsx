@@ -1,5 +1,7 @@
-import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
+
+import { useUpdateExchanges } from "../../hooks";
 
 import * as Styled from "./TradingPairCard.styled";
 import { useTradingPairStyles } from "./hooks";
@@ -17,6 +19,9 @@ export const TradingPairCard = ({
   percentChange,
   volume,
 }: PairProps): JSX.Element => {
+  const router = useRouter();
+  const { updateExchanges } = useUpdateExchanges();
+
   const {
     handleMouseHover,
     handleMouseOut,
@@ -27,33 +32,37 @@ export const TradingPairCard = ({
   } = useTradingPairStyles(percentChange);
 
   return (
-    <Link href={`/market/${tradingPair.replace("/", "_")}`}>
-      <a>
-        <Styled.Card
-          className="trading-card"
-          onMouseEnter={handleMouseHover}
-          onMouseLeave={handleMouseOut}
-          theme={changeBackgroundColor ? positiveTheme : negativeTheme}
+    <div
+      onClick={() => {
+        const activePair = tradingPair.replace("/", "_");
+        updateExchanges(activePair);
+        router.push(`/market/${activePair}`);
+      }}
+    >
+      <Styled.Card
+        className="trading-card"
+        onMouseEnter={handleMouseHover}
+        onMouseLeave={handleMouseOut}
+        theme={changeBackgroundColor ? positiveTheme : negativeTheme}
+      >
+        <Styled.ContentHeader>
+          <Styled.TradingPair>{tradingPair}</Styled.TradingPair>
+          {showChangeAndVolume && (
+            <Styled.PercentChange
+              theme={changeBackgroundColor ? positiveTheme : negativeTheme}
+            >
+              {changeBackgroundColor ? "+" : ""}
+              {percentChange}
+            </Styled.PercentChange>
+          )}
+        </Styled.ContentHeader>
+        <Styled.Price
+          theme={showChangeAndVolume ? positiveTheme : negativeTheme}
         >
-          <Styled.ContentHeader>
-            <Styled.TradingPair>{tradingPair}</Styled.TradingPair>
-            {showChangeAndVolume && (
-              <Styled.PercentChange
-                theme={changeBackgroundColor ? positiveTheme : negativeTheme}
-              >
-                {changeBackgroundColor ? "+" : ""}
-                {percentChange}
-              </Styled.PercentChange>
-            )}
-          </Styled.ContentHeader>
-          <Styled.Price
-            theme={showChangeAndVolume ? positiveTheme : negativeTheme}
-          >
-            {price}
-          </Styled.Price>
-          {showChangeAndVolume && <Styled.Volume>{volume}</Styled.Volume>}
-        </Styled.Card>
-      </a>
-    </Link>
+          {price}
+        </Styled.Price>
+        {showChangeAndVolume && <Styled.Volume>{volume}</Styled.Volume>}
+      </Styled.Card>
+    </div>
   );
 };

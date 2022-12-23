@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export type UseSonsTabResult = {
   loading: boolean;
-  sonsTableRows: SonsTableRow[];
+  sonsTableRows: SonsTableRow[] | undefined;
   searchDataSource: SonsTableRow[];
   sonsStats: SonsStats;
   activeSons: number;

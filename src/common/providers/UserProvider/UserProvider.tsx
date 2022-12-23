@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 
-import { usePeerplaysApiContext, useSettingsContext } from "..";
+import { useAppSettingsContext, usePeerplaysApiContext } from "..";
 import { useAsset, useLocalStorage, useSessionStorage } from "../../hooks";
 import {
   Account,
@@ -69,7 +69,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   ) as [string, (value: string) => void];
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
-  const { settings } = useSettingsContext();
+  const { settings } = useAppSettingsContext();
 
   const [id, setId] = useState<string>("");
   const [name, setName] = useState<string>("");

@@ -132,11 +132,7 @@ export const VoteForm = ({
                 {counterpart.translate(`buttons.reset_changes`)}
               </Styled.CardFormLinkButtonDisabled>
             ) : (
-              <Styled.CardFormLinkButton
-                onClick={() => {
-                  resetChanges();
-                }}
-              >
+              <Styled.CardFormLinkButton onClick={resetChanges}>
                 <Styled.Reset />
                 {counterpart.translate(`buttons.reset_changes`)}
               </Styled.CardFormLinkButton>

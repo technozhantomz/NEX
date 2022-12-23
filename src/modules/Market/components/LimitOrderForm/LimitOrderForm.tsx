@@ -10,9 +10,8 @@ import {
 } from "../../../../common/components";
 import { useHandleTransactionForm } from "../../../../common/hooks";
 import { useAssetsContext, useUserContext } from "../../../../common/providers";
-import { Asset } from "../../../../common/types";
 import { Form, FormInstance } from "../../../../ui/src";
-import { OrderForm } from "../../types";
+import { OrderForm, PairAssets } from "../../types";
 
 import { InputPrefix } from "./InputPrefix";
 import * as Styled from "./LimitOrderForm.styled";
@@ -20,8 +19,7 @@ import { useCreateLimitOrder } from "./hooks";
 
 type Props = {
   activePair: string;
-  currentBase: Asset | undefined;
-  currentQuote: Asset | undefined;
+  selectedAssets: PairAssets | undefined;
   loadingSelectedPair: boolean;
   isBuyOrder: boolean;
   showTitle?: boolean;
@@ -30,8 +28,7 @@ type Props = {
 
 export const LimitOrderForm = ({
   activePair,
-  currentBase,
-  currentQuote,
+  selectedAssets,
   loadingSelectedPair,
   isBuyOrder,
   showTitle = true,
@@ -41,8 +38,7 @@ export const LimitOrderForm = ({
   const { localStorageAccount } = useUserContext();
   const { defaultAsset } = useAssetsContext();
   const {
-    feeAmount,
-    marketFeePercent,
+    fees,
     balance,
     formValidation,
     handleCreateLimitOrder,
@@ -56,8 +52,7 @@ export const LimitOrderForm = ({
     quantity,
     total,
   } = useCreateLimitOrder({
-    currentBase,
-    currentQuote,
+    selectedAssets,
     loadingSelectedPair,
     isBuyOrder,
     orderForm,
@@ -194,7 +189,7 @@ export const LimitOrderForm = ({
                   <span>
                     {counterpart.translate(`pages.blocks.fees.fees`)}:
                   </span>
-                  <span>{`${feeAmount} ${
+                  <span>{`${fees.feeAmount} ${
                     defaultAsset ? defaultAsset.symbol : ""
                   }`}</span>
                 </Styled.OderInfoItem>
@@ -203,7 +198,7 @@ export const LimitOrderForm = ({
                   <span>
                     {counterpart.translate(`field.labels.market_fee`)}:
                   </span>
-                  <span>{`${marketFeePercent}%`}</span>
+                  <span>{`${fees.marketFeePercent}%`}</span>
                 </Styled.OderInfoItem>
 
                 <Styled.OderInfoItem>
@@ -242,7 +237,7 @@ export const LimitOrderForm = ({
                 {counterpart.translate(`buttons.dont_have_peerplays_account`)}
               </span>
               <Link href="/signup">
-                <a>{counterpart.translate(`links.create_account`)}</a>
+                {counterpart.translate(`links.create_account`)}
               </Link>
             </FormDisclamer>
           )}
@@ -253,7 +248,7 @@ export const LimitOrderForm = ({
             transactionSuccessMessage={transactionSuccessMessage}
             loadingTransaction={loadingTransaction}
             account={localStorageAccount}
-            fee={feeAmount}
+            fee={fees.feeAmount}
             transactionType="limit_order_create"
             price={`${price} ${activePair.split("_")[1]} / ${
               activePair.split("_")[0]

@@ -10,8 +10,6 @@ import { useGposPage } from "../hooks";
 
 import * as Styled from "./GPOSPage.styled";
 
-const { TabPane } = Tabs;
-
 const GPOSPage: NextPage = () => {
   const router = useRouter();
   const { tab } = router.query;
@@ -63,6 +61,35 @@ const GPOSPage: NextPage = () => {
       )}
     </>
   );
+  const tabItems = [
+    {
+      label: counterpart.translate(`buttons.power_up`),
+      key: "power-up",
+      children: (
+        <PowerUpTab
+          gposBalances={gposBalances}
+          loading={loading}
+          calculateGposBalances={calculateGposBalances}
+        />
+      ),
+    },
+    {
+      label: counterpart.translate(`buttons.power_down`),
+      key: "power-down",
+      children: (
+        <PowerDownTab
+          gposBalances={gposBalances}
+          loading={loading}
+          calculateGposBalances={calculateGposBalances}
+        />
+      ),
+    },
+    {
+      label: counterpart.translate(`buttons.vote`),
+      key: "vote",
+      children: "",
+    },
+  ];
 
   return (
     <Layout
@@ -74,7 +101,7 @@ const GPOSPage: NextPage = () => {
         }.heading`
       )}
       description="Peerplays (GPOS)"
-      dexLayout={true}
+      layout="dex"
       onClick={() => {
         if (sm) {
           isMobileDropdownvisible && setIsMobileDropdownvisible(false);
@@ -90,32 +117,8 @@ const GPOSPage: NextPage = () => {
             else router.push(`/gpos?tab=${key}`);
             if (sm) setIsMobileDropdownvisible(false);
           }}
-        >
-          <TabPane
-            tab={counterpart.translate(`buttons.power_up`)}
-            key="power-up"
-          >
-            <PowerUpTab
-              gposBalances={gposBalances}
-              loading={loading}
-              calculateGposBalances={calculateGposBalances}
-            />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`buttons.power_down`)}
-            key="power-down"
-          >
-            <PowerDownTab
-              gposBalances={gposBalances}
-              loading={loading}
-              calculateGposBalances={calculateGposBalances}
-            />
-          </TabPane>
-          <TabPane
-            tab={counterpart.translate(`buttons.vote`)}
-            key="vote"
-          ></TabPane>
-        </Tabs>
+          items={tabItems}
+        />
       </Styled.GPOSCard>
     </Layout>
   );

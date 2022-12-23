@@ -17,7 +17,7 @@ import React, {
   useState,
 } from "react";
 
-import { useSettingsContext } from "../";
+import { useAppSettingsContext } from "../";
 import { defaultToken } from "../../../api/params";
 import {
   ApiLatencies,
@@ -117,7 +117,7 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     latencyPreferences,
     setLatencyPreferences,
     setConnectedNode,
-  } = useSettingsContext();
+  } = useAppSettingsContext();
 
   const isAutoSelection = useCallback(() => {
     return _isAutoSelection.current;

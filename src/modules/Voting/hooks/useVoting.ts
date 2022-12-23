@@ -32,6 +32,11 @@ export function useVoting(): UseVotingResult {
   const { dbApi } = usePeerplaysApiContext();
   const { getAssetById, setPrecision } = useAsset();
 
+  const [voteTabLoaded, setVoteTabLoaded] = useState<boolean>(false);
+  if (!voteTabLoaded && !loadingUserVotes && !loadingMembers) {
+    setVoteTabLoaded(true);
+  }
+
   const getProxyAccount = useCallback(
     async (proxyId: string) => {
       const proxy = (await getFullAccount(proxyId, false)) as FullAccount;
@@ -140,5 +145,6 @@ export function useVoting(): UseVotingResult {
     proxy,
     getUserVotes,
     loadingMembers,
+    voteTabLoaded,
   };
 }

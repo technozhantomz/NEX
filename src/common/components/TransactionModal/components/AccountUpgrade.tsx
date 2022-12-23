@@ -14,9 +14,7 @@ export const AccountUpgrade = ({ account, fee }: Props): JSX.Element => {
     <>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.labels.account_to_upgrade`)}</p>
-        <Link href={`/user/${account}`}>
-          <a>{account}</a>
-        </Link>
+        <Link href={`/user/${account}`}>{account}</Link>
       </Styled.DetailContainer>
       <Styled.DetailContainer>
         <p>{counterpart.translate(`field.labels.upgrade_lifetime`)}</p>

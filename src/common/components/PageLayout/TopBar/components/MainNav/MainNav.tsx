@@ -2,6 +2,7 @@ import counterpart from "counterpart";
 
 import {
   DollarOutlined,
+  // LinkOutlined,
   MenuCard,
   PoweroffOutlined,
   ProfileOutlined,
@@ -17,8 +18,8 @@ import {
   Vote,
 } from "../../../../../../ui/src/icons";
 import {
+  useAppSettingsContext,
   useMenuContext,
-  useSettingsContext,
   useUserContext,
   useViewportContext,
 } from "../../../../../providers";
@@ -29,7 +30,7 @@ import { useAdvancedMode } from "./hooks";
 export const MainNav = (): JSX.Element => {
   const { advancedMode, handleAdvancedModeChange } = useAdvancedMode();
   const { localStorageAccount } = useUserContext();
-  const { exchanges } = useSettingsContext();
+  const { exchanges } = useAppSettingsContext();
   const { sm } = useViewportContext();
   const { openMenu } = useMenuContext();
   return (
@@ -74,6 +75,13 @@ export const MainNav = (): JSX.Element => {
             label={counterpart.translate(`pages.market.heading`)}
           />
         </li>
+        {/* <li>
+          <MenuItem
+            href={`/peerlink`}
+            icon={<LinkOutlined className={"menu-icon"} />}
+            label={counterpart.translate(`pages.peerlink.heading`)}
+          />
+        </li> */}
         <li>
           <MenuItem
             href="/blockchain"
