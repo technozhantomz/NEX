@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
 <<<<<<< HEAD
+<<<<<<< HEAD
   <file path="/home/ali/Desktop/Projects/peerplays/NEX/src/api/params/__test__/params.spec.ts">
     <testCase name="Default Exchanges values should have the correct default values" duration="3"/>
     <testCase name="Default locale values should have the correct default values" duration="1"/>
@@ -27,67 +28,83 @@
     <testCase name="Testing utils functions  isObjectId function 1 is an invalid object id" duration="1"/>
     <testCase name="Testing utils functions  isObjectId function empty string is an invalid object id" duration="0"/>
 =======
+=======
+  <file path="/home/suraj/Documents/new/new/NEX/src/modules/Profile/components/OrdersColumns/__test__/OrdersColumns.spec.tsx">
+    <testCase name="OrdersColumns should return an array with the correct number of ordersColumns" duration="5"/>
+    <testCase name="OrdersColumns should return an array with the correct number of historyColumns" duration="1"/>
+    <testCase name="OrdersColumns should return a column with a cancel icon that calls the handleClick function when clicked" duration="4"/>
+    <testCase name="OrdersColumns should return the correct onFilter function for the pair column" duration="2"/>
+    <testCase name="OrdersColumns should return the correct onFilter function for the type column" duration="1"/>
+    <testCase name="OrdersColumns should return the correct onFilter function for the side column" duration="3"/>
+    <testCase name="OrdersColumns should return the correct sorter function for the price column" duration="1"/>
+    <testCase name="OrdersColumns should return the correct sorter function for the amount column" duration="1"/>
+    <testCase name="OrdersColumns should return the correct sorter function for the filled column" duration="2"/>
+    <testCase name="OrdersColumns should return the correct sorter function for the total column" duration="2"/>
+    <testCase name="OrdersColumns should return the correct onFilter function for the statusActions column" duration="2"/>
+  </file>
+>>>>>>> eab64b35 (#611 unit test for OrdersColumns completed)
   <file path="/home/suraj/Documents/new/new/NEX/src/common/components/DashboardLoginButton/__test__/DashboardLoginButton.spec.tsx">
-    <testCase name="Dashboard login button Deposit tab renders correctly for not logged in user dashboard deposit tab(BTC)" duration="134"/>
-    <testCase name="Dashboard login button Deposit tab renders correctly for not logged in user dashboard deposit tab(HIVE)" duration="24"/>
+    <testCase name="Dashboard login button Deposit tab renders correctly for not logged in user dashboard deposit tab(BTC)" duration="106"/>
+    <testCase name="Dashboard login button Deposit tab renders correctly for not logged in user dashboard deposit tab(HIVE)" duration="15"/>
   </file>
   <file path="/home/suraj/Documents/new/new/NEX/src/modules/Wallet/components/AssetsColumns/__test__/AssetsColumns.spec.tsx">
     <testCase name="AssetsColumns should return an array with the correct number of columns" duration="4"/>
-    <testCase name="AssetsColumns should return the correct onFilter function for the symbol column" duration="3"/>
-    <testCase name="AssetsColumns should return the correct onFilter function for the name column" duration="1"/>
+    <testCase name="AssetsColumns should return the correct onFilter function for the symbol column" duration="2"/>
+    <testCase name="AssetsColumns should return the correct onFilter function for the name column" duration="2"/>
     <testCase name="AssetsColumns should return the correct sorter function for the available column" duration="1"/>
-    <testCase name="AssetsColumns should return the correct sorter function for the inOrders column" duration="1"/>
+    <testCase name="AssetsColumns should return the correct sorter function for the inOrders column" duration="0"/>
   </file>
-  <file path="/home/suraj/Documents/new/new/NEX/src/modules/Profile/components/OrdersColumns/__test__/OrdersColumns.spec.tsx">
-    <testCase name="OrdersColumns should return an array with the correct number of columns" duration="5"/>
-    <testCase name="OrdersColumns should return a column with a cancel icon that calls the handleClick function when clicked" duration="5"/>
+  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/CopyButton/__test__/CopyButton.spec.tsx">
+    <testCase name="CopyButton should render with button text" duration="110"/>
   </file>
   <file path="/home/suraj/Documents/new/new/NEX/src/common/components/ActivityAndNotificationTable/components/ActivityAndNotificationTag/__test__/ActivityAndNotificationTag.spec.tsx">
-    <testCase name="Activity Tag renders correctly for account creation" duration="46"/>
+    <testCase name="Activity Tag renders correctly for account creation" duration="39"/>
     <testCase name="Activity Tag renders correctly for account update" duration="6"/>
+  </file>
+  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/ActivityAndNotificationTable/components/ActivityAndNotificationColumns/__test__/ActivityAndNotificationColumns.spec.tsx">
+    <testCase name="ActivityAndNotificationColumns should return the correct columns for the notification tab" duration="3"/>
+    <testCase name="ActivityAndNotificationColumns should return the correct columns for the activity tab" duration="0"/>
+    <testCase name="ActivityAndNotificationColumns should return the correct onFilter function for the type column" duration="6"/>
+    <testCase name="ActivityAndNotificationColumns should return the correct sorter function for the time column" duration="2"/>
+  </file>
+  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/FormDisclamer/__test__/FormDiscalmer.spec.tsx">
+    <testCase name="FormDisclamer component renders FormDiscalmet correctly in login page" duration="38"/>
+    <testCase name="FormDisclamer component renders FormDiscalmet correctly in sign up page" duration="11"/>
+  </file>
+  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/PageLayout/Footer/components/ChoiceModal/__test__/ChoiceModal.spec.tsx">
+    <testCase name="ChoiceModal should render the correct content" duration="129"/>
   </file>
   <file path="/home/suraj/Documents/new/new/NEX/src/modules/Market/components/OrderBook/components/UserOrderColumns/__test__/UserOrderColumns.spec.tsx">
     <testCase name="UserOrderColumns should return an array with the correct number of columns" duration="4"/>
     <testCase name="UserOrderColumns should return a column with a cancel icon that calls the handleClick function when clicked" duration="5"/>
   </file>
-  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/PageLayout/Footer/components/ChoiceModal/__test__/ChoiceModal.spec.tsx">
-    <testCase name="ChoiceModal should render the correct content" duration="169"/>
-  </file>
-  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/CopyButton/__test__/CopyButton.spec.tsx">
-    <testCase name="CopyButton should render with button text" duration="98"/>
-  </file>
-  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/FormDisclamer/__test__/FormDiscalmer.spec.tsx">
-    <testCase name="FormDisclamer component renders FormDiscalmet correctly in login page" duration="63"/>
-    <testCase name="FormDisclamer component renders FormDiscalmet correctly in sign up page" duration="13"/>
+  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/CopyButton/hooks/__test__/useCopyButton.spec.tsx">
+    <testCase name="useCopyButton copies text to clipboard and updates copied state when button is clicked" duration="33"/>
   </file>
   <file path="/home/suraj/Documents/new/new/NEX/src/common/components/HIVEAndHBDDeposit/components/__test__/HIVEAndHBDDepositInfo.spec.tsx">
-    <testCase name="component renders correct number of text elements" duration="145"/>
+    <testCase name="component renders correct number of text elements" duration="127"/>
   </file>
-  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/ActivityAndNotificationTable/components/ActivityAndNotificationColumns/__test__/ActivityAndNotificationColumns.spec.tsx">
-    <testCase name="ActivityAndNotificationColumns should return the correct columns for the notification tab" duration="5"/>
-    <testCase name="ActivityAndNotificationColumns should return the correct columns for the activity tab" duration="1"/>
-    <testCase name="ActivityAndNotificationColumns should return the correct onFilter function for the type column" duration="6"/>
-    <testCase name="ActivityAndNotificationColumns should return the correct sorter function for the time column" duration="3"/>
-  </file>
-  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/CopyButton/hooks/__test__/useCopyButton.spec.tsx">
-    <testCase name="useCopyButton copies text to clipboard and updates copied state when button is clicked" duration="67"/>
+  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/UserLinkExtractor/__test__/UserLinkExtactor.spec.tsx">
+    <testCase name="UserLinkExtractor component UserLinkExtractor component in settings page - membership tab renders membership info correctly with correct link" duration="58"/>
+    <testCase name="UserLinkExtractor component UserLinkExtractor component in wallet page - Receive tab renders receive instruction correctly with correct link" duration="10"/>
   </file>
   <file path="/home/suraj/Documents/new/new/NEX/src/api/utils/__test__/utils.spec.ts">
-    <testCase name="Testing utils functions  SortId function sortId should returns -1 for a = 1.2.3 and b = 1.2.4 in sortId(a,b)" duration="4"/>
+    <testCase name="Testing utils functions  SortId function sortId should returns -1 for a = 1.2.3 and b = 1.2.4 in sortId(a,b)" duration="3"/>
     <testCase name="Testing utils functions  SortId function sortId should returns 1 for a = 1.2.3 and b = 1.2.4 in sortId(b,a)" duration="1"/>
     <testCase name="Testing utils functions  SortId function sortId should returns -1 for b = 1.2.4 and c = 1.2.5 in sortId(b,c)" duration="1"/>
     <testCase name="Testing utils functions  SortId function sortId should returns -2 for a = 1.2.3 and c = 1.2.5 in sortId(a,c)" duration="1"/>
     <testCase name="Testing utils functions  SortId function sortId should returns 1 for a = 1.2.3 and b = 1.2.4 in sortId(a,b, inverse=true)" duration="1"/>
     <testCase name="Testing utils functions  SortId function sortId should returns -1 for a = 1.2.3 and b = 1.2.4 in sortId(b,a, inverse=true)" duration="1"/>
-    <testCase name="Testing utils functions  SortId function sortId should returns 1 for b = 1.2.4 and c = 1.2.5 in sortId(b,c, inverse=true)" duration="1"/>
-    <testCase name="Testing utils functions  SortId function sortId should returns 2 for a = 1.2.3 and c = 1.2.5 in sortId(a,c, inverse=true)" duration="0"/>
-    <testCase name="Testing utils functions  isObjectId function 1.2.3 is a valid acoount object id" duration="1"/>
-    <testCase name="Testing utils functions  isObjectId function 1.3.4 is a valid asset object id" duration="2"/>
+    <testCase name="Testing utils functions  SortId function sortId should returns 1 for b = 1.2.4 and c = 1.2.5 in sortId(b,c, inverse=true)" duration="0"/>
+    <testCase name="Testing utils functions  SortId function sortId should returns 2 for a = 1.2.3 and c = 1.2.5 in sortId(a,c, inverse=true)" duration="1"/>
+    <testCase name="Testing utils functions  isObjectId function 1.2.3 is a valid acoount object id" duration="13"/>
+    <testCase name="Testing utils functions  isObjectId function 1.3.4 is a valid asset object id" duration="8"/>
     <testCase name="Testing utils functions  isObjectId function 1.6.1 is a valid witness object id" duration="1"/>
     <testCase name="Testing utils functions  isObjectId function 1.2 is invalid object id" duration="1"/>
-    <testCase name="Testing utils functions  isObjectId function 1.2.3.4 is an invalid object id" duration="1"/>
-    <testCase name="Testing utils functions  isObjectId function hello is an invalid object id" duration="0"/>
+    <testCase name="Testing utils functions  isObjectId function 1.2.3.4 is an invalid object id" duration="0"/>
+    <testCase name="Testing utils functions  isObjectId function hello is an invalid object id" duration="1"/>
     <testCase name="Testing utils functions  isObjectId function 1 is an invalid object id" duration="0"/>
+<<<<<<< HEAD
     <testCase name="Testing utils functions  isObjectId function empty string is an invalid object id" duration="2"/>
 >>>>>>> 59231c6a (#611 unit test for OrdersColumns)
     <testCase name="Testing utils functions  trimNum function trimNum function should return 123.45 for trimNum(123.4567, 2)" duration="1"/>
@@ -108,12 +125,25 @@
     <testCase name="Testing utils functions  isNumber function It is possible to use `.` in is number function" duration="1"/>
 >>>>>>> 59231c6a (#611 unit test for OrdersColumns)
     <testCase name="Testing utils functions  isNumberKey function (in respone to react keyboardEvent) should return true for number keys" duration="0"/>
+=======
+    <testCase name="Testing utils functions  isObjectId function empty string is an invalid object id" duration="1"/>
+    <testCase name="Testing utils functions  trimNum function trimNum function should return 123.45 for trimNum(123.4567, 2)" duration="0"/>
+    <testCase name="Testing utils functions  trimNum function trimNum function should return 123.456 for trimNum(123.4567, 3)" duration="1"/>
+    <testCase name="Testing utils functions  trimNum function trimNum function should return 123.4567 for trimNum(123.4567, 4)" duration="0"/>
+    <testCase name="Testing utils functions  trimNum function trimNum function should return 0 for trimNum(Nan, any digit)" duration="1"/>
+    <testCase name="Testing utils functions  isNumber function 1 is a number" duration="0"/>
+    <testCase name="Testing utils functions  isNumber function 0 is a number" duration="0"/>
+    <testCase name="Testing utils functions  isNumber function h is not a number" duration="0"/>
+    <testCase name="Testing utils functions  isNumber function epmty string is not a number" duration="1"/>
+    <testCase name="Testing utils functions  isNumber function It is possible to use `.` in is number function" duration="0"/>
+    <testCase name="Testing utils functions  isNumberKey function (in respone to react keyboardEvent) should return true for number keys" duration="1"/>
+>>>>>>> eab64b35 (#611 unit test for OrdersColumns completed)
     <testCase name="Testing utils functions  isNumberKey function (in respone to react keyboardEvent) should return false for non-number keys" duration="0"/>
     <testCase name="Testing utils functions  ensureInputNumberValidity function should prevent non-number keys from being entered should prevent `a` from being entered" duration="2"/>
-    <testCase name="Testing utils functions  ensureInputNumberValidity function Should check number and prevent numbers with integers part longer than 6 char should prevent 588888888.55555 from being entered" duration="1"/>
-    <testCase name="Testing utils functions  ensureInputNumberValidity function Should check number and prevent numbers with integers part longer than 6 char should allow entering 5888.55555 " duration="2"/>
-    <testCase name="Testing utils functions  validateGrapheneAccountName function should return true for valid Graphene account names" duration="11"/>
-    <testCase name="Testing utils functions  validateGrapheneAccountName function Should return false for invalid Graphene account names" duration="2"/>
+    <testCase name="Testing utils functions  ensureInputNumberValidity function Should check number and prevent numbers with integers part longer than 6 char should prevent 588888888.55555 from being entered" duration="0"/>
+    <testCase name="Testing utils functions  ensureInputNumberValidity function Should check number and prevent numbers with integers part longer than 6 char should allow entering 5888.55555 " duration="1"/>
+    <testCase name="Testing utils functions  validateGrapheneAccountName function should return true for valid Graphene account names" duration="1"/>
+    <testCase name="Testing utils functions  validateGrapheneAccountName function Should return false for invalid Graphene account names" duration="1"/>
     <testCase name="Testing utils functions  isUrlsEqual function should return true for URLs that are equal ignoring trailing slashes and the protocol part of the URL" duration="1"/>
     <testCase name="Testing utils functions  isUrlsEqual function should return false for URLs that are not equal ignoring trailing slashes and the protocol part of the URL" duration="1"/>
 <<<<<<< HEAD
@@ -131,15 +161,18 @@
     <testCase name="Testing isArrayEqual function [] is equal to []" duration="0"/>
 =======
     <testCase name="Testing utils functions  getBlockchainFromSymbol function the blockchain for &quot;HIVE&quot; is Hive" duration="1"/>
-    <testCase name="Testing utils functions  getBlockchainFromSymbol function the blockchain for &quot;Hive&quot; is Hive" duration="1"/>
+    <testCase name="Testing utils functions  getBlockchainFromSymbol function the blockchain for &quot;Hive&quot; is Hive" duration="0"/>
     <testCase name="Testing utils functions  getBlockchainFromSymbol function the blockchain for the symbol &quot;ETH&quot; is Ethereum" duration="1"/>
     <testCase name="Testing utils functions  getBlockchainFromSymbol function the blockchain for the symbol &quot;eth&quot; is Ethereum" duration="0"/>
     <testCase name="Testing utils functions  getBlockchainFromSymbol function the blockchain for the symbol &quot;BTC&quot; is Bitcoin" duration="1"/>
-    <testCase name="Testing utils functions  getBlockchainFromSymbol function the blockchain for the symbol &quot;btc&quot; is Bitcoin" duration="1"/>
+    <testCase name="Testing utils functions  getBlockchainFromSymbol function the blockchain for the symbol &quot;btc&quot; is Bitcoin" duration="0"/>
+  </file>
+  <file path="/home/suraj/Documents/new/new/NEX/src/common/components/KeyInput/hooks/__test__/useKeyInput.spec.tsx">
+    <testCase name="UseKeyInput toggleVisibility changes isVisible state" duration="34"/>
   </file>
   <file path="/home/suraj/Documents/new/new/NEX/src/common/components/TableHeading/__test__/TableHeading.spec.tsx">
-    <testCase name="TableHeading component TableHeading in vote table renders correctly for Vote table rank column" duration="31"/>
-    <testCase name="TableHeading component TableHeading in vote table renders correctly for Vote table Name column" duration="5"/>
+    <testCase name="TableHeading component TableHeading in vote table renders correctly for Vote table rank column" duration="27"/>
+    <testCase name="TableHeading component TableHeading in vote table renders correctly for Vote table Name column" duration="6"/>
   </file>
   <file path="/home/suraj/Documents/new/new/NEX/src/api/utils/__test__/isArrayEqual.spec.ts">
     <testCase name="Testing isArrayEqual function [3,2,1] is equal to [3,2,1]" duration="3"/>
@@ -148,9 +181,10 @@
     <testCase name="Testing isArrayEqual function [] is equal to []" duration="1"/>
 >>>>>>> 59231c6a (#611 unit test for OrdersColumns)
     <testCase name="Testing isArrayEqual function null is equal to null" duration="0"/>
-    <testCase name="Testing isArrayEqual function undefined is equal to undefined" duration="0"/>
+    <testCase name="Testing isArrayEqual function undefined is equal to undefined" duration="1"/>
     <testCase name="Testing isArrayEqual function [{network: &apos;Peerplays&apos;}] is equal to [{network: &apos;Peerplays&apos;}]" duration="1"/>
   </file>
+<<<<<<< HEAD
 <<<<<<< HEAD
   <file path="/home/ali/Desktop/Projects/peerplays/NEX/src/api/utils/__test__/copyText.spec.ts">
     <testCase name="copyText should call navigator.clipboard.writeText with the correct argument" duration="3"/>
@@ -185,13 +219,22 @@
     <testCase name="copyText should call navigator.clipboard.writeText with the correct argument" duration="4"/>
     <testCase name="copyText should not throw an error if navigator.clipboard is undefined" duration="1"/>
   </file>
+=======
+>>>>>>> eab64b35 (#611 unit test for OrdersColumns completed)
   <file path="/home/suraj/Documents/new/new/NEX/src/api/params/__test__/params.spec.ts">
-    <testCase name="Default Exchanges values should have the correct default values" duration="3"/>
-    <testCase name="Default locale values should have the correct default values" duration="1"/>
+    <testCase name="Default Exchanges values should have the correct default values" duration="4"/>
+    <testCase name="Default locale values should have the correct default values" duration="2"/>
     <testCase name="Default notifications values should have the correct default values" duration="1"/>
-    <testCase name="Default settings values should have the correct default values" duration="2"/>
-    <testCase name="Testing network parameters should have the correct default values" duration="3"/>
+    <testCase name="Default settings values should have the correct default values" duration="4"/>
+    <testCase name="Testing network parameters should have the correct default values" duration="7"/>
     <testCase name="symbols To Be Excepted should have the correct default values" duration="1"/>
 >>>>>>> 59231c6a (#611 unit test for OrdersColumns)
+  </file>
+  <file path="/home/suraj/Documents/new/new/NEX/src/api/utils/__test__/getPassedTime.spec.ts">
+    <testCase name="getPassedTime should correctly calculate the passed time" duration="2"/>
+  </file>
+  <file path="/home/suraj/Documents/new/new/NEX/src/api/utils/__test__/copyText.spec.ts">
+    <testCase name="copyText should call navigator.clipboard.writeText with the correct argument" duration="3"/>
+    <testCase name="copyText should not throw an error if navigator.clipboard is undefined" duration="0"/>
   </file>
 </testExecutions>
