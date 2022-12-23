@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  FC,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { breakpoints } from "../../../ui/src/breakpoints";
 
@@ -30,7 +24,11 @@ const ViewportContext = createContext<IViewport>({
   xxl: false,
 });
 
-export const ViewportProvider: FC = ({ children }) => {
+export function ViewportProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element {
   const [windowSize, setWindowSize] = useState<IViewport>({
     width: 0,
     height: 0,
@@ -68,7 +66,7 @@ export const ViewportProvider: FC = ({ children }) => {
       {children}
     </ViewportContext.Provider>
   );
-};
+}
 
 export const useViewportContext = (): IViewport => {
   return useContext<IViewport>(ViewportContext);

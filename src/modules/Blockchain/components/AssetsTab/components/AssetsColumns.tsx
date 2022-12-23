@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import Link from "next/link";
 
 import { TableHeading } from "../../../../../common/components";
 import { InfoCircleOutlined, Tag, Tooltip } from "../../../../../ui/src";
@@ -76,9 +77,9 @@ const renders = [
   undefined,
   undefined,
   (issuer: string): JSX.Element => (
-    <a href={`/user/${issuer}`} target="_blank">
+    <Link href={`/user/${issuer}`} target="_blank">
       {issuer}
-    </a>
+    </Link>
   ),
   (info: string): JSX.Element => {
     if (!info || info === "") {

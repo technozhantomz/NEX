@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { TableHeading } from "../../../../../../common/components";
 
 import * as Styled from "./TransactionsTable.styled";
@@ -47,17 +49,17 @@ export const TransactionsColumns = (
   ];
   const renders = [
     (rank: number): JSX.Element => (
-      <a target="_blank" href={`/blockchain/${block}/${rank}`}>
+      <Link target="_blank" href={`/blockchain/${block}/${rank}`}>
         {rank}
-      </a>
+      </Link>
     ),
     // (id: string, record: TransactionRow): JSX.Element => (
-    //   <a target="_blank" href={`/blockchain/${block}/${record.rank}`}>
+    //   <Link target="_blank" href={`/blockchain/${block}/${record.rank}`}>
     //     <Styled.CenterEllipsis>
     //       <span className="ellipsis">{id}</span>
     //       <span className="indent">{id}</span>
     //     </Styled.CenterEllipsis>
-    //   </a>
+    //   </Link>
     // ),
     (expiration: string): JSX.Element => (
       <Styled.TimeStamp>{expiration}</Styled.TimeStamp>

@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import { MouseEvent } from "react";
 
 import { TableHeading } from "../../../../common/components";
 import { DeleteOutlined } from "../../../../ui/src";
@@ -105,17 +106,21 @@ export const createOrdersColumns = (
     //total
     undefined,
     //status
-    (_value: string, _record: any): JSX.Element => (
-      <Styled.DeleteIconContainer
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          (handleCancel as (orderId: string) => void)(_record.key);
-        }}
-      >
-        <DeleteOutlined />
-      </Styled.DeleteIconContainer>
-    ),
+    (_value: string, _record: any): JSX.Element => {
+      function handleClick(
+        // eslint-disable-next-line no-undef
+        e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+      ) {
+        e.stopPropagation();
+        e.preventDefault();
+        (handleCancel as (orderId: string) => void)(_record.key);
+      }
+      return (
+        <Styled.DeleteIconContainer onClick={handleClick}>
+          <DeleteOutlined />
+        </Styled.DeleteIconContainer>
+      );
+    },
   ];
   const filters = [
     //expiration

@@ -34,7 +34,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     assetBlockchains,
     sendForm,
     selectedAssetSymbol,
-    selectedAsset,
+    userAsset,
     handleValuesChange,
     onBlockchainChange,
     selectedBlockchain,
@@ -83,12 +83,11 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     selectedAssetPrecission
   );
 
-  //done
   const feeLabel =
     selectedBlockchain === BITCOIN_NETWORK
       ? counterpart.translate(`field.labels.estimated_fees_label`)
       : counterpart.translate(`field.labels.fees_label`);
-  //done
+
   const feeSummary: (inTotal?: boolean) => string | JSX.Element = (
     inTotal = false
   ) => {
@@ -208,8 +207,9 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
               value={selectedBlockchain}
             >
               {assetBlockchains.map((blockchain, index) => {
+                const key = `${blockchain}-${index}`;
                 return (
-                  <Styled.BlockchainOption key={index} value={blockchain}>
+                  <Styled.BlockchainOption key={key} value={blockchain}>
                     <Styled.contentWrapper>
                       <Styled.IconWrapper>
                         {icons[blockchain]}
@@ -228,15 +228,14 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
               {counterpart.translate(`pages.wallet.available_to_send`)}
             </Styled.AvailableAssetLabel>
             <Styled.AvailableAssetAmount>
-              {selectedAsset ? selectedAsset.amount : 0}
+              {userAsset ? userAsset.amount : 0}
             </Styled.AvailableAssetAmount>
           </Styled.AvailableAssetWrapper>
           <Progress
+            status="normal"
             percent={
-              selectedAsset && selectedAsset.amount && amount
-                ? Number(
-                    ((Number(amount) / selectedAsset.amount) * 100).toFixed(1)
-                  )
+              userAsset && userAsset.amount && amount
+                ? Number(((Number(amount) / userAsset.amount) * 100).toFixed(1))
                 : 0
             }
           />
@@ -275,7 +274,6 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
           <Styled.MemoFormItem
             name="memo"
             validateFirst={true}
-            rules={formValdation.memo}
             validateTrigger="onChange"
           >
             <Styled.Memo

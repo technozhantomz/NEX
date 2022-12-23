@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import { breakpoint } from "./breakpoints";
 import { colors } from "./colors";
 import { mixIns } from "./mixins";
 
@@ -14,5 +15,10 @@ export const Tag = styled.span<Props>`
   border: none;
   ${mixIns.borderRadius}
   padding: 5px 21px;
-  white-space: nowrap;
+  white-space: normal;
+  display: inline-block;
+  text-align: center;
+  ${breakpoint.sm} {
+    white-space: nowrap;
+  }
 `;

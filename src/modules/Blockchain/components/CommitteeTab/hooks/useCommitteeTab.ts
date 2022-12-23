@@ -5,10 +5,7 @@ import {
   useAsset,
   useMembers,
 } from "../../../../../common/hooks";
-import {
-  useAssetsContext,
-  usePeerplaysApiContext,
-} from "../../../../../common/providers";
+import { useAssetsContext } from "../../../../../common/providers";
 
 import {
   CommitteeTableRow,
@@ -22,16 +19,15 @@ export function useCommitteeTab(): UseCommitteeTabResult {
   );
   const [activeCommittee, setActiveCommittee] = useState<number>(0);
   const [committeeStats, setCommitteeStats] = useState<number[]>([]);
-  const [committeeTableRows, setCommitteeTableRows] = useState<
-    CommitteeTableRow[]
-  >([]);
-  const { dbApi } = usePeerplaysApiContext();
+  const [committeeTableRows, setCommitteeTableRows] =
+    useState<CommitteeTableRow[]>();
+
   const { formKnownAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const { getCommittees } = useMembers();
 
-  const getCommitteesTableRows = useCallback(async () => {
+  const getCommitteesTableData = useCallback(async () => {
     if (defaultAsset) {
       try {
         const { committees, committeesIds } = await getCommittees();
@@ -39,57 +35,76 @@ export function useCommitteeTab(): UseCommitteeTabResult {
         if (committees && committees.length > 0) {
           committees.sort((a, b) => b.total_votes - a.total_votes);
 
-          const committeeRows = await Promise.all(
-            committees.map(async (committee, index) => {
-              const votesAsset = formKnownAssetBalanceById(
-                defaultAsset,
-                Number(committee.total_votes)
-              );
-              return {
-                key: index,
-                rank: index + 1,
-                name: committeesIds.filter(
-                  (committeeId) => committeeId[1] === committee.id
-                )[0][0],
-                active: (votesAsset?.amount as number) > 0 ? true : false,
-                url: committee.url,
-                totalVotes: `${votesAsset?.amount} ${votesAsset?.symbol}`,
-              } as CommitteeTableRow;
-            })
-          );
-          const activeCommittee = committeeRows.filter(
+          const committeeRows = committees.map((committee, index) => {
+            const votesAsset = formKnownAssetBalanceById(
+              defaultAsset,
+              Number(committee.total_votes)
+            );
+            return {
+              key: index,
+              rank: index + 1,
+              name: committeesIds.filter(
+                (committeeId) => committeeId[1] === committee.id
+              )[0][0],
+              active: (votesAsset?.amount as number) > 0 ? true : false,
+              url: committee.url,
+              totalVotes: `${votesAsset?.amount} ${votesAsset?.symbol}`,
+            } as CommitteeTableRow;
+          });
+
+          const activeCommitteeRows = committeeRows.filter(
             (committee) => committee.active
           );
-          setCommitteeTableRows(committeeRows);
-          setSearchDataSource(committeeRows);
-          setActiveCommittee(activeCommittee.length);
-          setCommitteeStats(
-            updateArrayWithLimit(committeeStats, activeCommittee.length, 99)
-          );
-          setLoading(false);
+          return {
+            committeeRows,
+            activeCommittee: activeCommitteeRows.length,
+            committeeStats: updateArrayWithLimit(
+              committeeStats,
+              activeCommitteeRows.length,
+              99
+            ),
+          };
         }
       } catch (e) {
-        setLoading(false);
         console.log(e);
       }
     }
   }, [
-    dbApi,
-    formKnownAssetBalanceById,
-    setCommitteeTableRows,
-    setActiveCommittee,
-    setCommitteeStats,
-    updateArrayWithLimit,
     defaultAsset,
-    setLoading,
+    getCommittees,
+    formKnownAssetBalanceById,
+    updateArrayWithLimit,
   ]);
 
   useEffect(() => {
-    const committeeInterval = setInterval(() => getCommitteesTableRows(), 3000);
+    let ignore = false;
+
+    async function setCommitteeRows() {
+      setLoading(true);
+      const committeesTableInfo = await getCommitteesTableData();
+      if (!ignore && committeesTableInfo) {
+        setCommitteeTableRows(committeesTableInfo.committeeRows);
+        setSearchDataSource(committeesTableInfo.committeeRows);
+        setActiveCommittee(committeesTableInfo.activeCommittee);
+        setCommitteeStats(committeesTableInfo.committeeStats);
+        setLoading(false);
+      }
+    }
+    setCommitteeRows();
+    const committeeInterval = setInterval(() => setCommitteeRows(), 3000);
+
     return () => {
+      ignore = true;
       clearInterval(committeeInterval);
     };
-  }, [defaultAsset]);
+  }, [
+    setLoading,
+    getCommitteesTableData,
+    setCommitteeTableRows,
+    setSearchDataSource,
+    setActiveCommittee,
+    setCommitteeStats,
+  ]);
 
   return {
     loading,

@@ -24,12 +24,10 @@ export const PasswordModal = ({
     passwordModalForm,
     formValidation,
     onChangeUseWhaleVault,
-    useResetFormOnCloseModal,
     useWhaleVault,
+    resetForm,
   } = usePasswordForm({ neededKeyType });
   const { localStorageAccount } = useUserContext();
-
-  useResetFormOnCloseModal(passwordModalForm, visible);
 
   return (
     <Styled.PasswordModal
@@ -43,6 +41,7 @@ export const PasswordModal = ({
       }}
       onCancel={!submitting ? onCancel : undefined}
       footer={null}
+      afterClose={resetForm}
     >
       <Styled.PasswordModalForm
         form={passwordModalForm}

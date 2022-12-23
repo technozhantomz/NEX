@@ -158,6 +158,17 @@ export function useBlockchain(): UseBlockchainResult {
     [dbApi]
   );
 
+  const getGlobalProperties = useCallback(async () => {
+    try {
+      const gpo: GlobalProperties = await dbApi("get_global_properties");
+      if (gpo) {
+        return gpo;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi]);
+
   return {
     getChain,
     getBlockData,
@@ -167,5 +178,6 @@ export function useBlockchain(): UseBlockchainResult {
     getBlock,
     getBlocks,
     getBlockHeader,
+    getGlobalProperties,
   };
 }

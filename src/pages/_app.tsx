@@ -1,3 +1,14 @@
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
 import { MetaMaskProvider } from "metamask-react";
 import type { AppProps } from "next/app";
 
@@ -17,6 +28,17 @@ import {
 import "../ui/src/ui.less";
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Filler,
+    Legend
+  );
+
   return (
     <ViewportProvider>
       <MetaMaskProvider>

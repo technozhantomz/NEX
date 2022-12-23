@@ -3,9 +3,8 @@ import { Dispatch, SetStateAction } from "react";
 import { FeeParameter } from "../../../../../common/types";
 
 export type UseFeesTabResult = {
-  loading: boolean;
   searchDataSource: FeesTableRow[];
-  fullFeesRows: FeesTableRow[];
+  fullFeesRows?: FeesTableRow[];
   setSearchDataSource: Dispatch<SetStateAction<FeesTableRow[]>>;
 };
 

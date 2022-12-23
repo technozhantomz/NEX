@@ -1,18 +1,15 @@
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import Link from "next/link";
+import { useRef } from "react";
 
-import { renderPaginationItem } from "../../../../common/components";
-import { useViewportContext } from "../../../../common/providers";
 import {
-  DownloadOutlined,
-  InfoCircleOutlined,
-  List,
-  SearchOutlined,
-} from "../../../../ui/src";
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
+import { useViewportContext } from "../../../../common/providers";
+import { InfoCircleOutlined, List, SearchOutlined } from "../../../../ui/src";
 import { StatsCard } from "../../common";
 
 import * as Styled from "./SonsTab.styled";
@@ -63,35 +60,23 @@ export const SonsTab = (): JSX.Element => {
         </Styled.SonsHeader>
         <SearchTableInput
           columns={SonsColumns as ColumnsType<unknown>}
-          dataSource={sonsTableRows}
+          dataSource={sonsTableRows ?? []}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(`pages.blocks.sons.search_sons`),
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"SonsTable.csv"}
-            data={sonsTableRows}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={sonsTableRows}
+        ></TableDownloader>
       </Styled.SonsHeaderBar>
       {sm ? (
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={loading && !sonsTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -115,9 +100,9 @@ export const SonsTab = (): JSX.Element => {
                     {SonsColumns[1].title()}
                   </span>
                   <span className="item-info-value">
-                    <a target="_blank" href={`/user/${item.name}`}>
+                    <Link target="_blank" href={`/user/${item.name}`}>
                       {item.name}
-                    </a>
+                    </Link>
                   </span>
                 </div>
                 <div className="item-info">
@@ -152,7 +137,7 @@ export const SonsTab = (): JSX.Element => {
         <Styled.SonsTable
           dataSource={searchDataSource}
           columns={SonsColumns as ColumnsType<unknown>}
-          loading={loading}
+          loading={loading && !sonsTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -167,8 +152,8 @@ export const SonsTab = (): JSX.Element => {
       <Styled.PrintTable>
         <SonsPrintTable
           ref={componentRef}
-          loading={loading}
-          sonsTableRows={sonsTableRows}
+          loading={loading && !sonsTableRows}
+          sonsTableRows={sonsTableRows ?? []}
           sonsColumns={SonsColumns}
         />
       </Styled.PrintTable>

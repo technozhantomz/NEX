@@ -1,3 +1,4 @@
+import { ChainValidation } from "peerplaysjs-lib";
 import { ClipboardEvent, KeyboardEvent } from "react";
 
 import { BITCOIN_NETWORK, defaultNetwork, HIVE_NETWORK } from "../params";
@@ -12,7 +13,7 @@ export const utils = {
 
     return inverse ? intB - intA : intA - intB;
   },
-  is_object_id: (obj_id: string): boolean => {
+  isObjectId: (obj_id: string): boolean => {
     if ("string" != typeof obj_id) return false;
     const match = id_regex.exec(obj_id);
     return match !== null && obj_id.split(".").length === 3;
@@ -74,9 +75,13 @@ export const utils = {
       TEST: "PeerPlays",
       PPY: "PeerPlays",
     };
-    return blockchains[symbol] || symbol;
+    return blockchains[symbol.toUpperCase()] || symbol;
   },
   validateGrapheneAccountName: (name: string): boolean => {
+    const defaultErrors = ChainValidation.is_account_name_error(name);
+    if (defaultErrors) {
+      return false;
+    }
     return /^[a-z](?!.*([-.])\\1)((?=.*(-))|(?=.*(\d)))[a-z0-9-.]{2,62}(?![-.])$/.test(
       name
     );
