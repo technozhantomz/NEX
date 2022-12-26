@@ -2,9 +2,14 @@ import {
   BITCOIN_ASSET_SYMBOL,
   BITCOIN_NETWORK,
   DEFAULT_PROXY_ID,
+  defaultChainId,
+  defaultChainParams,
   defaultNetwork,
   defaultQuote,
   defaultToken,
+  ETHEREUM_ASSET_SYMBOL,
+  ETHEREUM_NETWORK,
+  faucetUrl,
   HBD_ASSET_SYMBOL,
   HIVE_ASSET_SYMBOL,
   HIVE_NETWORK,
@@ -58,6 +63,9 @@ describe("Default settings values", () => {
 });
 
 describe("Testing network parameters", () => {
+  const FAUCET_URL = process.env.NEXT_PUBLIC_FAUCET_URL;
+  const DEFAULT_CHAIN_ID = process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID;
+
   it("should have the correct default values", () => {
     expect(defaultToken).toMatch(/(TEST|PPY)/);
     expect(defaultNetwork).toEqual("Peerplays");
@@ -70,6 +78,15 @@ describe("Testing network parameters", () => {
     expect(HIVE_ASSET_SYMBOL).toEqual("HIVE");
     expect(HBD_ASSET_SYMBOL).toEqual("HBD");
     expect(SON_ACCOUNT_NAME).toEqual("son-account");
+    expect(ETHEREUM_NETWORK).toEqual("Ethereum");
+    expect(ETHEREUM_ASSET_SYMBOL).toEqual("ETH");
+    expect(faucetUrl).toEqual(FAUCET_URL);
+    expect(defaultChainId).toEqual(DEFAULT_CHAIN_ID);
+    expect(defaultChainParams).toEqual({
+      core_asset: defaultToken,
+      chain_id: DEFAULT_CHAIN_ID,
+      address_prefix: defaultToken,
+    });
   });
 });
 
