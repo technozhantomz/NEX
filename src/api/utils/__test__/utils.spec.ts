@@ -1,4 +1,4 @@
-import { KeyboardEvent } from "react";
+import { ClipboardEvent, KeyboardEvent } from "react";
 
 import { utils } from "../utils";
 
@@ -81,6 +81,10 @@ describe("Testing utils functions ", () => {
     it("empty string is an invalid object id", () => {
       expect(utils.isObjectId(invalidObjectID5)).toBe(false);
     });
+
+    it("returns false when obj_id is not a string", () => {
+      expect(utils.isObjectId(123 as any)).toBe(false);
+    });
   });
 
   describe("trimNum function", () => {
@@ -160,6 +164,40 @@ describe("Testing utils functions ", () => {
         };
         utils.ensureInputNumberValidity(e as any);
         expect(e.preventDefault).toHaveBeenCalled();
+      });
+    });
+
+    describe("numberedInputsPasteHandler", () => {
+      let pasteEvent: ClipboardEvent<HTMLInputElement>;
+      let mockPreventDefault: jest.Mock;
+
+      beforeEach(() => {
+        pasteEvent = {
+          clipboardData: {
+            getData: jest.fn().mockReturnValue("123456"),
+          },
+          preventDefault: jest.fn(),
+          target: {
+            value: "",
+          } as HTMLInputElement,
+        } as unknown as ClipboardEvent<HTMLInputElement>;
+
+        mockPreventDefault = jest.fn();
+        pasteEvent.preventDefault = mockPreventDefault;
+      });
+
+      it("should prevent default if clipboard data is not a number", () => {
+        pasteEvent.clipboardData.getData = jest
+          .fn()
+          .mockImplementation(() => "123abc");
+        utils.numberedInputsPasteHandler(pasteEvent);
+        expect(mockPreventDefault).toHaveBeenCalled();
+      });
+
+      it("should prevent default if target value would be greater than 6 characters", () => {
+        pasteEvent.target.value = "123456";
+        utils.numberedInputsPasteHandler(pasteEvent);
+        expect(mockPreventDefault).toHaveBeenCalled();
       });
     });
 
