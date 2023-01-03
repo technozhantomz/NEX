@@ -33,7 +33,7 @@ const VotingPage: NextPage = () => {
     allMembersIds,
     fullAccount,
     proxy,
-    totalGpos,
+    gposInfo,
     getUserVotes,
     serverApprovedVotesIds,
     voteTabLoaded,
@@ -89,7 +89,7 @@ const VotingPage: NextPage = () => {
     {
       label: counterpart.translate(`pages.voting.gpos.tab`),
       key: "gpos",
-      children: <GPOSTab />,
+      children: <GPOSTab gposInfo={gposInfo} />,
     },
     ...voteTabs.map((voteTab, index) => {
       return {
@@ -113,7 +113,7 @@ const VotingPage: NextPage = () => {
             )}
             allMembersIds={allMembersIds}
             getUserVotes={getUserVotes}
-            totalGpos={totalGpos}
+            totalGpos={gposInfo.gposBalance}
             proxy={proxy}
             key={voteTab}
           />
@@ -126,7 +126,7 @@ const VotingPage: NextPage = () => {
       children: (
         <ProxyTab
           serverProxy={proxy}
-          totalGpos={totalGpos}
+          totalGpos={gposInfo.gposBalance}
           getUserVotes={getUserVotes}
           loading={!voteTabLoaded}
         />

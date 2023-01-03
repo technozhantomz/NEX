@@ -77,7 +77,7 @@ export function usePowerUpForm({
       const values = powerUpForm.getFieldsValue();
       const depositAmount = values.depositAmount;
       const trx = buildVestingBalanceCreateTransaction(
-        gposBalances?.asset as Asset,
+        defaultAsset as Asset,
         depositAmount,
         id
       );
@@ -94,7 +94,7 @@ export function usePowerUpForm({
           setTransactionSuccessMessage(
             counterpart.translate(`field.success.successfully_deposited`, {
               depositAmount: values.depositAmount,
-              symbol: gposBalances?.asset.symbol,
+              symbol: gposBalances?.symbol,
             })
           );
           setLoadingTransaction(false);
@@ -124,6 +124,7 @@ export function usePowerUpForm({
       localStorageAccount,
       calculateGposBalances,
       setTransactionSuccessMessage,
+      defaultAsset,
     ]
   );
 
@@ -141,7 +142,7 @@ export function usePowerUpForm({
 
   const validateDepositAmount = async (_: unknown, value: string) => {
     const accountAsset = assets.find(
-      (asset) => asset.symbol === gposBalances?.asset.symbol
+      (asset) => asset.symbol === gposBalances?.symbol
     );
     const total = Number(value) + feeAmount;
     if (Number(value) <= 0) {
@@ -180,14 +181,13 @@ export function usePowerUpForm({
       if (!sm) {
         powerUpForm.setFieldsValue({
           openingBalance:
-            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
-          newBalance:
-            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
+            gposBalances.openingBalance + " " + gposBalances.symbol,
+          newBalance: gposBalances.openingBalance + " " + gposBalances.symbol,
         });
       } else {
         powerUpForm.setFieldsValue({
-          openingBalance: gposBalances.asset.symbol,
-          newBalance: gposBalances.asset.symbol,
+          openingBalance: gposBalances.symbol,
+          newBalance: gposBalances.symbol,
         });
       }
     }
@@ -213,14 +213,13 @@ export function usePowerUpForm({
 
         if (!sm) {
           powerUpForm.setFieldsValue({
-            newBalance: newBalance + " " + gposBalances?.asset.symbol,
-            availableBalance:
-              userAvailableBalance + " " + gposBalances.asset.symbol,
+            newBalance: newBalance + " " + gposBalances?.symbol,
+            availableBalance: userAvailableBalance + " " + gposBalances.symbol,
           });
         } else {
           powerUpForm.setFieldsValue({
-            newBalance: gposBalances?.asset.symbol,
-            availableBalance: gposBalances.asset.symbol,
+            newBalance: gposBalances?.symbol,
+            availableBalance: gposBalances.symbol,
           });
         }
       }
