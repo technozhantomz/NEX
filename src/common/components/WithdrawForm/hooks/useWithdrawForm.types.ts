@@ -1,6 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 
 import { FormInstance, Rule } from "../../../../ui/src";
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../hooks";
 import { SidechainAcccount, SignerKey } from "../../../types";
 
 export type UseWithdrawFormResult = {
@@ -9,12 +13,9 @@ export type UseWithdrawFormResult = {
   handleValuesChange: (changedValues: any) => void;
   handleAssetChange: (value: unknown) => void;
   selectedAsset: string;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  transactionErrorMessage: string;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  transactionSuccessMessage: string;
+  transactionMessageState: TransactionMessageState;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   handleWithdraw: (signerKey: SignerKey) => Promise<void>;
-  loadingTransaction: boolean;
   amount: string;
   withdrawAddress: string;
   userBalance: number;

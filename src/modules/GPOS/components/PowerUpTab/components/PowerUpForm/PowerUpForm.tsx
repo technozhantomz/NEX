@@ -34,12 +34,9 @@ export const PowerUpForm = ({
     powerUpForm,
     formValidation,
     adjustDeposit,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageState,
+    transactionMessageDispatch,
     handleVesting,
-    loadingTransaction,
     feeAmount,
     depositAmount,
     newBalance,
@@ -58,8 +55,7 @@ export const PowerUpForm = ({
     handleFormFinish,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: handleVesting,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
   const { sm } = useViewportContext();
@@ -177,9 +173,7 @@ export const PowerUpForm = ({
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={localStorageAccount}
           fee={feeAmount}
           vestingAmount={depositAmount}

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { Dispatch, useCallback, useState } from "react";
 
 import { useFormKeys } from "..";
 import { useUserContext } from "../../providers";
@@ -6,17 +6,17 @@ import { KeyType, SignerKey } from "../../types";
 
 import { UseHandleTransactionFormResult } from "./useHandleTransactionForm.types";
 
+import { TransactionMessageAction, TransactionMessageActionType } from ".";
+
 type Args = {
   handleTransactionConfirmation: (password: SignerKey) => Promise<void>;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   neededKeyType: KeyType;
 };
 
 export function useHandleTransactionForm({
   handleTransactionConfirmation,
-  setTransactionErrorMessage,
-  setTransactionSuccessMessage,
+  transactionMessageDispatch,
   neededKeyType,
 }: Args): UseHandleTransactionFormResult {
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
@@ -39,14 +39,9 @@ export function useHandleTransactionForm({
   }, [setIsTransactionModalVisible]);
 
   const hideTransactionModal = useCallback(() => {
-    setTransactionErrorMessage("");
-    setTransactionSuccessMessage("");
+    transactionMessageDispatch({ type: TransactionMessageActionType.CLEAR });
     setIsTransactionModalVisible(false);
-  }, [
-    setIsTransactionModalVisible,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-  ]);
+  }, [setIsTransactionModalVisible, transactionMessageDispatch]);
 
   const hidePasswordModal = useCallback(() => {
     setIsPasswordModalVisible(false);

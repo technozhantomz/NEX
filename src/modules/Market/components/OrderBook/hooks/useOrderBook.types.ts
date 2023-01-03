@@ -1,5 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
 
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../../../common/hooks";
 import { SignerKey } from "../../../../../common/types";
 import { OrderColumn, OrderRow, OrderType } from "../../../types";
 
@@ -13,11 +17,8 @@ export type UseOrderBookResult = {
   handleFilterChange: (type: OrderType) => void;
   orderColumns: OrderColumn[];
   cancelOrderfeeAmount: number;
-  transactionErrorMessage: string;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  transactionSuccessMessage: string;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  loadingTransaction: boolean;
+  transactionMessageState: TransactionMessageState;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   setSelectedOrderId: Dispatch<SetStateAction<string>>;
   selectedOrderId: string;
   handleCancelLimitOrder: (signerKey: SignerKey) => Promise<void>;

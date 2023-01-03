@@ -5,12 +5,14 @@ import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useBlockchain,
   useFees,
   useMaintenance,
   useTransactionBuilder,
+  useTransactionMessage,
 } from "../../../../../common/hooks";
 import {
   useAssetsContext,
@@ -37,15 +39,12 @@ export function useMembershipTab(): UseMembershipTabResult {
   const { calculateAccountUpgradeFee } = useFees();
   const { maintenanceInterval, nextMaintenanceTime } = useMaintenance();
   const { getGlobalProperties } = useBlockchain();
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
 
   const [membershipForm] = Form.useForm();
   const [loadingAccountMembership, setLoadingAccountMembership] =
     useState<boolean>(true);
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
   const [feesCashback, setFeesCashback] = useState<number>(0);
   const [membershipPrice, setMembershipPrice] = useState<number>(0);
   const [networkFee, setNetworkFee] = useState<number>(0);
@@ -184,11 +183,14 @@ export function useMembershipTab(): UseMembershipTabResult {
         (assets.filter((asset) => asset.id === defaultAsset.id)[0]
           .amount as number) < membershipPrice
       ) {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.balance_not_enough`)
-        );
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.ERROR,
+          message: counterpart.translate(`field.errors.balance_not_enough`),
+        });
       } else {
-        setTransactionErrorMessage("");
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.CLEAR,
+        });
         const fee = { amount: 0, asset_id: defaultAsset?.id };
         const trx = {
           type: "account_upgrade",
@@ -201,14 +203,16 @@ export function useMembershipTab(): UseMembershipTabResult {
         let trxResult;
 
         try {
-          setLoadingTransaction(true);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADING,
+          });
           trxResult = await buildTrx([trx], [signerKey]);
         } catch (error) {
           console.log(error);
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.unable_transaction`)
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_ERROR,
+            message: counterpart.translate(`field.errors.transaction_unable`),
+          });
         }
 
         if (trxResult) {
@@ -217,16 +221,17 @@ export function useMembershipTab(): UseMembershipTabResult {
 
           _setMembershipStatus(membershipStatus);
 
-          setTransactionErrorMessage("");
-          setTransactionSuccessMessage(
-            counterpart.translate(`field.success.account_upgraded_successfully`)
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_SUCCESS,
+            message: counterpart.translate(
+              `field.success.account_upgraded_successfully`
+            ),
+          });
         } else {
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.unable_transaction`)
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_ERROR,
+            message: counterpart.translate(`field.errors.transaction_unable`),
+          });
         }
       }
     },
@@ -235,10 +240,8 @@ export function useMembershipTab(): UseMembershipTabResult {
       defaultAsset,
       membershipPrice,
       id,
-      setLoadingTransaction,
+      transactionMessageDispatch,
       buildTrx,
-      setTransactionErrorMessage,
-      setTransactionSuccessMessage,
       setIsLifetimeMember,
       formAccountBalancesByName,
       localStorageAccount,
@@ -271,11 +274,8 @@ export function useMembershipTab(): UseMembershipTabResult {
   return {
     handleMembershipUpgrade,
     membershipForm,
-    loadingTransaction,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionSuccessMessage,
-    setTransactionErrorMessage,
+    transactionMessageState,
+    transactionMessageDispatch,
     name,
     feesCashback,
     membershipPrice,
