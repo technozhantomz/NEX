@@ -41,11 +41,8 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     formValdation,
     feeAmount,
     send,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageDispatch,
+    transactionMessageState,
     localStorageAccount,
     amount,
     toAccount,
@@ -73,8 +70,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     hideTransactionModal,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: send,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
 
@@ -298,9 +294,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
       <TransactionModal
         visible={isTransactionModalVisible}
         onCancel={hideTransactionModal}
-        transactionErrorMessage={transactionErrorMessage}
-        transactionSuccessMessage={transactionSuccessMessage}
-        loadingTransaction={loadingTransaction}
+        transactionMessageState={transactionMessageState}
         account={localStorageAccount}
         fee={transactionModalFee}
         asset={selectedAssetSymbol}

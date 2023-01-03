@@ -1,5 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../../../../common/hooks";
 import { SignerKey } from "../../../../../../common/types";
 import { VoteRow } from "../../../../types";
 
@@ -13,11 +17,8 @@ export type UseVoteTabResult = {
   addVote: (voteId: string) => void;
   removeVote: (voteId: string) => void;
   handleVoting: (signerKey: SignerKey) => Promise<void>;
-  transactionErrorMessage: string;
-  transactionSuccessMessage: string;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  loadingTransaction: boolean;
+  transactionMessageState: TransactionMessageState;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   updateAccountFee: number | undefined;
   afterSuccessTransactionModalClose: (() => void) | undefined;
 };

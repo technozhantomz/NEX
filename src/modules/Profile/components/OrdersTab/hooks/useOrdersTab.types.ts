@@ -1,3 +1,4 @@
+import { TransactionMessageState } from "../../../../../common/hooks";
 import { OrderTableRow } from "../../../types";
 import { OrderColumnType } from "../../OrdersColumns";
 
@@ -7,9 +8,7 @@ export type UseOrdersTabResult = {
   openOrdersTableRows: OrderTableRow[];
   ordersHistoriesTableRows: OrderTableRow[];
   ordersHistoriesColumns: OrderColumnType[];
-  transactionErrorMessage: string;
-  transactionSuccessMessage: string;
-  loadingTransaction: boolean;
+  transactionMessageState: TransactionMessageState;
   selectedOrderId: string;
   isPasswordModalVisible: boolean;
   isTransactionModalVisible: boolean;

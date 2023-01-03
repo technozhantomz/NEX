@@ -21,11 +21,8 @@ export const GenerateBitcoinAddress = ({
 }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
-    transactionErrorMessage,
-    transactionSuccessMessage,
+    transactionMessageState,
+    transactionMessageDispatch,
     generateBitcoinAddresses,
   } = useGenerateBitcoinAddress(getSidechainAccounts);
 
@@ -38,8 +35,7 @@ export const GenerateBitcoinAddress = ({
     hideTransactionModal,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: generateBitcoinAddresses,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
 
@@ -66,9 +62,7 @@ export const GenerateBitcoinAddress = ({
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={localStorageAccount}
           fee={0}
           sidechain={BITCOIN_NETWORK}

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
+  TransactionMessageActionType,
   useAccount,
   useAccountHistory,
   useAsset,
@@ -13,6 +14,7 @@ import {
   useHandleTransactionForm,
   useOrderTransactionBuilder,
   useTransactionBuilder,
+  useTransactionMessage,
 } from "../../../../../common/hooks";
 import {
   useAssetsContext,
@@ -43,14 +45,8 @@ export function useOrdersTab(): UseOrdersTabResult {
     OrderColumnType[]
   >([]);
   const [selectedOrderId, setSelectedOrderId] = useState<string>("");
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [cancelOrderfeeAmount, setCancelOrderfeeAmount] = useState<number>(0);
   const [submited, setSubmited] = useState<boolean>(false);
-
   const [loading, setLoading] = useState<boolean>(true);
   const { localStorageAccount, id } = useUserContext();
   const { formLocalDate } = useFormDate();
@@ -62,6 +58,8 @@ export function useOrdersTab(): UseOrdersTabResult {
   const { buildTrx } = useTransactionBuilder();
   const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
   const { calculateCancelLimitOrderFee } = useFees();
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
 
   const formFilledLimitOrderRow = useCallback(
     async (
@@ -320,43 +318,45 @@ export function useOrdersTab(): UseOrdersTabResult {
   );
   const handleCancelLimitOrder = useCallback(
     async (signerKey: SignerKey) => {
-      setTransactionErrorMessage("");
+      transactionMessageDispatch({
+        type: TransactionMessageActionType.CLEAR,
+      });
 
       const trx = buildCancelLimitOrderTransaction(selectedOrderId, id);
       let trxResult;
       try {
-        setLoadingTransaction(true);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
         setSubmited(true);
-        setTransactionErrorMessage("");
-        setTransactionSuccessMessage(
-          counterpart.translate(`field.success.canceled_limit_order`, {
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(`field.success.canceled_limit_order`, {
             selectedOrderId,
-          })
-        );
-        setLoadingTransaction(false);
+          }),
+        });
       } else {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
     },
     [
-      setTransactionErrorMessage,
+      transactionMessageDispatch,
       buildCancelLimitOrderTransaction,
       selectedOrderId,
       id,
-      setLoadingTransaction,
       buildTrx,
       formAccountBalancesByName,
       localStorageAccount,
@@ -373,8 +373,7 @@ export function useOrdersTab(): UseOrdersTabResult {
     hideTransactionModal,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: handleCancelLimitOrder,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
 
@@ -451,9 +450,7 @@ export function useOrdersTab(): UseOrdersTabResult {
     openOrdersTableRows,
     ordersHistoriesTableRows,
     ordersHistoriesColumns,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
     selectedOrderId,
     isPasswordModalVisible,
     isTransactionModalVisible,

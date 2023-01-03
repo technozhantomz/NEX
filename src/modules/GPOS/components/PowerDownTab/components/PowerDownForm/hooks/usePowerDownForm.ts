@@ -2,11 +2,13 @@ import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useFees,
   useGPOSTransactionBuilder,
   useTransactionBuilder,
+  useTransactionMessage,
 } from "../../../../../../../common/hooks";
 import {
   useAssetsContext,
@@ -32,15 +34,12 @@ export function usePowerDownForm({
   //loading,
   calculateGposBalances,
 }: UsePowerDownFormArgs): UsePowerDownFormResult {
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [newBalance, setNewBalance] = useState<string>("0");
   const [newAvailableBalance, setNewAvailableBalance] = useState<string>("0");
 
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
   const [powerDownForm] = Form.useForm<PowerDownForm>();
   const withdrawAmount: string =
     Form.useWatch("withdrawAmount", powerDownForm) || "0";
@@ -56,10 +55,14 @@ export function usePowerDownForm({
 
   const handleWithdraw = useCallback(
     async (signerKey: SignerKey) => {
-      setTransactionErrorMessage("");
+      transactionMessageDispatch({
+        type: TransactionMessageActionType.CLEAR,
+      });
       const values = powerDownForm.getFieldsValue();
       try {
-        setLoadingTransaction(true);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
         const vestingBalances: VestingBalance[] = await dbApi(
           "get_vesting_balances",
           [id]
@@ -79,41 +82,40 @@ export function usePowerDownForm({
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await calculateGposBalances();
-          setTransactionErrorMessage("");
-          setTransactionSuccessMessage(
-            counterpart.translate(`field.success.successfully_withdrawn`, {
-              withdrawAmount: values.withdrawAmount,
-              symbol: gposBalances?.symbol,
-            })
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_SUCCESS,
+            message: counterpart.translate(
+              `field.success.successfully_withdrawn`,
+              {
+                withdrawAmount: values.withdrawAmount,
+                symbol: gposBalances?.symbol,
+              }
+            ),
+          });
         } else {
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.unable_transaction`)
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_ERROR,
+            message: counterpart.translate(`field.errors.transaction_unable`),
+          });
         }
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.unable_transaction`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
     },
     [
       powerDownForm,
-      setLoadingTransaction,
+      transactionMessageDispatch,
       dbApi,
       id,
       gposBalances,
-      setTransactionErrorMessage,
       buildVestingWithdrawTransaction,
       buildTrx,
       formAccountBalancesByName,
       calculateGposBalances,
-      setTransactionSuccessMessage,
-      defaultAsset,
     ]
   );
 
@@ -255,11 +257,8 @@ export function usePowerDownForm({
     powerDownForm,
     formValidation,
     adjustWithdraw,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     handleWithdraw,
     feeAmount,
     withdrawAmount,

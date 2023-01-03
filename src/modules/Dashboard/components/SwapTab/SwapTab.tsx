@@ -24,16 +24,13 @@ import { useSwap } from "./hooks";
 export const SwapTab = (): JSX.Element => {
   const {
     swapForm,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     selectedAssetsSymbols,
     allAssets,
     handleSellAssetChange,
     handleBuyAssetChange,
     localStorageAccount,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
     swapOrderFee,
     price,
     loadingSwapData,
@@ -58,8 +55,7 @@ export const SwapTab = (): JSX.Element => {
     hideTransactionModal,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: handleSwapSubmit,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
 
@@ -286,9 +282,7 @@ export const SwapTab = (): JSX.Element => {
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={localStorageAccount}
           fee={transactionModalFee}
           transactionType="swap_order_create"
