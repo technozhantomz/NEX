@@ -72,7 +72,7 @@ export function usePowerDownForm({
         );
 
         const trx = buildVestingWithdrawTransaction(
-          gposBalances?.asset as Asset,
+          defaultAsset as Asset,
           values.withdrawAmount,
           gposVestingBalances,
           id
@@ -88,7 +88,7 @@ export function usePowerDownForm({
               `field.success.successfully_withdrawn`,
               {
                 withdrawAmount: values.withdrawAmount,
-                symbol: gposBalances?.asset.symbol,
+                symbol: gposBalances?.symbol,
               }
             ),
           });
@@ -144,7 +144,7 @@ export function usePowerDownForm({
 
   const validateWithdrawAmount = async (_: unknown, value: string) => {
     const accountAsset = assets.find(
-      (asset) => asset.symbol === gposBalances?.asset.symbol
+      (asset) => asset.symbol === gposBalances?.symbol
     );
     if (Number(value) <= 0) {
       return Promise.reject(
@@ -178,17 +178,16 @@ export function usePowerDownForm({
       if (!sm) {
         powerDownForm.setFieldsValue({
           openingBalance:
-            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
+            gposBalances.openingBalance + " " + gposBalances.symbol,
           availableBalance:
-            gposBalances.availableBalance + " " + gposBalances.asset.symbol,
-          newBalance:
-            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
+            gposBalances.availableBalance + " " + gposBalances.symbol,
+          newBalance: gposBalances.openingBalance + " " + gposBalances.symbol,
         });
       } else {
         powerDownForm.setFieldsValue({
-          openingBalance: gposBalances.asset.symbol,
-          availableBalance: gposBalances.asset.symbol,
-          newBalance: gposBalances.asset.symbol,
+          openingBalance: gposBalances.symbol,
+          availableBalance: gposBalances.symbol,
+          newBalance: gposBalances.symbol,
         });
       }
     }
@@ -224,14 +223,13 @@ export function usePowerDownForm({
         setNewAvailableBalance(newAvailableBalance);
         if (!sm) {
           powerDownForm.setFieldsValue({
-            availableBalance:
-              newAvailableBalance + " " + gposBalances.asset.symbol,
-            newBalance: newBalance + " " + gposBalances.asset.symbol,
+            availableBalance: newAvailableBalance + " " + gposBalances.symbol,
+            newBalance: newBalance + " " + gposBalances.symbol,
           });
         } else {
           powerDownForm.setFieldsValue({
-            availableBalance: gposBalances.asset.symbol,
-            newBalance: gposBalances.asset.symbol,
+            availableBalance: gposBalances.symbol,
+            newBalance: gposBalances.symbol,
           });
         }
       }
