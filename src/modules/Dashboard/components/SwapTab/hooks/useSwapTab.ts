@@ -4,12 +4,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useFees,
   useOrderBook,
   useOrderTransactionBuilder,
   useTransactionBuilder,
+  useTransactionMessage,
   useUpdateExchanges,
 } from "../../../../../common/hooks";
 import {
@@ -29,11 +31,8 @@ import {
 
 export function useSwap(): UseSwapResult {
   const { exchanges, updateSwapPair } = useUpdateExchanges();
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
   const { localStorageAccount, assets, id } = useUserContext();
   const [selectedAssetsSymbols, setSelectedAssetsSymbols] =
     useState<SwapAssetPair>({
@@ -774,38 +773,42 @@ export function useSwap(): UseSwapResult {
 
       let trxResult;
       try {
-        setLoadingTransaction(true);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
         swapForm.resetFields();
         setCalculatedPrice(0);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
         swapForm.resetFields();
         setCalculatedPrice(0);
-        setTransactionErrorMessage("");
-        setTransactionSuccessMessage(
-          counterpart.translate(`field.success.swap_order_successfully`, {
-            sellAmount: sellAmount,
-            buyAmount: buyAmount,
-            sellAssetSymbol: selectedAssetsSymbols.sellAssetSymbol,
-            buyAssetSymbol: selectedAssetsSymbols.buyAssetSymbol,
-          })
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(
+            `field.success.swap_order_successfully`,
+            {
+              sellAmount: sellAmount,
+              buyAmount: buyAmount,
+              sellAssetSymbol: selectedAssetsSymbols.sellAssetSymbol,
+              buyAssetSymbol: selectedAssetsSymbols.buyAssetSymbol,
+            }
+          ),
+        });
       } else {
         swapForm.resetFields();
         setCalculatedPrice(0);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.unable_transaction`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
     },
     [
@@ -813,15 +816,13 @@ export function useSwap(): UseSwapResult {
       id,
       limitByPrecision,
       orderPrice,
-      setLoadingTransaction,
       buildTrx,
       swapForm,
       setCalculatedPrice,
-      setTransactionErrorMessage,
       formAccountBalancesByName,
       localStorageAccount,
-      setTransactionSuccessMessage,
       selectedAssetsSymbols,
+      transactionMessageDispatch,
     ]
   );
 
@@ -863,7 +864,9 @@ export function useSwap(): UseSwapResult {
 
       let swapTrxResult;
       try {
-        setLoadingTransaction(true);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
         swapTrxResult = await buildTrx(
           [buyCoreAssetTrx, sellCoreAssetTrx],
           [signerKey]
@@ -872,32 +875,34 @@ export function useSwap(): UseSwapResult {
           formAccountBalancesByName(localStorageAccount);
           swapForm.resetFields();
           setCalculatedPrice(0);
-          setTransactionErrorMessage("");
-          setTransactionSuccessMessage(
-            counterpart.translate(`field.success.swap_order_successfully`, {
-              sellAmount: sellAmount,
-              buyAmount: buyAmount,
-              sellAssetSymbol: selectedAssetsSymbols.sellAssetSymbol,
-              buyAssetSymbol: selectedAssetsSymbols.buyAssetSymbol,
-            })
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_SUCCESS,
+            message: counterpart.translate(
+              `field.success.swap_order_successfully`,
+              {
+                sellAmount: sellAmount,
+                buyAmount: buyAmount,
+                sellAssetSymbol: selectedAssetsSymbols.sellAssetSymbol,
+                buyAssetSymbol: selectedAssetsSymbols.buyAssetSymbol,
+              }
+            ),
+          });
         } else {
           swapForm.resetFields();
           setCalculatedPrice(0);
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.unable_transaction`)
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_ERROR,
+            message: counterpart.translate(`field.errors.transaction_unable`),
+          });
         }
       } catch (e) {
         console.log(e);
         swapForm.resetFields();
         setCalculatedPrice(0);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
     },
     [
@@ -907,15 +912,13 @@ export function useSwap(): UseSwapResult {
       buildSwapTransaction,
       id,
       defaultAsset,
-      setLoadingTransaction,
       buildTrx,
       formAccountBalancesByName,
       localStorageAccount,
       swapForm,
       setCalculatedPrice,
-      setTransactionErrorMessage,
-      setTransactionSuccessMessage,
       selectedAssetsSymbols,
+      transactionMessageDispatch,
     ]
   );
 
@@ -962,10 +965,7 @@ export function useSwap(): UseSwapResult {
       handleNonBasePairSwapSubmit,
       buildSwapTransaction,
       id,
-      setLoadingTransaction,
       buildTrx,
-      setTransactionErrorMessage,
-      setTransactionSuccessMessage,
       formAccountBalancesByName,
       setCalculatedPrice,
       localStorageAccount,
@@ -1231,16 +1231,13 @@ export function useSwap(): UseSwapResult {
 
   return {
     swapForm,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     selectedAssetsSymbols,
     allAssets,
     handleSellAssetChange,
     handleBuyAssetChange,
     localStorageAccount,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
     swapOrderFee,
     price: calculatedPrice,
     loadingSwapData,

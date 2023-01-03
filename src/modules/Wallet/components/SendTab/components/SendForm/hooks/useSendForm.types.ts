@@ -1,5 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../../../../../common/hooks";
 import { Asset, SignerKey } from "../../../../../../../common/types";
 import {
   BaseOptionType,
@@ -28,11 +32,8 @@ export type UseSendFormResult = {
   selectedBlockchain: string | undefined;
   formValdation: FormValidation;
   feeAmount: number;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  transactionErrorMessage: string;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  transactionSuccessMessage: string;
-  loadingTransaction: boolean;
+  transactionMessageState: TransactionMessageState;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   send: (signerKey: SignerKey) => Promise<void>;
   amount: string;
   localStorageAccount: string;

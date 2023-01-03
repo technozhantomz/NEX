@@ -1,5 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../../../../../common/hooks";
 import { SignerKey } from "../../../../../../../common/types";
 import { FormInstance, Rule } from "../../../../../../../ui/src";
 import { GPOSBalances } from "../../../../../types";
@@ -8,12 +12,9 @@ export type UsePowerUpFormResult = {
   formValidation: FormValidation;
   powerUpForm: FormInstance<PowerUpForm>;
   adjustDeposit: (direction: string) => void;
-  transactionErrorMessage: string;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  transactionSuccessMessage: string;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  transactionMessageState: TransactionMessageState;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   handleVesting: (signerKey: SignerKey) => Promise<void>;
-  loadingTransaction: boolean;
   feeAmount: number;
   depositAmount: string;
   newBalance: string;

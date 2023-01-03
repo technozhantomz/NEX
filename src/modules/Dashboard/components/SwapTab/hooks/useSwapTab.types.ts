@@ -1,6 +1,10 @@
 import { FormInstance, Rule } from "antd/lib/form";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../../../common/hooks";
 import { Asset, SignerKey } from "../../../../../common/types";
 
 export type UseSwapResult = {
@@ -10,11 +14,8 @@ export type UseSwapResult = {
   handleBuyAssetChange: (value: unknown) => void;
   selectedAssetsSymbols: SwapAssetPair;
   localStorageAccount: string;
-  transactionErrorMessage: string;
-  transactionSuccessMessage: string;
-  loadingTransaction: boolean;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  transactionMessageState: TransactionMessageState;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   allAssets: Asset[];
   swapOrderFee: number;
   price: number;

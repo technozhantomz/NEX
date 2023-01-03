@@ -35,12 +35,9 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
-    transactionErrorMessage,
-    setTransactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionSuccessMessage,
+    transactionMessageState,
+    transactionMessageDispatch,
     handleWithdraw,
-    loadingTransaction,
     amount,
     withdrawAddress,
     userBalance,
@@ -62,8 +59,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     hideTransactionModal,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: handleWithdraw,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
 
@@ -335,9 +331,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={localStorageAccount}
           fee={transactionModalFee}
           asset={selectedAsset}

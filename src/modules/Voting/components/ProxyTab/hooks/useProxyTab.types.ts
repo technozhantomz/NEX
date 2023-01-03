@@ -1,5 +1,9 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch } from "react";
 
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../../../common/hooks";
 import { Account, Proxy, SignerKey } from "../../../../../common/types";
 
 export type UseProxyTab = {
@@ -7,15 +11,12 @@ export type UseProxyTab = {
   searchError: boolean;
   searchedAccount: Account | undefined;
   updateAccountFee: number;
-  loadingTransaction: boolean;
-  transactionErrorMessage: string;
-  transactionSuccessMessage: string;
+  transactionMessageState: TransactionMessageState;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   addProxy: (account: Account) => void;
   removeProxy: () => void;
   searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => Promise<void>;
   handlePublishChanges: (password: SignerKey) => Promise<void>;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   localProxy: Proxy;
   isPublishable: boolean;
   resetChanges: () => void;

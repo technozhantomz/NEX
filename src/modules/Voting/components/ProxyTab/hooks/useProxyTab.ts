@@ -3,8 +3,10 @@ import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import { DEFAULT_PROXY_ID, defaultToken } from "../../../../../api/params";
 import {
+  TransactionMessageActionType,
   useAccount,
   useTransactionBuilder,
+  useTransactionMessage,
   useUpdateAccountTransactionBuilder,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
@@ -31,19 +33,16 @@ export function useProxyTab({
   const [localProxy, setLocalProxy] = useState<Proxy>({ ...serverProxy });
   const [searchError, setSearchError] = useState<boolean>(false);
   const [updateAccountFee, setUpdateAccountFee] = useState<number>(0);
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [pendingTransaction, setPendingTransaction] = useState<Transaction>();
   const [searchValue, setSearchValue] = useState<string>("");
   const [searchedAccount, setSearchedAccount] = useState<Account | undefined>();
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
   const [isPublishable, setIsPublishable] = useState<boolean>(false);
   const [isSameAccount, setIsSameAccount] = useState<boolean>(false);
   const [accountAlreadyAdded, setAccountAlreadyAdded] =
     useState<boolean>(false);
 
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
   const { id, assets, name, localStorageAccount } = useUserContext();
   const { getAccountByName, getFullAccount, formAccountBalancesByName } =
     useAccount();
@@ -143,43 +142,49 @@ export function useProxyTab({
         userDefaultAsset === undefined ||
         (userDefaultAsset.amount as number) < updateAccountFee
       ) {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.balance_not_enough_to_pay`)
-        );
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.ERROR,
+          message: counterpart.translate(
+            `field.errors.balance_not_enough_to_pay`
+          ),
+        });
         return;
       }
       if (totalGpos <= 0) {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.need_to_vest_gpos`)
-        );
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.ERROR,
+          message: counterpart.translate(`field.errors.need_to_vest_gpos`),
+        });
       } else {
-        setTransactionErrorMessage("");
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.CLEAR,
+        });
         let trxResult;
         try {
-          setLoadingTransaction(true);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADING,
+          });
           trxResult = await buildTrx([pendingTransaction], [signerKey]);
-          setLoadingTransaction(false);
         } catch (error) {
           console.log(error);
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.unable_transaction`)
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_ERROR,
+            message: counterpart.translate(`field.errors.transaction_unable`),
+          });
         }
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           getUserVotes();
           setIsPublishable(false);
-          setTransactionErrorMessage("");
-          setTransactionSuccessMessage(
-            counterpart.translate(`field.success.published_proxy`)
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_SUCCESS,
+            message: counterpart.translate(`field.success.published_proxy`),
+          });
         } else {
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.unable_transaction`)
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_ERROR,
+            message: counterpart.translate(`field.errors.transaction_unable`),
+          });
         }
       }
     },
@@ -187,9 +192,8 @@ export function useProxyTab({
       assets,
       defaultToken,
       updateAccountFee,
-      setTransactionErrorMessage,
+      transactionMessageDispatch,
       totalGpos,
-      setLoadingTransaction,
       buildTrx,
       pendingTransaction,
       formAccountBalancesByName,
@@ -243,15 +247,12 @@ export function useProxyTab({
     searchError,
     searchedAccount,
     updateAccountFee,
-    loadingTransaction,
-    transactionErrorMessage,
-    transactionSuccessMessage,
+    transactionMessageState,
+    transactionMessageDispatch,
     addProxy,
     removeProxy,
     searchChange,
     handlePublishChanges,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
     localProxy,
     isPublishable,
     resetChanges,
