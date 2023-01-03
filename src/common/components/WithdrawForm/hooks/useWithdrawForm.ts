@@ -12,12 +12,14 @@ import {
 import { utils } from "../../../../api/utils";
 import { Form } from "../../../../ui/src";
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useFees,
   useSidechainTransactionBuilder,
   useSonNetwork,
   useTransactionBuilder,
+  useTransactionMessage,
   useTransferTransactionBuilder,
 } from "../../../hooks";
 import { useAssetsContext, useUserContext } from "../../../providers";
@@ -49,14 +51,11 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     buildDeletingBitcoinSidechainTransaction,
   } = useSidechainTransactionBuilder();
   const [withdrawForm] = Form.useForm<WithdrawForm>();
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
 
   const [withdrawFee, setWithdrawFee] = useState<number>(0);
   const [selectedAsset, setSelectedAsset] = useState<string>(asset);
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [amount, setAmount] = useState<string>("0");
   const [withdrawPublicKey, setWithdrawPublicKey] = useState<string>("");
   const [withdrawAddress, setWithdrawAddress] = useState<string>("");
@@ -177,8 +176,12 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   }, [buildWithdrawFormTransaction, getTrxFee, setWithdrawFee]);
 
   const handleWithdraw = async (signerKey: SignerKey) => {
-    setTransactionErrorMessage("");
-    setLoadingTransaction(true);
+    transactionMessageDispatch({
+      type: TransactionMessageActionType.CLEAR,
+    });
+    transactionMessageDispatch({
+      type: TransactionMessageActionType.LOADING,
+    });
     const values = withdrawForm.getFieldsValue();
     const btcSidechainAddressesChanged =
       values.withdrawAddress !== bitcoinSidechainAccount?.withdraw_address ||
@@ -210,19 +213,19 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
           [signerKey]
         );
         if (!updateSidechainsTrxResult) {
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.transaction_unable`)
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_ERROR,
+            message: counterpart.translate(`field.errors.transaction_unable`),
+          });
           return;
         }
         await getSidechainAccounts(id);
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
         return;
       }
     }
@@ -231,30 +234,32 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       const trx = await buildWithdrawFormTransaction();
       const trxResult = await buildTrx([trx], [signerKey]);
       if (!trxResult) {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       } else {
         formAccountBalancesByName(localStorageAccount);
-        setTransactionErrorMessage("");
-        setTransactionSuccessMessage(
-          counterpart.translate(`field.success.successfully_withdrawn`, {
-            symbol: selectedAsset,
-            withdrawAmount: amount,
-          })
-        );
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(
+            `field.success.successfully_withdrawn`,
+            {
+              symbol: selectedAsset,
+              withdrawAmount: amount,
+            }
+          ),
+        });
         withdrawForm.setFieldsValue({
           amount: "0",
         });
-        setLoadingTransaction(false);
       }
     } catch (e) {
       console.log(e);
-      setTransactionErrorMessage(
-        counterpart.translate(`field.errors.transaction_unable`)
-      );
-      setLoadingTransaction(false);
+      transactionMessageDispatch({
+        type: TransactionMessageActionType.LOADED_ERROR,
+        message: counterpart.translate(`field.errors.transaction_unable`),
+      });
     }
   };
 
@@ -487,12 +492,9 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
-    transactionErrorMessage,
-    setTransactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionSuccessMessage,
+    transactionMessageState,
+    transactionMessageDispatch,
     handleWithdraw,
-    loadingTransaction,
     amount,
     withdrawAddress,
     userBalance,

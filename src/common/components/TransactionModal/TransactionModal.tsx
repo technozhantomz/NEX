@@ -1,6 +1,7 @@
 import counterpart from "counterpart";
 
 import { CardFormButton } from "../../../ui/src";
+import { TransactionMessageState } from "../../hooks";
 import { GeneratedKey, Proxy } from "../../types";
 
 import * as Styled from "./TransactionModal.styled";
@@ -22,9 +23,7 @@ type Props = {
   visible: boolean;
   onCancel: () => void;
   transactionType: string;
-  transactionErrorMessage: string;
-  transactionSuccessMessage: string;
-  loadingTransaction: boolean;
+  transactionMessageState: TransactionMessageState;
   account?: string;
   fee: number | string;
   proxy?: Proxy;
@@ -52,9 +51,7 @@ export const TransactionModal = ({
   visible,
   onCancel,
   transactionType,
-  transactionErrorMessage,
-  transactionSuccessMessage,
-  loadingTransaction,
+  transactionMessageState,
   account,
   fee,
   proxy,
@@ -168,7 +165,7 @@ export const TransactionModal = ({
   useResetFormOnCloseModal(transactionModalForm, visible);
 
   const postTransactionButton =
-    transactionErrorMessage !== "" ? (
+    transactionMessageState.transactionErrorMessage !== "" ? (
       <CardFormButton key="back" onClick={onCancel} className="cancel">
         {counterpart.translate(`buttons.cancel`)}
       </CardFormButton>
@@ -185,14 +182,14 @@ export const TransactionModal = ({
       onClick={() => {
         transactionModalForm.submit();
       }}
-      loading={loadingTransaction}
+      loading={transactionMessageState.loadingTransaction}
     >
       {counterpart.translate(`buttons.confirm`)}
     </CardFormButton>,
     <CardFormButton
       key="back"
       onClick={onCancel}
-      disabled={loadingTransaction}
+      disabled={transactionMessageState.loadingTransaction}
       className="cancel"
     >
       {counterpart.translate(`buttons.cancel`)}
@@ -207,10 +204,13 @@ export const TransactionModal = ({
         onOk={() => {
           transactionModalForm.submit();
         }}
-        onCancel={!loadingTransaction ? onCancel : undefined}
+        onCancel={
+          !transactionMessageState.loadingTransaction ? onCancel : undefined
+        }
         centered={true}
         footer={
-          transactionErrorMessage !== "" || transactionSuccessMessage !== ""
+          transactionMessageState.transactionErrorMessage !== "" ||
+          transactionMessageState.transactionSuccessMessage !== ""
             ? postTransactionButton
             : defaultButtons
         }
@@ -231,16 +231,16 @@ export const TransactionModal = ({
         {transactionDetails[transactionType] !== undefined
           ? transactionDetails[transactionType]
           : ""}
-        {transactionErrorMessage !== "" ? (
+        {transactionMessageState.transactionErrorMessage !== "" ? (
           <Styled.TransactionError>
-            {transactionErrorMessage}
+            {transactionMessageState.transactionErrorMessage}
           </Styled.TransactionError>
         ) : (
           ""
         )}
-        {transactionSuccessMessage !== "" ? (
+        {transactionMessageState.transactionSuccessMessage !== "" ? (
           <Styled.TransactionSuccess>
-            {transactionSuccessMessage}
+            {transactionMessageState.transactionSuccessMessage}
           </Styled.TransactionSuccess>
         ) : (
           ""

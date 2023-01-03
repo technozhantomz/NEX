@@ -2,11 +2,13 @@ import counterpart from "counterpart";
 import { useCallback, useMemo, useState } from "react";
 
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useFees,
   useOrderTransactionBuilder,
   useTransactionBuilder,
+  useTransactionMessage,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
 import { Asset, SignerKey } from "../../../../../common/types";
@@ -36,13 +38,10 @@ export function useOrderBook({
   const [orderType, setOrderType] = useState<OrderType>("total");
   const [threshold, setThreshold] = useState<number>(0.001);
   const [selectedOrderId, setSelectedOrderId] = useState<string>("");
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const { formAccountBalancesByName } = useAccount();
 
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
   const { localStorageAccount, id } = useUserContext();
   const { buildTrx } = useTransactionBuilder();
   const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
@@ -200,42 +199,44 @@ export function useOrderBook({
 
   const handleCancelLimitOrder = useCallback(
     async (signerKey: SignerKey) => {
-      setTransactionErrorMessage("");
+      transactionMessageDispatch({
+        type: TransactionMessageActionType.CLEAR,
+      });
 
       const trx = buildCancelLimitOrderTransaction(selectedOrderId, id);
       let trxResult;
       try {
-        setLoadingTransaction(true);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
-        setTransactionErrorMessage("");
-        setTransactionSuccessMessage(
-          counterpart.translate(`field.success.canceled_limit_order`, {
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(`field.success.canceled_limit_order`, {
             selectedOrderId,
-          })
-        );
-        setLoadingTransaction(false);
+          }),
+        });
       } else {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
     },
     [
-      setTransactionErrorMessage,
+      transactionMessageDispatch,
       buildCancelLimitOrderTransaction,
       selectedOrderId,
       id,
-      setLoadingTransaction,
       buildTrx,
       formAccountBalancesByName,
       localStorageAccount,
@@ -251,11 +252,8 @@ export function useOrderBook({
     handleFilterChange,
     orderColumns,
     cancelOrderfeeAmount,
-    transactionErrorMessage,
-    setTransactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     setSelectedOrderId,
     selectedOrderId,
     handleCancelLimitOrder,

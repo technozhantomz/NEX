@@ -45,11 +45,8 @@ export const OrderBook = ({
     handleFilterChange,
     orderColumns,
     cancelOrderfeeAmount,
-    transactionErrorMessage,
-    setTransactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     setSelectedOrderId,
     selectedOrderId,
     handleCancelLimitOrder,
@@ -69,8 +66,7 @@ export const OrderBook = ({
     hideTransactionModal,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: handleCancelLimitOrder,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
   const { md } = useViewportContext();
@@ -192,9 +188,7 @@ export const OrderBook = ({
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={localStorageAccount}
           fee={cancelOrderfeeAmount}
           orderId={selectedOrderId}

@@ -1,5 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../../../../../common/hooks";
 import { SignerKey } from "../../../../../../../common/types";
 import { FormInstance, Rule } from "../../../../../../../ui/src";
 import { GPOSBalances } from "../../../../../types";
@@ -8,11 +12,8 @@ export type UsePowerDownFormResult = {
   powerDownForm: FormInstance<PowerDownForm>;
   formValidation: FormValidation;
   adjustWithdraw: (direction: string) => void;
-  transactionErrorMessage: string;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  transactionSuccessMessage: string;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  loadingTransaction: boolean;
+  transactionMessageState: TransactionMessageState;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   handleWithdraw: (signerKey: SignerKey) => Promise<void>;
   feeAmount: number;
   withdrawAmount: string;

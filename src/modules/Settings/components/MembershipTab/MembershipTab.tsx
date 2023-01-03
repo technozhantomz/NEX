@@ -16,9 +16,8 @@ import { useMembershipTab } from "./hooks";
 
 export const MembershipTab = (): JSX.Element => {
   const {
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     membershipForm,
     name,
     feesCashback,
@@ -40,8 +39,6 @@ export const MembershipTab = (): JSX.Element => {
     expirationDate,
     loadingAccountMembership,
     handleMembershipUpgrade,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
   } = useMembershipTab();
 
   const {
@@ -53,8 +50,7 @@ export const MembershipTab = (): JSX.Element => {
     hideTransactionModal,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: handleMembershipUpgrade,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
 
@@ -251,9 +247,7 @@ export const MembershipTab = (): JSX.Element => {
           <TransactionModal
             visible={isTransactionModalVisible}
             onCancel={hideTransactionModal}
-            transactionErrorMessage={transactionErrorMessage}
-            transactionSuccessMessage={transactionSuccessMessage}
-            loadingTransaction={loadingTransaction}
+            transactionMessageState={transactionMessageState}
             account={name}
             fee={membershipPrice}
             transactionType="account_upgrade"

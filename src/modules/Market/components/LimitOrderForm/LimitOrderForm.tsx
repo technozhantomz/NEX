@@ -43,11 +43,8 @@ export const LimitOrderForm = ({
     formValidation,
     handleCreateLimitOrder,
     handleValuesChange,
-    setTransactionErrorMessage,
-    transactionErrorMessage,
-    setTransactionSuccessMessage,
-    transactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     price,
     quantity,
     total,
@@ -67,8 +64,7 @@ export const LimitOrderForm = ({
     hideTransactionModal,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: handleCreateLimitOrder,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
 
@@ -244,9 +240,7 @@ export const LimitOrderForm = ({
           <TransactionModal
             visible={isTransactionModalVisible}
             onCancel={hideTransactionModal}
-            transactionErrorMessage={transactionErrorMessage}
-            transactionSuccessMessage={transactionSuccessMessage}
-            loadingTransaction={loadingTransaction}
+            transactionMessageState={transactionMessageState}
             account={localStorageAccount}
             fee={fees.feeAmount}
             transactionType="limit_order_create"
