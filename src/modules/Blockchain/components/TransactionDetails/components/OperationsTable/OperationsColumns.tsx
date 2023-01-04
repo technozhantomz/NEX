@@ -4,8 +4,8 @@ import { TableHeading } from "../../../../../../common/components";
 
 import * as Styled from "./OperationsTable.styled";
 
-const headings = ["number", "operation_id", "operation_type", "fees", ""];
-const keys = ["number", "id", "type", "fees", "details"];
+const headings = ["number", "operation_id", "time", "fees", ""];
+const keys = ["number", "id", "time", "fees", "details"];
 const renders = [
   undefined,
   undefined,
