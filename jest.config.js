@@ -23,6 +23,9 @@ const customJestConfig = {
     "!**/index.ts",
     "!**/*.styled.tsx",
     "!<rootDir>/src/pages/**/**.tsx",
+    "!<rootDir>/src/api/params/nodesList.ts",
+    "!<rootDir>/src/api/params/defaultApiSettings.ts",
+    "!<rootDir>/src/ui/src/icons/**",
   ],
   coverageReporters: ["clover", "json", "lcov", "text"],
 };
