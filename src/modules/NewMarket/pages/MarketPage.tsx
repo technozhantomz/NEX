@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
+import { Col, Row } from "../../../ui/src";
 
 import * as Styled from "./MarketPage.styled";
 
@@ -17,7 +18,11 @@ const MarketPage: NextPage = () => {
       description={`Market Page | ${pair}`}
     >
       <Styled.Container>
-        <div>Hello New Market Page</div>
+        <Row>
+          <Col span={5}>Hello left</Col>
+          <Col span={14}>Hello middle</Col>
+          <Col span={5}>Hello Rigth</Col>
+        </Row>
       </Styled.Container>
     </Layout>
   );

@@ -63,6 +63,10 @@ export const Layout = styled.main`
         padding-left: 16px;
         padding-right: 16px;
       }
+      &.card-layout__xlrg {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
       &.card-layout {
         max-width: 600px;
       }
@@ -72,9 +76,11 @@ export const Layout = styled.main`
       &.card-layout__xlrg {
         max-width: 1800px;
       }
-      &.card-layout__lrg > .ant-card,
-      &.card-layout__xlrg > .ant-card {
+      &.card-layout__lrg > .ant-card {
         min-height: 856px;
+      }
+      &.card-layout__xlrg > .ant-card {
+        min-height: 1242px;
       }
     }
   }
