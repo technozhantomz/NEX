@@ -1,10 +1,6 @@
-import {
-  styled,
-  Card as UiCard,
-  Dropdown as UiDropdown,
-} from "../../../../ui/src";
-import { colors } from "../../../../ui/src/colors";
-import { mixIns } from "../../../../ui/src/mixins";
+import { styled, Dropdown as UiDropdown } from "../../../ui/src";
+import { colors } from "../../../ui/src/colors";
+import { mixIns } from "../../../ui/src/mixins";
 
 export const MobileDropdownWrapper = styled.div`
   ${mixIns.inActiveTab}
@@ -27,11 +23,5 @@ export const MobileDropdown = styled(UiDropdown)`
 export const MobileTabsWrapper = styled.div`
   .ant-tabs-tab {
     color: ${colors.textColor};
-  }
-`;
-
-export const BlockchainCard = styled(UiCard)`
-  .ant-card-body {
-    padding: 0;
   }
 `;
