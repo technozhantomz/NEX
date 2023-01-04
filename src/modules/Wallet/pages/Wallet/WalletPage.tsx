@@ -5,7 +5,13 @@ import { useState } from "react";
 
 import { Layout } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
-import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
+import {
+  Button,
+  DownOutlined,
+  Menu,
+  PageTabs,
+  UpOutlined,
+} from "../../../../ui/src";
 import { ReceiveTab, SendTab } from "../../components";
 import { AssetsTable } from "../../components/AssetsTable";
 
@@ -90,7 +96,7 @@ const WalletPage: NextPage = () => {
       }}
     >
       <Styled.WalletCard onClick={() => visible && setVisible(false)}>
-        <Styled.Tabs
+        <PageTabs
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "assets"}`}
           onTabClick={(key) => {

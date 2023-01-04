@@ -9,7 +9,7 @@ import {
   Button,
   DownOutlined,
   Menu,
-  Tabs,
+  PageTabs,
   UpOutlined,
 } from "../../../../ui/src";
 
@@ -74,7 +74,7 @@ const Blockchain: NextPage = () => {
       }}
     >
       <Styled.BlockchainCard>
-        <Tabs
+        <PageTabs
           renderTabBar={renderTabBar}
           defaultActiveKey={`${tab ? tab : "blockchain"}`}
           onTabClick={(key) => {

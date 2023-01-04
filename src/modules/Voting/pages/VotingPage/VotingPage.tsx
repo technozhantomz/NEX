@@ -11,7 +11,7 @@ import {
   Button,
   DownOutlined,
   Menu,
-  Tabs,
+  PageTabs,
   UpOutlined,
 } from "../../../../ui/src";
 import { GPOSTab, ProxyTab, VoteTab } from "../../components";
@@ -148,7 +148,7 @@ const VotingPage: NextPage = () => {
       }}
     >
       <Styled.VotingPageCard>
-        <Tabs
+        <PageTabs
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "gpos"}`}
           onTabClick={(key) => {

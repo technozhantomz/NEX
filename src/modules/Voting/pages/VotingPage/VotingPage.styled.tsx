@@ -4,42 +4,12 @@ import {
   Card as UiCard,
   Dropdown as UiDropdown,
 } from "../../../../ui/src";
-import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 import { mixIns } from "../../../../ui/src/mixins";
 
 export const VotingPageCard = styled(UiCard)`
   .ant-card-body {
     padding: 0;
-  }
-  ${breakpoint.sm} {
-    .ant-tabs-tab-btn {
-      font-size: 20px;
-      line-height: 24px;
-    }
-    .ant-tabs-top > .ant-tabs-nav {
-      margin: 0;
-    }
-    .ant-card-body {
-      .ant-tabs-tab {
-        justify-content: center;
-        padding: 20px 28px 12px;
-        width: 200px;
-      }
-      .ant-tabs-top > .ant-tabs-nav::before {
-        border-bottom: 2pt solid #f0f0f0;
-      }
-      .ant-tabs > .ant-tabs-nav .ant-tabs-nav-list {
-        justify-content: space-between;
-        width: 100%;
-      }
-      .ant-tabs-ink-bar {
-        height: 2pt;
-      }
-      .ant-tabs-nav-operations {
-        display: none;
-      }
-    }
   }
 `;
 

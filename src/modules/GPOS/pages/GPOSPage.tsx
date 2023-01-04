@@ -4,7 +4,13 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
-import { Button, DownOutlined, Menu, Tabs, UpOutlined } from "../../../ui/src";
+import {
+  Button,
+  DownOutlined,
+  Menu,
+  PageTabs,
+  UpOutlined,
+} from "../../../ui/src";
 import { PowerDownTab, PowerUpTab } from "../components";
 import { useGposPage } from "../hooks";
 
@@ -109,7 +115,7 @@ const GPOSPage: NextPage = () => {
       }}
     >
       <Styled.GPOSCard>
-        <Tabs
+        <PageTabs
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "power-up"}`}
           onTabClick={(key) => {

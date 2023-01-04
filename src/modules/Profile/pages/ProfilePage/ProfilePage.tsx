@@ -8,7 +8,13 @@ import {
   useUserContext,
   useViewportContext,
 } from "../../../../common/providers";
-import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
+import {
+  Button,
+  DownOutlined,
+  Menu,
+  PageTabs,
+  UpOutlined,
+} from "../../../../ui/src";
 
 import * as Styled from "./ProfilePage.styled";
 import { ProfileTabItems } from "./ProfileTabItems";
@@ -68,7 +74,7 @@ const ProfilePage: NextPage = () => {
       }}
     >
       <Styled.ProfileCard>
-        <Styled.Tabs
+        <PageTabs
           activeKey={`${tab ? tab : "orders"}`}
           onTabClick={(key) => {
             router.push(`/profile?tab=${key}`);

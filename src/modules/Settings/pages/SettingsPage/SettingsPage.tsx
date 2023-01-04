@@ -13,7 +13,7 @@ import {
   Button,
   DownOutlined,
   Menu,
-  Tabs,
+  PageTabs,
   UpOutlined,
 } from "../../../../ui/src";
 import { GeneralTab, KeyManagementTab, MembershipTab } from "../../components";
@@ -103,7 +103,7 @@ const SettingPage: NextPage = () => {
       }}
     >
       <Styled.SettingsCard>
-        <Tabs
+        <PageTabs
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "general"}`}
           onTabClick={(key) => {
