@@ -3,9 +3,9 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { Layout } from "../../../../common/components";
+import { Layout, MobileTabBar } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
-import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
+import { PageTabs } from "../../../../ui/src";
 import { ReceiveTab, SendTab } from "../../components";
 import { AssetsTable } from "../../components/AssetsTable";
 
@@ -16,39 +16,16 @@ const WalletPage: NextPage = () => {
   const { asset, tab } = router.query;
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
-  const renderTabBar = (props: any, DefaultTabBar: any) => (
-    <>
-      {sm ? (
-        <Styled.MobileDropdownWrapper>
-          <Styled.MobileDropdown
-            visible={visible}
-            overlay={
-              <Styled.MobileTabsWrapper>
-                <Menu
-                  onClick={(item: any) => {
-                    props.onTabClick(item.key);
-                  }}
-                  items={props.panes.map((pane: any) => {
-                    return { label: pane.props.tab, key: pane.key };
-                  })}
-                  selectedKeys={tab ? [tab as string] : ["assets"]}
-                />
-              </Styled.MobileTabsWrapper>
-            }
-          >
-            <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab
-                ? counterpart.translate(`pages.wallet.${tab}`)
-                : counterpart.translate(`pages.wallet.assets`)}{" "}
-              {!visible ? <DownOutlined /> : <UpOutlined />}
-            </Button>
-          </Styled.MobileDropdown>
-        </Styled.MobileDropdownWrapper>
-      ) : (
-        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
-      )}
-    </>
-  );
+  const renderTabBar = MobileTabBar({
+    sm,
+    visible,
+    tab,
+    setVisible,
+    defaultKey: "assets",
+    defaultTab: counterpart.translate(`pages.wallet.assets`),
+    selectedTab: counterpart.translate(`pages.wallet.${tab}`),
+  });
+
   const assetSymbol = asset && asset.length > 0 ? asset[0] : undefined;
   const tabItems = [
     {
@@ -90,7 +67,7 @@ const WalletPage: NextPage = () => {
       }}
     >
       <Styled.WalletCard onClick={() => visible && setVisible(false)}>
-        <Styled.Tabs
+        <PageTabs
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "assets"}`}
           onTabClick={(key) => {

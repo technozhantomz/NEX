@@ -3,19 +3,12 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-import { Layout } from "../../../../common/components";
+import { Layout, MobileTabBar } from "../../../../common/components";
 import {
-  useAppSettingsContext,
   useUserContext,
   useViewportContext,
 } from "../../../../common/providers";
-import {
-  Button,
-  DownOutlined,
-  Menu,
-  Tabs,
-  UpOutlined,
-} from "../../../../ui/src";
+import { PageTabs } from "../../../../ui/src";
 import { GeneralTab, KeyManagementTab, MembershipTab } from "../../components";
 
 import * as Styled from "./SettingsPage.styled";
@@ -24,48 +17,20 @@ const SettingPage: NextPage = () => {
   const router = useRouter();
   const [visible, setVisible] = useState<boolean>(false);
   const { tab } = router.query;
-  const { settings } = useAppSettingsContext();
   const { localStorageAccount } = useUserContext();
-
   const { sm } = useViewportContext();
-  const renderTabBar = (props: any, DefaultTabBar: any) => (
-    <>
-      {sm ? (
-        <Styled.MobileDropdownWrapper>
-          <Styled.MobileDropdown
-            visible={visible}
-            overlay={
-              <Styled.MobileTabsWrapper>
-                <Menu
-                  onClick={(item: any) => {
-                    props.onTabClick(item.key);
-                  }}
-                  items={props.panes.map((pane: any) => {
-                    return { label: pane.props.tab, key: pane.key };
-                  })}
-                  selectedKeys={tab ? [tab as string] : ["general"]}
-                />
-              </Styled.MobileTabsWrapper>
-            }
-          >
-            <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab && settings
-                ? counterpart.translate(
-                    `pages.settings.${(tab as string).replace(
-                      "-",
-                      "_"
-                    )}.heading`
-                  )
-                : counterpart.translate(`pages.settings.general.heading`)}{" "}
-              {!visible ? <DownOutlined /> : <UpOutlined />}
-            </Button>
-          </Styled.MobileDropdown>
-        </Styled.MobileDropdownWrapper>
-      ) : (
-        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
-      )}
-    </>
-  );
+  const renderTabBar = MobileTabBar({
+    sm,
+    visible,
+    tab,
+    setVisible,
+    defaultKey: "general",
+    defaultTab: counterpart.translate(`pages.settings.general.heading`),
+    selectedTab: counterpart.translate(
+      `pages.settings.${(tab as string)?.replace("-", "_")}.heading`
+    ),
+  });
+
   let tabItems = [
     {
       label: counterpart.translate(`pages.settings.general.heading`),
@@ -103,7 +68,7 @@ const SettingPage: NextPage = () => {
       }}
     >
       <Styled.SettingsCard>
-        <Tabs
+        <PageTabs
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "general"}`}
           onTabClick={(key) => {
