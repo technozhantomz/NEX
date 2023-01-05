@@ -223,4 +223,7 @@ dast:
   rules:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
 
+
+
+
   
