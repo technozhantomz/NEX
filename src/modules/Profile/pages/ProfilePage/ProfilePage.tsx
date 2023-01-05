@@ -3,12 +3,12 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-import { Layout } from "../../../../common/components";
+import { Layout, MobileTabBar } from "../../../../common/components";
 import {
   useUserContext,
   useViewportContext,
 } from "../../../../common/providers";
-import { Button, DownOutlined, Menu, UpOutlined } from "../../../../ui/src";
+import { PageTabs } from "../../../../ui/src";
 
 import * as Styled from "./ProfilePage.styled";
 import { ProfileTabItems } from "./ProfileTabItems";
@@ -20,39 +20,15 @@ const ProfilePage: NextPage = () => {
   const profileTabItems = ProfileTabItems(localStorageAccount);
   const router = useRouter();
   const { tab } = router.query;
-  const renderTabBar = (props: any, DefaultTabBar: any) => (
-    <>
-      {sm ? (
-        <Styled.MobileDropdownWrapper>
-          <Styled.MobileDropdown
-            visible={visible}
-            overlay={
-              <Styled.MobileTabsWrapper>
-                <Menu
-                  onClick={(item: any) => {
-                    props.onTabClick(item.key);
-                  }}
-                  items={props.panes.map((pane: any) => {
-                    return { label: pane.props.tab, key: pane.key };
-                  })}
-                  selectedKeys={tab ? [tab as string] : ["orders"]}
-                />
-              </Styled.MobileTabsWrapper>
-            }
-          >
-            <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab
-                ? counterpart.translate(`pages.profile.${tab}`)
-                : counterpart.translate(`pages.profile.orders`)}{" "}
-              {!visible ? <DownOutlined /> : <UpOutlined />}
-            </Button>
-          </Styled.MobileDropdown>
-        </Styled.MobileDropdownWrapper>
-      ) : (
-        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
-      )}
-    </>
-  );
+  const renderTabBar = MobileTabBar({
+    sm,
+    visible,
+    tab,
+    setVisible,
+    defaultKey: "orders",
+    defaultTab: counterpart.translate(`pages.profile.orders`),
+    selectedTab: counterpart.translate(`pages.profile.${tab}`),
+  });
 
   return (
     <Layout
@@ -68,7 +44,7 @@ const ProfilePage: NextPage = () => {
       }}
     >
       <Styled.ProfileCard>
-        <Styled.Tabs
+        <PageTabs
           activeKey={`${tab ? tab : "orders"}`}
           onTabClick={(key) => {
             router.push(`/profile?tab=${key}`);

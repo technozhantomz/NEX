@@ -2,9 +2,9 @@ import counterpart from "counterpart";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import { Layout } from "../../../common/components";
+import { Layout, MobileTabBar } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
-import { Button, DownOutlined, Menu, Tabs, UpOutlined } from "../../../ui/src";
+import { PageTabs } from "../../../ui/src";
 import { PowerDownTab, PowerUpTab } from "../components";
 import { useGposPage } from "../hooks";
 
@@ -21,46 +21,17 @@ const GPOSPage: NextPage = () => {
     isMobileDropdownvisible,
     setIsMobileDropdownvisible,
   } = useGposPage();
-  const renderTabBar = (props: any, DefaultTabBar: any) => (
-    <>
-      {sm ? (
-        <Styled.MobileDropdownWrapper>
-          <Styled.MobileDropdown
-            visible={isMobileDropdownvisible}
-            overlay={
-              <Styled.MobileTabsWrapper>
-                <Menu
-                  onClick={(item: any) => {
-                    props.onTabClick(item.key);
-                  }}
-                  items={props.panes.map((pane: any) => {
-                    return { label: pane.props.tab, key: pane.key };
-                  })}
-                  selectedKeys={tab ? [tab as string] : ["power-up"]}
-                />
-              </Styled.MobileTabsWrapper>
-            }
-          >
-            <Button
-              type="text"
-              onClick={() =>
-                setIsMobileDropdownvisible(!isMobileDropdownvisible)
-              }
-            >
-              {tab
-                ? counterpart.translate(
-                    `buttons.${(tab as string).replace("-", "_")}`
-                  )
-                : counterpart.translate(`buttons.power_up`)}{" "}
-              {!isMobileDropdownvisible ? <DownOutlined /> : <UpOutlined />}
-            </Button>
-          </Styled.MobileDropdown>
-        </Styled.MobileDropdownWrapper>
-      ) : (
-        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
-      )}
-    </>
-  );
+  const renderTabBar = MobileTabBar({
+    sm,
+    visible: isMobileDropdownvisible,
+    tab,
+    setVisible: setIsMobileDropdownvisible,
+    defaultKey: "power-up",
+    defaultTab: counterpart.translate(`buttons.power_up`),
+    selectedTab: counterpart.translate(
+      `buttons.${(tab as string)?.replace("-", "_")}`
+    ),
+  });
   const tabItems = [
     {
       label: counterpart.translate(`buttons.power_up`),
@@ -109,7 +80,7 @@ const GPOSPage: NextPage = () => {
       }}
     >
       <Styled.GPOSCard>
-        <Tabs
+        <PageTabs
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "power-up"}`}
           onTabClick={(key) => {
