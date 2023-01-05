@@ -81,6 +81,7 @@ export const Layout = styled.main`
       }
       &.card-layout__xlrg > .ant-card {
         min-height: 1242px;
+        height: 1242px;
       }
     }
   }
