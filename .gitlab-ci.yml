@@ -116,8 +116,7 @@ sonarcloud-check:
   script:
     - npm install
     - npm run test:ci
-    - ls -la
-    - sonar-scanner -X
+    - sonar-scanner
   only:
     - merge_requests
     - branches
