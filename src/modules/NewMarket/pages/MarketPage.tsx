@@ -4,12 +4,37 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
+import { TradeHistory } from "../componets";
 
 import * as Styled from "./MarketPage.styled";
+import { useMarketPage } from "./hooks";
 
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
+  const {
+    // tradingPairsStats,
+    // loadingTradingPairsStats,
+    // handleClickOnPair,
+    selectedAssets,
+    loadingSelectedPair,
+    // isPairModalVisible,
+    // setIsPairModalVisible,
+    // exchanges,
+    // asks,
+    // bids,
+    // loadingAsksBids,
+    // userOrdersRows,
+    // loadingUserOrderRows,
+    orderHistoryRows,
+    loadingOrderHistoryRows,
+    userOrderHistoryRows,
+    loadingUserHistoryRows,
+    // buyOrderForm,
+    // sellOrderForm,
+    // onOrderBookRowClick,
+    // pageLoaded,
+  } = useMarketPage({ currentPair: pair as string });
   return (
     <Layout
       title="market"
@@ -28,7 +53,14 @@ const MarketPage: NextPage = () => {
 
             {/* Trade History Table */}
             <Styled.TradeHistoryContainer>
-              History data table
+              <TradeHistory
+                selectedAssets={selectedAssets}
+                loadingSelectedPair={loadingSelectedPair}
+                orderHistoryRows={orderHistoryRows}
+                loadingOrderHistoryRows={loadingOrderHistoryRows}
+                userOrderHistoryRows={userOrderHistoryRows}
+                loadingUserHistoryRows={loadingUserHistoryRows}
+              />
             </Styled.TradeHistoryContainer>
           </Styled.RightBorderedFlexedCol>
 
