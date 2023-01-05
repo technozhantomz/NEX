@@ -19,9 +19,62 @@ const MarketPage: NextPage = () => {
     >
       <Styled.Container>
         <Styled.FullHeightRow>
-          <Col span={5}>Hello left</Col>
-          <Col span={14}>Hello middle</Col>
-          <Col span={5}>Hello Rigth</Col>
+          {/* Left Section */}
+          <Styled.RightBorderedFlexedCol span={5}>
+            {/* Trade History Title */}
+            <Styled.HistoryBox>
+              <Styled.BoxHeader>Trade history</Styled.BoxHeader>
+            </Styled.HistoryBox>
+
+            {/* Trade History Table */}
+            <Styled.TradeHistoryContainer>
+              History data table
+            </Styled.TradeHistoryContainer>
+          </Styled.RightBorderedFlexedCol>
+
+          {/* Middle Section */}
+          <Styled.RightBorderedFlexedCol span={14}>
+            {/* Stats Section */}
+            <Styled.StatsBox>678 PPY</Styled.StatsBox>
+
+            {/* Charts and Order book Section */}
+            <Styled.ChartsAndOrderBookRow>
+              {/* Charts Section */}
+              <Styled.RightBorderedFlexedCol span={16}>
+                <Styled.PriceChartContainer>
+                  Price Chart Section
+                </Styled.PriceChartContainer>
+                <Styled.MarketDepthContainer>
+                  Market Depth Chart Section
+                </Styled.MarketDepthContainer>
+              </Styled.RightBorderedFlexedCol>
+              {/* Order Book section */}
+              <Col span={8}>Order Book Section</Col>
+            </Styled.ChartsAndOrderBookRow>
+
+            {/* My Open order and My History section */}
+            <Styled.UserOrdersContainer>
+              My Open Orders and My Orders History
+            </Styled.UserOrdersContainer>
+          </Styled.RightBorderedFlexedCol>
+
+          {/* Right section */}
+          <Styled.FlexedCol span={5}>
+            {/* Pair Selector */}
+            <Styled.PairSelectorContainer>
+              Pair selector
+            </Styled.PairSelectorContainer>
+
+            {/* Limit Order forms */}
+            <Styled.LimitOrderFormContainer>
+              Limit Order Form
+            </Styled.LimitOrderFormContainer>
+
+            {/* Wallet Sections */}
+            <Styled.WalletContainer>
+              Wallet Functionalities
+            </Styled.WalletContainer>
+          </Styled.FlexedCol>
         </Styled.FullHeightRow>
       </Styled.Container>
     </Layout>
