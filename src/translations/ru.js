@@ -702,6 +702,12 @@ export const ru = {
       my_order_history: "Моя история заказов",
       buy: "КУПИТЬ",
       sell: "ПРОДАВАТЬ",
+      tabs: {
+        history: {
+          all: "Trade history",
+          user: "My history",
+        },
+      },
     },
     settings: {
       heading: "Настройки",
