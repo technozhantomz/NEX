@@ -63,6 +63,12 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
               <span className="item-info-title">
                 {OperationsColumns[3].title()}
               </span>
+              <span className="item-info-value">{item.time}</span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">
+                {OperationsColumns[4].title()}
+              </span>
               <span className="item-info-value">{item.fees}</span>
             </div>
             <div className="item-info">
@@ -108,7 +114,7 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
-              `pages.blocks.trnasaction_details.search_operations`
+              `pages.blocks.block_details.search_transactions`
             ),
             suffix: <SearchOutlined />,
           }}
