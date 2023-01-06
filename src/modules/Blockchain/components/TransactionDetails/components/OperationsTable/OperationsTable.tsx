@@ -57,11 +57,17 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
               <span className="item-info-title">
                 {OperationsColumns[2].title()}
               </span>
-              <span className="item-info-value">{item.time}</span>
+              <span className="item-info-value">{item.type}</span>
             </div>
             <div className="item-info">
               <span className="item-info-title">
                 {OperationsColumns[3].title()}
+              </span>
+              <span className="item-info-value">{item.time}</span>
+            </div>
+            <div className="item-info">
+              <span className="item-info-title">
+                {OperationsColumns[4].title()}
               </span>
               <span className="item-info-value">{item.fees}</span>
             </div>
