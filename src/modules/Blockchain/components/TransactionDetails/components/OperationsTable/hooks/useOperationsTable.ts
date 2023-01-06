@@ -1,3 +1,4 @@
+import { ChainTypes } from "peerplaysjs-lib";
 import { useCallback, useEffect, useState } from "react";
 
 import { useAsset } from "../../../../../../../common/hooks";
@@ -21,6 +22,9 @@ export function useOperationsTable(
     setLoading(true);
     try {
       if (transaction) {
+        const operationType = Object.keys(ChainTypes.operations).find(
+          (key) => ChainTypes.operations[key] === transaction.operations[0][0]
+        );
         const operations: OperationRow[] = await Promise.all(
           transaction.operations.map(
             async (operation: unknown[], index: number) => {
@@ -34,6 +38,7 @@ export function useOperationsTable(
                 key: index + 1,
                 number: index + 1,
                 id: operation[0] as number,
+                type: operationType,
                 time: operationDetails.ts as string,
                 fees: fees,
                 details: JSON.stringify(operation),
