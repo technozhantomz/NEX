@@ -1,13 +1,13 @@
 import counterpart from "counterpart";
 import { MouseEvent } from "react";
 
-import { TableHeading } from "../../../../common/components";
-import { DeleteOutlined } from "../../../../ui/src";
+import { TableHeading } from "..";
+import { DeleteOutlined } from "../../../ui/src";
 import { OrderTableRow } from "../../types";
 
-import * as Styled from "./OrdersColumns.styled";
+import * as Styled from "./UserOrderColumns.styled";
 
-export type OrderColumnType = {
+export type UserOrderColumnType = {
   title: () => JSX.Element;
   dataIndex: string;
   key: string;
@@ -60,10 +60,10 @@ export type OrderColumnType = {
     | undefined;
 };
 
-export const createOrdersColumns = (
+export const createUserOrderColumns = (
   isHistoryTable: boolean,
   handleCancel?: (orderId: string) => void
-): OrderColumnType[] => {
+): UserOrderColumnType[] => {
   const keys = [
     "date",
     "pair",
