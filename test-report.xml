@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-<<<<<<< HEAD
   <file path="/home/ali/Desktop/Projects/peerplays/NEX/src/common/components/ActivityAndNotificationTable/components/ActivityAndNotificationTag/__test__/ActivityAndNotificationTag.spec.tsx">
     <testCase name="Activity Tag renders correctly for account creation" duration="48"/>
     <testCase name="Activity Tag renders correctly for account update" duration="4"/>
@@ -11,7 +10,7 @@
   <file path="/home/ali/Desktop/Projects/peerplays/NEX/src/common/components/ActivityAndNotificationTable/components/ActivityAndNotificationColumns/__test__/ActivityAndNotificationColumns.spec.tsx">
     <testCase name="ActivityAndNotificationColumns should return the correct columns for the notification tab" duration="5"/>
     <testCase name="ActivityAndNotificationColumns should return the correct columns for the activity tab" duration="1"/>
-    <testCase name="ActivityAndNotificationColumns should return the correct onFilter function for the type column" duration="18"/>
+    <testCase name="ActivityAndNotificationColumns should return the correct onFilter function for the type column" duration="13"/>
     <testCase name="ActivityAndNotificationColumns should return the correct sorter function for the time column" duration="2"/>
   </file>
   <file path="/home/ali/Desktop/Projects/peerplays/NEX/src/modules/Market/components/OrderBook/components/UserOrderColumns/__test__/UserOrderColumns.spec.tsx">
@@ -82,9 +81,11 @@
     <testCase name="Testing utils functions  isNumberKey function (in respone to react keyboardEvent) should return true for number keys" duration="0"/>
     <testCase name="Testing utils functions  isNumberKey function (in respone to react keyboardEvent) should return false for non-number keys" duration="0"/>
     <testCase name="Testing utils functions  ensureInputNumberValidity function should prevent non-number keys from being entered should prevent `a` from being entered" duration="2"/>
+    <testCase name="Testing utils functions  ensureInputNumberValidity function numberedInputsPasteHandler should prevent default if clipboard data is not a number" duration="2"/>
+    <testCase name="Testing utils functions  ensureInputNumberValidity function numberedInputsPasteHandler should prevent default if target value would be greater than 6 characters" duration="1"/>
     <testCase name="Testing utils functions  ensureInputNumberValidity function Should check number and prevent numbers with integers part longer than 6 char should prevent 588888888.55555 from being entered" duration="1"/>
     <testCase name="Testing utils functions  ensureInputNumberValidity function Should check number and prevent numbers with integers part longer than 6 char should allow entering 5888.55555 " duration="1"/>
-    <testCase name="Testing utils functions  validateGrapheneAccountName function should return true for valid Graphene account names" duration="1"/>
+    <testCase name="Testing utils functions  validateGrapheneAccountName function should return true for valid Graphene account names" duration="2"/>
     <testCase name="Testing utils functions  validateGrapheneAccountName function Should return false for invalid Graphene account names" duration="1"/>
     <testCase name="Testing utils functions  isUrlsEqual function should return true for URLs that are equal ignoring trailing slashes and the protocol part of the URL" duration="1"/>
     <testCase name="Testing utils functions  isUrlsEqual function should return false for URLs that are not equal ignoring trailing slashes and the protocol part of the URL" duration="0"/>
@@ -117,7 +118,6 @@
   </file>
   <file path="/home/ali/Desktop/Projects/peerplays/NEX/src/common/components/CopyButton/__test__/CopyButton.spec.tsx">
     <testCase name="CopyButton should render with button text" duration="35"/>
-=======
   <file path="/home/suraj/Documents/new/new/NEX/src/modules/Wallet/components/AssetsColumns/__test__/AssetsColumns.spec.tsx">
     <testCase name="AssetsColumns should return an array with the correct number of columns" duration="6"/>
     <testCase name="AssetsColumns should return the correct onFilter function for the symbol column" duration="5"/>
@@ -274,6 +274,5 @@
   </file>
   <file path="/home/suraj/Documents/new/new/NEX/src/common/hooks/marketHistory/__test__/useMarketHistory.spec.tsx">
     <testCase name="useMarketHistory getFillOrderHistory returns the expected value" duration="35"/>
->>>>>>> b4a7f0ae (#615 unit test for useMarketHistory)
   </file>
 </testExecutions>
