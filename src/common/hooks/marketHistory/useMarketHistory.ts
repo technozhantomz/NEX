@@ -17,6 +17,7 @@ export function useMarketHistory(): UseMarketHistoryResult {
         return histories;
       } catch (e) {
         console.log(e);
+        return Promise.reject(e);
       }
     },
     [historyApi]
