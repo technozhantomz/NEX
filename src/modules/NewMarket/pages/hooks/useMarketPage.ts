@@ -603,8 +603,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     selectedAssets,
     loadingSelectedPair,
     isPairModalVisible,
-    setIsPairModalVisible,
-    handleClickOnPair,
     exchanges,
     asks,
     bids,
@@ -617,7 +615,9 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     loadingUserHistoryRows,
     buyOrderForm,
     sellOrderForm,
-    onOrderBookRowClick,
     pageLoaded,
+    onOrderBookRowClick,
+    setIsPairModalVisible,
+    handleClickOnPair,
   };
 }

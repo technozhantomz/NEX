@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
-import { TradeHistory } from "../componets";
+import { PairModal, PairSelect, TradeHistory } from "../componets";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -15,25 +15,25 @@ const MarketPage: NextPage = () => {
   const {
     // tradingPairsStats,
     // loadingTradingPairsStats,
-    // handleClickOnPair,
-    selectedAssets,
-    loadingSelectedPair,
-    // isPairModalVisible,
-    // setIsPairModalVisible,
-    // exchanges,
+    // buyOrderForm,
+    // sellOrderForm,
+    // pageLoaded,
     // asks,
     // bids,
     // loadingAsksBids,
     // userOrdersRows,
     // loadingUserOrderRows,
+    selectedAssets,
+    loadingSelectedPair,
+    isPairModalVisible,
+    exchanges,
     orderHistoryRows,
     loadingOrderHistoryRows,
     userOrderHistoryRows,
     loadingUserHistoryRows,
-    // buyOrderForm,
-    // sellOrderForm,
+    handleClickOnPair,
+    setIsPairModalVisible,
     // onOrderBookRowClick,
-    // pageLoaded,
   } = useMarketPage({ currentPair: pair as string });
   const historyTabItems = [
     {
@@ -123,7 +123,10 @@ const MarketPage: NextPage = () => {
           <Styled.FlexedCol span={5}>
             {/* Pair Selector */}
             <Styled.PairSelectorContainer>
-              Pair selector
+              <PairSelect
+                handleClickOnPair={handleClickOnPair}
+                currentPair={pair as string}
+              />
             </Styled.PairSelectorContainer>
 
             {/* Limit Order forms */}
@@ -137,6 +140,12 @@ const MarketPage: NextPage = () => {
             </Styled.WalletContainer>
           </Styled.FlexedCol>
         </Styled.FullHeightRow>
+        <PairModal
+          isVisible={isPairModalVisible}
+          setIsVisible={setIsPairModalVisible}
+          currentPair={pair as string}
+          exchanges={exchanges}
+        />
       </Styled.Container>
     </Layout>
   );

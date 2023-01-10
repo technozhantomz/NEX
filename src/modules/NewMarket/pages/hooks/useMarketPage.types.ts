@@ -16,8 +16,6 @@ export type UseMarketPageResult = {
   loadingSelectedPair: boolean;
   selectedAssets: PairAssets | undefined;
   isPairModalVisible: boolean;
-  setIsPairModalVisible: Dispatch<SetStateAction<boolean>>;
-  handleClickOnPair: () => void;
   exchanges: Exchanges;
   asks: Order[];
   bids: Order[];
@@ -30,6 +28,8 @@ export type UseMarketPageResult = {
   loadingUserHistoryRows: boolean;
   buyOrderForm: FormInstance<OrderForm>;
   sellOrderForm: FormInstance<OrderForm>;
-  onOrderBookRowClick: (record: OrderRow) => void;
   pageLoaded: boolean;
+  onOrderBookRowClick: (record: OrderRow) => void;
+  setIsPairModalVisible: Dispatch<SetStateAction<boolean>>;
+  handleClickOnPair: () => void;
 };
