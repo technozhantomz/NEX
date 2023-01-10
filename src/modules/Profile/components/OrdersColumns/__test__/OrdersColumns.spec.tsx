@@ -109,7 +109,7 @@ describe("OrdersColumns", () => {
           stopPropagation: jest.fn(),
           preventDefault: jest.fn(),
         };
-        orderlColumn.render("value", orders[0]).props.onClick(mockEvent);
+        orderlColumn.render?.("value", orders[0]).props.onClick(mockEvent);
         expect(mockEvent.stopPropagation).toHaveBeenCalled();
         expect(mockEvent.preventDefault).toHaveBeenCalled();
         expect(handleClick).toHaveBeenCalledWith("1.7.500");
@@ -159,7 +159,7 @@ describe("OrdersColumns", () => {
     describe("onFilters", () => {
       it("should return the correct onFilter function for the pair column", () => {
         const filteredOrders = orders.filter((order) =>
-          ordersColumns[1].onFilter("HIVE_TEST", order)
+          ordersColumns[1].onFilter?.("HIVE_TEST", order)
         );
         expect(filteredOrders).toEqual([
           {
@@ -177,7 +177,7 @@ describe("OrdersColumns", () => {
       });
       it("should return the correct onFilter function for the type column", () => {
         const filteredOrders = orders.filter((order) =>
-          ordersColumns[2].onFilter("Limit", order)
+          ordersColumns[2].onFilter?.("Limit", order)
         );
         expect(filteredOrders).toEqual([
           {
@@ -195,7 +195,7 @@ describe("OrdersColumns", () => {
       });
       it("should return the correct onFilter function for the side column", () => {
         const filteredOrders = orders.filter((order) =>
-          ordersColumns[3].onFilter("Buy", order)
+          ordersColumns[3].onFilter?.("Buy", order)
         );
         expect(filteredOrders).toEqual([
           {
@@ -389,7 +389,7 @@ describe("OrdersColumns", () => {
     describe("onFilters", () => {
       it("should return the correct onFilter function for the pair column", () => {
         const filteredHistories = histories.filter((history) =>
-          historyColumns[1].onFilter("BTC_TEST", history)
+          historyColumns[1].onFilter?.("BTC_TEST", history)
         );
         expect(filteredHistories).toEqual([
           {
@@ -408,7 +408,7 @@ describe("OrdersColumns", () => {
       });
       it("should return the correct onFilter function for the type column", () => {
         const filteredHistories = histories.filter((history) =>
-          historyColumns[2].onFilter("Limit", history)
+          historyColumns[2].onFilter?.("Limit", history)
         );
         expect(filteredHistories).toEqual([
           {
@@ -427,7 +427,7 @@ describe("OrdersColumns", () => {
       });
       it("should return the correct onFilter function for the side column", () => {
         const filteredHistories = histories.filter((history) =>
-          historyColumns[3].onFilter("Buy", history)
+          historyColumns[3].onFilter?.("Buy", history)
         );
         expect(filteredHistories).toEqual([
           {
@@ -446,7 +446,7 @@ describe("OrdersColumns", () => {
       });
       it("should return the correct onFilter function for the statusActions column", () => {
         const filteredHistories = histories.filter((history) =>
-          historyColumns[8].onFilter("Partial", history)
+          historyColumns[8].onFilter?.("Partial", history)
         );
         expect(filteredHistories).toEqual([
           {
