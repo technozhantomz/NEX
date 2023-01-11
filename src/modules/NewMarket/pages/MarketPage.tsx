@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
-import { TradeHistory } from "../componets";
+import { TradeHistory, OrderBook } from "../componets";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -21,9 +21,9 @@ const MarketPage: NextPage = () => {
     // isPairModalVisible,
     // setIsPairModalVisible,
     // exchanges,
-    // asks,
-    // bids,
-    // loadingAsksBids,
+    asks,
+    bids,
+    loadingAsksBids,
     // userOrdersRows,
     // loadingUserOrderRows,
     orderHistoryRows,
@@ -70,6 +70,8 @@ const MarketPage: NextPage = () => {
       ),
     },
   ];
+
+  
   return (
     <Layout
       title="market"
@@ -110,7 +112,15 @@ const MarketPage: NextPage = () => {
                 </Styled.MarketDepthContainer>
               </Styled.RightBorderedFlexedCol>
               {/* Order Book section */}
-              <Col span={8}>Order Book Section</Col>
+              <Col span={8}>
+                <OrderBook 
+                  selectedAssets={selectedAssets}
+                  bids={bids}
+                  asks={asks}
+                  loadingAsksBids={loadingAsksBids}
+                  loadingSelectedPair={loadingSelectedPair} 
+                />
+              </Col>
             </Styled.ChartsAndOrderBookRow>
 
             {/* My Open order and My History section */}
