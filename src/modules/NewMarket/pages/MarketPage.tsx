@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
+import { useMarketPage } from "../../Market/pages/MarketPage/hooks";
 import { Balances } from "../components/Balances";
 
 import * as Styled from "./MarketPage.styled";
@@ -11,6 +12,9 @@ import * as Styled from "./MarketPage.styled";
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
+  const { selectedAssets, loadingSelectedPair } = useMarketPage({
+    currentPair: pair as string,
+  });
   return (
     <Layout
       title="market"
@@ -74,7 +78,11 @@ const MarketPage: NextPage = () => {
             {/* Wallet Sections */}
             <Styled.WalletContainer>
               Wallet Functionalities
-              <Balances />
+              <Balances
+                selectedAssets={selectedAssets}
+                loadingSelectedPair={loadingSelectedPair}
+                activePair={pair as string}
+              />
             </Styled.WalletContainer>
           </Styled.FlexedCol>
         </Styled.FullHeightRow>

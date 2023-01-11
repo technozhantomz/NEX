@@ -1,13 +1,30 @@
+import { PairAssets } from "../../../Market/types";
+
 import { useBalances } from "./hooks";
 
-export function Balances(): JSX.Element {
-  const { calculateBalances } = useBalances();
+type Props = {
+  selectedAssets: PairAssets | undefined;
+  loadingSelectedPair: boolean;
+  activePair: string;
+};
 
-  console.log(calculateBalances());
+export function Balances({
+  selectedAssets,
+  loadingSelectedPair,
+  activePair,
+}: Props): JSX.Element {
+  console.log(selectedAssets);
+  const { balance } = useBalances(selectedAssets, loadingSelectedPair);
+
+  console.log(balance);
   return (
     <>
-      <p>BTC</p>
-      <p>PPY</p>
+      <p>
+        {activePair.split("_")[0]} {balance.userQuoteAssetAmount}
+      </p>
+      <p>
+        {activePair.split("_")[1]} {balance.userBaseAssetAmount}
+      </p>
     </>
   );
 }
