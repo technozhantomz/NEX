@@ -3,9 +3,8 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
-import { PairNameAndMarketStats } from "../../../common/types";
 import { Col } from "../../../ui/src";
-import { PairModal, PairSelect, StatsBar, TradeHistory } from "../componets";
+import { PairModal, PairSelect, TradeHistory } from "../componets";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -14,6 +13,7 @@ const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
   const {
+    // tradingPairsStats,
     // loadingTradingPairsStats,
     // buyOrderForm,
     // sellOrderForm,
@@ -23,7 +23,6 @@ const MarketPage: NextPage = () => {
     // loadingAsksBids,
     // userOrdersRows,
     // loadingUserOrderRows,
-    tradingPairsStats,
     selectedAssets,
     loadingSelectedPair,
     isPairModalVisible,
@@ -97,24 +96,7 @@ const MarketPage: NextPage = () => {
           {/* Middle Section */}
           <Styled.RightBorderedFlexedCol span={14}>
             {/* Stats Section */}
-            <Styled.StatsBox>
-              <StatsBar
-                stats={
-                  tradingPairsStats.find(
-                    (stats) =>
-                      stats.tradingPair === (pair as string).replace("_", "/")
-                  ) ||
-                  ({
-                    tradingPair: (pair as string).replace("_", "/"),
-                    marketPairStats: {
-                      latest: "0",
-                      percentChange: "0",
-                      volume: "0",
-                    },
-                  } as PairNameAndMarketStats)
-                }
-              />
-            </Styled.StatsBox>
+            <Styled.StatsBox>678 PPY</Styled.StatsBox>
 
             {/* Charts and Order book Section */}
             <Styled.ChartsAndOrderBookRow>

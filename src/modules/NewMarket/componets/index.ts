@@ -1,4 +1,3 @@
-export * from "./PairModal";
-export * from "./PairSelect";
-export * from "./StatsBar";
 export * from "./TradeHistory";
+export * from "./PairSelect";
+export * from "./PairModal";
