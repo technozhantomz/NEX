@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
+import { Balances } from "../components/Balances";
 
 import * as Styled from "./MarketPage.styled";
 
@@ -73,6 +74,7 @@ const MarketPage: NextPage = () => {
             {/* Wallet Sections */}
             <Styled.WalletContainer>
               Wallet Functionalities
+              <Balances />
             </Styled.WalletContainer>
           </Styled.FlexedCol>
         </Styled.FullHeightRow>
