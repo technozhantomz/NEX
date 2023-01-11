@@ -5,17 +5,18 @@ export const Flex = styled.div`
   display: flex;
 `;
 export const Table = styled(UiTable)`
+  max-height: inherit;
   .ant-table-tbody > tr > td {
     border-bottom: none;
-    font-size: 1em;
+    font-size: 0.7em;
     padding: 2px;
-    text-align: center;
+    text-align: left;
   }
   .ant-table-thead > tr > th {
-    background: #fff;
+    font-size: 0.9em;
+    background: ${colors.white};
     border-bottom: none;
-    padding: 13px;
-    text-align: center;
+    padding: 0 0 11px;
     overflow-wrap: unset;
   }
   .ant-table-thead
@@ -31,17 +32,12 @@ export const Table = styled(UiTable)`
   }
   .ant-table-tbody > tr.ant-table-row.sell > td:first-child {
     color: ${colors.marketSell};
-    :after {
-      content: "\f0d7";
-    }
   }
   .ant-table-tbody > tr.ant-table-row.buy > td:first-child {
     color: ${colors.marketBuy};
-    :after {
-      content: "\f0d7";
-      margin-left: 5px;
-    }
   }
 `;
 
-export const TableContainer = styled.div``;
+export const TableContainer = styled.div`
+  max-height: inherit;
+`;

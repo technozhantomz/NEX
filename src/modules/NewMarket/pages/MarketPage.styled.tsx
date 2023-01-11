@@ -1,4 +1,11 @@
-import { Col, Row, styled, Card as UiCard } from "../../../../src/ui/src";
+import {
+  Col,
+  Row,
+  styled,
+  Card as UiCard,
+  Tabs as UiTabs,
+} from "../../../../src/ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 import { mixIns } from "../../../ui/src/mixins";
 
@@ -27,9 +34,8 @@ export const RightBorderedCol = styled(Col)`
 `;
 
 export const HistoryBox = styled.div`
-  padding: 16px 20px;
-  ${mixIns.hairline}
-  min-height: 65px;
+  padding: 10px 0 0;
+  max-height: inherit;
 `;
 
 export const BoxHeader = styled.h2`
@@ -50,8 +56,9 @@ export const PairSelectorContainer = styled.div`
 `;
 
 export const TradeHistoryContainer = styled.div`
-  padding: 16px 16px;
+  padding: 20px 16px;
   height: 100%;
+  max-height: inherit;
 `;
 
 export const ChartsAndOrderBookRow = styled(Row)`
@@ -76,4 +83,31 @@ export const LimitOrderFormContainer = styled.div`
 
 export const WalletContainer = styled.div`
   padding: 25px;
+`;
+
+export const Tabs = styled(UiTabs)`
+  width: 100%;
+  &.ant-tabs-top > .ant-tabs-nav,
+  &.ant-tabs-bottom > .ant-tabs-nav,
+  &.ant-tabs-top > div > .ant-tabs-nav,
+  &.ant-tabs-bottom > div > .ant-tabs-nav {
+    margin: 0;
+  }
+  &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
+  &.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
+    width: 100%;
+  }
+  .ant-tabs-tab {
+    flex: 1 1 50%;
+    justify-content: center;
+  }
+  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn,
+  .ant-tabs-tab:hover {
+    color: ${colors.textColor};
+  }
+  &.for-user .ant-tabs-tab {
+    ${breakpoint.md} {
+      font-size: 20px;
+    }
+  }
 `;

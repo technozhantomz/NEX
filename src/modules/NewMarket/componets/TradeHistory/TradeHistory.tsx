@@ -1,4 +1,4 @@
-// import { useViewportContext } from "../../../../common/providers";
+import { useViewportContext } from "../../../../common/providers";
 import { Scroll } from "../../../../common/types";
 import { OrderHistoryRow, PairAssets } from "../../types";
 
@@ -24,35 +24,34 @@ export const TradeHistory = ({
   userOrderHistoryRows,
   loadingUserHistoryRows,
 }: Props): JSX.Element => {
-  // const { md } = useViewportContext();
+  const { md } = useViewportContext();
   const { columns } = useHistory({
     selectedAssets,
     loadingSelectedPair,
-    // forUser,
   });
   const dataSource = forUser ? userOrderHistoryRows : orderHistoryRows;
-  // const desktopScrollForUserHistories =
-  //   dataSource.length > 11
-  //     ? {
-  //         y: 290,
-  //         x: true,
-  //         scrollToFirstRowOnChange: false,
-  //       }
-  //     : { x: true, scrollToFirstRowOnChange: false };
+  const desktopScrollForUserHistories =
+    dataSource.length > 11
+      ? {
+          y: 290,
+          x: true,
+          scrollToFirstRowOnChange: false,
+        }
+      : { x: true, scrollToFirstRowOnChange: false };
 
-  // const desktopScrollForHistories =
-  //   dataSource.length > 24
-  //     ? { y: 770, x: true, scrollToFirstRowOnChange: false }
-  //     : { x: true, scrollToFirstRowOnChange: false };
-  // const desktopScroll = forUser
-  //   ? desktopScrollForUserHistories
-  //   : desktopScrollForHistories;
+  const desktopScrollForHistories =
+    dataSource.length > 60
+      ? { y: 1035, x: true, scrollToFirstRowOnChange: false }
+      : { x: true, scrollToFirstRowOnChange: false };
+  const desktopScroll = forUser
+    ? desktopScrollForUserHistories
+    : desktopScrollForHistories;
 
-  const scroll =
-    dataSource.length > 100
+  const mobileScroll =
+    dataSource.length > 6
       ? ({ y: 300, x: true, scrollToFirstRowOnChange: false } as Scroll)
       : ({ x: true, scrollToFirstRowOnChange: false } as Scroll);
-  // const scroll = md ? mobileScroll : (desktopScroll as Scroll);
+  const scroll = md ? mobileScroll : (desktopScroll as Scroll);
 
   return (
     <>

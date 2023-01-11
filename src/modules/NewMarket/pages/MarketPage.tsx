@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
-import { TradeHistory } from "../componets";
+import { TradeHistory, OrderBook } from "../componets";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -21,9 +21,9 @@ const MarketPage: NextPage = () => {
     // isPairModalVisible,
     // setIsPairModalVisible,
     // exchanges,
-    // asks,
-    // bids,
-    // loadingAsksBids,
+    asks,
+    bids,
+    loadingAsksBids,
     // userOrdersRows,
     // loadingUserOrderRows,
     orderHistoryRows,
@@ -35,6 +35,43 @@ const MarketPage: NextPage = () => {
     // onOrderBookRowClick,
     // pageLoaded,
   } = useMarketPage({ currentPair: pair as string });
+  const historyTabItems = [
+    {
+      label: counterpart.translate(`pages.market.tabs.history.all`),
+      key: "all",
+      children: (
+        <Styled.TradeHistoryContainer>
+          <TradeHistory
+            selectedAssets={selectedAssets}
+            loadingSelectedPair={loadingSelectedPair}
+            orderHistoryRows={orderHistoryRows}
+            loadingOrderHistoryRows={loadingOrderHistoryRows}
+            userOrderHistoryRows={userOrderHistoryRows}
+            loadingUserHistoryRows={loadingUserHistoryRows}
+          />
+        </Styled.TradeHistoryContainer>
+      ),
+    },
+    {
+      label: counterpart.translate(`pages.market.tabs.history.user`),
+      key: "user",
+      children: (
+        <Styled.TradeHistoryContainer>
+          <TradeHistory
+            forUser={true}
+            selectedAssets={selectedAssets}
+            loadingSelectedPair={loadingSelectedPair}
+            orderHistoryRows={orderHistoryRows}
+            loadingOrderHistoryRows={loadingOrderHistoryRows}
+            userOrderHistoryRows={userOrderHistoryRows}
+            loadingUserHistoryRows={loadingUserHistoryRows}
+          />
+        </Styled.TradeHistoryContainer>
+      ),
+    },
+  ];
+
+  
   return (
     <Layout
       title="market"
@@ -48,20 +85,14 @@ const MarketPage: NextPage = () => {
           <Styled.RightBorderedFlexedCol span={5}>
             {/* Trade History Title */}
             <Styled.HistoryBox>
-              <Styled.BoxHeader>Trade history</Styled.BoxHeader>
-            </Styled.HistoryBox>
-
-            {/* Trade History Table */}
-            <Styled.TradeHistoryContainer>
-              <TradeHistory
-                selectedAssets={selectedAssets}
-                loadingSelectedPair={loadingSelectedPair}
-                orderHistoryRows={orderHistoryRows}
-                loadingOrderHistoryRows={loadingOrderHistoryRows}
-                userOrderHistoryRows={userOrderHistoryRows}
-                loadingUserHistoryRows={loadingUserHistoryRows}
+              {/* <Styled.BoxHeader> */}
+              <Styled.Tabs
+                defaultActiveKey="1"
+                centered={true}
+                items={historyTabItems}
               />
-            </Styled.TradeHistoryContainer>
+              {/* </Styled.BoxHeader> */}
+            </Styled.HistoryBox>
           </Styled.RightBorderedFlexedCol>
 
           {/* Middle Section */}
@@ -81,7 +112,15 @@ const MarketPage: NextPage = () => {
                 </Styled.MarketDepthContainer>
               </Styled.RightBorderedFlexedCol>
               {/* Order Book section */}
-              <Col span={8}>Order Book Section</Col>
+              <Col span={8}>
+                <OrderBook 
+                  selectedAssets={selectedAssets}
+                  bids={bids}
+                  asks={asks}
+                  loadingAsksBids={loadingAsksBids}
+                  loadingSelectedPair={loadingSelectedPair} 
+                />
+              </Col>
             </Styled.ChartsAndOrderBookRow>
 
             {/* My Open order and My History section */}
