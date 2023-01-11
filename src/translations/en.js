@@ -703,6 +703,12 @@ export const en = {
       my_order_history: "My Order History",
       buy: "BUY",
       sell: "SELL",
+      tabs: {
+        history: {
+          all: "Trade history",
+          user: "My history",
+        },
+      },
     },
     settings: {
       heading: "Settings",

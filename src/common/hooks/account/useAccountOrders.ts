@@ -90,8 +90,11 @@ export function useAccountOrders(): UseAccountOrdersResult {
             ? counterpart.translate("pages.profile.orders_tab.buy")
             : counterpart.translate("pages.profile.orders_tab.sell"),
         price: `${price} ${defaultAsset.symbol}`,
+        numberedPrice: Number(price),
         amount: `${amount} ${base.symbol}`,
+        numberedAmount: Number(amount),
         total: `${total} ${defaultAsset.symbol}`,
+        numberedTotal: Number(total),
         filled: filled,
         statusActions:
           numberdFilled === 100
@@ -180,8 +183,11 @@ export function useAccountOrders(): UseAccountOrdersResult {
             ? counterpart.translate("pages.profile.orders_tab.buy")
             : counterpart.translate("pages.profile.orders_tab.sell"),
         price: `${price} ${defaultAsset.symbol}`,
+        numberedPrice: Number(price),
         amount: `${amount} ${base.symbol}`,
+        numberedAmount: Number(amount),
         total: `${total} ${defaultAsset.symbol}`,
+        numberedTotal: Number(total),
         filled: filled,
       } as OrderTableRow;
     },

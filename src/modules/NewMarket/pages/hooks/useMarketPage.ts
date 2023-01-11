@@ -8,7 +8,9 @@ import {
   useAccountOrders,
   useAsset,
   useFees,
+  useFormDate,
   useHandleTransactionForm,
+  useMarketHistory,
   useOrderTransactionBuilder,
   useTransactionBuilder,
   useTransactionMessage,
@@ -19,8 +21,13 @@ import {
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../common/providers";
-import { Asset, OrderTableRow, SignerKey } from "../../../../common/types";
-import { PairAssets } from "../../types";
+import {
+  Asset,
+  OrderHistory,
+  OrderTableRow,
+  SignerKey,
+} from "../../../../common/types";
+import { PairAssets, TradeHistoryColumn, TradeHistoryRow } from "../../types";
 
 import { UseMarketPageResult } from "./useMarketPage.types";
 
@@ -28,12 +35,12 @@ type Props = {
   currentPair: string;
 };
 
-// This is in miliseconds
+// This is in milliseconds
 //const REQUIRED_TICKER_UPDATE_TIME = 800;
 
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { getAssetsBySymbols } = useAsset();
+  const { setPrecision, getAssetsBySymbols, ceilPrecision } = useAsset();
   const { id, localStorageAccount } = useUserContext();
   const { synced } = useChainStoreContext();
   const {
@@ -49,10 +56,13 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
   const { calculateCancelLimitOrderFee } = useFees();
   const { buildTrx } = useTransactionBuilder();
+  const { getFillOrderHistory } = useMarketHistory();
+  const { formLocalDate } = useFormDate();
 
   const [selectedAssets, setSelectedAssets] = useState<PairAssets>();
   const [loadingSelectedPair, setLoadingSelectedPair] = useState<boolean>(true);
 
+  // User orders
   const [userOpenOrdersRows, setUserOpenOrdersRows] = useState<OrderTableRow[]>(
     []
   );
@@ -66,6 +76,12 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const [userOrdersHistoriesColumns, setUserOrdersHistoriesColumns] = useState<
     UserOrderColumnType[]
   >([]);
+
+  // Trade history
+  const [tradeHistoryRows, setTradeHistoryRows] = useState<TradeHistoryRow[]>(
+    []
+  );
+  const [loadingTradeHistory, setLoadingTradeHistory] = useState<boolean>(true);
 
   const getPairAssets = useCallback(async () => {
     const assetsSymbols = currentPair.split("_");
@@ -100,6 +116,103 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     setUserOrdersHistoriesColumns(historyColumns);
     setLoadingUserOrders(false);
   };
+
+  const tradeHistoryColumns: TradeHistoryColumn[] = useMemo(() => {
+    if (!loadingSelectedPair && selectedAssets) {
+      return [
+        {
+          title: `${counterpart.translate("tableHead.price")} (${
+            selectedAssets.quote.symbol
+          })`,
+          dataIndex: "price",
+          key: "price",
+          fixed: true,
+        },
+        {
+          title: `${counterpart.translate("tableHead.amount")} (${
+            selectedAssets.base.symbol
+          })`,
+          dataIndex: "amount",
+          key: "amount",
+          fixed: true,
+        },
+        {
+          title: counterpart.translate(`tableHead.time`),
+          dataIndex: "time",
+          key: "time",
+          fixed: true,
+        },
+      ];
+    } else {
+      return [];
+    }
+  }, [loadingSelectedPair, selectedAssets]);
+  const formOrderHistoryRow = useCallback(
+    (history: OrderHistory, base: Asset, quote: Asset): TradeHistoryRow => {
+      const time = formLocalDate(history.time, [
+        "month",
+        "date",
+        "year",
+        "time",
+      ]);
+      const { pays, receives } = history.op;
+      let baseAmount = 0,
+        quoteAmount = 0,
+        isBuyOrder = false;
+      // this is sell orders
+      if (pays.asset_id === base.id) {
+        baseAmount = setPrecision(false, pays.amount, base.precision);
+        quoteAmount = setPrecision(false, receives.amount, quote.precision);
+        //this is buy orders
+      } else {
+        baseAmount = setPrecision(false, receives.amount, base.precision);
+        quoteAmount = setPrecision(false, pays.amount, quote.precision);
+        isBuyOrder = true;
+      }
+
+      return {
+        key: history.id,
+        price: ceilPrecision(quoteAmount / baseAmount),
+        amount: baseAmount,
+        time: time,
+        isBuyOrder,
+      } as TradeHistoryRow;
+    },
+    [setPrecision, formLocalDate, ceilPrecision]
+  );
+  const getHistory = useCallback(async () => {
+    if (selectedAssets) {
+      const base = selectedAssets.base;
+      const quote = selectedAssets.quote;
+      try {
+        setLoadingTradeHistory(true);
+        const histories = await getFillOrderHistory(base, quote);
+        if (histories) {
+          const marketTakersHistories = histories.reduce(
+            (previousHistory, currentHistory, i, { [i - 1]: next }) => {
+              if (i % 2) {
+                previousHistory.push(
+                  currentHistory.op.order_id > next.op.order_id
+                    ? currentHistory
+                    : next
+                );
+              }
+              return previousHistory;
+            },
+            [] as OrderHistory[]
+          );
+          const tradeHistoryRows = marketTakersHistories.map((history) => {
+            return formOrderHistoryRow(history, base, quote);
+          });
+          setTradeHistoryRows(tradeHistoryRows);
+        }
+        setLoadingTradeHistory(false);
+      } catch (e) {
+        console.log(e);
+        setLoadingTradeHistory(false);
+      }
+    }
+  }, [selectedAssets, setLoadingTradeHistory, getFillOrderHistory]);
 
   const cancelOrderFeeAmount = useMemo(() => {
     const cancelLimitOrderFee = calculateCancelLimitOrderFee();
@@ -196,13 +309,14 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const subscribeToMarket = useCallback(async () => {
     if (selectedAssets && synced) {
       try {
-        await Promise.all([formUserOrders()]);
+        await Promise.all([formUserOrders(), getHistory()]);
         await dbApi("subscribe_to_market", [
           () => {
             // setTimeout(() => {
             //   getTradingPairsStats();
             // }, REQUIRED_TICKER_UPDATE_TIME);
             formUserOrders();
+            getHistory();
           },
           selectedAssets.base.symbol,
           selectedAssets.quote.symbol,
@@ -254,5 +368,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     cancelOrderFeeAmount,
     localStorageAccount,
     formUserOrders,
+    tradeHistoryRows,
+    loadingTradeHistory,
+    tradeHistoryColumns,
   };
 }

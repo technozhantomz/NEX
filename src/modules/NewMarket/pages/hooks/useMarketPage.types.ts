@@ -1,7 +1,7 @@
 import { UserOrderColumnType } from "../../../../common/components";
 import { TransactionMessageState } from "../../../../common/hooks";
 import { OrderTableRow } from "../../../../common/types";
-import { PairAssets } from "../../types";
+import { PairAssets, TradeHistoryColumn, TradeHistoryRow } from "../../types";
 
 export type UseMarketPageResult = {
   loadingSelectedPair: boolean;
@@ -21,4 +21,7 @@ export type UseMarketPageResult = {
   hideTransactionModal: () => void;
   localStorageAccount: string;
   formUserOrders: () => Promise<void>;
+  tradeHistoryRows: TradeHistoryRow[];
+  loadingTradeHistory: boolean;
+  tradeHistoryColumns: TradeHistoryColumn[];
 };
