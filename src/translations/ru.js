@@ -702,6 +702,12 @@ export const ru = {
       my_order_history: "Моя история заказов",
       buy: "КУПИТЬ",
       sell: "ПРОДАВАТЬ",
+      tabs: {
+        history: {
+          all: "Торговая история",
+          user: "Моя история",
+        },
+      },
     },
     settings: {
       heading: "Настройки",
@@ -1229,7 +1235,7 @@ export const ru = {
     status_actions: "Статус/Действия",
   },
   tableFilters: {
-    avtive: "Активный",
+    active: "Активный",
     inactive: "Неактивно",
     approved: "Утверждено",
     not_approved: "Не одобрено",

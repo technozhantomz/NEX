@@ -207,7 +207,7 @@ export const showVotesColumns = (
         //active
         [
           {
-            text: counterpart.translate(`tableFilters.avtive`),
+            text: counterpart.translate(`tableFilters.active`),
             value: true,
           },
           {
@@ -238,7 +238,7 @@ export const showVotesColumns = (
         undefined,
         [
           {
-            text: counterpart.translate(`tableFilters.avtive`),
+            text: counterpart.translate(`tableFilters.active`),
             value: true,
           },
           {
