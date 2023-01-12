@@ -1,6 +1,7 @@
 import counterpart from "counterpart";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { defaultToken } from "../../../../api/params";
 import { UserOrderColumnType } from "../../../../common/components";
 import {
   TransactionMessageActionType,
@@ -14,6 +15,7 @@ import {
   useOrderTransactionBuilder,
   useTransactionBuilder,
   useTransactionMessage,
+  useUpdateExchanges,
 } from "../../../../common/hooks";
 import {
   useAssetsContext,
@@ -58,6 +60,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { buildTrx } = useTransactionBuilder();
   const { getFillOrderHistory } = useMarketHistory();
   const { formLocalDate } = useFormDate();
+  const { exchanges } = useUpdateExchanges();
 
   const [selectedAssets, setSelectedAssets] = useState<PairAssets>();
   const [loadingSelectedPair, setLoadingSelectedPair] = useState<boolean>(true);
@@ -82,6 +85,12 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     []
   );
   const [loadingTradeHistory, setLoadingTradeHistory] = useState<boolean>(true);
+
+  // Pair modal
+  const [isPairModalVisible, setIsPairModalVisible] = useState<boolean>(false);
+  const handleClickOnPair = useCallback(() => {
+    setIsPairModalVisible(true);
+  }, [setIsPairModalVisible]);
 
   const getPairAssets = useCallback(async () => {
     const assetsSymbols = currentPair.split("_");
@@ -117,6 +126,43 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     setLoadingUserOrders(false);
   };
 
+  const userTradeHistoryRows = useMemo(() => {
+    const baseSymbol = currentPair.split("_")[0] as string;
+    const quoteSymbol = currentPair.split("_")[1] as string;
+    const notDefaultToken =
+      baseSymbol === defaultToken
+        ? { symbol: quoteSymbol, isBase: false }
+        : { symbol: baseSymbol, isBase: true };
+    const selectedPairHistoryRows = userOrderHistoryRows.filter((row) =>
+      row.pair.split("_").includes(notDefaultToken.symbol)
+    );
+    return notDefaultToken.isBase
+      ? selectedPairHistoryRows.map((row) => {
+          return {
+            key: row.key,
+            price: String(row.numberedPrice),
+            amount: row.numberedAmount,
+            time: row.date,
+            isBuyOrder:
+              row.side ===
+              counterpart.translate("pages.profile.orders_tab.buy"),
+          } as TradeHistoryRow;
+        })
+      : selectedPairHistoryRows.map((row) => {
+          return {
+            key: row.key,
+            price: ceilPrecision(
+              row.numberedAmount / row.numberedTotal,
+              selectedAssets?.base.precision
+            ),
+            amount: row.numberedTotal,
+            time: row.date,
+            isBuyOrder:
+              row.side !==
+              counterpart.translate("pages.profile.orders_tab.buy"),
+          } as TradeHistoryRow;
+        });
+  }, [userOrderHistoryRows, currentPair, defaultToken, selectedAssets]);
   const tradeHistoryColumns: TradeHistoryColumn[] = useMemo(() => {
     if (!loadingSelectedPair && selectedAssets) {
       return [
@@ -147,7 +193,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       return [];
     }
   }, [loadingSelectedPair, selectedAssets]);
-  const formOrderHistoryRow = useCallback(
+  const formTradeHistoryRow = useCallback(
     (history: OrderHistory, base: Asset, quote: Asset): TradeHistoryRow => {
       const time = formLocalDate(history.time, [
         "month",
@@ -202,7 +248,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
             [] as OrderHistory[]
           );
           const tradeHistoryRows = marketTakersHistories.map((history) => {
-            return formOrderHistoryRow(history, base, quote);
+            return formTradeHistoryRow(history, base, quote);
           });
           setTradeHistoryRows(tradeHistoryRows);
         }
@@ -212,7 +258,13 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         setLoadingTradeHistory(false);
       }
     }
-  }, [selectedAssets, setLoadingTradeHistory, getFillOrderHistory]);
+  }, [
+    selectedAssets,
+    setLoadingTradeHistory,
+    getFillOrderHistory,
+    formTradeHistoryRow,
+    setTradeHistoryRows,
+  ]);
 
   const cancelOrderFeeAmount = useMemo(() => {
     const cancelLimitOrderFee = calculateCancelLimitOrderFee();
@@ -305,7 +357,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       console.log(e);
     }
   }, [currentPair, dbApi]);
-
   const subscribeToMarket = useCallback(async () => {
     if (selectedAssets && synced) {
       try {
@@ -371,5 +422,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     tradeHistoryRows,
     loadingTradeHistory,
     tradeHistoryColumns,
+    setIsPairModalVisible,
+    isPairModalVisible,
+    handleClickOnPair,
+    exchanges,
+    userTradeHistoryRows,
   };
 }

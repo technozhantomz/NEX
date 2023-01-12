@@ -16,7 +16,7 @@ export const Tabs = styled(UiTabs)`
   .ant-tabs-tab {
     flex: 1 1 50%;
     justify-content: center;
-    padding: 20px 0 8px 0;
+    padding: 13px 0 8px 0;
   }
   .ant-tabs-tab-btn {
     font-size: 20px;
