@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
+import { HistoryTabs } from "../components";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -14,6 +15,7 @@ const MarketPage: NextPage = () => {
   const { selectedPair } = useMarketPage({
     currentPair: pair as string,
   });
+
   return (
     <Layout
       title="market"
@@ -27,13 +29,14 @@ const MarketPage: NextPage = () => {
           <Styled.RightBorderedFlexedCol span={5}>
             {/* Trade History Title */}
             <Styled.HistoryBox>
-              <Styled.BoxHeader>Trade history</Styled.BoxHeader>
+              {/* <Styled.BoxHeader>Trade history</Styled.BoxHeader> */}
+              <HistoryTabs />
             </Styled.HistoryBox>
 
             {/* Trade History Table */}
-            <Styled.TradeHistoryContainer>
+            {/* <Styled.TradeHistoryContainer>
               History data table
-            </Styled.TradeHistoryContainer>
+            </Styled.TradeHistoryContainer> */}
           </Styled.RightBorderedFlexedCol>
 
           {/* Middle Section */}
