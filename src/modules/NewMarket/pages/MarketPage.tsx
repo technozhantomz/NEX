@@ -6,10 +6,14 @@ import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
 
 import * as Styled from "./MarketPage.styled";
+import { useMarketPage } from "./hooks";
 
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
+  const { selectedPair } = useMarketPage({
+    currentPair: pair as string,
+  });
   return (
     <Layout
       title="market"
@@ -62,7 +66,7 @@ const MarketPage: NextPage = () => {
           <Styled.FlexedCol span={5}>
             {/* Pair Selector */}
             <Styled.PairSelectorContainer>
-              Pair selector
+              Pair selector {selectedPair?.base.symbol}
             </Styled.PairSelectorContainer>
 
             {/* Limit Order forms */}
