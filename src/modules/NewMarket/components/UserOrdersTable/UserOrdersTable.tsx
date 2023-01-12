@@ -4,7 +4,7 @@ import { UserOrderColumnType } from "../../../../common/components";
 import { OrderTableRow } from "../../../../common/types";
 
 import * as Styled from "./UserOrdersTable.styled";
-import { useUserOpenOrders } from "./hooks";
+import { useUserOrdersTable } from "./hooks";
 
 type Props = {
   userOrdersRows: OrderTableRow[];
@@ -17,7 +17,7 @@ export function UserOrdersTable({
   userOrdersColumns,
   loadingUserOrders,
 }: Props): JSX.Element {
-  const { defineTableRowClassName } = useUserOpenOrders();
+  const { defineTableRowClassName } = useUserOrdersTable();
   const desktopScroll = {
     y: 300,
     x: 940,
