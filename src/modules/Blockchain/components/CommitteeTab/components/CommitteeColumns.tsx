@@ -35,7 +35,7 @@ const filters = [
   undefined,
   [
     {
-      text: "Avtive",
+      text: "Active",
       value: true,
     },
     {
