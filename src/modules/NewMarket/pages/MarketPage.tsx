@@ -77,7 +77,6 @@ const MarketPage: NextPage = () => {
 
             {/* Wallet Sections */}
             <Styled.WalletContainer>
-              Wallet Functionalities
               <Balances
                 selectedAssets={selectedAssets}
                 loadingSelectedPair={loadingSelectedPair}
