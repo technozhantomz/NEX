@@ -1,5 +1,8 @@
+import counterpart from "counterpart";
+
 import { PairAssets } from "../../../Market/types";
 
+import * as Styled from "./Balances.styled";
 import { useBalances } from "./hooks";
 
 type Props = {
@@ -13,18 +16,23 @@ export function Balances({
   loadingSelectedPair,
   activePair,
 }: Props): JSX.Element {
-  console.log(selectedAssets);
   const { balance } = useBalances(selectedAssets, loadingSelectedPair);
-
-  console.log(balance);
   return (
     <>
-      <p>
-        {activePair.split("_")[0]} {balance.userQuoteAssetAmount}
-      </p>
-      <p>
-        {activePair.split("_")[1]} {balance.userBaseAssetAmount}
-      </p>
+      <Styled.BalanceInfo>
+        <Styled.BalanceLabel>
+          {activePair.split("_")[0]}{" "}
+          {counterpart.translate(`field.labels.available`)}
+        </Styled.BalanceLabel>
+        <Styled.Balance>{balance.userQuoteAssetAmount}</Styled.Balance>
+      </Styled.BalanceInfo>
+      <Styled.BalanceInfo>
+        <Styled.BalanceLabel>
+          {activePair.split("_")[1]}{" "}
+          {counterpart.translate(`field.labels.available`)}
+        </Styled.BalanceLabel>
+        <Styled.Balance>{balance.userBaseAssetAmount}</Styled.Balance>
+      </Styled.BalanceInfo>
     </>
   );
 }
