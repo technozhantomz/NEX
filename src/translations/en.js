@@ -1032,7 +1032,7 @@ export const en = {
       approved: "Approved",
       removed: "Removed",
       my_activity: "My activity",
-      available: "Available:",
+      available: "Available",
     },
     comments: {
       deposit_hbd:

@@ -1035,7 +1035,7 @@ export const ru = {
       approved: "Одобренный",
       removed: "удаленный",
       my_activity: "Моя деятельность",
-      available: "Доступный:",
+      available: "Доступный",
     },
     comments: {
       deposit_hbd:
