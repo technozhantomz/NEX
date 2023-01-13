@@ -20,10 +20,7 @@ export type UserOrderColumnType = {
     | undefined;
   filterMode: string | undefined;
   filterSearch: boolean | undefined;
-  onFilter:
-    | ((value: boolean, record: OrderTableRow) => boolean)
-    | ((value: string, record: OrderTableRow) => boolean)
-    | undefined;
+  onFilter: ((value: string, record: OrderTableRow) => boolean) | undefined;
   sorter:
     | ((
         a: {
