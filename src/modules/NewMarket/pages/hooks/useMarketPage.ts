@@ -127,8 +127,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   };
 
   const userTradeHistoryRows = useMemo(() => {
-    const baseSymbol = currentPair.split("_")[0] as string;
-    const quoteSymbol = currentPair.split("_")[1] as string;
+    const baseSymbol = currentPair.split("_")[0];
+    const quoteSymbol = currentPair.split("_")[1];
     const notDefaultToken =
       baseSymbol === defaultToken
         ? { symbol: quoteSymbol, isBase: false }
@@ -357,9 +357,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         await Promise.all([formUserOrders(), getHistory()]);
         await dbApi("subscribe_to_market", [
           () => {
-            // setTimeout(() => {
-            //   getTradingPairsStats();
-            // }, REQUIRED_TICKER_UPDATE_TIME);
             formUserOrders();
             getHistory();
           },

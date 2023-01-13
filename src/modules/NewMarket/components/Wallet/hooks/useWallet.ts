@@ -13,8 +13,8 @@ export function useWallet({ currentPair }: Args): UseWalletResult {
   const { assets } = useUserContext();
 
   const balances = useMemo(() => {
-    const baseSymbol = currentPair.split("_")[0] as string;
-    const quoteSymbol = currentPair.split("_")[1] as string;
+    const baseSymbol = currentPair.split("_")[0];
+    const quoteSymbol = currentPair.split("_")[1];
     if (assets && assets.length > 0) {
       const userBaseAsset = assets.find((asset) => asset.symbol === baseSymbol);
       const userQuoteAsset = assets.find(
