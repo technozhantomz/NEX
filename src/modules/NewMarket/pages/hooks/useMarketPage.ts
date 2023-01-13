@@ -164,8 +164,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         });
   }, [userOrderHistoryRows, currentPair, defaultToken, selectedAssets]);
   const tradeHistoryColumns: TradeHistoryColumn[] = useMemo(() => {
-    const baseSymbol = currentPair.split("_")[0] as string;
-    const quoteSymbol = currentPair.split("_")[1] as string;
+    const baseSymbol = currentPair.split("_")[0];
+    const quoteSymbol = currentPair.split("_")[1];
     return [
       {
         title: `${counterpart.translate("tableHead.price")} (${quoteSymbol})`,

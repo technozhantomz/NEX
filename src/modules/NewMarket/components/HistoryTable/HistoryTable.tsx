@@ -3,6 +3,7 @@ import { ColumnsType } from "antd/lib/table";
 import { TradeHistoryColumn, TradeHistoryRow } from "../../types";
 
 import * as Styled from "./HistoryTable.styled";
+import { useHistoryTable } from "./hooks";
 
 type Props = {
   tradeHistoryRows: TradeHistoryRow[];
@@ -21,6 +22,7 @@ export const HistoryTable = ({
     scrollToFirstRowOnChange: false,
   };
   const scroll = tradeHistoryRows.length === 0 ? undefined : desktopScroll;
+  const { defineTableRowClassName } = useHistoryTable();
 
   return (
     <>
@@ -32,10 +34,7 @@ export const HistoryTable = ({
           columns={tradeHistoryColumns as ColumnsType<TradeHistoryColumn>}
           dataSource={tradeHistoryRows}
           bordered={false}
-          rowClassName={(record: any) => {
-            const item = record as TradeHistoryRow;
-            return item.isBuyOrder ? "buy" : "sell";
-          }}
+          rowClassName={defineTableRowClassName}
         ></Styled.Table>
       </Styled.TableContainer>
     </>
