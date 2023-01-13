@@ -5,4 +5,5 @@ export const mixIns = {
   hairline: `border-bottom: 0.25px solid ${colors.borderColorBase};`,
   hairlineTop: `border-top: 0.25px solid ${colors.borderColorBase};`,
   inActiveTab: `border-bottom: 2pt solid ${colors.inactiveColor};`,
+  antReverseTable: `.ant-table table{ display: flex-grow; flex-direction: column-reverse;}`,
 };

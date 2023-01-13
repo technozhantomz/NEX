@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
-import { TradeHistory, OrderBook } from "../componets";
+import { OrderBook, TradeHistory } from "../componets";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -71,7 +71,6 @@ const MarketPage: NextPage = () => {
     },
   ];
 
-  
   return (
     <Layout
       title="market"
@@ -113,12 +112,12 @@ const MarketPage: NextPage = () => {
               </Styled.RightBorderedFlexedCol>
               {/* Order Book section */}
               <Col span={8}>
-                <OrderBook 
+                <OrderBook
                   selectedAssets={selectedAssets}
                   bids={bids}
                   asks={asks}
                   loadingAsksBids={loadingAsksBids}
-                  loadingSelectedPair={loadingSelectedPair} 
+                  loadingSelectedPair={loadingSelectedPair}
                 />
               </Col>
             </Styled.ChartsAndOrderBookRow>

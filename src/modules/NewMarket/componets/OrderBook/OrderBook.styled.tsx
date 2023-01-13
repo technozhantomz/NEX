@@ -1,99 +1,128 @@
-import { styled, Button as UiButton, Table as UiTable } from "../../../../ui/src";
+import { Dropdown, Menu, styled, Table as UiTable } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
+import { mixIns } from "../../../../ui/src/mixins";
 
 export const Flex = styled.div`
   display: flex;
 `;
 
 export const Heading = styled.h2`
-    font-size: 1em;
-    font-weight: 500;
-    margin-bottom: 5px;
-    padding: 0;
-    text-align: left;
+  font-size: 1.1em;
+  font-weight: 500;
+  margin-bottom: 15px;
+  padding: 0;
+  text-align: left;
+`;
+
+export const FilterContainer = styled.div`
+  display: flex;
+  margin-bottom: 25px;
+  justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+export const OrdersFilter = styled.button`
+  display: flex;
+  width: 100%;
+  height: 25px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  &.active {
+    border: 1px solid #c1c2c4;
+  }
+  & span {
+    background-color: #e2444d;
+    height: 2px;
+    width: 14px;
+  }
+  &.order-filters__type--total span:nth-child(3),
+  &.order-filters__type--total span:nth-child(4) {
+    background-color: #1cb881;
+  }
+  &.order-filters__type--buy span {
+    background-color: #1cb881;
+  }
+  & span:not(:last-child) {
+    margin-bottom: 1px;
+  }
+`;
+
+export const ThresholdMenu = styled(Menu)``;
+
+export const ThresholdDropdown = styled(Dropdown)`
+  display: flex !important;
+  align-items: center !important;
+`;
+
+export const ThresholdLabel = styled.span`
+  color: ${colors.textColorSecondary};
+  font-size: 12px;
+  margin-right: 5px;
+`;
+
+export const ThresholdValue = styled.span`
+  font-size: 14px;
+  color: #212121;
 `;
 
 export const ButtonGroup = styled.div`
-    display: flex;
-    padding: 0px;
-    justify-content: space-between;
-    margin-bottom: 5px;
-    width: 100%;
-`;
-
-
-export const Button = styled(UiButton)`
-  font-size: 0.6em;
+  display: flex;
   padding: 0px;
-  width: 35px;
-  height: 15px !important;
-  
-
-  &.ant-btn-primary {
-    background-color: #3498db;
-    border-color: #3498db;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 100%;
-    }
-  }
-
-  &.ant-btn-default {
-    border-width: 1px !important;
-    border-style: solid;
-    border-radius: 100%;
-    background-color: #ffffff;
-    border-color: #bbbbbb;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  &:first-child {
-    border-top-left-radius: 100% !important;
-    border-bottom-left-radius: 100% !important;
-  }
-  
-  &:last-child {
-    border-top-right-radius: 100% !important;
-    border-bottom-right-radius: 100% !important;
-  }
+  justify-content: space-between;
+  margin-bottom: 5px;
+  width: 100%;
 `;
-
 
 export const BidRows = styled.div`
-    height: 50% !important;
-    overflow: auto;
-    padding: 0px;
-    margin: 0px;
+  height: 50% !important;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden;
 `;
 
 export const AskRows = styled.div`
-    height: 50% !important;
-    overflow: auto;
-    padding: 0px;
-    margin: 0px;
-    .ant-table-thead::before {
-        content: "";
-        display:table;
-      }
-      
-      .ant-table-tbody::after {
-          content: "";
-          display:table;
-      }
+  height: 50% !important;
+  overflow: hidden;
+  padding: 0px;
+  margin: 0px;
+`;
+
+export const TableHeader = styled.thead`
+  display: table-header-group;
+  text-align: left;
+  vertical-align: middle;
+  border-color: inherit;
+  width: auto;
+  min-width: 100%;
+`;
+
+export const TableRow = styled.tr`
+  display: table-row;
+  width: 100%;
+  vertical-align: inherit;
+`;
+
+export const TableCell = styled.th`
+  font-size: 0.9em;
+  position: relative;
+  padding-right: 5px;
+  color: #212121;
+  font-weight: 500;
+  background: #ffffff;
+  overflow-wrap: unset;
+  display: table-cell;
+  vertical-align: inherit;
 `;
 
 export const Table = styled(UiTable)`
-  &.ask-rows {
-    .ant-table {
-      display: flex;
-      flex-direction: column;
-    }
-  }
   max-height: inherit;
+
   .ant-table-tbody > tr > td {
     border-bottom: none;
     font-size: 0.7em;
@@ -128,9 +157,13 @@ export const Table = styled(UiTable)`
   }
 `;
 
+export const AskTable = styled(Table)`
+  ${mixIns.antReverseTable}
+`;
 
 export const OrderBookContainer = styled.div`
   max-height: inherit;
   height: 50% !important;
   padding: 8px;
+  overflow: hidden;
 `;

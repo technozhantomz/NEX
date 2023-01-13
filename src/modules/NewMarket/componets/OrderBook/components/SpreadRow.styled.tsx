@@ -14,7 +14,7 @@ export const SpreadRow = styled.div`
   margin-top: 8px;
   padding-left: 5px;
   padding-right: 5px;
-
+  overflow: hidden;
 `;
 
 export const SpreadCell = styled.div`
@@ -23,20 +23,17 @@ export const SpreadCell = styled.div`
 `;
 
 export const SpreadIcon = styled.i`
-    font-size: 18px;
-    margin-right: 0px;
-    
-    &.buy::before {
-        content: "↑";
-        color: ${colors.marketBuy};
-        font-size: 18px;
-        margin-right: 0px;
-    }
-    
-    &.sell::before {
-        content: "↓";
-        color: ${colors.marketSell};
-        font-size: 18px;
-        margin-right: 0px;
-    }
+  margin-right: 5px;
+  margin-left: 2px;
+  font-size: 16px;
+
+  &.buy::before {
+    content: "▲";
+    color: ${colors.marketBuy};
+  }
+
+  &.sell::before {
+    content: "▼";
+    color: ${colors.marketSell};
+  }
 `;
