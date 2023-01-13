@@ -7,7 +7,6 @@ import {
   useAsset,
   useBlockchain,
   useFormDate,
-  useMarketHistory,
 } from "../../../../../common/hooks";
 import {
   useMarketContext,
@@ -31,12 +30,11 @@ type Props = {
 export function useHistoryTable({
   forUser = false,
 }: Props): UseHistoryTableResult {
-  const { selectedPair } = useMarketContext();
+  const { selectedPair, marketHistory } = useMarketContext();
   const { id, localStorageAccount } = useUserContext();
   const { getBlockHeader } = useBlockchain();
   const { getAccountHistoryById } = useAccountHistory();
   const { setPrecision, ceilPrecision } = useAsset();
-  const { getFillOrderHistory } = useMarketHistory();
   const { getFullAccount } = useAccount();
   const { formLocalDate } = useFormDate();
   const [tradeHistoryRows, setTradeHistoryRows] = useState<TradeHistoryRow[]>(
@@ -179,35 +177,17 @@ export function useHistoryTable({
   );
 
   const getHistory = useCallback(async () => {
-    if (selectedPair) {
-      const base = selectedPair.base;
-      const quote = selectedPair.quote;
+    setLoadingTradeHistory(true);
+    if (selectedPair && marketHistory) {
       try {
-        setLoadingTradeHistory(true);
-        const histories = await getFillOrderHistory(base, quote);
-        if (histories) {
-          const marketTakersHistories = histories.reduce(
-            (previousHistory, currentHistory, i, { [i - 1]: next }) => {
-              if (i % 2) {
-                previousHistory.push(
-                  currentHistory.op.order_id > next.op.order_id
-                    ? currentHistory
-                    : next
-                );
-              }
-              return previousHistory;
-            },
-            [] as OrderHistory[]
+        const tradeHistoryRows = marketHistory.map((history) => {
+          return formTradeHistoryRow(
+            history,
+            selectedPair.base,
+            selectedPair.quote
           );
-          const tradeHistoryRows = marketTakersHistories.map((history) => {
-            return formTradeHistoryRow(
-              history,
-              selectedPair.base,
-              selectedPair.quote
-            );
-          });
-          setTradeHistoryRows(tradeHistoryRows);
-        }
+        });
+        setTradeHistoryRows(tradeHistoryRows);
         setLoadingTradeHistory(false);
       } catch (e) {
         console.log(e);
@@ -215,9 +195,8 @@ export function useHistoryTable({
       }
     }
   }, [
-    selectedPair,
+    marketHistory,
     setLoadingTradeHistory,
-    getFillOrderHistory,
     formTradeHistoryRow,
     setTradeHistoryRows,
   ]);
