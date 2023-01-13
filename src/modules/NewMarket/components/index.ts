@@ -4,3 +4,4 @@ export * from "./HistoryTabs";
 export * from "./HistoryTable";
 export * from "./PairModal";
 export * from "./PairSelect";
+export * from "./Wallet";

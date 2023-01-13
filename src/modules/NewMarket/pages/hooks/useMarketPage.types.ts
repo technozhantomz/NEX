@@ -22,7 +22,6 @@ export type UseMarketPageResult = {
   hidePasswordModal: () => void;
   hideTransactionModal: () => void;
   localStorageAccount: string;
-  formUserOrders: () => Promise<void>;
   tradeHistoryRows: TradeHistoryRow[];
   loadingTradeHistory: boolean;
   tradeHistoryColumns: TradeHistoryColumn[];

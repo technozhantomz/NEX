@@ -418,7 +418,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     hideTransactionModal,
     cancelOrderFeeAmount,
     localStorageAccount,
-    formUserOrders,
     tradeHistoryRows,
     loadingTradeHistory,
     tradeHistoryColumns,
