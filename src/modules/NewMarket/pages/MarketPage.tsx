@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
+import { PriceChart } from "../components";
 
 import * as Styled from "./MarketPage.styled";
 
@@ -42,7 +43,7 @@ const MarketPage: NextPage = () => {
               {/* Charts Section */}
               <Styled.RightBorderedFlexedCol span={16}>
                 <Styled.PriceChartContainer>
-                  Price Chart Section
+                  <PriceChart />
                 </Styled.PriceChartContainer>
                 <Styled.MarketDepthContainer>
                   Market Depth Chart Section
