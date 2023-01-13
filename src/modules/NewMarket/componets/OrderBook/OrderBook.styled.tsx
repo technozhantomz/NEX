@@ -1,6 +1,5 @@
 import { Dropdown, Menu, styled, Table as UiTable } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
-import { mixIns } from "../../../../ui/src/mixins";
 
 export const Flex = styled.div`
   display: flex;
@@ -16,7 +15,7 @@ export const Heading = styled.h2`
 
 export const FilterContainer = styled.div`
   display: flex;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   justify-content: space-between;
   display: flex;
   flex-wrap: wrap;
@@ -26,6 +25,7 @@ export const OrdersFilter = styled.button`
   display: flex;
   width: 100%;
   height: 25px;
+  margin-bottom: 10px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -58,32 +58,25 @@ export const ThresholdMenu = styled(Menu)``;
 export const ThresholdDropdown = styled(Dropdown)`
   display: flex !important;
   align-items: center !important;
+  margin-bottom: 10px;
 `;
 
 export const ThresholdLabel = styled.span`
   color: ${colors.textColorSecondary};
-  font-size: 12px;
+  font-size: 11px;
   margin-right: 5px;
 `;
 
 export const ThresholdValue = styled.span`
-  font-size: 14px;
+  font-size: 11px;
   color: #212121;
-`;
-
-export const ButtonGroup = styled.div`
-  display: flex;
-  padding: 0px;
-  justify-content: space-between;
-  margin-bottom: 5px;
-  width: 100%;
 `;
 
 export const BidRows = styled.div`
   height: 50% !important;
   padding: 0px;
   margin: 0px;
-  overflow: hidden;
+  overflow: auto;
 `;
 
 export const AskRows = styled.div`
@@ -148,18 +141,14 @@ export const Table = styled(UiTable)`
     background: none;
   }
   .ant-table-tbody > tr.ant-table-row.sell > td:first-child {
-    height: 50% !important;
     color: ${colors.marketSell};
   }
   .ant-table-tbody > tr.ant-table-row.buy > td:first-child {
-    height: 50% !important;
     color: ${colors.marketBuy};
   }
 `;
 
-export const AskTable = styled(Table)`
-  ${mixIns.antReverseTable}
-`;
+export const AskTable = styled(Table)``;
 
 export const OrderBookContainer = styled.div`
   max-height: inherit;

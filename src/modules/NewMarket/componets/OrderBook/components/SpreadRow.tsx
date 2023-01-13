@@ -15,13 +15,13 @@ export const SpreadRow = ({
 }: SpreadProps): JSX.Element => {
   return (
     <Styled.SpreadRow>
-      <Styled.SpreadCell>{spread.toFixed(3)}</Styled.SpreadCell>
       <Styled.SpreadCell>
+        {spread.toFixed(3)}
         <Styled.SpreadIcon className={lastTradeType}>
           {lastTradeType === "buy" ? (
-            <i className="fas fa-caret-up" style={{ color: "green" }} />
+            <i style={{ color: "green" }} />
           ) : (
-            <i className="fas fa-caret-down" style={{ color: "red" }} />
+            <i style={{ color: "red" }} />
           )}
         </Styled.SpreadIcon>
       </Styled.SpreadCell>

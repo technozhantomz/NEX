@@ -3,29 +3,31 @@ import { colors } from "../../../../../ui/src/colors";
 
 export const SpreadRow = styled.div`
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.9em;
+  font-size: 0.75em;
   border-width: 1px;
   border-style: solid;
   border-color: ${colors.borderColorBase};
-  border-radius: 4px;
-  margin-bottom: 8px;
-  margin-top: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding-left: 4px;
+  padding-right: 4px;
   overflow: hidden;
 `;
 
 export const SpreadCell = styled.div`
   display: flex;
   align-items: center;
+  padding-right: 2px;
 `;
 
 export const SpreadIcon = styled.i`
   margin-right: 5px;
   margin-left: 2px;
-  font-size: 16px;
+  font-size: 1.4em;
 
   &.buy::before {
     content: "▲";

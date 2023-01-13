@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const DownOutlined = styled(AntdDownOutlined)`
   vertical-align: middle !important;
-  margin-left: 16px !important;
+  margin-left: 10px !important;
   &.anticon.anticon-down svg {
     width: 12px;
     height: 12px;
