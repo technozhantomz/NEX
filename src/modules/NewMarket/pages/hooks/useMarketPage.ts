@@ -164,35 +164,29 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         });
   }, [userOrderHistoryRows, currentPair, defaultToken, selectedAssets]);
   const tradeHistoryColumns: TradeHistoryColumn[] = useMemo(() => {
-    if (!loadingSelectedPair && selectedAssets) {
-      return [
-        {
-          title: `${counterpart.translate("tableHead.price")} (${
-            selectedAssets.quote.symbol
-          })`,
-          dataIndex: "price",
-          key: "price",
-          fixed: true,
-        },
-        {
-          title: `${counterpart.translate("tableHead.amount")} (${
-            selectedAssets.base.symbol
-          })`,
-          dataIndex: "amount",
-          key: "amount",
-          fixed: true,
-        },
-        {
-          title: counterpart.translate(`tableHead.time`),
-          dataIndex: "time",
-          key: "time",
-          fixed: true,
-        },
-      ];
-    } else {
-      return [];
-    }
-  }, [loadingSelectedPair, selectedAssets]);
+    const baseSymbol = currentPair.split("_")[0] as string;
+    const quoteSymbol = currentPair.split("_")[1] as string;
+    return [
+      {
+        title: `${counterpart.translate("tableHead.price")} (${quoteSymbol})`,
+        dataIndex: "price",
+        key: "price",
+        fixed: true,
+      },
+      {
+        title: `${counterpart.translate("tableHead.amount")} (${baseSymbol})`,
+        dataIndex: "amount",
+        key: "amount",
+        fixed: true,
+      },
+      {
+        title: counterpart.translate(`tableHead.time`),
+        dataIndex: "time",
+        key: "time",
+        fixed: true,
+      },
+    ];
+  }, [currentPair]);
   const formTradeHistoryRow = useCallback(
     (history: OrderHistory, base: Asset, quote: Asset): TradeHistoryRow => {
       const time = formLocalDate(history.time, [
@@ -227,11 +221,11 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     [setPrecision, formLocalDate, ceilPrecision]
   );
   const getHistory = useCallback(async () => {
+    setLoadingTradeHistory(true);
     if (selectedAssets) {
       const base = selectedAssets.base;
       const quote = selectedAssets.quote;
       try {
-        setLoadingTradeHistory(true);
         const histories = await getFillOrderHistory(base, quote);
         if (histories) {
           const marketTakersHistories = histories.reduce(
