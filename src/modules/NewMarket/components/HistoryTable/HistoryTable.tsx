@@ -10,8 +10,12 @@ type Props = {
 };
 
 export const HistoryTable = ({ forUser = false }: Props): JSX.Element => {
-  const { tradeHistoryRows, tradeHistoryColumns, loadingTradeHistory } =
-    useHistoryTable({ forUser });
+  const {
+    tradeHistoryRows,
+    userOrderHistoryRows,
+    tradeHistoryColumns,
+    loadingTradeHistory,
+  } = useHistoryTable({ forUser });
   const desktopScroll = {
     y: undefined,
     x: 310,
@@ -27,7 +31,7 @@ export const HistoryTable = ({ forUser = false }: Props): JSX.Element => {
           loading={loadingTradeHistory}
           pagination={false}
           columns={tradeHistoryColumns as ColumnsType<TradeHistoryColumn>}
-          dataSource={tradeHistoryRows}
+          dataSource={forUser ? userOrderHistoryRows : tradeHistoryRows}
           bordered={false}
           rowClassName={(record: any) => {
             const item = record as TradeHistoryRow;

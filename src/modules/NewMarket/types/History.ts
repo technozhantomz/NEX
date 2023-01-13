@@ -6,6 +6,16 @@ export type TradeHistoryRow = {
   isBuyOrder: boolean;
 };
 
+export type OrderHistoryRow = {
+  key: string;
+  price: string;
+  base: number;
+  quote: number;
+  date: string;
+  isBuyOrder: boolean;
+  filled: string;
+};
+
 export type TradeHistoryColumn = {
   title: string;
   dataIndex: string;
