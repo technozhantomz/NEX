@@ -1,4 +1,5 @@
 import { Col, Row, styled, Card as UiCard } from "../../../../src/ui/src";
+import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 import { mixIns } from "../../../ui/src/mixins";
 
@@ -13,12 +14,12 @@ export const FullHeightRow = styled(Row)`
   height: 100%;
 `;
 
-export const FlexedCol = styled(Col)`
+export const VerticalFlexedCol = styled(Col)`
   display: flex;
   flex-direction: column;
 `;
 
-export const RightBorderedFlexedCol = styled(FlexedCol)`
+export const RightBorderedVerticalFlexedCol = styled(VerticalFlexedCol)`
   border-right: 0.25px solid ${colors.borderColorBase};
 `;
 
@@ -27,9 +28,8 @@ export const RightBorderedCol = styled(Col)`
 `;
 
 export const HistoryBox = styled.div`
-  // padding: 16px 20px;
-  // ${mixIns.hairline}
-  min-height: 65px;
+  padding: 10px 0 0;
+  max-height: inherit;
 `;
 
 export const BoxHeader = styled.h2`
@@ -44,30 +44,45 @@ export const StatsBox = styled.div`
 `;
 
 export const PairSelectorContainer = styled.div`
-  padding: 16px 20px;
+  padding: 8px 20px;
   ${mixIns.hairline}
   min-height: 65px;
 `;
 
 export const TradeHistoryContainer = styled.div`
-  padding: 16px 16px;
+  padding: 0px 0px;
   height: 100%;
+  max-height: inherit;
 `;
 
 export const ChartsAndOrderBookRow = styled(Row)`
-  min-height: 750px;
+  min-height: 520px;
+  ${breakpoint.xl} {
+    min-height: 750px;
+  }
   ${mixIns.hairline}
 `;
 
 export const PriceChartContainer = styled.div`
-  min-height: 450px;
+  height: 100%;
+  ${breakpoint.xl} {
+    min-height: 450px;
+  }
 `;
 
 export const MarketDepthContainer = styled.div`
-  min-height: 300px;
+  ${breakpoint.xl} {
+    min-height: 300px;
+  }
 `;
 
-export const UserOrdersContainer = styled.div``;
+export const TabletTabsContainer = styled.div`
+  min-height: 656px;
+`;
+
+export const UserOrdersContainer = styled.div`
+  min-height: 425px;
+`;
 
 export const LimitOrderFormContainer = styled.div`
   min-height: 930px;
@@ -76,4 +91,28 @@ export const LimitOrderFormContainer = styled.div`
 
 export const WalletContainer = styled.div`
   padding: 25px;
+`;
+
+const MobileContainer = styled.div`
+  margin-bottom: 8px;
+  background-color: ${colors.white};
+  border-radius: 2px;
+  color: ${colors.textColor};
+`;
+
+export const MobileAssetSelectorContainer = styled(MobileContainer)`
+  height: 50px;
+  border: 1px solid ${colors.borderColorBase};
+`;
+
+export const MobileStatsContainer = styled(MobileContainer)`
+  height: 50px;
+`;
+
+export const MobileChartContainer = styled(MobileContainer)`
+  height: 250px;
+`;
+
+export const MobileTabsContainer = styled(MobileContainer)`
+  height: 320px;
 `;

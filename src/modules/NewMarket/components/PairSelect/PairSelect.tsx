@@ -1,5 +1,3 @@
-// import counterpart from "counterpart";
-
 import { DownOutlined } from "../../../../ui/src";
 import BitcoinCashIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinCashIcon.svg";
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";

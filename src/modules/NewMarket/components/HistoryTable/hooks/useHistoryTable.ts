@@ -220,6 +220,11 @@ export function useHistoryTable({
     setTradeHistoryRows,
   ]);
 
+  const defineTableRowClassName = useCallback((record: any) => {
+    const item = record as TradeHistoryRow;
+    return item.isBuyOrder ? "buy" : "sell";
+  }, []);
+
   useEffect(() => {
     forUser ? getUserHistory() : getHistory();
   }, [selectedPair]);
@@ -228,5 +233,6 @@ export function useHistoryTable({
     tradeHistoryRows,
     tradeHistoryColumns,
     loadingTradeHistory,
+    defineTableRowClassName,
   };
 }
