@@ -16,6 +16,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { selectedPair, setSelectedPair } = useMarketContext();
 
   const [loadingSelectedPair, setLoadingSelectedPair] = useState<boolean>(true);
+  const [isPairModalVisible, setIsPairModalVisible] = useState<boolean>(false);
   //   const [pageLoaded, setPageLoaded] = useState<boolean>(false);
 
   const getPairAssets = useCallback(async () => {
@@ -36,6 +37,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     }
   }, [currentPair, getAssetsBySymbols]);
 
+  const handleClickOnPair = useCallback(() => {
+    setIsPairModalVisible(true);
+  }, [setIsPairModalVisible]);
+
   useEffect(() => {
     let ignore = false;
     async function setPairAssets() {
@@ -55,6 +60,9 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   return {
     selectedPair,
     loadingSelectedPair,
+    isPairModalVisible,
+    handleClickOnPair,
+    setIsPairModalVisible,
     // pageLoaded,
   };
 }

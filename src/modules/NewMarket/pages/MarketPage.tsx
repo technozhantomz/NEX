@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
-import { HistoryTabs } from "../components";
+import { HistoryTabs, PairModal, PairSelect } from "../components";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -12,7 +12,12 @@ import { useMarketPage } from "./hooks";
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
-  const { selectedPair } = useMarketPage({
+  const {
+    // selectedPair,
+    isPairModalVisible,
+    handleClickOnPair,
+    setIsPairModalVisible,
+  } = useMarketPage({
     currentPair: pair as string,
   });
 
@@ -69,7 +74,10 @@ const MarketPage: NextPage = () => {
           <Styled.FlexedCol span={5}>
             {/* Pair Selector */}
             <Styled.PairSelectorContainer>
-              Pair selector {selectedPair?.base.symbol}
+              <PairSelect
+                currentPair={pair as string}
+                handleClickOnPair={handleClickOnPair}
+              />
             </Styled.PairSelectorContainer>
 
             {/* Limit Order forms */}
@@ -83,6 +91,11 @@ const MarketPage: NextPage = () => {
             </Styled.WalletContainer>
           </Styled.FlexedCol>
         </Styled.FullHeightRow>
+        <PairModal
+          isVisible={isPairModalVisible}
+          setIsVisible={setIsPairModalVisible}
+          currentPair={pair as string}
+        />
       </Styled.Container>
     </Layout>
   );
