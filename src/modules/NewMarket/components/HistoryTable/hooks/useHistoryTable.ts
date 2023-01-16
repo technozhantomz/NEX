@@ -14,14 +14,17 @@ import {
 } from "../../../../../common/providers";
 import {
   Asset,
+  BlockHeader,
   History,
   LimitOrder,
   OrderHistory,
 } from "../../../../../common/types";
-import { OrderHistoryRow } from "../../../../Market/types";
-import { TradeHistoryColumn, TradeHistoryRow } from "../../../types";
 
-import { UseHistoryTableResult } from "./useHistoryTable.types";
+import {
+  TradeHistoryColumn,
+  TradeHistoryRow,
+  UseHistoryTableResult,
+} from "./useHistoryTable.types";
 
 type Props = {
   forUser?: boolean;
@@ -40,9 +43,6 @@ export function useHistoryTable({
   const [tradeHistoryRows, setTradeHistoryRows] = useState<TradeHistoryRow[]>(
     []
   );
-  const [userOrderHistoryRows, setUserOrderHistoryRows] = useState<
-    OrderHistoryRow[]
-  >([]);
   const [loadingTradeHistory, setLoadingTradeHistory] = useState<boolean>(true);
 
   const tradeHistoryColumns: TradeHistoryColumn[] = useMemo(() => {
@@ -77,14 +77,23 @@ export function useHistoryTable({
   }, [selectedPair]);
 
   const formTradeHistoryRow = useCallback(
-    (history: OrderHistory, base: Asset, quote: Asset): TradeHistoryRow => {
-      const time = formLocalDate(history.time, [
-        "month",
-        "date",
-        "year",
-        "time",
-      ]);
-      const { pays, receives } = history.op;
+    async (
+      history: OrderHistory | History,
+      base: Asset,
+      quote: Asset,
+      openOrder?: LimitOrder
+    ): Promise<TradeHistoryRow> => {
+      const blockHeader = await getBlockHeader((history as History).block_num);
+      const timestamp = forUser
+        ? (blockHeader as BlockHeader).timestamp
+        : (history as OrderHistory).time;
+      const time = formLocalDate(timestamp, ["month", "date", "year", "time"]);
+      const { pays, receives } = forUser
+        ? (history as History).op[1]
+        : (history as OrderHistory).op;
+      const key = history.id;
+      let numberdFilled = 100;
+      let filled = "";
       let baseAmount = 0,
         quoteAmount = 0,
         isBuyOrder = false;
@@ -99,94 +108,41 @@ export function useHistoryTable({
         isBuyOrder = true;
       }
 
+      if (forUser) {
+        if (openOrder) {
+          numberdFilled =
+            (pays.amount / openOrder.sell_price.base.amount) * 100;
+          filled = `${numberdFilled.toFixed(1)}%`;
+        } else {
+          filled = "100%";
+        }
+      }
+
       return {
-        key: history.id,
+        key,
         price: ceilPrecision(quoteAmount / baseAmount),
         amount: baseAmount,
-        time: time,
+        time,
         isBuyOrder,
+        filled: forUser ? filled : undefined,
       } as TradeHistoryRow;
     },
     [setPrecision, formLocalDate, ceilPrecision]
-  );
-
-  const formUserHistoryRow = useCallback(
-    async (
-      baseAsset: Asset,
-      quoteAsset: Asset,
-      history: History,
-      openOrder?: LimitOrder
-    ): Promise<OrderHistoryRow> => {
-      const blockHeader = await getBlockHeader(history.block_num);
-      const date = blockHeader
-        ? formLocalDate(blockHeader.timestamp, [
-            "month",
-            "date",
-            "year",
-            "time",
-          ])
-        : "";
-      const operationDetails = history.op[1];
-      const key = history.id;
-
-      let price = "0",
-        base = 0,
-        quote = 0,
-        isBuyOrder = false;
-
-      if (operationDetails.receives.asset_id === quoteAsset.id) {
-        quote = setPrecision(
-          false,
-          operationDetails.receives.amount,
-          quoteAsset.precision
-        );
-        base = setPrecision(
-          false,
-          operationDetails.pays.amount,
-          baseAsset.precision
-        );
-        price = ceilPrecision(base / quote, baseAsset.precision);
-        isBuyOrder = true;
-      } else {
-        quote = setPrecision(
-          false,
-          operationDetails.pays.amount,
-          quoteAsset.precision
-        );
-        base = setPrecision(
-          false,
-          operationDetails.receives.amount,
-          baseAsset.precision
-        );
-        price = ceilPrecision(base / quote, baseAsset.precision);
-      }
-      let numberdFilled = 100;
-      let filled = "";
-      if (openOrder) {
-        numberdFilled =
-          (operationDetails.pays.amount / openOrder.sell_price.base.amount) *
-          100;
-        filled = `${numberdFilled.toFixed(1)}%`;
-      } else {
-        filled = "100%";
-      }
-
-      return { key, price, base, quote, date, isBuyOrder, filled };
-    },
-    [getBlockHeader, formLocalDate, setPrecision, ceilPrecision]
   );
 
   const getHistory = useCallback(async () => {
     setLoadingTradeHistory(true);
     if (selectedPair && marketHistory) {
       try {
-        const tradeHistoryRows = marketHistory.map((history) => {
-          return formTradeHistoryRow(
-            history,
-            selectedPair.base,
-            selectedPair.quote
-          );
-        });
+        const tradeHistoryRows = await Promise.all(
+          marketHistory.map((history) => {
+            return formTradeHistoryRow(
+              history,
+              selectedPair.base,
+              selectedPair.quote
+            );
+          })
+        );
         setTradeHistoryRows(tradeHistoryRows);
         setLoadingTradeHistory(false);
       } catch (e) {
@@ -232,10 +188,10 @@ export function useHistoryTable({
           fillOrdersHistoryForThePair.map(
             async (fillOrderHistoryForThePair) => {
               const operationDetails = fillOrderHistoryForThePair.op[1];
-              return formUserHistoryRow(
+              return formTradeHistoryRow(
+                fillOrderHistoryForThePair,
                 selectedPair.base,
                 selectedPair.quote,
-                fillOrderHistoryForThePair,
                 limitOrders.find(
                   (order) => order.id === operationDetails.order_id
                 )
@@ -243,7 +199,7 @@ export function useHistoryTable({
             }
           )
         );
-        setUserOrderHistoryRows(userHistoryRows);
+        setTradeHistoryRows(userHistoryRows);
         setLoadingTradeHistory(false);
       } catch (e) {
         console.log(e);
@@ -260,8 +216,8 @@ export function useHistoryTable({
     getFullAccount,
     setLoadingTradeHistory,
     getAccountHistoryById,
-    formUserHistoryRow,
-    setUserOrderHistoryRows,
+    formTradeHistoryRow,
+    setTradeHistoryRows,
   ]);
 
   useEffect(() => {
@@ -270,7 +226,6 @@ export function useHistoryTable({
 
   return {
     tradeHistoryRows,
-    userOrderHistoryRows,
     tradeHistoryColumns,
     loadingTradeHistory,
   };

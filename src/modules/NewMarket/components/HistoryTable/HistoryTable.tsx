@@ -1,24 +1,22 @@
 import { ColumnsType } from "antd/lib/table";
 
-import { TradeHistoryColumn, TradeHistoryRow } from "../../types";
-
 import * as Styled from "./HistoryTable.styled";
 import { useHistoryTable } from "./hooks";
+import {
+  TradeHistoryColumn,
+  TradeHistoryRow,
+} from "./hooks/useHistoryTable.types";
 
 type Props = {
   forUser?: boolean;
 };
 
 export const HistoryTable = ({ forUser = false }: Props): JSX.Element => {
-  const {
-    tradeHistoryRows,
-    userOrderHistoryRows,
-    tradeHistoryColumns,
-    loadingTradeHistory,
-  } = useHistoryTable({ forUser });
+  const { tradeHistoryRows, tradeHistoryColumns, loadingTradeHistory } =
+    useHistoryTable({ forUser });
   const desktopScroll = {
-    y: undefined,
-    x: 310,
+    y: 1100,
+    x: 240,
     scrollToFirstRowOnChange: false,
   };
   const scroll = tradeHistoryRows.length === 0 ? undefined : desktopScroll;
@@ -31,7 +29,7 @@ export const HistoryTable = ({ forUser = false }: Props): JSX.Element => {
           loading={loadingTradeHistory}
           pagination={false}
           columns={tradeHistoryColumns as ColumnsType<TradeHistoryColumn>}
-          dataSource={forUser ? userOrderHistoryRows : tradeHistoryRows}
+          dataSource={tradeHistoryRows}
           bordered={false}
           rowClassName={(record: any) => {
             const item = record as TradeHistoryRow;

@@ -27,8 +27,8 @@ export const RightBorderedCol = styled(Col)`
 `;
 
 export const HistoryBox = styled.div`
-  padding: 16px 20px;
-  ${mixIns.hairline}
+  // padding: 16px 20px;
+  // ${mixIns.hairline}
   min-height: 65px;
 `;
 

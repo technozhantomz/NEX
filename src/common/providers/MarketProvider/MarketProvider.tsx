@@ -18,7 +18,7 @@ type Props = {
 };
 
 // This is in milliseconds
-const REQUIRED_TICKER_UPDATE_TIME = 800;
+// const REQUIRED_TICKER_UPDATE_TIME = 800;
 const defaultMarketState: MarketContextType = {
   selectedPair: undefined,
   marketHistory: [],
@@ -119,9 +119,9 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         ]);
         await dbApi("subscribe_to_market", [
           () => {
-            setTimeout(() => {
-              //   getTradingPairsStats();
-            }, REQUIRED_TICKER_UPDATE_TIME);
+            // setTimeout(() => {
+            //   //   getTradingPairsStats();
+            // }, REQUIRED_TICKER_UPDATE_TIME);
             refreshOrderBook();
             refreshHistory();
           },

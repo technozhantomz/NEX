@@ -4,7 +4,12 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
-import { HistoryTabs, PairModal, PairSelect } from "../components";
+import {
+  HistoryTabs,
+  PairModal,
+  PairSelect,
+  UsersOrdersTabs,
+} from "../components";
 
 import * as Styled from "./MarketPage.styled";
 import { useMarketPage } from "./hooks";
@@ -66,7 +71,7 @@ const MarketPage: NextPage = () => {
 
             {/* My Open order and My History section */}
             <Styled.UserOrdersContainer>
-              My Open Orders and My Orders History
+              <UsersOrdersTabs />
             </Styled.UserOrdersContainer>
           </Styled.RightBorderedFlexedCol>
 

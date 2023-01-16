@@ -28,7 +28,7 @@ export const Tabs = styled(UiTabs)`
 
 export const TabContentContainer = styled.div`
   .ant-table-wrapper {
-    margin-bottom: 0 !important;
+    margin-bottom: 0;
     width: 100%;
     padding: 8px 20px 20px 20px;
   }
