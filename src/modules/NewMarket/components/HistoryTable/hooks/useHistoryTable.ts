@@ -47,19 +47,17 @@ export function useHistoryTable({
 
   const tradeHistoryColumns: TradeHistoryColumn[] = useMemo(() => {
     if (selectedPair) {
+      const baseSymbol = selectedPair.base.symbol;
+      const quoteSymbol = selectedPair.quote.symbol;
       return [
         {
-          title: `${counterpart.translate("tableHead.price")} (${
-            selectedPair.quote.symbol
-          })`,
+          title: `${counterpart.translate("tableHead.price")} (${quoteSymbol})`,
           dataIndex: "price",
           key: "price",
           fixed: true,
         },
         {
-          title: `${counterpart.translate("tableHead.amount")} (${
-            selectedPair.base.symbol
-          })`,
+          title: `${counterpart.translate("tableHead.amount")} (${baseSymbol})`,
           dataIndex: "amount",
           key: "amount",
           fixed: true,
@@ -130,6 +128,31 @@ export function useHistoryTable({
     [setPrecision, formLocalDate, ceilPrecision]
   );
 
+  const defineHistoryPriceMovement = useCallback(
+    (tradeHistoryRows: TradeHistoryRow[]) => {
+      const updatedTradeHistoryRows = [...tradeHistoryRows];
+      for (let i = updatedTradeHistoryRows.length - 1; i >= 0; i--) {
+        const historyRow = updatedTradeHistoryRows[i];
+        for (let j = i - 1; j > 0; j--) {
+          if (historyRow.isBuyOrder === updatedTradeHistoryRows[j].isBuyOrder) {
+            if (
+              Number(historyRow.price) !==
+              Number(updatedTradeHistoryRows[j].price)
+            ) {
+              const isPriceUp =
+                Number(updatedTradeHistoryRows[j].price) >
+                Number(historyRow.price);
+              updatedTradeHistoryRows[j].isPriceUp = isPriceUp;
+            }
+            break;
+          }
+        }
+      }
+      return updatedTradeHistoryRows;
+    },
+    []
+  );
+
   const getHistory = useCallback(async () => {
     setLoadingTradeHistory(true);
     if (selectedPair && marketHistory) {
@@ -143,7 +166,11 @@ export function useHistoryTable({
             );
           })
         );
-        setTradeHistoryRows(tradeHistoryRows);
+        const updatedTradeHistoryRows =
+          defineHistoryPriceMovement(tradeHistoryRows);
+        console.log("updatedTradeHistoryRows", updatedTradeHistoryRows);
+
+        setTradeHistoryRows(updatedTradeHistoryRows);
         setLoadingTradeHistory(false);
       } catch (e) {
         console.log(e);
