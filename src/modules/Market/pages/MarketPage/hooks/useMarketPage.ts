@@ -38,7 +38,7 @@ type Props = {
   currentPair: string;
 };
 
-// This is in miliseconds
+// This is in milliseconds
 const REQUIRED_TICKER_UPDATE_TIME = 800;
 
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
