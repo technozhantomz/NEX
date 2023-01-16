@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
 import { Col } from "../../../ui/src";
-import { PriceChart } from "../components";
+import { PriceChart } from "../components/PriceChart";
 
 import * as Styled from "./MarketPage.styled";
 
