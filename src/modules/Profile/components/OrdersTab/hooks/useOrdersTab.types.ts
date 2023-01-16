@@ -1,13 +1,13 @@
+import { UserOrderColumnType } from "../../../../../common/components";
 import { TransactionMessageState } from "../../../../../common/hooks";
-import { OrderTableRow } from "../../../types";
-import { OrderColumnType } from "../../OrdersColumns";
+import { OrderTableRow } from "../../../../../common/types";
 
 export type UseOrdersTabResult = {
   loading: boolean;
-  openOrdersColumns: OrderColumnType[];
+  openOrdersColumns: UserOrderColumnType[];
   openOrdersTableRows: OrderTableRow[];
   ordersHistoriesTableRows: OrderTableRow[];
-  ordersHistoriesColumns: OrderColumnType[];
+  ordersHistoriesColumns: UserOrderColumnType[];
   transactionMessageState: TransactionMessageState;
   selectedOrderId: string;
   isPasswordModalVisible: boolean;
@@ -16,6 +16,6 @@ export type UseOrdersTabResult = {
   handleFormFinish: (name: string, info: any) => void;
   hideTransactionModal: () => void;
   localStorageAccount: string;
-  cancelOrderfeeAmount: number;
+  cancelOrderFeeAmount: number;
   onCancelClick: (orderId: string) => void;
 };
