@@ -1,7 +1,10 @@
 import counterpart from "counterpart";
 
 import { TradeHistoryColumn, TradeHistoryRow } from "../../types";
-import { HistoryTable } from "../HistoryTable";
+import {
+  HistoryTable,
+  renderTradeHistoryColumnsWithPriceMovement,
+} from "../HistoryTable";
 
 import * as Styled from "./HistoryTabs.styled";
 
@@ -20,6 +23,9 @@ export function HistoryTabs({
   loadingUserTradeHistory,
   tradeHistoryColumns,
 }: Props): JSX.Element {
+  const tradeHistoryColumnsWithPriceMovement =
+    renderTradeHistoryColumnsWithPriceMovement(tradeHistoryColumns);
+
   const tabItems = [
     {
       label: counterpart.translate(`pages.market.tabs.history.all`),
@@ -29,7 +35,7 @@ export function HistoryTabs({
           <HistoryTable
             tradeHistoryRows={tradeHistoryRows}
             loading={loadingTradeHistory}
-            tradeHistoryColumns={tradeHistoryColumns}
+            tradeHistoryColumns={tradeHistoryColumnsWithPriceMovement}
           />
         </Styled.TabContentContainer>
       ),

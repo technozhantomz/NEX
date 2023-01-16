@@ -220,6 +220,30 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     },
     [setPrecision, formLocalDate, ceilPrecision]
   );
+  const defineHistoryPriceMovement = useCallback(
+    (tradeHistoryRows: TradeHistoryRow[]) => {
+      const updatedTradeHistoryRows = [...tradeHistoryRows];
+      for (let i = updatedTradeHistoryRows.length - 1; i >= 0; i--) {
+        const historyRow = updatedTradeHistoryRows[i];
+        for (let j = i - 1; j > 0; j--) {
+          if (historyRow.isBuyOrder === updatedTradeHistoryRows[j].isBuyOrder) {
+            if (
+              Number(historyRow.price) !==
+              Number(updatedTradeHistoryRows[j].price)
+            ) {
+              const isPriceUp =
+                Number(updatedTradeHistoryRows[j].price) >
+                Number(historyRow.price);
+              updatedTradeHistoryRows[j].isPriceUp = isPriceUp;
+            }
+            break;
+          }
+        }
+      }
+      return updatedTradeHistoryRows;
+    },
+    []
+  );
   const getHistory = useCallback(async () => {
     setLoadingTradeHistory(true);
     if (selectedAssets) {
@@ -244,7 +268,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           const tradeHistoryRows = marketTakersHistories.map((history) => {
             return formTradeHistoryRow(history, base, quote);
           });
-          setTradeHistoryRows(tradeHistoryRows);
+          const updatedTradeHistoryRows =
+            defineHistoryPriceMovement(tradeHistoryRows);
+          console.log("updatedTradeHistoryRows", updatedTradeHistoryRows);
+          setTradeHistoryRows(updatedTradeHistoryRows);
         }
         setLoadingTradeHistory(false);
       } catch (e) {
@@ -258,6 +285,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     getFillOrderHistory,
     formTradeHistoryRow,
     setTradeHistoryRows,
+    defineHistoryPriceMovement,
   ]);
 
   const cancelOrderFeeAmount = useMemo(() => {
