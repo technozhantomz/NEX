@@ -18,6 +18,7 @@ import {
   BrowserHistoryProvider,
   ConnectionManagerProvider,
   FeesProvider,
+  MarketProvider,
   MenuProvider,
   NotificationsProvider,
   PeerLinkProvider,
@@ -52,7 +53,9 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
                       <BrowserHistoryProvider>
                         <NotificationsProvider>
                           <MenuProvider>
-                            <Component {...pageProps} />
+                            <MarketProvider>
+                              <Component {...pageProps} />
+                            </MarketProvider>
                           </MenuProvider>
                         </NotificationsProvider>
                       </BrowserHistoryProvider>

@@ -703,6 +703,12 @@ export const en = {
       my_order_history: "My Order History",
       buy: "BUY",
       sell: "SELL",
+      tabs: {
+        history: {
+          all: "Trade history",
+          user: "My history",
+        },
+      },
     },
     settings: {
       heading: "Settings",
@@ -1026,6 +1032,7 @@ export const en = {
       approved: "Approved",
       removed: "Removed",
       my_activity: "My activity",
+      available: "Available",
     },
     comments: {
       deposit_hbd:
@@ -1226,7 +1233,7 @@ export const en = {
     status_actions: "Status/Actions",
   },
   tableFilters: {
-    avtive: "Avtive",
+    active: "Active",
     inactive: "Inactive",
     approved: "Approved",
     not_approved: "Not Approved",
