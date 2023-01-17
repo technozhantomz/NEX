@@ -69,21 +69,6 @@ const MarketPage: NextPage = () => {
     </Styled.ChartsAndOrderBookRow>
   );
 
-  //   {/* Charts and Order book Section */}
-  //   <Styled.ChartsAndOrderBookRow>
-  //   {/* Charts Section */}
-  //   <Styled.RightBorderedFlexedCol span={16}>
-  //     <Styled.PriceChartContainer>
-  //
-  //     </Styled.PriceChartContainer>
-  //     <Styled.MarketDepthContainer>
-  //       Market Depth Chart Section
-  //     </Styled.MarketDepthContainer>
-  //   </Styled.RightBorderedFlexedCol>
-  //   {/* Order Book section */}
-  //   <Col span={8}>Order Book Section</Col>
-  // </Styled.ChartsAndOrderBookRow>
-
   const renderTabs = !xl ? (
     <Styled.UserOrdersContainer>
       <UsersOrdersTabs />
