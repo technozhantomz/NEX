@@ -3,7 +3,7 @@ import counterpart from "counterpart";
 import { useViewportContext } from "../../../../common/providers";
 import { Scroll } from "../../../../common/types";
 import { DownOutlined, Tooltip } from "../../../../ui/src";
-import { Order, OrderType, PairAssets } from "../../types";
+import { Order, OrderRow, OrderType, PairAssets } from "../../types";
 
 import * as Styled from "./OrderBook.styled";
 import { SpreadRow } from "./components";
@@ -26,12 +26,13 @@ export const OrderBook = ({
 }: Props): JSX.Element => {
   const { md } = useViewportContext();
   const {
-    ordersRows,
     orderType,
     orderColumns,
     threshold,
     handleThresholdChange,
     handleFilterChange,
+    askRows,
+    bidRows,
   } = useOrderBook({
     selectedAssets,
     loadingSelectedPair,
@@ -40,25 +41,41 @@ export const OrderBook = ({
   });
 
   // Add state variable to keep track of the selected filter type
-  // const [filterType, setFilterType] = useState<"all" | "bids" | "asks">("all");
 
   const types: OrderType[] = ["total", "sell", "buy"];
 
   const thresholdMenu = (
     <Styled.ThresholdMenu onClick={handleThresholdChange}>
-      <Styled.ThresholdMenu.Item key="0.001">0.001</Styled.ThresholdMenu.Item>
-      <Styled.ThresholdMenu.Item key="0.005">0.005</Styled.ThresholdMenu.Item>
-      <Styled.ThresholdMenu.Item key="0.01">0.01</Styled.ThresholdMenu.Item>
+      <Styled.ThresholdMenu.Item key={"0.001"}>0.001</Styled.ThresholdMenu.Item>
+      <Styled.ThresholdMenu.Item key={"0.005"}>0.005</Styled.ThresholdMenu.Item>
+      <Styled.ThresholdMenu.Item key={"0.01"}>0.01</Styled.ThresholdMenu.Item>
     </Styled.ThresholdMenu>
   );
 
   // Use the filterType state variable to decide which orders to display
-  const dataSource = ordersRows;
+  const dataSource = [...askRows, ...bidRows];
+
+  // const desktopScrollForOrders =
+  //   dataSource.length > 20
+  //     ? { y: undefined, x: undefined, scrollToFirstRowOnChange: false }
+  //     : { x: 300, scrollToFirstRowOnChange: false };
+
+  // const desktopScroll = desktopScrollForOrders;
+
+  // const mobileScroll =
+  //   dataSource.length > 6
+  //     ? ({ y: 300, x: undefined, scrollToFirstRowOnChange: false } as Scroll)
+  //     : ({ x: undefined, scrollToFirstRowOnChange: false } as Scroll);
+
+  // const scroll = md ? mobileScroll : (desktopScroll as Scroll);
 
   const desktopScrollForOrders =
-    dataSource.length > 60
-      ? { y: 1035, x: true, scrollToFirstRowOnChange: false }
-      : { x: true, scrollToFirstRowOnChange: false };
+    dataSource.length > 8
+      ? {
+          y: 140,
+          scrollToFirstRowOnChange: false,
+        }
+      : { y: 140, scrollToFirstRowOnChange: false };
 
   const desktopScroll = desktopScrollForOrders;
 
@@ -66,7 +83,6 @@ export const OrderBook = ({
     dataSource.length > 6
       ? ({ y: 300, x: true, scrollToFirstRowOnChange: false } as Scroll)
       : ({ x: true, scrollToFirstRowOnChange: false } as Scroll);
-
   const scroll = md ? mobileScroll : (desktopScroll as Scroll);
 
   const lastTradeType = dataSource[0]
@@ -75,9 +91,7 @@ export const OrderBook = ({
       : "sell"
     : "";
   const lastTradePrice = dataSource[0] ? parseFloat(dataSource[0].quote) : 0;
-  const lastTradeFiatAmount = dataSource[0]
-    ? parseFloat(dataSource[0].price)
-    : 0;
+  const lastTradeAmount = dataSource[0] ? parseFloat(dataSource[0].amount) : 0;
   const spread =
     bids[0] && asks[0]
       ? parseFloat(bids[0].quote) - parseFloat(asks[0].quote)
@@ -127,41 +141,38 @@ export const OrderBook = ({
           </Styled.Flex>
         </Styled.FilterContainer>
         {orderType !== "sell" && (
-          <Styled.BidRows>
-            <Styled.Table
-              loading={loadingAsksBids}
-              tableLayout={"fixed"}
-              pagination={false}
-              columns={orderColumns}
-              bordered={false}
-              scroll={scroll}
-              dataSource={bids}
-              rowClassName={() => {
-                return "buy";
-              }}
-            ></Styled.Table>
-          </Styled.BidRows>
+          <Styled.Table
+            loading={loadingAsksBids}
+            pagination={false}
+            columns={orderColumns}
+            bordered={false}
+            scroll={scroll}
+            dataSource={bidRows}
+            rowClassName={(record) => {
+              const item = record as OrderRow;
+              const orderDepthRatio = Math.ceil(bids.length / item.orderDepth);
+              const orderDepthClass = `order-depth-${orderDepthRatio}`;
+              return `buy ${orderDepthClass}`;
+            }}
+          ></Styled.Table>
         )}
         <SpreadRow
           lastTradeType={lastTradeType}
           lastTradePrice={lastTradePrice}
-          lastTradeFiatValue={lastTradeFiatAmount}
+          lastTradeFiatValue={lastTradeAmount}
           spread={spread}
         />
         {orderType !== "buy" && (
-          <Styled.AskRows>
-            <Styled.AskTable
-              loading={loadingAsksBids}
-              pagination={false}
-              columns={orderColumns}
-              bordered={false}
-              scroll={scroll}
-              dataSource={asks}
-              rowClassName={() => {
-                return "sell";
-              }}
-            ></Styled.AskTable>
-          </Styled.AskRows>
+          <Styled.AskTable
+            loading={loadingAsksBids}
+            showHeader={false}
+            pagination={false}
+            columns={orderColumns}
+            bordered={false}
+            scroll={scroll}
+            dataSource={askRows}
+            rowClassName={"sell"}
+          ></Styled.AskTable>
         )}
       </Styled.OrderBookContainer>
     </>

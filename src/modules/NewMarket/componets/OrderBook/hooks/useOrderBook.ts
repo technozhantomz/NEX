@@ -1,8 +1,6 @@
 import counterpart from "counterpart";
 import { useCallback, useMemo, useState } from "react";
 
-import { useAsset } from "../../../../../common/hooks";
-import { Asset } from "../../../../../common/types";
 import {
   Order,
   OrderColumn,
@@ -27,72 +25,61 @@ export function useOrderBook({
   bids,
 }: Args): UseOrderBookResult {
   const [orderType, setOrderType] = useState<OrderType>("total");
-  const [threshold, setThreshold] = useState<number>(0.001);
-  const { ceilPrecision, roundNum } = useAsset();
+  const [threshold, setThreshold] = useState<string>("0.001");
 
-  const reduceOrdersByPrice = useCallback(
-    (orders: Order[], currentBase: Asset, currentQuote: Asset) => {
-      const reducedOrders = orders.reduce((previousOrders, currentOrder) => {
-        const repeatedPriceIndex = previousOrders.findIndex(
-          (previousOrder) =>
-            ceilPrecision(
-              Number(previousOrder.base) / Number(previousOrder.quote),
-              currentBase.precision
-            ) ===
-            ceilPrecision(
-              Number(currentOrder.base) / Number(currentOrder.quote),
-              currentBase.precision
-            )
-        );
-        if (repeatedPriceIndex === -1) {
-          previousOrders.push({
-            ...currentOrder,
-            price: ceilPrecision(currentOrder.price, currentBase.precision),
-          });
-        } else {
-          const orderWithRepeatedPrice = previousOrders[repeatedPriceIndex];
-          previousOrders[repeatedPriceIndex] = {
-            quote: String(
-              Number(orderWithRepeatedPrice.quote) + Number(currentOrder.quote)
-            ),
-            base: String(
-              Number(orderWithRepeatedPrice.base) + Number(currentOrder.base)
-            ),
-            price: orderWithRepeatedPrice.price,
-            isBuyOrder: orderWithRepeatedPrice.isBuyOrder,
-          };
-        }
-        return previousOrders;
-      }, [] as Order[]);
-
-      return reducedOrders.map((order) => {
-        return {
-          ...order,
-          quote: roundNum(order.quote, currentQuote.precision),
-          base: roundNum(order.base, currentBase.precision),
+  const groupOrdersByThreshold = (orders: Order[], threshold: string) => {
+    const groupedOrder: { [price: string]: OrderRow } = {};
+    const decimalPlaces = threshold.split(".")[1].length;
+    orders.forEach((order, index) => {
+      const roundedPrice = Number(order.quote).toFixed(decimalPlaces);
+      if (!groupedOrder[roundedPrice]) {
+        groupedOrder[roundedPrice] = {
+          key: index.toString(),
+          quote: roundedPrice,
+          amount: parseFloat(order.base).toFixed(decimalPlaces).toString(),
+          total: (Number(order.quote) * Number(order.base))
+            .toFixed(decimalPlaces)
+            .toString(),
+          orderDepth: 0,
+          isBuyOrder: order.isBuyOrder,
         };
-      });
-    },
-    [ceilPrecision, roundNum]
-  );
+      } else {
+        groupedOrder[roundedPrice].amount = (
+          Number(groupedOrder[roundedPrice].amount) + Number(order.base)
+        ).toString();
+        groupedOrder[roundedPrice].total = (
+          Number(groupedOrder[roundedPrice].total) +
+          Number(order.quote) * Number(order.base)
+        ).toString();
+        groupedOrder[roundedPrice].orderDepth += 1;
+      }
+    });
+    return Object.values(groupedOrder);
+  };
 
   const orderColumns: OrderColumn[] = useMemo(() => {
     if (!loadingSelectedPair && selectedAssets) {
       return [
         {
-          title: counterpart.translate(`tableHead.price`),
-          dataIndex: "price",
-          key: "price",
-        },
-        {
-          title: selectedAssets.quote.symbol,
+          title: `${counterpart.translate("tableHead.price")} (${
+            selectedAssets.quote.symbol
+          })`,
+          width: "33%",
           dataIndex: "quote",
           key: "quote",
         },
         {
-          title: selectedAssets.base.symbol,
-          dataIndex: "base",
-          key: "base",
+          title: `${counterpart.translate("tableHead.amount")} (${
+            selectedAssets.base.symbol
+          })`,
+          width: "33%",
+          dataIndex: "amount",
+          key: "amount",
+        },
+        {
+          title: counterpart.translate(`tableHead.total`),
+          dataIndex: "total",
+          key: "total",
         },
       ];
     } else {
@@ -100,61 +87,24 @@ export function useOrderBook({
     }
   }, [loadingSelectedPair, selectedAssets]);
 
-  const ordersRows: OrderRow[] = useMemo(() => {
+  const askRows: OrderRow[] = useMemo(() => {
     if (!loadingSelectedPair && selectedAssets) {
-      let selectedOrders: Order[] = [];
-      const reducedAsks = reduceOrdersByPrice(
-        asks,
-        selectedAssets.base,
-        selectedAssets.quote
-      );
-      const reducedBids = reduceOrdersByPrice(
-        bids,
-        selectedAssets.base,
-        selectedAssets.quote
-      );
-      switch (orderType) {
-        case "total":
-          selectedOrders = [
-            ...reducedAsks.filter((ask) => Number(ask.price) >= threshold),
-            ...reducedBids.filter((bid) => Number(bid.price) >= threshold),
-          ];
-          break;
-        case "sell":
-          selectedOrders = [
-            ...reducedAsks.filter((ask) => Number(ask.price) >= threshold),
-          ];
-          break;
-        case "buy":
-          selectedOrders = [
-            ...reducedBids.filter((bid) => Number(bid.price) >= threshold),
-          ];
-          break;
-        default:
-          break;
-      }
-      const orders: OrderRow[] = selectedOrders.map((order, index) => {
-        return {
-          key: String(index),
-          quote: order.quote,
-          base: order.base,
-          price: order.price,
-          isBuyOrder: order.isBuyOrder,
-        };
-      });
-      return orders;
+      const reducedAsks: OrderRow[] = groupOrdersByThreshold(asks, threshold);
+      return reducedAsks;
     } else {
       return [];
     }
-  }, [
-    orderType,
-    asks,
-    bids,
-    threshold,
-    loadingSelectedPair,
-    selectedAssets,
-    reduceOrdersByPrice,
-  ]);
+  }, [asks, threshold, loadingSelectedPair, selectedAssets]);
+
+  const bidRows: OrderRow[] = useMemo(() => {
+    if (!loadingSelectedPair && selectedAssets) {
+      const reducedBids: OrderRow[] = groupOrdersByThreshold(bids, threshold);
+      return reducedBids;
+    } else {
+      return [];
+    }
+  }, [bids, threshold, loadingSelectedPair, selectedAssets]);
+
   const handleFilterChange = useCallback(
     (type: OrderType) => {
       setOrderType(type);
@@ -164,17 +114,18 @@ export function useOrderBook({
 
   const handleThresholdChange = useCallback(
     ({ key }: { key: string }) => {
-      setThreshold(Number(key));
+      setThreshold(key);
     },
     [setThreshold]
   );
 
   return {
-    ordersRows,
     orderType,
     threshold,
     handleThresholdChange,
     handleFilterChange,
     orderColumns,
+    askRows,
+    bidRows,
   };
 }

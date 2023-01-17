@@ -72,20 +72,6 @@ export const ThresholdValue = styled.span`
   color: #212121;
 `;
 
-export const BidRows = styled.div`
-  height: 50% !important;
-  padding: 0px;
-  margin: 0px;
-  overflow: auto;
-`;
-
-export const AskRows = styled.div`
-  height: 50% !important;
-  overflow: hidden;
-  padding: 0px;
-  margin: 0px;
-`;
-
 export const TableHeader = styled.thead`
   display: table-header-group;
   text-align: left;
@@ -146,13 +132,182 @@ export const Table = styled(UiTable)`
   .ant-table-tbody > tr.ant-table-row.buy > td:first-child {
     color: ${colors.marketBuy};
   }
+
+  .ant-table-tbody > tr.buy.order-depth-10 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 10%,
+      transparent 10%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.buy.order-depth-20 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 20%,
+      transparent 20%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.buy.order-depth-30 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 30%,
+      transparent 30%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.buy.order-depth-40 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 40%,
+      transparent 40%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.buy.order-depth-50 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 50%,
+      transparent 50%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.buy.order-depth-60 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 60%,
+      transparent 60%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.buy.order-depth-70 {
+    background: linear-gradient(
+      to left,
+      rgba(136, 255, 51, 0.9) 0%,
+      rgba(136, 255, 51, 0.9) 70%,
+      transparent 70%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.buy.order-depth-80 {
+    background: linear-gradient(
+      to left,
+      rgba(136, 255, 51, 0.9) 0%,
+      rgba(136, 255, 51, 0.9) 80%,
+      transparent 80%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.buy.order-depth-90 {
+    background: linear-gradient(
+      to left,
+      rgba(136, 255, 51, 0.9) 0%,
+      rgba(136, 255, 51, 0.9) 90%,
+      transparent 90%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-10 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 10%,
+      transparent 10%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-20 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 20%,
+      transparent 20%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-30 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 30%,
+      transparent 30%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-40 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 40%,
+      transparent 40%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-50 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 50%,
+      transparent 50%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-60 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 60%,
+      transparent 60%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.sell.order-depth-70 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 70%,
+      transparent 70%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.sell.order-depth-80 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 80%,
+      transparent 80%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.sell.order-depth-90 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 90%,
+      transparent 90%,
+      transparent 100%
+    );
+  }
 `;
 
 export const AskTable = styled(Table)``;
 
 export const OrderBookContainer = styled.div`
   max-height: inherit;
-  height: 50% !important;
+  height: 100% !important;
   padding: 8px;
   overflow: hidden;
 `;
