@@ -11,14 +11,15 @@ export type OrderColumn = {
   title: string;
   dataIndex: string;
   key: string;
-  render?: (_value: string, record: any) => string;
+  render?: (_value: string, record: unknown) => string;
 };
 
 export type OrderRow = {
   key: string;
   quote: string;
-  base: string;
-  price: string;
+  amount: string;
+  total: string;
+  orderDepth: number;
   isBuyOrder: boolean;
   expiration?: string;
   filled?: string;

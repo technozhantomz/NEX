@@ -1,4 +1,4 @@
-import { OrderColumn, OrderRow, OrderType } from "../../../types";
+import { OrderColumn, OrderRow, OrderType } from "../types";
 
 export type { OrderType } from "../../../types";
 

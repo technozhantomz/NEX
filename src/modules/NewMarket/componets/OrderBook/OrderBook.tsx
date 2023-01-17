@@ -3,11 +3,12 @@ import counterpart from "counterpart";
 import { useViewportContext } from "../../../../common/providers";
 import { Scroll } from "../../../../common/types";
 import { DownOutlined, Tooltip } from "../../../../ui/src";
-import { Order, OrderRow, OrderType, PairAssets } from "../../types";
+import { PairAssets } from "../../types";
 
 import * as Styled from "./OrderBook.styled";
 import { SpreadRow } from "./components";
 import { useOrderBook } from "./hooks";
+import { Order, OrderRow, OrderType } from "./types";
 
 type Props = {
   selectedAssets: PairAssets | undefined;

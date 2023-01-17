@@ -1,13 +1,8 @@
 import counterpart from "counterpart";
 import { useCallback, useMemo, useState } from "react";
 
-import {
-  Order,
-  OrderColumn,
-  OrderRow,
-  OrderType,
-  PairAssets,
-} from "../../../types";
+import { PairAssets } from "../../../types";
+import { Order, OrderColumn, OrderRow, OrderType } from "../types";
 
 import { UseOrderBookResult } from "./useOrderBook.types";
 
