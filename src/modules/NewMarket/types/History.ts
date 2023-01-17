@@ -1,15 +1,16 @@
-export type OrderHistoryRow = {
+export type TradeHistoryRow = {
   key: string;
   price: string;
-  base: number;
-  quote: number;
-  date: string;
+  amount: number;
+  time: string;
   isBuyOrder: boolean;
-  filled: string;
+  isPriceUp?: boolean;
 };
 
-export type OrderHistoryColumn = {
+export type TradeHistoryColumn = {
   title: string;
   dataIndex: string;
   key: string;
+  fixed: string | boolean;
+  render?: (_: any, record: TradeHistoryRow) => JSX.Element;
 };

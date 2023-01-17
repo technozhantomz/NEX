@@ -1,3 +1,2 @@
-export * from "./Order";
-export * from "./History";
 export * from "./Pair";
+export * from "./History";

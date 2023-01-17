@@ -704,8 +704,8 @@ export const ru = {
       sell: "ПРОДАВАТЬ",
       tabs: {
         history: {
-          all: "Trade history",
-          user: "My history",
+          all: "Торговая история",
+          user: "Моя история",
         },
       },
     },
@@ -1035,6 +1035,7 @@ export const ru = {
       approved: "Одобренный",
       removed: "удаленный",
       my_activity: "Моя деятельность",
+      available: "Доступный",
     },
     comments: {
       deposit_hbd:
@@ -1235,7 +1236,7 @@ export const ru = {
     status_actions: "Статус/Действия",
   },
   tableFilters: {
-    avtive: "Активный",
+    active: "Активный",
     inactive: "Неактивно",
     approved: "Утверждено",
     not_approved: "Не одобрено",

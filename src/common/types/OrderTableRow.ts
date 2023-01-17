@@ -5,8 +5,11 @@ export type OrderTableRow = {
   type: string;
   side: string;
   price: string;
+  numberedPrice: number;
   amount: string;
+  numberedAmount: number;
   filled: string;
   total: string;
+  numberedTotal: number;
   statusActions?: string;
 };

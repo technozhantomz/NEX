@@ -1032,6 +1032,7 @@ export const en = {
       approved: "Approved",
       removed: "Removed",
       my_activity: "My activity",
+      available: "Available",
     },
     comments: {
       deposit_hbd:
@@ -1232,7 +1233,7 @@ export const en = {
     status_actions: "Status/Actions",
   },
   tableFilters: {
-    avtive: "Avtive",
+    active: "Active",
     inactive: "Inactive",
     approved: "Approved",
     not_approved: "Not Approved",

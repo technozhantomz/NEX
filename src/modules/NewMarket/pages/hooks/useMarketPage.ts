@@ -1,36 +1,35 @@
-import { useCallback, useEffect, useState } from "react";
+import counterpart from "counterpart";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { defaultToken } from "../../../../api/params";
+import { UserOrderColumnType } from "../../../../common/components";
 import {
+  TransactionMessageActionType,
   useAccount,
-  useAccountHistory,
+  useAccountOrders,
   useAsset,
-  useBlockchain,
+  useFees,
   useFormDate,
+  useHandleTransactionForm,
   useMarketHistory,
-  useMarketPairStats,
-  useOrderBook,
+  useOrderTransactionBuilder,
+  useTransactionBuilder,
+  useTransactionMessage,
   useUpdateExchanges,
 } from "../../../../common/hooks";
 import {
+  useAssetsContext,
   useChainStoreContext,
   usePeerplaysApiContext,
   useUserContext,
 } from "../../../../common/providers";
 import {
   Asset,
-  History,
-  LimitOrder,
   OrderHistory,
-  PairNameAndMarketStats,
+  OrderTableRow,
+  SignerKey,
 } from "../../../../common/types";
-import { Form } from "../../../../ui/src";
-import {
-  Order,
-  OrderForm,
-  OrderHistoryRow,
-  OrderRow,
-  PairAssets,
-} from "../../types";
+import { PairAssets, TradeHistoryColumn, TradeHistoryRow } from "../../types";
 
 import { UseMarketPageResult } from "./useMarketPage.types";
 
@@ -38,58 +37,57 @@ type Props = {
   currentPair: string;
 };
 
-// This is in miliseconds
-const REQUIRED_TICKER_UPDATE_TIME = 800;
+// This is in milliseconds
+//const REQUIRED_TICKER_UPDATE_TIME = 800;
 
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { getBlockHeader } = useBlockchain();
-  const { exchanges } = useUpdateExchanges();
-  const { setPrecision, ceilPrecision, getAssetsBySymbols } = useAsset();
-  const { getFullAccount } = useAccount();
+  const { setPrecision, getAssetsBySymbols, ceilPrecision } = useAsset();
   const { id, localStorageAccount } = useUserContext();
-  const { getAccountHistoryById } = useAccountHistory();
-  const { getFillOrderHistory } = useMarketHistory();
-  const { getDefaultPairs, formPairStats } = useMarketPairStats();
-  const { formLocalDate } = useFormDate();
   const { synced } = useChainStoreContext();
-  const [buyOrderForm] = Form.useForm<OrderForm>();
-  const [sellOrderForm] = Form.useForm<OrderForm>();
-  const { getOrderBook } = useOrderBook();
-
-  const [tradingPairsStats, setTradingPairsStats] = useState<
-    PairNameAndMarketStats[]
-  >([]);
-  const [loadingTradingPairsStats, setLoadingTradingPairsStats] =
-    useState<boolean>(true);
+  const {
+    getOrdersRows,
+    updateOpenOrdersColumns,
+    updateOrdersHistoriesColumns,
+  } = useAccountOrders();
+  const { defaultAsset } = useAssetsContext();
+  const [selectedOrderId, setSelectedOrderId] = useState<string>("");
+  const { formAccountBalancesByName } = useAccount();
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
+  const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
+  const { calculateCancelLimitOrderFee } = useFees();
+  const { buildTrx } = useTransactionBuilder();
+  const { getFillOrderHistory } = useMarketHistory();
+  const { formLocalDate } = useFormDate();
+  const { exchanges } = useUpdateExchanges();
 
   const [selectedAssets, setSelectedAssets] = useState<PairAssets>();
   const [loadingSelectedPair, setLoadingSelectedPair] = useState<boolean>(true);
 
-  const [isPairModalVisible, setIsPairModalVisible] = useState<boolean>(false);
-
-  const [asks, setAsks] = useState<Order[]>([]);
-  const [bids, setBids] = useState<Order[]>([]);
-  const [loadingAsksBids, setLoadingAsksBids] = useState<boolean>(true);
-
-  const [userOrdersRows, setUserOrdersRows] = useState<OrderRow[]>([]);
-  const [loadingUserOrderRows, setLoadingUserOrderRows] =
-    useState<boolean>(true);
-
-  const [orderHistoryRows, setOrderHistoryRows] = useState<OrderHistoryRow[]>(
+  // User orders
+  const [userOpenOrdersRows, setUserOpenOrdersRows] = useState<OrderTableRow[]>(
     []
   );
-  const [loadingOrderHistoryRows, setLoadingOrderHistoryRows] =
-    useState<boolean>(true);
-
   const [userOrderHistoryRows, setUserOrderHistoryRows] = useState<
-    OrderHistoryRow[]
+    OrderTableRow[]
   >([]);
-  const [loadingUserHistoryRows, setLoadingUserHistoryRows] =
-    useState<boolean>(true);
+  const [loadingUserOrders, setLoadingUserOrders] = useState<boolean>(true);
+  const [userOpenOrdersColumns, setUserOpenOrdersColumns] = useState<
+    UserOrderColumnType[]
+  >([]);
+  const [userOrdersHistoriesColumns, setUserOrdersHistoriesColumns] = useState<
+    UserOrderColumnType[]
+  >([]);
 
-  const [pageLoaded, setPageLoaded] = useState<boolean>(false);
+  // Trade history
+  const [tradeHistoryRows, setTradeHistoryRows] = useState<TradeHistoryRow[]>(
+    []
+  );
+  const [loadingTradeHistory, setLoadingTradeHistory] = useState<boolean>(true);
 
+  // Pair modal
+  const [isPairModalVisible, setIsPairModalVisible] = useState<boolean>(false);
   const handleClickOnPair = useCallback(() => {
     setIsPairModalVisible(true);
   }, [setIsPairModalVisible]);
@@ -99,10 +97,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     try {
       const quoteBase = await getAssetsBySymbols(assetsSymbols);
       if (quoteBase.length > 1) {
-        const quote = quoteBase.find(
+        const base = quoteBase.find(
           (asset) => asset.symbol === assetsSymbols[0]
         ) as Asset;
-        const base = quoteBase.find(
+        const quote = quoteBase.find(
           (asset) => asset.symbol === assetsSymbols[1]
         ) as Asset;
         return { base, quote };
@@ -112,231 +110,146 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     }
   }, [currentPair, getAssetsBySymbols]);
 
-  const getTradingPairsStats = useCallback(async () => {
-    try {
-      setLoadingTradingPairsStats(true);
-      const initPairs: string[] =
-        exchanges.list.length > 0 ? exchanges.list : getDefaultPairs();
-      const tradingPairsStats = await Promise.all(initPairs.map(formPairStats));
-      setTradingPairsStats(tradingPairsStats);
-      setLoadingTradingPairsStats(false);
-      if (!pageLoaded) {
-        setPageLoaded(true);
-      }
-    } catch (e) {
-      console.log(e);
-      setLoadingTradingPairsStats(false);
-    }
-  }, [
-    setLoadingTradingPairsStats,
-    exchanges,
-    getDefaultPairs,
-    formPairStats,
-    setTradingPairsStats,
-    pageLoaded,
-    setPageLoaded,
-  ]);
+  const formUserOrders = async () => {
+    setLoadingUserOrders(true);
+    const { openOrdersRows, historiesRows } = await getOrdersRows();
 
-  const getAsksBids = useCallback(async () => {
-    if (selectedAssets) {
-      try {
-        setLoadingAsksBids(true);
-        const { asks, bids } = await getOrderBook(
-          selectedAssets.base,
-          selectedAssets.quote
-        );
-        setAsks(
-          asks.map((ask) => {
-            return { ...ask, isBuyOrder: false };
-          }) as Order[]
-        );
-        setBids(
-          bids.map((bid) => {
-            return { ...bid, isBuyOrder: true };
-          }) as Order[]
-        );
-        setLoadingAsksBids(false);
-      } catch (e) {
-        console.log(e);
-        setAsks([]);
-        setBids([]);
-        setLoadingAsksBids(false);
-      }
-    }
-  }, [selectedAssets, setLoadingAsksBids, getOrderBook, setAsks, setBids]);
+    const openOrdersColumns = updateOpenOrdersColumns(
+      openOrdersRows,
+      onCancelClick
+    );
+    const historyColumns = updateOrdersHistoriesColumns(historiesRows);
+    setUserOpenOrdersRows(openOrdersRows);
+    setUserOrderHistoryRows(historiesRows);
+    setUserOpenOrdersColumns(openOrdersColumns);
+    setUserOrdersHistoriesColumns(historyColumns);
+    setLoadingUserOrders(false);
+  };
 
-  const formUserOrderRow = useCallback(
-    (baseAsset: Asset, quoteAsset: Asset, limitOrder: LimitOrder): OrderRow => {
-      let price: string,
-        base: string,
-        quote: string,
-        isBuyOrder = false;
-      const key = limitOrder.id;
-      const expiration = formLocalDate(limitOrder.expiration);
-      if (baseAsset.id === limitOrder.sell_price.base.asset_id) {
-        base = String(
-          setPrecision(
-            false,
-            limitOrder.sell_price.base.amount,
-            baseAsset.precision
-          )
-        );
-        price = ceilPrecision(
-          setPrecision(
-            false,
-            limitOrder.sell_price.base.amount,
-            baseAsset.precision
-          ) /
-            setPrecision(
-              false,
-              limitOrder.sell_price.quote.amount,
-              quoteAsset.precision
+  const userTradeHistoryRows = useMemo(() => {
+    const baseSymbol = currentPair.split("_")[0];
+    const quoteSymbol = currentPair.split("_")[1];
+    const notDefaultToken =
+      baseSymbol === defaultToken
+        ? { symbol: quoteSymbol, isBase: false }
+        : { symbol: baseSymbol, isBase: true };
+    const selectedPairHistoryRows = userOrderHistoryRows.filter((row) =>
+      row.pair.split("_").includes(notDefaultToken.symbol)
+    );
+    return notDefaultToken.isBase
+      ? selectedPairHistoryRows.map((row) => {
+          return {
+            key: row.key,
+            price: String(row.numberedPrice),
+            amount: row.numberedAmount,
+            time: row.date,
+            isBuyOrder:
+              row.side ===
+              counterpart.translate("pages.profile.orders_tab.buy"),
+          } as TradeHistoryRow;
+        })
+      : selectedPairHistoryRows.map((row) => {
+          return {
+            key: row.key,
+            price: ceilPrecision(
+              row.numberedAmount / row.numberedTotal,
+              selectedAssets?.base.precision
             ),
-          baseAsset.precision
-        );
-
-        quote = String(
-          setPrecision(
-            false,
-            limitOrder.sell_price.quote.amount,
-            quoteAsset.precision
-          )
-        );
-        isBuyOrder = true;
-      } else {
-        quote = String(
-          setPrecision(
-            false,
-            limitOrder.sell_price.base.amount,
-            quoteAsset.precision
-          )
-        );
-        price = ceilPrecision(
-          setPrecision(
-            false,
-            limitOrder.sell_price.quote.amount,
-            baseAsset.precision
-          ) /
-            setPrecision(
-              false,
-              limitOrder.sell_price.base.amount,
-              quoteAsset.precision
-            ),
-          baseAsset.precision
-        );
-        base = String(
-          setPrecision(
-            false,
-            limitOrder.sell_price.quote.amount,
-            baseAsset.precision
-          )
-        );
-      }
-      const filled = `${(
-        ((Number(limitOrder.sell_price.base.amount) -
-          Number(limitOrder.for_sale)) /
-          Number(limitOrder.sell_price.base.amount)) *
-        100
-      ).toFixed(1)}%`;
-      return {
-        key,
-        base,
-        quote,
-        price,
-        isBuyOrder,
-        expiration,
-        filled,
-      } as OrderRow;
-    },
-    [setPrecision, ceilPrecision]
-  );
-  const getUserOrderBook = useCallback(async () => {
-    if (selectedAssets) {
-      const base = selectedAssets.base;
-      const quote = selectedAssets.quote;
-      try {
-        setLoadingUserOrderRows(true);
-        const fullAccount = await getFullAccount(localStorageAccount, false);
-        if (fullAccount !== undefined) {
-          const limitOrders = fullAccount.limit_orders;
-          const limitOrdersForThePair = limitOrders.filter((limitOrder) => {
-            const orderAssetsIds = [
-              limitOrder.sell_price.base.asset_id,
-              limitOrder.sell_price.quote.asset_id,
-            ];
-            return (
-              orderAssetsIds.includes(base.id) &&
-              orderAssetsIds.includes(quote.id)
-            );
-          });
-          const userOrderRows = limitOrdersForThePair.map((limitOrder) => {
-            return formUserOrderRow(base, quote, limitOrder);
-          });
-          setUserOrdersRows(userOrderRows);
-          setLoadingUserOrderRows(false);
-        } else {
-          setUserOrdersRows([]);
-          setLoadingUserOrderRows(false);
-        }
-      } catch (e) {
-        console.log(e);
-        setLoadingUserOrderRows(false);
-      }
-    }
-  }, [
-    selectedAssets,
-    setLoadingUserOrderRows,
-    getFullAccount,
-    localStorageAccount,
-    formUserOrderRow,
-    setUserOrdersRows,
-  ]);
-
-  const refreshOrderBook = useCallback(async () => {
-    await getAsksBids();
-    await getUserOrderBook();
-  }, [getAsksBids, getUserOrderBook]);
-
-  const formOrderHistoryRow = useCallback(
-    (history: OrderHistory, base: Asset, quote: Asset): OrderHistoryRow => {
+            amount: row.numberedTotal,
+            time: row.date,
+            isBuyOrder:
+              row.side !==
+              counterpart.translate("pages.profile.orders_tab.buy"),
+          } as TradeHistoryRow;
+        });
+  }, [userOrderHistoryRows, currentPair, defaultToken, selectedAssets]);
+  const tradeHistoryColumns: TradeHistoryColumn[] = useMemo(() => {
+    const baseSymbol = currentPair.split("_")[0];
+    const quoteSymbol = currentPair.split("_")[1];
+    return [
+      {
+        title: `${counterpart.translate("tableHead.price")} (${quoteSymbol})`,
+        dataIndex: "price",
+        key: "price",
+        fixed: true,
+      },
+      {
+        title: `${counterpart.translate("tableHead.amount")} (${baseSymbol})`,
+        dataIndex: "amount",
+        key: "amount",
+        fixed: true,
+      },
+      {
+        title: counterpart.translate(`tableHead.time`),
+        dataIndex: "time",
+        key: "time",
+        fixed: true,
+      },
+    ];
+  }, [currentPair]);
+  const formTradeHistoryRow = useCallback(
+    (history: OrderHistory, base: Asset, quote: Asset): TradeHistoryRow => {
       const time = formLocalDate(history.time, [
-        // "month",
-        // "date",
-        // "year",
+        "month",
+        "date",
+        "year",
         "time",
       ]);
       const { pays, receives } = history.op;
       let baseAmount = 0,
         quoteAmount = 0,
         isBuyOrder = false;
-      // this is buy orders
+      // this is sell orders
       if (pays.asset_id === base.id) {
         baseAmount = setPrecision(false, pays.amount, base.precision);
         quoteAmount = setPrecision(false, receives.amount, quote.precision);
-        isBuyOrder = true;
-        //this is sell orders
+        //this is buy orders
       } else {
         baseAmount = setPrecision(false, receives.amount, base.precision);
         quoteAmount = setPrecision(false, pays.amount, quote.precision);
+        isBuyOrder = true;
       }
 
       return {
         key: history.id,
-        price: ceilPrecision(baseAmount / quoteAmount),
-        base: baseAmount,
-        quote: quoteAmount,
-        date: time,
+        price: ceilPrecision(quoteAmount / baseAmount),
+        amount: baseAmount,
+        time: time,
         isBuyOrder,
-      } as OrderHistoryRow;
+      } as TradeHistoryRow;
     },
     [setPrecision, formLocalDate, ceilPrecision]
   );
+  const defineHistoryPriceMovement = useCallback(
+    (tradeHistoryRows: TradeHistoryRow[]) => {
+      const updatedTradeHistoryRows = [...tradeHistoryRows];
+      for (let i = updatedTradeHistoryRows.length - 1; i >= 0; i--) {
+        const historyRow = updatedTradeHistoryRows[i];
+        for (let j = i - 1; j > 0; j--) {
+          if (historyRow.isBuyOrder === updatedTradeHistoryRows[j].isBuyOrder) {
+            if (
+              Number(historyRow.price) !==
+              Number(updatedTradeHistoryRows[j].price)
+            ) {
+              const isPriceUp =
+                Number(updatedTradeHistoryRows[j].price) >
+                Number(historyRow.price);
+              updatedTradeHistoryRows[j].isPriceUp = isPriceUp;
+            }
+            break;
+          }
+        }
+      }
+      return updatedTradeHistoryRows;
+    },
+    []
+  );
   const getHistory = useCallback(async () => {
+    setLoadingTradeHistory(true);
     if (selectedAssets) {
       const base = selectedAssets.base;
       const quote = selectedAssets.quote;
       try {
-        setLoadingOrderHistoryRows(true);
         const histories = await getFillOrderHistory(base, quote);
         if (histories) {
           const marketTakersHistories = histories.reduce(
@@ -352,178 +265,103 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
             },
             [] as OrderHistory[]
           );
-          setOrderHistoryRows(
-            marketTakersHistories.map((history) => {
-              return formOrderHistoryRow(history, base, quote);
-            })
-          );
+          const tradeHistoryRows = marketTakersHistories.map((history) => {
+            return formTradeHistoryRow(history, base, quote);
+          });
+          const updatedTradeHistoryRows =
+            defineHistoryPriceMovement(tradeHistoryRows);
+          console.log("updatedTradeHistoryRows", updatedTradeHistoryRows);
+          setTradeHistoryRows(updatedTradeHistoryRows);
         }
-        setLoadingOrderHistoryRows(false);
+        setLoadingTradeHistory(false);
       } catch (e) {
         console.log(e);
-        setLoadingOrderHistoryRows(false);
+        setLoadingTradeHistory(false);
       }
     }
   }, [
     selectedAssets,
-    setLoadingOrderHistoryRows,
+    setLoadingTradeHistory,
     getFillOrderHistory,
-    setOrderHistoryRows,
-    formOrderHistoryRow,
+    formTradeHistoryRow,
+    setTradeHistoryRows,
+    defineHistoryPriceMovement,
   ]);
 
-  const formUserHistoryRow = useCallback(
-    async (
-      baseAsset: Asset,
-      quoteAsset: Asset,
-      history: History,
-      openOrder?: LimitOrder
-    ): Promise<OrderHistoryRow> => {
-      const blockHeader = await getBlockHeader(history.block_num);
-      const date = blockHeader
-        ? formLocalDate(blockHeader.timestamp, [
-            "month",
-            "date",
-            "year",
-            "time",
-          ])
-        : "";
-      const operationDetails = history.op[1];
-      const key = history.id;
+  const cancelOrderFeeAmount = useMemo(() => {
+    const cancelLimitOrderFee = calculateCancelLimitOrderFee();
+    if (cancelLimitOrderFee !== undefined) {
+      return cancelLimitOrderFee;
+    } else {
+      return 0;
+    }
+  }, [calculateCancelLimitOrderFee]);
+  const handleCancelLimitOrder = useCallback(
+    async (signerKey: SignerKey) => {
+      transactionMessageDispatch({
+        type: TransactionMessageActionType.CLEAR,
+      });
 
-      let price = "0",
-        base = 0,
-        quote = 0,
-        isBuyOrder = false;
-
-      if (operationDetails.receives.asset_id === quoteAsset.id) {
-        quote = setPrecision(
-          false,
-          operationDetails.receives.amount,
-          quoteAsset.precision
-        );
-        base = setPrecision(
-          false,
-          operationDetails.pays.amount,
-          baseAsset.precision
-        );
-        price = ceilPrecision(base / quote, baseAsset.precision);
-        isBuyOrder = true;
-      } else {
-        quote = setPrecision(
-          false,
-          operationDetails.pays.amount,
-          quoteAsset.precision
-        );
-        base = setPrecision(
-          false,
-          operationDetails.receives.amount,
-          baseAsset.precision
-        );
-        price = ceilPrecision(base / quote, baseAsset.precision);
-      }
-      let numberdFilled = 100;
-      let filled = "";
-      if (openOrder) {
-        numberdFilled =
-          (operationDetails.pays.amount / openOrder.sell_price.base.amount) *
-          100;
-        filled = `${numberdFilled.toFixed(1)}%`;
-      } else {
-        filled = "100%";
-      }
-
-      return { key, price, base, quote, date, isBuyOrder, filled };
-    },
-    [getBlockHeader, formLocalDate, setPrecision, ceilPrecision]
-  );
-  const getUserHistory = useCallback(async () => {
-    if (selectedAssets && id && id !== "") {
-      const base = selectedAssets.base;
-      const quote = selectedAssets.quote;
+      const trx = buildCancelLimitOrderTransaction(selectedOrderId, id);
+      let trxResult;
       try {
-        setLoadingUserHistoryRows(true);
-        const [fullAccount, userOperationsHistory] = await Promise.all([
-          getFullAccount(localStorageAccount, false),
-          getAccountHistoryById(id),
-        ]);
-        let limitOrders: LimitOrder[] = [];
-        if (fullAccount) {
-          limitOrders = fullAccount.limit_orders;
-        }
-        //const userOperationsHistory = await getAccountHistoryById(id);
-        const fillOrdersHistory = userOperationsHistory.filter(
-          (userOperationHistory) => userOperationHistory.op[0] === 4
-        );
-        const fillOrdersHistoryForThePair = fillOrdersHistory.filter(
-          (fillOrderHistory) => {
-            const pays = fillOrderHistory.op[1].pays;
-            const receives = fillOrderHistory.op[1].receives;
-            const orderAssetsIds = [pays.asset_id, receives.asset_id];
-            return (
-              orderAssetsIds.includes(base.id) &&
-              orderAssetsIds.includes(quote.id)
-            );
-          }
-        );
-        const userHistoryRows = await Promise.all(
-          fillOrdersHistoryForThePair.map(
-            async (fillOrderHistoryForThePair) => {
-              const operationDetails = fillOrderHistoryForThePair.op[1];
-              return formUserHistoryRow(
-                base,
-                quote,
-                fillOrderHistoryForThePair,
-                limitOrders.find(
-                  (order) => order.id === operationDetails.order_id
-                )
-              );
-            }
-          )
-        );
-        setUserOrderHistoryRows(userHistoryRows);
-        setLoadingUserHistoryRows(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
+        trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
-        setLoadingUserHistoryRows(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
-    } else {
-      setUserOrderHistoryRows([]);
-      setLoadingUserHistoryRows(false);
-    }
-  }, [
-    selectedAssets,
-    id,
-    localStorageAccount,
-    getFullAccount,
-    setLoadingUserHistoryRows,
-    getAccountHistoryById,
-    formUserHistoryRow,
-    setUserOrderHistoryRows,
-  ]);
-
-  const refreshHistory = useCallback(async () => {
-    await getHistory();
-    await getUserHistory();
-  }, [getHistory, getUserHistory]);
-
-  const onOrderBookRowClick = useCallback(
-    (record: OrderRow) => {
-      if (!record.isBuyOrder) {
-        buyOrderForm.setFieldsValue({
-          price: record.price,
-          quantity: record.quote,
-          total: record.base,
+      if (trxResult) {
+        formAccountBalancesByName(localStorageAccount);
+        formUserOrders();
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(`field.success.canceled_limit_order`, {
+            selectedOrderId,
+          }),
         });
       } else {
-        sellOrderForm.setFieldsValue({
-          price: record.price,
-          quantity: record.quote,
-          total: record.base,
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
         });
       }
     },
-    [buyOrderForm, sellOrderForm]
+    [
+      transactionMessageDispatch,
+      buildCancelLimitOrderTransaction,
+      selectedOrderId,
+      id,
+      buildTrx,
+      formUserOrders,
+      formAccountBalancesByName,
+      localStorageAccount,
+      selectedAssets,
+    ]
+  );
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish: handleCancelLimitOrderFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleCancelLimitOrder,
+    transactionMessageDispatch,
+    neededKeyType: "active",
+  });
+  const onCancelClick = useCallback(
+    (orderId: string) => {
+      setSelectedOrderId(orderId.split(".")[2]);
+      showPasswordModal();
+    },
+    [setSelectedOrderId, showPasswordModal]
   );
 
   const unsubscribeFromMarket = useCallback(async () => {
@@ -541,22 +379,14 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       console.log(e);
     }
   }, [currentPair, dbApi]);
-
   const subscribeToMarket = useCallback(async () => {
     if (selectedAssets && synced) {
       try {
-        await Promise.all([
-          getTradingPairsStats(),
-          refreshOrderBook(),
-          refreshHistory(),
-        ]);
+        await Promise.all([formUserOrders(), getHistory()]);
         await dbApi("subscribe_to_market", [
           () => {
-            setTimeout(() => {
-              getTradingPairsStats();
-            }, REQUIRED_TICKER_UPDATE_TIME);
-            refreshOrderBook();
-            refreshHistory();
+            formUserOrders();
+            getHistory();
           },
           selectedAssets.base.symbol,
           selectedAssets.quote.symbol,
@@ -565,14 +395,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         console.log(e);
       }
     }
-  }, [
-    selectedAssets,
-    synced,
-    getTradingPairsStats,
-    refreshOrderBook,
-    refreshHistory,
-    dbApi,
-  ]);
+  }, [selectedAssets, synced, formUserOrders, dbApi]);
 
   useEffect(() => {
     let ignore = false;
@@ -595,29 +418,32 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     return () => {
       unsubscribeFromMarket();
     };
-  }, [selectedAssets, id]);
+  }, [selectedAssets, id, localStorageAccount, defaultAsset]);
 
   return {
-    tradingPairsStats,
-    loadingTradingPairsStats,
     selectedAssets,
     loadingSelectedPair,
-    isPairModalVisible,
+    userOpenOrdersRows,
+    userOrderHistoryRows,
+    userOpenOrdersColumns,
+    userOrdersHistoriesColumns,
+    loadingUserOrders,
+    transactionMessageState,
+    selectedOrderId,
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    hidePasswordModal,
+    handleCancelLimitOrderFinish,
+    hideTransactionModal,
+    cancelOrderFeeAmount,
+    localStorageAccount,
+    tradeHistoryRows,
+    loadingTradeHistory,
+    tradeHistoryColumns,
     setIsPairModalVisible,
+    isPairModalVisible,
     handleClickOnPair,
     exchanges,
-    asks,
-    bids,
-    loadingAsksBids,
-    userOrdersRows,
-    loadingUserOrderRows,
-    orderHistoryRows,
-    loadingOrderHistoryRows,
-    userOrderHistoryRows,
-    loadingUserHistoryRows,
-    buyOrderForm,
-    sellOrderForm,
-    onOrderBookRowClick,
-    pageLoaded,
+    userTradeHistoryRows,
   };
 }

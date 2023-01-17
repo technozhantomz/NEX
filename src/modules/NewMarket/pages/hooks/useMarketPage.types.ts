@@ -1,35 +1,33 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { Exchanges, PairNameAndMarketStats } from "../../../../common/types";
-import { FormInstance } from "../../../../ui/src";
-import {
-  Order,
-  OrderForm,
-  OrderHistoryRow,
-  OrderRow,
-  PairAssets,
-} from "../../types";
+import { UserOrderColumnType } from "../../../../common/components";
+import { TransactionMessageState } from "../../../../common/hooks";
+import { Exchanges, OrderTableRow } from "../../../../common/types";
+import { PairAssets, TradeHistoryColumn, TradeHistoryRow } from "../../types";
 
 export type UseMarketPageResult = {
-  tradingPairsStats: PairNameAndMarketStats[];
-  loadingTradingPairsStats: boolean;
   loadingSelectedPair: boolean;
   selectedAssets: PairAssets | undefined;
-  isPairModalVisible: boolean;
+  userOpenOrdersRows: OrderTableRow[];
+  userOrderHistoryRows: OrderTableRow[];
+  userOpenOrdersColumns: UserOrderColumnType[];
+  userOrdersHistoriesColumns: UserOrderColumnType[];
+  loadingUserOrders: boolean;
+  cancelOrderFeeAmount: number;
+  transactionMessageState: TransactionMessageState;
+  handleCancelLimitOrderFinish: (name: string, info: any) => void;
+  selectedOrderId: string;
+  isPasswordModalVisible: boolean;
+  isTransactionModalVisible: boolean;
+  hidePasswordModal: () => void;
+  hideTransactionModal: () => void;
+  localStorageAccount: string;
+  tradeHistoryRows: TradeHistoryRow[];
+  loadingTradeHistory: boolean;
+  tradeHistoryColumns: TradeHistoryColumn[];
   setIsPairModalVisible: Dispatch<SetStateAction<boolean>>;
+  isPairModalVisible: boolean;
   handleClickOnPair: () => void;
   exchanges: Exchanges;
-  asks: Order[];
-  bids: Order[];
-  loadingAsksBids: boolean;
-  userOrdersRows: OrderRow[];
-  loadingUserOrderRows: boolean;
-  orderHistoryRows: OrderHistoryRow[];
-  loadingOrderHistoryRows: boolean;
-  userOrderHistoryRows: OrderHistoryRow[];
-  loadingUserHistoryRows: boolean;
-  buyOrderForm: FormInstance<OrderForm>;
-  sellOrderForm: FormInstance<OrderForm>;
-  onOrderBookRowClick: (record: OrderRow) => void;
-  pageLoaded: boolean;
+  userTradeHistoryRows: TradeHistoryRow[];
 };
