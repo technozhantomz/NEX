@@ -22,7 +22,7 @@ export const OrdersTab = (): JSX.Element => {
     handleFormFinish,
     hideTransactionModal,
     localStorageAccount,
-    cancelOrderfeeAmount,
+    cancelOrderFeeAmount,
     onCancelClick,
   } = useOrdersTab();
 
@@ -42,7 +42,7 @@ export const OrdersTab = (): JSX.Element => {
           onCancel={hideTransactionModal}
           transactionMessageState={transactionMessageState}
           account={localStorageAccount}
-          fee={cancelOrderfeeAmount}
+          fee={cancelOrderFeeAmount}
           orderId={selectedOrderId}
           transactionType="limit_order_cancel"
         />

@@ -3,14 +3,95 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
+import { useViewportContext } from "../../../common/providers";
 import { Col } from "../../../ui/src";
-import { PriceChart } from "../components/PriceChart";
+import {
+  HistoryTabs,
+  PairModal,
+  PairSelect,
+  PriceChart,
+  UsersOrdersTabs,
+  Wallet,
+} from "../components";
 
 import * as Styled from "./MarketPage.styled";
+import { useMarketPage } from "./hooks";
 
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
+  const { md, xl } = useViewportContext();
+  const {
+    // selectedPair,
+    isPairModalVisible,
+    handleClickOnPair,
+    setIsPairModalVisible,
+  } = useMarketPage({
+    currentPair: pair as string,
+  });
+
+  const renderHistoryTabs = !xl ? (
+    <Styled.RightBorderedVerticalFlexedCol xl={{ span: 5 }}>
+      {/* Trade History Title */}
+      <Styled.HistoryBox>
+        <Styled.TradeHistoryContainer>
+          <HistoryTabs />
+        </Styled.TradeHistoryContainer>
+      </Styled.HistoryBox>
+    </Styled.RightBorderedVerticalFlexedCol>
+  ) : (
+    ""
+  );
+
+  const renderChartAndOrderBook = (
+    <Styled.ChartsAndOrderBookRow>
+      {/* Charts Section */}
+      {!xl ? (
+        <>
+          <Styled.RightBorderedVerticalFlexedCol md={24} xl={16}>
+            <Styled.PriceChartContainer>
+              <PriceChart />
+            </Styled.PriceChartContainer>
+            <Styled.MarketDepthContainer>
+              Market Depth Chart Section
+            </Styled.MarketDepthContainer>
+          </Styled.RightBorderedVerticalFlexedCol>
+          {/* Order Book section */}
+          <Col xl={8}>Order Book Section</Col>
+        </>
+      ) : (
+        <Styled.VerticalFlexedCol md={24} xl={16}>
+          <Styled.PriceChartContainer>
+            <PriceChart />
+          </Styled.PriceChartContainer>
+        </Styled.VerticalFlexedCol>
+      )}
+    </Styled.ChartsAndOrderBookRow>
+  );
+
+  //   {/* Charts and Order book Section */}
+  //   <Styled.ChartsAndOrderBookRow>
+  //   {/* Charts Section */}
+  //   <Styled.RightBorderedFlexedCol span={16}>
+  //     <Styled.PriceChartContainer>
+  //
+  //     </Styled.PriceChartContainer>
+  //     <Styled.MarketDepthContainer>
+  //       Market Depth Chart Section
+  //     </Styled.MarketDepthContainer>
+  //   </Styled.RightBorderedFlexedCol>
+  //   {/* Order Book section */}
+  //   <Col span={8}>Order Book Section</Col>
+  // </Styled.ChartsAndOrderBookRow>
+
+  const renderTabs = !xl ? (
+    <Styled.UserOrdersContainer>
+      <UsersOrdersTabs />
+    </Styled.UserOrdersContainer>
+  ) : (
+    <Styled.TabletTabsContainer>Tablet tabs</Styled.TabletTabsContainer>
+  );
+
   return (
     <Layout
       title="market"
@@ -18,66 +99,65 @@ const MarketPage: NextPage = () => {
       heading={counterpart.translate(`pages.market.heading`)}
       description={`Market Page | ${pair}`}
     >
-      <Styled.Container>
-        <Styled.FullHeightRow>
-          {/* Left Section */}
-          <Styled.RightBorderedFlexedCol span={5}>
-            {/* Trade History Title */}
-            <Styled.HistoryBox>
-              <Styled.BoxHeader>Trade history</Styled.BoxHeader>
-            </Styled.HistoryBox>
+      {/* Mobile view */}
+      {md ? (
+        <>
+          <Styled.MobileAssetSelectorContainer>
+            Asset Selector
+          </Styled.MobileAssetSelectorContainer>
+          <Styled.MobileStatsContainer>Stats</Styled.MobileStatsContainer>
+          <Styled.MobileChartContainer>Chart</Styled.MobileChartContainer>
+          <Styled.MobileTabsContainer>Tabs</Styled.MobileTabsContainer>
+        </>
+      ) : (
+        <Styled.Container>
+          <Styled.FullHeightRow>
+            {/* Left Section */}
+            {renderHistoryTabs}
 
-            {/* Trade History Table */}
-            <Styled.TradeHistoryContainer>
-              History data table
-            </Styled.TradeHistoryContainer>
-          </Styled.RightBorderedFlexedCol>
+            {/* Middle Section */}
+            <Styled.RightBorderedVerticalFlexedCol
+              md={{ span: 16 }}
+              xl={{ span: 14 }}
+            >
+              {/* Stats Section */}
+              <Styled.StatsBox>678 PPY</Styled.StatsBox>
 
-          {/* Middle Section */}
-          <Styled.RightBorderedFlexedCol span={14}>
-            {/* Stats Section */}
-            <Styled.StatsBox>678 PPY</Styled.StatsBox>
+              {/* Charts and Order book Section */}
+              {renderChartAndOrderBook}
 
-            {/* Charts and Order book Section */}
-            <Styled.ChartsAndOrderBookRow>
-              {/* Charts Section */}
-              <Styled.RightBorderedFlexedCol span={16}>
-                <Styled.PriceChartContainer>
-                  <PriceChart />
-                </Styled.PriceChartContainer>
-                <Styled.MarketDepthContainer>
-                  Market Depth Chart Section
-                </Styled.MarketDepthContainer>
-              </Styled.RightBorderedFlexedCol>
-              {/* Order Book section */}
-              <Col span={8}>Order Book Section</Col>
-            </Styled.ChartsAndOrderBookRow>
+              {/* Tabs section */}
+              {renderTabs}
+            </Styled.RightBorderedVerticalFlexedCol>
 
-            {/* My Open order and My History section */}
-            <Styled.UserOrdersContainer>
-              My Open Orders and My Orders History
-            </Styled.UserOrdersContainer>
-          </Styled.RightBorderedFlexedCol>
+            {/* Right section */}
+            <Styled.VerticalFlexedCol md={{ span: 8 }} xl={{ span: 5 }}>
+              {/* Pair Selector */}
+              <Styled.PairSelectorContainer>
+                <PairSelect
+                  handleClickOnPair={handleClickOnPair}
+                  currentPair={pair as string}
+                />
+              </Styled.PairSelectorContainer>
 
-          {/* Right section */}
-          <Styled.FlexedCol span={5}>
-            {/* Pair Selector */}
-            <Styled.PairSelectorContainer>
-              Pair selector
-            </Styled.PairSelectorContainer>
+              {/* Limit Order forms */}
+              <Styled.LimitOrderFormContainer>
+                Limit Order Form
+              </Styled.LimitOrderFormContainer>
 
-            {/* Limit Order forms */}
-            <Styled.LimitOrderFormContainer>
-              Limit Order Form
-            </Styled.LimitOrderFormContainer>
-
-            {/* Wallet Sections */}
-            <Styled.WalletContainer>
-              Wallet Functionalities
-            </Styled.WalletContainer>
-          </Styled.FlexedCol>
-        </Styled.FullHeightRow>
-      </Styled.Container>
+              {/* Wallet Sections */}
+              <Styled.WalletContainer>
+                <Wallet currentPair={pair as string} />
+              </Styled.WalletContainer>
+            </Styled.VerticalFlexedCol>
+          </Styled.FullHeightRow>
+          <PairModal
+            isVisible={isPairModalVisible}
+            setIsVisible={setIsPairModalVisible}
+            currentPair={pair as string}
+          />
+        </Styled.Container>
+      )}
     </Layout>
   );
 };
