@@ -141,10 +141,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     if (selectedAssets) {
       try {
         setLoadingAsksBids(true);
-        const { asks, bids } = await getOrderBook(
-          selectedAssets.base,
-          selectedAssets.quote
-        );
+        const { asks, bids } = await getOrderBook(selectedAssets);
         setAsks(
           asks.map((ask) => {
             return { ...ask, isBuyOrder: false };

@@ -75,10 +75,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   const getAsksBids = useCallback(async () => {
     if (selectedPair) {
       try {
-        const { asks, bids } = await getOrderBook(
-          selectedPair.base,
-          selectedPair.quote
-        );
+        const { asks, bids } = await getOrderBook(selectedPair);
         setAsks(
           asks.map((ask) => {
             return { ...ask, isBuyOrder: false };
