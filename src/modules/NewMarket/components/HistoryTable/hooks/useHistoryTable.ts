@@ -168,8 +168,6 @@ export function useHistoryTable({
         );
         const updatedTradeHistoryRows =
           defineHistoryPriceMovement(tradeHistoryRows);
-        console.log("updatedTradeHistoryRows", updatedTradeHistoryRows);
-
         setTradeHistoryRows(updatedTradeHistoryRows);
         setLoadingTradeHistory(false);
       } catch (e) {
