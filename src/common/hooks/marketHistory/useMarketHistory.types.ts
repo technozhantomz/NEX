@@ -1,8 +1,7 @@
-import { Asset, OrderHistory } from "../../types";
+import { MarketPair, OrderHistory } from "../../types";
 
 export type UseMarketHistoryResult = {
   getFillOrderHistory: (
-    base: Asset,
-    quote: Asset
+    selectedPair: MarketPair
   ) => Promise<OrderHistory[] | undefined>;
 };

@@ -1,21 +1,37 @@
 import { createChart, CrosshairMode } from "lightweight-charts";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
+
+import { useMarketHistory } from "../../../../../common/hooks";
+import { useMarketContext } from "../../../../../common/providers";
 
 import { UseCreatePriceChartResult } from "./useCreatePriceChart.types";
 
 export function useCreatePriceChart(): UseCreatePriceChartResult {
   const chartContainerRef = useRef<HTMLDivElement>(null);
+  const { selectedPair } = useMarketContext();
+  const { getFillOrderHistory } = useMarketHistory();
+
+  const getData = useCallback(async () => {
+    if (selectedPair) {
+      const histories = await getFillOrderHistory(selectedPair);
+      console.log(histories);
+      const sortedHistoriesByDate = histories?.sort((a, b) => {
+        return new Date(a.time).getTime() - new Date(b.time).getTime();
+      });
+      console.log(sortedHistoriesByDate);
+    }
+  }, [selectedPair]);
 
   useEffect(() => {
     if (chartContainerRef.current) {
       const chart = createChart(chartContainerRef.current, {
-        width: 700,
+        width: 500,
         height: 524,
         crosshair: {
           mode: CrosshairMode.Normal,
         },
       });
-
+      getData();
       const candleSeries = chart.addCandlestickSeries();
 
       candleSeries.setData([

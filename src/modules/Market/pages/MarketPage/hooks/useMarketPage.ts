@@ -337,7 +337,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       const quote = selectedAssets.quote;
       try {
         setLoadingOrderHistoryRows(true);
-        const histories = await getFillOrderHistory(base, quote);
+        const histories = await getFillOrderHistory(selectedAssets);
         if (histories) {
           const marketTakersHistories = histories.reduce(
             (previousHistory, currentHistory, i, { [i - 1]: next }) => {
