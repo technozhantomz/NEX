@@ -217,7 +217,7 @@ export function useAsset(): UseAssetResult {
       const numbered = Number(num);
       const precised = Number(numbered.toFixed(precision));
       return precised >= numbered
-        ? String(precised)
+        ? precised.toFixed(precision)
         : (precised + 1 / 10 ** precision).toFixed(precision);
     }, []);
 

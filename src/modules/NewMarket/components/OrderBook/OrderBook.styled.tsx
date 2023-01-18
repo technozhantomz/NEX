@@ -1,14 +1,17 @@
 import { Dropdown, Menu, styled, Table as UiTable } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
-export const Flex = styled.div`
-  display: flex;
+export const OrderBookContainer = styled.div`
+  max-height: inherit;
+  min-height: 100%;
+  padding: 2px;
+  overflow: hidden;
 `;
 
 export const Heading = styled.h2`
-  font-size: 1.1em;
+  font-size: 20px;
   font-weight: 500;
-  margin-bottom: 15px;
+  margin 20px;
   padding: 0;
   text-align: left;
 `;
@@ -19,6 +22,11 @@ export const FilterContainer = styled.div`
   justify-content: space-between;
   display: flex;
   flex-wrap: wrap;
+  margin: 16px;
+`;
+
+export const Flex = styled.div`
+  display: flex;
 `;
 
 export const OrdersFilter = styled.button`
@@ -72,44 +80,44 @@ export const ThresholdValue = styled.span`
   color: #212121;
 `;
 
-export const TableHeader = styled.thead`
-  display: table-header-group;
-  text-align: left;
-  vertical-align: middle;
-  border-color: inherit;
-  width: auto;
-  min-width: 100%;
+export const LastTradeContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 25px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border: 1px solid ${colors.borderColorBase};
+  font-size: 12px;
 `;
 
-export const TableRow = styled.tr`
-  display: table-row;
-  width: 100%;
-  vertical-align: inherit;
+export const LastTradeValue = styled.div`
+  flex-basis: 33%;
 `;
 
-export const TableCell = styled.th`
-  font-size: 0.9em;
-  position: relative;
-  padding-right: 5px;
-  color: #212121;
-  font-weight: 500;
-  background: #ffffff;
-  overflow-wrap: unset;
-  display: table-cell;
-  vertical-align: inherit;
+export const LastTradePriceValue = styled(LastTradeValue)`
+  .buy {
+    color: ${colors.marketBuy};
+  }
+  .sell {
+    color: ${colors.marketSell};
+  }
 `;
 
 export const Table = styled(UiTable)`
   max-height: inherit;
-
+  padding: 6px;
   .ant-table-tbody > tr > td {
     border-bottom: none;
     font-size: 0.7em;
     padding: 2px;
     text-align: left;
+    background: unset;
   }
   .ant-table-thead > tr > th {
-    font-size: 0.9em;
+    font-size: 12px;
     background: ${colors.white};
     border-bottom: none;
     padding: 0 0 11px;
@@ -191,8 +199,8 @@ export const Table = styled(UiTable)`
   .ant-table-tbody > tr.buy.order-depth-70 {
     background: linear-gradient(
       to left,
-      rgba(136, 255, 51, 0.9) 0%,
-      rgba(136, 255, 51, 0.9) 70%,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 70%,
       transparent 70%,
       transparent 100%
     );
@@ -201,8 +209,8 @@ export const Table = styled(UiTable)`
   .ant-table-tbody > tr.buy.order-depth-80 {
     background: linear-gradient(
       to left,
-      rgba(136, 255, 51, 0.9) 0%,
-      rgba(136, 255, 51, 0.9) 80%,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 80%,
       transparent 80%,
       transparent 100%
     );
@@ -211,9 +219,19 @@ export const Table = styled(UiTable)`
   .ant-table-tbody > tr.buy.order-depth-90 {
     background: linear-gradient(
       to left,
-      rgba(136, 255, 51, 0.9) 0%,
-      rgba(136, 255, 51, 0.9) 90%,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 90%,
       transparent 90%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.ant-table-row.buy.order-depth-100 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 100%,
+      transparent 100%,
       transparent 100%
     );
   }
@@ -301,13 +319,13 @@ export const Table = styled(UiTable)`
       transparent 100%
     );
   }
-`;
-
-export const AskTable = styled(Table)``;
-
-export const OrderBookContainer = styled.div`
-  max-height: inherit;
-  height: 100% !important;
-  padding: 8px;
-  overflow: hidden;
+  .ant-table-tbody > tr.sell.order-depth-100 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 100%,
+      transparent 100%,
+      transparent 100%
+    );
+  }
 `;

@@ -11,6 +11,7 @@ import { useViewportContext } from "../../../common/providers";
 import { Col, Form } from "../../../ui/src";
 import {
   HistoryTabs,
+  OrderBook,
   PairModal,
   PairSelect,
   UsersOrdersTabs,
@@ -23,10 +24,10 @@ import { useMarketPage } from "./hooks";
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
-  const { md, xl } = useViewportContext();
+  const { md, xxl } = useViewportContext();
   const {
-    //selectedAssets,
-    //loadingSelectedPair,
+    selectedAssets,
+    loadingSelectedPair,
     userOpenOrdersRows,
     userOrderHistoryRows,
     userOpenOrdersColumns,
@@ -49,12 +50,15 @@ const MarketPage: NextPage = () => {
     handleClickOnPair,
     exchanges,
     userTradeHistoryRows,
+    asks,
+    bids,
+    loadingAsksBids,
   } = useMarketPage({
     currentPair: pair as string,
   });
 
-  const renderHistoryTabs = !xl ? (
-    <Styled.RightBorderedVerticalFlexedCol xl={{ span: 5 }}>
+  const renderHistoryTabs = !xxl ? (
+    <Styled.RightBorderedVerticalFlexedCol xxl={{ span: 5 }}>
       {/* Trade History Title */}
       <Styled.HistoryBox>
         <Styled.TradeHistoryContainer>
@@ -75,9 +79,9 @@ const MarketPage: NextPage = () => {
   const renderChartAndOrderBook = (
     <Styled.ChartsAndOrderBookRow>
       {/* Charts Section */}
-      {!xl ? (
+      {!xxl ? (
         <>
-          <Styled.RightBorderedVerticalFlexedCol md={24} xl={16}>
+          <Styled.RightBorderedVerticalFlexedCol md={24} xxl={16}>
             <Styled.PriceChartContainer>
               Price Chart Section
             </Styled.PriceChartContainer>
@@ -86,10 +90,22 @@ const MarketPage: NextPage = () => {
             </Styled.MarketDepthContainer>
           </Styled.RightBorderedVerticalFlexedCol>
           {/* Order Book section */}
-          <Col xl={8}>Order Book Section</Col>
+          <Col xxl={8}>
+            <OrderBook
+              currentPair={pair as string}
+              selectedAssets={selectedAssets}
+              loadingSelectedPair={loadingSelectedPair}
+              bids={bids}
+              asks={asks}
+              loadingAsksBids={loadingAsksBids}
+              lastTradeHistory={
+                tradeHistoryRows.length > 0 ? tradeHistoryRows[0] : undefined
+              }
+            />
+          </Col>
         </>
       ) : (
-        <Styled.VerticalFlexedCol md={24} xl={16}>
+        <Styled.VerticalFlexedCol md={24} xxl={16}>
           <Styled.PriceChartContainer>
             Price Chart Section
           </Styled.PriceChartContainer>
@@ -98,7 +114,7 @@ const MarketPage: NextPage = () => {
     </Styled.ChartsAndOrderBookRow>
   );
 
-  const renderTabs = !xl ? (
+  const renderTabs = !xxl ? (
     <Styled.UserOrdersContainer>
       <UsersOrdersTabs
         userOpenOrdersRows={userOpenOrdersRows}
@@ -138,7 +154,7 @@ const MarketPage: NextPage = () => {
             {/* Middle Section */}
             <Styled.RightBorderedVerticalFlexedCol
               md={{ span: 16 }}
-              xl={{ span: 14 }}
+              xxl={{ span: 14 }}
             >
               {/* Stats Section */}
               <Styled.StatsBox>678 PPY</Styled.StatsBox>
@@ -151,7 +167,7 @@ const MarketPage: NextPage = () => {
             </Styled.RightBorderedVerticalFlexedCol>
 
             {/* Right section */}
-            <Styled.VerticalFlexedCol md={{ span: 8 }} xl={{ span: 5 }}>
+            <Styled.VerticalFlexedCol md={{ span: 8 }} xxl={{ span: 5 }}>
               {/* Pair Selector */}
               <Styled.PairSelectorContainer>
                 <PairSelect

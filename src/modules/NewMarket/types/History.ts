@@ -1,7 +1,7 @@
 export type TradeHistoryRow = {
   key: string;
   price: string;
-  amount: number;
+  amount: string;
   time: string;
   isBuyOrder: boolean;
   isPriceUp?: boolean;
