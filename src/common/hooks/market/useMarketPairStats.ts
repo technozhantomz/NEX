@@ -24,6 +24,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
   const [allAssets, _setAllAssets] = useState<Asset[] | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
 
+  //to-do: refactor or remove
   const getMarketPairStats = useCallback(
     async (base: Asset, quote: Asset) => {
       let latest = "0",

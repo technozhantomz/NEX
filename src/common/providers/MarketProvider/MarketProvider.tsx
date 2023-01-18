@@ -7,7 +7,12 @@ import React, {
 } from "react";
 
 import { useMarketHistory, useOrderBook, useSessionStorage } from "../../hooks";
-import { MarketOrder, MarketPair, OrderHistory } from "../../types";
+import {
+  MarketOrder,
+  MarketPair,
+  MarketPairStats,
+  OrderHistory,
+} from "../../types";
 import { useChainStoreContext } from "../ChainStoreProvider";
 import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
@@ -18,12 +23,17 @@ type Props = {
 };
 
 // This is in milliseconds
-// const REQUIRED_TICKER_UPDATE_TIME = 800;
+const REQUIRED_TICKER_UPDATE_TIME = 800;
 const defaultMarketState: MarketContextType = {
   selectedPair: undefined,
   marketHistory: [],
   asks: [],
   bids: [],
+  tradingPairStats: {
+    latest: "",
+    percentChange: "",
+    volume: "",
+  },
   setSelectedPair: function (selectedPair: MarketPair): void {
     throw new Error(`Function not implemented. ${selectedPair}`);
   },
@@ -36,13 +46,16 @@ const MarketContext = createContext<MarketContextType>(defaultMarketState);
 
 export const MarketProvider = ({ children }: Props): JSX.Element => {
   const { dbApi } = usePeerplaysApiContext();
-  const { getFillOrderHistory } = useMarketHistory();
+  const { getFillOrderHistory, getTicker } = useMarketHistory();
   const { getOrderBook } = useOrderBook();
   const { synced } = useChainStoreContext();
   const [selectedPair, setSelectedPair] = useSessionStorage(
     "selectedMarketPair"
   ) as [MarketPair, (selectedPair: MarketPair) => void];
   const [marketHistory, setMarketHistory] = useState<OrderHistory[]>([]);
+  const [tradingPairStats, setTradingPairStats] = useState<MarketPairStats>(
+    defaultMarketState.tradingPairStats
+  );
   const [asks, setAsks] = useState<MarketOrder[]>([]);
   const [bids, setBids] = useState<MarketOrder[]>([]);
 
@@ -73,6 +86,25 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
       }
     }
   }, [selectedPair, getFillOrderHistory]);
+
+  const getTradingPairsStats = useCallback(async () => {
+    if (selectedPair) {
+      try {
+        const tickerStats = await getTicker(
+          selectedPair.base,
+          selectedPair.quote
+        );
+
+        setTradingPairStats({
+          latest: tickerStats?.quote,
+          percentChange: tickerStats?.percent_change,
+          volume: tickerStats?.base_volume,
+        } as MarketPairStats);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, [selectedPair]);
 
   const getAsksBids = useCallback(async () => {
     if (selectedPair) {
@@ -113,15 +145,15 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
     if (selectedPair && synced) {
       try {
         await Promise.all([
-          //   getTradingPairsStats(),
+          getTradingPairsStats(),
           refreshOrderBook(),
           refreshHistory(),
         ]);
         await dbApi("subscribe_to_market", [
           () => {
-            // setTimeout(() => {
-            //   //   getTradingPairsStats();
-            // }, REQUIRED_TICKER_UPDATE_TIME);
+            setTimeout(() => {
+              getTradingPairsStats();
+            }, REQUIRED_TICKER_UPDATE_TIME);
             refreshOrderBook();
             refreshHistory();
           },
@@ -135,7 +167,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   }, [
     selectedPair,
     synced,
-    // getTradingPairsStats,
+    getTradingPairsStats,
     refreshOrderBook,
     refreshHistory,
     dbApi,
@@ -169,6 +201,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         marketHistory,
         asks,
         bids,
+        tradingPairStats,
         setSelectedPair,
         unsubscribeFromMarket,
       }}

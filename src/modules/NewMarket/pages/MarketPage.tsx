@@ -3,10 +3,14 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Layout } from "../../../common/components";
-import { useViewportContext } from "../../../common/providers";
+import {
+  // useMarketContext,
+  useViewportContext,
+} from "../../../common/providers";
 import { Col } from "../../../ui/src";
 import {
   HistoryTabs,
+  MarketStats,
   PairModal,
   PairSelect,
   UsersOrdersTabs,
@@ -20,6 +24,7 @@ const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
   const { md, xl } = useViewportContext();
+  // const { tradingPairStats } = useMarketContext();
   const {
     // selectedPair,
     isPairModalVisible,
@@ -105,7 +110,12 @@ const MarketPage: NextPage = () => {
               xl={{ span: 14 }}
             >
               {/* Stats Section */}
-              <Styled.StatsBox>678 PPY</Styled.StatsBox>
+              <Styled.StatsBox>
+                <MarketStats />
+                {/* {tradingPairStats.volume}
+                {tradingPairStats.latest}
+                {tradingPairStats.percentChange} */}
+              </Styled.StatsBox>
 
               {/* Charts and Order book Section */}
               {renderChartAndOrderBook}

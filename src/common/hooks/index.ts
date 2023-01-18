@@ -11,5 +11,4 @@ export * from "./blockchain";
 export * from "./asset";
 export * from "./utils";
 export * from "./nft";
-export * from "./marketHistory";
 export * from "./gpos";
