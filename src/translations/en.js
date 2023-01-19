@@ -1227,7 +1227,7 @@ export const en = {
     status_actions: "Status/Actions",
   },
   tableFilters: {
-    avtive: "Avtive",
+    active: "Active",
     inactive: "Inactive",
     approved: "Approved",
     not_approved: "Not Approved",

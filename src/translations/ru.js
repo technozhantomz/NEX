@@ -1230,7 +1230,7 @@ export const ru = {
     status_actions: "Статус/Действия",
   },
   tableFilters: {
-    avtive: "Активный",
+    active: "Активный",
     inactive: "Неактивно",
     approved: "Утверждено",
     not_approved: "Не одобрено",
