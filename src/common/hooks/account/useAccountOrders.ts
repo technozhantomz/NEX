@@ -64,7 +64,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
           defaultAsset.precision
         );
       }
-      const price = ceilPrecision(total / amount, defaultAsset.precision);
+      const price = (total / amount).toFixed(defaultAsset.precision);
       if (openOrder) {
         numberdFilled =
           (operationDetails.pays.amount / openOrder.sell_price.base.amount) *
@@ -115,20 +115,14 @@ export function useAccountOrders(): UseAccountOrdersResult {
         amount = String(
           setPrecision(false, openOrder.sell_price.base.amount, base.precision)
         );
-        price = ceilPrecision(
+        price = (
           setPrecision(
             false,
             openOrder.sell_price.quote.amount,
             defaultAsset.precision
           ) /
-            setPrecision(
-              false,
-              openOrder.sell_price.base.amount,
-              base.precision
-            ),
-
-          defaultAsset.precision
-        );
+          setPrecision(false, openOrder.sell_price.base.amount, base.precision)
+        ).toFixed(defaultAsset.precision);
         total = String(
           setPrecision(
             false,
@@ -141,19 +135,14 @@ export function useAccountOrders(): UseAccountOrdersResult {
         amount = String(
           setPrecision(false, openOrder.sell_price.quote.amount, base.precision)
         );
-        price = ceilPrecision(
+        price = (
           setPrecision(
             false,
             openOrder.sell_price.base.amount,
             defaultAsset.precision
           ) /
-            setPrecision(
-              false,
-              openOrder.sell_price.quote.amount,
-              base.precision
-            ),
-          defaultAsset.precision
-        );
+          setPrecision(false, openOrder.sell_price.quote.amount, base.precision)
+        ).toFixed(defaultAsset.precision);
         total = String(
           setPrecision(
             false,

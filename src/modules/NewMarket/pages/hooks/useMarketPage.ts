@@ -12,9 +12,7 @@ type Props = {
 
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { getAssetsBySymbols } = useAsset();
-
   const { selectedPair, setSelectedPair } = useMarketContext();
-
   const [loadingSelectedPair, setLoadingSelectedPair] = useState<boolean>(true);
   const [isPairModalVisible, setIsPairModalVisible] = useState<boolean>(false);
   //   const [pageLoaded, setPageLoaded] = useState<boolean>(false);

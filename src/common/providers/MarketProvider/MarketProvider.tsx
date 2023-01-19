@@ -7,7 +7,7 @@ import React, {
 } from "react";
 
 import { useMarketHistory, useOrderBook, useSessionStorage } from "../../hooks";
-import { MarketOrder, MarketPair, OrderHistory } from "../../types";
+import { MarketOrder, OrderHistory, SelectedMarketPair } from "../../types";
 import { useChainStoreContext } from "../ChainStoreProvider";
 import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
@@ -24,7 +24,7 @@ const defaultMarketState: MarketContextType = {
   marketHistory: [],
   asks: [],
   bids: [],
-  setSelectedPair: function (selectedPair: MarketPair): void {
+  setSelectedPair: function (selectedPair: SelectedMarketPair): void {
     throw new Error(`Function not implemented. ${selectedPair}`);
   },
   unsubscribeFromMarket: async function (): Promise<void> {
@@ -41,7 +41,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   const { synced } = useChainStoreContext();
   const [selectedPair, setSelectedPair] = useSessionStorage(
     "selectedMarketPair"
-  ) as [MarketPair, (selectedPair: MarketPair) => void];
+  ) as [SelectedMarketPair, (selectedPair: SelectedMarketPair) => void];
   const [marketHistory, setMarketHistory] = useState<OrderHistory[]>([]);
   const [asks, setAsks] = useState<MarketOrder[]>([]);
   const [bids, setBids] = useState<MarketOrder[]>([]);

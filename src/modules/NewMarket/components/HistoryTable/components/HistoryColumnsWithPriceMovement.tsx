@@ -1,14 +1,11 @@
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 
-import {
-  TradeHistoryColumn,
-  TradeHistoryRow,
-} from "../hooks/useHistoryTable.types";
+import { TradeHistoryRow } from "../../../../../common/types";
+import { TradeHistoryColumn } from "../hooks/useHistoryTable.types";
 
 export const renderTradeHistoryColumnsWithPriceMovement = (
   historyColumns?: TradeHistoryColumn[]
 ): TradeHistoryColumn[] => {
-  console.log(historyColumns);
   if (historyColumns) {
     return [
       {
