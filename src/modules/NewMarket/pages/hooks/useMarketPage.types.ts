@@ -3,7 +3,12 @@ import { Dispatch, SetStateAction } from "react";
 import { UserOrderColumnType } from "../../../../common/components";
 import { TransactionMessageState } from "../../../../common/hooks";
 import { Exchanges, OrderTableRow } from "../../../../common/types";
-import { PairAssets, TradeHistoryColumn, TradeHistoryRow } from "../../types";
+import {
+  Order,
+  PairAssets,
+  TradeHistoryColumn,
+  TradeHistoryRow,
+} from "../../types";
 
 export type UseMarketPageResult = {
   loadingSelectedPair: boolean;
@@ -30,4 +35,7 @@ export type UseMarketPageResult = {
   handleClickOnPair: () => void;
   exchanges: Exchanges;
   userTradeHistoryRows: TradeHistoryRow[];
+  asks: Order[];
+  bids: Order[];
+  loadingAsksBids: boolean;
 };

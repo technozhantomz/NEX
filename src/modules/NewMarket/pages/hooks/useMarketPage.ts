@@ -12,6 +12,7 @@ import {
   useFormDate,
   useHandleTransactionForm,
   useMarketHistory,
+  useOrderBook,
   useOrderTransactionBuilder,
   useTransactionBuilder,
   useTransactionMessage,
@@ -29,7 +30,12 @@ import {
   OrderTableRow,
   SignerKey,
 } from "../../../../common/types";
-import { PairAssets, TradeHistoryColumn, TradeHistoryRow } from "../../types";
+import {
+  Order,
+  PairAssets,
+  TradeHistoryColumn,
+  TradeHistoryRow,
+} from "../../types";
 
 import { UseMarketPageResult } from "./useMarketPage.types";
 
@@ -61,9 +67,15 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { getFillOrderHistory } = useMarketHistory();
   const { formLocalDate } = useFormDate();
   const { exchanges } = useUpdateExchanges();
+  const { getOrderBook } = useOrderBook();
 
   const [selectedAssets, setSelectedAssets] = useState<PairAssets>();
   const [loadingSelectedPair, setLoadingSelectedPair] = useState<boolean>(true);
+
+  // Asks and Bids
+  const [asks, setAsks] = useState<Order[]>([]);
+  const [bids, setBids] = useState<Order[]>([]);
+  const [loadingAsksBids, setLoadingAsksBids] = useState<boolean>(true);
 
   // User orders
   const [userOpenOrdersRows, setUserOpenOrdersRows] = useState<OrderTableRow[]>(
@@ -110,6 +122,41 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     }
   }, [currentPair, getAssetsBySymbols]);
 
+  const getAsksBids = useCallback(async () => {
+    if (selectedAssets && !loadingSelectedPair) {
+      setLoadingAsksBids(true);
+      const { asks, bids } = await getOrderBook(
+        selectedAssets.base,
+        selectedAssets.quote
+      );
+      // This should change, right now, getOrderBook is not correct
+      const updatedAsks = bids.map((bid) => {
+        return {
+          ...bid,
+          price: ((bid.quote as any) / (bid.base as any)).toFixed(20),
+          isBuyOrder: false,
+        };
+      }) as Order[];
+      const updatedBids = asks.map((ask) => {
+        return {
+          ...ask,
+          price: ((ask.quote as any) / (ask.base as any)).toFixed(20),
+          isBuyOrder: true,
+        };
+      }) as Order[];
+      setAsks(updatedAsks);
+      setBids(updatedBids);
+      setLoadingAsksBids(false);
+    }
+  }, [
+    selectedAssets,
+    loadingSelectedPair,
+    setLoadingAsksBids,
+    getOrderBook,
+    setAsks,
+    setBids,
+  ]);
+
   const formUserOrders = async () => {
     setLoadingUserOrders(true);
     const { openOrdersRows, historiesRows } = await getOrdersRows();
@@ -140,8 +187,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       ? selectedPairHistoryRows.map((row) => {
           return {
             key: row.key,
-            price: String(row.numberedPrice),
-            amount: row.numberedAmount,
+            price: row.price,
+            amount: row.numberedAmount.toFixed(
+              selectedAssets?.base.precision || 5
+            ),
             time: row.date,
             isBuyOrder:
               row.side ===
@@ -151,11 +200,12 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       : selectedPairHistoryRows.map((row) => {
           return {
             key: row.key,
-            price: ceilPrecision(
-              row.numberedAmount / row.numberedTotal,
-              selectedAssets?.base.precision
+            price: (row.numberedAmount / row.numberedTotal).toFixed(
+              selectedAssets?.quote.precision || 5
             ),
-            amount: row.numberedTotal,
+            amount: row.numberedTotal.toFixed(
+              selectedAssets?.base.precision || 5
+            ),
             time: row.date,
             isBuyOrder:
               row.side !==
@@ -212,8 +262,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
 
       return {
         key: history.id,
-        price: ceilPrecision(quoteAmount / baseAmount),
-        amount: baseAmount,
+        price: (quoteAmount / baseAmount).toFixed(quote.precision),
+        amount: baseAmount.toFixed(base.precision),
         time: time,
         isBuyOrder,
       } as TradeHistoryRow;
@@ -225,7 +275,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       const updatedTradeHistoryRows = [...tradeHistoryRows];
       for (let i = updatedTradeHistoryRows.length - 1; i >= 0; i--) {
         const historyRow = updatedTradeHistoryRows[i];
-        for (let j = i - 1; j > 0; j--) {
+        for (let j = i - 1; j >= 0; j--) {
           if (historyRow.isBuyOrder === updatedTradeHistoryRows[j].isBuyOrder) {
             if (
               Number(historyRow.price) !==
@@ -270,7 +320,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
           });
           const updatedTradeHistoryRows =
             defineHistoryPriceMovement(tradeHistoryRows);
-          console.log("updatedTradeHistoryRows", updatedTradeHistoryRows);
           setTradeHistoryRows(updatedTradeHistoryRows);
         }
         setLoadingTradeHistory(false);
@@ -382,11 +431,12 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const subscribeToMarket = useCallback(async () => {
     if (selectedAssets && synced) {
       try {
-        await Promise.all([formUserOrders(), getHistory()]);
+        await Promise.all([formUserOrders(), getHistory(), getAsksBids()]);
         await dbApi("subscribe_to_market", [
           () => {
             formUserOrders();
             getHistory();
+            getAsksBids();
           },
           selectedAssets.base.symbol,
           selectedAssets.quote.symbol,
@@ -395,7 +445,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
         console.log(e);
       }
     }
-  }, [selectedAssets, synced, formUserOrders, dbApi]);
+  }, [selectedAssets, synced, formUserOrders, getHistory, getAsksBids, dbApi]);
 
   useEffect(() => {
     let ignore = false;
@@ -445,5 +495,8 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     handleClickOnPair,
     exchanges,
     userTradeHistoryRows,
+    asks,
+    bids,
+    loadingAsksBids,
   };
 }

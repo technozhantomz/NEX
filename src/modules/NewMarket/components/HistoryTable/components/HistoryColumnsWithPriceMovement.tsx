@@ -5,7 +5,6 @@ import { TradeHistoryColumn, TradeHistoryRow } from "../../../types";
 export const renderTradeHistoryColumnsWithPriceMovement = (
   historyColumns?: TradeHistoryColumn[]
 ): TradeHistoryColumn[] => {
-  console.log(historyColumns);
   if (historyColumns) {
     return [
       {
