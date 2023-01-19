@@ -129,8 +129,6 @@ export function useMarketHistory(): UseMarketHistoryResult {
         );
         const updatedTradeHistoryRows =
           defineHistoryPriceMovement(tradeHistoryRows);
-        console.log("updatedTradeHistoryRows", updatedTradeHistoryRows);
-
         return updatedTradeHistoryRows;
       } catch (e) {
         console.log(e);

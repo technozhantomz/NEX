@@ -143,7 +143,6 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   const asksRows: MarketOrder[] = useMemo(() => {
     if (selectedPair) {
       const groupedAsks = groupAsksByThreshold(asks, selectedPair, threshold);
-      console.log("asksRows", groupedAsks);
       return groupedAsks;
     } else {
       return [];
@@ -153,7 +152,6 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   const bidsRows: MarketOrder[] = useMemo(() => {
     if (selectedPair) {
       const groupedBids = groupBidsByThreshold(bids, selectedPair, threshold);
-      console.log("bidsRows", groupedBids);
       return groupedBids;
     } else {
       return [];
@@ -192,7 +190,6 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
         const value = 1 / Math.pow(10, power);
         values.push(value.toFixed(power));
       }
-      console.log("values", values);
       return values;
     } else {
       return ["0.0001"];
