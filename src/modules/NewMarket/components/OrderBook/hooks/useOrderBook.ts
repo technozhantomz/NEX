@@ -1,12 +1,15 @@
 import counterpart from "counterpart";
-import { cloneDeep } from "lodash";
+import { cloneDeep, max } from "lodash";
 import { useCallback, useMemo, useState } from "react";
 
 import { useAsset } from "../../../../../common/hooks";
 import { Order, PairAssets, TradeHistoryRow } from "../../../types";
-import { OrderColumn } from "../types";
 
-import { FilterType, UseOrderBookResult } from "./useOrderBook.types";
+import {
+  FilterType,
+  OrderColumn,
+  UseOrderBookResult,
+} from "./useOrderBook.types";
 
 type Args = {
   currentPair: string;
@@ -166,7 +169,7 @@ export function useOrderBook({
         key: "quote",
         fixed: true,
       },
-    ];
+    ] as OrderColumn[];
   }, [currentPair]);
 
   const handleFilterChange = useCallback(
@@ -232,6 +235,36 @@ export function useOrderBook({
     []
   );
 
+  const specifyAsksTableRowClassName = useCallback(
+    (record: any) => {
+      const item = record as Order;
+      const orderDepthRatio =
+        Math.ceil(
+          (Number(item.quote) /
+            (max(asksRows.map((row) => Number(row.quote))) ?? 0)) *
+            10
+        ) * 10;
+      const orderDepthClass = `order-depth-${orderDepthRatio}`;
+      return `sell ${orderDepthClass}`;
+    },
+    [asksRows]
+  );
+
+  const specifyBidsTableRowClassName = useCallback(
+    (record: any) => {
+      const item = record as Order;
+      const orderDepthRatio =
+        Math.ceil(
+          (Number(item.quote) /
+            (max(bidsRows.map((row) => Number(row.quote))) ?? 0)) *
+            10
+        ) * 10;
+      const orderDepthClass = `order-depth-${orderDepthRatio}`;
+      return `buy ${orderDepthClass}`;
+    },
+    [bidsRows]
+  );
+
   return {
     orderColumns,
     handleThresholdChange,
@@ -244,5 +277,7 @@ export function useOrderBook({
     specifyTableHeight,
     specifyTableScroll,
     specifyLastTradeClassName,
+    specifyAsksTableRowClassName,
+    specifyBidsTableRowClassName,
   };
 }

@@ -1,12 +1,11 @@
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import counterpart from "counterpart";
-import { max } from "lodash";
+import { useCallback } from "react";
 
 import { DownOutlined, Tooltip } from "../../../../ui/src";
 import { Order, PairAssets, TradeHistoryRow } from "../../types";
 
 import * as Styled from "./OrderBook.styled";
-//import { SpreadRow } from "./components";
 import { FilterType, useOrderBook } from "./hooks";
 
 type Props = {
@@ -40,6 +39,8 @@ export const OrderBook = ({
     specifyTableHeight,
     specifyTableScroll,
     specifyLastTradeClassName,
+    specifyAsksTableRowClassName,
+    specifyBidsTableRowClassName,
   } = useOrderBook({
     currentPair,
     asks,
@@ -61,22 +62,29 @@ export const OrderBook = ({
 
   const bidsScroll = specifyTableScroll(bidsRows);
   const asksScroll = specifyTableScroll(asksRows);
-  const lastTradeHistoryPrice =
-    lastTradeHistory && lastTradeHistory.isPriceUp !== undefined ? (
-      lastTradeHistory.isPriceUp ? (
-        <>
-          <span style={{ marginRight: "4px" }}>{lastTradeHistory.price}</span>
-          <CaretUpOutlined />
-        </>
-      ) : (
-        <>
-          <span style={{ marginRight: "4px" }}>{lastTradeHistory.price}</span>
-          <CaretDownOutlined />
-        </>
-      )
-    ) : (
-      <span style={{ marginRight: "4px" }}>{lastTradeHistory?.price}</span>
-    );
+
+  const renderLastTradeHistoryPrice = useCallback(
+    (lastTradeHistory: TradeHistoryRow) => {
+      if (lastTradeHistory.isPriceUp !== undefined) {
+        return lastTradeHistory.isPriceUp ? (
+          <>
+            <span style={{ marginRight: "4px" }}>{lastTradeHistory.price}</span>
+            <CaretUpOutlined />
+          </>
+        ) : (
+          <>
+            <span style={{ marginRight: "4px" }}>{lastTradeHistory.price}</span>
+            <CaretDownOutlined />
+          </>
+        );
+      } else {
+        return (
+          <span style={{ marginRight: "4px" }}>{lastTradeHistory?.price}</span>
+        );
+      }
+    },
+    []
+  );
 
   return (
     <>
@@ -122,33 +130,27 @@ export const OrderBook = ({
             </Styled.ThresholdDropdown>
           </Styled.Flex>
         </Styled.FilterContainer>
+        {/* Buy table */}
         {filter !== "sell" && (
           <Styled.Table
             style={{ height: specifyTableHeight() }}
             loading={loadingAsksBids}
             pagination={false}
-            columns={orderColumns}
+            columns={orderColumns as any}
             bordered={false}
             scroll={bidsScroll}
             dataSource={bidsRows}
-            rowClassName={(record) => {
-              const item = record as Order;
-              const orderDepthRatio =
-                Math.ceil(
-                  (Number(item.quote) /
-                    (max(bidsRows.map((row) => Number(row.quote))) ?? 0)) *
-                    10
-                ) * 10;
-              const orderDepthClass = `order-depth-${orderDepthRatio}`;
-              return `buy ${orderDepthClass}`;
-            }}
+            rowClassName={specifyBidsTableRowClassName}
           ></Styled.Table>
         )}
+        {/* Last trade */}
         {filter === "total" && (
           <Styled.LastTradeContainer>
             <Styled.LastTradePriceValue>
               <span className={specifyLastTradeClassName(lastTradeHistory)}>
-                {lastTradeHistory ? lastTradeHistoryPrice : 0}
+                {lastTradeHistory
+                  ? renderLastTradeHistoryPrice(lastTradeHistory)
+                  : 0}
               </span>
             </Styled.LastTradePriceValue>
             <Styled.LastTradeValue>
@@ -164,26 +166,17 @@ export const OrderBook = ({
             </Styled.LastTradeValue>
           </Styled.LastTradeContainer>
         )}
+        {/* Sell table */}
         {filter !== "buy" && (
           <Styled.Table
             style={{ height: specifyTableHeight() }}
             loading={loadingAsksBids}
             pagination={false}
-            columns={orderColumns}
+            columns={orderColumns as any}
             bordered={false}
             scroll={asksScroll}
             dataSource={asksRows}
-            rowClassName={(record) => {
-              const item = record as Order;
-              const orderDepthRatio =
-                Math.ceil(
-                  (Number(item.quote) /
-                    (max(asksRows.map((row) => Number(row.quote))) ?? 0)) *
-                    10
-                ) * 10;
-              const orderDepthClass = `order-depth-${orderDepthRatio}`;
-              return `sell ${orderDepthClass}`;
-            }}
+            rowClassName={specifyAsksTableRowClassName}
           ></Styled.Table>
         )}
       </Styled.OrderBookContainer>

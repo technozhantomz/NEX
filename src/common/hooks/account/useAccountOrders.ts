@@ -135,21 +135,21 @@ export function useAccountOrders(): UseAccountOrdersResult {
         amount = String(
           setPrecision(false, openOrder.sell_price.quote.amount, base.precision)
         );
-        (price = (
+        price = (
           setPrecision(
             false,
             openOrder.sell_price.base.amount,
             defaultAsset.precision
           ) /
           setPrecision(false, openOrder.sell_price.quote.amount, base.precision)
-        ).toFixed(defaultAsset.precision)),
-          (total = String(
-            setPrecision(
-              false,
-              openOrder.sell_price.base.amount,
-              defaultAsset.precision
-            )
-          ));
+        ).toFixed(defaultAsset.precision);
+        total = String(
+          setPrecision(
+            false,
+            openOrder.sell_price.base.amount,
+            defaultAsset.precision
+          )
+        );
       }
       const filled = `${(
         ((Number(openOrder.sell_price.base.amount) -

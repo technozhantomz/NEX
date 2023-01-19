@@ -1,10 +1,11 @@
 import { Order, TradeHistoryRow } from "../../../types";
 
-type OrderColumn = {
+export type OrderColumn = {
   title: string;
   dataIndex: string;
   key: string;
-  render?: ((_value: string, record: unknown) => string) | undefined;
+  render?: (_value: string, record: unknown) => string;
+  fixed?: boolean | string;
 };
 
 export type UseOrderBookResult = {
@@ -25,6 +26,8 @@ export type UseOrderBookResult = {
       }
     | undefined;
   specifyLastTradeClassName: (tradeHistory?: TradeHistoryRow) => string;
+  specifyAsksTableRowClassName: (record: any) => string;
+  specifyBidsTableRowClassName: (record: any) => string;
 };
 
 export type FilterType = "buy" | "sell" | "total";
