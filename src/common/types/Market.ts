@@ -11,6 +11,10 @@ export type MarketPairStats = {
   latest: string;
   percentChange: string;
   volume: string;
+  ask_quote: string;
+  bid_quote: string;
+  dailyHigh: string;
+  dailyLow: string;
 };
 
 // TODO: remove marketPage redesign

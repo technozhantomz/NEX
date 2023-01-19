@@ -24,7 +24,7 @@ const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
   const { md, xl } = useViewportContext();
-  // const { tradingPairStats } = useMarketContext();
+  // const { ticker } = useMarketContext();
   const {
     // selectedPair,
     isPairModalVisible,

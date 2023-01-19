@@ -1,44 +1,54 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useAsset } from "..";
+import { useAsset, useMarketHistory } from "..";
 import {
   BITCOIN_ASSET_SYMBOL,
   defaultToken,
   HBD_ASSET_SYMBOL,
   HIVE_ASSET_SYMBOL,
 } from "../../../api/params";
-import { usePeerplaysApiContext } from "../../providers";
-import {
-  Asset,
-  MarketPairStats,
-  PairNameAndMarketStats,
-  Ticker,
-} from "../../types";
+// import { useMarketContext } from "../../providers";
+import { Asset, MarketPairStats, PairNameAndMarketStats } from "../../types";
 
 import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
-  const { dbApi } = usePeerplaysApiContext();
+  // const { dbApi } = usePeerplaysApiContext();
   const { getAllAssets, limitByPrecision, ceilPrecision } = useAsset();
-
+  const { getTicker } = useMarketHistory();
   const [allAssets, _setAllAssets] = useState<Asset[] | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
 
   //to-do: refactor or remove
   const getMarketPairStats = useCallback(
+    //data needed:
+    // 1. Symbols
+    // 2. latest quote
+    // 3. latest base
+    // 4. ask
+    // 5. bid
+    // 6. 24h change
+    // 7. 24h high
+    // 8. 24h low
+    // 9. 24h volume
     async (base: Asset, quote: Asset) => {
       let latest = "0",
         percentChange = "0",
-        volume = "0";
+        volume = "0",
+        ask_quote = "0",
+        bid_quote = "0",
+        dailyHigh = "0",
+        dailyLow = "0";
       try {
-        const ticker: Ticker = await dbApi("get_ticker", [
-          base.symbol,
-          quote.symbol,
-        ]);
+        const ticker = await getTicker(base, quote);
         if (ticker) {
           latest = ceilPrecision(ticker.latest, base.precision);
           percentChange = limitByPrecision(ticker.percent_change, 1) || "0";
           volume = limitByPrecision(ticker.quote_volume, 3);
+          ask_quote = limitByPrecision(ticker.lowest_ask, base.precision);
+          bid_quote = limitByPrecision(ticker.highest_bid, base.precision);
+          dailyHigh = limitByPrecision(ticker.highest_bid, base.precision);
+          dailyLow = limitByPrecision(ticker.lowest_ask, base.precision);
         }
       } catch (e) {
         console.log(e);
@@ -47,9 +57,13 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         latest,
         percentChange,
         volume,
+        ask_quote,
+        bid_quote,
+        dailyHigh,
+        dailyLow,
       } as MarketPairStats;
     },
-    [dbApi]
+    []
   );
 
   const getDefaultPairs = useCallback(() => {
