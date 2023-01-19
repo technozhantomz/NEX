@@ -7,6 +7,7 @@ import { useViewportContext } from "../../../common/providers";
 import { Col } from "../../../ui/src";
 import {
   HistoryTabs,
+  OrderBook,
   PairModal,
   PairSelect,
   PriceChart,
@@ -20,7 +21,7 @@ import { useMarketPage } from "./hooks";
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
-  const { md, xl } = useViewportContext();
+  const { md, xxl } = useViewportContext();
   const {
     // selectedPair,
     isPairModalVisible,
@@ -30,8 +31,8 @@ const MarketPage: NextPage = () => {
     currentPair: pair as string,
   });
 
-  const renderHistoryTabs = !xl ? (
-    <Styled.RightBorderedVerticalFlexedCol xl={{ span: 5 }}>
+  const renderHistoryTabs = !xxl ? (
+    <Styled.RightBorderedVerticalFlexedCol xxl={{ span: 5 }}>
       {/* Trade History Title */}
       <Styled.HistoryBox>
         <Styled.TradeHistoryContainer>
@@ -46,9 +47,9 @@ const MarketPage: NextPage = () => {
   const renderChartAndOrderBook = (
     <Styled.ChartsAndOrderBookRow>
       {/* Charts Section */}
-      {!xl ? (
+      {!xxl ? (
         <>
-          <Styled.RightBorderedVerticalFlexedCol md={24} xl={16}>
+          <Styled.RightBorderedVerticalFlexedCol md={24} xxl={16}>
             <Styled.PriceChartContainer>
               <PriceChart />
             </Styled.PriceChartContainer>
@@ -57,10 +58,12 @@ const MarketPage: NextPage = () => {
             </Styled.MarketDepthContainer>
           </Styled.RightBorderedVerticalFlexedCol>
           {/* Order Book section */}
-          <Col xl={8}>Order Book Section</Col>
+          <Col xxl={8}>
+            <OrderBook currentPair={pair as string} />
+          </Col>
         </>
       ) : (
-        <Styled.VerticalFlexedCol md={24} xl={16}>
+        <Styled.VerticalFlexedCol md={24} xxl={16}>
           <Styled.PriceChartContainer>
             <PriceChart />
           </Styled.PriceChartContainer>
@@ -69,12 +72,14 @@ const MarketPage: NextPage = () => {
     </Styled.ChartsAndOrderBookRow>
   );
 
-  const renderTabs = !xl ? (
+  const renderTabs = !xxl ? (
     <Styled.UserOrdersContainer>
       <UsersOrdersTabs />
     </Styled.UserOrdersContainer>
   ) : (
-    <Styled.TabletTabsContainer>Tablet tabs</Styled.TabletTabsContainer>
+    <Styled.TabletTabsContainer>
+      <UsersOrdersTabs />
+    </Styled.TabletTabsContainer>
   );
 
   return (
@@ -103,7 +108,7 @@ const MarketPage: NextPage = () => {
             {/* Middle Section */}
             <Styled.RightBorderedVerticalFlexedCol
               md={{ span: 16 }}
-              xl={{ span: 14 }}
+              xxl={{ span: 14 }}
             >
               {/* Stats Section */}
               <Styled.StatsBox>678 PPY</Styled.StatsBox>
@@ -116,7 +121,7 @@ const MarketPage: NextPage = () => {
             </Styled.RightBorderedVerticalFlexedCol>
 
             {/* Right section */}
-            <Styled.VerticalFlexedCol md={{ span: 8 }} xl={{ span: 5 }}>
+            <Styled.VerticalFlexedCol md={{ span: 8 }} xxl={{ span: 5 }}>
               {/* Pair Selector */}
               <Styled.PairSelectorContainer>
                 <PairSelect

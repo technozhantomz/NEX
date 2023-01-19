@@ -1,5 +1,5 @@
 import { createChart, CrosshairMode } from "lightweight-charts";
-import { uniqBy } from "lodash";
+// import { uniqBy } from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useAsset, useMarketHistory } from "../../../../../common/hooks";
@@ -10,6 +10,10 @@ import {
   ChartFeed,
   UseCreatePriceChartResult,
 } from "./useCreatePriceChart.types";
+
+interface GroupedOrderHistory {
+  [date: string]: OrderHistory[];
+}
 
 export function useCreatePriceChart(): UseCreatePriceChartResult {
   const chartContainerRef = useRef<HTMLDivElement>(null);
@@ -22,48 +26,76 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
   const getChartFeed = useCallback(async () => {
     if (selectedPair) {
       const histories = (await getFillOrderHistory(
-        selectedPair
+        selectedPair.base,
+        selectedPair.quote
       )) as OrderHistory[];
       if (histories) {
         const sortedHistoriesByDate = histories.sort((a, b) => {
           return new Date(a.time).getTime() - new Date(b.time).getTime();
         });
-        const charData = await Promise.all(
-          sortedHistoriesByDate.map((order) => {
-            let orderAmmount;
-            //TODO: do not use data string get all orders for the data and map that to get the open, close, high, low values
-            const dataString = order.time.substring(0, order.time.indexOf("T")); // hack for now needto clean up
-            const orderOps = order.op;
-            const base = selectedPair.base;
-            if (orderOps.pays.asset_id === base.id) {
-              orderAmmount = setPrecision(
-                false,
-                orderOps.pays.amount,
-                base.precision
-              );
-              //this is buy orders
-            } else {
-              orderAmmount = setPrecision(
-                false,
-                orderOps.receives.amount,
-                base.precision
-              );
+        const groupedHistories: GroupedOrderHistory[] =
+          sortedHistoriesByDate.reduce((accumulator, order) => {
+            const key = order.time.substring(0, order.time.indexOf("T"));
+            if (!accumulator[key]) {
+              accumulator[key] = [];
             }
-            return {
-              time: dataString,
-              // value: orderAmmount,
-              open: orderAmmount,
-              high: orderAmmount,
-              low: orderAmmount,
-              close: orderAmmount,
-            };
-          })
-        );
-        console.log(charData);
-        setChartFeed(uniqBy(charData, "time"));
+            accumulator[key].push(order);
+            return accumulator;
+          }, []);
+
+        const processedOrders = Object.keys(groupedHistories).map((date) => {
+          const group = groupedHistories[date];
+          const open = getOrderAmmount(group[0]);
+          const close = getOrderAmmount(group[group.length - 1]);
+          const high = Math.max(
+            ...group.map((order: OrderHistory) => {
+              return getOrderAmmount(order);
+            })
+          );
+          const low = Math.min(
+            ...group.map((order: OrderHistory) => {
+              return getOrderAmmount(order);
+            })
+          );
+          return Object.assign({
+            time: date,
+            open,
+            close,
+            high,
+            low,
+          });
+        });
+
+        setChartFeed(processedOrders);
       }
     }
   }, [selectedPair]);
+
+  const getOrderAmmount = useCallback(
+    (order: OrderHistory) => {
+      if (selectedPair) {
+        let orderAmmount;
+        const orderOps = order.op;
+        const base = selectedPair.base;
+        if (orderOps.pays.asset_id === base.id) {
+          orderAmmount = setPrecision(
+            false,
+            orderOps.pays.amount,
+            base.precision
+          );
+          //this is buy orders
+        } else {
+          orderAmmount = setPrecision(
+            false,
+            orderOps.receives.amount,
+            base.precision
+          );
+        }
+        return orderAmmount;
+      }
+    },
+    [selectedPair]
+  );
 
   useEffect(() => {
     if (chartFeed.length > 0) {
