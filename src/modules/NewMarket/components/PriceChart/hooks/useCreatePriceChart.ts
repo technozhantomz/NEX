@@ -1,11 +1,10 @@
 import { createChart, CrosshairMode } from "lightweight-charts";
-// import { uniqBy } from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import {
-  IChartingLibraryWidget,
-  widget,
-} from "../../../../../../public/static/charting_library";
+// import {
+//   IChartingLibraryWidget,
+//   widget,
+// } from "../../../../../../public/static/charting_library";
 import { useAsset, useMarketHistory } from "../../../../../common/hooks";
 import { useMarketContext } from "../../../../../common/providers";
 import { OrderHistory } from "../../../../../common/types";
@@ -19,36 +18,40 @@ interface GroupedOrderHistory {
   [date: string]: OrderHistory[];
 }
 
+declare global {
+  interface Window {
+    Datafeeds: any;
+  }
+}
+
 export function useCreatePriceChart(): UseCreatePriceChartResult {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const lightweightContainerRef = useRef<HTMLDivElement>(null);
   const { selectedPair } = useMarketContext();
   const { getFillOrderHistory } = useMarketHistory();
   const { setPrecision } = useAsset();
-  // const { formLocalDate } = useFormDate();
   const [chartFeed, setChartFeed] = useState<ChartFeed[]>([]);
 
-  const defaultProps = {
-    symbol: "AAPL",
-    interval: "D",
-    datafeedUrl: "https://demo_feed.tradingview.com",
-    libraryPath: "/static/charting_library/",
-    chartsStorageUrl: "https://saveload.tradingview.com",
-    chartsStorageApiVersion: "1.1",
-    clientId: "tradingview.com",
-    userId: "public_user_id",
-    fullscreen: false,
-    autosize: true,
-    studiesOverrides: {},
-  };
+  // const defaultProps = {
+  //   symbol: "AAPL",
+  //   interval: "D",
+  //   datafeedUrl: "https://demo_feed.tradingview.com",
+  //   libraryPath: "/static/charting_library/",
+  //   chartsStorageUrl: "https://saveload.tradingview.com",
+  //   chartsStorageApiVersion: "1.1",
+  //   clientId: "tradingview.com",
+  //   userId: "public_user_id",
+  //   fullscreen: false,
+  //   autosize: true,
+  //   studiesOverrides: {},
+  // };
 
-  let tvWidget1: IChartingLibraryWidget | null = null;
+  // let tvWidget1: IChartingLibraryWidget | null = null;
 
   const getChartFeed = useCallback(async () => {
     if (selectedPair) {
       const histories = (await getFillOrderHistory(
-        selectedPair.base,
-        selectedPair.quote
+        selectedPair
       )) as OrderHistory[];
       if (histories) {
         const sortedHistoriesByDate = histories.sort((a, b) => {
@@ -118,60 +121,60 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
     [selectedPair]
   );
 
-  useEffect(() => {
-    if (chartContainerRef.current) {
-      const widgetOptions = {
-        symbol: defaultProps.symbol,
-        // BEWARE: no trailing slash is expected in feed URL
-        datafeedUrl: new window.Datafeeds.UDFCompatibleDatafeed(
-          defaultProps.datafeedUrl
-        ),
-        interval: defaultProps.interval,
-        container: chartContainerRef.current,
-        library_path: defaultProps.libraryPath,
+  // useEffect(() => {
+  //   if (chartContainerRef.current) {
+  //     const widgetOptions = {
+  //       symbol: defaultProps.symbol,
+  //       // BEWARE: no trailing slash is expected in feed URL
+  //       datafeedUrl: new window.Datafeeds.UDFCompatibleDatafeed(
+  //         "https://demo_feed.tradingview.com"
+  //       ),
+  //       interval: defaultProps.interval,
+  //       container: chartContainerRef.current,
+  //       library_path: defaultProps.libraryPath,
 
-        locale: "en",
-        disabled_features: ["use_localstorage_for_settings"],
-        enabled_features: ["study_templates"],
-        charts_storage_url: defaultProps.chartsStorageUrl,
-        charts_storage_api_version: defaultProps.chartsStorageApiVersion,
-        client_id: defaultProps.clientId,
-        user_id: defaultProps.userId,
-        fullscreen: defaultProps.fullscreen,
-        autosize: defaultProps.autosize,
-        studies_overrides: defaultProps.studiesOverrides,
-      };
+  //       locale: "en",
+  //       disabled_features: ["use_localstorage_for_settings"],
+  //       enabled_features: ["study_templates"],
+  //       charts_storage_url: defaultProps.chartsStorageUrl,
+  //       charts_storage_api_version: defaultProps.chartsStorageApiVersion,
+  //       client_id: defaultProps.clientId,
+  //       user_id: defaultProps.userId,
+  //       fullscreen: defaultProps.fullscreen,
+  //       autosize: defaultProps.autosize,
+  //       studies_overrides: defaultProps.studiesOverrides,
+  //     };
 
-      const tvWidget = new widget(widgetOptions);
-      tvWidget1 = tvWidget;
+  //     const tvWidget = new widget(widgetOptions);
+  //     tvWidget1 = tvWidget;
 
-      tvWidget.onChartReady(() => {
-        tvWidget.headerReady().then(() => {
-          const button = tvWidget.createButton();
-          button.setAttribute("title", "Click to show a notification popup");
-          button.classList.add("apply-common-tooltip");
-          button.addEventListener("click", () =>
-            tvWidget.showNoticeDialog({
-              title: "Notification",
-              body: "TradingView Charting Library API works correctly",
-              callback: () => {
-                console.log("Noticed!");
-              },
-            })
-          );
+  //     tvWidget.onChartReady(() => {
+  //       tvWidget.headerReady().then(() => {
+  //         const button = tvWidget.createButton();
+  //         button.setAttribute("title", "Click to show a notification popup");
+  //         button.classList.add("apply-common-tooltip");
+  //         button.addEventListener("click", () =>
+  //           tvWidget.showNoticeDialog({
+  //             title: "Notification",
+  //             body: "TradingView Charting Library API works correctly",
+  //             callback: () => {
+  //               console.log("Noticed!");
+  //             },
+  //           })
+  //         );
 
-          button.innerHTML = "Check API";
-        });
-      });
-    }
+  //         button.innerHTML = "Check API";
+  //       });
+  //     });
+  //   }
 
-    return () => {
-      if (tvWidget1 !== null) {
-        tvWidget1.remove();
-        tvWidget1 = null;
-      }
-    };
-  }, []);
+  //   return () => {
+  //     if (tvWidget1 !== null) {
+  //       tvWidget1.remove();
+  //       tvWidget1 = null;
+  //     }
+  //   };
+  // }, []);
 
   // lightweight-charts needs to be removed
   useEffect(() => {

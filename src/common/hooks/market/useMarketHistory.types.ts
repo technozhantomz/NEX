@@ -1,5 +1,4 @@
 import {
-  Asset,
   History,
   LimitOrder,
   MarketPair,
@@ -9,8 +8,7 @@ import {
 
 export type UseMarketHistoryResult = {
   getFillOrderHistory: (
-    base: Asset,
-    quote: Asset
+    selectedPair: MarketPair
   ) => Promise<OrderHistory[] | undefined>;
   getHistoryTableRows: () => Promise<TradeHistoryRow[] | undefined>;
   formTradeHistoryRows: (

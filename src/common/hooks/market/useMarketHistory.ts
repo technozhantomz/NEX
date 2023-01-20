@@ -2,7 +2,6 @@ import { useCallback } from "react";
 
 import { useMarketContext, usePeerplaysApiContext } from "../../providers";
 import {
-  Asset,
   BlockHeader,
   History,
   LimitOrder,
@@ -24,11 +23,11 @@ export function useMarketHistory(): UseMarketHistoryResult {
   const { formLocalDate } = useFormDate();
 
   const getFillOrderHistory = useCallback(
-    async (base: Asset, quote: Asset) => {
+    async (selectedPair: MarketPair) => {
       try {
         const histories: OrderHistory[] = await historyApi(
           "get_fill_order_history",
-          [base.id, quote.id, 100]
+          [selectedPair.base.id, selectedPair.quote.id, 100]
         );
         return histories;
       } catch (e) {

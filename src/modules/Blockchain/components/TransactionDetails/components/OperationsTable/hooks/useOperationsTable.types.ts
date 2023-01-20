@@ -13,7 +13,8 @@ export type OperationRow = {
   key: number;
   number: number;
   id: number;
-  type: string;
+  type?: string;
+  time: string;
   fees: string;
   details: string;
   results: string;

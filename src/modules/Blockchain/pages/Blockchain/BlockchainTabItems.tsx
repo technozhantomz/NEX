@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { ReactNode } from "react";
+import { ReactNode, useCallback } from "react";
 
 import {
   AssetsTab,
@@ -17,7 +17,7 @@ export const BlockchainTabItems = (
   blockNum: number | undefined,
   transactionId: string | undefined
 ): { key: string; label: ReactNode; children: ReactNode }[] => {
-  const BlockTab = (): JSX.Element => {
+  const BlockTab = useCallback((): JSX.Element => {
     return (
       <>
         {block ? (
@@ -36,7 +36,7 @@ export const BlockchainTabItems = (
         )}
       </>
     );
-  };
+  }, [block, transactionId, blockNum]);
 
   const label = [
     "blockchain",
