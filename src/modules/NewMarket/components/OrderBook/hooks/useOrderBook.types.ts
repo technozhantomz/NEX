@@ -1,4 +1,4 @@
-import { Order, TradeHistoryRow } from "../../../types";
+import { MarketOrder, TradeHistoryRow } from "../../../../../common/types";
 
 export type OrderColumn = {
   title: string;
@@ -10,15 +10,17 @@ export type OrderColumn = {
 
 export type UseOrderBookResult = {
   threshold: number;
-  handleThresholdChange: (menuInfo: { key: string }) => void;
+  loading: boolean;
   orderColumns: OrderColumn[];
-  asksRows: Order[];
-  bidsRows: Order[];
+  asksRows: MarketOrder[];
+  bidsRows: MarketOrder[];
   filter: FilterType;
-  handleFilterChange: (type: FilterType) => void;
   thresholdValues: string[];
+  lastTrade: TradeHistoryRow;
+  handleFilterChange: (type: FilterType) => void;
+  handleThresholdChange: (menuInfo: { key: string }) => void;
   specifyTableHeight: () => string;
-  specifyTableScroll: (orders: Order[]) =>
+  specifyTableScroll: (orders: MarketOrder[]) =>
     | {
         y: number;
         x: undefined;

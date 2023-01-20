@@ -2,39 +2,27 @@ import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import counterpart from "counterpart";
 import { useCallback } from "react";
 
+import { TradeHistoryRow } from "../../../../common/types";
 import { DownOutlined, Tooltip } from "../../../../ui/src";
-import { Order, PairAssets, TradeHistoryRow } from "../../types";
 
 import * as Styled from "./OrderBook.styled";
 import { FilterType, useOrderBook } from "./hooks";
 
 type Props = {
   currentPair: string;
-  selectedAssets: PairAssets | undefined;
-  loadingSelectedPair: boolean;
-  loadingAsksBids: boolean;
-  asks: Order[];
-  bids: Order[];
-  lastTradeHistory?: TradeHistoryRow;
 };
 
-export const OrderBook = ({
-  currentPair,
-  selectedAssets,
-  loadingSelectedPair,
-  loadingAsksBids,
-  bids,
-  asks,
-  lastTradeHistory,
-}: Props): JSX.Element => {
+export const OrderBook = ({ currentPair }: Props): JSX.Element => {
   const {
     thresholdValues,
     orderColumns,
-    handleThresholdChange,
     threshold,
     asksRows,
     bidsRows,
     filter,
+    lastTrade,
+    loading,
+    handleThresholdChange,
     handleFilterChange,
     specifyTableHeight,
     specifyTableScroll,
@@ -43,10 +31,6 @@ export const OrderBook = ({
     specifyBidsTableRowClassName,
   } = useOrderBook({
     currentPair,
-    asks,
-    bids,
-    selectedAssets,
-    loadingSelectedPair,
   });
 
   const types: FilterType[] = ["total", "sell", "buy"];
@@ -64,23 +48,21 @@ export const OrderBook = ({
   const asksScroll = specifyTableScroll(asksRows);
 
   const renderLastTradeHistoryPrice = useCallback(
-    (lastTradeHistory: TradeHistoryRow) => {
-      if (lastTradeHistory.isPriceUp !== undefined) {
-        return lastTradeHistory.isPriceUp ? (
+    (lastTrade: TradeHistoryRow) => {
+      if (lastTrade.isPriceUp !== undefined) {
+        return lastTrade.isPriceUp ? (
           <>
-            <span style={{ marginRight: "4px" }}>{lastTradeHistory.price}</span>
+            <span style={{ marginRight: "4px" }}>{lastTrade.price}</span>
             <CaretUpOutlined />
           </>
         ) : (
           <>
-            <span style={{ marginRight: "4px" }}>{lastTradeHistory.price}</span>
+            <span style={{ marginRight: "4px" }}>{lastTrade.price}</span>
             <CaretDownOutlined />
           </>
         );
       } else {
-        return (
-          <span style={{ marginRight: "4px" }}>{lastTradeHistory?.price}</span>
-        );
+        return <span style={{ marginRight: "4px" }}>{lastTrade?.price}</span>;
       }
     },
     []
@@ -134,7 +116,7 @@ export const OrderBook = ({
         {filter !== "sell" && (
           <Styled.Table
             style={{ height: specifyTableHeight() }}
-            loading={loadingAsksBids}
+            loading={loading}
             pagination={false}
             columns={orderColumns as any}
             bordered={false}
@@ -147,21 +129,19 @@ export const OrderBook = ({
         {filter === "total" && (
           <Styled.LastTradeContainer>
             <Styled.LastTradePriceValue>
-              <span className={specifyLastTradeClassName(lastTradeHistory)}>
-                {lastTradeHistory
-                  ? renderLastTradeHistoryPrice(lastTradeHistory)
-                  : 0}
+              <span className={specifyLastTradeClassName(lastTrade)}>
+                {lastTrade ? renderLastTradeHistoryPrice(lastTrade) : 0}
               </span>
             </Styled.LastTradePriceValue>
             <Styled.LastTradeValue>
-              {lastTradeHistory ? lastTradeHistory.amount : 0}
+              {lastTrade ? lastTrade.amount : 0}
             </Styled.LastTradeValue>
             <Styled.LastTradeValue>
-              {lastTradeHistory
-                ? (
-                    Number(lastTradeHistory.amount) *
-                    Number(lastTradeHistory.price)
-                  ).toFixed(selectedAssets?.quote.precision || 5)
+              {lastTrade
+                ? // ? (Number(lastTrade.amount) * Number(lastTrade.price)).toFixed(
+                  //     selectedPair?.quote.precision || 5
+                  //   )
+                  Number(lastTrade.amount) * Number(lastTrade.price)
                 : 0}
             </Styled.LastTradeValue>
           </Styled.LastTradeContainer>
@@ -170,7 +150,7 @@ export const OrderBook = ({
         {filter !== "buy" && (
           <Styled.Table
             style={{ height: specifyTableHeight() }}
-            loading={loadingAsksBids}
+            loading={loading}
             pagination={false}
             columns={orderColumns as any}
             bordered={false}

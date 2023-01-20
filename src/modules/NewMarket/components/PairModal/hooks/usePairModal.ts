@@ -10,6 +10,7 @@ import {
 
 import { defaultToken } from "../../../../../api/params";
 import { useAsset, useUpdateExchanges } from "../../../../../common/hooks";
+import { useMarketContext } from "../../../../../common/providers";
 import { Form } from "../../../../../ui/src";
 
 import { PairForm, UsePairModalResult } from "./usePairModal.types";
@@ -28,6 +29,7 @@ export function usePairModal({
   const router = useRouter();
   const { getAllAssets } = useAsset();
   const { updateExchanges } = useUpdateExchanges();
+  const { unsubscribeFromMarket } = useMarketContext();
 
   const handleValuesChange = useCallback(() => {
     pairModalForm.validateFields();
@@ -48,6 +50,7 @@ export function usePairModal({
         pairModalForm.setFieldsValue({
           recents: currentPair.replace("_", "/"),
         });
+        unsubscribeFromMarket();
         router.push(`/new-market/${selectedPair}`);
       } else {
         setIsVisible(false);
