@@ -46,3 +46,7 @@ yarn-error.log*
 /sonar-scanner
 /.scannerwork
 /.swc
+
+# tradingView chart
+public/static/charting_library/
+public/static/datafeeds/
