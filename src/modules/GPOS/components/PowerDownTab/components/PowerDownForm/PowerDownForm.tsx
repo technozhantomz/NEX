@@ -34,11 +34,8 @@ export const PowerDownForm = ({
     powerDownForm,
     formValidation,
     adjustWithdraw,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     handleWithdraw,
     feeAmount,
     newAvailableBalance,
@@ -58,8 +55,7 @@ export const PowerDownForm = ({
     handleFormFinish,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: handleWithdraw,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
   const { sm } = useViewportContext();
@@ -177,9 +173,7 @@ export const PowerDownForm = ({
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           fee={feeAmount}
           account={localStorageAccount}
           withdrawalAmount={withdrawAmount}

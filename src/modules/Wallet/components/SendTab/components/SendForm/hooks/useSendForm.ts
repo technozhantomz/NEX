@@ -13,11 +13,13 @@ import {
 } from "../../../../../../../api/params";
 import { utils } from "../../../../../../../api/utils";
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useFees,
   useSonNetwork,
   useTransactionBuilder,
+  useTransactionMessage,
   useTransferTransactionBuilder,
 } from "../../../../../../../common/hooks";
 import { useUserContext } from "../../../../../../../common/providers";
@@ -43,15 +45,13 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
   const { calculateTransferFee } = useFees();
   const { buildTransferTransaction } = useTransferTransactionBuilder();
   const { buildTrx, getTrxFee } = useTransactionBuilder();
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
 
   const [selectedBlockchain, setSelectedBlockchain] = useState<string>();
   const [toAccount, setToAccount] = useState<Account>();
   const [fromAccount, setFromAccount] = useState<Account>();
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
+
   const [amount, setAmount] = useState<string>("0");
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
@@ -245,7 +245,9 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
 
   const send = useCallback(
     async (signerKey: SignerKey) => {
-      setTransactionErrorMessage("");
+      transactionMessageDispatch({
+        type: TransactionMessageActionType.CLEAR,
+      });
       const values = sendForm.getFieldsValue();
       let _to = "";
       let _memo = "";
@@ -260,46 +262,48 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
       }
       let trxResult;
       try {
-        setLoadingTransaction(true);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
         const trx = await buildSendFormTransaction(_to, _memo);
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
       if (trxResult) {
         afterTransactionModalClose.current = () => {
           sendForm.resetFields();
         };
         formAccountBalancesByName(localStorageAccount);
-        setTransactionErrorMessage("");
-        setTransactionSuccessMessage(
-          counterpart.translate(`field.success.successfully_transferred`, {
-            amount: values.amount,
-            asset: values.asset,
-            to: values.to,
-          })
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(
+            `field.success.successfully_transferred`,
+            {
+              amount: values.amount,
+              asset: values.asset,
+              to: values.to,
+            }
+          ),
+        });
       } else {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
     },
     [
-      setTransactionErrorMessage,
+      transactionMessageDispatch,
       sendForm,
-      setLoadingTransaction,
       buildSendFormTransaction,
       buildTrx,
       localStorageAccount,
       formAccountBalancesByName,
-      setTransactionSuccessMessage,
       selectedBlockchain,
       defaultNetwork,
       SON_ACCOUNT_NAME,
@@ -536,11 +540,8 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     selectedBlockchain,
     formValdation,
     feeAmount,
-    transactionErrorMessage,
-    setTransactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     send,
     amount,
     localStorageAccount,

@@ -3,11 +3,13 @@ import { useCallback, useEffect, useState } from "react";
 
 import { defaultToken } from "../../../../../../../api/params";
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useFees,
   useGPOSTransactionBuilder,
   useTransactionBuilder,
+  useTransactionMessage,
 } from "../../../../../../../common/hooks";
 import {
   useAssetsContext,
@@ -29,14 +31,11 @@ export function usePowerUpForm({
   calculateGposBalances,
 }: UsePowerUpFormArgs): UsePowerUpFormResult {
   const [feeAmount, setFeeAmount] = useState<number>(0);
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [newBalance, setNewBalance] = useState<string>("0");
   const [userAvailableBalance, _setUserAvailableBalance] = useState<number>(0);
 
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
   const [powerUpForm] = Form.useForm<PowerUpForm>();
   const depositAmount: string =
     Form.useWatch("depositAmount", powerUpForm) || "0";
@@ -77,39 +76,45 @@ export function usePowerUpForm({
       const values = powerUpForm.getFieldsValue();
       const depositAmount = values.depositAmount;
       const trx = buildVestingBalanceCreateTransaction(
-        gposBalances?.asset as Asset,
+        defaultAsset as Asset,
         depositAmount,
         id
       );
 
-      setTransactionErrorMessage("");
+      transactionMessageDispatch({
+        type: TransactionMessageActionType.CLEAR,
+      });
 
       try {
-        setLoadingTransaction(true);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
         const trxResult = await buildTrx([trx], [signerKey]);
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await calculateGposBalances();
-          setTransactionErrorMessage("");
-          setTransactionSuccessMessage(
-            counterpart.translate(`field.success.successfully_deposited`, {
-              depositAmount: values.depositAmount,
-              symbol: gposBalances?.asset.symbol,
-            })
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_SUCCESS,
+            message: counterpart.translate(
+              `field.success.successfully_deposited`,
+              {
+                depositAmount: values.depositAmount,
+                symbol: gposBalances?.symbol,
+              }
+            ),
+          });
         } else {
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.unable_transaction`)
-          );
-          setLoadingTransaction(false);
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.LOADED_ERROR,
+            message: counterpart.translate(`field.errors.transaction_unable`),
+          });
         }
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.unable_transaction`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
     },
     [
@@ -117,13 +122,11 @@ export function usePowerUpForm({
       gposBalances,
       buildVestingBalanceCreateTransaction,
       id,
-      setTransactionErrorMessage,
-      setLoadingTransaction,
       buildTrx,
       formAccountBalancesByName,
       localStorageAccount,
       calculateGposBalances,
-      setTransactionSuccessMessage,
+      transactionMessageDispatch,
     ]
   );
 
@@ -141,7 +144,7 @@ export function usePowerUpForm({
 
   const validateDepositAmount = async (_: unknown, value: string) => {
     const accountAsset = assets.find(
-      (asset) => asset.symbol === gposBalances?.asset.symbol
+      (asset) => asset.symbol === gposBalances?.symbol
     );
     const total = Number(value) + feeAmount;
     if (Number(value) <= 0) {
@@ -180,14 +183,13 @@ export function usePowerUpForm({
       if (!sm) {
         powerUpForm.setFieldsValue({
           openingBalance:
-            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
-          newBalance:
-            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
+            gposBalances.openingBalance + " " + gposBalances.symbol,
+          newBalance: gposBalances.openingBalance + " " + gposBalances.symbol,
         });
       } else {
         powerUpForm.setFieldsValue({
-          openingBalance: gposBalances.asset.symbol,
-          newBalance: gposBalances.asset.symbol,
+          openingBalance: gposBalances.symbol,
+          newBalance: gposBalances.symbol,
         });
       }
     }
@@ -213,14 +215,13 @@ export function usePowerUpForm({
 
         if (!sm) {
           powerUpForm.setFieldsValue({
-            newBalance: newBalance + " " + gposBalances?.asset.symbol,
-            availableBalance:
-              userAvailableBalance + " " + gposBalances.asset.symbol,
+            newBalance: newBalance + " " + gposBalances?.symbol,
+            availableBalance: userAvailableBalance + " " + gposBalances.symbol,
           });
         } else {
           powerUpForm.setFieldsValue({
-            newBalance: gposBalances?.asset.symbol,
-            availableBalance: gposBalances.asset.symbol,
+            newBalance: gposBalances?.symbol,
+            availableBalance: gposBalances.symbol,
           });
         }
       }
@@ -239,12 +240,9 @@ export function usePowerUpForm({
     powerUpForm,
     formValidation,
     adjustDeposit,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageState,
+    transactionMessageDispatch,
     handleVesting,
-    loadingTransaction,
     feeAmount,
     depositAmount,
     newBalance,

@@ -1,13 +1,15 @@
 import counterpart from "counterpart";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 
 import { defaultToken } from "../../../../../api/params";
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useFees,
   useOrderTransactionBuilder,
   useTransactionBuilder,
+  useTransactionMessage,
 } from "../../../../../common/hooks";
 import { useUserContext } from "../../../../../common/providers";
 import { Asset, SignerKey } from "../../../../../common/types";
@@ -24,12 +26,8 @@ export function useCreateLimitOrder({
   isBuyOrder,
   orderForm,
 }: UseCreateLimitOrderArgs): UseCreateLimitOrderResult {
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
   const price: string = Form.useWatch("price", orderForm);
   const quantity: string = Form.useWatch("quantity", orderForm);
   const total: string = Form.useWatch("total", orderForm);
@@ -156,7 +154,9 @@ export function useCreateLimitOrder({
 
   const handleCreateLimitOrder = useCallback(
     async (signerKey: SignerKey) => {
-      setTransactionErrorMessage("");
+      transactionMessageDispatch({
+        type: TransactionMessageActionType.CLEAR,
+      });
       const values = orderForm.getFieldsValue();
       const expiration = new Date(
         new Date().getTime() + 1000 * 60 * 60 * 24 * 365
@@ -176,41 +176,42 @@ export function useCreateLimitOrder({
       let trxResult;
 
       try {
-        setLoadingTransaction(true);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
-        setTransactionErrorMessage("");
-        setTransactionSuccessMessage(
-          counterpart.translate(`field.success.limit_order_successfully`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(
+            `field.success.limit_order_successfully`
+          ),
+        });
       } else {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.unable_transaction`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
     },
     [
-      setTransactionErrorMessage,
+      transactionMessageDispatch,
       orderForm,
       buildCreateLimitOrderTransaction,
       id,
       selectedAssets,
       isBuyOrder,
       buildTrx,
-      setLoadingTransaction,
       localStorageAccount,
       formAccountBalancesByName,
-      setTransactionSuccessMessage,
     ]
   );
 
@@ -343,11 +344,8 @@ export function useCreateLimitOrder({
     formValidation,
     handleValuesChange,
     handleCreateLimitOrder,
-    transactionErrorMessage,
-    setTransactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     price,
     total,
     quantity,

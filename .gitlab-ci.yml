@@ -28,6 +28,7 @@ build-qa:
   image: node:16.17.0-alpine3.16
   stage: build
   script:
+    - echo "NEXT_PUBLIC_FORCE_VERSION='v1'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
     - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
@@ -50,6 +51,7 @@ build-stg:
   image: node:16.17.0-alpine3.16
   stage: build
   script:
+    - echo "NEXT_PUBLIC_FORCE_VERSION='v1'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$DEV_TOKEN'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$DEV_QUOTE'" >> .env
     - echo "NEXT_PUBLIC_FAUCET_URL='$DEV_FAUCET'" >> .env
@@ -72,6 +74,7 @@ build-production:
   image: node:16.17.0-alpine3.16
   stage: build
   script:
+    - echo "NEXT_PUBLIC_FORCE_VERSION='v1'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_TOKEN='$PROD_TOKEN'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_QUOTE='$PROD_QUOTE'" >> .env
     - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env
@@ -114,6 +117,8 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
+    - npm install
+    - npm run test:ci
     - sonar-scanner
   only:
     - merge_requests
