@@ -68,11 +68,11 @@ const filters = [
   undefined,
   [
     {
-      text: "Avtive",
+      text: counterpart.translate(`tableFilters.active`),
       value: true,
     },
     {
-      text: "Inactive",
+      text: counterpart.translate(`tableFilters.inactive`),
       value: false,
     },
   ],

@@ -55,7 +55,7 @@ export const TransactionDetails = ({
                 <span>
                   {counterpart.translate(
                     `pages.blocks.transaction_detials.transaction`
-                  )}
+                  )}{" "}
                   {transaction} of {blockTransactions.length}
                 </span>
               </Styled.BlockNumber>

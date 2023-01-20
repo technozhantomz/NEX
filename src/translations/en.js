@@ -26,10 +26,11 @@ export const en = {
         "Once you've synchronized your clock, please refresh this page",
     },
     connection_error: {
-      title: "Application initialization issues",
+      title: "Connection Error",
       first_description:
-        "Coming soon: Node manual selection and Adding a personal node",
-      second_description: "Please check your connection and refresh the page",
+        "Peerplays DEX can't find a running node to connect to the blockchain.",
+      second_description:
+        "Please check your node connection and refresh the page.",
     },
   },
   transaction: {
@@ -1226,7 +1227,7 @@ export const en = {
     status_actions: "Status/Actions",
   },
   tableFilters: {
-    avtive: "Avtive",
+    active: "Active",
     inactive: "Inactive",
     approved: "Approved",
     not_approved: "Not Approved",

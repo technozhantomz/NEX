@@ -26,10 +26,11 @@ export const ru = {
       second_description: "После синхронизации часов обновите эту страницу.",
     },
     connection_error: {
-      title: "Проблема с инициализацией приложения",
-      first_description: "Скоро: ручной выбор узла и добавление личного узла",
+      title: "Ошибка подключения",
+      first_description:
+        "Peerplays DEX не может найти работающий узел для подключения к блокчейну.",
       second_description:
-        "Пожалуйста, проверьте подключение и обновите страницу",
+        "Пожалуйста, проверьте соединение с узлом и обновите страницу.",
     },
   },
   transaction: {
@@ -1229,7 +1230,7 @@ export const ru = {
     status_actions: "Статус/Действия",
   },
   tableFilters: {
-    avtive: "Активный",
+    active: "Активный",
     inactive: "Неактивно",
     approved: "Утверждено",
     not_approved: "Не одобрено",

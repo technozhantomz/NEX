@@ -4,10 +4,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { defaultToken } from "../../../../../../api/params";
 import { isArrayEqual } from "../../../../../../api/utils";
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useBlockchain,
   useTransactionBuilder,
+  useTransactionMessage,
   useUpdateAccountTransactionBuilder,
 } from "../../../../../../common/hooks";
 import {
@@ -55,14 +57,10 @@ export function useVoteTab({
     GlobalProperties | undefined
   >();
   const [updateAccountFee, setUpdateAccountFee] = useState<number>();
-  //
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const afterCloseTransactionModal = useRef<() => void>();
 
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
   const { formKnownAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { formAccountBalancesByName } = useAccount();
@@ -373,29 +371,37 @@ export function useVoteTab({
     async (signerKey: SignerKey) => {
       const votingErrorMessage = validateVoting(updateAccountFee as number);
       if (votingErrorMessage) {
-        setTransactionErrorMessage(votingErrorMessage);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.ERROR,
+          message: votingErrorMessage,
+        });
         return;
       }
+      transactionMessageDispatch({
+        type: TransactionMessageActionType.CLEAR,
+        message: votingErrorMessage,
+      });
 
-      setTransactionErrorMessage("");
       let trxResult;
       try {
-        setLoadingTransaction(true);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
         const trx = await createUpdateAccountTrx(localApprovedVotesIds);
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (error) {
         console.log(error);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.unable_transaction`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.unable_transaction`),
+        });
       }
       if (trxResult) {
-        setTransactionErrorMessage("");
-        setTransactionSuccessMessage(
-          counterpart.translate(`field.success.published_votes`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(`field.success.published_votes`),
+        });
+
         afterCloseTransactionModal.current = () => {
           formAccountBalancesByName(localStorageAccount);
           getUserVotes();
@@ -403,17 +409,16 @@ export function useVoteTab({
           setConfirmed(true);
         };
       } else {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.unable_transaction`)
-        );
-        setLoadingTransaction(false);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.unable_transaction`),
+        });
       }
     },
     [
       validateVoting,
       updateAccountFee,
-      setTransactionErrorMessage,
-      setLoadingTransaction,
+      transactionMessageDispatch,
       createUpdateAccountTrx,
       localApprovedVotesIds,
       buildTrx,
@@ -469,11 +474,8 @@ export function useVoteTab({
     addVote,
     removeVote,
     handleVoting,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    transactionMessageDispatch,
     updateAccountFee,
     localApprovedVotesIds,
     afterSuccessTransactionModalClose: afterCloseTransactionModal.current,

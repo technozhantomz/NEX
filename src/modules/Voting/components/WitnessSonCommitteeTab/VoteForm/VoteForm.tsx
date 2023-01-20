@@ -1,12 +1,16 @@
 import counterpart from "counterpart";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 
 import { DEFAULT_PROXY_ID } from "../../../../../api/params";
 import {
   PasswordModal,
   TransactionModal,
 } from "../../../../../common/components";
-import { useHandleTransactionForm } from "../../../../../common/hooks";
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+  useHandleTransactionForm,
+} from "../../../../../common/hooks";
 import { Proxy, SignerKey } from "../../../../../common/types";
 import { Tooltip } from "../../../../../ui/src";
 
@@ -19,11 +23,8 @@ type Props = {
   isVotesChanged: boolean;
   resetChanges: () => void;
   handleVoting: (signerKey: SignerKey) => Promise<void>;
-  loadingTransaction: boolean;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  transactionErrorMessage: string;
-  transactionSuccessMessage: string;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
+  transactionMessageState: TransactionMessageState;
   name: string;
   updateAccountFee?: number;
   proxy: Proxy;
@@ -37,12 +38,9 @@ export const VoteForm = ({
   tab,
   isVotesChanged,
   resetChanges,
-  setTransactionErrorMessage,
-  setTransactionSuccessMessage,
   handleVoting,
-  transactionErrorMessage,
-  transactionSuccessMessage,
-  loadingTransaction,
+  transactionMessageDispatch,
+  transactionMessageState,
   name,
   updateAccountFee,
   proxy,
@@ -65,8 +63,7 @@ export const VoteForm = ({
     hideTransactionModal,
   } = useHandleTransactionForm({
     handleTransactionConfirmation: handleVoting,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
 
@@ -146,9 +143,7 @@ export const VoteForm = ({
           <TransactionModal
             visible={isTransactionModalVisible}
             onCancel={hideTransactionModal}
-            transactionErrorMessage={transactionErrorMessage}
-            transactionSuccessMessage={transactionSuccessMessage}
-            loadingTransaction={loadingTransaction}
+            transactionMessageState={transactionMessageState}
             account={name}
             fee={updateAccountFee as number}
             transactionType="account_update"

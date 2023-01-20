@@ -14,9 +14,7 @@ export const OrdersTab = (): JSX.Element => {
     openOrdersTableRows,
     ordersHistoriesTableRows,
     ordersHistoriesColumns,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
     selectedOrderId,
     isPasswordModalVisible,
     isTransactionModalVisible,
@@ -42,9 +40,7 @@ export const OrdersTab = (): JSX.Element => {
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={localStorageAccount}
           fee={cancelOrderfeeAmount}
           orderId={selectedOrderId}

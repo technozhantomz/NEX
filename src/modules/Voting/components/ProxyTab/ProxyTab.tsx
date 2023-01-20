@@ -24,15 +24,12 @@ export const ProxyTab = ({
     searchError,
     searchedAccount,
     updateAccountFee,
-    loadingTransaction,
-    transactionErrorMessage,
-    transactionSuccessMessage,
+    transactionMessageState,
+    transactionMessageDispatch,
     addProxy,
     removeProxy,
     searchChange,
     handlePublishChanges,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
     localProxy,
     isPublishable,
     resetChanges,
@@ -54,15 +51,12 @@ export const ProxyTab = ({
         searchError={searchError}
         searchedAccount={searchedAccount}
         updateAccountFee={updateAccountFee}
-        loadingTransaction={loadingTransaction}
-        transactionErrorMessage={transactionErrorMessage}
-        transactionSuccessMessage={transactionSuccessMessage}
+        transactionMessageState={transactionMessageState}
+        transactionMessageDispatch={transactionMessageDispatch}
         addProxy={addProxy}
         removeProxy={removeProxy}
         searchChange={searchChange}
         handlePublishChanges={handlePublishChanges}
-        setTransactionErrorMessage={setTransactionErrorMessage}
-        setTransactionSuccessMessage={setTransactionSuccessMessage}
         isPublishable={isPublishable}
         resetChanges={resetChanges}
         searchValue={searchValue}

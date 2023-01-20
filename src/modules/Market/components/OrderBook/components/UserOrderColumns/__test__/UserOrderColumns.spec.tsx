@@ -10,7 +10,7 @@ describe("UserOrderColumns", () => {
   });
 
   it("should return an array with the correct number of columns", () => {
-    expect(userOrderColumns).toHaveLength(5);
+    expect(userOrderColumns).toHaveLength(6);
   });
 
   // it("should return a column with a cancel icon that calls the handleClick function when clicked", () => {

@@ -1,5 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../../../common/hooks";
 import { SignerKey } from "../../../../../common/types";
 import { FormInstance } from "../../../../../ui/src";
 
@@ -23,11 +27,8 @@ export type MembershipStatus = {
 
 export type UseMembershipTabResult = {
   handleMembershipUpgrade: (signerKey: SignerKey) => Promise<void>;
-  loadingTransaction: boolean;
-  transactionErrorMessage: string;
-  transactionSuccessMessage: string;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
+  transactionMessageState: TransactionMessageState;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   membershipForm: FormInstance<MembershipForm>;
   name: string;
   feesCashback: number;

@@ -44,11 +44,8 @@ export const VoteTab = ({
     addVote,
     removeVote,
     handleVoting,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageDispatch,
+    transactionMessageState,
     updateAccountFee,
     afterSuccessTransactionModalClose,
   } = useVoteTab({
@@ -71,11 +68,8 @@ export const VoteTab = ({
       resetChanges={resetChanges}
       name={name}
       handleVoting={handleVoting}
-      loadingTransaction={loadingTransaction}
-      setTransactionErrorMessage={setTransactionErrorMessage}
-      setTransactionSuccessMessage={setTransactionSuccessMessage}
-      transactionErrorMessage={transactionErrorMessage}
-      transactionSuccessMessage={transactionSuccessMessage}
+      transactionMessageDispatch={transactionMessageDispatch}
+      transactionMessageState={transactionMessageState}
       updateAccountFee={updateAccountFee}
       proxy={proxy}
       localApprovedVotesIds={localApprovedVotesIds}
@@ -91,11 +85,8 @@ export const VoteTab = ({
         resetChanges={resetChanges}
         name={name}
         handleVoting={handleVoting}
-        loadingTransaction={loadingTransaction}
-        setTransactionErrorMessage={setTransactionErrorMessage}
-        setTransactionSuccessMessage={setTransactionSuccessMessage}
-        transactionErrorMessage={transactionErrorMessage}
-        transactionSuccessMessage={transactionSuccessMessage}
+        transactionMessageDispatch={transactionMessageDispatch}
+        transactionMessageState={transactionMessageState}
         updateAccountFee={updateAccountFee}
         proxy={proxy}
         localApprovedVotesIds={localApprovedVotesIds}
