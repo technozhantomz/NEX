@@ -2,13 +2,9 @@ import counterpart from "counterpart";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import {
-  Layout,
-  PasswordModal,
-  TransactionModal,
-} from "../../../common/components";
+import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
-import { Col, Form } from "../../../ui/src";
+import { Col } from "../../../ui/src";
 import {
   HistoryTabs,
   OrderBook,
@@ -26,33 +22,10 @@ const MarketPage: NextPage = () => {
   const { pair } = router.query;
   const { md, xxl } = useViewportContext();
   const {
-    selectedAssets,
-    loadingSelectedPair,
-    userOpenOrdersRows,
-    userOrderHistoryRows,
-    userOpenOrdersColumns,
-    userOrdersHistoriesColumns,
-    loadingUserOrders,
-    transactionMessageState,
-    selectedOrderId,
-    isPasswordModalVisible,
-    isTransactionModalVisible,
-    hidePasswordModal,
-    handleCancelLimitOrderFinish,
-    hideTransactionModal,
-    cancelOrderFeeAmount,
-    localStorageAccount,
-    tradeHistoryColumns,
-    tradeHistoryRows,
-    loadingTradeHistory,
-    setIsPairModalVisible,
+    // selectedPair,
     isPairModalVisible,
     handleClickOnPair,
-    exchanges,
-    userTradeHistoryRows,
-    asks,
-    bids,
-    loadingAsksBids,
+    setIsPairModalVisible,
   } = useMarketPage({
     currentPair: pair as string,
   });
@@ -62,13 +35,7 @@ const MarketPage: NextPage = () => {
       {/* Trade History Title */}
       <Styled.HistoryBox>
         <Styled.TradeHistoryContainer>
-          <HistoryTabs
-            tradeHistoryRows={tradeHistoryRows}
-            loadingTradeHistory={loadingTradeHistory}
-            userTradeHistoryRows={userTradeHistoryRows}
-            loadingUserTradeHistory={loadingUserOrders}
-            tradeHistoryColumns={tradeHistoryColumns}
-          />
+          <HistoryTabs />
         </Styled.TradeHistoryContainer>
       </Styled.HistoryBox>
     </Styled.RightBorderedVerticalFlexedCol>
@@ -91,17 +58,7 @@ const MarketPage: NextPage = () => {
           </Styled.RightBorderedVerticalFlexedCol>
           {/* Order Book section */}
           <Col xxl={8}>
-            <OrderBook
-              currentPair={pair as string}
-              selectedAssets={selectedAssets}
-              loadingSelectedPair={loadingSelectedPair}
-              bids={bids}
-              asks={asks}
-              loadingAsksBids={loadingAsksBids}
-              lastTradeHistory={
-                tradeHistoryRows.length > 0 ? tradeHistoryRows[0] : undefined
-              }
-            />
+            <OrderBook currentPair={pair as string} />
           </Col>
         </>
       ) : (
@@ -116,16 +73,12 @@ const MarketPage: NextPage = () => {
 
   const renderTabs = !xxl ? (
     <Styled.UserOrdersContainer>
-      <UsersOrdersTabs
-        userOpenOrdersRows={userOpenOrdersRows}
-        userOrderHistoryRows={userOrderHistoryRows}
-        userOpenOrdersColumns={userOpenOrdersColumns}
-        userOrdersHistoriesColumns={userOrdersHistoriesColumns}
-        loadingUserOrders={loadingUserOrders}
-      />
+      <UsersOrdersTabs />
     </Styled.UserOrdersContainer>
   ) : (
-    <Styled.TabletTabsContainer>Tablet tabs</Styled.TabletTabsContainer>
+    <Styled.TabletTabsContainer>
+      <UsersOrdersTabs />
+    </Styled.TabletTabsContainer>
   );
 
   return (
@@ -191,28 +144,9 @@ const MarketPage: NextPage = () => {
             isVisible={isPairModalVisible}
             setIsVisible={setIsPairModalVisible}
             currentPair={pair as string}
-            exchanges={exchanges}
           />
         </Styled.Container>
       )}
-
-      {/* Cancel order form */}
-      <Form.Provider onFormFinish={handleCancelLimitOrderFinish}>
-        <TransactionModal
-          visible={isTransactionModalVisible}
-          onCancel={hideTransactionModal}
-          transactionMessageState={transactionMessageState}
-          account={localStorageAccount}
-          fee={cancelOrderFeeAmount}
-          orderId={selectedOrderId}
-          transactionType="limit_order_cancel"
-        />
-        <PasswordModal
-          visible={isPasswordModalVisible}
-          onCancel={hidePasswordModal}
-          neededKeyType="active"
-        />
-      </Form.Provider>
     </Layout>
   );
 };
