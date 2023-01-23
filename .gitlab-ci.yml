@@ -126,6 +126,20 @@ sonarcloud-check:
   tags:
     - sonar-check
 
+gitlab-unittest:
+  image: node:latest
+  stage: test
+  before_script:
+    - 'yarn global add jest'
+    - 'yarn add --dev jest-junit'
+  script:
+    - 'jest --ci --reporters=default --reporters=jest-junit'
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - junit.xml
+
 deploy_review:
   dependencies: [build-qa]
   stage: deploy
