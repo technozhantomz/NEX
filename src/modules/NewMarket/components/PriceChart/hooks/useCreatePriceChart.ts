@@ -1,17 +1,22 @@
 // import { createChart, CrosshairMode } from "lightweight-charts";
 import { useEffect, useRef } from "react";
 
+// eslint-disable-next-line import/order
 import {
   AvailableSaveloadVersions,
   ChartingLibraryWidgetOptions,
   IChartingLibraryWidget,
   LanguageCode,
   ResolutionString,
+  ThemeName,
   widget,
 } from "../../../../../../public/static/charting_library";
+
 // import { useAsset, useMarketHistory } from "../../../../../common/hooks";
 // import { useMarketContext } from "../../../../../common/providers";
 // import { OrderHistory } from "../../../../../common/types";
+
+import { useAppSettingsContext } from "../../../../../common/providers";
 
 import {
   // ChartFeed,
@@ -30,6 +35,7 @@ declare global {
 
 export function useCreatePriceChart(): UseCreatePriceChartResult {
   const chartContainerRef = useRef<HTMLDivElement>(null);
+  const { settings } = useAppSettingsContext();
   // const lightweightContainerRef = useRef<HTMLDivElement>(null);
   // const { selectedPair } = useMarketContext();
   // const { getFillOrderHistory } = useMarketHistory();
@@ -39,9 +45,13 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
   const defaultProps = {
     symbol: "AAPL",
     interval: "D",
-    locale: "en",
-    disabled_features: ["use_localstorage_for_settings"],
-    enabled_features: ["study_templates"],
+    locale: settings.language,
+    disabled_features: [
+      "use_localstorage_for_settings",
+      "header_widget",
+      "top_toolbar",
+    ],
+    enabled_features: [],
     datafeedUrl: "https://demo_feed.tradingview.com",
     libraryPath: "/static/charting_library/",
     chartsStorageUrl: "https://saveload.tradingview.com",
@@ -51,6 +61,7 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
     fullscreen: false,
     autosize: true,
     studiesOverrides: {},
+    theme: settings.darkTheme ? "Dark" : "Light",
   };
 
   let tvWidget1: IChartingLibraryWidget | null = null;
@@ -151,6 +162,7 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
         fullscreen: defaultProps.fullscreen,
         autosize: defaultProps.autosize,
         studies_overrides: defaultProps.studiesOverrides,
+        theme: defaultProps.theme as ThemeName,
       };
       const newWindow: any = window;
       console.log("defaultProps.datafeedUrl", newWindow.Datafeeds);
