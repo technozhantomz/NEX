@@ -24,7 +24,6 @@ const defaultMarketState: MarketContextType = {
   marketHistory: [],
   asks: [],
   bids: [],
-  // ticker: undefined,
   setSelectedPair: function (selectedPair: MarketPair): void {
     throw new Error(`Function not implemented. ${selectedPair}`);
   },
@@ -75,21 +74,6 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
       }
     }
   }, [selectedPair, getFillOrderHistory]);
-
-  // const subscribeToTicker = useCallback(async () => {
-  //   if (selectedPair) {
-  //     try {
-  //       const tickerStats = await getTicker(
-  //         selectedPair.base,
-  //         selectedPair.quote
-  //       );
-
-  //       setTicker(tickerStats);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   }
-  // }, [selectedPair]);
 
   const getAsksBids = useCallback(async () => {
     if (selectedPair) {
@@ -186,7 +170,6 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         marketHistory,
         asks,
         bids,
-        // ticker,
         setSelectedPair,
         unsubscribeFromMarket,
       }}

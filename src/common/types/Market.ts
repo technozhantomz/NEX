@@ -11,10 +11,11 @@ export type MarketPairStats = {
   latest: string;
   percentChange: string;
   volume: string;
-  ask_quote: string;
-  bid_quote: string;
-  dailyHigh: string;
-  dailyLow: string;
+  ask_quote?: string;
+  bid_quote?: string;
+  dailyHigh?: string;
+  dailyLow?: string;
+  latestIsBuyOrder?: boolean;
 };
 
 // TODO: remove marketPage redesign
@@ -28,6 +29,7 @@ export type MarketOrder = {
   price: string;
   quote: string;
   isBuyOrder: boolean;
+  timestamp?: Date;
 };
 
 export type MarketOrderType = "total" | "buy" | "sell";

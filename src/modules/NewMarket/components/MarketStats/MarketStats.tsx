@@ -34,15 +34,25 @@ export function MarketStats(): JSX.Element {
   }, [selectedPair]);
 
   return (
-    <Styled.Row gutter={30}>
+    <Styled.Row gutter={20}>
       <Styled.Col>
-        {/* shall display the last price (quote asset) for the selected market pair. */}
-        <Styled.LatestStatistic
-          title={`${stats?.latest} ${selectedPair?.quote.symbol}`}
-          // shall display the last price in the user’s preferred currency (user settings).
-          // In a market pair, there's a base/quote, so this should be the base price
-          value={`${stats?.latest} ${selectedPair?.base.symbol}`}
-        />
+        {stats?.latestIsBuyOrder ? (
+          <Styled.LatestBuyStatistic
+            title={`${stats?.latest} ${selectedPair?.quote.symbol}`}
+            value={`${stats?.latest} ${
+              selectedPair?.base.symbol
+            } ${String.fromCharCode(9650)}`}
+            valueStyle={{ color: colors.marketBuy }} //need to get user's preferred currency
+          />
+        ) : (
+          <Styled.LatestSellStatistic
+            title={`${stats?.latest} ${selectedPair?.quote.symbol}`}
+            value={`${stats?.latest} ${
+              selectedPair?.base.symbol
+            } ${String.fromCharCode(9660)}`} //need to get user's preferred currency
+            valueStyle={{ color: colors.marketSell }}
+          />
+        )}
       </Styled.Col>
       <Styled.Col>
         <Styled.Statistic title="Ask" value={stats?.ask_quote} precision={4} />
@@ -54,7 +64,7 @@ export function MarketStats(): JSX.Element {
         <Styled.Statistic
           title="24h Change"
           valueStyle={{ color: colors.marketBuy }}
-          value={stats?.percentChange}
+          value={`${stats?.percentChange}%`}
         />
       </Styled.Col>
       <Styled.Col>

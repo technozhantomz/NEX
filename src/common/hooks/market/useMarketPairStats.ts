@@ -7,64 +7,76 @@ import {
   HBD_ASSET_SYMBOL,
   HIVE_ASSET_SYMBOL,
 } from "../../../api/params";
-// import { useMarketContext } from "../../providers";
-import { Asset, MarketPairStats, PairNameAndMarketStats } from "../../types";
+import {
+  Asset,
+  MarketPairStats,
+  OrderHistory,
+  PairNameAndMarketStats,
+} from "../../types";
+import { useOrderBook } from "../market/useOrderBook";
 
 import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
-  // const { dbApi } = usePeerplaysApiContext();
   const { getAllAssets, limitByPrecision, ceilPrecision } = useAsset();
-  const { getTicker } = useMarketHistory();
+  const { getOrderBook } = useOrderBook();
+  const { getTicker, getFillOrderHistory } = useMarketHistory();
   const [allAssets, _setAllAssets] = useState<Asset[] | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
 
   //to-do: refactor or remove
-  const getMarketPairStats = useCallback(
-    //data needed:
-    // 1. Symbols
-    // 2. latest quote
-    // 3. latest base
-    // 4. ask
-    // 5. bid
-    // 6. 24h change
-    // 7. 24h high
-    // 8. 24h low
-    // 9. 24h volume
-    async (base: Asset, quote: Asset) => {
-      let latest = "0",
-        percentChange = "0",
-        volume = "0",
-        ask_quote = "0",
-        bid_quote = "0",
-        dailyHigh = "0",
-        dailyLow = "0";
-      try {
-        const ticker = await getTicker(base, quote);
-        if (ticker) {
-          latest = ceilPrecision(ticker.latest, base.precision);
-          percentChange = limitByPrecision(ticker.percent_change, 1) || "0";
-          volume = limitByPrecision(ticker.quote_volume, 3);
-          ask_quote = limitByPrecision(ticker.lowest_ask, base.precision);
-          bid_quote = limitByPrecision(ticker.highest_bid, base.precision);
-          dailyHigh = limitByPrecision(ticker.highest_bid, base.precision);
-          dailyLow = limitByPrecision(ticker.lowest_ask, base.precision);
+  const getMarketPairStats = useCallback(async (base: Asset, quote: Asset) => {
+    let latest = "0",
+      latestIsBuyOrder = false,
+      percentChange = "0",
+      volume = "0",
+      ask_quote = "0",
+      bid_quote = "0",
+      dailyHigh = "0",
+      dailyLow = "0";
+    try {
+      const ticker = await getTicker(base, quote);
+      const tradeHistory = await getFillOrderHistory(base, quote);
+      const askBids = await getOrderBook(base, quote);
+
+      const latestAskQuote = askBids?.asks[0]?.quote;
+      const latestBidQuote = askBids?.bids[0]?.quote;
+
+      if (tradeHistory && tradeHistory.length > 0) {
+        const lastTrade = tradeHistory[0];
+
+        const { pays } = (lastTrade as OrderHistory).op;
+        // this is sell orders
+        if (pays.asset_id === base.id) {
+          latestIsBuyOrder = false;
+          //this is buy orders
+        } else {
+          latestIsBuyOrder = true;
         }
-      } catch (e) {
-        console.log(e);
       }
-      return {
-        latest,
-        percentChange,
-        volume,
-        ask_quote,
-        bid_quote,
-        dailyHigh,
-        dailyLow,
-      } as MarketPairStats;
-    },
-    []
-  );
+      if (ticker) {
+        latest = ceilPrecision(ticker.latest, base.precision);
+        percentChange = limitByPrecision(ticker.percent_change, base.precision);
+        volume = limitByPrecision(ticker.quote_volume, 3);
+        ask_quote = limitByPrecision(latestAskQuote, base.precision);
+        bid_quote = limitByPrecision(latestBidQuote, base.precision);
+        dailyHigh = limitByPrecision(ticker?.highest_bid, base.precision);
+        dailyLow = limitByPrecision(ticker?.lowest_ask, base.precision);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    return {
+      latest,
+      latestIsBuyOrder,
+      percentChange,
+      volume,
+      ask_quote,
+      bid_quote,
+      dailyHigh,
+      dailyLow,
+    } as MarketPairStats;
+  }, []);
 
   const getDefaultPairs = useCallback(() => {
     const pairs: string[] = [

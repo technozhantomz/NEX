@@ -5,7 +5,6 @@ export type MarketContextType = {
   marketHistory: OrderHistory[];
   asks: MarketOrder[];
   bids: MarketOrder[];
-  // ticker: Ticker | undefined;
   setSelectedPair: (selectedPair: MarketPair) => void;
   unsubscribeFromMarket: () => Promise<void>;
 };
