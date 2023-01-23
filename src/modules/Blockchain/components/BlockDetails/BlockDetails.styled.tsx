@@ -38,7 +38,7 @@ export const LoadingContainer = styled.div`
 `;
 
 export const BlockWrapper = styled.div`
-  margin: 35px;
+  margin: 20px 15px;
   max-width: 800px;
 `;
 
