@@ -132,28 +132,28 @@ deploy_review:
     - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-review || true
     - pm2 start npm --name nex-review -- run start
-    - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
+    - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > $PROD_DEPLOY_DIR/environment_url.txt
   environment:
-    name: review/$CI_COMMIT_REF_NAME
-    url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
+    name: review/$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_app
+    auto_stop_in: 1 week
   artifacts:
     paths:
-      - environment_url.txt
+      - $PROD_DEPLOY_DIR/environment_url.txt
   rules:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   tags:
     - deploy-review
 
 stop_review_app:
-  dependencies: [deploy_review]
   stage: deploy
-  script: stop-review-app
+  script: 
+    - pm2 del nex-review || true
   environment:
-    name: review/$CI_COMMIT_REF_NAME
+    name: review/$CI_COMMIT_REF_SLUG
     action: stop
   rules:
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
-  allow_failure: true  
   when: manual
   tags:
     - deploy-review
