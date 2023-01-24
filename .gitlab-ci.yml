@@ -135,6 +135,7 @@ deploy_review:
     - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > $PROD_DEPLOY_DIR/environment_url.txt
   environment:
     name: review/$CI_COMMIT_REF_SLUG
+    url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
     on_stop: stop_review_app
     auto_stop_in: 1 week
   artifacts:
@@ -151,6 +152,7 @@ stop_review_app:
     - pm2 del nex-review || true
   environment:
     name: review/$CI_COMMIT_REF_SLUG
+    url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
     action: stop
   rules:
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
