@@ -24,6 +24,7 @@ stages:
 - dast
 
 build-qa:
+  # node docker image on which this would be run
   image: node:16.17.0-alpine3.16
   stage: build
   script:
@@ -46,6 +47,7 @@ build-qa:
     - build
 
 build-stg:
+  # node docker image on which this would be run
   image: node:16.17.0-alpine3.16
   stage: build
   script:
@@ -68,6 +70,7 @@ build-stg:
     - build
 
 build-production:
+  # node docker image on which this would be run
   image: node:16.17.0-alpine3.16
   stage: build
   script:
@@ -127,39 +130,44 @@ deploy_review:
   dependencies: [build-qa]
   stage: deploy
   script:
-    - rm -rf $PROD_DEPLOY_DIR/* || true
-    - tar -zxf nex-qa.tar.gz --directory $PROD_DEPLOY_DIR
-    - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-review || true
+    - npm install 
     - pm2 start npm --name nex-review -- run start
-    - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > $PROD_DEPLOY_DIR/environment_url.txt
+    - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
+  after_script:
+    - >
+      if [ $CI_JOB_STATUS == 'success' ]; then
+        curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=REF_NAME https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
+      else
+        echo 'The deployment has failed'
+      fi
   environment:
-    name: review/$CI_COMMIT_REF_SLUG
+    name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
-    on_stop: stop_review_app
-    auto_stop_in: 1 week
   artifacts:
     paths:
-      - $PROD_DEPLOY_DIR/environment_url.txt
+      - environment_url.txt
   rules:
   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   tags:
     - deploy-review
 
 stop_review_app:
+  dependencies: [deploy_review]
   stage: deploy
-  script: 
-    - pm2 del nex-review || true
+  script: stop-review-app
   environment:
-    name: review/$CI_COMMIT_REF_SLUG
-    url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
+    name: review/$CI_COMMIT_REF_NAME
     action: stop
-  rules:
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
+  only:
+    - merge_requests
+  except:
+    - main
+  allow_failure: true  
   when: manual
   tags:
     - deploy-review
-    
+
 deployToQA:
   stage: deploy
   script: 
@@ -186,6 +194,13 @@ deployToStaging:
     - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-staging || true
     - pm2 start npm --name nex-staging -- run start
+  after_script:
+    - >
+      if [ $CI_JOB_STATUS == 'success' ]; then
+        curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=REF_NAME https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
+      else
+        echo 'The deployment has failed'
+      fi
   dependencies: [build-stg]
   environment:
     name: staging
