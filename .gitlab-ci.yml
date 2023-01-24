@@ -135,12 +135,8 @@ deploy_review:
     - pm2 start npm --name nex-review -- run start
     - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
   after_script:
-    - >
-      if [ $CI_JOB_STATUS == 'success' ]; then
-        curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=REF_NAME https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
-      else
-        echo 'The deployment has failed'
-      fi
+    - curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=REF_NAME https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
+
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
@@ -195,12 +191,8 @@ deployToStaging:
     - pm2 del nex-staging || true
     - pm2 start npm --name nex-staging -- run start
   after_script:
-    - >
-      if [ $CI_JOB_STATUS == 'success' ]; then
-        curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=REF_NAME https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
-      else
-        echo 'The deployment has failed'
-      fi
+    - curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=REF_NAME https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
+
   dependencies: [build-stg]
   environment:
     name: staging
