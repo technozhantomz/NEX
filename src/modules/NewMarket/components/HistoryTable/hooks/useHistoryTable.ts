@@ -4,25 +4,16 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   useAccount,
   useAccountHistory,
-  useAsset,
-  useBlockchain,
-  useFormDate,
+  useMarketHistory,
 } from "../../../../../common/hooks";
 import {
   useMarketContext,
   useUserContext,
 } from "../../../../../common/providers";
-import {
-  Asset,
-  BlockHeader,
-  History,
-  LimitOrder,
-  OrderHistory,
-} from "../../../../../common/types";
+import { LimitOrder, TradeHistoryRow } from "../../../../../common/types";
 
 import {
   TradeHistoryColumn,
-  TradeHistoryRow,
   UseHistoryTableResult,
 } from "./useHistoryTable.types";
 
@@ -35,11 +26,9 @@ export function useHistoryTable({
 }: Props): UseHistoryTableResult {
   const { selectedPair, marketHistory } = useMarketContext();
   const { id, localStorageAccount } = useUserContext();
-  const { getBlockHeader } = useBlockchain();
+  const { getHistoryTableRows, formTradeHistoryRows } = useMarketHistory();
   const { getAccountHistoryById } = useAccountHistory();
-  const { setPrecision, ceilPrecision } = useAsset();
   const { getFullAccount } = useAccount();
-  const { formLocalDate } = useFormDate();
   const [tradeHistoryRows, setTradeHistoryRows] = useState<TradeHistoryRow[]>(
     []
   );
@@ -74,115 +63,21 @@ export function useHistoryTable({
     }
   }, [selectedPair]);
 
-  const formTradeHistoryRow = useCallback(
-    async (
-      history: OrderHistory | History,
-      base: Asset,
-      quote: Asset,
-      openOrder?: LimitOrder
-    ): Promise<TradeHistoryRow> => {
-      const blockHeader = await getBlockHeader((history as History).block_num);
-      const timestamp = forUser
-        ? (blockHeader as BlockHeader).timestamp
-        : (history as OrderHistory).time;
-      const time = formLocalDate(timestamp, ["month", "date", "year", "time"]);
-      const { pays, receives } = forUser
-        ? (history as History).op[1]
-        : (history as OrderHistory).op;
-      const key = history.id;
-      let numberdFilled = 100;
-      let filled = "";
-      let baseAmount = 0,
-        quoteAmount = 0,
-        isBuyOrder = false;
-      // this is sell orders
-      if (pays.asset_id === base.id) {
-        baseAmount = setPrecision(false, pays.amount, base.precision);
-        quoteAmount = setPrecision(false, receives.amount, quote.precision);
-        //this is buy orders
-      } else {
-        baseAmount = setPrecision(false, receives.amount, base.precision);
-        quoteAmount = setPrecision(false, pays.amount, quote.precision);
-        isBuyOrder = true;
-      }
-
-      if (forUser) {
-        if (openOrder) {
-          numberdFilled =
-            (pays.amount / openOrder.sell_price.base.amount) * 100;
-          filled = `${numberdFilled.toFixed(1)}%`;
-        } else {
-          filled = "100%";
-        }
-      }
-
-      return {
-        key,
-        price: ceilPrecision(quoteAmount / baseAmount),
-        amount: baseAmount,
-        time,
-        isBuyOrder,
-        filled: forUser ? filled : undefined,
-      } as TradeHistoryRow;
-    },
-    [setPrecision, formLocalDate, ceilPrecision]
-  );
-
-  const defineHistoryPriceMovement = useCallback(
-    (tradeHistoryRows: TradeHistoryRow[]) => {
-      const updatedTradeHistoryRows = [...tradeHistoryRows];
-      for (let i = updatedTradeHistoryRows.length - 1; i >= 0; i--) {
-        const historyRow = updatedTradeHistoryRows[i];
-        for (let j = i - 1; j > 0; j--) {
-          if (historyRow.isBuyOrder === updatedTradeHistoryRows[j].isBuyOrder) {
-            if (
-              Number(historyRow.price) !==
-              Number(updatedTradeHistoryRows[j].price)
-            ) {
-              const isPriceUp =
-                Number(updatedTradeHistoryRows[j].price) >
-                Number(historyRow.price);
-              updatedTradeHistoryRows[j].isPriceUp = isPriceUp;
-            }
-            break;
-          }
-        }
-      }
-      return updatedTradeHistoryRows;
-    },
-    []
-  );
-
   const getHistory = useCallback(async () => {
     setLoadingTradeHistory(true);
     if (selectedPair && marketHistory) {
       try {
-        const tradeHistoryRows = await Promise.all(
-          marketHistory.map((history) => {
-            return formTradeHistoryRow(
-              history,
-              selectedPair.base,
-              selectedPair.quote
-            );
-          })
-        );
-        const updatedTradeHistoryRows =
-          defineHistoryPriceMovement(tradeHistoryRows);
-        console.log("updatedTradeHistoryRows", updatedTradeHistoryRows);
+        const marketHistoryRows =
+          (await getHistoryTableRows()) as TradeHistoryRow[];
 
-        setTradeHistoryRows(updatedTradeHistoryRows);
+        setTradeHistoryRows(marketHistoryRows);
         setLoadingTradeHistory(false);
       } catch (e) {
         console.log(e);
         setLoadingTradeHistory(false);
       }
     }
-  }, [
-    marketHistory,
-    setLoadingTradeHistory,
-    formTradeHistoryRow,
-    setTradeHistoryRows,
-  ]);
+  }, [marketHistory, setLoadingTradeHistory, setTradeHistoryRows]);
 
   const getUserHistory = useCallback(async () => {
     if (selectedPair && id && id !== "") {
@@ -215,10 +110,10 @@ export function useHistoryTable({
           fillOrdersHistoryForThePair.map(
             async (fillOrderHistoryForThePair) => {
               const operationDetails = fillOrderHistoryForThePair.op[1];
-              return formTradeHistoryRow(
+              return formTradeHistoryRows(
                 fillOrderHistoryForThePair,
-                selectedPair.base,
-                selectedPair.quote,
+                selectedPair,
+                forUser,
                 limitOrders.find(
                   (order) => order.id === operationDetails.order_id
                 )
@@ -238,12 +133,13 @@ export function useHistoryTable({
     }
   }, [
     selectedPair,
+    forUser,
     id,
     localStorageAccount,
     getFullAccount,
     setLoadingTradeHistory,
     getAccountHistoryById,
-    formTradeHistoryRow,
+    formTradeHistoryRows,
     setTradeHistoryRows,
   ]);
 

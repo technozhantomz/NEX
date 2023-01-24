@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
-
 import { GPOSBalances } from "../types";
 
 export type UseGposPageResult = {
@@ -7,5 +5,5 @@ export type UseGposPageResult = {
   loading: boolean;
   calculateGposBalances: () => Promise<void>;
   isMobileDropdownvisible: boolean;
-  setIsMobileDropdownvisible: Dispatch<SetStateAction<boolean>>;
+  setIsMobileDropdownvisible: (isMobileDropdownvisible: boolean) => void;
 };

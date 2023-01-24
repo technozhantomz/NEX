@@ -6,3 +6,4 @@ export * from "./MarketStats";
 export * from "./PairModal";
 export * from "./PairSelect";
 export * from "./Wallet";
+export * from "./OrderBook";

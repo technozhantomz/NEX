@@ -1,11 +1,11 @@
 import { Asset } from "./Asset";
 
-export type MarketPair =
-  | {
-      base: Asset;
-      quote: Asset;
-    }
-  | undefined;
+export type SelectedMarketPair = MarketPair | undefined;
+
+export type MarketPair = {
+  base: Asset;
+  quote: Asset;
+};
 
 export type MarketPairStats = {
   latest: string;

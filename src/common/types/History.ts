@@ -33,3 +33,13 @@ export type OrderHistory = {
   op: OrederHistoryOptions;
   time: string;
 };
+
+export type TradeHistoryRow = {
+  key: string;
+  price: string;
+  amount: number;
+  time: string;
+  isBuyOrder: boolean;
+  isPriceUp?: boolean;
+  filled?: string;
+};
