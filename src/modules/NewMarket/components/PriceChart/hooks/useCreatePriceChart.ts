@@ -1,5 +1,5 @@
 // import { createChart, CrosshairMode } from "lightweight-charts";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // eslint-disable-next-line import/order
 import {
@@ -12,20 +12,22 @@ import {
   widget,
 } from "../../../../../../public/static/charting_library";
 
-// import { useAsset, useMarketHistory } from "../../../../../common/hooks";
-// import { useMarketContext } from "../../../../../common/providers";
-// import { OrderHistory } from "../../../../../common/types";
-
-import { useAppSettingsContext } from "../../../../../common/providers";
+import { useAsset, useMarketHistory } from "../../../../../common/hooks";
+import {
+  useAppSettingsContext,
+  useMarketContext,
+} from "../../../../../common/providers";
+import { OrderHistory } from "../../../../../common/types";
 
 import {
-  // ChartFeed,
+  ChartFeed,
   UseCreatePriceChartResult,
 } from "./useCreatePriceChart.types";
+import { useDataFeed } from "./useDataFeed";
 
-// interface GroupedOrderHistory {
-//   [date: string]: OrderHistory[];
-// }
+interface GroupedOrderHistory {
+  [date: string]: OrderHistory[];
+}
 
 declare global {
   interface Window {
@@ -37,14 +39,15 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const { settings } = useAppSettingsContext();
   // const lightweightContainerRef = useRef<HTMLDivElement>(null);
-  // const { selectedPair } = useMarketContext();
-  // const { getFillOrderHistory } = useMarketHistory();
-  // const { setPrecision } = useAsset();
-  // const [chartFeed, setChartFeed] = useState<ChartFeed[]>([]);
+  const { selectedPair } = useMarketContext();
+  const { dataFeed } = useDataFeed();
+  const { getFillOrderHistory } = useMarketHistory();
+  const { setPrecision } = useAsset();
+  const [chartFeed, setChartFeed] = useState<ChartFeed[]>([]);
 
   const defaultProps = {
-    symbol: "AAPL",
-    interval: "D",
+    symbol: "PeerplaysDex:TEST/BTC",
+    interval: "Y",
     locale: settings.language,
     disabled_features: [
       "use_localstorage_for_settings",
@@ -66,87 +69,87 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
 
   let tvWidget1: IChartingLibraryWidget | null = null;
 
-  // const getChartFeed = useCallback(async () => {
-  //   if (selectedPair) {
-  //     const histories = (await getFillOrderHistory(
-  //       selectedPair
-  //     )) as OrderHistory[];
-  //     if (histories) {
-  //       const sortedHistoriesByDate = histories.sort((a, b) => {
-  //         return new Date(a.time).getTime() - new Date(b.time).getTime();
-  //       });
-  //       const groupedHistories: GroupedOrderHistory[] =
-  //         sortedHistoriesByDate.reduce((accumulator, order) => {
-  //           const key = order.time.substring(0, order.time.indexOf("T"));
-  //           if (!accumulator[key]) {
-  //             accumulator[key] = [];
-  //           }
-  //           accumulator[key].push(order);
-  //           return accumulator;
-  //         }, []);
+  const getChartFeed = useCallback(async () => {
+    if (selectedPair) {
+      const histories = (await getFillOrderHistory(
+        selectedPair
+      )) as OrderHistory[];
+      if (histories) {
+        const sortedHistoriesByDate = histories.sort((a, b) => {
+          return new Date(a.time).getTime() - new Date(b.time).getTime();
+        });
+        const groupedHistories: GroupedOrderHistory[] =
+          sortedHistoriesByDate.reduce((accumulator, order) => {
+            const key = order.time.substring(0, order.time.indexOf("T"));
+            if (!accumulator[key]) {
+              accumulator[key] = [];
+            }
+            accumulator[key].push(order);
+            return accumulator;
+          }, []);
 
-  //       const processedOrders = Object.keys(groupedHistories).map((date) => {
-  //         const group = groupedHistories[date];
-  //         const open = getOrderAmmount(group[0]);
-  //         const close = getOrderAmmount(group[group.length - 1]);
-  //         const high = Math.max(
-  //           ...group.map((order: OrderHistory) => {
-  //             return getOrderAmmount(order);
-  //           })
-  //         );
-  //         const low = Math.min(
-  //           ...group.map((order: OrderHistory) => {
-  //             return getOrderAmmount(order);
-  //           })
-  //         );
-  //         return Object.assign({
-  //           time: date,
-  //           open,
-  //           close,
-  //           high,
-  //           low,
-  //         });
-  //       });
+        const processedOrders = Object.keys(groupedHistories).map((date) => {
+          const group = groupedHistories[date];
+          const open = getOrderAmmount(group[0]);
+          const close = getOrderAmmount(group[group.length - 1]);
+          const high = Math.max(
+            ...group.map((order: OrderHistory) => {
+              return getOrderAmmount(order);
+            })
+          );
+          const low = Math.min(
+            ...group.map((order: OrderHistory) => {
+              return getOrderAmmount(order);
+            })
+          );
+          return Object.assign({
+            time: date,
+            open,
+            close,
+            high,
+            low,
+          });
+        });
 
-  //       setChartFeed(processedOrders);
-  //     }
-  //   }
-  // }, [selectedPair]);
+        setChartFeed(processedOrders);
+      }
+    }
+  }, [selectedPair]);
 
-  // const getOrderAmmount = useCallback(
-  //   (order: OrderHistory) => {
-  //     if (selectedPair) {
-  //       let orderAmmount;
-  //       const orderOps = order.op;
-  //       const base = selectedPair.base;
-  //       if (orderOps.pays.asset_id === base.id) {
-  //         orderAmmount = setPrecision(
-  //           false,
-  //           orderOps.pays.amount,
-  //           base.precision
-  //         );
-  //         //this is buy orders
-  //       } else {
-  //         orderAmmount = setPrecision(
-  //           false,
-  //           orderOps.receives.amount,
-  //           base.precision
-  //         );
-  //       }
-  //       return orderAmmount;
-  //     }
-  //   },
-  //   [selectedPair]
-  // );
+  const getOrderAmmount = useCallback(
+    (order: OrderHistory) => {
+      if (selectedPair) {
+        let orderAmmount;
+        const orderOps = order.op;
+        const base = selectedPair.base;
+        if (orderOps.pays.asset_id === base.id) {
+          orderAmmount = setPrecision(
+            false,
+            orderOps.pays.amount,
+            base.precision
+          );
+          //this is buy orders
+        } else {
+          orderAmmount = setPrecision(
+            false,
+            orderOps.receives.amount,
+            base.precision
+          );
+        }
+        return orderAmmount;
+      }
+    },
+    [selectedPair]
+  );
 
   useEffect(() => {
+    console.log("DataFeed", dataFeed);
+    getChartFeed();
     if (chartContainerRef.current) {
       const widgetOptions: ChartingLibraryWidgetOptions = {
         symbol: defaultProps.symbol,
         // BEWARE: no trailing slash is expected in feed URL
-        datafeed: new window.Datafeeds.UDFCompatibleDatafeed(
-          defaultProps.datafeedUrl
-        ),
+        datafeed: dataFeed,
         interval: defaultProps.interval as ResolutionString,
         container: chartContainerRef.current,
         library_path: defaultProps.libraryPath,
@@ -164,8 +167,8 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
         studies_overrides: defaultProps.studiesOverrides,
         theme: defaultProps.theme as ThemeName,
       };
-      const newWindow: any = window;
-      console.log("defaultProps.datafeedUrl", newWindow.Datafeeds);
+      // const newWindow: any = window;
+      // console.log("defaultProps.datafeedUrl", newWindow.Datafeeds);
       const tvWidget = new widget(widgetOptions);
       tvWidget1 = tvWidget;
 
@@ -188,7 +191,7 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
         });
       });
     }
-
+    console.log("ChartFeed", chartFeed);
     return () => {
       if (tvWidget1 !== null) {
         tvWidget1.remove();
