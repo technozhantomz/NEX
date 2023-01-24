@@ -33,10 +33,10 @@ export const StatsCard = ({
       },
     },
     scales: {
-      xAxis: {
+      x: {
         display: false,
       },
-      yAxis: {
+      y: {
         display: false,
       },
     },
