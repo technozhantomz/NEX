@@ -73,7 +73,9 @@ const MarketPage: NextPage = () => {
       <UsersOrdersTabs />
     </Styled.UserOrdersContainer>
   ) : (
-    <Styled.TabletTabsContainer>Tablet tabs</Styled.TabletTabsContainer>
+    <Styled.TabletTabsContainer>
+      <UsersOrdersTabs />
+    </Styled.TabletTabsContainer>
   );
 
   return (
