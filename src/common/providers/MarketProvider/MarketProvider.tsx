@@ -84,31 +84,29 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
 
   const getAsksBids = useCallback(async () => {
     if (selectedPair) {
-      try {
-        setLoadingAsksBids(true);
-        setAsks([]);
-        setBids([]);
-        const { asks, bids } = await getOrderBook(
-          selectedPair.base,
-          selectedPair.quote
-        );
-        setAsks(
-          asks.map((ask) => {
-            return { ...ask, isBuyOrder: false };
-          }) as MarketOrder[]
-        );
-        setBids(
-          bids.map((bid) => {
-            return { ...bid, isBuyOrder: true };
-          }) as MarketOrder[]
-        );
-        setLoadingAsksBids(false);
-      } catch (e) {
-        console.log(e);
-        setAsks([]);
-        setBids([]);
-        setLoadingAsksBids(false);
-      }
+      setLoadingAsksBids(true);
+      const { asks, bids } = await getOrderBook(
+        selectedPair.base,
+        selectedPair.quote
+      );
+      // This should change, right now, getOrderBook is not correct
+      const updatedAsks = bids.map((bid) => {
+        return {
+          ...bid,
+          price: ((bid.quote as any) / (bid.base as any)).toFixed(20),
+          isBuyOrder: false,
+        };
+      }) as MarketOrder[];
+      const updatedBids = asks.map((ask) => {
+        return {
+          ...ask,
+          price: ((ask.quote as any) / (ask.base as any)).toFixed(20),
+          isBuyOrder: true,
+        };
+      }) as MarketOrder[];
+      setAsks(updatedAsks);
+      setBids(updatedBids);
+      setLoadingAsksBids(false);
     }
   }, [selectedPair, getOrderBook, setAsks, setBids]);
 
