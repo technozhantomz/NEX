@@ -6,8 +6,14 @@ import React, {
   useState,
 } from "react";
 
-import { useMarketHistory, useOrderBook, useSessionStorage } from "../../hooks";
-import { MarketOrder, OrderHistory, SelectedMarketPair } from "../../types";
+import { useMarketHistory, useOrderBook } from "../../hooks";
+import {
+  Asset,
+  MarketOrder,
+  MarketPair,
+  OrderHistory,
+  TradeHistoryRow,
+} from "../../types";
 import { useChainStoreContext } from "../ChainStoreProvider";
 import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
@@ -17,18 +23,18 @@ type Props = {
   children: React.ReactNode;
 };
 
-// This is in milliseconds
-const REQUIRED_TICKER_UPDATE_TIME = 800;
 const defaultMarketState: MarketContextType = {
   selectedPair: undefined,
   marketHistory: [],
   asks: [],
   bids: [],
-  setSelectedPair: function (selectedPair: SelectedMarketPair): void {
-    throw new Error(`Function not implemented. ${selectedPair}`);
+  setMarketPair: function (base: Asset, quote: Asset): void {
+    throw new Error(`Function not implemented. for ${base} ${quote}`);
   },
-  unsubscribeFromMarket: async function (): Promise<void> {
-    throw new Error(`Function not implemented.`);
+  loadingAsksBids: true,
+  lastTradeHistory: undefined,
+  fillLastTradeHistory: function (lastTradeHistory?: TradeHistoryRow): void {
+    throw new Error(`Function not implemented. for ${lastTradeHistory}`);
   },
 };
 
@@ -39,12 +45,12 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   const { getFillOrderHistory } = useMarketHistory();
   const { getOrderBook } = useOrderBook();
   const { synced } = useChainStoreContext();
-  const [selectedPair, setSelectedPair] = useSessionStorage(
-    "selectedMarketPair"
-  ) as [SelectedMarketPair, (selectedPair: SelectedMarketPair) => void];
-  const [marketHistory, setMarketHistory] = useState<OrderHistory[]>([]);
-  const [asks, setAsks] = useState<MarketOrder[]>([]);
-  const [bids, setBids] = useState<MarketOrder[]>([]);
+  const [selectedPair, setSelectedPair] = useState<MarketPair>();
+  const [marketHistory, setMarketHistory] = useState<OrderHistory[]>();
+  const [asks, setAsks] = useState<MarketOrder[]>();
+  const [bids, setBids] = useState<MarketOrder[]>();
+  const [loadingAsksBids, setLoadingAsksBids] = useState<boolean>(true);
+  const [lastTradeHistory, setLastTradeHistory] = useState<TradeHistoryRow>();
 
   const getHistory = useCallback(async () => {
     if (selectedPair) {
@@ -72,58 +78,44 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         console.log(e);
       }
     }
-  }, [selectedPair, getFillOrderHistory]);
+  }, [selectedPair, getFillOrderHistory, setMarketHistory]);
 
   const getAsksBids = useCallback(async () => {
     if (selectedPair) {
-      try {
-        const { asks, bids } = await getOrderBook(
-          selectedPair.base,
-          selectedPair.quote
-        );
-        setAsks(
-          asks.map((ask) => {
-            return { ...ask, isBuyOrder: false };
-          }) as MarketOrder[]
-        );
-        setBids(
-          bids.map((bid) => {
-            return { ...bid, isBuyOrder: true };
-          }) as MarketOrder[]
-        );
-      } catch (e) {
-        console.log(e);
-        setAsks([]);
-        setBids([]);
-      }
+      setLoadingAsksBids(true);
+      const { asks, bids } = await getOrderBook(
+        selectedPair.base,
+        selectedPair.quote
+      );
+      // This should change, right now, getOrderBook is not correct
+      const updatedAsks = bids.map((bid) => {
+        return {
+          ...bid,
+          price: ((bid.quote as any) / (bid.base as any)).toFixed(20),
+          isBuyOrder: false,
+        };
+      }) as MarketOrder[];
+      const updatedBids = asks.map((ask) => {
+        return {
+          ...ask,
+          price: ((ask.quote as any) / (ask.base as any)).toFixed(20),
+          isBuyOrder: true,
+        };
+      }) as MarketOrder[];
+      setAsks(updatedAsks);
+      setBids(updatedBids);
+      setLoadingAsksBids(false);
     }
   }, [selectedPair, getOrderBook, setAsks, setBids]);
-
-  const refreshHistory = useCallback(async () => {
-    await getHistory();
-    // await getUserHistory(); //NOTE should i add user history to the contect?
-  }, [getHistory]);
-
-  const refreshOrderBook = useCallback(async () => {
-    await getAsksBids();
-    // await getUserOrderBook();
-  }, [getAsksBids]);
 
   const subscribeToMarket = useCallback(async () => {
     if (selectedPair && synced) {
       try {
-        await Promise.all([
-          // subscribeToTicker(),
-          refreshOrderBook(),
-          refreshHistory(),
-        ]);
+        await Promise.all([getHistory(), getAsksBids()]);
         await dbApi("subscribe_to_market", [
           () => {
-            setTimeout(() => {
-              // subscribeToTicker();
-            }, REQUIRED_TICKER_UPDATE_TIME);
-            refreshOrderBook();
-            refreshHistory();
+            getHistory();
+            getAsksBids();
           },
           selectedPair.base.symbol,
           selectedPair.quote.symbol,
@@ -132,14 +124,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         console.log(e);
       }
     }
-  }, [
-    selectedPair,
-    synced,
-    // subscribeToTicker,
-    refreshOrderBook,
-    refreshHistory,
-    dbApi,
-  ]);
+  }, [selectedPair, synced, dbApi, getHistory, getAsksBids]);
 
   const unsubscribeFromMarket = useCallback(async () => {
     if (selectedPair) {
@@ -151,15 +136,31 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
           selectedPair.base.symbol,
           selectedPair.quote.symbol,
         ]);
-        setSelectedPair(undefined);
       } catch (e) {
         console.log(e);
       }
     }
-  }, [selectedPair, dbApi]);
+  }, [selectedPair, dbApi, setSelectedPair]);
+
+  const setMarketPair = useCallback(
+    (base: Asset, quote: Asset) => {
+      setSelectedPair({ base: base, quote: quote } as MarketPair);
+    },
+    [setSelectedPair]
+  );
+
+  const fillLastTradeHistory = useCallback(
+    (lastTradeHistory?: TradeHistoryRow) => {
+      setLastTradeHistory(lastTradeHistory);
+    },
+    [setLastTradeHistory]
+  );
 
   useEffect(() => {
     subscribeToMarket();
+    return () => {
+      unsubscribeFromMarket();
+    };
   }, [selectedPair]);
 
   return (
@@ -169,15 +170,16 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         marketHistory,
         asks,
         bids,
-        setSelectedPair,
-        unsubscribeFromMarket,
+        setMarketPair,
+        loadingAsksBids,
+        lastTradeHistory,
+        fillLastTradeHistory,
       }}
     >
       {children}
     </MarketContext.Provider>
   );
 };
-
 export const useMarketContext = (): MarketContextType => {
   return useContext<MarketContextType>(MarketContext);
 };

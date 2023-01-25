@@ -1,7 +1,5 @@
 import { Asset } from "./Asset";
 
-export type SelectedMarketPair = MarketPair | undefined;
-
 export type MarketPair = {
   base: Asset;
   quote: Asset;
@@ -31,5 +29,3 @@ export type MarketOrder = {
   isBuyOrder: boolean;
   timestamp?: Date;
 };
-
-export type MarketOrderType = "total" | "buy" | "sell";

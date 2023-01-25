@@ -2,7 +2,7 @@
 import { isNil } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
-import { Cache, Exchanges, Settings } from "../../types";
+import { Cache, Exchanges, MarketPair, Settings } from "../../types";
 
 type Value =
   | string
@@ -13,6 +13,7 @@ type Value =
   | Exchanges
   | Settings
   | Cache
+  | MarketPair
   | undefined
   | Notification[]
   | null;

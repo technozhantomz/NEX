@@ -57,7 +57,7 @@ export const TradeHistoryContainer = styled.div`
 
 export const ChartsAndOrderBookRow = styled(Row)`
   min-height: 520px;
-  ${breakpoint.xl} {
+  ${breakpoint.xxl} {
     min-height: 750px;
   }
   ${mixIns.hairline}
@@ -65,19 +65,19 @@ export const ChartsAndOrderBookRow = styled(Row)`
 
 export const PriceChartContainer = styled.div`
   height: 100%;
-  ${breakpoint.xl} {
+  ${breakpoint.xxl} {
     min-height: 450px;
   }
 `;
 
 export const MarketDepthContainer = styled.div`
-  ${breakpoint.xl} {
+  ${breakpoint.xxl} {
     min-height: 300px;
   }
 `;
 
 export const TabletTabsContainer = styled.div`
-  min-height: 656px;
+  min-height: 636px;
 `;
 
 export const UserOrdersContainer = styled.div`

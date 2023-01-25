@@ -1,8 +1,9 @@
 import { ColumnsType } from "antd/lib/table";
+import { useMemo } from "react";
 
 import * as Styled from "./HistoryTable.styled";
-import { useHistoryTable } from "./hooks";
-import { TradeHistoryColumn } from "./hooks/useHistoryTable.types";
+import { renderTradeHistoryColumnsWithPriceMovement } from "./components";
+import { TradeHistoryColumn, useHistoryTable } from "./hooks";
 
 type Props = {
   forUser?: boolean;
@@ -15,12 +16,16 @@ export const HistoryTable = ({ forUser = false }: Props): JSX.Element => {
     loadingTradeHistory,
     defineTableRowClassName,
   } = useHistoryTable({ forUser });
-  const desktopScroll = {
-    y: 1100,
-    x: 240,
-    scrollToFirstRowOnChange: false,
-  };
-  const scroll = tradeHistoryRows.length === 0 ? undefined : desktopScroll;
+  const desktopScroll = useMemo(() => {
+    return {
+      y: 1100,
+      x: 240,
+      scrollToFirstRowOnChange: false,
+    };
+  }, []);
+  const scroll = useMemo(() => {
+    return tradeHistoryRows.length === 0 ? undefined : desktopScroll;
+  }, [tradeHistoryRows]);
 
   return (
     <>
@@ -29,7 +34,11 @@ export const HistoryTable = ({ forUser = false }: Props): JSX.Element => {
           scroll={scroll}
           loading={loadingTradeHistory}
           pagination={false}
-          columns={tradeHistoryColumns as ColumnsType<TradeHistoryColumn>}
+          columns={
+            renderTradeHistoryColumnsWithPriceMovement(
+              tradeHistoryColumns
+            ) as ColumnsType<TradeHistoryColumn>
+          }
           dataSource={tradeHistoryRows}
           bordered={false}
           rowClassName={defineTableRowClassName}

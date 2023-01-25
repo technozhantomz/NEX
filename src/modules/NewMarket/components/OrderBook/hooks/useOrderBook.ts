@@ -1,8 +1,8 @@
 import counterpart from "counterpart";
 import { cloneDeep, max } from "lodash";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
-import { useAsset, useMarketHistory } from "../../../../../common/hooks";
+import { useAsset } from "../../../../../common/hooks";
 import { useMarketContext } from "../../../../../common/providers";
 import {
   MarketOrder,
@@ -22,19 +22,12 @@ type Args = {
 
 export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   const { roundNum } = useAsset();
-  const { getHistoryTableRows } = useMarketHistory();
-  const { selectedPair, marketHistory, asks, bids } = useMarketContext();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { selectedPair, asks, bids, loadingAsksBids, lastTradeHistory } =
+    useMarketContext();
   const [threshold, setThreshold] = useState<number>(0.001);
   const [filter, setFilter] = useState<FilterType>("total");
   const [prevPair, setPrevPair] = useState<string>(currentPair);
-  const [lastTrade, setLastTrade] = useState<TradeHistoryRow>({
-    key: "",
-    price: "",
-    amount: 0,
-    time: "",
-    isBuyOrder: false,
-  });
+
   if (prevPair !== currentPair) {
     setPrevPair(currentPair);
     setThreshold(0.001);
@@ -141,7 +134,7 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   );
 
   const asksRows: MarketOrder[] = useMemo(() => {
-    if (selectedPair) {
+    if (selectedPair && asks) {
       const groupedAsks = groupAsksByThreshold(asks, selectedPair, threshold);
       return groupedAsks;
     } else {
@@ -150,7 +143,7 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   }, [asks, threshold, selectedPair]);
 
   const bidsRows: MarketOrder[] = useMemo(() => {
-    if (selectedPair) {
+    if (selectedPair && bids) {
       const groupedBids = groupBidsByThreshold(bids, selectedPair, threshold);
       return groupedBids;
     } else {
@@ -264,34 +257,14 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
     [bidsRows]
   );
 
-  const getLastTrade = useCallback(async () => {
-    setLoading(true);
-    if (selectedPair && marketHistory) {
-      try {
-        const marketHistoryRows =
-          (await getHistoryTableRows()) as TradeHistoryRow[];
-
-        setLastTrade(marketHistoryRows[0]);
-        setLoading(false);
-      } catch (e) {
-        console.log(e);
-        setLoading(false);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    getLastTrade();
-  }, [selectedPair, marketHistory]);
-
   return {
     orderColumns,
     threshold,
     asksRows,
     bidsRows,
     filter,
-    lastTrade,
-    loading,
+    loading: loadingAsksBids,
+    lastTrade: lastTradeHistory,
     thresholdValues,
     handleThresholdChange,
     handleFilterChange,
@@ -300,5 +273,6 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
     specifyLastTradeClassName,
     specifyAsksTableRowClassName,
     specifyBidsTableRowClassName,
+    selectedPair,
   };
 }
