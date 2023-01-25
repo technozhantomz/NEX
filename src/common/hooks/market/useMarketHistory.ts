@@ -3,11 +3,13 @@ import { useCallback } from "react";
 
 import { usePeerplaysApiContext } from "../../providers";
 import {
+  Asset,
   BlockHeader,
   History,
   LimitOrder,
   MarketPair,
   OrderHistory,
+  Ticker,
   TradeHistoryRow,
 } from "../../types";
 import { useAsset } from "../asset";
@@ -17,7 +19,7 @@ import { useFormDate } from "../utils";
 import { UseMarketHistoryResult } from "./useMarketHistory.types";
 
 export function useMarketHistory(): UseMarketHistoryResult {
-  const { historyApi } = usePeerplaysApiContext();
+  const { historyApi, dbApi } = usePeerplaysApiContext();
   const { getBlockHeader } = useBlockchain();
   const { setPrecision, ceilPrecision } = useAsset();
   const { formLocalDate } = useFormDate();
@@ -35,6 +37,21 @@ export function useMarketHistory(): UseMarketHistoryResult {
       }
     },
     [historyApi]
+  );
+
+  const getTicker = useCallback(
+    async (base: Asset, quote: Asset) => {
+      try {
+        const ticker: Ticker = await dbApi("get_ticker", [
+          base.symbol,
+          quote.symbol,
+        ]);
+        return ticker;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
   );
 
   const formTradeHistoryRow = useCallback(
@@ -138,6 +155,7 @@ export function useMarketHistory(): UseMarketHistoryResult {
 
   return {
     getFillOrderHistory,
+    getTicker,
     formTradeHistoryTableRows,
     formTradeHistoryRow,
   };
