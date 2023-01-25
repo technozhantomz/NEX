@@ -1,4 +1,8 @@
-import { MarketOrder, TradeHistoryRow } from "../../../../../common/types";
+import {
+  MarketOrder,
+  MarketPair,
+  TradeHistoryRow,
+} from "../../../../../common/types";
 
 export type OrderColumn = {
   title: string;
@@ -16,7 +20,7 @@ export type UseOrderBookResult = {
   bidsRows: MarketOrder[];
   filter: FilterType;
   thresholdValues: string[];
-  lastTrade: TradeHistoryRow;
+  lastTrade?: TradeHistoryRow;
   handleFilterChange: (type: FilterType) => void;
   handleThresholdChange: (menuInfo: { key: string }) => void;
   specifyTableHeight: () => string;
@@ -30,6 +34,7 @@ export type UseOrderBookResult = {
   specifyLastTradeClassName: (tradeHistory?: TradeHistoryRow) => string;
   specifyAsksTableRowClassName: (record: any) => string;
   specifyBidsTableRowClassName: (record: any) => string;
+  selectedPair: MarketPair | undefined;
 };
 
 export type FilterType = "buy" | "sell" | "total";

@@ -57,6 +57,8 @@ export function useUserOrdersTable(isOpen: boolean): UseUserOrdersTableResult {
 
   const formUserOrders = async () => {
     setLoading(true);
+    setUserOrdersRows([]);
+    setUserOrdersColumns([]);
     const { openOrdersRows, historiesRows } = await getOrdersRows();
 
     const openOrdersColumns = updateOpenOrdersColumns(

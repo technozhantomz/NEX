@@ -1,4 +1,5 @@
 import { ColumnsType } from "antd/lib/table";
+import { useMemo } from "react";
 
 import { PasswordModal, TransactionModal } from "../../../../common/components";
 import { useUserContext } from "../../../../common/providers";
@@ -28,12 +29,17 @@ export function UserOrdersTable({ isOpen = false }: Props): JSX.Element {
     defineTableRowClassName,
   } = useUserOrdersTable(isOpen);
   const { localStorageAccount } = useUserContext();
-  const desktopScroll = {
-    y: 300,
-    x: 940,
-    scrollToFirstRowOnChange: false,
-  };
-  const scroll = userOrdersRows.length === 0 ? undefined : desktopScroll;
+  const desktopScroll = useMemo(() => {
+    return {
+      y: 300,
+      x: 940,
+      scrollToFirstRowOnChange: false,
+    };
+  }, []);
+  const scroll = useMemo(() => {
+    return userOrdersRows.length === 0 ? undefined : desktopScroll;
+  }, [userOrdersRows]);
+
   return (
     <>
       <Styled.OrdersTable

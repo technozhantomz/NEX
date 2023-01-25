@@ -29,6 +29,7 @@ export const OrderBook = ({ currentPair }: Props): JSX.Element => {
     specifyLastTradeClassName,
     specifyAsksTableRowClassName,
     specifyBidsTableRowClassName,
+    selectedPair,
   } = useOrderBook({
     currentPair,
   });
@@ -138,10 +139,9 @@ export const OrderBook = ({ currentPair }: Props): JSX.Element => {
             </Styled.LastTradeValue>
             <Styled.LastTradeValue>
               {lastTrade
-                ? // ? (Number(lastTrade.amount) * Number(lastTrade.price)).toFixed(
-                  //     selectedPair?.quote.precision || 5
-                  //   )
-                  Number(lastTrade.amount) * Number(lastTrade.price)
+                ? (Number(lastTrade.amount) * Number(lastTrade.price)).toFixed(
+                    selectedPair?.quote.precision ?? 5
+                  )
                 : 0}
             </Styled.LastTradeValue>
           </Styled.LastTradeContainer>
