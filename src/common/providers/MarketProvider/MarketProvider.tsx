@@ -23,8 +23,6 @@ type Props = {
   children: React.ReactNode;
 };
 
-// This is in milliseconds
-// const REQUIRED_TICKER_UPDATE_TIME = 800;
 const defaultMarketState: MarketContextType = {
   selectedPair: undefined,
   marketHistory: [],
