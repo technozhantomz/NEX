@@ -93,11 +93,18 @@ const MarketPage: NextPage = () => {
       {md ? (
         <>
           <Styled.MobileAssetSelectorContainer>
-            Asset Selector
+            <PairSelect
+              handleClickOnPair={handleClickOnPair}
+              currentPair={pair as string}
+            />
           </Styled.MobileAssetSelectorContainer>
           <Styled.MobileStatsContainer>Stats</Styled.MobileStatsContainer>
-          <Styled.MobileChartContainer>Chart</Styled.MobileChartContainer>
-          <Styled.MobileTabsContainer>Tabs</Styled.MobileTabsContainer>
+          <Styled.MobileChartContainer>
+            <PriceChart />
+          </Styled.MobileChartContainer>
+          <Styled.MobileTabsContainer>
+            <UsersOrdersTabs />
+          </Styled.MobileTabsContainer>
         </>
       ) : (
         <Styled.Container>
