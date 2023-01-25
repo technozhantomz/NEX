@@ -89,7 +89,9 @@ const MarketPage: NextPage = () => {
           <Styled.MobileAssetSelectorContainer>
             Asset Selector
           </Styled.MobileAssetSelectorContainer>
-          <Styled.MobileStatsContainer>Stats</Styled.MobileStatsContainer>
+          <Styled.MobileStatsContainer>
+            <MarketStats />
+          </Styled.MobileStatsContainer>
           <Styled.MobileChartContainer>Chart</Styled.MobileChartContainer>
           <Styled.MobileTabsContainer>Tabs</Styled.MobileTabsContainer>
         </>
@@ -107,9 +109,6 @@ const MarketPage: NextPage = () => {
               {/* Stats Section */}
               <Styled.StatsBox>
                 <MarketStats />
-                {/* {tradingPairStats.volume}
-                {tradingPairStats.latest}
-                {tradingPairStats.percentChange} */}
               </Styled.StatsBox>
 
               {/* Charts and Order book Section */}
