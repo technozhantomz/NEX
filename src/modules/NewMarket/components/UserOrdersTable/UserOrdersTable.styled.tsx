@@ -1,6 +1,9 @@
 import { styled, DataTable as UiTable } from "../../../../ui/src";
 
 export const OrdersTable = styled(UiTable)`
+  .ant-table-tbody > tr > td {
+    font-size: 12px;
+  }
   .sell,
   .ant-table-tbody > tr.sell.ant-table-row:hover > td,
   .ant-table-tbody > tr.sell > td.ant-table-cell-row-hover {

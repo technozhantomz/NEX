@@ -10,7 +10,12 @@ import {
   useMarketContext,
   useUserContext,
 } from "../../../../../common/providers";
-import { LimitOrder, TradeHistoryRow } from "../../../../../common/types";
+import {
+  LimitOrder,
+  MarketPair,
+  OrderHistory,
+  TradeHistoryRow,
+} from "../../../../../common/types";
 
 import {
   TradeHistoryColumn,
@@ -24,9 +29,10 @@ type Props = {
 export function useHistoryTable({
   forUser = false,
 }: Props): UseHistoryTableResult {
-  const { selectedPair, marketHistory } = useMarketContext();
+  const { selectedPair, marketHistory, fillLastTradeHistory } =
+    useMarketContext();
   const { id, localStorageAccount } = useUserContext();
-  const { getHistoryTableRows, formTradeHistoryRows } = useMarketHistory();
+  const { formTradeHistoryTableRows, formTradeHistoryRow } = useMarketHistory();
   const { getAccountHistoryById } = useAccountHistory();
   const { getFullAccount } = useAccount();
   const [tradeHistoryRows, setTradeHistoryRows] = useState<TradeHistoryRow[]>(
@@ -63,85 +69,90 @@ export function useHistoryTable({
     }
   }, [selectedPair]);
 
-  const getHistory = useCallback(async () => {
-    setLoadingTradeHistory(true);
-    if (selectedPair && marketHistory) {
-      try {
-        const marketHistoryRows =
-          (await getHistoryTableRows()) as TradeHistoryRow[];
+  const formMarketTradeHistoryTableRows = useCallback(
+    async (selectedPair: MarketPair, marketHistory: OrderHistory[]) => {
+      setLoadingTradeHistory(true);
+      const marketHistoryRows = await formTradeHistoryTableRows(
+        selectedPair,
+        marketHistory
+      );
+      setTradeHistoryRows(marketHistoryRows ?? []);
+      const lastTradeHistory =
+        marketHistoryRows && marketHistoryRows.length
+          ? marketHistoryRows[0]
+          : undefined;
+      fillLastTradeHistory(lastTradeHistory);
+      setLoadingTradeHistory(false);
+    },
+    [
+      setLoadingTradeHistory,
+      formTradeHistoryTableRows,
+      setTradeHistoryRows,
+      fillLastTradeHistory,
+    ]
+  );
 
-        setTradeHistoryRows(marketHistoryRows);
-        setLoadingTradeHistory(false);
-      } catch (e) {
-        console.log(e);
-        setLoadingTradeHistory(false);
-      }
-    }
-  }, [marketHistory, setLoadingTradeHistory, setTradeHistoryRows]);
-
-  const getUserHistory = useCallback(async () => {
-    if (selectedPair && id && id !== "") {
-      try {
-        setLoadingTradeHistory(true);
-        const [fullAccount, userOperationsHistory] = await Promise.all([
-          getFullAccount(localStorageAccount, false),
-          getAccountHistoryById(id),
-        ]);
-        let limitOrders: LimitOrder[] = [];
-        if (fullAccount) {
-          limitOrders = fullAccount.limit_orders;
-        }
-        //const userOperationsHistory = await getAccountHistoryById(id);
-        const fillOrdersHistory = userOperationsHistory.filter(
-          (userOperationHistory) => userOperationHistory.op[0] === 4
-        );
-        const fillOrdersHistoryForThePair = fillOrdersHistory.filter(
-          (fillOrderHistory) => {
-            const pays = fillOrderHistory.op[1].pays;
-            const receives = fillOrderHistory.op[1].receives;
-            const orderAssetsIds = [pays.asset_id, receives.asset_id];
-            return (
-              orderAssetsIds.includes(selectedPair.base.id) &&
-              orderAssetsIds.includes(selectedPair.quote.id)
-            );
+  const formUserTradeHistoryTableRows = useCallback(
+    async (selectedPair: MarketPair, id?: string) => {
+      if (id !== undefined && id !== "") {
+        try {
+          setLoadingTradeHistory(true);
+          const [fullAccount, userOperationsHistory] = await Promise.all([
+            getFullAccount(localStorageAccount, false),
+            getAccountHistoryById(id),
+          ]);
+          let limitOrders: LimitOrder[] = [];
+          if (fullAccount) {
+            limitOrders = fullAccount.limit_orders;
           }
-        );
-        const userHistoryRows = await Promise.all(
-          fillOrdersHistoryForThePair.map(
-            async (fillOrderHistoryForThePair) => {
-              const operationDetails = fillOrderHistoryForThePair.op[1];
-              return formTradeHistoryRows(
-                fillOrderHistoryForThePair,
-                selectedPair,
-                forUser,
-                limitOrders.find(
-                  (order) => order.id === operationDetails.order_id
-                )
+          const fillOrdersHistory = userOperationsHistory.filter(
+            (userOperationHistory) => userOperationHistory.op[0] === 4
+          );
+          const fillOrdersHistoryForThePair = fillOrdersHistory.filter(
+            (fillOrderHistory) => {
+              const pays = fillOrderHistory.op[1].pays;
+              const receives = fillOrderHistory.op[1].receives;
+              const orderAssetsIds = [pays.asset_id, receives.asset_id];
+              return (
+                orderAssetsIds.includes(selectedPair.base.id) &&
+                orderAssetsIds.includes(selectedPair.quote.id)
               );
             }
-          )
-        );
-        setTradeHistoryRows(userHistoryRows);
-        setLoadingTradeHistory(false);
-      } catch (e) {
-        console.log(e);
+          );
+          const userHistoryRows = await Promise.all(
+            fillOrdersHistoryForThePair.map(
+              async (fillOrderHistoryForThePair) => {
+                const operationDetails = fillOrderHistoryForThePair.op[1];
+                return formTradeHistoryRow(
+                  fillOrderHistoryForThePair,
+                  selectedPair,
+                  true,
+                  limitOrders.find(
+                    (order) => order.id === operationDetails.order_id
+                  )
+                );
+              }
+            )
+          );
+          setTradeHistoryRows(userHistoryRows);
+          setLoadingTradeHistory(false);
+        } catch (e) {
+          console.log(e);
+          setLoadingTradeHistory(false);
+        }
+      } else {
         setLoadingTradeHistory(false);
       }
-    } else {
-      setTradeHistoryRows([]);
-      setLoadingTradeHistory(false);
-    }
-  }, [
-    selectedPair,
-    forUser,
-    id,
-    localStorageAccount,
-    getFullAccount,
-    setLoadingTradeHistory,
-    getAccountHistoryById,
-    formTradeHistoryRows,
-    setTradeHistoryRows,
-  ]);
+    },
+    [
+      setLoadingTradeHistory,
+      localStorageAccount,
+      getFullAccount,
+      getAccountHistoryById,
+      formTradeHistoryRow,
+      setTradeHistoryRows,
+    ]
+  );
 
   const defineTableRowClassName = useCallback((record: any) => {
     const item = record as TradeHistoryRow;
@@ -149,8 +160,14 @@ export function useHistoryTable({
   }, []);
 
   useEffect(() => {
-    forUser ? getUserHistory() : getHistory();
-  }, [selectedPair]);
+    if (selectedPair && marketHistory) {
+      if (forUser) {
+        formUserTradeHistoryTableRows(selectedPair, id);
+      } else {
+        formMarketTradeHistoryTableRows(selectedPair, marketHistory);
+      }
+    }
+  }, [selectedPair, marketHistory, id]);
 
   return {
     tradeHistoryRows,

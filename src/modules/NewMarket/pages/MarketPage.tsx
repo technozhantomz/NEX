@@ -21,14 +21,10 @@ const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
   const { md, xxl } = useViewportContext();
-  const {
-    // selectedPair,
-    isPairModalVisible,
-    handleClickOnPair,
-    setIsPairModalVisible,
-  } = useMarketPage({
-    currentPair: pair as string,
-  });
+  const { isPairModalVisible, handleClickOnPair, setIsPairModalVisible } =
+    useMarketPage({
+      currentPair: pair as string,
+    });
 
   const renderHistoryTabs = !xxl ? (
     <Styled.RightBorderedVerticalFlexedCol xxl={{ span: 5 }}>
@@ -76,9 +72,7 @@ const MarketPage: NextPage = () => {
       <UsersOrdersTabs />
     </Styled.UserOrdersContainer>
   ) : (
-    <Styled.TabletTabsContainer>
-      <UsersOrdersTabs />
-    </Styled.TabletTabsContainer>
+    <Styled.TabletTabsContainer>Tablet tabs</Styled.TabletTabsContainer>
   );
 
   return (

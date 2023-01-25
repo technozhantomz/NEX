@@ -12,8 +12,11 @@ export type UseMarketHistoryResult = {
     base: Asset,
     quote: Asset
   ) => Promise<OrderHistory[] | undefined>;
-  getHistoryTableRows: () => Promise<TradeHistoryRow[] | undefined>;
-  formTradeHistoryRows: (
+  formTradeHistoryTableRows: (
+    selectedPair: MarketPair,
+    marketHistory: OrderHistory[]
+  ) => Promise<TradeHistoryRow[] | undefined>;
+  formTradeHistoryRow: (
     history: OrderHistory | History,
     selectedPair: MarketPair,
     forUser: boolean,

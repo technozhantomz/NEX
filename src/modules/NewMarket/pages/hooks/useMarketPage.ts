@@ -12,7 +12,7 @@ type Props = {
 
 export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { getAssetsBySymbols } = useAsset();
-  const { selectedPair, setSelectedPair } = useMarketContext();
+  const { selectedPair, setMarketPair } = useMarketContext();
   const [loadingSelectedPair, setLoadingSelectedPair] = useState<boolean>(true);
   const [isPairModalVisible, setIsPairModalVisible] = useState<boolean>(false);
   //   const [pageLoaded, setPageLoaded] = useState<boolean>(false);
@@ -45,7 +45,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       setLoadingSelectedPair(true);
       const baseQuote = await getPairAssets();
       if (!ignore && baseQuote) {
-        setSelectedPair({ base: baseQuote.base, quote: baseQuote.quote });
+        setMarketPair(baseQuote.base, baseQuote.quote);
         setLoadingSelectedPair(false);
       }
     }
@@ -53,7 +53,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     return () => {
       ignore = true;
     };
-  }, [setLoadingSelectedPair, getPairAssets, setSelectedPair]);
+  }, [setLoadingSelectedPair, getPairAssets, setMarketPair]);
 
   return {
     selectedPair,

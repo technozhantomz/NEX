@@ -1,6 +1,7 @@
+import { cloneDeep } from "lodash";
 import { useCallback } from "react";
 
-import { useMarketContext, usePeerplaysApiContext } from "../../providers";
+import { usePeerplaysApiContext } from "../../providers";
 import {
   Asset,
   BlockHeader,
@@ -17,7 +18,6 @@ import { useFormDate } from "../utils";
 import { UseMarketHistoryResult } from "./useMarketHistory.types";
 
 export function useMarketHistory(): UseMarketHistoryResult {
-  const { selectedPair, marketHistory } = useMarketContext();
   const { historyApi } = usePeerplaysApiContext();
   const { getBlockHeader } = useBlockchain();
   const { setPrecision, ceilPrecision } = useAsset();
@@ -38,7 +38,7 @@ export function useMarketHistory(): UseMarketHistoryResult {
     [historyApi]
   );
 
-  const formTradeHistoryRows = useCallback(
+  const formTradeHistoryRow = useCallback(
     async (
       history: OrderHistory | History,
       selectedPair: MarketPair,
@@ -96,10 +96,10 @@ export function useMarketHistory(): UseMarketHistoryResult {
 
   const defineHistoryPriceMovement = useCallback(
     (tradeHistoryRows: TradeHistoryRow[]) => {
-      const updatedTradeHistoryRows = [...tradeHistoryRows];
+      const updatedTradeHistoryRows = cloneDeep(tradeHistoryRows);
       for (let i = updatedTradeHistoryRows.length - 1; i >= 0; i--) {
         const historyRow = updatedTradeHistoryRows[i];
-        for (let j = i - 1; j > 0; j--) {
+        for (let j = i - 1; j >= 0; j--) {
           if (historyRow.isBuyOrder === updatedTradeHistoryRows[j].isBuyOrder) {
             if (
               Number(historyRow.price) !==
@@ -119,12 +119,12 @@ export function useMarketHistory(): UseMarketHistoryResult {
     []
   );
 
-  const getHistoryTableRows = useCallback(async () => {
-    if (selectedPair && marketHistory) {
+  const formTradeHistoryTableRows = useCallback(
+    async (selectedPair: MarketPair, marketHistory: OrderHistory[]) => {
       try {
         const tradeHistoryRows = await Promise.all(
           marketHistory.map((history) => {
-            return formTradeHistoryRows(history, selectedPair, false);
+            return formTradeHistoryRow(history, selectedPair, false);
           })
         );
         const updatedTradeHistoryRows =
@@ -133,8 +133,13 @@ export function useMarketHistory(): UseMarketHistoryResult {
       } catch (e) {
         console.log(e);
       }
-    }
-  }, [selectedPair, marketHistory, formTradeHistoryRows]);
+    },
+    [formTradeHistoryRow, defineHistoryPriceMovement]
+  );
 
-  return { getFillOrderHistory, getHistoryTableRows, formTradeHistoryRows };
+  return {
+    getFillOrderHistory,
+    formTradeHistoryTableRows,
+    formTradeHistoryRow,
+  };
 }
