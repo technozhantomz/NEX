@@ -8,7 +8,8 @@ import {
 
 export type UseMarketHistoryResult = {
   getFillOrderHistory: (
-    selectedPair: MarketPair
+    selectedPair: MarketPair,
+    limit?: number
   ) => Promise<OrderHistory[] | undefined>;
   getHistoryTableRows: () => Promise<TradeHistoryRow[] | undefined>;
   formTradeHistoryRows: (
