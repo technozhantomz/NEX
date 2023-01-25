@@ -7,6 +7,7 @@ import { useViewportContext } from "../../../common/providers";
 import { Col } from "../../../ui/src";
 import {
   HistoryTabs,
+  MarketStats,
   OrderBook,
   PairModal,
   PairSelect,
@@ -88,7 +89,9 @@ const MarketPage: NextPage = () => {
           <Styled.MobileAssetSelectorContainer>
             Asset Selector
           </Styled.MobileAssetSelectorContainer>
-          <Styled.MobileStatsContainer>Stats</Styled.MobileStatsContainer>
+          <Styled.MobileStatsContainer>
+            <MarketStats />
+          </Styled.MobileStatsContainer>
           <Styled.MobileChartContainer>Chart</Styled.MobileChartContainer>
           <Styled.MobileTabsContainer>Tabs</Styled.MobileTabsContainer>
         </>
@@ -104,7 +107,9 @@ const MarketPage: NextPage = () => {
               xxl={{ span: 14 }}
             >
               {/* Stats Section */}
-              <Styled.StatsBox>678 PPY</Styled.StatsBox>
+              <Styled.StatsBox>
+                <MarketStats />
+              </Styled.StatsBox>
 
               {/* Charts and Order book Section */}
               {renderChartAndOrderBook}
