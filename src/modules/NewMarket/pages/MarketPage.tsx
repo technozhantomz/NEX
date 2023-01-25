@@ -6,6 +6,7 @@ import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
 import { Col } from "../../../ui/src";
 import {
+  ControlsTabs,
   HistoryTabs,
   OrderBook,
   PairModal,
@@ -125,7 +126,7 @@ const MarketPage: NextPage = () => {
 
               {/* Limit Order forms */}
               <Styled.LimitOrderFormContainer>
-                Limit Order Form
+                <ControlsTabs />
               </Styled.LimitOrderFormContainer>
 
               {/* Wallet Sections */}

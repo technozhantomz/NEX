@@ -86,6 +86,8 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
     if (selectedPair) {
       try {
         setLoadingAsksBids(true);
+        setAsks([]);
+        setBids([]);
         const { asks, bids } = await getOrderBook(
           selectedPair.base,
           selectedPair.quote
@@ -129,7 +131,9 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   }, [selectedPair, synced, dbApi, getHistory, getAsksBids]);
 
   const unsubscribeFromMarket = useCallback(async () => {
+    console.log("test unsub before", selectedPair);
     if (selectedPair) {
+      console.log("test unsub", selectedPair);
       try {
         await dbApi("unsubscribe_from_market", [
           () => {
@@ -159,6 +163,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   );
 
   useEffect(() => {
+    console.log("test selectedPair", selectedPair);
     subscribeToMarket();
     return () => {
       unsubscribeFromMarket();

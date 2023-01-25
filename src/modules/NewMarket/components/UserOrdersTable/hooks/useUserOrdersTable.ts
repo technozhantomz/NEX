@@ -163,7 +163,9 @@ export function useUserOrdersTable(isOpen: boolean): UseUserOrdersTableResult {
   }, []);
 
   useEffect(() => {
-    formUserOrders();
+    if (marketHistory) {
+      formUserOrders();
+    }
   }, [marketHistory]);
 
   return {
