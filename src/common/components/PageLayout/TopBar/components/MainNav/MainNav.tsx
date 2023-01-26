@@ -70,7 +70,7 @@ export const MainNav = (): JSX.Element => {
         </li>
         <li>
           <MenuItem
-            href={`/new-market/${exchanges.active}`}
+            href={`/market/${exchanges.active}`}
             icon={<Market className={"menu-icon"} />}
             label={counterpart.translate(`pages.market.heading`)}
           />

@@ -1,1 +1,1 @@
-export { default } from "./pages/MarketPage";
+export { default } from "./pages";

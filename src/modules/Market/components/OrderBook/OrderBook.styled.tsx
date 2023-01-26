@@ -1,59 +1,39 @@
 import { Dropdown, Menu, styled, Table as UiTable } from "../../../../ui/src";
 import { colors } from "../../../../ui/src/colors";
 
-export const Flex = styled.div`
-  display: flex;
-`;
-export const Table = styled(UiTable)`
-  .ant-table-tbody > tr > td {
-    border-bottom: none;
-    font-size: 1em;
-    padding: 2px;
-    text-align: center;
-  }
-  .ant-table-thead > tr > th {
-    background: #fff;
-    border-bottom: none;
-    padding: 13px;
-    text-align: center;
-    overflow-wrap: unset;
-  }
-  .ant-table-thead
-    > tr
-    > th:not(:last-child):not(.ant-table-selection-column):not(
-      .ant-table-row-expand-icon-cell
-    ):not([colspan])::before {
-    display: none;
-  }
-  .ant-table-tbody > tr.ant-table-row:hover > td,
-  .ant-table-tbody > tr > td.ant-table-cell-row-hover {
-    background: none;
-  }
-  .ant-table-tbody > tr.ant-table-row.sell {
-    background: #fff4f4;
-  }
-  .ant-table-tbody > tr.ant-table-row.buy {
-    background: #e5fff6;
-  }
-  .ant-table-row {
-    cursor: pointer;
-  }
+export const OrderBookContainer = styled.div`
+  max-height: inherit;
+  min-height: 100%;
+  padding: 2px;
+  overflow: hidden;
 `;
 
-export const TableContainer = styled.div``;
+export const Heading = styled.h2`
+  font-size: 20px;
+  font-weight: 500;
+  margin 20px;
+  padding: 0;
+  text-align: left;
+`;
 
 export const FilterContainer = styled.div`
   display: flex;
-  padding-left: 30px;
-  padding-right: 30px;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 16px;
+`;
+
+export const Flex = styled.div`
+  display: flex;
 `;
 
 export const OrdersFilter = styled.button`
   display: flex;
-  width: 25px;
+  width: 100%;
   height: 25px;
+  margin-bottom: 10px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -83,15 +63,269 @@ export const OrdersFilter = styled.button`
 
 export const ThresholdMenu = styled(Menu)``;
 
-export const ThresholdDropdown = styled(Dropdown)``;
+export const ThresholdDropdown = styled(Dropdown)`
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 10px;
+`;
 
 export const ThresholdLabel = styled.span`
   color: ${colors.textColorSecondary};
-  font-size: 12px;
-  margin-right: 10px;
+  font-size: 11px;
+  margin-right: 5px;
 `;
 
 export const ThresholdValue = styled.span`
-  font-size: 14px;
+  font-size: 11px;
   color: #212121;
+`;
+
+export const LastTradeContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 25px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border: 1px solid ${colors.borderColorBase};
+  font-size: 12px;
+`;
+
+export const LastTradeValue = styled.div`
+  flex-basis: 33%;
+`;
+
+export const LastTradePriceValue = styled(LastTradeValue)`
+  .buy {
+    color: ${colors.marketBuy};
+  }
+  .sell {
+    color: ${colors.marketSell};
+  }
+`;
+
+export const Table = styled(UiTable)`
+  max-height: inherit;
+  padding: 6px;
+  .ant-table-tbody > tr > td {
+    border-bottom: none;
+    font-size: 0.7em;
+    padding: 2px;
+    text-align: left;
+    background: unset;
+  }
+  .ant-table-thead > tr > th {
+    font-size: 12px;
+    background: ${colors.white};
+    border-bottom: none;
+    padding: 0 0 11px;
+    overflow-wrap: unset;
+  }
+  .ant-table-thead
+    > tr
+    > th:not(:last-child):not(.ant-table-selection-column):not(
+      .ant-table-row-expand-icon-cell
+    ):not([colspan])::before {
+    display: none;
+  }
+  .ant-table-tbody > tr.ant-table-row:hover > td,
+  .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+    background: none;
+  }
+  .ant-table-tbody > tr.ant-table-row.sell > td:first-child {
+    color: ${colors.marketSell};
+  }
+  .ant-table-tbody > tr.ant-table-row.buy > td:first-child {
+    color: ${colors.marketBuy};
+  }
+
+  .ant-table-tbody > tr.buy.order-depth-10 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 10%,
+      transparent 10%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.buy.order-depth-20 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 20%,
+      transparent 20%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.buy.order-depth-30 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 30%,
+      transparent 30%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.buy.order-depth-40 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 40%,
+      transparent 40%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.buy.order-depth-50 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 50%,
+      transparent 50%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.buy.order-depth-60 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 60%,
+      transparent 60%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.buy.order-depth-70 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 70%,
+      transparent 70%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.buy.order-depth-80 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 80%,
+      transparent 80%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.buy.order-depth-90 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 90%,
+      transparent 90%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.ant-table-row.buy.order-depth-100 {
+    background: linear-gradient(
+      to left,
+      rgb(168, 240, 216) 0%,
+      rgb(168, 240, 216) 100%,
+      transparent 100%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-10 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 10%,
+      transparent 10%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-20 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 20%,
+      transparent 20%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-30 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 30%,
+      transparent 30%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-40 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 40%,
+      transparent 40%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-50 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 50%,
+      transparent 50%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-60 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 60%,
+      transparent 60%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.sell.order-depth-70 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 70%,
+      transparent 70%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.sell.order-depth-80 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 80%,
+      transparent 80%,
+      transparent 100%
+    );
+  }
+
+  .ant-table-tbody > tr.sell.order-depth-90 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 90%,
+      transparent 90%,
+      transparent 100%
+    );
+  }
+  .ant-table-tbody > tr.sell.order-depth-100 {
+    background: linear-gradient(
+      to left,
+      rgb(254, 218, 220) 0%,
+      rgb(254, 218, 220) 100%,
+      transparent 100%,
+      transparent 100%
+    );
+  }
 `;

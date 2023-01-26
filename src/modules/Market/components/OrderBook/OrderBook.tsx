@@ -1,130 +1,80 @@
+import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import counterpart from "counterpart";
+import { useCallback } from "react";
 
-import { PasswordModal, TransactionModal } from "../../../../common/components";
-import { useHandleTransactionForm } from "../../../../common/hooks";
-import {
-  useUserContext,
-  useViewportContext,
-} from "../../../../common/providers";
-import { Scroll } from "../../../../common/types";
-import { DownOutlined, Form, Tooltip } from "../../../../ui/src";
-import { Order, OrderRow, PairAssets } from "../../types";
+import { TradeHistoryRow } from "../../../../common/types";
+import { DownOutlined, Tooltip } from "../../../../ui/src";
 
 import * as Styled from "./OrderBook.styled";
-import { showUserOrderColumns } from "./components";
-import { OrderType, useOrderBook } from "./hooks";
+import { FilterType, useOrderBook } from "./hooks";
 
 type Props = {
-  selectedAssets: PairAssets | undefined;
-  loadingSelectedPair: boolean;
-  forUser?: boolean;
-  asks: Order[];
-  bids: Order[];
-  loadingAsksBids: boolean;
-  userOrdersRows: OrderRow[];
-  loadingUserOrderRows: boolean;
-  onOrderBookRowClick: (record: OrderRow) => void;
+  currentPair: string;
 };
 
-export const OrderBook = ({
-  forUser = false,
-  loadingSelectedPair,
-  asks,
-  bids,
-  loadingAsksBids,
-  userOrdersRows,
-  loadingUserOrderRows,
-  onOrderBookRowClick,
-  selectedAssets,
-}: Props): JSX.Element => {
+export const OrderBook = ({ currentPair }: Props): JSX.Element => {
   const {
-    ordersRows,
-    orderType,
+    thresholdValues,
+    orderColumns,
     threshold,
+    asksRows,
+    bidsRows,
+    filter,
+    lastTrade,
+    loading,
     handleThresholdChange,
     handleFilterChange,
-    orderColumns,
-    cancelOrderfeeAmount,
-    transactionMessageState,
-    transactionMessageDispatch,
-    setSelectedOrderId,
-    selectedOrderId,
-    handleCancelLimitOrder,
+    specifyTableHeight,
+    specifyTableScroll,
+    specifyLastTradeClassName,
+    specifyAsksTableRowClassName,
+    specifyBidsTableRowClassName,
+    selectedPair,
   } = useOrderBook({
-    selectedAssets,
-    loadingSelectedPair,
-    asks,
-    bids,
+    currentPair,
   });
 
-  const {
-    isPasswordModalVisible,
-    isTransactionModalVisible,
-    showPasswordModal,
-    hidePasswordModal,
-    handleFormFinish,
-    hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleCancelLimitOrder,
-    transactionMessageDispatch,
-    neededKeyType: "active",
-  });
-  const { md } = useViewportContext();
-  const { localStorageAccount } = useUserContext();
-
-  const dataSource = forUser ? userOrdersRows : ordersRows;
-
-  const desktopScrollForUserHistories =
-    dataSource.length > 11
-      ? {
-          y: 290,
-          x: true,
-          scrollToFirstRowOnChange: false,
-        }
-      : { x: true, scrollToFirstRowOnChange: false };
-
-  const desktopScrollForHistories =
-    dataSource.length > 27
-      ? { y: 730, x: true, scrollToFirstRowOnChange: false }
-      : { x: true, scrollToFirstRowOnChange: false };
-  const desktopScroll = forUser
-    ? desktopScrollForUserHistories
-    : desktopScrollForHistories;
-
-  const mobileScroll =
-    dataSource.length > 6
-      ? ({ y: 300, x: true, scrollToFirstRowOnChange: false } as Scroll)
-      : ({ x: true, scrollToFirstRowOnChange: false } as Scroll);
-  const scroll = md ? mobileScroll : (desktopScroll as Scroll);
-
-  const types: OrderType[] = ["total", "sell", "buy"];
-
+  const types: FilterType[] = ["total", "sell", "buy"];
   const thresholdMenu = (
     <Styled.ThresholdMenu onClick={handleThresholdChange}>
-      <Styled.ThresholdMenu.Item key="0.001">0.001</Styled.ThresholdMenu.Item>
-      <Styled.ThresholdMenu.Item key="0.005">0.005</Styled.ThresholdMenu.Item>
-      <Styled.ThresholdMenu.Item key="0.01">0.01</Styled.ThresholdMenu.Item>
+      {thresholdValues.map((value) => (
+        <Styled.ThresholdMenu.Item key={value}>
+          {value}
+        </Styled.ThresholdMenu.Item>
+      ))}
     </Styled.ThresholdMenu>
   );
 
-  const userOrderColumns = selectedAssets
-    ? showUserOrderColumns(
-        selectedAssets.quote.symbol,
-        selectedAssets.base.symbol,
-        (orderId) => {
-          setSelectedOrderId(orderId.split(".")[2]);
-          showPasswordModal();
-        }
-      )
-    : undefined;
+  const bidsScroll = specifyTableScroll(bidsRows);
+  const asksScroll = specifyTableScroll(asksRows);
 
-  const columns = forUser ? userOrderColumns : orderColumns;
+  const renderLastTradeHistoryPrice = useCallback(
+    (lastTrade: TradeHistoryRow) => {
+      if (lastTrade.isPriceUp !== undefined) {
+        return lastTrade.isPriceUp ? (
+          <>
+            <span style={{ marginRight: "4px" }}>{lastTrade.price}</span>
+            <CaretUpOutlined />
+          </>
+        ) : (
+          <>
+            <span style={{ marginRight: "4px" }}>{lastTrade.price}</span>
+            <CaretDownOutlined />
+          </>
+        );
+      } else {
+        return <span style={{ marginRight: "4px" }}>{lastTrade?.price}</span>;
+      }
+    },
+    []
+  );
 
   return (
     <>
-      {forUser ? (
-        ""
-      ) : (
+      <Styled.OrderBookContainer>
+        <Styled.Heading>
+          {counterpart.translate("pages.market.order_book")}
+        </Styled.Heading>
         <Styled.FilterContainer>
           <Styled.Flex>
             {types.map((type) => (
@@ -137,7 +87,7 @@ export const OrderBook = ({
                   key={type}
                   onClick={() => handleFilterChange(type)}
                   className={`order-filters__type--${type}${
-                    type === orderType ? " active" : ""
+                    type === filter ? " active" : ""
                   }`}
                 >
                   <span></span>
@@ -163,43 +113,53 @@ export const OrderBook = ({
             </Styled.ThresholdDropdown>
           </Styled.Flex>
         </Styled.FilterContainer>
-      )}
-      <Styled.TableContainer>
-        <Styled.Table
-          loading={forUser ? loadingUserOrderRows : loadingAsksBids}
-          pagination={false}
-          columns={columns}
-          scroll={scroll}
-          bordered={false}
-          dataSource={dataSource}
-          rowClassName={(record: any) => {
-            return record.isBuyOrder ? "buy" : "sell";
-          }}
-          onRow={(record, _rowIndex) => {
-            return {
-              onClick: () => {
-                onOrderBookRowClick(record as OrderRow);
-              },
-            };
-          }}
-        ></Styled.Table>
-      </Styled.TableContainer>
-      <Form.Provider onFormFinish={handleFormFinish}>
-        <TransactionModal
-          visible={isTransactionModalVisible}
-          onCancel={hideTransactionModal}
-          transactionMessageState={transactionMessageState}
-          account={localStorageAccount}
-          fee={cancelOrderfeeAmount}
-          orderId={selectedOrderId}
-          transactionType="limit_order_cancel"
-        />
-        <PasswordModal
-          visible={isPasswordModalVisible}
-          onCancel={hidePasswordModal}
-          neededKeyType="active"
-        />
-      </Form.Provider>
+        {/* Buy table */}
+        {filter !== "sell" && (
+          <Styled.Table
+            style={{ height: specifyTableHeight() }}
+            loading={loading}
+            pagination={false}
+            columns={orderColumns as any}
+            bordered={false}
+            scroll={bidsScroll}
+            dataSource={bidsRows}
+            rowClassName={specifyBidsTableRowClassName}
+          ></Styled.Table>
+        )}
+        {/* Last trade */}
+        {filter === "total" && (
+          <Styled.LastTradeContainer>
+            <Styled.LastTradePriceValue>
+              <span className={specifyLastTradeClassName(lastTrade)}>
+                {lastTrade ? renderLastTradeHistoryPrice(lastTrade) : 0}
+              </span>
+            </Styled.LastTradePriceValue>
+            <Styled.LastTradeValue>
+              {lastTrade ? lastTrade.amount : 0}
+            </Styled.LastTradeValue>
+            <Styled.LastTradeValue>
+              {lastTrade
+                ? (Number(lastTrade.amount) * Number(lastTrade.price)).toFixed(
+                    selectedPair?.quote.precision ?? 5
+                  )
+                : 0}
+            </Styled.LastTradeValue>
+          </Styled.LastTradeContainer>
+        )}
+        {/* Sell table */}
+        {filter !== "buy" && (
+          <Styled.Table
+            style={{ height: specifyTableHeight() }}
+            loading={loading}
+            pagination={false}
+            columns={orderColumns as any}
+            bordered={false}
+            scroll={asksScroll}
+            dataSource={asksRows}
+            rowClassName={specifyAsksTableRowClassName}
+          ></Styled.Table>
+        )}
+      </Styled.OrderBookContainer>
     </>
   );
 };
