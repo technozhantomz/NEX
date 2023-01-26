@@ -34,7 +34,7 @@ export function useMarketStats(): UseMarketStatsResult {
       const quote = selectedPair.quote;
       try {
         const ticker = await getTicker(selectedPair.base, selectedPair.quote);
-        console.log("ticker", ticker);
+        // console.log("ticker", ticker);
         askPrice = Number(asks[0].price).toFixed(base.precision);
         bidPrice = Number(bids[0].price).toFixed(base.precision);
         if (ticker) {
@@ -48,15 +48,15 @@ export function useMarketStats(): UseMarketStatsResult {
         console.log(e);
       }
     }
-    console.log("ticker final", {
-      latest,
-      percentChange,
-      volume,
-      askPrice,
-      bidPrice,
-      dailyHigh,
-      dailyLow,
-    });
+    // console.log("ticker final", {
+    //   latest,
+    //   percentChange,
+    //   volume,
+    //   askPrice,
+    //   bidPrice,
+    //   dailyHigh,
+    //   dailyLow,
+    // });
     return {
       latest,
       percentChange,

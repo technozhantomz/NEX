@@ -77,7 +77,7 @@ export function useDataFeed(): UseDataFeedResult {
       //   symbolName,
       //   onSymbolResolvedCallback,
       //   onResolveErrorCallback,
-      //   extension,
+      //   _extension,
       // });
 
       const symbols = await getAllSymbols();
@@ -118,7 +118,7 @@ export function useDataFeed(): UseDataFeedResult {
       onErrorCallback
     ) => {
       const { from, to, firstDataRequest } = periodParams;
-      // console.log("[getBars]: Method call", symbolInfo, resolution, from, to);
+      // console.log("[getBars]: Method call", symbolInfo, _resolution, from, to);
       try {
         const data = (await getChartFeed()) as ChartFeed[];
         let bars: ChartFeed[] = [];
@@ -146,9 +146,41 @@ export function useDataFeed(): UseDataFeedResult {
           noData: false,
         });
       } catch (error) {
-        // console.log("[getBars]: Get error", error);
+        console.log("[getBars]: Get error", error);
         onErrorCallback(error as string);
       }
+    },
+    subscribeBars: (
+      _symbolInfo,
+      _resolution,
+      _onRealtimeCallback,
+      _subscriberUID,
+      _onResetCacheNeededCallback
+    ) => {
+      // console.log(
+      //   "[subscribeBars]: Method call with subscriberUID:",
+      //   symbolInfo,
+      //   resolution,
+      //   onRealtimeCallback,
+      //   subscriberUID,
+      //   onResetCacheNeededCallback
+      // );
+      // subscribeOnStream(
+      //   symbolInfo,
+      //   resolution,
+      //   onRealtimeCallback,
+      //   subscriberUID,
+      //   onResetCacheNeededCallback,
+      //   lastBarsCache.get(symbolInfo.full_name)
+      // );
+    },
+
+    unsubscribeBars: (_subscriberUID) => {
+      // console.log(
+      //   "[unsubscribeBars]: Method call with subscriberUID:",
+      //   subscriberUID
+      // );
+      // unsubscribeFromStream(subscriberUID);
     },
   };
   return { dataFeed };

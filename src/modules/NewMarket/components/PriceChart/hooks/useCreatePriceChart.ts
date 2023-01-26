@@ -30,11 +30,12 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
   const { settings } = useAppSettingsContext();
   const { dataFeed } = useDataFeed();
   const { selectedPair } = useMarketContext();
+
   let tvWidget1: IChartingLibraryWidget | null = null;
 
   useEffect(() => {
     if (selectedPair) {
-      const symbol = `PeerplaysDex:${selectedPair.quote.symbol}/${selectedPair.base.symbol}`;
+      const symbol = `PeerplaysDex:${selectedPair.base.symbol}/${selectedPair.quote.symbol}`;
       if (chartContainerRef.current) {
         const widgetOptions: ChartingLibraryWidgetOptions = {
           symbol: symbol,
@@ -62,6 +63,7 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
           theme: settings.darkTheme ? "Dark" : ("Light" as ThemeName),
         };
         const tvWidget = new widget(widgetOptions);
+
         tvWidget1 = tvWidget;
 
         tvWidget.onChartReady(() => {
