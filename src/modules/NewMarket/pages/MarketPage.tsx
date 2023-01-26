@@ -11,6 +11,7 @@ import {
   OrderBook,
   PairModal,
   PairSelect,
+  PriceChart,
   UsersOrdersTabs,
   Wallet,
 } from "../components";
@@ -47,7 +48,7 @@ const MarketPage: NextPage = () => {
         <>
           <Styled.RightBorderedVerticalFlexedCol md={24} xxl={16}>
             <Styled.PriceChartContainer>
-              Price Chart Section
+              <PriceChart />
             </Styled.PriceChartContainer>
             <Styled.MarketDepthContainer>
               Market Depth Chart Section
@@ -61,7 +62,7 @@ const MarketPage: NextPage = () => {
       ) : (
         <Styled.VerticalFlexedCol md={24} xxl={16}>
           <Styled.PriceChartContainer>
-            Price Chart Section
+            <PriceChart />
           </Styled.PriceChartContainer>
         </Styled.VerticalFlexedCol>
       )}
@@ -73,7 +74,9 @@ const MarketPage: NextPage = () => {
       <UsersOrdersTabs />
     </Styled.UserOrdersContainer>
   ) : (
-    <Styled.TabletTabsContainer>Tablet tabs</Styled.TabletTabsContainer>
+    <Styled.TabletTabsContainer>
+      <UsersOrdersTabs />
+    </Styled.TabletTabsContainer>
   );
 
   return (
@@ -87,13 +90,20 @@ const MarketPage: NextPage = () => {
       {md ? (
         <>
           <Styled.MobileAssetSelectorContainer>
-            Asset Selector
+            <PairSelect
+              handleClickOnPair={handleClickOnPair}
+              currentPair={pair as string}
+            />
           </Styled.MobileAssetSelectorContainer>
           <Styled.MobileStatsContainer>
             <MarketStats />
           </Styled.MobileStatsContainer>
-          <Styled.MobileChartContainer>Chart</Styled.MobileChartContainer>
-          <Styled.MobileTabsContainer>Tabs</Styled.MobileTabsContainer>
+          <Styled.MobileChartContainer>
+            <PriceChart />
+          </Styled.MobileChartContainer>
+          <Styled.MobileTabsContainer>
+            <UsersOrdersTabs />
+          </Styled.MobileTabsContainer>
         </>
       ) : (
         <Styled.Container>
