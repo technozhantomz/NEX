@@ -77,15 +77,15 @@ export function useMarketHistory(): UseMarketHistoryResult {
       let baseAmount = 0,
         quoteAmount = 0,
         isBuyOrder = false;
-      // this is sell orders
+      // this is buy orders
       if (pays.asset_id === base.id) {
         baseAmount = setPrecision(false, pays.amount, base.precision);
         quoteAmount = setPrecision(false, receives.amount, quote.precision);
-        //this is buy orders
+        isBuyOrder = true;
+        //this is sell orders
       } else {
         baseAmount = setPrecision(false, receives.amount, base.precision);
         quoteAmount = setPrecision(false, pays.amount, quote.precision);
-        isBuyOrder = true;
       }
 
       if (forUser) {
@@ -100,8 +100,8 @@ export function useMarketHistory(): UseMarketHistoryResult {
 
       return {
         key,
-        price: ceilPrecision(quoteAmount / baseAmount),
-        amount: baseAmount,
+        price: (baseAmount / quoteAmount).toFixed(base.precision),
+        amount: quoteAmount,
         time,
         isBuyOrder,
         filled: forUser ? filled : undefined,

@@ -64,8 +64,8 @@ export const PairModal = ({
         form={pairModalForm}
         onFinish={handleSelectPair}
         initialValues={{
-          base: currentPair.split("_")[0],
-          quote: currentPair.split("_")[1],
+          base: currentPair.split("_")[1],
+          quote: currentPair.split("_")[0],
           recents: exchanges.list[1] ? exchanges.list[1] : exchanges.list[0],
         }}
         onValuesChange={handleValuesChange}
@@ -73,15 +73,6 @@ export const PairModal = ({
         size="large"
         validateTrigger="onChange"
       >
-        <Form.Item name="base" validateFirst={true} rules={formValidation.base}>
-          <Select>
-            {allAssetsSymbols.map((asset) => (
-              <Option value={asset} key={`${asset}_base`}>
-                {asset}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
         <Form.Item
           name="quote"
           validateFirst={true}
@@ -90,6 +81,15 @@ export const PairModal = ({
           <Select>
             {allAssetsSymbols.map((asset) => (
               <Option value={asset} key={`${asset}_quote`}>
+                {asset}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item name="base" validateFirst={true} rules={formValidation.base}>
+          <Select>
+            {allAssetsSymbols.map((asset) => (
+              <Option value={asset} key={`${asset}_base`}>
                 {asset}
               </Option>
             ))}
