@@ -136,8 +136,6 @@ deploy_review:
     - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-review || true 
     - pm2 start npm --name nex-review -- run start
-  after_script:
-    - curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=cicd/trigger-jobs https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
@@ -157,12 +155,8 @@ stop_review_app:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
-  only:
-    - merge_requests
-  except:
-    - main
-  allow_failure: true  
-  when: manual
+  rules:
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   tags:
     - deploy-review
 
