@@ -25,11 +25,11 @@ export function useMarketHistory(): UseMarketHistoryResult {
   const { formLocalDate } = useFormDate();
 
   const getFillOrderHistory = useCallback(
-    async (base: Asset, quote: Asset) => {
+    async (selectedPair: MarketPair, limit = 100) => {
       try {
         const histories: OrderHistory[] = await historyApi(
           "get_fill_order_history",
-          [base.id, quote.id, 100]
+          [selectedPair.base.id, selectedPair.quote.id, limit]
         );
         return histories;
       } catch (e) {

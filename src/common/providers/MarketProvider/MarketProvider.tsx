@@ -54,10 +54,8 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
 
   const getHistory = useCallback(async () => {
     if (selectedPair) {
-      const base = selectedPair.base;
-      const quote = selectedPair.quote;
       try {
-        const histories = await getFillOrderHistory(base, quote);
+        const histories = await getFillOrderHistory(selectedPair);
         if (histories) {
           const marketTakersHistories = histories.reduce(
             (previousHistory, currentHistory, i, { [i - 1]: next }) => {
@@ -83,10 +81,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   const getAsksBids = useCallback(async () => {
     if (selectedPair) {
       setLoadingAsksBids(true);
-      const { asks, bids } = await getOrderBook(
-        selectedPair.base,
-        selectedPair.quote
-      );
+      const { asks, bids } = await getOrderBook(selectedPair);
       // This should change, right now, getOrderBook is not correct
       const updatedAsks = asks.map((ask) => {
         return {
