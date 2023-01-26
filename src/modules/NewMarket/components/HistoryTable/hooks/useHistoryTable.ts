@@ -46,13 +46,15 @@ export function useHistoryTable({
       const quoteSymbol = selectedPair.quote.symbol;
       return [
         {
-          title: `${counterpart.translate("tableHead.price")} (${quoteSymbol})`,
+          title: `${counterpart.translate("tableHead.price")} (${baseSymbol})`,
           dataIndex: "price",
           key: "price",
           fixed: true,
         },
         {
-          title: `${counterpart.translate("tableHead.amount")} (${baseSymbol})`,
+          title: `${counterpart.translate(
+            "tableHead.amount"
+          )} (${quoteSymbol})`,
           dataIndex: "amount",
           key: "amount",
           fixed: true,

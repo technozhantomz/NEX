@@ -152,25 +152,25 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   }, [bids, threshold, selectedPair]);
 
   const orderColumns: OrderColumn[] = useMemo(() => {
-    const baseSymbol = currentPair.split("_")[0];
-    const quoteSymbol = currentPair.split("_")[1];
+    const baseSymbol = currentPair.split("_")[1];
+    const quoteSymbol = currentPair.split("_")[0];
     return [
       {
-        title: `${counterpart.translate("tableHead.price")} (${quoteSymbol})`,
+        title: `${counterpart.translate("tableHead.price")} (${baseSymbol})`,
         fixed: true,
         dataIndex: "price",
         key: "price",
       },
       {
-        title: `${counterpart.translate("tableHead.amount")} (${baseSymbol})`,
+        title: `${counterpart.translate("tableHead.amount")} (${quoteSymbol})`,
         fixed: true,
-        dataIndex: "base",
-        key: "base",
-      },
-      {
-        title: `${counterpart.translate("tableHead.total")} (${quoteSymbol})`,
         dataIndex: "quote",
         key: "quote",
+      },
+      {
+        title: `${counterpart.translate("tableHead.total")} (${baseSymbol})`,
+        dataIndex: "base",
+        key: "base",
         fixed: true,
       },
     ] as OrderColumn[];

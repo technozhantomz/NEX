@@ -41,7 +41,7 @@ export function usePairModal({
   const handleSelectPair = useCallback(() => {
     pairModalForm.validateFields().then(() => {
       const { quote, base } = pairModalForm.getFieldsValue();
-      const selectedPair = `${base.trim()}_${quote.trim()}`;
+      const selectedPair = `${quote.trim()}_${base.trim()}`;
       if (selectedPair !== currentPair) {
         setIsVisible(false);
         updateExchanges(selectedPair);
@@ -59,7 +59,7 @@ export function usePairModal({
     (value: unknown) => {
       const selectedItem = value as string;
       const pair = selectedItem.split("/");
-      pairModalForm.setFieldsValue({ quote: pair[1], base: pair[0] });
+      pairModalForm.setFieldsValue({ quote: pair[0], base: pair[1] });
     },
     [pairModalForm]
   );

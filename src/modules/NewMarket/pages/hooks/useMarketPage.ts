@@ -23,10 +23,10 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
       const quoteBase = await getAssetsBySymbols(assetsSymbols);
       if (quoteBase.length > 1) {
         const base = quoteBase.find(
-          (asset) => asset.symbol === assetsSymbols[0]
+          (asset) => asset.symbol === assetsSymbols[1]
         ) as Asset;
         const quote = quoteBase.find(
-          (asset) => asset.symbol === assetsSymbols[1]
+          (asset) => asset.symbol === assetsSymbols[0]
         ) as Asset;
         return { base, quote };
       }

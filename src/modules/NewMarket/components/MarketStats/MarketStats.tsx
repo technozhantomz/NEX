@@ -1,42 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import counterpart from "counterpart";
 
-import { useMarketPairStats } from "../../../../common/hooks";
-import { useMarketContext } from "../../../../common/providers";
-import { MarketPairStats } from "../../../../common/types";
 import { colors } from "../../../../ui/src/colors";
 
 import * as Styled from "./MarketStats.styled";
+import { useMarketStats } from "./hooks";
 
 export function MarketStats(): JSX.Element {
-  const [stats, setStats] = useState<MarketPairStats>();
-  const { selectedPair } = useMarketContext();
-  const { getMarketPairStats } = useMarketPairStats();
-
-  const getMarketStats = useCallback(async () => {
-    if (selectedPair) {
-      try {
-        const stats = await getMarketPairStats(
-          selectedPair.base,
-          selectedPair.quote
-        );
-        setStats(stats);
-        console.log({ stats });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  }, [selectedPair]);
-
-  useEffect(() => {
-    if (selectedPair) {
-      getMarketStats();
-    }
-  }, [selectedPair]);
-
+  const { marketPairStats } = useMarketStats();
   return (
     <Styled.Row gutter={20}>
       <Styled.Col>
-        {stats?.latestIsBuyOrder ? (
+        {/* {stats?.latestIsBuyOrder ? (
           <Styled.LatestBuyStatistic
             title={`${stats?.latest} ${selectedPair?.quote.symbol}`}
             value={`${stats?.latest} ${
@@ -52,29 +26,38 @@ export function MarketStats(): JSX.Element {
             } ${String.fromCharCode(9660)}`} //need to get user's preferred currency
             valueStyle={{ color: colors.marketSell }}
           />
-        )}
+        )} */}
       </Styled.Col>
-      <Styled.Col>
+      {/* <Styled.Col>
         <Styled.Statistic title="Ask" value={stats?.ask_quote} precision={4} />
       </Styled.Col>
       <Styled.Col>
         <Styled.Statistic title="Bid" value={stats?.bid_quote} precision={4} />
-      </Styled.Col>
+      </Styled.Col> */}
       <Styled.Col>
         <Styled.Statistic
-          title="24h Change"
+          title={counterpart.translate("pages.market.twenty_four_hour_change")}
           valueStyle={{ color: colors.marketBuy }}
-          value={`${stats?.percentChange}%`}
+          value={`${marketPairStats.percentChange}%`}
         />
       </Styled.Col>
       <Styled.Col>
-        <Styled.Statistic title="24h High" value={stats?.dailyHigh} />
+        <Styled.Statistic
+          title={counterpart.translate("pages.market.twenty_four_hour_high")}
+          value={marketPairStats.dailyHigh}
+        />
       </Styled.Col>
       <Styled.Col>
-        <Styled.Statistic title="24h Low" value={stats?.dailyLow} />
+        <Styled.Statistic
+          title={counterpart.translate("pages.market.twenty_four_hour_low")}
+          value={marketPairStats.dailyLow}
+        />
       </Styled.Col>
       <Styled.Col>
-        <Styled.Statistic title="24h Volume" value={stats?.volume} />
+        <Styled.Statistic
+          title={counterpart.translate("pages.market.twenty_four_hour_volume")}
+          value={marketPairStats.volume}
+        />
       </Styled.Col>
     </Styled.Row>
   );

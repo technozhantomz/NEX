@@ -26,7 +26,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
   const formFilledLimitOrderRow = useCallback(
     async (
       filledOrder: History,
-      base: Asset,
+      quote: Asset,
       defaultAsset: Asset,
       openOrder?: LimitOrder
     ) => {
@@ -37,11 +37,11 @@ export function useAccountOrders(): UseAccountOrdersResult {
       let filled = "";
       let numberdFilled = 100;
       // buy history (asset/PPY)
-      if (operationDetails.receives.asset_id === base.id) {
+      if (operationDetails.receives.asset_id === quote.id) {
         amount = setPrecision(
           false,
           operationDetails.receives.amount,
-          base.precision
+          quote.precision
         );
 
         total = setPrecision(
@@ -55,7 +55,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
         amount = setPrecision(
           false,
           operationDetails.pays.amount,
-          base.precision
+          quote.precision
         );
 
         total = setPrecision(
@@ -83,15 +83,15 @@ export function useAccountOrders(): UseAccountOrdersResult {
               "time",
             ])
           : "",
-        pair: `${base.symbol}_${defaultToken}`,
+        pair: `${quote.symbol}_${defaultToken}`,
         type: counterpart.translate("general.limit"),
         side:
-          operationDetails.receives.asset_id === base.id
+          operationDetails.receives.asset_id === quote.id
             ? counterpart.translate("pages.profile.orders_tab.buy")
             : counterpart.translate("pages.profile.orders_tab.sell"),
         price: `${price} ${defaultAsset.symbol}`,
         numberedPrice: Number(price),
-        amount: `${amount} ${base.symbol}`,
+        amount: `${amount} ${quote.symbol}`,
         numberedAmount: Number(amount),
         total: `${total} ${defaultAsset.symbol}`,
         numberedTotal: Number(total),
@@ -106,14 +106,14 @@ export function useAccountOrders(): UseAccountOrdersResult {
   );
 
   const formOpenLimitOrderRow = useCallback(
-    (openOrder: LimitOrder, base: Asset, defaultAsset: Asset) => {
+    (openOrder: LimitOrder, quote: Asset, defaultAsset: Asset) => {
       let price = "";
       let amount = "";
       let total = "";
       // sell (asset/PPY)
-      if (openOrder.sell_price.base.asset_id === base.id) {
+      if (openOrder.sell_price.base.asset_id === quote.id) {
         amount = String(
-          setPrecision(false, openOrder.sell_price.base.amount, base.precision)
+          setPrecision(false, openOrder.sell_price.base.amount, quote.precision)
         );
         price = (
           setPrecision(
@@ -121,7 +121,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
             openOrder.sell_price.quote.amount,
             defaultAsset.precision
           ) /
-          setPrecision(false, openOrder.sell_price.base.amount, base.precision)
+          setPrecision(false, openOrder.sell_price.base.amount, quote.precision)
         ).toFixed(defaultAsset.precision);
         total = String(
           setPrecision(
@@ -133,7 +133,11 @@ export function useAccountOrders(): UseAccountOrdersResult {
         //buy (asset/ppy)
       } else {
         amount = String(
-          setPrecision(false, openOrder.sell_price.quote.amount, base.precision)
+          setPrecision(
+            false,
+            openOrder.sell_price.quote.amount,
+            quote.precision
+          )
         );
         price = (
           setPrecision(
@@ -141,7 +145,11 @@ export function useAccountOrders(): UseAccountOrdersResult {
             openOrder.sell_price.base.amount,
             defaultAsset.precision
           ) /
-          setPrecision(false, openOrder.sell_price.quote.amount, base.precision)
+          setPrecision(
+            false,
+            openOrder.sell_price.quote.amount,
+            quote.precision
+          )
         ).toFixed(defaultAsset.precision);
         total = String(
           setPrecision(
@@ -165,7 +173,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
           "year",
           "time",
         ]),
-        pair: `${base.symbol}_${defaultToken}`,
+        pair: `${quote.symbol}_${defaultToken}`,
         type: counterpart.translate("general.limit"),
         side:
           openOrder.sell_price.base.asset_id === defaultAsset.id
@@ -173,7 +181,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
             : counterpart.translate("pages.profile.orders_tab.sell"),
         price: `${price} ${defaultAsset.symbol}`,
         numberedPrice: Number(price),
-        amount: `${amount} ${base.symbol}`,
+        amount: `${amount} ${quote.symbol}`,
         numberedAmount: Number(amount),
         total: `${total} ${defaultAsset.symbol}`,
         numberedTotal: Number(total),
@@ -194,13 +202,13 @@ export function useAccountOrders(): UseAccountOrdersResult {
       if (fullAccount && allAssets && defaultAsset) {
         const limitOrders = fullAccount.limit_orders;
         const openOrdersRows = limitOrders.map((order) => {
-          const base = allAssets.find(
+          const quote = allAssets.find(
             (asset) =>
               (asset.id === order.sell_price.base.asset_id ||
                 asset.id === order.sell_price.quote.asset_id) &&
               asset.id !== defaultAsset.id
           ) as Asset;
-          return formOpenLimitOrderRow(order, base, defaultAsset);
+          return formOpenLimitOrderRow(order, quote, defaultAsset);
         });
 
         const filledOrdersHistories = userOperationsHistories.filter(
@@ -209,7 +217,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
         const historiesRows = await Promise.all(
           filledOrdersHistories.map((filledOrder) => {
             const operationDetails = filledOrder.op[1];
-            const base = allAssets.find(
+            const quote = allAssets.find(
               (asset) =>
                 (asset.id === operationDetails.receives.asset_id ||
                   asset.id === operationDetails.pays.asset_id) &&
@@ -220,7 +228,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
             );
             return formFilledLimitOrderRow(
               filledOrder,
-              base,
+              quote,
               defaultAsset,
               openOrder
             );

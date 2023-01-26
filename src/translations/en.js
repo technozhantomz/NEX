@@ -710,6 +710,12 @@ export const en = {
           user: "My history",
         },
       },
+      twenty_four_hour_high: "24h High",
+      twenty_four_hour_low: "24h Low",
+      twenty_four_hour_volume: "24h Volume",
+      twenty_four_hour_change: "24h Change",
+      ask: "Ask",
+      bid: "Bid",
     },
     settings: {
       heading: "Settings",

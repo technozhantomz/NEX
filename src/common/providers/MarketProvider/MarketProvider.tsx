@@ -83,17 +83,15 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
       setLoadingAsksBids(true);
       const { asks, bids } = await getOrderBook(selectedPair);
       // This should change, right now, getOrderBook is not correct
-      const updatedAsks = bids.map((bid) => {
+      const updatedAsks = asks.map((ask) => {
         return {
-          ...bid,
-          price: ((bid.quote as any) / (bid.base as any)).toFixed(20),
+          ...ask,
           isBuyOrder: false,
         };
       }) as MarketOrder[];
-      const updatedBids = asks.map((ask) => {
+      const updatedBids = bids.map((bid) => {
         return {
-          ...ask,
-          price: ((ask.quote as any) / (ask.base as any)).toFixed(20),
+          ...bid,
           isBuyOrder: true,
         };
       }) as MarketOrder[];
@@ -139,7 +137,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
 
   const setMarketPair = useCallback(
     (base: Asset, quote: Asset) => {
-      setSelectedPair({ base: base, quote: quote } as MarketPair);
+      setSelectedPair({ base, quote } as MarketPair);
     },
     [setSelectedPair]
   );
