@@ -132,14 +132,14 @@ deploy_review:
   script:
     - rm -rf $PROD_DEPLOY_DIR/* || true
     - tar -zxf nex-qa.tar.gz --directory $PROD_DEPLOY_DIR
+    - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
     - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-review || true 
     - pm2 start npm --name nex-review -- run start
-    - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
   after_script:
     - curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=main https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
   environment:
-    name: review/$CI_COMMIT_REF_NAME
+    name: review/$CI_COMMIT_REF_SLUG
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
   artifacts:
     paths:
@@ -194,7 +194,6 @@ deployToStaging:
     - pm2 start npm --name nex-staging -- run start
   after_script:
     - curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=main https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
-
   dependencies: [build-stg]
   environment:
     name: staging
