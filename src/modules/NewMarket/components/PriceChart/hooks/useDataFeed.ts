@@ -1,3 +1,5 @@
+import { filter } from "lodash";
+
 import {
   DatafeedConfiguration,
   IBasicDataFeed,
@@ -77,8 +79,9 @@ export function useDataFeed(): UseDataFeedResult {
       //   onResolveErrorCallback,
       //   extension,
       // });
+
       const symbols = await getAllSymbols();
-      const symbolItem = symbols.find(
+      const symbolItem = filter(symbols, (symbol) => !!symbol).find(
         ({ full_name }) => full_name === symbolName
       );
       if (!symbolItem) {
