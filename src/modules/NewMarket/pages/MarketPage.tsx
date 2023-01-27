@@ -6,6 +6,7 @@ import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
 import { Col } from "../../../ui/src";
 import {
+  DepthChart,
   HistoryTabs,
   OrderBook,
   PairModal,
@@ -53,7 +54,7 @@ const MarketPage: NextPage = () => {
               Price Chart Section
             </Styled.PriceChartContainer>
             <Styled.MarketDepthContainer>
-              Market Depth Chart Section
+              <DepthChart />
             </Styled.MarketDepthContainer>
           </Styled.RightBorderedVerticalFlexedCol>
           {/* Order Book section */}
