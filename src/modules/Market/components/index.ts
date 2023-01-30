@@ -8,3 +8,4 @@ export * from "./PairSelect";
 export * from "./PriceChart";
 export * from "./Wallet";
 export * from "./OrderBook";
+export * from "./ControlsTabs";

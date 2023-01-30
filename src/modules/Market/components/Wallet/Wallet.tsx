@@ -28,14 +28,14 @@ export function Wallet({ currentPair }: Props): JSX.Element {
           {currentPair.split("_")[0]}{" "}
           {counterpart.translate(`field.labels.available`)}:
         </Styled.BalanceLabel>
-        <Styled.Balance>{balances.baseAmount}</Styled.Balance>
+        <Styled.Balance>{balances.quoteAmount}</Styled.Balance>
       </Styled.BalanceInfo>
       <Styled.BalanceInfo>
         <Styled.BalanceLabel>
           {currentPair.split("_")[1]}{" "}
           {counterpart.translate(`field.labels.available`)}:
         </Styled.BalanceLabel>
-        <Styled.Balance>{balances.quoteAmount}</Styled.Balance>
+        <Styled.Balance>{balances.baseAmount}</Styled.Balance>
       </Styled.BalanceInfo>
     </>
   );
