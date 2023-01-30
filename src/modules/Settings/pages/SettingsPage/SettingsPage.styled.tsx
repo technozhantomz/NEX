@@ -8,11 +8,6 @@ export const SettingsCard = styled(UiCard)`
     width: 100%;
     ${mixIns.borderRadius}
     opacity: 1;
-    .ant-tabs-tab,
-    .ant-tabs-extra-content {
-      justify-content: center;
-      padding: 33px 28px 10px;
-    }
   }
   ${breakpoint.sm} {
     .ant-card-body {

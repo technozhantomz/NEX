@@ -16,10 +16,11 @@ const BlockchainPage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { block, tab } = router.query;
   const { pageMeta, blockNum, transactionId } = useBlockchainPage(tab, block);
-  const { sm } = useViewportContext();
+  const { width } = useViewportContext();
   const blockchainTabItems = BlockchainTabItems(block, blockNum, transactionId);
+  const mobileMenuBreakpoint = 790;
   const renderTabBar = MobileTabBar({
-    sm,
+    showMobileMenu: width <= mobileMenuBreakpoint,
     visible,
     tab,
     setVisible,
@@ -36,7 +37,7 @@ const BlockchainPage: NextPage = () => {
       description={`${pageMeta.description}`}
       layout="dex"
       onClick={() => {
-        if (sm) {
+        if (width <= mobileMenuBreakpoint) {
           visible && setVisible(false);
         }
       }}
@@ -47,7 +48,7 @@ const BlockchainPage: NextPage = () => {
           defaultActiveKey={`${tab ? tab : "blockchain"}`}
           onTabClick={(key) => {
             router.push(`/blockchain?tab=${key}`);
-            if (sm) setVisible(false);
+            if (width <= mobileMenuBreakpoint) setVisible(false);
           }}
           items={blockchainTabItems}
           destroyInactiveTabPane={true}

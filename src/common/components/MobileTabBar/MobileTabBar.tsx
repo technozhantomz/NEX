@@ -5,7 +5,7 @@ import { Button, DownOutlined, Menu, UpOutlined } from "../../../ui/src";
 import * as Styled from "./MobileTabBar.styled";
 
 type Args = {
-  sm: boolean;
+  showMobileMenu: boolean;
   visible: boolean;
   tab: string | string[] | undefined;
   setVisible: (value: SetStateAction<boolean>) => void;
@@ -15,7 +15,7 @@ type Args = {
 };
 
 export const MobileTabBar = ({
-  sm,
+  showMobileMenu,
   visible,
   tab,
   setVisible,
@@ -26,7 +26,7 @@ export const MobileTabBar = ({
   const renderTabBar = useCallback(
     (props: any, DefaultTabBar: any) => (
       <>
-        {sm ? (
+        {showMobileMenu ? (
           <Styled.MobileDropdownWrapper>
             <Styled.MobileDropdown
               visible={visible}
@@ -55,7 +55,15 @@ export const MobileTabBar = ({
         )}
       </>
     ),
-    [sm, visible, tab, setVisible, defaultKey, defaultTab, selectedTab]
+    [
+      showMobileMenu,
+      visible,
+      tab,
+      setVisible,
+      defaultKey,
+      defaultTab,
+      selectedTab,
+    ]
   );
 
   return renderTabBar;

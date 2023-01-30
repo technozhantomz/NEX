@@ -21,7 +21,7 @@ const ProfilePage: NextPage = () => {
   const router = useRouter();
   const { tab } = router.query;
   const renderTabBar = MobileTabBar({
-    sm,
+    showMobileMenu: sm,
     visible,
     tab,
     setVisible,

@@ -9,9 +9,10 @@ export const MobileDropdown = styled(UiDropdown)`
   &.ant-btn-text,
   &.ant-btn-text:hover,
   &.ant-btn-text:focus {
-    width: 50%;
+    padding-top: 16px;
+    min-width: 40%;
     text-transform: capitalize;
-    height: 50px;
+    min-height: 67px;
     background: ${colors.white};
     border-bottom: 2pt solid ${colors.linkColor};
     border-radius: 0px;

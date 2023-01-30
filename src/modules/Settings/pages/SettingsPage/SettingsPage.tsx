@@ -20,7 +20,7 @@ const SettingPage: NextPage = () => {
   const { localStorageAccount } = useUserContext();
   const { sm } = useViewportContext();
   const renderTabBar = MobileTabBar({
-    sm,
+    showMobileMenu: sm,
     visible,
     tab,
     setVisible,
