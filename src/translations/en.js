@@ -709,6 +709,10 @@ export const en = {
           all: "Trade history",
           user: "My history",
         },
+        controls: {
+          limit: "Limit",
+          market: "Market",
+        },
       },
     },
     settings: {

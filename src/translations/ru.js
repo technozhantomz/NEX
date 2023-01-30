@@ -708,6 +708,10 @@ export const ru = {
           all: "Торговая история",
           user: "Моя история",
         },
+        controls: {
+          limit: "Ограничение",
+          market: "Рынок",
+        },
       },
     },
     settings: {
