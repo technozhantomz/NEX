@@ -18,3 +18,4 @@ export * from "./DownloadBitcoinKeys";
 export * from "./PaginationConfig";
 export * from "./UserLinkExtractor";
 export * from "./TableDownloader";
+export * from "./MobileTabBar";
