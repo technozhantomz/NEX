@@ -7,6 +7,7 @@ type Args = {
 };
 
 export function FormTabs({ isBuyForm }: Args): JSX.Element {
+  console.log("isBuyForm", isBuyForm);
   const tabItems = [
     {
       label: counterpart.translate(`pages.market.tabs.controls.limit`),
