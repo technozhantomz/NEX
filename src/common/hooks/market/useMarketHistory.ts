@@ -9,6 +9,7 @@ import {
   LimitOrder,
   MarketPair,
   OrderHistory,
+  Ticker,
   TradeHistoryRow,
 } from "../../types";
 import { useAsset } from "../asset";
@@ -18,17 +19,17 @@ import { useFormDate } from "../utils";
 import { UseMarketHistoryResult } from "./useMarketHistory.types";
 
 export function useMarketHistory(): UseMarketHistoryResult {
-  const { historyApi } = usePeerplaysApiContext();
+  const { historyApi, dbApi } = usePeerplaysApiContext();
   const { getBlockHeader } = useBlockchain();
   const { setPrecision, ceilPrecision } = useAsset();
   const { formLocalDate } = useFormDate();
 
   const getFillOrderHistory = useCallback(
-    async (base: Asset, quote: Asset) => {
+    async (selectedPair: MarketPair, limit = 100) => {
       try {
         const histories: OrderHistory[] = await historyApi(
           "get_fill_order_history",
-          [base.id, quote.id, 100]
+          [selectedPair.base.id, selectedPair.quote.id, limit]
         );
         return histories;
       } catch (e) {
@@ -36,6 +37,21 @@ export function useMarketHistory(): UseMarketHistoryResult {
       }
     },
     [historyApi]
+  );
+
+  const getTicker = useCallback(
+    async (base: Asset, quote: Asset) => {
+      try {
+        const ticker: Ticker = await dbApi("get_ticker", [
+          base.symbol,
+          quote.symbol,
+        ]);
+        return ticker;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
   );
 
   const formTradeHistoryRow = useCallback(
@@ -61,15 +77,15 @@ export function useMarketHistory(): UseMarketHistoryResult {
       let baseAmount = 0,
         quoteAmount = 0,
         isBuyOrder = false;
-      // this is sell orders
+      // this is buy orders
       if (pays.asset_id === base.id) {
         baseAmount = setPrecision(false, pays.amount, base.precision);
         quoteAmount = setPrecision(false, receives.amount, quote.precision);
-        //this is buy orders
+        isBuyOrder = true;
+        //this is sell orders
       } else {
         baseAmount = setPrecision(false, receives.amount, base.precision);
         quoteAmount = setPrecision(false, pays.amount, quote.precision);
-        isBuyOrder = true;
       }
 
       if (forUser) {
@@ -84,8 +100,8 @@ export function useMarketHistory(): UseMarketHistoryResult {
 
       return {
         key,
-        price: ceilPrecision(quoteAmount / baseAmount),
-        amount: baseAmount,
+        price: (baseAmount / quoteAmount).toFixed(base.precision),
+        amount: quoteAmount,
         time,
         isBuyOrder,
         filled: forUser ? filled : undefined,
@@ -139,6 +155,7 @@ export function useMarketHistory(): UseMarketHistoryResult {
 
   return {
     getFillOrderHistory,
+    getTicker,
     formTradeHistoryTableRows,
     formTradeHistoryRow,
   };

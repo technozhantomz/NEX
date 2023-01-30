@@ -9,9 +9,12 @@ export type MarketPairStats = {
   latest: string;
   percentChange: string;
   volume: string;
+  askPrice?: string;
+  bidPrice?: string;
+  dailyHigh?: string;
+  dailyLow?: string;
 };
 
-// TODO: remove marketPage redesign
 export type PairNameAndMarketStats = {
   tradingPair: string;
   marketPairStats: MarketPairStats;
@@ -22,4 +25,5 @@ export type MarketOrder = {
   price: string;
   quote: string;
   isBuyOrder: boolean;
+  timestamp?: Date;
 };

@@ -1,0 +1,130 @@
+import { useCallback } from "react";
+
+import { defaultToken } from "../../../../../api/params";
+import { useAsset, useMarketHistory } from "../../../../../common/hooks";
+import { useMarketContext } from "../../../../../common/providers";
+import { OrderHistory } from "../../../../../common/types";
+
+import {
+  ExchangeSymbol,
+  ExchangeSymbols,
+  GroupedOrderHistory,
+  UseDataFeedHelpersResult,
+} from "./useDataFeedHelpers.types";
+
+export function useDataFeedHelpers(): UseDataFeedHelpersResult {
+  const { getAllAssets } = useAsset();
+  const { getFillOrderHistory } = useMarketHistory();
+  const { setPrecision } = useAsset();
+  const { selectedPair } = useMarketContext();
+
+  const generateSymbol = (
+    exchange: string,
+    fromSymbol: string,
+    toSymbol: string
+  ): ExchangeSymbol => {
+    const short = `${fromSymbol}/${toSymbol}`;
+    return {
+      short,
+      full: `${exchange}:${short}`,
+    };
+  };
+
+  const getOrderAmmount = useCallback(
+    (order: OrderHistory) => {
+      if (selectedPair) {
+        let orderAmmount;
+        const orderOps = order.op;
+        const base = selectedPair.base;
+        if (orderOps.pays.asset_id === base.id) {
+          orderAmmount = setPrecision(
+            false,
+            orderOps.pays.amount,
+            base.precision
+          );
+          //this is buy orders
+        } else {
+          orderAmmount = setPrecision(
+            false,
+            orderOps.receives.amount,
+            base.precision
+          );
+        }
+        return orderAmmount;
+      }
+    },
+    [selectedPair]
+  );
+
+  const getAllSymbols = async () => {
+    let allSymbols = [];
+    const allAssets = await getAllAssets();
+    const symbols = allAssets?.map((asset) => {
+      if (asset.symbol !== defaultToken) {
+        const symbol = generateSymbol(
+          "PeerplaysDex",
+          defaultToken as string,
+          asset.symbol
+        );
+        return {
+          symbol: symbol.short,
+          full_name: symbol.full,
+          description: symbol.short,
+          exchange: "PeerplaysDex",
+          type: "crypto",
+        };
+      }
+    });
+    allSymbols = [...(symbols as ExchangeSymbols[])];
+    return allSymbols;
+  };
+
+  const getChartFeed = useCallback(async () => {
+    if (selectedPair) {
+      const histories = (await getFillOrderHistory(
+        selectedPair,
+        10000
+      )) as OrderHistory[];
+      if (histories) {
+        const sortedHistoriesByDate = histories.sort((a, b) => {
+          return new Date(a.time).getTime() - new Date(b.time).getTime();
+        });
+        const groupedHistories: GroupedOrderHistory[] =
+          sortedHistoriesByDate.reduce((accumulator, order) => {
+            const key = order.time;
+            if (!accumulator[key]) {
+              accumulator[key] = [];
+            }
+            accumulator[key].push(order);
+            return accumulator;
+          }, []);
+        const processedOrders = Object.keys(groupedHistories).map((date) => {
+          const group = groupedHistories[date];
+          const time = new Date(date).getTime();
+          const open = getOrderAmmount(group[0]);
+          const close = getOrderAmmount(group[group.length - 1]);
+          const high = Math.max(
+            ...group.map((order: OrderHistory) => {
+              return getOrderAmmount(order);
+            })
+          );
+          const low = Math.min(
+            ...group.map((order: OrderHistory) => {
+              return getOrderAmmount(order);
+            })
+          );
+          return Object.assign({
+            time,
+            open,
+            close,
+            high,
+            low,
+          });
+        });
+        return processedOrders;
+      }
+    }
+  }, [selectedPair]);
+
+  return { getAllSymbols, getChartFeed };
+}
