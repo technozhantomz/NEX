@@ -35,7 +35,7 @@ export const AssetsTable = ({
     searchDataSource,
     setSearchDataSource,
   } = useAssetsTable({ filterAsset, actionType });
-  const { sm } = useViewportContext();
+  const { md } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
   const renderListItem = useCallback(
     (item: AssetTableRow) => {
@@ -94,7 +94,7 @@ export const AssetsTable = ({
           data={assetsTableRows}
         ></TableDownloader>
       </Styled.AssetHeaderBar>
-      {sm ? (
+      {md ? (
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
