@@ -1,1 +1,1 @@
-export { default } from "./Blockchain";
+export { default } from "./BlockchainPage";
