@@ -36,6 +36,7 @@ export {
   Switch,
   List,
   Carousel,
+  Slider,
 } from "antd";
 
 export {

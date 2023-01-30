@@ -1,6 +1,8 @@
+import counterpart from "counterpart";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 
+import { defaultToken } from "../../../../../../../api/params";
 import { useFees } from "../../../../../../../common/hooks";
 import {
   useMarketContext,
@@ -22,9 +24,9 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
   const { calculateCreateLimitOrderFee } = useFees();
 
   const price: string = Form.useWatch("price", orderForm);
-  const quantity: string = Form.useWatch("quantity", orderForm);
+  const amount: string = Form.useWatch("amount", orderForm);
   const total: string = Form.useWatch("total", orderForm);
-  console.log(price, quantity, total);
+  console.log(price, amount, total);
 
   const balance = useMemo(() => {
     const baseSymbol = (pair as string).split("_")[1];
@@ -66,8 +68,69 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     }
   }, [selectedPair, calculateCreateLimitOrderFee, isBuyForm]);
 
+  const validatePrice = (_: unknown, value: number) => {
+    if (Number(value) <= 0) {
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.price_should_greater`))
+      );
+    }
+    return Promise.resolve();
+  };
+  const validateAmount = (_: unknown, value: number) => {
+    if (Number(value) <= 0) {
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.quantity_should_greater`))
+      );
+    }
+    const userQuoteAsset = assets.find(
+      (asset) => asset.symbol === selectedPair?.quote.symbol
+    );
+    if (!isBuyForm) {
+      if (!userQuoteAsset) {
+        return Promise.reject(
+          new Error(counterpart.translate(`field.errors.balance_not_enough`))
+        );
+      }
+      if (selectedPair?.quote.symbol === defaultToken) {
+        if (
+          Number(value) + fees.feeAmount >
+          (userQuoteAsset?.amount as number)
+        ) {
+          return Promise.reject(
+            new Error(counterpart.translate(`field.errors.balance_not_enough`))
+          );
+        }
+      } else {
+        if (Number(value) > (userQuoteAsset?.amount as number)) {
+          return Promise.reject(
+            new Error(counterpart.translate(`field.errors.balance_not_enough`))
+          );
+        }
+      }
+    }
+    return Promise.resolve();
+  };
+
+  const formValidation = {
+    price: [
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.field_is_required`),
+      },
+      { validator: validatePrice },
+    ],
+    amount: [
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.field_is_required`),
+      },
+      { validator: validateAmount },
+    ],
+  };
+
   return {
     balance,
     fees,
+    formValidation,
   };
 }

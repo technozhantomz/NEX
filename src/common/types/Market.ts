@@ -30,6 +30,6 @@ export type MarketOrder = {
 
 export type OrderForm = {
   price: string;
-  quantity: string;
+  amount: string;
   total: string;
 };

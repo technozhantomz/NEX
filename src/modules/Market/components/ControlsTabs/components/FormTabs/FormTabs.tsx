@@ -15,7 +15,7 @@ export function FormTabs({ isBuyForm }: Props): JSX.Element {
       key: "limit",
       children: (
         <Styled.TabContentContainer>
-          <OrderForm isBuyForm={isBuyForm}></OrderForm>
+          <OrderForm formType="limit" isBuyForm={isBuyForm}></OrderForm>
         </Styled.TabContentContainer>
       ),
     },
@@ -24,7 +24,7 @@ export function FormTabs({ isBuyForm }: Props): JSX.Element {
       key: "market",
       children: (
         <Styled.TabContentContainer>
-          <OrderForm isBuyForm={isBuyForm}></OrderForm>
+          <OrderForm formType="market" isBuyForm={isBuyForm}></OrderForm>
         </Styled.TabContentContainer>
       ),
     },
