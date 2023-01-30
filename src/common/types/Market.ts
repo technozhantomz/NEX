@@ -27,3 +27,9 @@ export type MarketOrder = {
   isBuyOrder: boolean;
   timestamp?: Date;
 };
+
+export type OrderForm = {
+  price: string;
+  quantity: string;
+  total: string;
+};

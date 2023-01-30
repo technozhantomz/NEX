@@ -1,6 +1,6 @@
 import counterpart from "counterpart";
 
-import { TradeForm } from "../TradeForm";
+import { OrderForm } from "../OrderForm";
 
 import * as Styled from "./FormTabs.styled";
 
@@ -15,7 +15,7 @@ export function FormTabs({ isBuyForm }: Props): JSX.Element {
       key: "limit",
       children: (
         <Styled.TabContentContainer>
-          <TradeForm isBuyForm={isBuyForm}></TradeForm>
+          <OrderForm isBuyForm={isBuyForm}></OrderForm>
         </Styled.TabContentContainer>
       ),
     },
@@ -24,7 +24,7 @@ export function FormTabs({ isBuyForm }: Props): JSX.Element {
       key: "market",
       children: (
         <Styled.TabContentContainer>
-          <TradeForm isBuyForm={isBuyForm}></TradeForm>
+          <OrderForm isBuyForm={isBuyForm}></OrderForm>
         </Styled.TabContentContainer>
       ),
     },

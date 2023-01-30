@@ -6,11 +6,13 @@ import React, {
   useState,
 } from "react";
 
+import { Form, FormInstance } from "../../../ui/src";
 import { useMarketHistory, useOrderBook } from "../../hooks";
 import {
   Asset,
   MarketOrder,
   MarketPair,
+  OrderForm,
   OrderHistory,
   TradeHistoryRow,
 } from "../../types";
@@ -36,6 +38,8 @@ const defaultMarketState: MarketContextType = {
   fillLastTradeHistory: function (lastTradeHistory?: TradeHistoryRow): void {
     throw new Error(`Function not implemented. for ${lastTradeHistory}`);
   },
+  buyOrderForm: {} as FormInstance<OrderForm>,
+  sellOrderForm: {} as FormInstance<OrderForm>,
 };
 
 const MarketContext = createContext<MarketContextType>(defaultMarketState);
@@ -51,6 +55,8 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   const [bids, setBids] = useState<MarketOrder[]>();
   const [loadingAsksBids, setLoadingAsksBids] = useState<boolean>(true);
   const [lastTradeHistory, setLastTradeHistory] = useState<TradeHistoryRow>();
+  const [buyOrderForm] = Form.useForm<OrderForm>();
+  const [sellOrderForm] = Form.useForm<OrderForm>();
 
   const getHistory = useCallback(async () => {
     if (selectedPair) {
@@ -152,7 +158,6 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   );
 
   useEffect(() => {
-    console.log("test selectedPair", selectedPair);
     subscribeToMarket();
     return () => {
       unsubscribeFromMarket();
@@ -170,6 +175,8 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         loadingAsksBids,
         lastTradeHistory,
         fillLastTradeHistory,
+        buyOrderForm,
+        sellOrderForm,
       }}
     >
       {children}

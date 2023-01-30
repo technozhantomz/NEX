@@ -1,11 +1,11 @@
-import * as Styled from "./TradeForm.styled";
-import { useTradeForm } from "./hooks";
+import * as Styled from "./OrderForm.styled";
+import { useOrderForm } from "./hooks";
 
 type Props = {
   isBuyForm: boolean;
 };
-export function TradeForm({ isBuyForm }: Props): JSX.Element {
-  const { balance } = useTradeForm({ isBuyForm });
+export function OrderForm({ isBuyForm }: Props): JSX.Element {
+  const { balance } = useOrderForm({ isBuyForm });
   return (
     <Styled.FormContainer>
       <Styled.Form.Provider>
