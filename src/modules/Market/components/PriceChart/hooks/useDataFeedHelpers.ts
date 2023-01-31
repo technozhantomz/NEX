@@ -8,7 +8,6 @@ import { OrderHistory } from "../../../../../common/types";
 import {
   ExchangeSymbol,
   ExchangeSymbols,
-  GroupedOrderHistory,
   UseDataFeedHelpersResult,
 } from "./useDataFeedHelpers.types";
 
@@ -86,41 +85,41 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
         10000
       )) as OrderHistory[];
       if (histories) {
-        const sortedHistoriesByDate = histories.sort((a, b) => {
-          return new Date(a.time).getTime() - new Date(b.time).getTime();
+        const groupedHistories = new Map<number, OrderHistory[]>();
+        histories.forEach((order) => {
+          const time = new Date(order.time).getTime();
+          let group = groupedHistories.get(time);
+          if (!group) {
+            group = [];
+            groupedHistories.set(time, group);
+          }
+          group.push(order);
         });
-        const groupedHistories: GroupedOrderHistory[] =
-          sortedHistoriesByDate.reduce((accumulator, order) => {
-            const key = order.time;
-            if (!accumulator[key]) {
-              accumulator[key] = [];
-            }
-            accumulator[key].push(order);
-            return accumulator;
-          }, []);
-        const processedOrders = Object.keys(groupedHistories).map((date) => {
-          const group = groupedHistories[date];
-          const time = new Date(date).getTime();
-          const open = getOrderAmmount(group[0]);
-          const close = getOrderAmmount(group[group.length - 1]);
-          const high = Math.max(
-            ...group.map((order: OrderHistory) => {
-              return getOrderAmmount(order);
-            })
-          );
-          const low = Math.min(
-            ...group.map((order: OrderHistory) => {
-              return getOrderAmmount(order);
-            })
-          );
-          return Object.assign({
-            time,
-            open,
-            close,
-            high,
-            low,
-          });
-        });
+        console.log(groupedHistories);
+        const processedOrders = Array.from(groupedHistories.entries()).map(
+          ([time, group]) => {
+            const open = getOrderAmmount(group[0]);
+            const close = getOrderAmmount(group[group.length - 1]);
+            const high = Math.max(
+              ...group.map((order: OrderHistory) => {
+                return getOrderAmmount(order) as number;
+              })
+            );
+            const low = Math.min(
+              ...group.map((order: OrderHistory) => {
+                return getOrderAmmount(order) as number;
+              })
+            );
+            return Object.assign({
+              time,
+              open,
+              close,
+              high,
+              low,
+            });
+          }
+        );
+        console.log(processedOrders);
         return processedOrders;
       }
     }
