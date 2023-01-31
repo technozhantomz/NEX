@@ -712,6 +712,8 @@ export const en = {
         controls: {
           limit: "Limit",
           market: "Market",
+          advanced: "Advanced",
+          time_policy: "Time in force policy",
         },
       },
       twenty_four_hour_high: "24h High",

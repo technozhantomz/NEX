@@ -37,6 +37,7 @@ export {
   List,
   Carousel,
   Slider,
+  Collapse,
 } from "antd";
 
 export {

@@ -1,7 +1,9 @@
+import { SliderMarks } from "antd/lib/slider";
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
 
 import { utils } from "../../../../../../api/utils";
+import { DownOutlined, InfoCircleOutlined } from "../../../../../../ui/src";
 
 import * as Styled from "./OrderForm.styled";
 import { useOrderForm } from "./hooks";
@@ -14,6 +16,13 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
   const router = useRouter();
   const { pair } = router.query;
   const { balance, formValidation } = useOrderForm({ isBuyForm });
+  const sliderMarks: SliderMarks = {
+    0: "0%",
+    25: "25%",
+    50: "50%",
+    75: "75%",
+    100: "100%",
+  };
   return (
     <Styled.FormContainer>
       <Styled.Form.Provider>
@@ -79,7 +88,51 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
               suffix={(pair as string).split("_")[0]}
             />
           </Styled.AmountFormItem>
-          <Styled.PriceSlider />
+          <Styled.PriceSlider min={0} max={100} marks={sliderMarks} />
+          <Styled.AmountFormItem
+            name="total"
+            rules={formValidation.total}
+            validateFirst={true}
+            validateTrigger="onBlur"
+          >
+            <Styled.InputNumber
+              type="number"
+              min={0}
+              step="any"
+              onFocus={(e) => {
+                e.target.select();
+              }}
+              onKeyPress={utils.ensureInputNumberValidity}
+              onPaste={utils.numberedInputsPasteHandler}
+              autoComplete="off"
+              placeholder={counterpart.translate("field.placeholder.total")}
+              suffix={(pair as string).split("_")[1]}
+              disabled={true}
+            />
+          </Styled.AmountFormItem>
+          <Styled.AdvancedCollapse
+            bordered={false}
+            defaultActiveKey={["1"]}
+            expandIcon={({ isActive }) => (
+              <DownOutlined rotate={isActive ? 180 : 0} />
+            )}
+          >
+            <Styled.AdvancedCollapsePanel
+              header={counterpart.translate(
+                "pages.market.tabs.controls.advanced"
+              )}
+              key="1"
+            >
+              <Styled.TimePolicyHeaderContainer>
+                <Styled.TimePolicyHeader>
+                  {counterpart.translate(
+                    "pages.market.tabs.controls.time_policy"
+                  )}
+                </Styled.TimePolicyHeader>
+                <InfoCircleOutlined />
+              </Styled.TimePolicyHeaderContainer>
+            </Styled.AdvancedCollapsePanel>
+          </Styled.AdvancedCollapse>
         </Styled.Form>
       </Styled.Form.Provider>
     </Styled.FormContainer>

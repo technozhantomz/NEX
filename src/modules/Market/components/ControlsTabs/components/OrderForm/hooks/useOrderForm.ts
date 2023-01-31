@@ -111,6 +111,61 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     return Promise.resolve();
   };
 
+  const validateTotalForBuyOrders = (value: number) => {
+    let errorMessage = "";
+    const userBaseAsset = assets.find(
+      (asset) => asset.symbol === selectedPair?.base.symbol
+    );
+    if (!userBaseAsset) {
+      errorMessage = counterpart.translate(`field.errors.balance_not_enough`);
+    }
+    if (selectedPair?.base.symbol === defaultToken) {
+      if (Number(value) + fees.feeAmount > (userBaseAsset?.amount as number)) {
+        errorMessage = counterpart.translate(`field.errors.balance_not_enough`);
+      }
+    } else {
+      if (Number(value) > (userBaseAsset?.amount as number)) {
+        errorMessage = counterpart.translate(`field.errors.balance_not_enough`);
+      }
+    }
+    if (
+      userBaseAsset === undefined ||
+      Number(value) > (userBaseAsset?.amount as number)
+    ) {
+      errorMessage = counterpart.translate(`field.errors.balance_not_enough`);
+    }
+    return errorMessage;
+  };
+
+  const validateTotal = (_: unknown, value: number) => {
+    if (Number(value) <= 0) {
+      return Promise.reject(
+        new Error(counterpart.translate(`field.errors.total_should_greater`))
+      );
+    }
+    const userDefaultAsset = assets.find(
+      (asset) => asset.symbol === defaultToken
+    );
+    if (
+      userDefaultAsset === undefined ||
+      fees.feeAmount > (userDefaultAsset?.amount as number)
+    ) {
+      return Promise.reject(
+        new Error(
+          counterpart.translate(`field.errors.balance_not_enough_to_pay`)
+        )
+      );
+    }
+
+    if (isBuyForm) {
+      const errorMessage = validateTotalForBuyOrders(value);
+      if (errorMessage !== "") {
+        return Promise.reject(new Error(errorMessage));
+      }
+    }
+    return Promise.resolve();
+  };
+
   const formValidation = {
     price: [
       {
@@ -125,6 +180,13 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
         message: counterpart.translate(`field.errors.field_is_required`),
       },
       { validator: validateAmount },
+    ],
+    total: [
+      {
+        required: true,
+        message: counterpart.translate(`field.errors.field_is_required`),
+      },
+      { validator: validateTotal },
     ],
   };
 

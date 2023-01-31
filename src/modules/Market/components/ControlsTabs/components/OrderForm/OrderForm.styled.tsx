@@ -1,4 +1,5 @@
 import {
+  Collapse,
   Radio,
   styled,
   //CardFormButton as UiButton,
@@ -17,7 +18,7 @@ export const FormItem = styled(UiForm.Item)`
   margin-bottom: 0;
 `;
 export const AmountFormItem = styled(FormItem)`
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 `;
 export const InputNumber = styled(UiInput)`
   input::-webkit-outer-spin-button,
@@ -40,6 +41,41 @@ export const InputNumber = styled(UiInput)`
 `;
 export const PriceSlider = styled(UiSlider)`
   margin-bottom: 25px;
+  &.ant-slider:hover .ant-slider-track {
+    background-color: ${colors.lightText};
+  }
+  &.ant-slider:hover .ant-slider-handle:not(.ant-tooltip-open) {
+    border-color: ${colors.textColor};
+  }
+  .ant-slider-rail {
+    height: 8px;
+  }
+  .ant-slider-mark {
+    display: none;
+  }
+  .ant-slider-handle {
+    width: 22px;
+    height: 22px;
+    border: solid 4px ${colors.textColor};
+    margin-top: -8px;
+  }
+  .ant-slider-handle:focus {
+    box-shadow: unset;
+  }
+  .ant-slider-track {
+    background-color: ${colors.lightText};
+    height: 8px;
+  }
+
+  .ant-slider-dot {
+    top: -6px;
+    width: 20px;
+    height: 20px;
+    background-color: ${colors.lightText};
+  }
+  .ant-slider-dot-active {
+    border: unset;
+  }
 `;
 
 export const BalanceContainer = styled.div`
@@ -87,4 +123,44 @@ export const PriceRadioGroup = styled(Radio.Group)`
 `;
 export const PriceRadioButton = styled(Radio.Button)`
   flex: 1 1 20%;
+`;
+
+export const AdvancedCollapse = styled(Collapse)`
+  &.ant-collapse-borderless {
+    background-color: ${colors.white};
+  }
+  &.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    flex-direction: row-reverse;
+    padding: 0;
+    padding-bottom: 20px;
+    .ant-collapse-header-text {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .ant-collapse-arrow {
+      margin-right: 0px;
+      font-size: 16px;
+    }
+  }
+  &.ant-collapse-borderless
+    > .ant-collapse-item
+    > .ant-collapse-content
+    > .ant-collapse-content-box {
+    padding: 0;
+  }
+`;
+export const AdvancedCollapsePanel = styled(Collapse.Panel)``;
+export const TimePolicyHeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  .anticon-info-circle {
+    color: rgb(242, 194, 34);
+    font-size: 18px;
+  }
+  margin-bottom: 20px;
+`;
+export const TimePolicyHeader = styled.h4`
+  font-size: 14px;
+  margin-right: 20px;
+  margin-bottom: 0;
 `;

@@ -12,5 +12,5 @@ export type UseOrderFormResult = {
 export type FormValidation = {
   price: Rule[];
   amount: Rule[];
-  // total: Rule[];
+  total: Rule[];
 };
