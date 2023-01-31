@@ -7,6 +7,10 @@ export type UseOrderFormResult = {
     marketFeePercent: number;
   };
   formValidation: FormValidation;
+  timePolicyOptions: {
+    label: string;
+    value: string;
+  }[];
 };
 
 export type FormValidation = {

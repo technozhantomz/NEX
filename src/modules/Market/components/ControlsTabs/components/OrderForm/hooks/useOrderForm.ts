@@ -14,6 +14,7 @@ import { UseOrderFormResult } from "./useOrderForm.types";
 
 type Args = {
   isBuyForm: boolean;
+  formType: "limit" | "market";
 };
 export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
   const { assets } = useUserContext();
@@ -190,9 +191,39 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     ],
   };
 
+  const timePolicyOptions = [
+    {
+      label: counterpart.translate(
+        "pages.market.tabs.controls.good_til_canceled"
+      ),
+      value: "good-til-canceled",
+    }, // remember to pass the key prop
+    {
+      label: counterpart.translate("pages.market.tabs.controls.good_til_time"),
+      value: "good-til-time",
+    },
+    {
+      label: counterpart.translate("pages.market.tabs.controls.fill_or_kill"),
+      value: "fill-or-kill",
+    },
+    {
+      label: counterpart.translate(
+        "pages.market.tabs.controls.maker_or_cancel"
+      ),
+      value: "maker-or-cancel",
+    },
+    {
+      label: counterpart.translate(
+        "pages.market.tabs.controls.immediate_or_cancel"
+      ),
+      value: "immediate-or-cancel",
+    },
+  ];
+
   return {
     balance,
     fees,
     formValidation,
+    timePolicyOptions,
   };
 }

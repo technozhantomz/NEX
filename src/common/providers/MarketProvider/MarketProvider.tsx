@@ -126,9 +126,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   }, [selectedPair, synced, dbApi, getHistory, getAsksBids]);
 
   const unsubscribeFromMarket = useCallback(async () => {
-    console.log("test unsub before", selectedPair);
     if (selectedPair) {
-      console.log("test unsub", selectedPair);
       try {
         await dbApi("unsubscribe_from_market", [
           () => {

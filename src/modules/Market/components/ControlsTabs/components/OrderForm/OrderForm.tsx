@@ -2,8 +2,14 @@ import { SliderMarks } from "antd/lib/slider";
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
 
+import { defaultToken } from "../../../../../../api/params";
 import { utils } from "../../../../../../api/utils";
-import { DownOutlined, InfoCircleOutlined } from "../../../../../../ui/src";
+import { useUserContext } from "../../../../../../common/providers";
+import {
+  DownOutlined,
+  InfoCircleOutlined,
+  Tooltip,
+} from "../../../../../../ui/src";
 
 import * as Styled from "./OrderForm.styled";
 import { useOrderForm } from "./hooks";
@@ -14,8 +20,12 @@ type Props = {
 };
 export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
   const router = useRouter();
+  const { localStorageAccount } = useUserContext();
   const { pair } = router.query;
-  const { balance, formValidation } = useOrderForm({ isBuyForm });
+  const { balance, formValidation, timePolicyOptions, fees } = useOrderForm({
+    isBuyForm,
+    formType,
+  });
   const sliderMarks: SliderMarks = {
     0: "0%",
     25: "25%",
@@ -23,6 +33,15 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
     75: "75%",
     100: "100%",
   };
+  const isLoggedIn = localStorageAccount !== null && localStorageAccount !== "";
+  const buyOrSellText = isBuyForm
+    ? counterpart.translate(`buttons.buy`)
+    : counterpart.translate(`buttons.sell`);
+  const loggedInSubmitButton =
+    buyOrSellText + " " + (pair as string).split("_")[0];
+  const nonLoggedInSubmitButton =
+    counterpart.translate(`buttons.login`) + " & " + loggedInSubmitButton;
+
   return (
     <Styled.FormContainer>
       <Styled.Form.Provider>
@@ -129,10 +148,93 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
                     "pages.market.tabs.controls.time_policy"
                   )}
                 </Styled.TimePolicyHeader>
-                <InfoCircleOutlined />
+                <Tooltip
+                  title={counterpart.translate(
+                    "pages.market.tabs.controls.time_policy_description"
+                  )}
+                >
+                  <InfoCircleOutlined />
+                </Tooltip>
               </Styled.TimePolicyHeaderContainer>
+              <Styled.TimePolicySelect
+                defaultValue="good-til-canceled"
+                options={timePolicyOptions}
+              />
+
+              <Styled.ExecutionHeaderContainer>
+                <Styled.ExecutionHeader>
+                  {counterpart.translate(
+                    "pages.market.tabs.controls.execution"
+                  )}
+                </Styled.ExecutionHeader>
+                <Tooltip
+                  title={counterpart.translate(
+                    "pages.market.tabs.controls.execution_description"
+                  )}
+                >
+                  <InfoCircleOutlined />
+                </Tooltip>
+              </Styled.ExecutionHeaderContainer>
+              <Styled.ExecutionRadioGroup defaultValue="allow-taker">
+                <Styled.ExecutionRadioButton value="post-only">
+                  {counterpart.translate(
+                    "pages.market.tabs.controls.post_only"
+                  )}
+                </Styled.ExecutionRadioButton>
+                <Styled.ExecutionRadioButton value="allow-taker">
+                  {counterpart.translate(
+                    "pages.market.tabs.controls.allow_taker"
+                  )}
+                </Styled.ExecutionRadioButton>
+              </Styled.ExecutionRadioGroup>
             </Styled.AdvancedCollapsePanel>
           </Styled.AdvancedCollapse>
+
+          <Styled.FeeContainer>
+            <Styled.FeeHeader>
+              {counterpart.translate("field.labels.fee")}:
+            </Styled.FeeHeader>
+            <Styled.FeeValue>{`${fees.feeAmount} ${defaultToken}`}</Styled.FeeValue>
+          </Styled.FeeContainer>
+          <Styled.FeeContainer>
+            <Styled.FeeHeader>
+              <span>{counterpart.translate("field.labels.market_fee")}:</span>
+            </Styled.FeeHeader>
+            <Styled.FeeValue>
+              <span>{`${fees.marketFeePercent}%`}</span>
+              <Styled.MarketFeeToolTip
+                title={counterpart.translate(
+                  "pages.market.tabs.controls.market_fee_description",
+                  {
+                    percent: fees.marketFeePercent,
+                    asset: isBuyForm
+                      ? (pair as string).split("_")[0]
+                      : (pair as string).split("_")[1],
+                  }
+                )}
+              >
+                <InfoCircleOutlined />
+              </Styled.MarketFeeToolTip>
+            </Styled.FeeValue>
+          </Styled.FeeContainer>
+
+          <Styled.ButtonFormItem>
+            {isLoggedIn ? (
+              <Styled.FormButton type="primary" htmlType="submit">
+                {loggedInSubmitButton}
+              </Styled.FormButton>
+            ) : (
+              <Styled.FormButton
+                type="primary"
+                htmlType="button"
+                onClick={() => {
+                  router.push("/login");
+                }}
+              >
+                {nonLoggedInSubmitButton}
+              </Styled.FormButton>
+            )}
+          </Styled.ButtonFormItem>
         </Styled.Form>
       </Styled.Form.Provider>
     </Styled.FormContainer>

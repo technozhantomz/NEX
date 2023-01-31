@@ -1,8 +1,10 @@
 import {
   Collapse,
   Radio,
+  Select,
   styled,
-  //CardFormButton as UiButton,
+  Tooltip,
+  CardFormButton as UiButton,
   Form as UiForm,
   Input as UiInput,
   Slider as UiSlider,
@@ -12,13 +14,18 @@ import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
 import { mixIns } from "../../../../../../ui/src/mixins";
 
-export const FormContainer = styled.div``;
+export const FormContainer = styled.div`
+  .anticon-info-circle {
+    color: rgb(242, 194, 34);
+    font-size: 18px;
+  }
+`;
 export const Form = styled(UiForm)``;
 export const FormItem = styled(UiForm.Item)`
   margin-bottom: 0;
 `;
 export const AmountFormItem = styled(FormItem)`
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 `;
 export const InputNumber = styled(UiInput)`
   input::-webkit-outer-spin-button,
@@ -40,7 +47,7 @@ export const InputNumber = styled(UiInput)`
   }
 `;
 export const PriceSlider = styled(UiSlider)`
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   &.ant-slider:hover .ant-slider-track {
     background-color: ${colors.lightText};
   }
@@ -153,10 +160,6 @@ export const AdvancedCollapsePanel = styled(Collapse.Panel)``;
 export const TimePolicyHeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  .anticon-info-circle {
-    color: rgb(242, 194, 34);
-    font-size: 18px;
-  }
   margin-bottom: 20px;
 `;
 export const TimePolicyHeader = styled.h4`
@@ -164,3 +167,87 @@ export const TimePolicyHeader = styled.h4`
   margin-right: 20px;
   margin-bottom: 0;
 `;
+export const TimePolicySelect = styled(Select)`
+  &.ant-select {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  &.ant-select .ant-select-selector {
+    height: 50px;
+    padding: 16px 20px;
+    align-items: center;
+    ${mixIns.borderRadius}
+  }
+`;
+
+export const ExecutionHeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+export const ExecutionHeader = styled.h4`
+  font-size: 14px;
+  margin-right: 20px;
+  margin-bottom: 0;
+`;
+export const ExecutionRadioGroup = styled(Radio.Group)`
+  width: 100%;
+  display: flex;
+  height: 50px;
+  margin-bottom: 20px;
+  .ant-radio-button-wrapper:first-child {
+    ${mixIns.borderRadius}
+  }
+  .ant-radio-button-wrapper:last-child {
+    ${mixIns.borderRadius}
+  }
+  .ant-radio-button-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    ${breakpoint.xxl} {
+      padding: 0 6px;
+    }
+    background: ${colors.borderColorBase};
+  }
+  .ant-radio-button-wrapper:hover {
+    position: relative;
+    color: ${colors.white};
+  }
+  .ant-radio-button-wrapper-checked:not(
+      .ant-radio-button-wrapper-disabled
+    ):focus-within {
+    box-shadow: unset;
+  }
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    color: ${colors.white};
+    background: ${colors.linkColor};
+    border-color: unset;
+    border: unset;
+  }
+`;
+export const ExecutionRadioButton = styled(Radio.Button)`
+  flex: 1 1 50%;
+`;
+
+export const FeeContainer = styled.div`
+  display: flex;
+  margin-bottom: 8px;
+`;
+export const FeeHeader = styled.div`
+  margin-right: 8px;
+`;
+export const FeeValue = styled.div`
+  display: flex;
+  align-items: center;
+`;
+export const MarketFeeToolTip = styled(Tooltip)`
+  margin-left: 20px;
+`;
+
+export const ButtonFormItem = styled(FormItem)`
+  margin-top: 25px;
+`;
+export const FormButton = styled(UiButton)``;
