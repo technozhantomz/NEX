@@ -23,6 +23,11 @@ export const FormContainer = styled.div`
 export const Form = styled(UiForm)``;
 export const FormItem = styled(UiForm.Item)`
   margin-bottom: 0;
+  .ant-input-affix-wrapper-status-error:not(
+      .ant-input-affix-wrapper-disabled
+    ):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper {
+    margin-bottom: 0;
+  }
 `;
 export const AmountFormItem = styled(FormItem)`
   margin-bottom: 10px;
