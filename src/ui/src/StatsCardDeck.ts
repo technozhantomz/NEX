@@ -10,7 +10,7 @@ export const StatsCardsDeck = styled.div`
   .stats-card {
     margin-right: 15px;
   }
-  ${breakpoint.sm} {
+  ${breakpoint.md} {
     margin: 15px 0 25px;
     max-width: 876px;
     flex-wrap: wrap;
