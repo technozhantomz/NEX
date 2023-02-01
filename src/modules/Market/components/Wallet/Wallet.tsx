@@ -21,7 +21,7 @@ export function Wallet({ currentPair }: Props): JSX.Element {
         <Styled.WalletButton
           type="primary"
           onClick={() => {
-            router.push(`/wallet/${currentPair.split("_")[0]}?tab=send`);
+            router.push(`/wallet/${currentPair.split("_")[0]}?tab=receive`);
           }}
         >
           {counterpart.translate(`buttons.deposit`)}
@@ -29,7 +29,7 @@ export function Wallet({ currentPair }: Props): JSX.Element {
         <Styled.WalletButton
           type="primary"
           onClick={() => {
-            router.push(`/wallet/${currentPair.split("_")[1]}?tab=receive`);
+            router.push(`/wallet/${currentPair.split("_")[0]}?tab=send`);
           }}
         >
           {counterpart.translate(`buttons.withdraw`)}
