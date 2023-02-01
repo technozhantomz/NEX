@@ -17,7 +17,7 @@ const WalletPage: NextPage = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const { sm } = useViewportContext();
   const renderTabBar = MobileTabBar({
-    sm,
+    showMobileMenu: sm,
     visible,
     tab,
     setVisible,

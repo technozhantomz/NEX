@@ -21,7 +21,7 @@ const VotingPage: NextPage = () => {
   const voteIdentifiers = [1, 3, 0];
   const { tab } = router.query;
   const { pageMeta } = useVotingPageMeta(tab as string);
-  const { sm } = useViewportContext();
+  const { md } = useViewportContext();
   const {
     allMembers,
     allMembersIds,
@@ -34,7 +34,7 @@ const VotingPage: NextPage = () => {
   } = useVoting();
 
   const renderTabBar = MobileTabBar({
-    sm,
+    showMobileMenu: md,
     visible,
     tab,
     setVisible,
@@ -100,7 +100,7 @@ const VotingPage: NextPage = () => {
       description={`${pageMeta.description}`}
       layout="dex"
       onClick={() => {
-        if (sm) {
+        if (md) {
           visible && setVisible(false);
         }
       }}
@@ -111,7 +111,7 @@ const VotingPage: NextPage = () => {
           activeKey={`${tab ? tab : "gpos"}`}
           onTabClick={(key) => {
             router.push(`/voting?tab=${key}`);
-            if (sm) setVisible(false);
+            if (md) setVisible(false);
           }}
           items={tabItems}
         />

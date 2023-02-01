@@ -1,6 +1,7 @@
+import { cloneDeep } from "lodash";
 import { useCallback } from "react";
 
-import { useMarketContext, usePeerplaysApiContext } from "../../providers";
+import { usePeerplaysApiContext } from "../../providers";
 import {
   Asset,
   BlockHeader,
@@ -8,6 +9,7 @@ import {
   LimitOrder,
   MarketPair,
   OrderHistory,
+  Ticker,
   TradeHistoryRow,
 } from "../../types";
 import { useAsset } from "../asset";
@@ -17,18 +19,17 @@ import { useFormDate } from "../utils";
 import { UseMarketHistoryResult } from "./useMarketHistory.types";
 
 export function useMarketHistory(): UseMarketHistoryResult {
-  const { selectedPair, marketHistory } = useMarketContext();
-  const { historyApi } = usePeerplaysApiContext();
+  const { historyApi, dbApi } = usePeerplaysApiContext();
   const { getBlockHeader } = useBlockchain();
   const { setPrecision, ceilPrecision } = useAsset();
   const { formLocalDate } = useFormDate();
 
   const getFillOrderHistory = useCallback(
-    async (base: Asset, quote: Asset) => {
+    async (selectedPair: MarketPair, limit = 100) => {
       try {
         const histories: OrderHistory[] = await historyApi(
           "get_fill_order_history",
-          [base.id, quote.id, 100]
+          [selectedPair.base.id, selectedPair.quote.id, limit]
         );
         return histories;
       } catch (e) {
@@ -38,7 +39,22 @@ export function useMarketHistory(): UseMarketHistoryResult {
     [historyApi]
   );
 
-  const formTradeHistoryRows = useCallback(
+  const getTicker = useCallback(
+    async (base: Asset, quote: Asset) => {
+      try {
+        const ticker: Ticker = await dbApi("get_ticker", [
+          base.symbol,
+          quote.symbol,
+        ]);
+        return ticker;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
+  );
+
+  const formTradeHistoryRow = useCallback(
     async (
       history: OrderHistory | History,
       selectedPair: MarketPair,
@@ -61,15 +77,15 @@ export function useMarketHistory(): UseMarketHistoryResult {
       let baseAmount = 0,
         quoteAmount = 0,
         isBuyOrder = false;
-      // this is sell orders
+      // this is buy orders
       if (pays.asset_id === base.id) {
         baseAmount = setPrecision(false, pays.amount, base.precision);
         quoteAmount = setPrecision(false, receives.amount, quote.precision);
-        //this is buy orders
+        isBuyOrder = true;
+        //this is sell orders
       } else {
         baseAmount = setPrecision(false, receives.amount, base.precision);
         quoteAmount = setPrecision(false, pays.amount, quote.precision);
-        isBuyOrder = true;
       }
 
       if (forUser) {
@@ -84,8 +100,8 @@ export function useMarketHistory(): UseMarketHistoryResult {
 
       return {
         key,
-        price: ceilPrecision(quoteAmount / baseAmount),
-        amount: baseAmount,
+        price: (baseAmount / quoteAmount).toFixed(base.precision),
+        amount: quoteAmount,
         time,
         isBuyOrder,
         filled: forUser ? filled : undefined,
@@ -96,10 +112,10 @@ export function useMarketHistory(): UseMarketHistoryResult {
 
   const defineHistoryPriceMovement = useCallback(
     (tradeHistoryRows: TradeHistoryRow[]) => {
-      const updatedTradeHistoryRows = [...tradeHistoryRows];
+      const updatedTradeHistoryRows = cloneDeep(tradeHistoryRows);
       for (let i = updatedTradeHistoryRows.length - 1; i >= 0; i--) {
         const historyRow = updatedTradeHistoryRows[i];
-        for (let j = i - 1; j > 0; j--) {
+        for (let j = i - 1; j >= 0; j--) {
           if (historyRow.isBuyOrder === updatedTradeHistoryRows[j].isBuyOrder) {
             if (
               Number(historyRow.price) !==
@@ -119,12 +135,12 @@ export function useMarketHistory(): UseMarketHistoryResult {
     []
   );
 
-  const getHistoryTableRows = useCallback(async () => {
-    if (selectedPair && marketHistory) {
+  const formTradeHistoryTableRows = useCallback(
+    async (selectedPair: MarketPair, marketHistory: OrderHistory[]) => {
       try {
         const tradeHistoryRows = await Promise.all(
           marketHistory.map((history) => {
-            return formTradeHistoryRows(history, selectedPair, false);
+            return formTradeHistoryRow(history, selectedPair, false);
           })
         );
         const updatedTradeHistoryRows =
@@ -133,8 +149,14 @@ export function useMarketHistory(): UseMarketHistoryResult {
       } catch (e) {
         console.log(e);
       }
-    }
-  }, [selectedPair, marketHistory, formTradeHistoryRows]);
+    },
+    [formTradeHistoryRow, defineHistoryPriceMovement]
+  );
 
-  return { getFillOrderHistory, getHistoryTableRows, formTradeHistoryRows };
+  return {
+    getFillOrderHistory,
+    getTicker,
+    formTradeHistoryTableRows,
+    formTradeHistoryRow,
+  };
 }

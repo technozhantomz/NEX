@@ -47,3 +47,7 @@ yarn-error.log*
 /.scannerwork
 /.swc
 test-report.xml
+
+# tradingView chart
+# public/static/charting_library/
+# public/static/datafeeds/

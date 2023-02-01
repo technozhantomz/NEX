@@ -275,7 +275,10 @@ export function useSwap(): UseSwapResult {
       inputedAmountType: SwapInputType
     ) => {
       try {
-        const { asks } = await getOrderBook(sellAsset, buyAsset);
+        const { asks } = await getOrderBook({
+          base: sellAsset,
+          quote: buyAsset,
+        });
         const numberedInputedAmount = Number(inputedAmount);
         const buyLiquidityVolume = calculateBasePairBuyLiquidity(asks);
         const sellLiquidityVolume = calculateBasePairSellLiquidity(asks);
@@ -359,14 +362,14 @@ export function useSwap(): UseSwapResult {
     ) => {
       const numberedInputedAmount = Number(inputedAmount);
       try {
-        const { asks: sellToCoreAsks } = await getOrderBook(
-          sellAsset,
-          defaultAsset as Asset
-        );
-        const { asks: coreToBuyAsks } = await getOrderBook(
-          defaultAsset as Asset,
-          buyAsset
-        );
+        const { asks: sellToCoreAsks } = await getOrderBook({
+          base: sellAsset,
+          quote: defaultAsset as Asset,
+        });
+        const { asks: coreToBuyAsks } = await getOrderBook({
+          base: defaultAsset as Asset,
+          quote: buyAsset,
+        });
         const sellLiquidityVolume = calculateNonBasePairSellLiquidity(
           sellToCoreAsks,
           coreToBuyAsks

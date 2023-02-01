@@ -4,16 +4,21 @@ import {
   LimitOrder,
   MarketPair,
   OrderHistory,
+  Ticker,
   TradeHistoryRow,
 } from "../../types";
 
 export type UseMarketHistoryResult = {
   getFillOrderHistory: (
-    base: Asset,
-    quote: Asset
+    selectedPair: MarketPair,
+    limit?: number
   ) => Promise<OrderHistory[] | undefined>;
-  getHistoryTableRows: () => Promise<TradeHistoryRow[] | undefined>;
-  formTradeHistoryRows: (
+  getTicker: (base: Asset, quote: Asset) => Promise<Ticker | undefined>;
+  formTradeHistoryTableRows: (
+    selectedPair: MarketPair,
+    marketHistory: OrderHistory[]
+  ) => Promise<TradeHistoryRow[] | undefined>;
+  formTradeHistoryRow: (
     history: OrderHistory | History,
     selectedPair: MarketPair,
     forUser: boolean,

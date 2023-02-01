@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 import { Dispatch, SetStateAction, useCallback } from "react";
 
-import { Exchanges } from "../../../../common/types";
+import { useUpdateExchanges } from "../../../../common/hooks";
 import { Form, Select } from "../../../../ui/src";
 
 import * as Styled from "./PairModal.styled";
@@ -11,7 +11,6 @@ type Props = {
   isVisible: boolean;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
   currentPair: string;
-  exchanges: Exchanges;
 };
 
 const { Option } = Select;
@@ -20,8 +19,8 @@ export const PairModal = ({
   isVisible,
   setIsVisible,
   currentPair,
-  exchanges,
 }: Props): JSX.Element => {
+  const { exchanges } = useUpdateExchanges();
   const {
     pairModalForm,
     formValidation,
@@ -31,7 +30,6 @@ export const PairModal = ({
     handleSelectRecent,
     handleValuesChange,
   } = usePairModal({ setIsVisible, currentPair });
-
   const handleSubmit = useCallback(() => {
     pairModalForm.submit();
   }, [pairModalForm]);

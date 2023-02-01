@@ -9,19 +9,12 @@ import { UseGposPageResult } from "./useGposPage.types";
 export function useGposPage(): UseGposPageResult {
   const [gposBalances, setGposBalances] = useState<GPOSBalances>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [isMobileDropdownvisible, _setIsMobileDropdownvisible] =
+  const [isMobileDropdownVisible, setIsMobileDropdownVisible] =
     useState<boolean>(false);
 
   const { getGposInfo } = useGpos();
   const { getAssetById } = useAsset();
   const { id } = useUserContext();
-
-  const setIsMobileDropdownvisible = useCallback(
-    (isMobileDropdownvisible: boolean) => {
-      _setIsMobileDropdownvisible(isMobileDropdownvisible);
-    },
-    [_setIsMobileDropdownvisible]
-  );
 
   const calculateGposBalances = useCallback(async () => {
     if (id) {
@@ -57,7 +50,7 @@ export function useGposPage(): UseGposPageResult {
     gposBalances,
     loading,
     calculateGposBalances,
-    isMobileDropdownvisible,
-    setIsMobileDropdownvisible,
+    isMobileDropdownVisible,
+    setIsMobileDropdownVisible,
   };
 }

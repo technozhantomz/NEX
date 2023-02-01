@@ -48,7 +48,7 @@ export function usePairModal({
         pairModalForm.setFieldsValue({
           recents: currentPair.replace("_", "/"),
         });
-        router.push(`/market/${selectedPair}`);
+        router.push(`/new-market/${selectedPair}`);
       } else {
         setIsVisible(false);
       }

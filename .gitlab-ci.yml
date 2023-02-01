@@ -130,12 +130,14 @@ deploy_review:
   dependencies: [build-qa]
   stage: deploy
   script:
-    - pm2 del nex-review || true
-    - npm install 
-    - pm2 start npm --name nex-review -- run start
+    - rm -rf $PROD_DEPLOY_DIR/* || true
+    - tar -zxf nex-qa.tar.gz --directory $PROD_DEPLOY_DIR
     - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
+    - cd $PROD_DEPLOY_DIR && cd NEX
+    - pm2 del nex-review || true 
+    - pm2 start npm --name nex-review -- run start
   environment:
-    name: review/$CI_COMMIT_REF_NAME
+    name: review/$CI_COMMIT_REF_SLUG
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
   artifacts:
     paths:
@@ -148,16 +150,13 @@ deploy_review:
 stop_review_app:
   dependencies: [deploy_review]
   stage: deploy
-  script: stop-review-app
+  script: 
+    - pm2 del nex-review
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
-  only:
-    - merge_requests
-  except:
-    - main
-  allow_failure: true  
-  when: manual
+  rules:
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
   tags:
     - deploy-review
 
@@ -187,6 +186,8 @@ deployToStaging:
     - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-staging || true
     - pm2 start npm --name nex-staging -- run start
+  after_script:
+    - curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=main https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
   dependencies: [build-stg]
   environment:
     name: staging

@@ -1,10 +1,18 @@
-import { MarketOrder, OrderHistory, SelectedMarketPair } from "../../types";
+import {
+  Asset,
+  MarketOrder,
+  MarketPair,
+  OrderHistory,
+  TradeHistoryRow,
+} from "../../types";
 
 export type MarketContextType = {
-  selectedPair: SelectedMarketPair;
-  marketHistory: OrderHistory[];
-  asks: MarketOrder[];
-  bids: MarketOrder[];
-  setSelectedPair: (selectedPair: SelectedMarketPair) => void;
-  unsubscribeFromMarket: () => Promise<void>;
+  selectedPair?: MarketPair;
+  marketHistory?: OrderHistory[];
+  asks?: MarketOrder[];
+  bids?: MarketOrder[];
+  setMarketPair: (base: Asset, quote: Asset) => void;
+  loadingAsksBids: boolean;
+  lastTradeHistory: TradeHistoryRow | undefined;
+  fillLastTradeHistory: (lastTradeHistory?: TradeHistoryRow) => void;
 };
