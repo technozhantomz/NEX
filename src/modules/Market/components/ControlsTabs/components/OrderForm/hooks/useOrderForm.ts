@@ -4,20 +4,38 @@ import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 
 import { defaultToken } from "../../../../../../../api/params";
-import { useAsset, useFees } from "../../../../../../../common/hooks";
+import {
+  TransactionMessageActionType,
+  useAccount,
+  useAsset,
+  useFees,
+  useOrderTransactionBuilder,
+  useTransactionBuilder,
+  useTransactionMessage,
+} from "../../../../../../../common/hooks";
 import {
   useMarketContext,
   useUserContext,
 } from "../../../../../../../common/providers";
+import { Asset, OrderForm, SignerKey } from "../../../../../../../common/types";
 
-import { UseOrderFormResult } from "./useOrderForm.types";
+import {
+  ExecutionType,
+  TimePolicy,
+  UseOrderFormResult,
+} from "./useOrderForm.types";
 
 type Args = {
   isBuyForm: boolean;
   formType: "limit" | "market";
 };
 export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
-  const { assets } = useUserContext();
+  const { transactionMessageState, transactionMessageDispatch } =
+    useTransactionMessage();
+  const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
+  const { buildTrx } = useTransactionBuilder();
+  const { assets, id, localStorageAccount } = useUserContext();
+  const { formAccountBalancesByName } = useAccount();
   const { limitByPrecision, roundNum } = useAsset();
   const router = useRouter();
   const { pair } = router.query;
@@ -33,6 +51,14 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     return isBuyForm ? buyOrderForm : sellOrderForm;
   }, [isBuyForm, buyOrderForm, sellOrderForm]);
   const { calculateCreateLimitOrderFee } = useFees();
+  const [timePolicy, setTimePolicy] = useState<TimePolicy>(
+    TimePolicy.Good_Til_Canceled
+  );
+  const [priceRadioValue, setPriceRadioValue] = useState<string>();
+  const [priceSliderValue, setPriceSliderValue] = useState<number>(0);
+  const [executionValue, setExecutionValue] =
+    useState<ExecutionType>("allow-taker");
+
   const balance = useMemo(() => {
     const baseSymbol = (pair as string).split("_")[1];
     const quoteSymbol = (pair as string).split("_")[0];
@@ -132,8 +158,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       };
     }
   }, [selectedPair]);
-  const [priceRadioValue, setPriceRadioValue] = useState<string>();
-  const [priceSliderValue, setPriceSliderValue] = useState<number>(0);
   const handleFieldPrecision = useCallback(
     (fieldValue: string, fieldName: string, assetPrecision: number) => {
       const precisedValue = limitByPrecision(fieldValue, assetPrecision);
@@ -337,6 +361,13 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     ]
   );
 
+  const handleTimePolicyChange = useCallback(
+    (value: any) => {
+      setTimePolicy(value);
+    },
+    [setTimePolicy]
+  );
+
   const validatePrice = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
       return Promise.reject(
@@ -464,29 +495,144 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       label: counterpart.translate(
         "pages.market.tabs.controls.good_til_canceled"
       ),
-      value: "good-til-canceled",
-    }, // remember to pass the key prop
-    {
-      label: counterpart.translate("pages.market.tabs.controls.good_til_time"),
-      value: "good-til-time",
+      value: TimePolicy.Good_Til_Canceled,
     },
+    // {
+    //   label: counterpart.translate("pages.market.tabs.controls.good_til_time"),
+    //   value: TimePolicy.Good_Til_Time,
+    // },
     {
       label: counterpart.translate("pages.market.tabs.controls.fill_or_kill"),
-      value: "fill-or-kill",
-    },
-    {
-      label: counterpart.translate(
-        "pages.market.tabs.controls.maker_or_cancel"
-      ),
-      value: "maker-or-cancel",
+      value: TimePolicy.Fill_Or_Kill,
     },
     {
       label: counterpart.translate(
         "pages.market.tabs.controls.immediate_or_cancel"
       ),
-      value: "immediate-or-cancel",
+      value: TimePolicy.Immediate_Or_Cancel,
     },
   ];
+
+  const createLimitOrderTimePolicy = useCallback((timePolicy: TimePolicy) => {
+    let expiration = "";
+    let fillOrKill = false;
+    switch (timePolicy) {
+      case TimePolicy.Fill_Or_Kill:
+        expiration = new Date(
+          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+        ).toISOString();
+        fillOrKill = true;
+        break;
+      case TimePolicy.Good_Til_Canceled:
+        expiration = new Date(
+          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+        ).toISOString();
+        fillOrKill = false;
+        break;
+      case TimePolicy.Immediate_Or_Cancel:
+        expiration = new Date(new Date().getTime() + 3000).toISOString();
+        fillOrKill = false;
+        break;
+    }
+    return { expiration, fillOrKill };
+  }, []);
+
+  const checkPostOnlyPossibility = useCallback(
+    (values: OrderForm) => {
+      const price = values.price;
+      if (isBuyForm) {
+        return !asks || !asks.length ? true : price < asks[0].price;
+      } else {
+        return !bids || !bids.length ? true : price > bids[0].price;
+      }
+    },
+    [isBuyForm, asks, bids]
+  );
+
+  const handleCreateLimitOrder = useCallback(
+    async (signerKey: SignerKey) => {
+      transactionMessageDispatch({
+        type: TransactionMessageActionType.CLEAR,
+      });
+      const values = orderForm.getFieldsValue();
+      const { expiration, fillOrKill } = createLimitOrderTimePolicy(timePolicy);
+      if (executionValue === "post-only") {
+        const isPossible = checkPostOnlyPossibility(values);
+        if (!isPossible) {
+          transactionMessageDispatch({
+            type: TransactionMessageActionType.ERROR,
+            message: counterpart.translate(
+              "field.errors.post_only_limit_order"
+            ),
+          });
+          return;
+        }
+      }
+
+      const trx = buildCreateLimitOrderTransaction(
+        id,
+        values.amount,
+        values.total,
+        selectedPair?.base as Asset,
+        selectedPair?.quote as Asset,
+        expiration,
+        fillOrKill,
+        [],
+        isBuyForm
+      );
+      let trxResult;
+      console.log("trx", trx);
+      try {
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADING,
+        });
+        trxResult = await buildTrx([trx], [signerKey]);
+      } catch (e) {
+        console.log(e);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
+      }
+      if (trxResult) {
+        formAccountBalancesByName(localStorageAccount);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(
+            `field.success.limit_order_successfully`
+          ),
+        });
+      } else {
+        console.log("trxResult", trxResult);
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
+      }
+    },
+    [
+      transactionMessageDispatch,
+      orderForm,
+      buildCreateLimitOrderTransaction,
+      id,
+      selectedPair,
+      isBuyForm,
+      buildTrx,
+      localStorageAccount,
+      formAccountBalancesByName,
+      timePolicy,
+      executionValue,
+      checkPostOnlyPossibility,
+      createLimitOrderTimePolicy,
+    ]
+  );
+
+  const handleExecutionChange = useCallback(
+    ({ target: { value } }: RadioChangeEvent) => {
+      setExecutionValue(value);
+    },
+    [setExecutionValue]
+  );
 
   return {
     balance,
@@ -500,5 +646,12 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     clearPriceRadioGroup,
     handlePriceSliderChange,
     priceSliderValue,
+    timePolicy,
+    handleTimePolicyChange,
+    transactionMessageState,
+    handleCreateLimitOrder,
+    transactionMessageDispatch,
+    executionValue,
+    handleExecutionChange,
   };
 }

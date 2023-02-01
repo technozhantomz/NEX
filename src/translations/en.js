@@ -716,7 +716,7 @@ export const en = {
           time_policy: "Time in force policy",
           time_policy_description:
             "This option sets the rules for how long your order will exist on the order book or how it must execute",
-          good_til_canceled: "Good till canceled",
+          good_til_canceled: "Good till canceled (default)",
           good_til_time: "Good till time",
           fill_or_kill: "Fill or kill",
           maker_or_cancel: "Maker or cancel",
@@ -1169,6 +1169,7 @@ export const en = {
       whalevault_not_installed:
         "WhaleVault is not installed. Please install WhaleVault extension and reload the app",
       wrong_whalevault_keys: "Added keys to WhaleVault are not correct",
+      post_only_limit_order: "Unable to create post only limit order",
     },
     success: {
       successfully_transferred:

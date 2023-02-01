@@ -4,6 +4,11 @@ import { useRouter } from "next/router";
 
 import { defaultToken } from "../../../../../../api/params";
 import { utils } from "../../../../../../api/utils";
+import {
+  PasswordModal,
+  TransactionModal,
+} from "../../../../../../common/components";
+import { useHandleTransactionForm } from "../../../../../../common/hooks";
 import { useUserContext } from "../../../../../../common/providers";
 import {
   DownOutlined,
@@ -34,9 +39,28 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
     clearPriceRadioGroup,
     handlePriceSliderChange,
     priceSliderValue,
+    timePolicy,
+    handleTimePolicyChange,
+    transactionMessageDispatch,
+    transactionMessageState,
+    handleCreateLimitOrder,
+    handleExecutionChange,
+    executionValue,
   } = useOrderForm({
     isBuyForm,
     formType,
+  });
+  const {
+    isPasswordModalVisible,
+    isTransactionModalVisible,
+    showPasswordModal,
+    hidePasswordModal,
+    handleFormFinish,
+    hideTransactionModal,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleCreateLimitOrder,
+    transactionMessageDispatch,
+    neededKeyType: "active",
   });
   const sliderMarks: SliderMarks = {
     0: "0%",
@@ -56,7 +80,7 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
 
   return (
     <Styled.FormContainer>
-      <Styled.Form.Provider>
+      <Styled.Form.Provider onFormFinish={handleFormFinish}>
         <Styled.BalanceContainer>
           <Styled.WalletIcon />
           <Styled.BalanceValue>{balance}</Styled.BalanceValue>
@@ -65,6 +89,7 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
           name="orderForm"
           form={orderForm}
           onValuesChange={handleValuesChange}
+          onFinish={showPasswordModal}
         >
           {formType === "limit" && (
             <Styled.FormItem
@@ -158,6 +183,7 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
               disabled={true}
             />
           </Styled.AmountFormItem>
+
           <Styled.AdvancedCollapse
             bordered={false}
             defaultActiveKey={["1"]}
@@ -186,8 +212,9 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
                 </Tooltip>
               </Styled.TimePolicyHeaderContainer>
               <Styled.TimePolicySelect
-                defaultValue="good-til-canceled"
+                value={timePolicy}
                 options={timePolicyOptions}
+                onChange={handleTimePolicyChange}
               />
 
               <Styled.ExecutionHeaderContainer>
@@ -204,7 +231,10 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
                   <InfoCircleOutlined />
                 </Tooltip>
               </Styled.ExecutionHeaderContainer>
-              <Styled.ExecutionRadioGroup defaultValue="allow-taker">
+              <Styled.ExecutionRadioGroup
+                onChange={handleExecutionChange}
+                value={executionValue}
+              >
                 <Styled.ExecutionRadioButton value="post-only">
                   {counterpart.translate(
                     "pages.market.tabs.controls.post_only"
@@ -265,6 +295,32 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
             )}
           </Styled.ButtonFormItem>
         </Styled.Form>
+        <TransactionModal
+          visible={isTransactionModalVisible}
+          onCancel={hideTransactionModal}
+          transactionMessageState={transactionMessageState}
+          account={localStorageAccount}
+          fee={fees.feeAmount}
+          transactionType="limit_order_create"
+          // price={`${price} ${activePair.split("_")[1]} / ${
+          //   activePair.split("_")[0]
+          // }`}
+          // buy={
+          //   isBuyOrder
+          //     ? `${quantity} ${activePair.split("_")[0]}`
+          //     : `${total} ${activePair.split("_")[1]}`
+          // }
+          // sell={
+          //   isBuyOrder
+          //     ? `${total} ${activePair.split("_")[1]}`
+          //     : `${quantity} ${activePair.split("_")[0]}`
+          // }
+        />
+        <PasswordModal
+          visible={isPasswordModalVisible}
+          onCancel={hidePasswordModal}
+          neededKeyType="active"
+        />
       </Styled.Form.Provider>
     </Styled.FormContainer>
   );
