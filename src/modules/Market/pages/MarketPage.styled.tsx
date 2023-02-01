@@ -101,6 +101,7 @@ const MobileContainer = styled.div`
 `;
 
 export const MobileAssetSelectorContainer = styled(MobileContainer)`
+  padding: 8px 20px;
   height: 50px;
   border: 1px solid ${colors.borderColorBase};
 `;
