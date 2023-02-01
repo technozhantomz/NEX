@@ -53,7 +53,6 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
         (ask) => Number(ask.price) >= threshold
       );
       const groupedAsks: (MarketOrder & { maxPrice: string })[] = [];
-
       filteredAsks.forEach((ask) => {
         const unchangedPrice = ask.price;
         ask.price = Number(ask.price).toFixed(
@@ -179,7 +178,7 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   const thresholdValues = useMemo(() => {
     if (selectedPair) {
       const values = [];
-      for (let power = 1; power <= selectedPair.quote.precision - 2; power++) {
+      for (let power = 1; power <= selectedPair.base.precision; power++) {
         const value = 1 / Math.pow(10, power);
         values.push(value.toFixed(power));
       }

@@ -1,14 +1,14 @@
+import { RadioChangeEvent } from "antd";
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { defaultToken } from "../../../../../../../api/params";
-import { useFees } from "../../../../../../../common/hooks";
+import { useAsset, useFees } from "../../../../../../../common/hooks";
 import {
   useMarketContext,
   useUserContext,
 } from "../../../../../../../common/providers";
-import { Form } from "../../../../../../../ui/src";
 
 import { UseOrderFormResult } from "./useOrderForm.types";
 
@@ -18,17 +18,21 @@ type Args = {
 };
 export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
   const { assets } = useUserContext();
+  const { limitByPrecision, roundNum } = useAsset();
   const router = useRouter();
   const { pair } = router.query;
-  const { buyOrderForm, sellOrderForm, selectedPair } = useMarketContext();
-  const orderForm = isBuyForm ? buyOrderForm : sellOrderForm;
+  const {
+    buyOrderForm,
+    sellOrderForm,
+    selectedPair,
+    lastTradeHistory,
+    asks,
+    bids,
+  } = useMarketContext();
+  const orderForm = useMemo(() => {
+    return isBuyForm ? buyOrderForm : sellOrderForm;
+  }, [isBuyForm, buyOrderForm, sellOrderForm]);
   const { calculateCreateLimitOrderFee } = useFees();
-
-  const price: string = Form.useWatch("price", orderForm);
-  const amount: string = Form.useWatch("amount", orderForm);
-  const total: string = Form.useWatch("total", orderForm);
-  console.log(price, amount, total);
-
   const balance = useMemo(() => {
     const baseSymbol = (pair as string).split("_")[1];
     const quoteSymbol = (pair as string).split("_")[0];
@@ -69,6 +73,270 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     }
   }, [selectedPair, calculateCreateLimitOrderFee, isBuyForm]);
 
+  const precisions = useMemo(() => {
+    if (selectedPair) {
+      const leastPrecision = 1;
+      let firstPrecision = 5;
+      let secondPrecision = 5;
+      const isSamePrecisions =
+        selectedPair.base.precision === selectedPair.quote.precision;
+      if (isSamePrecisions) {
+        firstPrecision = Math.floor(selectedPair.base.precision / 2);
+        secondPrecision = Math.floor(selectedPair.base.precision / 2);
+      } else {
+        const smallToBigRatio =
+          selectedPair.base.precision > selectedPair.quote.precision
+            ? {
+                ratio:
+                  selectedPair.quote.precision / selectedPair.base.precision,
+                isBaseBigger: true,
+              }
+            : {
+                ratio:
+                  selectedPair.base.precision / selectedPair.quote.precision,
+                isBaseBigger: false,
+              };
+        firstPrecision = smallToBigRatio.isBaseBigger
+          ? Math.round(selectedPair.quote.precision * smallToBigRatio.ratio)
+          : Math.round(selectedPair.base.precision * smallToBigRatio.ratio);
+        secondPrecision = selectedPair.base.precision - firstPrecision;
+        if (firstPrecision === 0) {
+          firstPrecision = leastPrecision;
+          secondPrecision = secondPrecision - leastPrecision;
+        }
+        if (secondPrecision === 0) {
+          secondPrecision = leastPrecision;
+          firstPrecision = firstPrecision - leastPrecision;
+        }
+      }
+      const bigPrecision =
+        firstPrecision >= secondPrecision ? firstPrecision : secondPrecision;
+      const smallPrecision =
+        firstPrecision >= secondPrecision ? secondPrecision : firstPrecision;
+      return {
+        price:
+          selectedPair.base.precision >= selectedPair.quote.precision
+            ? bigPrecision
+            : smallPrecision,
+        amount:
+          selectedPair.quote.precision >= selectedPair.base.precision
+            ? bigPrecision
+            : smallPrecision,
+        total: selectedPair.base.precision,
+      };
+    } else {
+      return {
+        price: 5,
+        amount: 5,
+        total: 5,
+      };
+    }
+  }, [selectedPair]);
+  const [priceRadioValue, setPriceRadioValue] = useState<string>();
+  const [priceSliderValue, setPriceSliderValue] = useState<number>(0);
+  const handleFieldPrecision = useCallback(
+    (fieldValue: string, fieldName: string, assetPrecision: number) => {
+      const precisedValue = limitByPrecision(fieldValue, assetPrecision);
+
+      const fieldsValueObject: {
+        [fieldName: string]: string;
+      } = {};
+      fieldsValueObject[`${fieldName}`] = precisedValue;
+
+      orderForm.setFieldsValue(fieldsValueObject);
+    },
+    [orderForm, limitByPrecision]
+  );
+  const handleFormPrecision = useCallback(
+    (changedValues: any) => {
+      if (selectedPair) {
+        if (changedValues.price) {
+          handleFieldPrecision(changedValues.price, "price", precisions.price);
+        }
+        if (changedValues.amount) {
+          handleFieldPrecision(
+            changedValues.amount,
+            "amount",
+            precisions.amount
+          );
+        }
+        if (changedValues.total) {
+          handleFieldPrecision(changedValues.total, "total", precisions.total);
+        }
+      }
+    },
+    [selectedPair, handleFieldPrecision, isBuyForm, precisions]
+  );
+  const handleRelationsBetweenInputs = useCallback(
+    (changedValues: any, allValues: any) => {
+      let baseRoundTo = 5;
+      if (selectedPair) {
+        baseRoundTo = selectedPair.base.precision;
+      }
+      if (changedValues.price || changedValues.amount) {
+        if (
+          allValues.price &&
+          allValues.price > 0 &&
+          allValues.amount &&
+          allValues.amount > 0
+        ) {
+          orderForm.setFieldsValue({
+            total: roundNum(allValues.price * allValues.amount, baseRoundTo),
+          });
+        } else {
+          orderForm.setFieldsValue({
+            total: undefined,
+          });
+        }
+      }
+    },
+    [orderForm, selectedPair]
+  );
+  const specifyPriceSliderValue = useCallback(() => {
+    const allValues = orderForm.getFieldsValue() as any;
+    if (isBuyForm) {
+      const userBaseBalance =
+        assets && assets.length
+          ? assets.find((asset) => asset.symbol === selectedPair?.base.symbol)
+              ?.amount
+          : 0;
+      if (allValues.total) {
+        const sliderValue = !userBaseBalance
+          ? 0
+          : Math.floor((allValues.total / userBaseBalance) * 100);
+        setPriceSliderValue(sliderValue);
+      } else {
+        setPriceSliderValue(0);
+      }
+    } else {
+      const userQuoteBalance =
+        assets && assets.length
+          ? assets.find((asset) => asset.symbol === selectedPair?.quote.symbol)
+              ?.amount
+          : 0;
+      if (allValues.amount) {
+        const sliderValue = !userQuoteBalance
+          ? 0
+          : Math.floor((allValues.amount / userQuoteBalance) * 100);
+        setPriceSliderValue(sliderValue);
+      } else {
+        setPriceSliderValue(0);
+      }
+    }
+  }, [orderForm, isBuyForm, assets, selectedPair, setPriceSliderValue]);
+  const handleValuesChange = useCallback(
+    (changedValues: any, allValues: any) => {
+      handleFormPrecision(changedValues);
+      handleRelationsBetweenInputs(changedValues, allValues);
+      specifyPriceSliderValue();
+    },
+    [handleFormPrecision, handleRelationsBetweenInputs, specifyPriceSliderValue]
+  );
+  const handlePriceRadioGroupChange = useCallback(
+    ({ target: { value } }: RadioChangeEvent) => {
+      setPriceRadioValue(value);
+      const currentPrice = lastTradeHistory
+        ? lastTradeHistory.price
+        : undefined;
+      let price: string | undefined = undefined;
+      const orders = isBuyForm ? asks : bids;
+      switch (value) {
+        case "mid":
+          price = currentPrice;
+          break;
+        case "book":
+          price = orders && orders.length ? orders[0].price : undefined;
+          break;
+        case "1":
+          price = currentPrice
+            ? String(Number(currentPrice) * 0.99)
+            : undefined;
+          break;
+        case "5":
+          price = currentPrice
+            ? String(Number(currentPrice) * 0.95)
+            : undefined;
+          break;
+        case "10":
+          price = currentPrice ? String(Number(currentPrice) * 0.9) : undefined;
+          break;
+      }
+      orderForm.setFieldsValue({
+        price: price,
+      });
+      const allValues = orderForm.getFieldsValue();
+      handleValuesChange({ price: price }, allValues);
+    },
+    [
+      setPriceRadioValue,
+      orderForm,
+      lastTradeHistory,
+      isBuyForm,
+      asks,
+      bids,
+      handleValuesChange,
+    ]
+  );
+  const clearPriceRadioGroup = useCallback(() => {
+    setPriceRadioValue(undefined);
+  }, [setPriceRadioValue]);
+  const handlePriceSliderChange = useCallback(
+    (value: number) => {
+      if (isBuyForm) {
+        const userBaseAsset =
+          assets && assets.length
+            ? assets.find((asset) => asset.symbol === selectedPair?.base.symbol)
+                ?.amount
+            : 0;
+        const total = userBaseAsset
+          ? String(userBaseAsset * (value / 100))
+          : "0";
+        const formPrice: string = orderForm.getFieldValue("price");
+        const askPrice = asks && asks.length ? asks[0].price : undefined;
+        const price = formPrice && formPrice !== "0" ? formPrice : askPrice;
+        const amount = price ? String(Number(total) / Number(price)) : "0";
+        orderForm.setFieldsValue({
+          amount: amount,
+          price: price,
+          total: total,
+        });
+        const allValues = orderForm.getFieldsValue();
+        handleValuesChange(
+          {
+            amount: amount,
+            price: price,
+            total: total,
+          },
+          allValues
+        );
+      } else {
+        const userQuoteBalance =
+          assets && assets.length
+            ? assets.find(
+                (asset) => asset.symbol === selectedPair?.quote.symbol
+              )?.amount
+            : 0;
+        const amount = userQuoteBalance
+          ? String(userQuoteBalance * (value / 100))
+          : "0";
+        orderForm.setFieldsValue({
+          amount: amount,
+        });
+        const allValues = orderForm.getFieldsValue();
+        handleValuesChange({ amount: amount }, allValues);
+      }
+    },
+    [
+      setPriceSliderValue,
+      isBuyForm,
+      assets,
+      selectedPair,
+      asks,
+      orderForm,
+      handleValuesChange,
+    ]
+  );
+
   const validatePrice = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
       return Promise.reject(
@@ -80,7 +348,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
   const validateAmount = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
       return Promise.reject(
-        new Error(counterpart.translate(`field.errors.quantity_should_greater`))
+        new Error(counterpart.translate(`field.errors.amount_should_greater`))
       );
     }
     const userQuoteAsset = assets.find(
@@ -225,5 +493,12 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     fees,
     formValidation,
     timePolicyOptions,
+    handleValuesChange,
+    orderForm,
+    handlePriceRadioGroupChange,
+    priceRadioValue,
+    clearPriceRadioGroup,
+    handlePriceSliderChange,
+    priceSliderValue,
   };
 }

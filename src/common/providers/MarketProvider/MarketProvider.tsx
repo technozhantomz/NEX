@@ -160,7 +160,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
     return () => {
       unsubscribeFromMarket();
     };
-  }, [selectedPair]);
+  }, [selectedPair, synced]);
 
   return (
     <MarketContext.Provider

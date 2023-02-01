@@ -1,4 +1,7 @@
-import { Rule } from "../../../../../../../ui/src";
+import { RadioChangeEvent } from "antd";
+
+import { OrderForm } from "../../../../../../../common/types";
+import { FormInstance, Rule } from "../../../../../../../ui/src";
 
 export type UseOrderFormResult = {
   balance: string;
@@ -11,6 +14,15 @@ export type UseOrderFormResult = {
     label: string;
     value: string;
   }[];
+  orderForm: FormInstance<OrderForm>;
+  handleValuesChange: (changedValues: any, allValues: any) => void;
+  handlePriceRadioGroupChange: ({
+    target: { value },
+  }: RadioChangeEvent) => void;
+  priceRadioValue: string | undefined;
+  clearPriceRadioGroup: () => void;
+  handlePriceSliderChange: (value: number) => void;
+  priceSliderValue: number;
 };
 
 export type FormValidation = {

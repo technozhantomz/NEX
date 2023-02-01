@@ -22,7 +22,19 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
   const { pair } = router.query;
-  const { balance, formValidation, timePolicyOptions, fees } = useOrderForm({
+  const {
+    balance,
+    formValidation,
+    timePolicyOptions,
+    fees,
+    orderForm,
+    handleValuesChange,
+    handlePriceRadioGroupChange,
+    priceRadioValue,
+    clearPriceRadioGroup,
+    handlePriceSliderChange,
+    priceSliderValue,
+  } = useOrderForm({
     isBuyForm,
     formType,
   });
@@ -49,29 +61,40 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
           <Styled.WalletIcon />
           <Styled.BalanceValue>{balance}</Styled.BalanceValue>
         </Styled.BalanceContainer>
-        <Styled.Form>
-          <Styled.FormItem
-            name="price"
-            rules={formValidation.price}
-            validateFirst={true}
-            validateTrigger="onBlur"
-          >
-            <Styled.InputNumber
-              type="number"
-              min={0}
-              step="any"
-              onFocus={(e) => {
-                e.target.select();
-              }}
-              onKeyPress={utils.ensureInputNumberValidity}
-              onPaste={utils.numberedInputsPasteHandler}
-              autoComplete="off"
-              placeholder={counterpart.translate("field.placeholder.price")}
-              suffix={(pair as string).split("_")[1]}
-            />
-          </Styled.FormItem>
+        <Styled.Form
+          name="orderForm"
+          form={orderForm}
+          onValuesChange={handleValuesChange}
+        >
           {formType === "limit" && (
-            <Styled.PriceRadioGroup>
+            <Styled.FormItem
+              name="price"
+              rules={formValidation.price}
+              validateFirst={true}
+              validateTrigger="onBlur"
+            >
+              <Styled.InputNumber
+                type="number"
+                min={0}
+                step="any"
+                onFocus={(e) => {
+                  e.target.select();
+                }}
+                onChange={clearPriceRadioGroup}
+                onKeyPress={utils.ensureInputNumberValidity}
+                onPaste={utils.numberedInputsPasteHandler}
+                autoComplete="off"
+                placeholder={counterpart.translate("field.placeholder.price")}
+                suffix={(pair as string).split("_")[1]}
+              />
+            </Styled.FormItem>
+          )}
+
+          {formType === "limit" && (
+            <Styled.PriceRadioGroup
+              onChange={handlePriceRadioGroupChange}
+              value={priceRadioValue}
+            >
               <Styled.PriceRadioButton value="mid">MID</Styled.PriceRadioButton>
               <Styled.PriceRadioButton value="book">
                 {isBuyForm ? "Ask" : "Bid"}
@@ -107,7 +130,13 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
               suffix={(pair as string).split("_")[0]}
             />
           </Styled.AmountFormItem>
-          <Styled.PriceSlider min={0} max={100} marks={sliderMarks} />
+          <Styled.PriceSlider
+            value={priceSliderValue}
+            min={0}
+            max={100}
+            marks={sliderMarks}
+            onChange={handlePriceSliderChange}
+          />
           <Styled.AmountFormItem
             name="total"
             rules={formValidation.total}

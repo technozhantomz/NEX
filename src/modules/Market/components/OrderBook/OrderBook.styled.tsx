@@ -84,8 +84,8 @@ export const LastTradeContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 4px;
+  padding-right: 4px;
   height: 25px;
   margin-bottom: 10px;
   margin-top: 10px;
