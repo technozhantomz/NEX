@@ -581,7 +581,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
         isBuyForm
       );
       let trxResult;
-      console.log("trx", trx);
       try {
         transactionMessageDispatch({
           type: TransactionMessageActionType.LOADING,
@@ -603,7 +602,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
           ),
         });
       } else {
-        console.log("trxResult", trxResult);
         transactionMessageDispatch({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
