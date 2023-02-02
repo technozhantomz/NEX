@@ -6,6 +6,7 @@ import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
 import { Col } from "../../../ui/src";
 import {
+  ControlsTabs,
   HistoryTabs,
   MarketStats,
   OrderBook,
@@ -22,7 +23,7 @@ import { useMarketPage } from "./hooks";
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
-  const { md, xxl } = useViewportContext();
+  const { lg, xxl } = useViewportContext();
   const { isPairModalVisible, handleClickOnPair, setIsPairModalVisible } =
     useMarketPage({
       currentPair: pair as string,
@@ -46,7 +47,7 @@ const MarketPage: NextPage = () => {
       {/* Charts Section */}
       {!xxl ? (
         <>
-          <Styled.RightBorderedVerticalFlexedCol md={24} xxl={16}>
+          <Styled.RightBorderedVerticalFlexedCol lg={24} xxl={16}>
             <Styled.PriceChartContainer>
               <PriceChart />
             </Styled.PriceChartContainer>
@@ -60,7 +61,7 @@ const MarketPage: NextPage = () => {
           </Col>
         </>
       ) : (
-        <Styled.VerticalFlexedCol md={24} xxl={16}>
+        <Styled.VerticalFlexedCol lg={24} xxl={16}>
           <Styled.PriceChartContainer>
             <PriceChart />
           </Styled.PriceChartContainer>
@@ -87,7 +88,7 @@ const MarketPage: NextPage = () => {
       description={`Market Page | ${pair}`}
     >
       {/* Mobile view */}
-      {md ? (
+      {lg ? (
         <>
           <Styled.MobileAssetSelectorContainer>
             <PairSelect
@@ -113,7 +114,7 @@ const MarketPage: NextPage = () => {
 
             {/* Middle Section */}
             <Styled.RightBorderedVerticalFlexedCol
-              md={{ span: 16 }}
+              lg={{ span: 16 }}
               xxl={{ span: 14 }}
             >
               {/* Stats Section */}
@@ -129,7 +130,7 @@ const MarketPage: NextPage = () => {
             </Styled.RightBorderedVerticalFlexedCol>
 
             {/* Right section */}
-            <Styled.VerticalFlexedCol md={{ span: 8 }} xxl={{ span: 5 }}>
+            <Styled.VerticalFlexedCol lg={{ span: 8 }} xxl={{ span: 5 }}>
               {/* Pair Selector */}
               <Styled.PairSelectorContainer>
                 <PairSelect
@@ -140,7 +141,7 @@ const MarketPage: NextPage = () => {
 
               {/* Limit Order forms */}
               <Styled.LimitOrderFormContainer>
-                Limit Order Form
+                <ControlsTabs />
               </Styled.LimitOrderFormContainer>
 
               {/* Wallet Sections */}

@@ -84,7 +84,6 @@ export const OrderBook = ({ currentPair }: Props): JSX.Element => {
                 key={`${type}_tooltip`}
               >
                 <Styled.OrdersFilter
-                  key={type}
                   onClick={() => handleFilterChange(type)}
                   className={`order-filters__type--${type}${
                     type === filter ? " active" : ""
