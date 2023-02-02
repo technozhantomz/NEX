@@ -6,11 +6,13 @@ import React, {
   useState,
 } from "react";
 
+import { Form, FormInstance } from "../../../ui/src";
 import { useMarketHistory, useOrderBook } from "../../hooks";
 import {
   Asset,
   MarketOrder,
   MarketPair,
+  OrderForm,
   OrderHistory,
   TradeHistoryRow,
 } from "../../types";
@@ -36,6 +38,8 @@ const defaultMarketState: MarketContextType = {
   fillLastTradeHistory: function (lastTradeHistory?: TradeHistoryRow): void {
     throw new Error(`Function not implemented. for ${lastTradeHistory}`);
   },
+  buyOrderForm: {} as FormInstance<OrderForm>,
+  sellOrderForm: {} as FormInstance<OrderForm>,
 };
 
 const MarketContext = createContext<MarketContextType>(defaultMarketState);
@@ -51,6 +55,8 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   const [bids, setBids] = useState<MarketOrder[]>();
   const [loadingAsksBids, setLoadingAsksBids] = useState<boolean>(true);
   const [lastTradeHistory, setLastTradeHistory] = useState<TradeHistoryRow>();
+  const [buyOrderForm] = Form.useForm<OrderForm>();
+  const [sellOrderForm] = Form.useForm<OrderForm>();
 
   const getHistory = useCallback(async () => {
     if (selectedPair) {
@@ -104,6 +110,8 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   const subscribeToMarket = useCallback(async () => {
     if (selectedPair && synced) {
       try {
+        buyOrderForm.resetFields();
+        sellOrderForm.resetFields();
         await Promise.all([getHistory(), getAsksBids()]);
         await dbApi("subscribe_to_market", [
           () => {
@@ -117,7 +125,15 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         console.log(e);
       }
     }
-  }, [selectedPair, synced, dbApi, getHistory, getAsksBids]);
+  }, [
+    selectedPair,
+    synced,
+    dbApi,
+    getHistory,
+    getAsksBids,
+    buyOrderForm,
+    sellOrderForm,
+  ]);
 
   const unsubscribeFromMarket = useCallback(async () => {
     if (selectedPair) {
@@ -154,7 +170,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
     return () => {
       unsubscribeFromMarket();
     };
-  }, [selectedPair]);
+  }, [selectedPair, synced]);
 
   return (
     <MarketContext.Provider
@@ -167,6 +183,8 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         loadingAsksBids,
         lastTradeHistory,
         fillLastTradeHistory,
+        buyOrderForm,
+        sellOrderForm,
       }}
     >
       {children}

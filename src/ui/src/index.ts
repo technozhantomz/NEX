@@ -36,6 +36,9 @@ export {
   Switch,
   List,
   Carousel,
+  Slider,
+  Collapse,
+  DatePicker,
 } from "antd";
 
 export {
@@ -67,6 +70,7 @@ export {
   LikeOutlined,
   LikeFilled,
   DislikeOutlined,
+  WalletOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";
