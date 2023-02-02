@@ -23,8 +23,17 @@ import { TimePolicy, useOrderForm } from "./hooks";
 type Props = {
   isBuyForm: boolean;
   formType: "limit" | "market";
+  precisions: {
+    price: number;
+    amount: number;
+    total: number;
+  };
 };
-export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
+export function OrderForm({
+  isBuyForm,
+  formType,
+  precisions,
+}: Props): JSX.Element {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
   const { pair } = router.query;
@@ -54,7 +63,7 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
     transactionModalTotal,
   } = useOrderForm({
     isBuyForm,
-    formType,
+    precisions,
   });
   const {
     isPasswordModalVisible,

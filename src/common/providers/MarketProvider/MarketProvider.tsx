@@ -110,6 +110,8 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   const subscribeToMarket = useCallback(async () => {
     if (selectedPair && synced) {
       try {
+        buyOrderForm.resetFields();
+        sellOrderForm.resetFields();
         await Promise.all([getHistory(), getAsksBids()]);
         await dbApi("subscribe_to_market", [
           () => {
@@ -123,7 +125,15 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         console.log(e);
       }
     }
-  }, [selectedPair, synced, dbApi, getHistory, getAsksBids]);
+  }, [
+    selectedPair,
+    synced,
+    dbApi,
+    getHistory,
+    getAsksBids,
+    buyOrderForm,
+    sellOrderForm,
+  ]);
 
   const unsubscribeFromMarket = useCallback(async () => {
     if (selectedPair) {

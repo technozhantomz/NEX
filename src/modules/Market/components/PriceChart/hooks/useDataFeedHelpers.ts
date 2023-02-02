@@ -95,7 +95,6 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
           }
           group.push(order);
         });
-        console.log(groupedHistories);
         const processedOrders = Array.from(groupedHistories.entries()).map(
           ([time, group]) => {
             const open = getOrderAmmount(group[0]);
@@ -119,7 +118,6 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
             });
           }
         );
-        console.log(processedOrders);
         return processedOrders;
       }
     }

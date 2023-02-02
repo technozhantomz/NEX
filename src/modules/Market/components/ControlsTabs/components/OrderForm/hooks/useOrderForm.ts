@@ -29,9 +29,16 @@ import {
 
 type Args = {
   isBuyForm: boolean;
-  formType: "limit" | "market";
+  precisions: {
+    price: number;
+    amount: number;
+    total: number;
+  };
 };
-export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
+export function useOrderForm({
+  isBuyForm,
+  precisions,
+}: Args): UseOrderFormResult {
   const { transactionMessageState, transactionMessageDispatch } =
     useTransactionMessage();
   const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
@@ -107,65 +114,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       return { feeAmount: 0, marketFeePercent: 0 };
     }
   }, [selectedPair, calculateCreateLimitOrderFee, isBuyForm]);
-
-  const precisions = useMemo(() => {
-    if (selectedPair) {
-      const leastPrecision = 1;
-      let firstPrecision = 5;
-      let secondPrecision = 5;
-      const isSamePrecisions =
-        selectedPair.base.precision === selectedPair.quote.precision;
-      if (isSamePrecisions) {
-        firstPrecision = Math.floor(selectedPair.base.precision / 2);
-        secondPrecision = Math.floor(selectedPair.base.precision / 2) + 1;
-      } else {
-        const smallToBigRatio =
-          selectedPair.base.precision > selectedPair.quote.precision
-            ? {
-                ratio:
-                  selectedPair.quote.precision / selectedPair.base.precision,
-                isBaseBigger: true,
-              }
-            : {
-                ratio:
-                  selectedPair.base.precision / selectedPair.quote.precision,
-                isBaseBigger: false,
-              };
-        firstPrecision = smallToBigRatio.isBaseBigger
-          ? Math.round(selectedPair.quote.precision * smallToBigRatio.ratio)
-          : Math.round(selectedPair.base.precision * smallToBigRatio.ratio);
-        secondPrecision = selectedPair.base.precision - firstPrecision;
-        if (firstPrecision === 0) {
-          firstPrecision = leastPrecision;
-          secondPrecision = secondPrecision - leastPrecision;
-        } else if (secondPrecision === 0) {
-          secondPrecision = leastPrecision;
-          firstPrecision = firstPrecision - leastPrecision;
-        }
-      }
-      const bigPrecision =
-        firstPrecision >= secondPrecision ? firstPrecision : secondPrecision;
-      const smallPrecision =
-        firstPrecision >= secondPrecision ? secondPrecision : firstPrecision;
-      return {
-        price:
-          selectedPair.base.precision >= selectedPair.quote.precision
-            ? bigPrecision
-            : smallPrecision,
-        amount:
-          selectedPair.quote.precision >= selectedPair.base.precision
-            ? bigPrecision
-            : smallPrecision,
-        total: selectedPair.base.precision,
-      };
-    } else {
-      return {
-        price: 5,
-        amount: 5,
-        total: 5,
-      };
-    }
-  }, [selectedPair]);
 
   const handleFieldPrecision = useCallback(
     (fieldValue: string, fieldName: string, precision: number) => {
@@ -659,12 +607,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       expirationCustomTime,
     ]
   );
-
-  // useEffect(() => {
-  //   if (formType === "market") {
-
-  //   }
-  // }, [formType]);
 
   return {
     balance,

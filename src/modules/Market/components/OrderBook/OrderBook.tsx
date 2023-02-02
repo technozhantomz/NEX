@@ -38,7 +38,7 @@ export const OrderBook = ({ currentPair }: Props): JSX.Element => {
   const thresholdMenu = (
     <Styled.ThresholdMenu onClick={handleThresholdChange}>
       {thresholdValues.map((value) => (
-        <Styled.ThresholdMenu.Item key={`threshold-${value}`}>
+        <Styled.ThresholdMenu.Item key={value}>
           {value}
         </Styled.ThresholdMenu.Item>
       ))}
