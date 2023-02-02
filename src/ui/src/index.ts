@@ -38,6 +38,7 @@ export {
   Carousel,
   Slider,
   Collapse,
+  DatePicker,
 } from "antd";
 
 export {

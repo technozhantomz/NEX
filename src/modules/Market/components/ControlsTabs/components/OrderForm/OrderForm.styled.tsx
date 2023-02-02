@@ -5,6 +5,7 @@ import {
   styled,
   Tooltip,
   CardFormButton as UiButton,
+  DatePicker as UiDatePicker,
   Form as UiForm,
   Input as UiInput,
   Slider as UiSlider,
@@ -30,7 +31,7 @@ export const FormItem = styled(UiForm.Item)`
   }
 `;
 export const AmountFormItem = styled(FormItem)`
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 `;
 export const InputNumber = styled(UiInput)`
   input::-webkit-outer-spin-button,
@@ -44,7 +45,7 @@ export const InputNumber = styled(UiInput)`
   height: 50px;
   width: 100%;
   font-size: 16px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   padding: 16px 20px;
   ${mixIns.borderRadius}
   .ant-input-suffix {
@@ -52,7 +53,7 @@ export const InputNumber = styled(UiInput)`
   }
 `;
 export const PriceSlider = styled(UiSlider)`
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   &.ant-slider:hover .ant-slider-track {
     background-color: ${colors.lightText};
   }
@@ -165,7 +166,7 @@ export const AdvancedCollapsePanel = styled(Collapse.Panel)``;
 export const TimePolicyHeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 `;
 export const TimePolicyHeader = styled.h4`
   font-size: 14px;
@@ -175,7 +176,6 @@ export const TimePolicyHeader = styled.h4`
 export const TimePolicySelect = styled(Select)`
   &.ant-select {
     width: 100%;
-    margin-bottom: 20px;
   }
   &.ant-select .ant-select-selector {
     height: 50px;
@@ -184,11 +184,18 @@ export const TimePolicySelect = styled(Select)`
     ${mixIns.borderRadius}
   }
 `;
+export const DatePicker = styled(UiDatePicker)`
+  &.ant-picker {
+    margin-bottom: 16px;
+    height: 50px;
+    ${mixIns.borderRadius}
+  }
+`;
 
 export const ExecutionHeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 `;
 export const ExecutionHeader = styled.h4`
   font-size: 14px;
@@ -199,7 +206,7 @@ export const ExecutionRadioGroup = styled(Radio.Group)`
   width: 100%;
   display: flex;
   height: 50px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   .ant-radio-button-wrapper:first-child {
     ${mixIns.borderRadius}
   }

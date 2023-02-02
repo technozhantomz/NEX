@@ -1,5 +1,6 @@
 import { SliderMarks } from "antd/lib/slider";
 import counterpart from "counterpart";
+import moment from "moment";
 import { useRouter } from "next/router";
 
 import { defaultToken } from "../../../../../../api/params";
@@ -17,7 +18,7 @@ import {
 } from "../../../../../../ui/src";
 
 import * as Styled from "./OrderForm.styled";
-import { useOrderForm } from "./hooks";
+import { TimePolicy, useOrderForm } from "./hooks";
 
 type Props = {
   isBuyForm: boolean;
@@ -37,8 +38,8 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
     handlePriceRadioGroupChange,
     priceRadioValue,
     clearPriceRadioGroup,
-    handlePriceSliderChange,
-    priceSliderValue,
+    handleSliderChange,
+    sliderValue,
     timePolicy,
     handleTimePolicyChange,
     transactionMessageDispatch,
@@ -46,6 +47,7 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
     handleCreateLimitOrder,
     handleExecutionChange,
     executionValue,
+    handleExpirationCustomChange,
   } = useOrderForm({
     isBuyForm,
     formType,
@@ -156,11 +158,11 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
             />
           </Styled.AmountFormItem>
           <Styled.PriceSlider
-            value={priceSliderValue}
+            value={sliderValue}
             min={0}
             max={100}
             marks={sliderMarks}
-            onChange={handlePriceSliderChange}
+            onChange={handleSliderChange}
           />
           <Styled.AmountFormItem
             name="total"
@@ -212,11 +214,22 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
                 </Tooltip>
               </Styled.TimePolicyHeaderContainer>
               <Styled.TimePolicySelect
+                style={{
+                  marginBottom:
+                    timePolicy !== TimePolicy.Good_Til_Time ? "16px" : "8px",
+                }}
                 value={timePolicy}
                 options={timePolicyOptions}
                 onChange={handleTimePolicyChange}
               />
-
+              {timePolicy === TimePolicy.Good_Til_Time && (
+                <Styled.DatePicker
+                  showTime
+                  showToday={false}
+                  disabledDate={(current) => current < moment().add(1, "hour")}
+                  onChange={handleExpirationCustomChange}
+                />
+              )}{" "}
               <Styled.ExecutionHeaderContainer>
                 <Styled.ExecutionHeader>
                   {counterpart.translate(

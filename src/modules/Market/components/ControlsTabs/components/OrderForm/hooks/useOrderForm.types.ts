@@ -1,4 +1,5 @@
 import { RadioChangeEvent } from "antd";
+import * as moment from "moment";
 import { Dispatch } from "react";
 
 import {
@@ -26,8 +27,8 @@ export type UseOrderFormResult = {
   }: RadioChangeEvent) => void;
   priceRadioValue: string | undefined;
   clearPriceRadioGroup: () => void;
-  handlePriceSliderChange: (value: number) => void;
-  priceSliderValue: number;
+  handleSliderChange: (value: number) => void;
+  sliderValue: number;
   timePolicy: TimePolicy;
   handleTimePolicyChange: (value: any) => void;
   transactionMessageDispatch: Dispatch<TransactionMessageAction>;
@@ -35,6 +36,11 @@ export type UseOrderFormResult = {
   handleCreateLimitOrder: (signerKey: SignerKey) => Promise<void>;
   executionValue: ExecutionType;
   handleExecutionChange: ({ target: { value } }: RadioChangeEvent) => void;
+  expirationCustomTime: moment.Moment | null;
+  handleExpirationCustomChange: (
+    value: moment.Moment | null,
+    _dateString: string
+  ) => void;
 };
 
 export type FormValidation = {

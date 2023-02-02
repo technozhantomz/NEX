@@ -1170,6 +1170,8 @@ export const en = {
         "WhaleVault is not installed. Please install WhaleVault extension and reload the app",
       wrong_whalevault_keys: "Added keys to WhaleVault are not correct",
       post_only_limit_order: "Unable to create post only limit order",
+      missing_custom_expiration_time:
+        "Please select the custom expiration time or change the time policy of the order",
     },
     success: {
       successfully_transferred:

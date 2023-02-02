@@ -1171,6 +1171,8 @@ export const ru = {
       wrong_whalevault_keys: "Добавленные ключи в WhaleVault неверны",
       post_only_limit_order:
         "Невозможно создать лимитный ордер только для публикации",
+      missing_custom_expiration_time:
+        "Выберите пользовательское время истечения срока действия или измените временную политику заказа.",
     },
     success: {
       successfully_transferred:

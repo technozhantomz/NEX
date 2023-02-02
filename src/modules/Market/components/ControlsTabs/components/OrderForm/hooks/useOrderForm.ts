@@ -1,5 +1,6 @@
 import { RadioChangeEvent } from "antd";
 import counterpart from "counterpart";
+import * as moment from "moment";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 
@@ -47,17 +48,21 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     asks,
     bids,
   } = useMarketContext();
-  const orderForm = useMemo(() => {
-    return isBuyForm ? buyOrderForm : sellOrderForm;
-  }, [isBuyForm, buyOrderForm, sellOrderForm]);
   const { calculateCreateLimitOrderFee } = useFees();
+
   const [timePolicy, setTimePolicy] = useState<TimePolicy>(
     TimePolicy.Good_Til_Canceled
   );
   const [priceRadioValue, setPriceRadioValue] = useState<string>();
-  const [priceSliderValue, setPriceSliderValue] = useState<number>(0);
+  const [sliderValue, setSliderValue] = useState<number>(0);
   const [executionValue, setExecutionValue] =
     useState<ExecutionType>("allow-taker");
+  const [expirationCustomTime, setExpirationCustomTime] =
+    useState<moment.Moment | null>(null);
+
+  const orderForm = useMemo(() => {
+    return isBuyForm ? buyOrderForm : sellOrderForm;
+  }, [isBuyForm, buyOrderForm, sellOrderForm]);
 
   const balance = useMemo(() => {
     const baseSymbol = (pair as string).split("_")[1];
@@ -108,7 +113,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
         selectedPair.base.precision === selectedPair.quote.precision;
       if (isSamePrecisions) {
         firstPrecision = Math.floor(selectedPair.base.precision / 2);
-        secondPrecision = Math.floor(selectedPair.base.precision / 2);
+        secondPrecision = Math.floor(selectedPair.base.precision / 2) + 1;
       } else {
         const smallToBigRatio =
           selectedPair.base.precision > selectedPair.quote.precision
@@ -129,8 +134,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
         if (firstPrecision === 0) {
           firstPrecision = leastPrecision;
           secondPrecision = secondPrecision - leastPrecision;
-        }
-        if (secondPrecision === 0) {
+        } else if (secondPrecision === 0) {
           secondPrecision = leastPrecision;
           firstPrecision = firstPrecision - leastPrecision;
         }
@@ -158,9 +162,10 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       };
     }
   }, [selectedPair]);
+
   const handleFieldPrecision = useCallback(
-    (fieldValue: string, fieldName: string, assetPrecision: number) => {
-      const precisedValue = limitByPrecision(fieldValue, assetPrecision);
+    (fieldValue: string, fieldName: string, precision: number) => {
+      const precisedValue = limitByPrecision(fieldValue, precision);
 
       const fieldsValueObject: {
         [fieldName: string]: string;
@@ -173,23 +178,17 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
   );
   const handleFormPrecision = useCallback(
     (changedValues: any) => {
-      if (selectedPair) {
-        if (changedValues.price) {
-          handleFieldPrecision(changedValues.price, "price", precisions.price);
-        }
-        if (changedValues.amount) {
-          handleFieldPrecision(
-            changedValues.amount,
-            "amount",
-            precisions.amount
-          );
-        }
-        if (changedValues.total) {
-          handleFieldPrecision(changedValues.total, "total", precisions.total);
-        }
+      if (changedValues.price) {
+        handleFieldPrecision(changedValues.price, "price", precisions.price);
+      }
+      if (changedValues.amount) {
+        handleFieldPrecision(changedValues.amount, "amount", precisions.amount);
+      }
+      if (changedValues.total) {
+        handleFieldPrecision(changedValues.total, "total", precisions.total);
       }
     },
-    [selectedPair, handleFieldPrecision, isBuyForm, precisions]
+    [handleFieldPrecision, precisions]
   );
   const handleRelationsBetweenInputs = useCallback(
     (changedValues: any, allValues: any) => {
@@ -197,7 +196,10 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       if (selectedPair) {
         baseRoundTo = selectedPair.base.precision;
       }
-      if (changedValues.price || changedValues.amount) {
+      if (
+        changedValues.price !== undefined ||
+        changedValues.amount !== undefined
+      ) {
         if (
           allValues.price &&
           allValues.price > 0 &&
@@ -216,7 +218,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     },
     [orderForm, selectedPair]
   );
-  const specifyPriceSliderValue = useCallback(() => {
+  const specifySliderValue = useCallback(() => {
     const allValues = orderForm.getFieldsValue() as any;
     if (isBuyForm) {
       const userBaseBalance =
@@ -225,12 +227,12 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
               ?.amount
           : 0;
       if (allValues.total) {
-        const sliderValue = !userBaseBalance
-          ? 0
-          : Math.floor((allValues.total / userBaseBalance) * 100);
-        setPriceSliderValue(sliderValue);
+        const sliderValue = userBaseBalance
+          ? Math.floor((allValues.total / userBaseBalance) * 100)
+          : 0;
+        setSliderValue(sliderValue);
       } else {
-        setPriceSliderValue(0);
+        setSliderValue(0);
       }
     } else {
       const userQuoteBalance =
@@ -239,23 +241,27 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
               ?.amount
           : 0;
       if (allValues.amount) {
-        const sliderValue = !userQuoteBalance
-          ? 0
-          : Math.floor((allValues.amount / userQuoteBalance) * 100);
-        setPriceSliderValue(sliderValue);
+        const sliderValue = userQuoteBalance
+          ? Math.floor((allValues.amount / userQuoteBalance) * 100)
+          : 0;
+        setSliderValue(sliderValue);
       } else {
-        setPriceSliderValue(0);
+        setSliderValue(0);
       }
     }
-  }, [orderForm, isBuyForm, assets, selectedPair, setPriceSliderValue]);
+  }, [orderForm, isBuyForm, assets, selectedPair, setSliderValue]);
+
   const handleValuesChange = useCallback(
     (changedValues: any, allValues: any) => {
+      console.log("changedValues", changedValues);
+      console.log("all Values", allValues);
       handleFormPrecision(changedValues);
       handleRelationsBetweenInputs(changedValues, allValues);
-      specifyPriceSliderValue();
+      specifySliderValue();
     },
-    [handleFormPrecision, handleRelationsBetweenInputs, specifyPriceSliderValue]
+    [handleFormPrecision, handleRelationsBetweenInputs, specifySliderValue]
   );
+
   const handlePriceRadioGroupChange = useCallback(
     ({ target: { value } }: RadioChangeEvent) => {
       setPriceRadioValue(value);
@@ -293,27 +299,28 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     },
     [
       setPriceRadioValue,
-      orderForm,
       lastTradeHistory,
       isBuyForm,
       asks,
       bids,
+      orderForm,
       handleValuesChange,
     ]
   );
   const clearPriceRadioGroup = useCallback(() => {
     setPriceRadioValue(undefined);
   }, [setPriceRadioValue]);
-  const handlePriceSliderChange = useCallback(
+
+  const handleSliderChange = useCallback(
     (value: number) => {
       if (isBuyForm) {
-        const userBaseAsset =
+        const userBaseBalance =
           assets && assets.length
             ? assets.find((asset) => asset.symbol === selectedPair?.base.symbol)
                 ?.amount
             : 0;
-        const total = userBaseAsset
-          ? String(userBaseAsset * (value / 100))
+        const total = userBaseBalance
+          ? String(userBaseBalance * (value / 100))
           : "0";
         const formPrice: string = orderForm.getFieldValue("price");
         const askPrice = asks && asks.length ? asks[0].price : undefined;
@@ -351,7 +358,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       }
     },
     [
-      setPriceSliderValue,
+      setSliderValue,
       isBuyForm,
       assets,
       selectedPair,
@@ -361,11 +368,47 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     ]
   );
 
+  const timePolicyOptions = [
+    {
+      label: counterpart.translate(
+        "pages.market.tabs.controls.good_til_canceled"
+      ),
+      value: TimePolicy.Good_Til_Canceled,
+    },
+    {
+      label: counterpart.translate("pages.market.tabs.controls.good_til_time"),
+      value: TimePolicy.Good_Til_Time,
+    },
+    {
+      label: counterpart.translate("pages.market.tabs.controls.fill_or_kill"),
+      value: TimePolicy.Fill_Or_Kill,
+    },
+    {
+      label: counterpart.translate(
+        "pages.market.tabs.controls.immediate_or_cancel"
+      ),
+      value: TimePolicy.Immediate_Or_Cancel,
+    },
+  ];
   const handleTimePolicyChange = useCallback(
     (value: any) => {
       setTimePolicy(value);
+      setExpirationCustomTime(null);
     },
-    [setTimePolicy]
+    [setTimePolicy, setExpirationCustomTime]
+  );
+  const handleExpirationCustomChange = useCallback(
+    (value: moment.Moment | null, _dateString: string) => {
+      setExpirationCustomTime(value);
+    },
+    [setExpirationCustomTime]
+  );
+
+  const handleExecutionChange = useCallback(
+    ({ target: { value } }: RadioChangeEvent) => {
+      setExecutionValue(value);
+    },
+    [setExecutionValue]
   );
 
   const validatePrice = (_: unknown, value: number) => {
@@ -410,7 +453,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     }
     return Promise.resolve();
   };
-
   const validateTotalForBuyOrders = (value: number) => {
     let errorMessage = "";
     const userBaseAsset = assets.find(
@@ -436,7 +478,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     }
     return errorMessage;
   };
-
   const validateTotal = (_: unknown, value: number) => {
     if (Number(value) <= 0) {
       return Promise.reject(
@@ -465,7 +506,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     }
     return Promise.resolve();
   };
-
   const formValidation = {
     price: [
       {
@@ -490,53 +530,37 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     ],
   };
 
-  const timePolicyOptions = [
-    {
-      label: counterpart.translate(
-        "pages.market.tabs.controls.good_til_canceled"
-      ),
-      value: TimePolicy.Good_Til_Canceled,
+  const createLimitOrderTimePolicy = useCallback(
+    (timePolicy: TimePolicy, expirationCustomTime: moment.Moment | null) => {
+      let expiration = "";
+      let fillOrKill = false;
+      switch (timePolicy) {
+        case TimePolicy.Fill_Or_Kill:
+          expiration = new Date(
+            new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+          ).toISOString();
+          fillOrKill = true;
+          break;
+        case TimePolicy.Good_Til_Canceled:
+          expiration = new Date(
+            new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+          ).toISOString();
+          fillOrKill = false;
+          break;
+        case TimePolicy.Immediate_Or_Cancel:
+          expiration = new Date(new Date().getTime() + 3000).toISOString();
+          fillOrKill = false;
+          break;
+        case TimePolicy.Good_Til_Time:
+          fillOrKill = false;
+          expiration = (expirationCustomTime as moment.Moment)
+            .toDate()
+            .toISOString();
+      }
+      return { expiration, fillOrKill };
     },
-    // {
-    //   label: counterpart.translate("pages.market.tabs.controls.good_til_time"),
-    //   value: TimePolicy.Good_Til_Time,
-    // },
-    {
-      label: counterpart.translate("pages.market.tabs.controls.fill_or_kill"),
-      value: TimePolicy.Fill_Or_Kill,
-    },
-    {
-      label: counterpart.translate(
-        "pages.market.tabs.controls.immediate_or_cancel"
-      ),
-      value: TimePolicy.Immediate_Or_Cancel,
-    },
-  ];
-
-  const createLimitOrderTimePolicy = useCallback((timePolicy: TimePolicy) => {
-    let expiration = "";
-    let fillOrKill = false;
-    switch (timePolicy) {
-      case TimePolicy.Fill_Or_Kill:
-        expiration = new Date(
-          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
-        ).toISOString();
-        fillOrKill = true;
-        break;
-      case TimePolicy.Good_Til_Canceled:
-        expiration = new Date(
-          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
-        ).toISOString();
-        fillOrKill = false;
-        break;
-      case TimePolicy.Immediate_Or_Cancel:
-        expiration = new Date(new Date().getTime() + 3000).toISOString();
-        fillOrKill = false;
-        break;
-    }
-    return { expiration, fillOrKill };
-  }, []);
-
+    []
+  );
   const checkPostOnlyPossibility = useCallback(
     (values: OrderForm) => {
       const price = values.price;
@@ -548,14 +572,25 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     },
     [isBuyForm, asks, bids]
   );
-
   const handleCreateLimitOrder = useCallback(
     async (signerKey: SignerKey) => {
       transactionMessageDispatch({
         type: TransactionMessageActionType.CLEAR,
       });
       const values = orderForm.getFieldsValue();
-      const { expiration, fillOrKill } = createLimitOrderTimePolicy(timePolicy);
+      if (timePolicy === TimePolicy.Good_Til_Time && !expirationCustomTime) {
+        transactionMessageDispatch({
+          type: TransactionMessageActionType.ERROR,
+          message: counterpart.translate(
+            "field.errors.missing_custom_expiration_time"
+          ),
+        });
+        return;
+      }
+      const { expiration, fillOrKill } = createLimitOrderTimePolicy(
+        timePolicy,
+        expirationCustomTime
+      );
       if (executionValue === "post-only") {
         const isPossible = checkPostOnlyPossibility(values);
         if (!isPossible) {
@@ -622,15 +657,15 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       executionValue,
       checkPostOnlyPossibility,
       createLimitOrderTimePolicy,
+      expirationCustomTime,
     ]
   );
+  console.log("expiration", expirationCustomTime);
+  // useEffect(() => {
+  //   if (formType === "market") {
 
-  const handleExecutionChange = useCallback(
-    ({ target: { value } }: RadioChangeEvent) => {
-      setExecutionValue(value);
-    },
-    [setExecutionValue]
-  );
+  //   }
+  // }, [formType]);
 
   return {
     balance,
@@ -642,8 +677,8 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     handlePriceRadioGroupChange,
     priceRadioValue,
     clearPriceRadioGroup,
-    handlePriceSliderChange,
-    priceSliderValue,
+    handleSliderChange,
+    sliderValue,
     timePolicy,
     handleTimePolicyChange,
     transactionMessageState,
@@ -651,5 +686,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     transactionMessageDispatch,
     executionValue,
     handleExecutionChange,
+    expirationCustomTime,
+    handleExpirationCustomChange,
   };
 }
