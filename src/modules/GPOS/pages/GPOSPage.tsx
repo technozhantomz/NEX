@@ -22,7 +22,7 @@ const GPOSPage: NextPage = () => {
     setIsMobileDropdownVisible,
   } = useGposPage();
   const renderTabBar = MobileTabBar({
-    sm,
+    showMobileMenu: sm,
     visible: isMobileDropdownVisible,
     tab,
     setVisible: setIsMobileDropdownVisible,

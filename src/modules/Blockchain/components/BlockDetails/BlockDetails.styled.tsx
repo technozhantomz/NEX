@@ -5,29 +5,11 @@ import {
 } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
-import { mixIns } from "../../../../ui/src/mixins";
 
 export const BlockCard = styled(UiCard)`
   .ant-card-body {
     color: ${colors.textColor}
     padding: 0;
-    .ant-tabs-tab {
-      justify-content: center;
-      padding: 33px 28px 10px;
-    }
-    .ant-tabs-top > .ant-tabs-nav::before {
-      ${mixIns.inActiveTab}
-    }
-    .ant-tabs > .ant-tabs-nav .ant-tabs-nav-list {
-      justify-content: space-between;
-      width: 100%;
-    }
-    .ant-tabs-ink-bar {
-      height: 2pt;
-    }
-    .ant-tabs-nav-operations {
-      display: none;
-    }
   }
 `;
 export const StatsCardsDeck = styled(UIStatsCardsDeck)``;

@@ -9,7 +9,11 @@ export const Row = styled(UiRow)`
   align-items: baseline;
 `;
 
-export const Col = styled(UiCol)``;
+export const Col = styled(UiCol)`
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 5px !important;
+`;
 
 export const Statistic = styled(UiStatistic)`
   .ant-statistic-title {

@@ -617,6 +617,7 @@ export const ru = {
         block_id: "Идентификатор блока",
         merkle_root: "Корень Меркла",
         previous_secret: "Предыдущий секрет",
+        next_secret: "Следующий секрет",
         witness_signature: "Подпись свидетеля",
         search_transactions: "Поиск транзакций",
       },
