@@ -33,7 +33,9 @@ Browser (Google Chrome):
 
 Browser (Firefox): 
 
-NEX release or git commit hash:
+NEX release or git commit hash: <!-- mandatory -->
+
+Peerplays blockchain version or commit hash: <!-- mandatory -->
 
 Bitcoin version: <!-- mandatory for environments with Bitcoin SONs -->
 
