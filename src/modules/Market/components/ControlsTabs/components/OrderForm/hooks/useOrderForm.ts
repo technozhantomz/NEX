@@ -19,6 +19,7 @@ import {
   useUserContext,
 } from "../../../../../../../common/providers";
 import { Asset, OrderForm, SignerKey } from "../../../../../../../common/types";
+import { Form } from "../../../../../../../ui/src";
 
 import {
   ExecutionType,
@@ -63,6 +64,9 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
   const orderForm = useMemo(() => {
     return isBuyForm ? buyOrderForm : sellOrderForm;
   }, [isBuyForm, buyOrderForm, sellOrderForm]);
+  const transactionModalPrice: string = Form.useWatch("price", orderForm);
+  const transactionModalAmount: string = Form.useWatch("amount", orderForm);
+  const transactionModalTotal: string = Form.useWatch("total", orderForm);
 
   const balance = useMemo(() => {
     const baseSymbol = (pair as string).split("_")[1];
@@ -253,8 +257,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
 
   const handleValuesChange = useCallback(
     (changedValues: any, allValues: any) => {
-      console.log("changedValues", changedValues);
-      console.log("all Values", allValues);
       handleFormPrecision(changedValues);
       handleRelationsBetweenInputs(changedValues, allValues);
       specifySliderValue();
@@ -545,14 +547,11 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
           expiration = new Date(
             new Date().getTime() + 1000 * 60 * 60 * 24 * 365
           ).toISOString();
-          fillOrKill = false;
           break;
         case TimePolicy.Immediate_Or_Cancel:
           expiration = new Date(new Date().getTime() + 3000).toISOString();
-          fillOrKill = false;
           break;
         case TimePolicy.Good_Til_Time:
-          fillOrKill = false;
           expiration = (expirationCustomTime as moment.Moment)
             .toDate()
             .toISOString();
@@ -660,7 +659,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       expirationCustomTime,
     ]
   );
-  console.log("expiration", expirationCustomTime);
+
   // useEffect(() => {
   //   if (formType === "market") {
 
@@ -688,5 +687,8 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     handleExecutionChange,
     expirationCustomTime,
     handleExpirationCustomChange,
+    transactionModalPrice,
+    transactionModalAmount,
+    transactionModalTotal,
   };
 }

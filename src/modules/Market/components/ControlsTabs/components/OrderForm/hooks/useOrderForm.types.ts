@@ -41,6 +41,9 @@ export type UseOrderFormResult = {
     value: moment.Moment | null,
     _dateString: string
   ) => void;
+  transactionModalPrice: string;
+  transactionModalAmount: string;
+  transactionModalTotal: string;
 };
 
 export type FormValidation = {

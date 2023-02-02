@@ -28,6 +28,7 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
   const { pair } = router.query;
+  const activePair = pair as string;
   const {
     balance,
     formValidation,
@@ -48,6 +49,9 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
     handleExecutionChange,
     executionValue,
     handleExpirationCustomChange,
+    transactionModalPrice,
+    transactionModalAmount,
+    transactionModalTotal,
   } = useOrderForm({
     isBuyForm,
     formType,
@@ -315,19 +319,19 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
           account={localStorageAccount}
           fee={fees.feeAmount}
           transactionType="limit_order_create"
-          // price={`${price} ${activePair.split("_")[1]} / ${
-          //   activePair.split("_")[0]
-          // }`}
-          // buy={
-          //   isBuyOrder
-          //     ? `${quantity} ${activePair.split("_")[0]}`
-          //     : `${total} ${activePair.split("_")[1]}`
-          // }
-          // sell={
-          //   isBuyOrder
-          //     ? `${total} ${activePair.split("_")[1]}`
-          //     : `${quantity} ${activePair.split("_")[0]}`
-          // }
+          price={`${transactionModalPrice} ${activePair.split("_")[1]} / ${
+            activePair.split("_")[0]
+          }`}
+          buy={
+            isBuyForm
+              ? `${transactionModalAmount} ${activePair.split("_")[0]}`
+              : `${transactionModalTotal} ${activePair.split("_")[1]}`
+          }
+          sell={
+            isBuyForm
+              ? `${transactionModalTotal} ${activePair.split("_")[1]}`
+              : `${transactionModalAmount} ${activePair.split("_")[0]}`
+          }
         />
         <PasswordModal
           visible={isPasswordModalVisible}
