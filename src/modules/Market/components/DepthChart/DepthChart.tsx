@@ -12,7 +12,6 @@ if (typeof Highcharts === "object") {
 export const DepthChart = (): JSX.Element => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const { depthChartOptions } = useDepthChart();
-  console.log({ depthChartOptions });
 
   return (
     <>
