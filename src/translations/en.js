@@ -709,6 +709,26 @@ export const en = {
           all: "Trade history",
           user: "My history",
         },
+        controls: {
+          limit: "Limit",
+          market: "Market",
+          advanced: "Advanced",
+          time_policy: "Time in force policy",
+          time_policy_description:
+            "This option sets the rules for how long your order will exist on the order book or how it must execute",
+          good_til_canceled: "Good till canceled (default)",
+          good_til_time: "Good till time",
+          fill_or_kill: "Fill or kill",
+          maker_or_cancel: "Maker or cancel",
+          immediate_or_cancel: "Immediate or cancel",
+          execution: "Execution",
+          execution_description:
+            "The Post Only option will ensure that your order will not immediately execute against an existing order. Your whole order will be posted to the order book. The Allow Taker option means that all or some of your order can immediately execute against an existing order",
+          post_only: "Post only",
+          allow_taker: "Allow taker",
+          market_fee_description:
+            "The owner of %(asset)s charges a market fee of %(percent)s%% for buy orders. This fee will be subtracted from the amount you receive when your order fills, it is not paid when placing an order.",
+        },
       },
       twenty_four_hour_high: "24h High",
       twenty_four_hour_low: "24h Low",
@@ -1149,6 +1169,9 @@ export const en = {
       whalevault_not_installed:
         "WhaleVault is not installed. Please install WhaleVault extension and reload the app",
       wrong_whalevault_keys: "Added keys to WhaleVault are not correct",
+      post_only_limit_order: "Unable to create post only limit order",
+      missing_custom_expiration_time:
+        "Please select the custom expiration time or change the time policy of the order",
     },
     success: {
       successfully_transferred:

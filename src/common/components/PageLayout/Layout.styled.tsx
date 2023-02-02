@@ -60,10 +60,6 @@ export const Layout = styled.main`
       &.card-layout__lrg,
       &.card-layout__xlrg {
         margin: 0 auto;
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-      &.card-layout__xlrg {
         padding-left: 24px;
         padding-right: 24px;
       }

@@ -1,7 +1,9 @@
+import { FormInstance } from "../../../ui/src";
 import {
   Asset,
   MarketOrder,
   MarketPair,
+  OrderForm,
   OrderHistory,
   TradeHistoryRow,
 } from "../../types";
@@ -15,4 +17,6 @@ export type MarketContextType = {
   loadingAsksBids: boolean;
   lastTradeHistory: TradeHistoryRow | undefined;
   fillLastTradeHistory: (lastTradeHistory?: TradeHistoryRow) => void;
+  buyOrderForm: FormInstance<OrderForm>;
+  sellOrderForm: FormInstance<OrderForm>;
 };
