@@ -71,8 +71,9 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
         }
       });
 
-      return groupedAsks.map((asks) => {
+      return groupedAsks.map((asks, index) => {
         return {
+          key: `${threshold}-ask-${index}`,
           quote: roundNum(asks.quote, selectedPair.quote.precision),
           base: roundNum(asks.base, selectedPair.base.precision),
           isBuyOrder: false,
@@ -115,8 +116,9 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
         }
       });
 
-      return groupedBids.map((bids) => {
+      return groupedBids.map((bids, index) => {
         return {
+          key: `${threshold}-bid-${index}`,
           quote: roundNum(bids.quote, selectedPair.quote.precision),
           base: roundNum(bids.base, selectedPair.base.precision),
           isBuyOrder: true,

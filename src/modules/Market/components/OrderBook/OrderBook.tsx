@@ -38,7 +38,7 @@ export const OrderBook = ({ currentPair }: Props): JSX.Element => {
   const thresholdMenu = (
     <Styled.ThresholdMenu onClick={handleThresholdChange}>
       {thresholdValues.map((value) => (
-        <Styled.ThresholdMenu.Item key={value}>
+        <Styled.ThresholdMenu.Item key={`threshold-${value}`}>
           {value}
         </Styled.ThresholdMenu.Item>
       ))}
@@ -84,7 +84,6 @@ export const OrderBook = ({ currentPair }: Props): JSX.Element => {
                 key={`${type}_tooltip`}
               >
                 <Styled.OrdersFilter
-                  key={type}
                   onClick={() => handleFilterChange(type)}
                   className={`order-filters__type--${type}${
                     type === filter ? " active" : ""
