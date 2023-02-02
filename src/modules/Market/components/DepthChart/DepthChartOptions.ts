@@ -5,12 +5,12 @@ export const options: Highcharts.Options = {
     renderTo: "container",
     type: "area",
   },
-  //   title: {
-  //     text: "ETH-BTC Market Depth",
-  //   },
+  title: {
+    text: "Market Depth",
+  },
   xAxis: {
-    minPadding: 0,
-    maxPadding: 0,
+    minPadding: 40,
+    maxPadding: 40,
     plotLines: [
       {
         color: "#888",

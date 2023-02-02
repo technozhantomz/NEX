@@ -24,6 +24,7 @@ export function useDepthChart(): UseDepthChartResult {
 
   const formDepthChartData = useCallback(() => {
     //sort quote and base
+    if (!asks || !bids) return;
     const sortedAsks = asks
       .sort((a, b) => {
         if (parseFloat(a.quote) - parseFloat(b.quote) !== 0) {
@@ -45,12 +46,24 @@ export function useDepthChart(): UseDepthChartResult {
 
   useEffect(() => {
     formDepthChartData();
-    depthChartSeries[0].data = depthChartData.bids;
-    depthChartSeries[1].data = depthChartData.asks;
-    setDepthChartSeries(depthChartSeries);
-    depthChartOptions.series = depthChartSeries;
-    setDepthChartOptions(depthChartOptions);
-  }, [asks, bids]);
+  }, [asks, bids, formDepthChartData]);
+
+  useEffect(() => {
+    setDepthChartSeries((prevDepthChartSeries) => {
+      const updatedDepthChartSeries = [...prevDepthChartSeries];
+      updatedDepthChartSeries[0].data = depthChartData.bids;
+      updatedDepthChartSeries[1].data = depthChartData.asks;
+      return updatedDepthChartSeries;
+    });
+  }, [depthChartData]);
+
+  useEffect(() => {
+    setDepthChartOptions((prevDepthChartOptions) => {
+      const updatedDepthChartOptions = { ...prevDepthChartOptions };
+      updatedDepthChartOptions.series = depthChartSeries;
+      return updatedDepthChartOptions;
+    });
+  }, [depthChartSeries]);
 
   return { depthChartData, depthChartOptions };
 }
