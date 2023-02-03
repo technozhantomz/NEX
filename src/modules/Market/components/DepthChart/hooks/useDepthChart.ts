@@ -27,18 +27,18 @@ export function useDepthChart(): UseDepthChartResult {
     if (!asks || !bids) return;
     const sortedAsks = asks
       .sort((a, b) => {
-        if (parseFloat(a.quote) - parseFloat(b.quote) !== 0) {
-          return parseFloat(a.quote) - parseFloat(b.quote);
+        if (Number(a.quote) - Number(b.quote) !== 0) {
+          return Number(a.quote) - Number(b.quote);
         }
-        return parseFloat(a.base) - parseFloat(b.base);
+        return Number(a.base) - Number(b.base);
       })
       .map((row) => [Number(row.quote), Number(row.base)] as DepthData);
     const sortedBids = bids
       .sort((a, b) => {
-        if (parseFloat(a.quote) - parseFloat(b.quote) !== 0) {
-          return parseFloat(a.quote) - parseFloat(b.quote);
+        if (Number(a.quote) - Number(b.quote) !== 0) {
+          return Number(a.quote) - Number(b.quote);
         }
-        return parseFloat(a.base) - parseFloat(b.base);
+        return Number(a.base) - Number(b.base);
       })
       .map((row) => [Number(row.quote), Number(row.base)] as DepthData);
     setDepthChartData({ asks: sortedAsks, bids: sortedBids });

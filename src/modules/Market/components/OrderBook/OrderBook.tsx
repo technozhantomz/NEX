@@ -106,7 +106,9 @@ export const OrderBook = ({ currentPair }: Props): JSX.Element => {
                 <Styled.ThresholdLabel>
                   {counterpart.translate(`field.labels.threshold`)}
                 </Styled.ThresholdLabel>
-                <Styled.ThresholdValue>{threshold}</Styled.ThresholdValue>
+                <Styled.ThresholdValue>
+                  {threshold.toFixed(Math.log10(Math.round(1 / threshold)))}
+                </Styled.ThresholdValue>
                 <DownOutlined />
               </a>
             </Styled.ThresholdDropdown>
