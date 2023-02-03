@@ -80,6 +80,7 @@ build-production:
     - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env
     - echo "NEXT_PUBLIC_FORCE_VERSION='$NEXT_PUBLIC_FORCE_VERSION'" >> .env
+    - echo "NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID='$NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID'" >> .env
     - npm install
     - npm run build
     - cd .. && tar czf nex-prod.tar.gz NEX/
