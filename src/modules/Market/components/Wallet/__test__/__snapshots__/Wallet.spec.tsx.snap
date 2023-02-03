@@ -38,7 +38,7 @@ exports[`Wallet component renders component correctly with props 1`] = `
     <span
       class="sc-eDvSVe lhzfG"
     >
-      10.00
+      20.00
     </span>
   </div>
   <div
@@ -52,7 +52,7 @@ exports[`Wallet component renders component correctly with props 1`] = `
     <span
       class="sc-eDvSVe lhzfG"
     >
-      20.00
+      10.00
     </span>
   </div>
 </DocumentFragment>

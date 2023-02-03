@@ -23,8 +23,8 @@ describe("useWallet hook", () => {
   it("should return balances of the specified currentPair", () => {
     const { result } = renderHook(() => useWallet({ currentPair }));
     expect(result.current.balances).toEqual({
-      baseAmount: 0.5,
-      quoteAmount: 100,
+      baseAmount: 100,
+      quoteAmount: 0.5,
     });
   });
 
@@ -45,15 +45,15 @@ describe("useWallet hook", () => {
       }
     );
     expect(result.current.balances).toEqual({
-      baseAmount: 0.5,
-      quoteAmount: 100,
+      baseAmount: 100,
+      quoteAmount: 0.5,
     });
     act(() => {
       rerender({ currentPair: "PPY_BTC" });
     });
     expect(result.current.balances).toEqual({
-      baseAmount: 100,
-      quoteAmount: 0.5,
+      baseAmount: 0.5,
+      quoteAmount: 100,
     });
   });
 });

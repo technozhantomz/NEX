@@ -3,6 +3,8 @@ import React from "react";
 
 import { Wallet } from "../index";
 
+jest.mock("next/router", () => require("next-router-mock"));
+
 jest.mock("../hooks", () => ({
   useWallet: jest.fn(() => ({
     balances: {

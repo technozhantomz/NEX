@@ -4,6 +4,7 @@ const DEFAULT_QUOTE = process.env.NEXT_PUBLIC_DEFAULT_QUOTE;
 const FAUCET_URL = process.env.NEXT_PUBLIC_FAUCET_URL;
 const DEFAULT_CHAIN_ID = process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID;
 const FORCE_VERSION = process.env.NEXT_PUBLIC_FORCE_VERSION;
+const GOOGLE_TAG_MANAGER_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID;
 
 /**
  * @namespace Config
@@ -53,4 +54,11 @@ export const config = {
    * @memberof Config
    */
   forceVersion: FORCE_VERSION,
+  /**
+   * Google Tag Manager Id.
+   *
+   * @type {string}
+   * @memberof Config
+   */
+  googleTagManagerId: GOOGLE_TAG_MANAGER_ID,
 };
