@@ -3,6 +3,7 @@ export * from "./AppSettingsProvider";
 export * from "./BrowserHistoryProvider";
 export * from "./PeerplaysApiProvider";
 export * from "./UserProvider";
+export * from "./MarketProvider";
 export * from "./MenuProvider";
 export * from "./AssetsProvider";
 export * from "./FeesProvider";

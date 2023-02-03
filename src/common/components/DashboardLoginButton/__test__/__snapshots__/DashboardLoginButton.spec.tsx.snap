@@ -3,10 +3,10 @@
 exports[`Dashboard login button Deposit tab renders correctly for not logged in user dashboard deposit tab(BTC) 1`] = `
 <DocumentFragment>
   <div
-    class="sc-jGNhvO dYgLZv"
+    class="sc-bQmOxr jxKOwW"
   >
     <button
-      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-3779289f-0 sc-bQmOxr dPgDWt bHmnGx"
+      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-3779289f-0 sc-fWQKxP dPgDWt bHmnGx"
       type="button"
     >
       <span>
@@ -14,7 +14,7 @@ exports[`Dashboard login button Deposit tab renders correctly for not logged in 
       </span>
     </button>
     <p
-      class="sc-bcXHqe cKWvWQ sc-fWQKxP krZzqb"
+      class="sc-bcXHqe cKWvWQ sc-EJAja gBJXbZ"
     >
       <span>
         Don't have a Peerplays account? 
@@ -32,10 +32,10 @@ exports[`Dashboard login button Deposit tab renders correctly for not logged in 
 exports[`Dashboard login button Deposit tab renders correctly for not logged in user dashboard deposit tab(HIVE) 1`] = `
 <DocumentFragment>
   <div
-    class="sc-jGNhvO dYgLZv"
+    class="sc-bQmOxr jxKOwW"
   >
     <button
-      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-3779289f-0 sc-bQmOxr dPgDWt bHmnGx"
+      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-3779289f-0 sc-fWQKxP dPgDWt bHmnGx"
       type="button"
     >
       <span>
@@ -43,7 +43,7 @@ exports[`Dashboard login button Deposit tab renders correctly for not logged in 
       </span>
     </button>
     <p
-      class="sc-bcXHqe cKWvWQ sc-fWQKxP krZzqb"
+      class="sc-bcXHqe cKWvWQ sc-EJAja gBJXbZ"
     >
       <span>
         Don't have a Peerplays account? 

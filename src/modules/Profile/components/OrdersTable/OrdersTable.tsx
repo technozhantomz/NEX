@@ -2,14 +2,14 @@ import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import { useCallback, useRef } from "react";
 
-import { OrderColumnType } from "..";
 import {
   renderPaginationItem,
   TableDownloader,
+  UserOrderColumnType,
 } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
+import { OrderTableRow } from "../../../../common/types";
 import { DeleteOutlined, List } from "../../../../ui/src";
-import { OrderTableRow } from "../../types";
 import { OrdersPrintTable } from "../OrdersPrintTable";
 
 import * as Styled from "./OrdersTable.styled";
@@ -17,7 +17,7 @@ import * as Styled from "./OrdersTable.styled";
 type Args = {
   header: string;
   loading: boolean;
-  ordersColumns: OrderColumnType[];
+  ordersColumns: UserOrderColumnType[];
   ordersTableRows: OrderTableRow[];
   onCancelClick?: (orderId: string) => void;
 };

@@ -20,4 +20,6 @@ export const symbolsToBeExcepted = [
   "WGKGQTICUIYEYTWV",
   "WNIPJIXZAFZGHGIC",
   "WTFUN",
+  "KOEBUNCPN",
+  "NATHANBUNCPNN",
 ];
