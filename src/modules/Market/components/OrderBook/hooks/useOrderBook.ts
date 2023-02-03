@@ -47,6 +47,30 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
     [setFilter]
   );
 
+  const reduceOrdersByPrice = useCallback((orders: MarketOrder[]) => {
+    const reducedOrders = orders.reduce((previousOrders, currentOrder) => {
+      const repeatedPriceIndex = previousOrders.findIndex((previousOrder) => {
+        previousOrder.price === currentOrder.price;
+      });
+      if (repeatedPriceIndex === -1) {
+        previousOrders.push(currentOrder);
+      } else {
+        const orderWithRepeatedPrice = previousOrders[repeatedPriceIndex];
+        previousOrders[repeatedPriceIndex] = {
+          ...orderWithRepeatedPrice,
+          quote: String(
+            Number(orderWithRepeatedPrice.quote) + Number(currentOrder.quote)
+          ),
+          base: String(
+            Number(orderWithRepeatedPrice.base) + Number(currentOrder.base)
+          ),
+        };
+      }
+      return previousOrders;
+    }, [] as MarketOrder[]);
+    return reducedOrders;
+  }, []);
+
   const groupAsksByThreshold = useCallback(
     (asks: MarketOrder[], selectedPair: MarketPair, threshold: number) => {
       const filteredAsks = cloneDeep(asks).filter(
@@ -70,8 +94,7 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
           groupedAsks.push({ ...ask, maxPrice: unchangedPrice });
         }
       });
-
-      return groupedAsks.map((asks, index) => {
+      const updatedAsks = groupedAsks.map((asks, index) => {
         return {
           key: `${threshold}-ask-${index}`,
           quote: roundNum(asks.quote, selectedPair.quote.precision),
@@ -85,8 +108,11 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
                 ),
         } as MarketOrder;
       });
+      const reducedAsks = reduceOrdersByPrice(updatedAsks);
+
+      return reducedAsks;
     },
-    [roundNum]
+    [roundNum, reduceOrdersByPrice]
   );
 
   const groupBidsByThreshold = useCallback(
@@ -115,8 +141,7 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
           groupedBids.push({ ...bid, minPrice: unchangedPrice });
         }
       });
-
-      return groupedBids.map((bids, index) => {
+      const updatedBids = groupedBids.map((bids, index) => {
         return {
           key: `${threshold}-bid-${index}`,
           quote: roundNum(bids.quote, selectedPair.quote.precision),
@@ -130,8 +155,11 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
                 ),
         } as MarketOrder;
       });
+      const reducedBids = reduceOrdersByPrice(updatedBids);
+
+      return reducedBids;
     },
-    [roundNum]
+    [roundNum, reduceOrdersByPrice]
   );
 
   const asksRows: MarketOrder[] = useMemo(() => {
