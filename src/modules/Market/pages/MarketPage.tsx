@@ -7,6 +7,7 @@ import { useViewportContext } from "../../../common/providers";
 import { Col } from "../../../ui/src";
 import {
   ControlsTabs,
+  DepthChart,
   HistoryTabs,
   MarketStats,
   OrderBook,
@@ -52,7 +53,7 @@ const MarketPage: NextPage = () => {
               <PriceChart />
             </Styled.PriceChartContainer>
             <Styled.MarketDepthContainer>
-              Market Depth Chart Section
+              <DepthChart />
             </Styled.MarketDepthContainer>
           </Styled.RightBorderedVerticalFlexedCol>
           {/* Order Book section */}
