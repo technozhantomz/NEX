@@ -1,3 +1,4 @@
+export * from "./DepthChart";
 export * from "./UserOrdersTabs";
 export * from "./UserOrdersTable";
 export * from "./HistoryTabs";
