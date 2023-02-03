@@ -97,6 +97,8 @@ describe("symbols To Be Excepted", () => {
       "WGKGQTICUIYEYTWV",
       "WNIPJIXZAFZGHGIC",
       "WTFUN",
+      "KOEBUNCPN",
+      "NATHANBUNCPNN",
     ]);
   });
 });

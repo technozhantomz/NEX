@@ -6,6 +6,6 @@ export type UseGposPageResult = {
   gposBalances: GPOSBalances | undefined;
   loading: boolean;
   calculateGposBalances: () => Promise<void>;
-  isMobileDropdownvisible: boolean;
-  setIsMobileDropdownvisible: Dispatch<SetStateAction<boolean>>;
+  isMobileDropdownVisible: boolean;
+  setIsMobileDropdownVisible: Dispatch<SetStateAction<boolean>>;
 };

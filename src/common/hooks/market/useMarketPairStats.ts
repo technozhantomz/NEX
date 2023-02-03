@@ -1,26 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useAsset } from "..";
+import { useAsset, useMarketHistory } from "..";
 import {
   BITCOIN_ASSET_SYMBOL,
   defaultToken,
   HBD_ASSET_SYMBOL,
   HIVE_ASSET_SYMBOL,
 } from "../../../api/params";
-import { usePeerplaysApiContext } from "../../providers";
-import {
-  Asset,
-  MarketPairStats,
-  PairNameAndMarketStats,
-  Ticker,
-} from "../../types";
+import { Asset, MarketPairStats, PairNameAndMarketStats } from "../../types";
 
 import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
-  const { dbApi } = usePeerplaysApiContext();
   const { getAllAssets, limitByPrecision, ceilPrecision } = useAsset();
-
+  const { getTicker } = useMarketHistory();
   const [allAssets, _setAllAssets] = useState<Asset[] | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -30,10 +23,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         percentChange = "0",
         volume = "0";
       try {
-        const ticker: Ticker = await dbApi("get_ticker", [
-          base.symbol,
-          quote.symbol,
-        ]);
+        const ticker = await getTicker(base, quote);
         if (ticker) {
           latest = ceilPrecision(ticker.latest, base.precision);
           percentChange = limitByPrecision(ticker.percent_change, 1) || "0";
@@ -48,7 +38,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         volume,
       } as MarketPairStats;
     },
-    [dbApi]
+    [getTicker]
   );
 
   const getDefaultPairs = useCallback(() => {

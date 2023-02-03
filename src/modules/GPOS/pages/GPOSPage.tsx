@@ -18,14 +18,14 @@ const GPOSPage: NextPage = () => {
     gposBalances,
     loading,
     calculateGposBalances,
-    isMobileDropdownvisible,
-    setIsMobileDropdownvisible,
+    isMobileDropdownVisible,
+    setIsMobileDropdownVisible,
   } = useGposPage();
   const renderTabBar = MobileTabBar({
     showMobileMenu: sm,
-    visible: isMobileDropdownvisible,
+    visible: isMobileDropdownVisible,
     tab,
-    setVisible: setIsMobileDropdownvisible,
+    setVisible: setIsMobileDropdownVisible,
     defaultKey: "power-up",
     defaultTab: counterpart.translate(`buttons.power_up`),
     selectedTab: counterpart.translate(
@@ -75,7 +75,7 @@ const GPOSPage: NextPage = () => {
       layout="dex"
       onClick={() => {
         if (sm) {
-          isMobileDropdownvisible && setIsMobileDropdownvisible(false);
+          isMobileDropdownVisible && setIsMobileDropdownVisible(false);
         }
       }}
     >
@@ -86,7 +86,7 @@ const GPOSPage: NextPage = () => {
           onTabClick={(key) => {
             if (key === "vote") router.push(`/voting?tab=witnesses`);
             else router.push(`/gpos?tab=${key}`);
-            if (sm) setIsMobileDropdownvisible(false);
+            if (sm) setIsMobileDropdownVisible(false);
           }}
           items={tabItems}
         />

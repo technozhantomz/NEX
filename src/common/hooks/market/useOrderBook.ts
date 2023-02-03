@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import { usePeerplaysApiContext } from "../../providers";
-import { Asset, BookedOrder } from "../../types";
+import { BookedOrder, MarketPair } from "../../types";
 
 import { UseOrderBookResult } from "./useOrderBook.types";
 
@@ -9,10 +9,14 @@ export function useOrderBook(): UseOrderBookResult {
   const { dbApi } = usePeerplaysApiContext();
 
   const getOrderBook = useCallback(
-    async (base: Asset, quote: Asset) => {
+    async (selectedPair: MarketPair) => {
       try {
         const { asks, bids }: { asks: BookedOrder[]; bids: BookedOrder[] } =
-          await dbApi("get_order_book", [base.symbol, quote.symbol, 50]);
+          await dbApi("get_order_book", [
+            selectedPair.base.symbol,
+            selectedPair.quote.symbol,
+            50,
+          ]);
         return {
           asks,
           bids,
