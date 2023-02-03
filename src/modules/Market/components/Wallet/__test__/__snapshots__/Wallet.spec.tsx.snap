@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Wallet component renders component correctly with props 1`] = `
+<DocumentFragment>
+  <h3
+    class="sc-bcXHqe jOHOIm"
+  >
+    Assets
+  </h3>
+  <div
+    class="sc-gswNZR kEhQcI"
+  >
+    <button
+      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 sc-dkrFOg dPgDWt fhfkqL"
+      type="button"
+    >
+      <span>
+        Deposit
+      </span>
+    </button>
+    <button
+      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 sc-dkrFOg dPgDWt fhfkqL"
+      type="button"
+    >
+      <span>
+        Withdraw
+      </span>
+    </button>
+  </div>
+  <div
+    class="sc-hLBbgP kBCcYD"
+  >
+    <span
+      class="sc-jSUZER dqWKZS"
+    >
+      BTC Available:
+    </span>
+    <span
+      class="sc-eDvSVe lhzfG"
+    >
+      10.00
+    </span>
+  </div>
+  <div
+    class="sc-hLBbgP kBCcYD"
+  >
+    <span
+      class="sc-jSUZER dqWKZS"
+    >
+      PPY Available:
+    </span>
+    <span
+      class="sc-eDvSVe lhzfG"
+    >
+      20.00
+    </span>
+  </div>
+</DocumentFragment>
+`;
