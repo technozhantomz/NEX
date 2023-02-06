@@ -70,11 +70,7 @@ export const PriceChartContainer = styled.div`
   }
 `;
 
-export const MarketDepthContainer = styled.div`
-  ${breakpoint.xxl} {
-    min-height: 300px;
-  }
-`;
+export const MarketDepthContainer = styled.div``;
 
 export const TabletTabsContainer = styled.div`
   min-height: 636px;

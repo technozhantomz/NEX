@@ -121,7 +121,6 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
             });
           }
         );
-        console.log("processedOrders2", processedOrders);
         return processedOrders;
       }
     }
