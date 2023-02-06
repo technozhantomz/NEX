@@ -59,10 +59,10 @@ export const SavedFormItem = styled(CardForm.Item)`
 export const Checkbox = styled(UICheckbox)`
   align-items: flex-start;
   .ant-checkbox-inner {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     &::after {
-      left: 35%;
+      left: 25%;
     }
   }
   .checkbox-text {
@@ -70,17 +70,10 @@ export const Checkbox = styled(UICheckbox)`
   }
   ${breakpoint.sm} {
     align-items: flex-start;
-    .ant-checkbox-inner {
-      width: 20px;
-      height: 20px;
-      &::after {
-        left: 25%;
-      }
-    }
   }
 
   .ant-checkbox + span {
-    font-size: 12px;
+    font-size: 14px;
     ${breakpoint.sm} {
       font-size: 16px;
     }

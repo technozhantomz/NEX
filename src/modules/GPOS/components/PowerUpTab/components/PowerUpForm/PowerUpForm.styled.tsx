@@ -18,16 +18,13 @@ export const PowerUpForm = styled(CardForm)`
     text-align: right;
     height: 50px;
     ${breakpoint.sm} {
-      font-size: 20px;
       height: 25px;
     }
   }
   .ant-input-affix-wrapper-lg {
     padding: 0 15px;
-    font-size: 16px;
     ${breakpoint.sm} {
       padding: 20px;
-      font-size: 20px;
     }
   }
 
@@ -38,7 +35,6 @@ export const PowerUpForm = styled(CardForm)`
       height: 50px;
       ${breakpoint.sm} {
         text-align: left;
-        font-size: 20px;
         height: 65px;
         padding: 0 20px;
       }
@@ -53,11 +49,6 @@ export const PowerUpForm = styled(CardForm)`
       .ant-btn-text:focus {
         background: #e3ebf8;
       }
-      ${breakpoint.sm} {
-        .ant-btn-text > span {
-          font-size: 28px;
-        }
-      }
     }
   }
   .ant-form-item:nth-child(3) {
@@ -65,6 +56,9 @@ export const PowerUpForm = styled(CardForm)`
   }
   .ant-form-item:nth-child(4) {
     margin-bottom: 45px;
+  }
+  .ant-form-item:nth-child(5) {
+    margin-bottom: 10px;
   }
 `;
 
