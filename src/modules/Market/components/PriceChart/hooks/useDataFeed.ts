@@ -16,7 +16,7 @@ export function useDataFeed(): UseDataFeedResult {
   const lastBarsCache = new Map();
 
   const configurationData = {
-    supported_resolutions: ["D", "2D", "3D", "W", "3W", "M", "6M"],
+    supported_resolutions: ["D", "2D", "3D", "W", "2W", "3W", "M", "6M", "Y"],
     supports_search: false,
     supports_group_request: false,
     supports_marks: true,

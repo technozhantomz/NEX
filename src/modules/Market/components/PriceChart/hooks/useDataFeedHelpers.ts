@@ -85,8 +85,11 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
         10000
       )) as OrderHistory[];
       if (histories) {
+        const sortedHistoriesByDate = histories.sort((a, b) => {
+          return new Date(a.time).getTime() - new Date(b.time).getTime();
+        });
         const groupedHistories = new Map<number, OrderHistory[]>();
-        histories.forEach((order) => {
+        sortedHistoriesByDate.forEach((order) => {
           const time = new Date(order.time).getTime();
           let group = groupedHistories.get(time);
           if (!group) {
@@ -118,6 +121,7 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
             });
           }
         );
+        console.log("processedOrders2", processedOrders);
         return processedOrders;
       }
     }
