@@ -20,7 +20,9 @@ jest.mock("../../UserOrdersTable", () => ({
 
 describe("UsersOrdersTabs component", () => {
   it("should render tabs with translated labels and UserOrdersTable", () => {
-    const { getByText } = render(<UsersOrdersTabs />);
+    const { getByText, asFragment } = render(<UsersOrdersTabs />);
+
+    expect(asFragment()).toMatchSnapshot();
 
     const openOrdersTab = getByText("pages.market.my_open_orders");
     expect(openOrdersTab).toBeInTheDocument();
