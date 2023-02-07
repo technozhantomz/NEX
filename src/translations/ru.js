@@ -128,7 +128,7 @@ export const ru = {
       asset_issue: {
         title: "Выпустить актив",
         description:
-          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к, %(receiver)s",
+          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к ,%(receiver)s",
       },
       asset_publish_feed: {
         title: "Опубликовать фид",
@@ -159,7 +159,7 @@ export const ru = {
       },
       asset_update_issuer: {
         title: "Обновить владельца объекта",
-        description: "%(issuer)s, переданы права на %(asset)s к, %(newOwner)s",
+        description: "%(issuer)s, переданы права на %(asset)s к ,%(newOwner)s",
       },
       balance_claim: {
         title: "Требовать остаток",

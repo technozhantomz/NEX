@@ -127,7 +127,7 @@ export const en = {
       asset_issue: {
         title: "Issue asset",
         description:
-          "%(issuer)s, issued %(assetAmount)s %(symbol)s to, %(receiver)s",
+          "%(issuer)s, issued %(assetAmount)s %(symbol)s to ,%(receiver)s",
       },
       asset_publish_feed: {
         title: "Publish feed",
