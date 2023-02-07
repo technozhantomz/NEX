@@ -20,7 +20,9 @@ jest.mock("../../HistoryTable", () => ({
 
 describe("HistoryTabs component", () => {
   it("should render tabs with translated labels and HistoryTable", () => {
-    const { getByText } = render(<HistoryTabs />);
+    const { getByText, asFragment } = render(<HistoryTabs />);
+
+    expect(asFragment()).toMatchSnapshot();
 
     const allHistoryTab = getByText("All History");
     expect(allHistoryTab).toBeInTheDocument();
