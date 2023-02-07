@@ -37,12 +37,6 @@ export const PasswordFormItem = styled(Form.Item)`
     align-items: center;
     margin-left: 0;
   }
-  .ant-input-affix-wrapper > input.ant-input {
-    font-size: 12px;
-    ${breakpoint.sm} {
-      font-size: 14px;
-    }
-  }
 `;
 
 export const LabelWrapper = styled.div`
@@ -108,12 +102,6 @@ export const GeneratedKeyInput = styled(KeyInput)`
     margin-right: 10px;
     ${breakpoint.sm} {
       margin-right: 15px;
-    }
-  }
-  .ant-input {
-    font-size: 10px;
-    ${breakpoint.sm} {
-      font-size: 14px;
     }
   }
   ${breakpoint.sm} {

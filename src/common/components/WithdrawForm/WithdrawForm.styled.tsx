@@ -3,12 +3,6 @@ import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 
 export const WithdrawForm = styled(CardForm)`
-  .form-input {
-    font-size: 14px;
-    ${breakpoint.sm} {
-      font-size: 20px;
-    }
-  }
   .ant-input-group.ant-input-group-compact {
     display: flex;
     align-items: center;
@@ -39,10 +33,6 @@ export const WithdrawForm = styled(CardForm)`
       text-align: right;
       direction: ltr;
       padding-right: 30px;
-      font-size: 16px;
-      ${breakpoint.sm} {
-        font-size: 20px;
-      }
     }
     .ant-input[disabled] {
       background-color: unset;

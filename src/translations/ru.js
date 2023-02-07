@@ -128,7 +128,7 @@ export const ru = {
       asset_issue: {
         title: "Выпустить актив",
         description:
-          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к, %(receiver)s",
+          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к , %(receiver)s",
       },
       asset_publish_feed: {
         title: "Опубликовать фид",
