@@ -16,7 +16,9 @@ describe("CreatePriceChart component", () => {
   });
 
   it("should render the component correctly", () => {
-    const { container } = render(<CreatePriceChart />);
+    const { container, asFragment } = render(<CreatePriceChart />);
+
+    expect(asFragment()).toMatchSnapshot();
     expect(container.firstChild).toBeDefined();
   });
 });
