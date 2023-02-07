@@ -9,7 +9,10 @@ describe("PriceChart component", () => {
   });
 
   it("should render the component correctly", () => {
-    const { container } = render(<PriceChart />);
+    const { container, asFragment } = render(<PriceChart />);
+
+    expect(asFragment()).toMatchSnapshot();
+
     expect(container.firstChild).toBeDefined();
   });
 });
