@@ -31,7 +31,7 @@ const MarketPage: NextPage = () => {
     });
 
   const renderHistoryTabs = !xxl ? (
-    <Styled.RightBorderedVerticalFlexedCol xxl={{ span: 5 }}>
+    <Styled.RightBorderedVerticalFlexedCol xxl={{ span: 4 }}>
       {/* Trade History Title */}
       <Styled.HistoryBox>
         <Styled.TradeHistoryContainer>
@@ -48,7 +48,7 @@ const MarketPage: NextPage = () => {
       {/* Charts Section */}
       {!xxl ? (
         <>
-          <Styled.RightBorderedVerticalFlexedCol lg={24} xxl={16}>
+          <Styled.RightBorderedVerticalFlexedCol lg={24} xxl={17}>
             <Styled.PriceChartContainer>
               <PriceChart />
             </Styled.PriceChartContainer>
@@ -57,7 +57,7 @@ const MarketPage: NextPage = () => {
             </Styled.MarketDepthContainer>
           </Styled.RightBorderedVerticalFlexedCol>
           {/* Order Book section */}
-          <Col xxl={8}>
+          <Col xxl={7}>
             <OrderBook currentPair={pair as string} />
           </Col>
         </>
@@ -116,7 +116,7 @@ const MarketPage: NextPage = () => {
             {/* Middle Section */}
             <Styled.RightBorderedVerticalFlexedCol
               lg={{ span: 16 }}
-              xxl={{ span: 14 }}
+              xxl={{ span: 15 }}
             >
               {/* Stats Section */}
               <Styled.StatsBox>

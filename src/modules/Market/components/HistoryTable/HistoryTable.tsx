@@ -19,7 +19,7 @@ export const HistoryTable = ({ forUser = false }: Props): JSX.Element => {
   const desktopScroll = useMemo(() => {
     return {
       y: 1100,
-      x: 240,
+      x: undefined,
       scrollToFirstRowOnChange: false,
     };
   }, []);

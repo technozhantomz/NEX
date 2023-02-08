@@ -84,8 +84,8 @@ export const LastTradeContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: 2px;
+  padding-right: 2px;
   height: 25px;
   margin-bottom: 10px;
   margin-top: 10px;
@@ -93,9 +93,7 @@ export const LastTradeContainer = styled.div`
   font-size: 12px;
 `;
 
-export const LastTradeValue = styled.div`
-  flex-basis: 33%;
-`;
+export const LastTradeValue = styled.div``;
 
 export const LastTradePriceValue = styled(LastTradeValue)`
   .buy {

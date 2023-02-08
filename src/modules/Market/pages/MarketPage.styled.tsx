@@ -97,9 +97,11 @@ const MobileContainer = styled.div`
 `;
 
 export const MobileAssetSelectorContainer = styled(MobileContainer)`
-  padding: 8px 20px;
+  padding: 0px 20px;
   height: 50px;
   border: 1px solid ${colors.borderColorBase};
+  display: flex;
+  align-items: center;
 `;
 
 export const MobileStatsContainer = styled(MobileContainer)`

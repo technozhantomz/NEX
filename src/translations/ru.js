@@ -730,6 +730,12 @@ export const ru = {
             "Владелец %(asset)s взимает рыночную комиссию в размере %(percent)s%% за ордера на покупку. Эта комиссия будет вычтена из суммы, которую вы получите, когда ваш заказ будет выполнен, она не оплачивается при размещении заказа.",
         },
       },
+      twenty_four_hour_high: "24h Высокий",
+      twenty_four_hour_low: "24h Низкий",
+      twenty_four_hour_volume: "24h Объем",
+      twenty_four_hour_change: "24h Изменять",
+      twenty_four_hour_lowest_ask: "24h Самая низкая цена",
+      twenty_four_hour_highest_bid: "24h Самая высокая ставка",
     },
     settings: {
       heading: "Настройки",

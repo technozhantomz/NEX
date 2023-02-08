@@ -49,9 +49,9 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
 
   const reduceOrdersByPrice = useCallback((orders: MarketOrder[]) => {
     const reducedOrders = orders.reduce((previousOrders, currentOrder) => {
-      const repeatedPriceIndex = previousOrders.findIndex((previousOrder) => {
-        previousOrder.price === currentOrder.price;
-      });
+      const repeatedPriceIndex = previousOrders.findIndex(
+        (previousOrder) => previousOrder.price === currentOrder.price
+      );
       if (repeatedPriceIndex === -1) {
         previousOrders.push(currentOrder);
       } else {
@@ -109,7 +109,6 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
         } as MarketOrder;
       });
       const reducedAsks = reduceOrdersByPrice(updatedAsks);
-
       return reducedAsks;
     },
     [roundNum, reduceOrdersByPrice]

@@ -13,13 +13,18 @@ export const Tabs = styled(UiTabs)`
   &.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
     width: 100%;
   }
+  &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations-hidden,
+  &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations {
+    display: none !important;
+  }
+
   .ant-tabs-tab {
     flex: 1 1 50%;
     justify-content: center;
-    padding: 13px 0 8px 0;
+    padding: 13px 4px 8px 4px;
   }
   .ant-tabs-tab-btn {
-    font-size: 20px;
+    font-size: 18px;
   }
   .ant-tabs-nav::before {
     ${mixIns.hairline}
@@ -30,6 +35,6 @@ export const TabContentContainer = styled.div`
   .ant-table-wrapper {
     margin-bottom: 0;
     width: 100%;
-    padding: 8px 20px 20px 20px;
+    padding: 8px 8px 20px 8px;
   }
 `;
