@@ -39,7 +39,7 @@ build-qa:
     - cd .. && tar czf nex-qa.tar.gz NEX/
     - cp nex-qa.tar.gz NEX/ && cd NEX
   rules:
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^feature/
   artifacts: 
     paths:
     - nex-qa.tar.gz
@@ -62,7 +62,7 @@ build-stg:
     - cd .. && tar czf nex-stg.tar.gz NEX/
     - cp nex-stg.tar.gz NEX/ && cd NEX
   rules:
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/ 
   artifacts: 
     paths:
     - nex-stg.tar.gz
@@ -80,6 +80,7 @@ build-production:
     - echo "NEXT_PUBLIC_FAUCET_URL='$PROD_FAUCET'" >> .env
     - echo "NEXT_PUBLIC_DEFAULT_CHAIN_ID='$PROD_CHAIN_ID'" >> .env
     - echo "NEXT_PUBLIC_FORCE_VERSION='$NEXT_PUBLIC_FORCE_VERSION'" >> .env
+    - echo "NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID='$NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID'" >> .env
     - npm install
     - npm run build
     - cd .. && tar czf nex-prod.tar.gz NEX/
@@ -118,7 +119,7 @@ sonarcloud-check:
       - .sonar/cache
   script:
     - npm install
-    - npm run test:ci
+    - npm run test:ci 
     - sonar-scanner
   only:
     - merge_requests
@@ -126,38 +127,51 @@ sonarcloud-check:
   tags:
     - sonar-check
 
+gitlab-unittest:
+  image: node:16.17.0-alpine3.16
+  stage: test
+  before_script:
+    - 'yarn global add jest'
+    - 'yarn add --dev jest-junit'
+  script:
+    - 'jest --ci -u --reporters=default --reporters=jest-junit'
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - junit.xml
+
 deploy_review:
   dependencies: [build-qa]
   stage: deploy
   script:
-    - pm2 del nex-review || true
-    - npm install 
-    - pm2 start npm --name nex-review -- run start
+    - rm -rf $PROD_DEPLOY_DIR/* || true
+    - tar -zxf nex-qa.tar.gz --directory $PROD_DEPLOY_DIR
     - echo "http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN" > environment_url.txt
+    - cd $PROD_DEPLOY_DIR && cd NEX
+    - pm2 del nex-review || true 
+    - pm2 start npm --name nex-review -- run start
   environment:
-    name: review/$CI_COMMIT_REF_NAME
+    name: review/$CI_COMMIT_REF_SLUG
     url: http://$CI_ENVIRONMENT_SLUG.$APPS_DOMAIN
   artifacts:
     paths:
       - environment_url.txt
   rules:
-  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^feature/
   tags:
     - deploy-review
 
 stop_review_app:
   dependencies: [deploy_review]
   stage: deploy
-  script: stop-review-app
+  script: 
+    - pm2 del nex-review
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
-  only:
-    - merge_requests
-  except:
-    - main
-  allow_failure: true  
-  when: manual
+  rules:
+  - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^hot-fix/ || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^feature/
   tags:
     - deploy-review
 
@@ -187,6 +201,8 @@ deployToStaging:
     - cd $PROD_DEPLOY_DIR && cd NEX
     - pm2 del nex-staging || true
     - pm2 start npm --name nex-staging -- run start
+  after_script:
+    - curl -X POST --fail -F token=$CI_TRIGGER_TOKEN -F ref=main https://gitlab.com/api/v4/projects/40772871/trigger/pipeline
   dependencies: [build-stg]
   environment:
     name: staging
