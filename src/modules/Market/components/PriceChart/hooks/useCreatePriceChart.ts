@@ -14,6 +14,7 @@ import {
 import {
   useAppSettingsContext,
   useMarketContext,
+  useViewportContext,
 } from "../../../../../common/providers";
 
 import { UseCreatePriceChartResult } from "./useCreatePriceChart.types";
@@ -30,6 +31,7 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
   const { settings } = useAppSettingsContext();
   const { dataFeed } = useDataFeed();
   const { selectedPair } = useMarketContext();
+  const { lg } = useViewportContext();
 
   let tvWidget1: IChartingLibraryWidget | null = null;
 
@@ -50,7 +52,7 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
             "header_widget",
             "top_toolbar",
           ],
-          enabled_features: [],
+          enabled_features: lg ? ["hide_left_toolbar_by_default"] : [],
           charts_storage_url: "https://saveload.tradingview.com",
           charts_storage_api_version: "1.1" as
             | AvailableSaveloadVersions

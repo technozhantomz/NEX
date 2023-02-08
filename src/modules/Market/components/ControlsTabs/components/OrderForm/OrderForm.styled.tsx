@@ -49,7 +49,7 @@ export const InputNumber = styled(UiInput)`
   padding: 16px 20px;
   ${mixIns.borderRadius}
   .ant-input-suffix {
-    font-size: 16px;
+    font-size: 18px;
   }
 `;
 export const PriceSlider = styled(UiSlider)`

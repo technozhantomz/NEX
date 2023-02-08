@@ -85,7 +85,7 @@ export function useFormTabs({ isBuyForm }: Args): UseFormTabsResult {
     }
   }, [selectedPair]);
 
-  console.log("targetOrders", targetOrders);
+  // console.log("targetOrders", targetOrders);
 
   const handleTabChange = useCallback(
     (activeKey: string) => {
