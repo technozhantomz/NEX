@@ -112,7 +112,7 @@ export function useAsset(): UseAssetResult {
   );
 
   /**
-   * private method, used only inside limitByPrecision function
+   * private method, used only inside useAsset functions
    */
   const removeUnnecessaryZerosInDecimalPart = useCallback(
     (integerPart: string, decimalPart: string) => {
@@ -167,7 +167,7 @@ export function useAsset(): UseAssetResult {
   };
 
   /**
-   * This is used for integer amounts comes from the chain (like fee amounts)
+   * This is used for integer amounts comes from the chain (like user balance)
    *
    * @param roundTo whether round the result or not
    * @param amount integer amount value
@@ -217,7 +217,7 @@ export function useAsset(): UseAssetResult {
       const numbered = Number(num);
       const precised = Number(numbered.toFixed(precision));
       return precised >= numbered
-        ? String(precised)
+        ? precised.toFixed(precision)
         : (precised + 1 / 10 ** precision).toFixed(precision);
     }, []);
 

@@ -11,13 +11,17 @@ import {
 } from "chart.js";
 import { MetaMaskProvider } from "metamask-react";
 import type { AppProps } from "next/app";
+import { useEffect } from "react";
+import TagManager from "react-gtm-module";
 
+import { config } from "../api/params";
 import {
   AppSettingsProvider,
   AssetsProvider,
   BrowserHistoryProvider,
   ConnectionManagerProvider,
   FeesProvider,
+  MarketProvider,
   MenuProvider,
   NotificationsProvider,
   PeerLinkProvider,
@@ -39,6 +43,20 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
     Legend
   );
 
+  let didTagManagerInit = false;
+  useEffect(() => {
+    if (!didTagManagerInit) {
+      didTagManagerInit = true;
+      if (config.googleTagManagerId && config.googleTagManagerId !== "") {
+        didTagManagerInit = true;
+        const tagManagerArgs = {
+          gtmId: config.googleTagManagerId,
+        };
+        TagManager.initialize(tagManagerArgs);
+      }
+    }
+  }, []);
+
   return (
     <ViewportProvider>
       <MetaMaskProvider>
@@ -52,7 +70,9 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
                       <BrowserHistoryProvider>
                         <NotificationsProvider>
                           <MenuProvider>
-                            <Component {...pageProps} />
+                            <MarketProvider>
+                              <Component {...pageProps} />
+                            </MarketProvider>
                           </MenuProvider>
                         </NotificationsProvider>
                       </BrowserHistoryProvider>

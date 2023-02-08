@@ -35,6 +35,8 @@ export const Layout: FunctionComponent<Props> = ({
         return "card-layout";
       case type == "card-lrg":
         return "card-layout__lrg";
+      case type == "card-xlrg":
+        return "card-layout__xlrg";
       default:
         return "default";
     }
@@ -53,12 +55,10 @@ export const Layout: FunctionComponent<Props> = ({
         <Styled.Page className={layout} onClick={onClick}>
           <TopBar layout={layout} />
           <Styled.Layout className={`${getStyles()}`}>
-            {heading != undefined ? (
+            {heading && (
               <Styled.PageHeading className={"page-heading"}>
                 {heading}
               </Styled.PageHeading>
-            ) : (
-              ""
             )}
             {children}
           </Styled.Layout>
