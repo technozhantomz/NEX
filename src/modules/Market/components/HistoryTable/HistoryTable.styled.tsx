@@ -8,7 +8,10 @@ export const Table = styled(UiTable)`
     border-bottom: none;
     padding: 2px;
     text-align: left;
-    font-size: 12px;
+    font-size: 10px;
+    ${breakpoint.lg} {
+      font-size: 12px;
+    }
     ${breakpoint.xxl} {
       font-size: 10px;
     }
@@ -18,7 +21,10 @@ export const Table = styled(UiTable)`
     border-bottom: none;
     padding: 0 0 11px;
     overflow-wrap: unset;
-    font-size: 14px;
+    font-size: 12px;
+    ${breakpoint.lg} {
+      font-size: 14px;
+    }
     ${breakpoint.xxl} {
       font-size: 12px;
     }
