@@ -38,6 +38,7 @@ export const createOrdersColumns = (
             record.statusActions
           ) : (
             <div
+              style={{ cursor: "pointer" }}
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
