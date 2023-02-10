@@ -56,28 +56,36 @@ export const TradeHistoryContainer = styled.div`
 `;
 
 export const ChartsAndOrderBookRow = styled(Row)`
-  min-height: 520px;
+  height: 520px;
   ${breakpoint.xxl} {
-    min-height: 750px;
+    height: 850px;
   }
   ${mixIns.hairline}
 `;
 
 export const PriceChartContainer = styled.div`
+  margin: 8px;
   height: 100%;
   ${breakpoint.xxl} {
-    min-height: 450px;
+    height: 450px;
+    border: 1px solid ${colors.borderColorBase};
+    ${mixIns.borderRadius}
   }
 `;
 
-export const MarketDepthContainer = styled.div``;
+export const MarketDepthContainer = styled.div`
+  margin: 8px;
+  ${breakpoint.xxl} {
+    height: 365px;
+  }
+`;
 
 export const TabletTabsContainer = styled.div`
   min-height: 636px;
 `;
 
 export const UserOrdersContainer = styled.div`
-  min-height: 425px;
+  height: 325px;
 `;
 
 export const LimitOrderFormContainer = styled.div`
@@ -97,9 +105,11 @@ const MobileContainer = styled.div`
 `;
 
 export const MobileAssetSelectorContainer = styled(MobileContainer)`
-  padding: 8px 20px;
+  padding: 0px 20px;
   height: 50px;
   border: 1px solid ${colors.borderColorBase};
+  display: flex;
+  align-items: center;
 `;
 
 export const MobileStatsContainer = styled(MobileContainer)`

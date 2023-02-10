@@ -2,6 +2,7 @@ import { styled } from "../../../../ui/src/";
 import { colors } from "../../../../ui/src/colors";
 
 export const Footer = styled.div`
+  z-index: 2;
   position: fixed;
   bottom: 0;
   left: 0;
