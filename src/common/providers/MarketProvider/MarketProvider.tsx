@@ -240,14 +240,14 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         notification[0][0][0][0] === 4
       ) {
         hasFill = true;
-        Promise.all([
-          !hasFill ? null : setHistory(),
-          setAsksBids(),
-          !hasFill ? null : setOHLCVs(bucketSize),
-          !hasFill ? null : setDayOHLCVs(),
-          setTicker(),
-        ]);
       }
+      Promise.all([
+        !hasFill ? null : setHistory(),
+        setAsksBids(),
+        !hasFill ? null : setOHLCVs(bucketSize),
+        !hasFill ? null : setDayOHLCVs(),
+        setTicker(),
+      ]);
     },
     [setHistory, setAsksBids, setOHLCVs, bucketSize, setDayOHLCVs, setTicker]
   );
@@ -325,7 +325,7 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
     return () => {
       unsubscribeFromMarket();
     };
-  }, [selectedPair, synced, bucketSize]);
+  }, [selectedPair, bucketSize]);
 
   const context = useMemo(() => {
     return {

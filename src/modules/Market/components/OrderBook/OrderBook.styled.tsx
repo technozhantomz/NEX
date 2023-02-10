@@ -1,4 +1,5 @@
 import { Dropdown, Menu, styled, Table as UiTable } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
 export const OrderBookContainer = styled.div`
@@ -22,7 +23,10 @@ export const FilterContainer = styled.div`
   justify-content: space-between;
   display: flex;
   flex-wrap: wrap;
-  margin: 16px;
+  margin: 8px;
+  ${breakpoint.lg} {
+    margin: 16px;
+  }
 `;
 
 export const Flex = styled.div`
@@ -107,6 +111,7 @@ export const LastTradePriceValue = styled(LastTradeValue)`
 export const Table = styled(UiTable)`
   max-height: inherit;
   padding: 6px;
+
   .ant-table-tbody > tr > td {
     border-bottom: none;
     font-size: 0.7em;
@@ -325,5 +330,25 @@ export const Table = styled(UiTable)`
       transparent 100%,
       transparent 100%
     );
+  }
+`;
+
+export const TableContainer = styled.div`
+  ${breakpoint.lg} {
+    display: flex;
+    justify-content: space-between;
+    flex: 1 1 48%;
+    padding-left: 16px;
+    padding-right: 16px;
+    .ant-table-wrapper:first-child {
+      border-right: 1px solid ${colors.borderColorBase};
+    }
+  }
+  ${breakpoint.xxl} {
+    display: block;
+    padding: 0;
+    .ant-table-wrapper:first-child {
+      border-right: none;
+    }
   }
 `;

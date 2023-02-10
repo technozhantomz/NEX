@@ -7,7 +7,7 @@ export type AssetTableRow = {
   symbol: string;
   name: string;
   available: number;
-  inOrders: number;
+  inOrders: string;
 };
 
 export type UseAssetsTabResult = {

@@ -27,6 +27,10 @@ export const Tabs = styled(UiTabs)`
     + .ant-tabs-tab {
     margin: 0;
   }
+  &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations-hidden,
+  &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations {
+    display: none !important;
+  }
   &.ant-tabs > .ant-tabs-nav > .ant-tabs-nav-wrap .ant-tabs-tab {
     flex: 1 1 50%;
     justify-content: center;

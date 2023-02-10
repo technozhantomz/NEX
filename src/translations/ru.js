@@ -128,7 +128,7 @@ export const ru = {
       asset_issue: {
         title: "Выпустить актив",
         description:
-          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к, %(receiver)s",
+          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к , %(receiver)s",
       },
       asset_publish_feed: {
         title: "Опубликовать фид",
@@ -704,6 +704,13 @@ export const ru = {
       my_order_history: "Моя история заказов",
       buy: "КУПИТЬ",
       sell: "ПРОДАВАТЬ",
+      orders: "Заказы",
+      market_depth: "Глубина рынка",
+      all_pairs: "Все пары",
+      all_statuses: "Все статусы",
+      completed: "Завершенный",
+      partial: "Частичный",
+      open: "Открыть",
       tabs: {
         history: {
           all: "Торговая история",

@@ -1,20 +1,27 @@
 import { styled, DataTable as UiTable } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
 export const Table = styled(UiTable)`
   max-height: inherit;
   .ant-table-tbody > tr > td {
     border-bottom: none;
-    font-size: 0.7em;
     padding: 2px;
     text-align: left;
+    font-size: 12px;
+    ${breakpoint.xxl} {
+      font-size: 10px;
+    }
   }
   .ant-table-thead > tr > th {
-    font-size: 12px;
     background: ${colors.white};
     border-bottom: none;
     padding: 0 0 11px;
     overflow-wrap: unset;
+    font-size: 14px;
+    ${breakpoint.xxl} {
+      font-size: 12px;
+    }
   }
   .ant-table-thead
     > tr

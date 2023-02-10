@@ -80,8 +80,8 @@ export const Layout = styled.main`
         min-height: 856px;
       }
       &.card-layout__xlrg > .ant-card {
-        min-height: 1242px;
-        height: 1242px;
+        min-height: 1280px;
+        height: 1280px;
       }
     }
   }

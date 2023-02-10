@@ -127,7 +127,7 @@ export const en = {
       asset_issue: {
         title: "Issue asset",
         description:
-          "%(issuer)s, issued %(assetAmount)s %(symbol)s to, %(receiver)s",
+          "%(issuer)s, issued %(assetAmount)s %(symbol)s to , %(receiver)s",
       },
       asset_publish_feed: {
         title: "Publish feed",
@@ -704,6 +704,13 @@ export const en = {
       my_order_history: "My Order History",
       buy: "BUY",
       sell: "SELL",
+      orders: "Orders",
+      market_depth: "Market depth",
+      all_pairs: "All pairs",
+      all_statuses: "All statuses",
+      completed: "Completed",
+      partial: "Partial",
+      open: "Open",
       tabs: {
         history: {
           all: "Trade history",

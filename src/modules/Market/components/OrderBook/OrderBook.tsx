@@ -2,6 +2,7 @@ import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import counterpart from "counterpart";
 import { useCallback } from "react";
 
+import { useViewportContext } from "../../../../common/providers";
 import { TradeHistoryRow } from "../../../../common/types";
 import { DownOutlined, Tooltip } from "../../../../ui/src";
 
@@ -33,8 +34,12 @@ export const OrderBook = ({ currentPair }: Props): JSX.Element => {
   } = useOrderBook({
     currentPair,
   });
+  const { xxl, lg } = useViewportContext();
 
-  const types: FilterType[] = ["total", "sell", "buy"];
+  const types: FilterType[] = ["sell", "buy"];
+  if (!xxl) {
+    types.unshift("total");
+  }
   const thresholdMenu = (
     <Styled.ThresholdMenu onClick={handleThresholdChange}>
       {thresholdValues.map((value) => (
@@ -72,31 +77,36 @@ export const OrderBook = ({ currentPair }: Props): JSX.Element => {
   return (
     <>
       <Styled.OrderBookContainer>
-        <Styled.Heading>
-          {counterpart.translate("pages.market.order_book")}
-        </Styled.Heading>
+        {!xxl && (
+          <Styled.Heading>
+            {counterpart.translate("pages.market.order_book")}
+          </Styled.Heading>
+        )}
         <Styled.FilterContainer>
-          <Styled.Flex>
-            {types.map((type) => (
-              <Tooltip
-                placement="top"
-                title={type.toUpperCase() + " ORDERS"}
-                key={`${type}_tooltip`}
-              >
-                <Styled.OrdersFilter
-                  onClick={() => handleFilterChange(type)}
-                  className={`order-filters__type--${type}${
-                    type === filter ? " active" : ""
-                  }`}
+          {(!xxl || lg) && (
+            <Styled.Flex>
+              {types.map((type) => (
+                <Tooltip
+                  placement="top"
+                  title={type.toUpperCase() + " ORDERS"}
+                  key={`${type}_tooltip`}
                 >
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </Styled.OrdersFilter>
-              </Tooltip>
-            ))}
-          </Styled.Flex>
+                  <Styled.OrdersFilter
+                    onClick={() => handleFilterChange(type)}
+                    className={`order-filters__type--${type}${
+                      type === filter ? " active" : ""
+                    }`}
+                  >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </Styled.OrdersFilter>
+                </Tooltip>
+              ))}
+            </Styled.Flex>
+          )}
+
           <Styled.Flex>
             <Styled.ThresholdDropdown overlay={thresholdMenu}>
               <a
@@ -114,52 +124,55 @@ export const OrderBook = ({ currentPair }: Props): JSX.Element => {
             </Styled.ThresholdDropdown>
           </Styled.Flex>
         </Styled.FilterContainer>
-        {/* Buy table */}
-        {filter !== "sell" && (
-          <Styled.Table
-            style={{ height: specifyTableHeight() }}
-            loading={loading}
-            pagination={false}
-            columns={orderColumns as any}
-            bordered={false}
-            scroll={bidsScroll}
-            dataSource={bidsRows}
-            rowClassName={specifyBidsTableRowClassName}
-          ></Styled.Table>
-        )}
-        {/* Last trade */}
-        {filter === "total" && (
-          <Styled.LastTradeContainer>
-            <Styled.LastTradePriceValue>
-              <span className={specifyLastTradeClassName(lastTrade)}>
-                {lastTrade ? renderLastTradeHistoryPrice(lastTrade) : 0}
-              </span>
-            </Styled.LastTradePriceValue>
-            <Styled.LastTradeValue>
-              {lastTrade ? lastTrade.amount : 0}
-            </Styled.LastTradeValue>
-            <Styled.LastTradeValue>
-              {lastTrade
-                ? (Number(lastTrade.amount) * Number(lastTrade.price)).toFixed(
-                    selectedPair?.quote.precision ?? 5
-                  )
-                : 0}
-            </Styled.LastTradeValue>
-          </Styled.LastTradeContainer>
-        )}
-        {/* Sell table */}
-        {filter !== "buy" && (
-          <Styled.Table
-            style={{ height: specifyTableHeight() }}
-            loading={loading}
-            pagination={false}
-            columns={orderColumns as any}
-            bordered={false}
-            scroll={asksScroll}
-            dataSource={asksRows}
-            rowClassName={specifyAsksTableRowClassName}
-          ></Styled.Table>
-        )}
+
+        <Styled.TableContainer>
+          {/* Buy table */}
+          {filter !== "sell" && (
+            <Styled.Table
+              style={{ height: specifyTableHeight() }}
+              loading={loading}
+              pagination={false}
+              columns={orderColumns as any}
+              bordered={false}
+              scroll={bidsScroll}
+              dataSource={bidsRows}
+              rowClassName={specifyBidsTableRowClassName}
+            ></Styled.Table>
+          )}
+          {/* Last trade */}
+          {filter === "total" && !xxl && (
+            <Styled.LastTradeContainer>
+              <Styled.LastTradePriceValue>
+                <span className={specifyLastTradeClassName(lastTrade)}>
+                  {lastTrade ? renderLastTradeHistoryPrice(lastTrade) : 0}
+                </span>
+              </Styled.LastTradePriceValue>
+              <Styled.LastTradeValue>
+                {lastTrade ? lastTrade.amount : 0}
+              </Styled.LastTradeValue>
+              <Styled.LastTradeValue>
+                {lastTrade
+                  ? (
+                      Number(lastTrade.amount) * Number(lastTrade.price)
+                    ).toFixed(selectedPair?.quote.precision ?? 5)
+                  : 0}
+              </Styled.LastTradeValue>
+            </Styled.LastTradeContainer>
+          )}
+          {/* Sell table */}
+          {filter !== "buy" && (
+            <Styled.Table
+              style={{ height: specifyTableHeight() }}
+              loading={loading}
+              pagination={false}
+              columns={orderColumns as any}
+              bordered={false}
+              scroll={asksScroll}
+              dataSource={asksRows}
+              rowClassName={specifyAsksTableRowClassName}
+            ></Styled.Table>
+          )}
+        </Styled.TableContainer>
       </Styled.OrderBookContainer>
     </>
   );

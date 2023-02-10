@@ -14,6 +14,7 @@ import {
   PairModal,
   PairSelect,
   PriceChart,
+  SmallScreenTabs,
   UsersOrdersTabs,
   Wallet,
 } from "../components";
@@ -77,7 +78,7 @@ const MarketPage: NextPage = () => {
     </Styled.UserOrdersContainer>
   ) : (
     <Styled.TabletTabsContainer>
-      <UsersOrdersTabs />
+      <SmallScreenTabs />
     </Styled.TabletTabsContainer>
   );
 
@@ -104,7 +105,7 @@ const MarketPage: NextPage = () => {
             <PriceChart />
           </Styled.MobileChartContainer>
           <Styled.MobileTabsContainer>
-            <UsersOrdersTabs />
+            <SmallScreenTabs />
           </Styled.MobileTabsContainer>
         </>
       ) : (
@@ -151,13 +152,13 @@ const MarketPage: NextPage = () => {
               </Styled.WalletContainer>
             </Styled.VerticalFlexedCol>
           </Styled.FullHeightRow>
-          <PairModal
-            isVisible={isPairModalVisible}
-            setIsVisible={setIsPairModalVisible}
-            currentPair={pair as string}
-          />
         </Styled.Container>
       )}
+      <PairModal
+        isVisible={isPairModalVisible}
+        setIsVisible={setIsPairModalVisible}
+        currentPair={pair as string}
+      />
     </Layout>
   );
 };
