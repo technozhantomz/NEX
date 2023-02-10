@@ -4,6 +4,7 @@ import { colors } from "../../../../ui/src/colors";
 
 export const PairSelectContainer = styled.div`
   margin: 0;
+  width: 100%;
 `;
 
 export const PairButtonRow = styled(Row)`

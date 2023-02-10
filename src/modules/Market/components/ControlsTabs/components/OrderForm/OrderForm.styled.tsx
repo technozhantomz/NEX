@@ -208,10 +208,10 @@ export const ExecutionRadioGroup = styled(Radio.Group)`
   height: 50px;
   margin-bottom: 16px;
   .ant-radio-button-wrapper:first-child {
-    ${mixIns.borderRadius}
+    border-radius: 4px 0 0 4px;
   }
   .ant-radio-button-wrapper:last-child {
-    ${mixIns.borderRadius}
+    border-radius: 0 4px 4px 0;
   }
   .ant-radio-button-wrapper {
     height: 100%;

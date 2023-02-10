@@ -10,3 +10,4 @@ export * from "./PriceChart";
 export * from "./Wallet";
 export * from "./OrderBook";
 export * from "./ControlsTabs";
+export * from "./SmallScreenTabs";

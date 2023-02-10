@@ -704,6 +704,13 @@ export const en = {
       my_order_history: "My Order History",
       buy: "BUY",
       sell: "SELL",
+      orders: "Orders",
+      market_depth: "Market depth",
+      all_pairs: "All pairs",
+      all_statuses: "All statuses",
+      completed: "Completed",
+      partial: "Partial",
+      open: "Open",
       tabs: {
         history: {
           all: "Trade history",
@@ -734,6 +741,8 @@ export const en = {
       twenty_four_hour_low: "24h Low",
       twenty_four_hour_volume: "24h Volume",
       twenty_four_hour_change: "24h Change",
+      twenty_four_hour_lowest_ask: "24h Lowest ask",
+      twenty_four_hour_highest_bid: "24h Highest bid",
       ask: "Ask",
       bid: "Bid",
     },

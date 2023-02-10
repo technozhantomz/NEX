@@ -100,6 +100,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
           numberdFilled === 100
             ? counterpart.translate("pages.profile.orders_tab.complete")
             : counterpart.translate("pages.profile.orders_tab.partial"),
+        isOpenOrderRow: false,
       } as OrderTableRow;
     },
     [getBlockHeader, setPrecision, formLocalDate, defaultToken]
@@ -186,6 +187,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
         total: `${total} ${defaultAsset.symbol}`,
         numberedTotal: Number(total),
         filled: filled,
+        isOpenOrderRow: true,
       } as OrderTableRow;
     },
     [formLocalDate, defaultToken, setPrecision, ceilPrecision]

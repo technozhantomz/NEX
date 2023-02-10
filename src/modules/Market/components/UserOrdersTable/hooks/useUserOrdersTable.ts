@@ -32,6 +32,7 @@ type UseUserOrdersTableResult = {
   handleCancelLimitOrderFinish: (name: string, info: any) => void;
   hideTransactionModal: () => void;
   defineTableRowClassName: (record: any) => "buy" | "sell";
+  onCancelClick: (orderId: string) => void;
 };
 
 export function useUserOrdersTable(isOpen: boolean): UseUserOrdersTableResult {
@@ -181,5 +182,6 @@ export function useUserOrdersTable(isOpen: boolean): UseUserOrdersTableResult {
     handleCancelLimitOrderFinish,
     hideTransactionModal,
     defineTableRowClassName,
+    onCancelClick,
   };
 }
