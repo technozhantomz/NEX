@@ -1,4 +1,13 @@
-import { Col, Row, styled, Card as UiCard } from "../../../../src/ui/src";
+import { Affix as AntdAffix } from "antd";
+
+import {
+  Col,
+  Row,
+  styled,
+  Button as UiButton,
+  Card as UiCard,
+  Drawer as UiDrawer,
+} from "../../../../src/ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 import { mixIns } from "../../../ui/src/mixins";
@@ -97,6 +106,7 @@ export const WalletContainer = styled.div`
   padding: 25px;
 `;
 
+export const MobilePageWrapper = styled.div``;
 const MobileContainer = styled.div`
   margin-bottom: 8px;
   background-color: ${colors.white};
@@ -122,4 +132,60 @@ export const MobileChartContainer = styled(MobileContainer)`
 
 export const MobileTabsContainer = styled(MobileContainer)`
   height: 320px;
+`;
+
+export const Affix = styled(AntdAffix)``;
+
+export const BuySellWrapper = styled.div`
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const BuySellButton = styled(UiButton)`
+  flex: 1 1 46%;
+  color: ${colors.white};
+  font-size: 16px;
+  border: none;
+  &.ant-btn:hover,
+  .ant-btn:focus {
+    color: ${colors.white} !important;
+    border-color: unset;
+  }
+`;
+export const BuyButton = styled(BuySellButton)`
+  margin-right: 8px;
+  background: ${colors.marketBuy};
+  &.ant-btn:hover,
+  .ant-btn:focus {
+    background: ${colors.marketBuy} !important;
+  }
+`;
+export const SellButton = styled(BuySellButton)`
+  margin-left: 8px;
+  background: ${colors.marketSell};
+  &.ant-btn:hover,
+  .ant-btn:focus {
+    background: ${colors.marketSell} !important;
+  }
+`;
+
+export const OrderDrawer = styled(UiDrawer)`
+  .ant-drawer-header {
+    border-bottom: none;
+  }
+  .ant-drawer-content-wrapper {
+    width: 100% !important;
+  }
+  .ant-drawer-header {
+    margin-top: 20px;
+  }
+  .ant-drawer-header-title {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    .ant-drawer-title {
+      font-size: 20px;
+    }
+  }
 `;

@@ -8,5 +8,10 @@ export type UseMarketPageResult = {
   isPairModalVisible: boolean;
   handleClickOnPair: () => void;
   setIsPairModalVisible: Dispatch<SetStateAction<boolean>>;
-  //   pageLoaded: boolean;
+  isOrderDrawerOpen: boolean;
+  showBuyOrderDrawer: () => void;
+  showSellOrderDrawer: () => void;
+  hideOrderDrawer: () => void;
+  controlsTabsClassName: string;
+  onChangeControlsTab: (activeKey: string) => void;
 };

@@ -26,10 +26,19 @@ const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
   const { lg, xxl } = useViewportContext();
-  const { isPairModalVisible, handleClickOnPair, setIsPairModalVisible } =
-    useMarketPage({
-      currentPair: pair as string,
-    });
+  const {
+    isPairModalVisible,
+    handleClickOnPair,
+    setIsPairModalVisible,
+    isOrderDrawerOpen,
+    showBuyOrderDrawer,
+    showSellOrderDrawer,
+    hideOrderDrawer,
+    controlsTabsClassName,
+    onChangeControlsTab,
+  } = useMarketPage({
+    currentPair: pair as string,
+  });
 
   const renderHistoryTabs = !xxl ? (
     <Styled.RightBorderedVerticalFlexedCol xxl={{ span: 4 }}>
@@ -91,7 +100,7 @@ const MarketPage: NextPage = () => {
     >
       {/* Mobile view */}
       {lg ? (
-        <>
+        <Styled.MobilePageWrapper>
           <Styled.MobileAssetSelectorContainer>
             <PairSelect
               handleClickOnPair={handleClickOnPair}
@@ -107,7 +116,30 @@ const MarketPage: NextPage = () => {
           <Styled.MobileTabsContainer>
             <SmallScreenTabs />
           </Styled.MobileTabsContainer>
-        </>
+          <Styled.Affix offsetBottom={0}>
+            <Styled.BuySellWrapper>
+              <Styled.BuyButton onClick={showBuyOrderDrawer}>
+                {counterpart.translate("pages.market.buy")}
+              </Styled.BuyButton>
+              <Styled.SellButton onClick={showSellOrderDrawer}>
+                {counterpart.translate("pages.market.sell")}
+              </Styled.SellButton>
+            </Styled.BuySellWrapper>
+          </Styled.Affix>
+          <Styled.OrderDrawer
+            title={counterpart.translate(
+              "pages.market.tabs.controls.order_form"
+            )}
+            onClose={hideOrderDrawer}
+            open={isOrderDrawerOpen}
+            autoFocus={false}
+          >
+            <ControlsTabs
+              controlsTabsClassName={controlsTabsClassName}
+              onChangeControlsTab={onChangeControlsTab}
+            />
+          </Styled.OrderDrawer>
+        </Styled.MobilePageWrapper>
       ) : (
         <Styled.Container>
           <Styled.FullHeightRow>
@@ -143,7 +175,10 @@ const MarketPage: NextPage = () => {
 
               {/* Limit Order forms */}
               <Styled.LimitOrderFormContainer>
-                <ControlsTabs />
+                <ControlsTabs
+                  controlsTabsClassName={controlsTabsClassName}
+                  onChangeControlsTab={onChangeControlsTab}
+                />
               </Styled.LimitOrderFormContainer>
 
               {/* Wallet Sections */}

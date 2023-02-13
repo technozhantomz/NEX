@@ -717,6 +717,7 @@ export const en = {
           user: "My history",
         },
         controls: {
+          order_form: "Order form",
           limit: "Limit",
           market: "Market",
           advanced: "Advanced",

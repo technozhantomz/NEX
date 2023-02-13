@@ -39,6 +39,7 @@ export {
   Slider,
   Collapse,
   DatePicker,
+  Drawer,
 } from "antd";
 
 export {

@@ -717,6 +717,7 @@ export const ru = {
           user: "Моя история",
         },
         controls: {
+          order_form: "Форма заказа",
           limit: "Ограничение",
           market: "Рынок",
           advanced: "Передовой",

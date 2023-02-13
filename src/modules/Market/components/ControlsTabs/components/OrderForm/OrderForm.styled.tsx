@@ -239,6 +239,11 @@ export const ExecutionRadioGroup = styled(Radio.Group)`
     border-color: unset;
     border: unset;
   }
+  .ant-radio-button-wrapper-checked:not(
+      .ant-radio-button-wrapper-disabled
+    )::before {
+    background-color: unset;
+  }
 `;
 export const ExecutionRadioButton = styled(Radio.Button)`
   flex: 1 1 50%;

@@ -12,7 +12,10 @@ export const PairButtonRow = styled(Row)`
 `;
 
 export const PairButton = styled(Button)`
-  font-size: 20px;
+  font-size: 16px;
+  ${breakpoint.lg} {
+    font-size: 20px;
+  }
   font-weight: 500;
   border: none;
   box-shadow: none;

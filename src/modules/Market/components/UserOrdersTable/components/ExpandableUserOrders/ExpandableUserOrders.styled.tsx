@@ -14,14 +14,18 @@ export const OrdersWrapper = styled(DataTabWrapper)`
 export const Table = styled(UiTable)`
   .ant-table-tbody > tr > td {
     font-size: 12px;
-    padding: 8px;
+    padding: 2px;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
   .ant-table-thead > tr > th {
     font-size: 12px;
     ${breakpoint.lg} {
       font-size: 14px;
     }
-    padding: 8px;
+    padding: 2px;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
   .sell,
   .ant-table-tbody > tr.sell.ant-table-row:hover > td,
