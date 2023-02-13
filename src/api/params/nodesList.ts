@@ -39,7 +39,7 @@ export const testnetNodes: Node[] = [
     location: counterpart.translate("settings.api_closest"),
   },
   {
-    url: "wss://mint.peerplays.download/api",
+    url: "wss://devnet.peerplays.download/api",
     location: "",
     region: "Northern America",
     country: "Canada",
