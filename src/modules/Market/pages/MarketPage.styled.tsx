@@ -47,7 +47,7 @@ export const BoxHeader = styled.h2`
 `;
 
 export const StatsBox = styled.div`
-  padding: 8px 20px;
+  padding: 0;
   ${mixIns.hairline}
   min-height: 65px;
 `;
@@ -116,14 +116,14 @@ const MobileContainer = styled.div`
 
 export const MobileAssetSelectorContainer = styled(MobileContainer)`
   padding: 0px 20px;
-  height: 50px;
+  height: 60px;
   border: 1px solid ${colors.borderColorBase};
   display: flex;
   align-items: center;
 `;
 
 export const MobileStatsContainer = styled(MobileContainer)`
-  height: 50px;
+  height: 60px;
 `;
 
 export const MobileChartContainer = styled(MobileContainer)`

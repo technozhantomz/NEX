@@ -44,12 +44,12 @@ export const InputNumber = styled(UiInput)`
   }
   height: 50px;
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 8px;
   padding: 16px 20px;
   ${mixIns.borderRadius}
   .ant-input-suffix {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 export const PriceSlider = styled(UiSlider)`

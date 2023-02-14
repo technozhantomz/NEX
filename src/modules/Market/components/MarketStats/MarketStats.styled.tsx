@@ -11,13 +11,15 @@ export const Row = styled.div`
   display: flex;
   overflow-x: auto;
   overflow-y: hidden;
+  height: 100%;
+  padding: 4px;
 `;
 
 export const Col = styled(UiCol)`
   margin-left: 0 !important;
   margin-right: 0 !important;
   padding-left: 8px !important;
-  min-width: 120px;
+  min-width: 140px;
 `;
 export const LatestCol = styled(Col)`
   min-width: 160px;

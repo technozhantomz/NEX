@@ -35,13 +35,13 @@ export const Flex = styled.div`
 
 export const OrdersFilter = styled.button`
   display: flex;
-  width: 100%;
-  height: 25px;
-  margin-bottom: 10px;
+  width: 30px;
+  height: 30px;
+  padding: 2px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
+  border-radius: 15px;
   border: none;
   background: none;
   cursor: pointer;
@@ -50,8 +50,8 @@ export const OrdersFilter = styled.button`
   }
   & span {
     background-color: #e2444d;
-    height: 2px;
-    width: 14px;
+    height: 3px;
+    width: 15px;
   }
   &.order-filters__type--total span:nth-child(3),
   &.order-filters__type--total span:nth-child(4) {

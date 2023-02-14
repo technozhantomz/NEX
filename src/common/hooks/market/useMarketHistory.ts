@@ -85,7 +85,7 @@ export function useMarketHistory(): UseMarketHistoryResult {
         ? (history as History).op[1]
         : (history as OrderHistory).op;
       const key = history.id;
-      let numberdFilled = 100;
+      let numberedFilled = 100;
       let filled = "";
       let baseAmount = 0,
         quoteAmount = 0,
@@ -103,9 +103,9 @@ export function useMarketHistory(): UseMarketHistoryResult {
 
       if (forUser) {
         if (openOrder) {
-          numberdFilled =
+          numberedFilled =
             (pays.amount / openOrder.sell_price.base.amount) * 100;
-          filled = `${numberdFilled.toFixed(1)}%`;
+          filled = `${numberedFilled.toFixed(1)}%`;
         } else {
           filled = "100%";
         }
