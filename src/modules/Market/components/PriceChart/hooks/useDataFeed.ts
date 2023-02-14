@@ -43,6 +43,7 @@ export function useDataFeed(): UseDataFeedResult {
   };
 
   const dataFeed: IBasicDataFeed = {
+    // This is chart --data-- configuration
     onReady: (callback) => {
       // console.log("[onReady]: Method call");
       setTimeout(() =>
@@ -66,6 +67,7 @@ export function useDataFeed(): UseDataFeedResult {
       });
       onResultReadyCallback(newSymbols as SearchSymbolResultItem[]);
     },
+    // This is chart --data-- configuration based on the pair (you can override onReady config)
     resolveSymbol: async (
       symbolName,
       onSymbolResolvedCallback,

@@ -15,7 +15,7 @@ import {
   BitcoinSidechainAccounts,
   FullAccount,
   KeyType,
-  SidechainAcccount,
+  SidechainAccount,
 } from "../../types";
 
 import { UserContextType } from "./UserProvider.types";
@@ -79,10 +79,10 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const passwordTimeout = useRef<NodeJS.Timeout>();
   const [account, setAccount] = useState<Account | undefined>();
   const [sidechainAccounts, setSidechainAccounts] = useState<
-    SidechainAcccount[]
+    SidechainAccount[]
   >([]);
   const [bitcoinSidechainAccount, setBitcoinSidechainAccount] =
-    useState<SidechainAcccount>();
+    useState<SidechainAccount>();
   const [loadingSidechainAccounts, setLoadingSidechainAccounts] =
     useState<boolean>(true);
   const [hasBTCDepositAddress, setHasBTCDepositAddress] =
@@ -101,7 +101,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         setLoadingSidechainAccounts(true);
         const accounts = (await dbApi("get_sidechain_addresses_by_account", [
           accountId,
-        ])) as SidechainAcccount[];
+        ])) as SidechainAccount[];
         setSidechainAccounts(accounts);
         if (accounts && accounts.length) {
           const bitcoinSidechain = accounts.find(
@@ -141,8 +141,8 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
 
   const updateSidechainAccounts = useCallback(
     (
-      sidechainAccounts: SidechainAcccount[],
-      bitcoinSidechainAccount: SidechainAcccount | undefined,
+      sidechainAccounts: SidechainAccount[],
+      bitcoinSidechainAccount: SidechainAccount | undefined,
       hasBTCDepositAddress: boolean,
       hasBTCWithdrawPublicKey: boolean
     ) => {

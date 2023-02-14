@@ -1,13 +1,13 @@
 import counterpart from "counterpart";
 
 import { InfoCircleOutlined } from "../../../ui/src";
-import { SidechainAcccount } from "../../types";
+import { SidechainAccount } from "../../types";
 
 import * as Styled from "./DownloadBitcoinKeys.styled";
 import { useDownloadBitcoinKeys } from "./hooks";
 
 type Props = {
-  bitcoinSidechainAccount: SidechainAcccount;
+  bitcoinSidechainAccount: SidechainAccount;
   getSidechainAccounts: (accountId: string) => Promise<void>;
 };
 export const DownloadBitcoinKeys = ({

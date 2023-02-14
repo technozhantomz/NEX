@@ -3,7 +3,10 @@ import { cloneDeep, max } from "lodash";
 import { useCallback, useMemo, useState } from "react";
 
 import { useAsset } from "../../../../../common/hooks";
-import { useMarketContext } from "../../../../../common/providers";
+import {
+  useMarketContext,
+  useViewportContext,
+} from "../../../../../common/providers";
 import {
   MarketOrder,
   MarketPair,
@@ -24,8 +27,12 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   const { roundNum } = useAsset();
   const { selectedPair, asks, bids, loadingAsksBids, lastTradeHistory } =
     useMarketContext();
+  const { lg, xxl } = useViewportContext();
+
   const [threshold, setThreshold] = useState<number>(0.001);
-  const [filter, setFilter] = useState<FilterType>("total");
+  const [filter, setFilter] = useState<FilterType>(() =>
+    lg ? "sell" : "total"
+  );
   const [prevPair, setPrevPair] = useState<string>(currentPair);
 
   if (prevPair !== currentPair) {
@@ -49,9 +56,9 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
 
   const reduceOrdersByPrice = useCallback((orders: MarketOrder[]) => {
     const reducedOrders = orders.reduce((previousOrders, currentOrder) => {
-      const repeatedPriceIndex = previousOrders.findIndex((previousOrder) => {
-        previousOrder.price === currentOrder.price;
-      });
+      const repeatedPriceIndex = previousOrders.findIndex(
+        (previousOrder) => previousOrder.price === currentOrder.price
+      );
       if (repeatedPriceIndex === -1) {
         previousOrders.push(currentOrder);
       } else {
@@ -68,7 +75,11 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
       }
       return previousOrders;
     }, [] as MarketOrder[]);
-    return reducedOrders;
+    return reducedOrders.sort((a, b) =>
+      !a.isBuyOrder
+        ? Number(a.price) - Number(b.price)
+        : Number(b.price) - Number(a.price)
+    );
   }, []);
 
   const groupAsksByThreshold = useCallback(
@@ -109,7 +120,6 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
         } as MarketOrder;
       });
       const reducedAsks = reduceOrdersByPrice(updatedAsks);
-
       return reducedAsks;
     },
     [roundNum, reduceOrdersByPrice]
@@ -220,30 +230,54 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
 
   const specifyTableScroll = useCallback(
     (orders: MarketOrder[]) => {
-      if (filter === "total") {
-        return orders.length > 12
+      if (lg) {
+        return orders.length > 7
           ? {
-              y: 246,
+              y: 130,
+              x: undefined,
+              scrollToFirstRowOnChange: false,
+            }
+          : undefined;
+      } else if (xxl) {
+        return orders.length > 25
+          ? {
+              y: 500,
               x: undefined,
               scrollToFirstRowOnChange: false,
             }
           : undefined;
       } else {
-        return orders.length > 30
-          ? {
-              y: 580,
-              x: undefined,
-              scrollToFirstRowOnChange: false,
-            }
-          : undefined;
+        if (filter === "total") {
+          return orders.length > 15
+            ? {
+                y: 300,
+                x: undefined,
+                scrollToFirstRowOnChange: false,
+              }
+            : undefined;
+        } else {
+          return orders.length > 34
+            ? {
+                y: 680,
+                x: undefined,
+                scrollToFirstRowOnChange: false,
+              }
+            : undefined;
+        }
       }
     },
-    [filter]
+    [filter, xxl, lg]
   );
 
   const specifyTableHeight = useCallback((): string => {
-    return filter === "total" ? "282px" : "610px";
-  }, [filter]);
+    if (lg) {
+      return "186px";
+    } else if (xxl) {
+      return "564px";
+    } else {
+      return filter === "total" ? "340px" : "724px";
+    }
+  }, [filter, xxl, lg]);
 
   const specifyLastTradeClassName = useCallback(
     (lastTrade?: TradeHistoryRow) => {

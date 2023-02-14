@@ -31,8 +31,8 @@ export function UserOrdersTable({ isOpen = false }: Props): JSX.Element {
   const { localStorageAccount } = useUserContext();
   const desktopScroll = useMemo(() => {
     return {
-      y: 300,
-      x: 940,
+      y: 240,
+      x: undefined,
       scrollToFirstRowOnChange: false,
     };
   }, []);

@@ -16,7 +16,7 @@ import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg"
 import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 import { useAsset, useHandleTransactionForm } from "../../hooks";
 import { useAssetsContext, useUserContext } from "../../providers";
-import { Asset, SidechainAcccount } from "../../types";
+import { Asset, SidechainAccount } from "../../types";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -31,7 +31,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
   const { limitByPrecision } = useAsset();
   const {
     withdrawForm,
-    formValdation,
+    formValidation,
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
@@ -39,11 +39,10 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     transactionMessageDispatch,
     handleWithdraw,
     amount,
-    withdrawAddress,
     userBalance,
     withdrawFee,
     btcTransferFee,
-    selectedAssetPrecission,
+    selectedAssetPrecision,
     hasBTCDepositAddress,
     bitcoinSidechainAccount,
     getSidechainAccounts,
@@ -63,9 +62,16 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     neededKeyType: "active",
   });
 
+  let withdrawAddress = "";
+  if ((withdrawForm as any).__INTERNAL__.name) {
+    // do form logic here
+    const values = withdrawForm.getFieldsValue();
+    withdrawAddress = values.withdrawAddress;
+  }
+
   const precisedAmount = limitByPrecision(
     String(amount),
-    selectedAssetPrecission
+    selectedAssetPrecision
   );
 
   const isLoggedIn = localStorageAccount && localStorageAccount !== "";
@@ -160,7 +166,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     <>
       <Form.Item
         name="from"
-        rules={formValdation.from}
+        rules={formValidation.from}
         validateFirst={true}
         initialValue={localStorageAccount}
         hidden={true}
@@ -174,7 +180,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
       <Form.Item
         name="withdrawPublicKey"
         validateFirst={true}
-        rules={formValdation.withdrawPublicKey}
+        rules={formValidation.withdrawPublicKey}
       >
         <Input
           placeholder={counterpart.translate(
@@ -188,7 +194,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
       <Form.Item
         name="withdrawAddress"
         validateFirst={true}
-        rules={formValdation.withdrawAddress}
+        rules={formValidation.withdrawAddress}
       >
         <Input
           placeholder={counterpart.translate(
@@ -208,7 +214,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
         </span>
       </Styled.WithdrawalInstruction>
       <DownloadBitcoinKeys
-        bitcoinSidechainAccount={bitcoinSidechainAccount as SidechainAcccount}
+        bitcoinSidechainAccount={bitcoinSidechainAccount as SidechainAccount}
         getSidechainAccounts={getSidechainAccounts}
       />
       {transactionDetails}
@@ -222,7 +228,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     <>
       <Form.Item
         name="from"
-        rules={formValdation.from}
+        rules={formValidation.from}
         validateFirst={true}
         initialValue={localStorageAccount}
         hidden={true}
@@ -236,7 +242,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
       <Form.Item
         name="withdrawAddress"
         validateFirst={true}
-        rules={formValdation.withdrawAddress}
+        rules={formValidation.withdrawAddress}
       >
         <Input
           placeholder={counterpart.translate(
@@ -296,7 +302,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
               <Styled.WithdrawFormAssetAmount
                 name="amount"
                 validateFirst={true}
-                rules={formValdation.amount}
+                rules={formValidation.amount}
                 noStyle
               >
                 <Input

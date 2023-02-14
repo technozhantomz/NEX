@@ -57,8 +57,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [withdrawFee, setWithdrawFee] = useState<number>(0);
   const [selectedAsset, setSelectedAsset] = useState<string>(asset);
   const [amount, setAmount] = useState<string>("0");
-  const [withdrawPublicKey, setWithdrawPublicKey] = useState<string>("");
-  const [withdrawAddress, setWithdrawAddress] = useState<string>("");
   const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
   const [btcTransferFee, setBtcTransferFee] = useState<number>(0.0003);
   const userBalance = useMemo(() => {
@@ -69,7 +67,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       return 0;
     }
   }, [assets, selectedAsset]);
-  const selectedAssetPrecission = useMemo(() => {
+  const selectedAssetPrecision = useMemo(() => {
     if (sidechainAssets && sidechainAssets.length > 0) {
       const selectedsidechainAsset = sidechainAssets.find(
         (asset) => asset?.symbol === selectedAsset
@@ -106,10 +104,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
           bitcoinSidechainAccount?.withdraw_address;
         withdrawFormValues["withdrawPublicKey"] =
           bitcoinSidechainAccount?.withdraw_public_key;
-        setWithdrawPublicKey(
-          bitcoinSidechainAccount?.withdraw_public_key ?? ""
-        );
-        setWithdrawAddress(bitcoinSidechainAccount?.withdraw_address ?? "");
       } else {
         withdrawFormValues["withdrawAddress"] = "";
       }
@@ -336,7 +330,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         value.length !== 66 ||
         (value.slice(0, 2) !== "03" && value.slice(0, 2) !== "02")
       ) {
-        setWithdrawPublicKey("");
         return Promise.reject(
           new Error(
             counterpart.translate(`field.errors.invalid_bitcoin_public_key`, {
@@ -345,7 +338,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
           )
         );
       }
-      setWithdrawPublicKey(value);
       return Promise.resolve();
     }
     return Promise.reject(new Error(""));
@@ -353,6 +345,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
 
   const validateBtcWithdrawAddress = (value: string) => {
     let error = "";
+    const { withdrawPublicKey } = withdrawForm.getFieldsValue();
     if (!loadingSidechainAccounts) {
       if (withdrawPublicKey === "") {
         error = counterpart.translate(`field.errors.first_valid_public_key`);
@@ -392,7 +385,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         );
       }
     }
-    setWithdrawAddress(value);
     if (selectedAsset === BITCOIN_ASSET_SYMBOL) {
       const error = validateBtcWithdrawAddress(value);
       if (error !== "") {
@@ -413,7 +405,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     }
   };
 
-  const formValdation = {
+  const formValidation = {
     from: [
       {
         required: true,
@@ -488,7 +480,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
 
   return {
     withdrawForm,
-    formValdation,
+    formValidation,
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
@@ -496,12 +488,11 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     transactionMessageDispatch,
     handleWithdraw,
     amount,
-    withdrawAddress,
     userBalance,
     withdrawFee,
     btcTransferFee,
     setBtcTransferFee,
-    selectedAssetPrecission,
+    selectedAssetPrecision,
     hasBTCDepositAddress,
     bitcoinSidechainAccount,
     getSidechainAccounts,

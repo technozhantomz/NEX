@@ -44,12 +44,12 @@ export const InputNumber = styled(UiInput)`
   }
   height: 50px;
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 8px;
   padding: 16px 20px;
   ${mixIns.borderRadius}
   .ant-input-suffix {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 export const PriceSlider = styled(UiSlider)`
@@ -208,10 +208,10 @@ export const ExecutionRadioGroup = styled(Radio.Group)`
   height: 50px;
   margin-bottom: 16px;
   .ant-radio-button-wrapper:first-child {
-    ${mixIns.borderRadius}
+    border-radius: 4px 0 0 4px;
   }
   .ant-radio-button-wrapper:last-child {
-    ${mixIns.borderRadius}
+    border-radius: 0 4px 4px 0;
   }
   .ant-radio-button-wrapper {
     height: 100%;
@@ -238,6 +238,11 @@ export const ExecutionRadioGroup = styled(Radio.Group)`
     background: ${colors.linkColor};
     border-color: unset;
     border: unset;
+  }
+  .ant-radio-button-wrapper-checked:not(
+      .ant-radio-button-wrapper-disabled
+    )::before {
+    background-color: unset;
   }
 `;
 export const ExecutionRadioButton = styled(Radio.Button)`
