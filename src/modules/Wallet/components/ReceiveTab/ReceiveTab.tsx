@@ -14,7 +14,7 @@ import {
   UserLinkExtractor,
 } from "../../../../common/components";
 import { useUserContext } from "../../../../common/providers";
-import { SidechainAcccount } from "../../../../common/types";
+import { SidechainAccount } from "../../../../common/types";
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 
 import * as Styled from "./ReceiveTab.styled";
@@ -48,7 +48,7 @@ export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
 
   const renderBtcDeposit = (
     hasBTCDepositAddress: boolean,
-    bitcoinSidechainAccount: SidechainAcccount
+    bitcoinSidechainAccount: SidechainAccount
   ) => {
     if (hasBTCDepositAddress) {
       return (
@@ -84,7 +84,7 @@ export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
     if (asset === BITCOIN_ASSET_SYMBOL) {
       return renderBtcDeposit(
         hasBTCDepositAddress,
-        bitcoinSidechainAccount as SidechainAcccount
+        bitcoinSidechainAccount as SidechainAccount
       );
     } else if (asset === HIVE_ASSET_SYMBOL || asset === HBD_ASSET_SYMBOL) {
       return <HIVEAndHBDDeposit assetSymbol={asset} />;
