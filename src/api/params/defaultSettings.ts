@@ -1,6 +1,6 @@
 import { Settings } from "../../common/types";
 
-import { defaultQuote } from "./networkparams";
+import { defaultQuote } from "./networkParams";
 
 export const defaultSettings: Settings = {
   language: "en",

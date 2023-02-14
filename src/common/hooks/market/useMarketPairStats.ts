@@ -121,7 +121,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
     let ignore = false;
     async function setAllAssets() {
       setLoading(true);
-      const allAssets = await getAllAssets();
+      const allAssets = await getAllAssets(true);
       if (!ignore) {
         _setAllAssets(allAssets);
         setLoading(false);

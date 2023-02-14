@@ -199,7 +199,7 @@ export function useAccountOrders(): UseAccountOrdersResult {
         await Promise.all([
           getFullAccount(localStorageAccount, false),
           getAccountHistoryById(id),
-          getAllAssets(),
+          getAllAssets(true),
         ]);
       if (fullAccount && allAssets && defaultAsset) {
         const limitOrders = fullAccount.limit_orders;

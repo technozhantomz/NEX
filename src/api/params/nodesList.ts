@@ -2,7 +2,7 @@ import counterpart from "counterpart";
 
 import { Node } from "../../common/types";
 
-import { testnetCheck } from "./networkparams";
+import { testnetCheck } from "./networkParams";
 
 export const nodeRegions = [
   // region of the node follows roughly https://en.wikipedia.org/wiki/Subregion#/media/File:United_Nations_geographical_subregions.png
