@@ -701,7 +701,7 @@ export function useSwap(): UseSwapResult {
   const setAllAssets = useCallback(async () => {
     try {
       setLoadingAssets(true);
-      const allAssets = await getAllAssets();
+      const allAssets = await getAllAssets(true);
       if (allAssets && allAssets.length > 0) {
         _setAllAssets(allAssets);
       }

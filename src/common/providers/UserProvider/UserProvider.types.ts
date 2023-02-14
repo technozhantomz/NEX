@@ -3,7 +3,7 @@ import {
   Asset,
   BitcoinSidechainAccounts,
   KeyType,
-  SidechainAcccount,
+  SidechainAccount,
 } from "../../types";
 
 export type UserContextType = {
@@ -29,7 +29,7 @@ export type UserContextType = {
   hasBTCDepositAddress: boolean;
   hasBTCWithdrawPublicKey: boolean;
   getSidechainAccounts: (accountId: string) => Promise<void>;
-  sidechainAccounts: SidechainAcccount[];
-  bitcoinSidechainAccount: SidechainAcccount | undefined;
+  sidechainAccounts: SidechainAccount[];
+  bitcoinSidechainAccount: SidechainAccount | undefined;
   loadingSidechainAccounts: boolean;
 };

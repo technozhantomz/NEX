@@ -2,6 +2,7 @@ import {
   Asset,
   History,
   LimitOrder,
+  MarketHistory,
   MarketPair,
   OrderHistory,
   Ticker,
@@ -24,4 +25,12 @@ export type UseMarketHistoryResult = {
     forUser: boolean,
     openOrder?: LimitOrder
   ) => Promise<TradeHistoryRow>;
+  getMarketHistoryBuckets: () => Promise<number[] | undefined>;
+  getMarketHistory: (
+    firstAssetSymbolOrId: string,
+    secondAssetSymbolOrId: string,
+    bucketSize: number,
+    start: string,
+    end: string
+  ) => Promise<MarketHistory[] | undefined>;
 };

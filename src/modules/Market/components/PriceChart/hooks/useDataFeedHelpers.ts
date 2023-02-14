@@ -57,7 +57,7 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
 
   const getAllSymbols = async () => {
     let allSymbols = [];
-    const allAssets = await getAllAssets();
+    const allAssets = await getAllAssets(true);
     const symbols = allAssets?.map((asset) => {
       if (asset.symbol !== defaultToken) {
         const symbol = generateSymbol(

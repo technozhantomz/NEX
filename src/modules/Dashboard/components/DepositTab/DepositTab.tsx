@@ -11,7 +11,7 @@ import {
   LoadingIndicator,
 } from "../../../../common/components";
 import { useAssetsContext, useUserContext } from "../../../../common/providers";
-import { Asset, SidechainAcccount } from "../../../../common/types";
+import { Asset, SidechainAccount } from "../../../../common/types";
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 
 import * as Styled from "./DepositTab.styled";
@@ -50,7 +50,7 @@ export const DepositTab = (): JSX.Element => {
         counterpart.translate(`field.labels.deposit_btc`)
       )}
       <DownloadBitcoinKeys
-        bitcoinSidechainAccount={bitcoinSidechainAccount as SidechainAcccount}
+        bitcoinSidechainAccount={bitcoinSidechainAccount as SidechainAccount}
         getSidechainAccounts={getSidechainAccounts}
       />
     </Styled.AddressGeneratedContainer>

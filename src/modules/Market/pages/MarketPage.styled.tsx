@@ -1,4 +1,13 @@
-import { Col, Row, styled, Card as UiCard } from "../../../../src/ui/src";
+import { Affix as AntdAffix } from "antd";
+
+import {
+  Col,
+  Row,
+  styled,
+  Button as UiButton,
+  Card as UiCard,
+  Drawer as UiDrawer,
+} from "../../../../src/ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 import { mixIns } from "../../../ui/src/mixins";
@@ -38,7 +47,7 @@ export const BoxHeader = styled.h2`
 `;
 
 export const StatsBox = styled.div`
-  padding: 8px 20px;
+  padding: 0;
   ${mixIns.hairline}
   min-height: 65px;
 `;
@@ -56,28 +65,36 @@ export const TradeHistoryContainer = styled.div`
 `;
 
 export const ChartsAndOrderBookRow = styled(Row)`
-  min-height: 520px;
+  height: 520px;
   ${breakpoint.xxl} {
-    min-height: 750px;
+    height: 850px;
   }
   ${mixIns.hairline}
 `;
 
 export const PriceChartContainer = styled.div`
+  margin: 8px;
   height: 100%;
   ${breakpoint.xxl} {
-    min-height: 450px;
+    height: 450px;
+    border: 1px solid ${colors.borderColorBase};
+    ${mixIns.borderRadius}
   }
 `;
 
-export const MarketDepthContainer = styled.div``;
+export const MarketDepthContainer = styled.div`
+  margin: 8px;
+  ${breakpoint.xxl} {
+    height: 365px;
+  }
+`;
 
 export const TabletTabsContainer = styled.div`
   min-height: 636px;
 `;
 
 export const UserOrdersContainer = styled.div`
-  min-height: 425px;
+  height: 325px;
 `;
 
 export const LimitOrderFormContainer = styled.div`
@@ -89,6 +106,7 @@ export const WalletContainer = styled.div`
   padding: 25px;
 `;
 
+export const MobilePageWrapper = styled.div``;
 const MobileContainer = styled.div`
   margin-bottom: 8px;
   background-color: ${colors.white};
@@ -97,13 +115,15 @@ const MobileContainer = styled.div`
 `;
 
 export const MobileAssetSelectorContainer = styled(MobileContainer)`
-  padding: 8px 20px;
-  height: 50px;
+  padding: 0px 20px;
+  height: 60px;
   border: 1px solid ${colors.borderColorBase};
+  display: flex;
+  align-items: center;
 `;
 
 export const MobileStatsContainer = styled(MobileContainer)`
-  height: 50px;
+  height: 60px;
 `;
 
 export const MobileChartContainer = styled(MobileContainer)`
@@ -112,4 +132,60 @@ export const MobileChartContainer = styled(MobileContainer)`
 
 export const MobileTabsContainer = styled(MobileContainer)`
   height: 320px;
+`;
+
+export const Affix = styled(AntdAffix)``;
+
+export const BuySellWrapper = styled.div`
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const BuySellButton = styled(UiButton)`
+  flex: 1 1 46%;
+  color: ${colors.white};
+  font-size: 16px;
+  border: none;
+  &.ant-btn:hover,
+  .ant-btn:focus {
+    color: ${colors.white} !important;
+    border-color: unset;
+  }
+`;
+export const BuyButton = styled(BuySellButton)`
+  margin-right: 8px;
+  background: ${colors.marketBuy};
+  &.ant-btn:hover,
+  .ant-btn:focus {
+    background: ${colors.marketBuy} !important;
+  }
+`;
+export const SellButton = styled(BuySellButton)`
+  margin-left: 8px;
+  background: ${colors.marketSell};
+  &.ant-btn:hover,
+  .ant-btn:focus {
+    background: ${colors.marketSell} !important;
+  }
+`;
+
+export const OrderDrawer = styled(UiDrawer)`
+  .ant-drawer-header {
+    border-bottom: none;
+  }
+  .ant-drawer-content-wrapper {
+    width: 100% !important;
+  }
+  .ant-drawer-header {
+    margin-top: 20px;
+  }
+  .ant-drawer-header-title {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    .ant-drawer-title {
+      font-size: 20px;
+    }
+  }
 `;
