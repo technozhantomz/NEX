@@ -10,11 +10,11 @@ import { SidechainAccount, SignerKey } from "../../../types";
 export type UseWithdrawFormResult = {
   formValidation: FormValidation;
   withdrawForm: FormInstance<WithdrawForm>;
-  handleValuesChange: (changedValues: any) => void;
+  handleValuesChange: (changedValues: { amount?: string | undefined }) => void;
   handleAssetChange: (value: unknown) => void;
   selectedAsset: string;
   transactionMessageState: TransactionMessageState;
-  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
+  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
   handleWithdraw: (signerKey: SignerKey) => Promise<void>;
   amount: string;
   userBalance: number;

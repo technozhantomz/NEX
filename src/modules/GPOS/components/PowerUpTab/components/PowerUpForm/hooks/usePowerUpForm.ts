@@ -34,7 +34,7 @@ export function usePowerUpForm({
   const [newBalance, setNewBalance] = useState<string>("0");
   const [userAvailableBalance, _setUserAvailableBalance] = useState<number>(0);
 
-  const { transactionMessageState, transactionMessageDispatch } =
+  const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
   const [powerUpForm] = Form.useForm<PowerUpForm>();
   const depositAmount: string =
@@ -81,19 +81,19 @@ export function usePowerUpForm({
         id
       );
 
-      transactionMessageDispatch({
+      dispatchTransactionMessage({
         type: TransactionMessageActionType.CLEAR,
       });
 
       try {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADING,
         });
         const trxResult = await buildTrx([trx], [signerKey]);
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await calculateGposBalances();
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_SUCCESS,
             message: counterpart.translate(
               `field.success.successfully_deposited`,
@@ -104,14 +104,14 @@ export function usePowerUpForm({
             ),
           });
         } else {
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(`field.errors.transaction_unable`),
           });
         }
       } catch (e) {
         console.log(e);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
@@ -126,7 +126,7 @@ export function usePowerUpForm({
       formAccountBalancesByName,
       localStorageAccount,
       calculateGposBalances,
-      transactionMessageDispatch,
+      dispatchTransactionMessage,
     ]
   );
 
@@ -241,7 +241,7 @@ export function usePowerUpForm({
     formValidation,
     adjustDeposit,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     handleVesting,
     feeAmount,
     depositAmount,

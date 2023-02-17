@@ -1,4 +1,5 @@
 import Highcharts from "highcharts";
+import { cloneDeep } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
 import { useMarketContext } from "../../../../../common/providers";
@@ -25,7 +26,9 @@ export function useDepthChart(): UseDepthChartResult {
   const formDepthChartData = useCallback(() => {
     //sort quote and base
     if (!asks || !bids) return;
-    const sortedAsks = asks
+    const clonedAsks = cloneDeep(asks);
+    const clonedBids = cloneDeep(bids);
+    const sortedAsks = clonedAsks
       .sort((a, b) => {
         if (Number(a.quote) - Number(b.quote) !== 0) {
           return Number(a.quote) - Number(b.quote);
@@ -33,7 +36,7 @@ export function useDepthChart(): UseDepthChartResult {
         return Number(a.base) - Number(b.base);
       })
       .map((row) => [Number(row.quote), Number(row.base)] as DepthData);
-    const sortedBids = bids
+    const sortedBids = clonedBids
       .sort((a, b) => {
         if (Number(a.quote) - Number(b.quote) !== 0) {
           return Number(a.quote) - Number(b.quote);

@@ -103,9 +103,9 @@ export const TransactionsTable = ({
   );
 
   const onRow = useCallback(
-    (record: any) => {
+    (record: TransactionRow) => {
       return {
-        onClick: (_event: any) => {
+        onClick: () => {
           router.push(`/blockchain/${block}/${record.rank}`);
         },
       };

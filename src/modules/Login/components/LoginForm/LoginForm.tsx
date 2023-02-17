@@ -11,7 +11,7 @@ export const LoginForm: React.FC = () => {
   const {
     loginForm,
     handleLogin,
-    formValdation,
+    formValidation,
     onChangeUseWhaleVault,
     onChangeWalletLock,
     submitting,
@@ -35,7 +35,7 @@ export const LoginForm: React.FC = () => {
     >
       <Form.Item
         name="username"
-        rules={formValdation.username}
+        rules={formValidation.username}
         validateFirst={true}
         validateTrigger={["onChange", "onSubmit"]}
       >
@@ -48,7 +48,7 @@ export const LoginForm: React.FC = () => {
         <>
           <Form.Item
             name="password"
-            rules={formValdation.password}
+            rules={formValidation.password}
             validateFirst={true}
             validateTrigger="onSubmit"
           >
@@ -76,7 +76,7 @@ export const LoginForm: React.FC = () => {
         ""
       )}
       <Form.Item
-        rules={formValdation.useWhaleVault}
+        rules={formValidation.useWhaleVault}
         validateFirst={true}
         validateTrigger={["onChange", "onSubmit"]}
         name="useWhaleVault"

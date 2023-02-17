@@ -25,7 +25,7 @@ export const ProxyTab = ({
     searchedAccount,
     updateAccountFee,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     addProxy,
     removeProxy,
     searchChange,
@@ -52,7 +52,7 @@ export const ProxyTab = ({
         searchedAccount={searchedAccount}
         updateAccountFee={updateAccountFee}
         transactionMessageState={transactionMessageState}
-        transactionMessageDispatch={transactionMessageDispatch}
+        dispatchTransactionMessage={dispatchTransactionMessage}
         addProxy={addProxy}
         removeProxy={removeProxy}
         searchChange={searchChange}

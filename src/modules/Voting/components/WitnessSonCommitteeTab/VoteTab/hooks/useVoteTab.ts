@@ -59,7 +59,7 @@ export function useVoteTab({
   const [updateAccountFee, setUpdateAccountFee] = useState<number>();
   const afterCloseTransactionModal = useRef<() => void>();
 
-  const { transactionMessageState, transactionMessageDispatch } =
+  const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
   const { formKnownAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
@@ -371,33 +371,33 @@ export function useVoteTab({
     async (signerKey: SignerKey) => {
       const votingErrorMessage = validateVoting(updateAccountFee as number);
       if (votingErrorMessage) {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.ERROR,
           message: votingErrorMessage,
         });
         return;
       }
-      transactionMessageDispatch({
+      dispatchTransactionMessage({
         type: TransactionMessageActionType.CLEAR,
         message: votingErrorMessage,
       });
 
       let trxResult;
       try {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADING,
         });
         const trx = await createUpdateAccountTrx(localApprovedVotesIds);
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (error) {
         console.log(error);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.unable_transaction`),
         });
       }
       if (trxResult) {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_SUCCESS,
           message: counterpart.translate(`field.success.published_votes`),
         });
@@ -409,7 +409,7 @@ export function useVoteTab({
           setConfirmed(true);
         };
       } else {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.unable_transaction`),
         });
@@ -418,7 +418,7 @@ export function useVoteTab({
     [
       validateVoting,
       updateAccountFee,
-      transactionMessageDispatch,
+      dispatchTransactionMessage,
       createUpdateAccountTrx,
       localApprovedVotesIds,
       buildTrx,
@@ -475,7 +475,7 @@ export function useVoteTab({
     removeVote,
     handleVoting,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     updateAccountFee,
     localApprovedVotesIds,
     afterSuccessTransactionModalClose: afterCloseTransactionModal.current,

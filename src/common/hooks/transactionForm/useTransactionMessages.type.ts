@@ -23,5 +23,5 @@ export type TransactionMessageState = {
 
 export type UseTransactionMessageResult = {
   transactionMessageState: TransactionMessageState;
-  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
+  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
 };

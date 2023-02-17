@@ -2,6 +2,7 @@ import counterpart from "counterpart";
 import { useRouter } from "next/router";
 
 import { defaultToken } from "../../../../api/params";
+import { LoadingIndicator } from "../../../../common/components";
 import { GPOSInfo } from "../../../../common/hooks";
 import { useViewportContext } from "../../../../common/providers";
 
@@ -10,9 +11,10 @@ import { useGPOSTab } from "./hooks";
 
 type Props = {
   gposInfo: GPOSInfo;
+  loading: boolean;
 };
 
-export const GPOSTab = ({ gposInfo }: Props): JSX.Element => {
+export const GPOSTab = ({ gposInfo, loading }: Props): JSX.Element => {
   const router = useRouter();
 
   const { readMore, setReadMore } = useGPOSTab();
@@ -88,11 +90,15 @@ export const GPOSTab = ({ gposInfo }: Props): JSX.Element => {
                     .replace(" ", "-")
                     .toLowerCase()}
                 >
-                  {`${counterpart.translate(
-                    `pages.voting.gpos.performance_string.${gposInfo.performance
-                      .replace(" ", "_")
-                      .toLowerCase()}`
-                  )}`}
+                  {!loading ? (
+                    `${counterpart.translate(
+                      `pages.voting.gpos.performance_string.${gposInfo.performance
+                        .replace(" ", "_")
+                        .toLowerCase()}`
+                    )}`
+                  ) : (
+                    <LoadingIndicator type="circle-small" />
+                  )}
                 </Styled.GPOSDetailsValue>
               </li>
               <li>

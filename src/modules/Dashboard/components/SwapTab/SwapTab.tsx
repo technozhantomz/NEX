@@ -9,7 +9,7 @@ import {
   PasswordModal,
   TransactionModal,
 } from "../../../../common/components";
-import { useHandleTransactionForm } from "../../../../common/hooks";
+import { useTransactionForm } from "../../../../common/hooks";
 import {
   CardFormButton,
   Form,
@@ -25,7 +25,7 @@ export const SwapTab = (): JSX.Element => {
   const {
     swapForm,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     selectedAssetsSymbols,
     allAssets,
     handleSellAssetChange,
@@ -49,13 +49,12 @@ export const SwapTab = (): JSX.Element => {
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleSwapSubmit,
-    transactionMessageDispatch,
+  } = useTransactionForm({
+    executeTransaction: handleSwapSubmit,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
 
@@ -194,7 +193,6 @@ export const SwapTab = (): JSX.Element => {
             const values = swapForm.getFieldsValue();
             setTransactionModalSellAmount(values.sellAmount);
             setTransactionModalBuyAmount(values.buyAmount);
-            showPasswordModal();
           }}
           validateTrigger={["onChange", "onSubmit", "onBlur"]}
         >
