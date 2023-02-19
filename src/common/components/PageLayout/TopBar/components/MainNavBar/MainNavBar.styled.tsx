@@ -67,7 +67,7 @@ export const MenuWrapper = styled.div`{
       width: 210px;
       background: transparent;
       padding-top: 0;
-      &.main-menu-wrapper{
+      &. -wrapper{
           right:32px;
       }
       &.profile-wrapper{

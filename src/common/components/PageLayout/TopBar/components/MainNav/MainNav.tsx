@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import Link from "next/link";
 
 import {
   DollarOutlined,
@@ -13,6 +14,7 @@ import {
 import {
   Blockchain,
   Dashboard,
+  Logo,
   Market,
   SignupIcon,
   Vote,
@@ -25,6 +27,7 @@ import {
 } from "../../../../../providers";
 import { MenuItem } from "../MenuItem";
 
+import * as Styled from "./MainNav.styled";
 import { useAdvancedMode } from "./hooks";
 
 export const MainNav = (): JSX.Element => {
@@ -40,6 +43,19 @@ export const MainNav = (): JSX.Element => {
         e.stopPropagation();
       }}
     >
+      <Styled.LogoContainer>
+        <div className={"topbar-left"}>
+          <div className="peerplays-logo">
+            <Link className="logo-link" href={"/"}>
+              <Logo className={"logo"} />
+              <h1 className="peer">
+                PEER
+                <span className="plays">PLAYS</span>
+              </h1>
+            </Link>
+          </div>
+        </div>
+      </Styled.LogoContainer>
       <ul>
         {localStorageAccount ? (
           ""
@@ -165,7 +181,7 @@ export const MainNav = (): JSX.Element => {
         {!localStorageAccount ? (
           ""
         ) : (
-          <li className={"logout"}>
+          <li>
             <MenuItem
               href="/logout"
               icon={<PoweroffOutlined className={"menu-icon"} />}
