@@ -14,14 +14,14 @@ export const LogoContainer = styled.div`
       .logo {
         font-size: 10em;
         display: flex;
-        color: ${colors.additionalBlue} !important;
+        color: ${colors.PeerPlaysBlue} !important;
         margin-right: 6px;
         ${breakpoint.sm} {
           margin-right: 12px;
         }
       }
       .peer {
-        color: ${colors.additionalBlue} !important;
+        color: ${colors.PeerPlaysBlue} !important;
         letter-spacing: 1px;
         font-size: 1.25rem;
         margin: 0;

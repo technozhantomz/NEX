@@ -14,7 +14,7 @@ import {
 import {
   Blockchain,
   Dashboard,
-  Logo,
+  LogoColored,
   Market,
   SignupIcon,
   Vote,
@@ -47,7 +47,7 @@ export const MainNav = (): JSX.Element => {
         <div className={"topbar-left"}>
           <div className="peerplays-logo">
             <Link className="logo-link" href={"/"}>
-              <Logo className={"logo"} />
+              <LogoColored className={"logo"} />
               <h1 className="peer">
                 PEER
                 <span className="plays">PLAYS</span>
