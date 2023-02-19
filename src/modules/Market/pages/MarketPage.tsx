@@ -26,7 +26,8 @@ import { useMarketPage } from "./hooks";
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
-  if (!tradeableAssetsSymbols.includes(pair as string)) {
+  console.log({ pair });
+  if (!tradeableAssetsSymbols.includes((pair as string).toUpperCase())) {
     router.push("/404");
     return null;
   }
@@ -43,7 +44,7 @@ const MarketPage: NextPage = () => {
     controlsTabsClassName,
     onChangeControlsTab,
   } = useMarketPage({
-    currentPair: pair as string,
+    currentPair: (pair as string).toUpperCase(),
   });
 
   const renderHistoryTabs = !xxl ? (
@@ -74,7 +75,7 @@ const MarketPage: NextPage = () => {
           </Styled.RightBorderedVerticalFlexedCol>
           {/* Order Book section */}
           <Col xxl={7}>
-            <OrderBook currentPair={pair as string} />
+            <OrderBook currentPair={(pair as string).toUpperCase()} />
           </Col>
         </>
       ) : (
@@ -110,7 +111,7 @@ const MarketPage: NextPage = () => {
           <Styled.MobileAssetSelectorContainer>
             <PairSelect
               handleClickOnPair={handleClickOnPair}
-              currentPair={pair as string}
+              currentPair={(pair as string).toUpperCase()}
             />
           </Styled.MobileAssetSelectorContainer>
           <Styled.MobileStatsContainer>
@@ -175,7 +176,7 @@ const MarketPage: NextPage = () => {
               <Styled.PairSelectorContainer>
                 <PairSelect
                   handleClickOnPair={handleClickOnPair}
-                  currentPair={pair as string}
+                  currentPair={(pair as string).toUpperCase()}
                 />
               </Styled.PairSelectorContainer>
 
@@ -189,7 +190,7 @@ const MarketPage: NextPage = () => {
 
               {/* Wallet Sections */}
               <Styled.WalletContainer>
-                <Wallet currentPair={pair as string} />
+                <Wallet currentPair={(pair as string).toUpperCase()} />
               </Styled.WalletContainer>
             </Styled.VerticalFlexedCol>
           </Styled.FullHeightRow>
@@ -198,7 +199,7 @@ const MarketPage: NextPage = () => {
       <PairModal
         isVisible={isPairModalVisible}
         setIsVisible={setIsPairModalVisible}
-        currentPair={pair as string}
+        currentPair={(pair as string).toUpperCase()}
       />
     </Layout>
   );
