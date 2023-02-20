@@ -2,7 +2,6 @@ import counterpart from "counterpart";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import { tradeableAssetsSymbols } from "../../../api/params/tradeableAssetsSymbols";
 import { Layout } from "../../../common/components";
 import { useViewportContext } from "../../../common/providers";
 import { Col } from "../../../ui/src";
@@ -26,11 +25,6 @@ import { useMarketPage } from "./hooks";
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
-  console.log({ pair });
-  if (!tradeableAssetsSymbols.includes((pair as string).toUpperCase())) {
-    router.push("/404");
-    return null;
-  }
 
   const { lg, xxl } = useViewportContext();
   const {
@@ -44,7 +38,7 @@ const MarketPage: NextPage = () => {
     controlsTabsClassName,
     onChangeControlsTab,
   } = useMarketPage({
-    currentPair: (pair as string).toUpperCase(),
+    currentPair: pair as string,
   });
 
   const renderHistoryTabs = !xxl ? (
