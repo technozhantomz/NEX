@@ -27,7 +27,7 @@ type Props = {
 export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
   const {
     loading,
-    showDetials,
+    showDetails,
     searchDataSource,
     operationsRows,
     setSearchDataSource,
@@ -80,7 +80,7 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
                 </a>
               </span>
             </div>
-            <Styled.OperationDetails className={showDetials ? "open" : ""}>
+            <Styled.OperationDetails className={showDetails ? "open" : ""}>
               <p>
                 {counterpart.translate(
                   `pages.blocks.transaction_detials.details`
@@ -98,7 +98,7 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
         </Styled.OperationsListItem>
       );
     },
-    [OperationsColumns, toggleDetails, showDetials]
+    [OperationsColumns, toggleDetails, showDetails]
   );
 
   return (

@@ -3,12 +3,12 @@ import { CheckboxChangeEvent, FormInstance, Rule } from "../../../../../ui/src";
 export type UseLoginFormResult = {
   validUser: boolean;
   handleLogin: () => void;
-  formValdation: IFormValidation;
+  formValidation: IFormValidation;
   loginForm: FormInstance<LoginForm>;
   submitting: boolean;
   useWhaleVault: boolean;
   onChangeUseWhaleVault: (e: CheckboxChangeEvent) => void;
-  onChangeWalletLock: (value: any) => void;
+  onChangeWalletLock: (value: string) => void;
 };
 
 export type LoginForm = {

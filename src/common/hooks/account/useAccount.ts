@@ -1,5 +1,5 @@
 import { Login, PrivateKey } from "peerplaysjs-lib";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 import { useAsset } from "..";
 import { defaultToken } from "../../../api/params";
@@ -26,7 +26,6 @@ export function useAccount(): UseAccountResult {
     setLocalStorageAccount,
     setBitcoinSidechainAccounts,
   } = useUserContext();
-  const [loading, setLoading] = useState<boolean>(true);
   const { formAssetBalanceById } = useAsset();
   const { dbApi, whaleVaultInstance } = usePeerplaysApiContext();
 
@@ -85,7 +84,6 @@ export function useAccount(): UseAccountResult {
   const formAccountAfterConfirmation = useCallback(
     async (fullAccount: FullAccount, password: string, keyType: KeyType) => {
       try {
-        setLoading(true);
         const assets = await Promise.all(
           fullAccount.balances.map((balance) => {
             return formAssetBalanceById(balance.asset_type, balance.balance);
@@ -98,19 +96,16 @@ export function useAccount(): UseAccountResult {
           fullAccount.account
         );
         savePassword(password, keyType);
-        setLoading(false);
       } catch (e) {
         console.log(e);
-        setLoading(false);
       }
     },
-    [updateAccount, formAssetBalanceById, setLoading, savePassword]
+    [updateAccount, formAssetBalanceById, savePassword]
   );
 
   const formAccountByName = useCallback(
     async (name: string, subscription: boolean) => {
       try {
-        setLoading(true);
         const fullAccount = await getFullAccount(name, subscription);
         if (fullAccount) {
           const assets = await Promise.all(
@@ -125,13 +120,11 @@ export function useAccount(): UseAccountResult {
             fullAccount.account
           );
         }
-        setLoading(false);
       } catch (e) {
-        setLoading(false);
         console.log(e);
       }
     },
-    [dbApi, updateAccount, formAssetBalanceById, setLoading]
+    [dbApi, updateAccount, formAssetBalanceById]
   );
 
   const formAccountBalancesByName = useCallback(
@@ -342,7 +335,6 @@ export function useAccount(): UseAccountResult {
 
   return {
     formAccountByName,
-    loading,
     formAccountBalancesByName,
     getFullAccount,
     getAccountByName,

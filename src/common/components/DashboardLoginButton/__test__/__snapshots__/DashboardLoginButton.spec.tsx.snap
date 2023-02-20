@@ -6,7 +6,7 @@ exports[`Dashboard login button Deposit tab renders correctly for not logged in 
     class="sc-bQmOxr jxKOwW"
   >
     <button
-      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-3779289f-0 sc-fWQKxP dPgDWt bHmnGx"
+      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-ed3eeb43-0 sc-fWQKxP dPgDWt fwQlA"
       type="button"
     >
       <span>
@@ -35,7 +35,7 @@ exports[`Dashboard login button Deposit tab renders correctly for not logged in 
     class="sc-bQmOxr jxKOwW"
   >
     <button
-      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-3779289f-0 sc-fWQKxP dPgDWt bHmnGx"
+      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-ed3eeb43-0 sc-fWQKxP dPgDWt fwQlA"
       type="button"
     >
       <span>

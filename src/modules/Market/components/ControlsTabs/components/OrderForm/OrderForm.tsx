@@ -9,7 +9,7 @@ import {
   PasswordModal,
   TransactionModal,
 } from "../../../../../../common/components";
-import { useHandleTransactionForm } from "../../../../../../common/hooks";
+import { useTransactionForm } from "../../../../../../common/hooks";
 import { useUserContext } from "../../../../../../common/providers";
 import {
   DownOutlined,
@@ -52,7 +52,7 @@ export function OrderForm({
     sliderValue,
     timePolicy,
     handleTimePolicyChange,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     transactionMessageState,
     handleCreateLimitOrder,
     handleExecutionChange,
@@ -68,13 +68,12 @@ export function OrderForm({
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleCreateLimitOrder,
-    transactionMessageDispatch,
+  } = useTransactionForm({
+    executeTransaction: handleCreateLimitOrder,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
   const sliderMarks: SliderMarks = {
@@ -104,7 +103,6 @@ export function OrderForm({
           name="orderForm"
           form={orderForm}
           onValuesChange={handleValuesChange}
-          onFinish={showPasswordModal}
         >
           {formType === "limit" && (
             <Styled.FormItem

@@ -39,7 +39,7 @@ export function useOrderForm({
   isBuyForm,
   precisions,
 }: Args): UseOrderFormResult {
-  const { transactionMessageState, transactionMessageDispatch } =
+  const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
   const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
   const { buildTrx } = useTransactionBuilder();
@@ -129,7 +129,7 @@ export function useOrderForm({
     [orderForm, limitByPrecision]
   );
   const handleFormPrecision = useCallback(
-    (changedValues: any) => {
+    (changedValues: { price?: string; amount?: string; total?: string }) => {
       if (changedValues.price) {
         handleFieldPrecision(changedValues.price, "price", precisions.price);
       }
@@ -143,7 +143,10 @@ export function useOrderForm({
     [handleFieldPrecision, precisions]
   );
   const handleRelationsBetweenInputs = useCallback(
-    (changedValues: any, allValues: any) => {
+    (
+      changedValues: { price?: string; amount?: string },
+      allValues: { price?: string; amount?: string }
+    ) => {
       let baseRoundTo = 5;
       if (selectedPair) {
         baseRoundTo = selectedPair.base.precision;
@@ -154,12 +157,15 @@ export function useOrderForm({
       ) {
         if (
           allValues.price &&
-          allValues.price > 0 &&
+          Number(allValues.price) > 0 &&
           allValues.amount &&
-          allValues.amount > 0
+          Number(allValues.amount) > 0
         ) {
           orderForm.setFieldsValue({
-            total: roundNum(allValues.price * allValues.amount, baseRoundTo),
+            total: roundNum(
+              Number(allValues.price) * Number(allValues.amount),
+              baseRoundTo
+            ),
           });
         } else {
           orderForm.setFieldsValue({
@@ -171,7 +177,7 @@ export function useOrderForm({
     [orderForm, selectedPair]
   );
   const specifySliderValue = useCallback(() => {
-    const allValues = orderForm.getFieldsValue() as any;
+    const allValues = orderForm.getFieldsValue();
     if (isBuyForm) {
       const userBaseBalance =
         assets && assets.length
@@ -180,7 +186,7 @@ export function useOrderForm({
           : 0;
       if (allValues.total) {
         const sliderValue = userBaseBalance
-          ? Math.floor((allValues.total / userBaseBalance) * 100)
+          ? Math.floor((Number(allValues.total) / userBaseBalance) * 100)
           : 0;
         setSliderValue(sliderValue);
       } else {
@@ -194,7 +200,7 @@ export function useOrderForm({
           : 0;
       if (allValues.amount) {
         const sliderValue = userQuoteBalance
-          ? Math.floor((allValues.amount / userQuoteBalance) * 100)
+          ? Math.floor((Number(allValues.amount) / userQuoteBalance) * 100)
           : 0;
         setSliderValue(sliderValue);
       } else {
@@ -204,7 +210,10 @@ export function useOrderForm({
   }, [orderForm, isBuyForm, assets, selectedPair, setSliderValue]);
 
   const handleValuesChange = useCallback(
-    (changedValues: any, allValues: any) => {
+    (
+      changedValues: { price?: string; amount?: string },
+      allValues: { price?: string; amount?: string }
+    ) => {
       handleFormPrecision(changedValues);
       handleRelationsBetweenInputs(changedValues, allValues);
       specifySliderValue();
@@ -286,7 +295,6 @@ export function useOrderForm({
           {
             amount: amount,
             price: price,
-            total: total,
           },
           allValues
         );
@@ -521,12 +529,12 @@ export function useOrderForm({
   );
   const handleCreateLimitOrder = useCallback(
     async (signerKey: SignerKey) => {
-      transactionMessageDispatch({
+      dispatchTransactionMessage({
         type: TransactionMessageActionType.CLEAR,
       });
       const values = orderForm.getFieldsValue();
       if (timePolicy === TimePolicy.Good_Til_Time && !expirationCustomTime) {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.ERROR,
           message: counterpart.translate(
             "field.errors.missing_custom_expiration_time"
@@ -541,7 +549,7 @@ export function useOrderForm({
       if (executionValue === "post-only") {
         const isPossible = checkPostOnlyPossibility(values);
         if (!isPossible) {
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.ERROR,
             message: counterpart.translate(
               "field.errors.post_only_limit_order"
@@ -564,34 +572,34 @@ export function useOrderForm({
       );
       let trxResult;
       try {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADING,
         });
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_SUCCESS,
           message: counterpart.translate(
             `field.success.limit_order_successfully`
           ),
         });
       } else {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
       }
     },
     [
-      transactionMessageDispatch,
+      dispatchTransactionMessage,
       orderForm,
       buildCreateLimitOrderTransaction,
       id,
@@ -624,7 +632,7 @@ export function useOrderForm({
     handleTimePolicyChange,
     transactionMessageState,
     handleCreateLimitOrder,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     executionValue,
     handleExecutionChange,
     expirationCustomTime,

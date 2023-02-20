@@ -27,11 +27,6 @@ export function usePasswordForm({ neededKeyType }: Props): IUsePasswordForm {
   };
 
   const validatePassword = async (_: unknown, value: string) => {
-    if (value.length < 12) {
-      return Promise.reject(
-        new Error(counterpart.translate(`field.errors.password_should_be_long`))
-      );
-    }
     if (account) {
       const { checkPassword, keyType: inputedKeyType } =
         validateAccountPassword(value, account);

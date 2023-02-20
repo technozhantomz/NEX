@@ -30,15 +30,15 @@ export type UseSendFormResult = {
   handleValuesChange: (changedValues: any) => Promise<void>;
   onBlockchainChange: (value: unknown) => void;
   selectedBlockchain: string | undefined;
-  formValdation: FormValidation;
+  formValidation: FormValidation;
   feeAmount: number;
   transactionMessageState: TransactionMessageState;
-  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
+  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
   send: (signerKey: SignerKey) => Promise<void>;
   amount: string;
   localStorageAccount: string;
   toAccount: string;
-  selectedAssetPrecission: number;
+  selectedAssetPrecision: number;
   btcTransferFee: number;
   afterTransactionModalClose?: () => void;
 };

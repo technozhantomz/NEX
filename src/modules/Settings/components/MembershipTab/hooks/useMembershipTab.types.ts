@@ -28,7 +28,7 @@ export type MembershipStatus = {
 export type UseMembershipTabResult = {
   handleMembershipUpgrade: (signerKey: SignerKey) => Promise<void>;
   transactionMessageState: TransactionMessageState;
-  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
+  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
   membershipForm: FormInstance<MembershipForm>;
   name: string;
   feesCashback: number;
