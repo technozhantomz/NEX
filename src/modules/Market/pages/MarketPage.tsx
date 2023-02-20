@@ -69,7 +69,7 @@ const MarketPage: NextPage = () => {
           </Styled.RightBorderedVerticalFlexedCol>
           {/* Order Book section */}
           <Col xxl={7}>
-            <OrderBook currentPair={(pair as string).toUpperCase()} />
+            <OrderBook currentPair={pair as string} />
           </Col>
         </>
       ) : (
@@ -105,7 +105,7 @@ const MarketPage: NextPage = () => {
           <Styled.MobileAssetSelectorContainer>
             <PairSelect
               handleClickOnPair={handleClickOnPair}
-              currentPair={(pair as string).toUpperCase()}
+              currentPair={pair as string}
             />
           </Styled.MobileAssetSelectorContainer>
           <Styled.MobileStatsContainer>
@@ -170,7 +170,7 @@ const MarketPage: NextPage = () => {
               <Styled.PairSelectorContainer>
                 <PairSelect
                   handleClickOnPair={handleClickOnPair}
-                  currentPair={(pair as string).toUpperCase()}
+                  currentPair={pair as string}
                 />
               </Styled.PairSelectorContainer>
 
@@ -184,7 +184,7 @@ const MarketPage: NextPage = () => {
 
               {/* Wallet Sections */}
               <Styled.WalletContainer>
-                <Wallet currentPair={(pair as string).toUpperCase()} />
+                <Wallet currentPair={pair as string} />
               </Styled.WalletContainer>
             </Styled.VerticalFlexedCol>
           </Styled.FullHeightRow>
@@ -193,7 +193,7 @@ const MarketPage: NextPage = () => {
       <PairModal
         isVisible={isPairModalVisible}
         setIsVisible={setIsPairModalVisible}
-        currentPair={(pair as string).toUpperCase()}
+        currentPair={pair as string}
       />
     </Layout>
   );
