@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   styled,
   Avatar as UiAvatar,
@@ -55,7 +57,6 @@ export const MenuWrapper = styled.div`{
   background: ${colors.white};
   color: ${colors.textColor};
   z-index: 1100;
-  padding-top: 95px;
   &.open{
     display: block;
     flex-direction: column;
@@ -82,16 +83,37 @@ export const MenuWrapper = styled.div`{
   }
 `;
 
+export const LogoCloseContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  padding-top: 48px;
+`;
 export const CloseButton = styled(UiButton)`
   color: ${colors.textColor};
-  position: absolute;
-  top: 8px;
-  right: 0;
-  z-index: 9999;
-  text-align: center;
-  margin: 50px 25px 0 20px;
   ${breakpoint.sm} {
     display: none;
+  }
+`;
+export const LogoContainer = styled.div`
+  ${breakpoint.sm} {
+    display: none;
+  }
+`;
+export const LogoLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  .logo {
+    margin-right: 6px;
+  }
+  .peer {
+    color: ${colors.primaryColor};
+    font-size: 1.25rem;
+    margin: 0;
+  }
+  .plays {
+    font-weight: 200;
   }
 `;
 
