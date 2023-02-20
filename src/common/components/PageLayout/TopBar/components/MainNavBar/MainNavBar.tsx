@@ -4,6 +4,7 @@ import {
   Avatar,
   Badge,
   BellOutlined,
+  LogoColored,
   MenuOutlined,
   MoreOutlined,
   UserOutlined,
@@ -40,13 +41,27 @@ export const MainNavBar = (): JSX.Element => {
   const CloseButton = (
     <>
       {sm ? (
-        <Styled.CloseButton
-          type="text"
-          className="close"
-          onClick={closeAllMenus}
-        >
-          X
-        </Styled.CloseButton>
+        <Styled.LogoCloseContainer>
+          <Styled.LogoContainer>
+            <Styled.LogoLink href={"/"}>
+              <LogoColored className={"logo"} />
+              <h1 className="peer">
+                PEER
+                <span className="plays">PLAYS</span>
+              </h1>
+            </Styled.LogoLink>
+          </Styled.LogoContainer>
+          <Styled.CloseButton
+            type="text"
+            className="close"
+            onClick={(e) => {
+              e.stopPropagation();
+              closeAllMenus();
+            }}
+          >
+            X
+          </Styled.CloseButton>
+        </Styled.LogoCloseContainer>
       ) : (
         ""
       )}
