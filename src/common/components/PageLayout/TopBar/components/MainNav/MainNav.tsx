@@ -165,7 +165,7 @@ export const MainNav = (): JSX.Element => {
         {!localStorageAccount ? (
           ""
         ) : (
-          <li className={"logout"}>
+          <li>
             <MenuItem
               href="/logout"
               icon={<PoweroffOutlined className={"menu-icon"} />}
