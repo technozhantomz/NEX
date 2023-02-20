@@ -25,6 +25,7 @@ import { useMarketPage } from "./hooks";
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
+
   const { lg, xxl } = useViewportContext();
   const {
     isPairModalVisible,
