@@ -256,18 +256,22 @@ export function useAccount(): UseAccountResult {
     [getAccountByName, localStorageAccount]
   );
 
+  const changeDefaultTokenInTestnetPublicKey = useCallback(
+    (pubKey: string) => {
+      return pubKey.slice(0, 4).includes(defaultToken as string)
+        ? pubKey
+        : pubKey.replace("PPY", defaultToken as string);
+    },
+    [defaultToken]
+  );
   const validateWhaleVaultPubKeys = useCallback(
-    (pubkeys: WhaleVaultPubKeys, account: Account, keyType?: KeyType) => {
+    (pubKeys: WhaleVaultPubKeys, account: Account, keyType?: KeyType) => {
       let isValid = false;
+      let { activePubkey, memoPubkey } = pubKeys;
 
-      let { activePubkey, memoPubkey } = pubkeys;
       if (!keyType || keyType === "active") {
         if (activePubkey) {
-          activePubkey = activePubkey
-            .slice(0, 4)
-            .includes(defaultToken as string)
-            ? activePubkey
-            : activePubkey.replace("PPY", defaultToken as string);
+          activePubkey = changeDefaultTokenInTestnetPublicKey(activePubkey);
           const accountActiveKey = account.active.key_auths[0][0];
           if (accountActiveKey === activePubkey) {
             isValid = true;
@@ -277,9 +281,7 @@ export function useAccount(): UseAccountResult {
       }
       if (!keyType || keyType === "memo") {
         if (memoPubkey) {
-          memoPubkey = memoPubkey.slice(0, 4).includes(defaultToken as string)
-            ? memoPubkey
-            : memoPubkey.replace("PPY", defaultToken as string);
+          memoPubkey = changeDefaultTokenInTestnetPublicKey(memoPubkey);
           const accountMemoKey = account.options.memo_key;
           if (accountMemoKey === memoPubkey) {
             isValid = true;
@@ -289,7 +291,7 @@ export function useAccount(): UseAccountResult {
       }
       return isValid;
     },
-    [defaultToken]
+    [changeDefaultTokenInTestnetPublicKey]
   );
 
   const _validateUseWhaleVault = useCallback(

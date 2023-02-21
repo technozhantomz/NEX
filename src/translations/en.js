@@ -620,7 +620,7 @@ export const en = {
         witness_signature: "Witness Signature",
         search_transactions: "Search Transactions",
       },
-      transaction_detials: {
+      transaction_details: {
         transaction: "Transaction",
         transaction_id: "Transaction ID",
         ref_block_prefix: "Ref block prefix",

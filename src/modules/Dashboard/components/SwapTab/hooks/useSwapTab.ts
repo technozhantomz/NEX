@@ -171,7 +171,6 @@ export function useSwap(): UseSwapResult {
       defaultAsset,
     ]
   );
-  //TODO: needs separation of concerns
   const calculateNonBasePairPriceForSellAmount = useCallback(
     (
       sellAmount: number,
@@ -237,7 +236,6 @@ export function useSwap(): UseSwapResult {
     ]
   );
 
-  //TODO: needs separation of concern
   const calculateNonBasePairPriceForBuyAmount = useCallback(
     (
       buyAmount: number,

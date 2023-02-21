@@ -73,7 +73,8 @@ export function useVoteTab({
   const sortVotesRows = useCallback((votes: VoteRow[]) => {
     const sorter = (a: VoteRow, b: VoteRow) =>
       Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0]);
-    return votes.sort(sorter).map((vote, index) => {
+    votes.sort(sorter);
+    return votes.map((vote, index) => {
       return { ...vote, rank: index + 1 };
     }) as VoteRow[];
   }, []);

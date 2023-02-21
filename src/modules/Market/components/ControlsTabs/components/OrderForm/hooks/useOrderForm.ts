@@ -558,13 +558,19 @@ export function useOrderForm({
           return;
         }
       }
+      const amounts = {
+        quantity: values.amount,
+        total: values.total,
+      };
+      const assetPairs = {
+        base: selectedPair?.base as Asset,
+        quote: selectedPair?.quote as Asset,
+      };
 
       const trx = buildCreateLimitOrderTransaction(
         id,
-        values.amount,
-        values.total,
-        selectedPair?.base as Asset,
-        selectedPair?.quote as Asset,
+        amounts,
+        assetPairs,
         expiration,
         fillOrKill,
         [],

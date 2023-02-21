@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -270,33 +271,54 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     }
   }, [id, getSidechainAccounts]);
 
+  const context = useMemo(() => {
+    return {
+      id,
+      name,
+      assets,
+      account,
+      localStorageAccount,
+      setLocalStorageAccount,
+      password,
+      keyType,
+      updateAccount,
+      setAssets,
+      savePassword,
+      removePassword,
+      hasBTCDepositAddress,
+      hasBTCWithdrawPublicKey,
+      getSidechainAccounts,
+      loadingSidechainAccounts,
+      sidechainAccounts,
+      bitcoinSidechainAccount,
+      bitcoinSidechainAccounts,
+      setBitcoinSidechainAccounts,
+    };
+  }, [
+    id,
+    name,
+    assets,
+    account,
+    localStorageAccount,
+    setLocalStorageAccount,
+    password,
+    keyType,
+    updateAccount,
+    setAssets,
+    savePassword,
+    removePassword,
+    hasBTCDepositAddress,
+    hasBTCWithdrawPublicKey,
+    getSidechainAccounts,
+    loadingSidechainAccounts,
+    sidechainAccounts,
+    bitcoinSidechainAccount,
+    bitcoinSidechainAccounts,
+    setBitcoinSidechainAccounts,
+  ]);
+
   return (
-    <UserContext.Provider
-      value={{
-        id,
-        name,
-        assets,
-        account,
-        localStorageAccount,
-        setLocalStorageAccount,
-        password,
-        keyType,
-        updateAccount,
-        setAssets,
-        savePassword,
-        removePassword,
-        hasBTCDepositAddress,
-        hasBTCWithdrawPublicKey,
-        getSidechainAccounts,
-        loadingSidechainAccounts,
-        sidechainAccounts,
-        bitcoinSidechainAccount,
-        bitcoinSidechainAccounts,
-        setBitcoinSidechainAccounts,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={context}>{children}</UserContext.Provider>
   );
 };
 

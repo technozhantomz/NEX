@@ -1,5 +1,11 @@
 import { useMetaMask } from "metamask-react";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { useSessionStorage } from "../../hooks";
 
@@ -47,7 +53,6 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
     "PL-hiveUserName"
   ) as [string, (value: string) => void];
   const { ethereum, connect } = useMetaMask();
-  //TODO: will need to add metamask and hive side chain info to user provider
 
   const connectToMetaMask = async () => {
     const accounts = await connect();
@@ -114,10 +119,17 @@ export const PeerLinkProvider = ({ children }: Props): JSX.Element => {
     }
   }, [hiveUserName]);
 
+  const context = useMemo(() => {
+    return {
+      metaMask,
+      hive,
+      connectToMetaMask,
+      connectToHive,
+    };
+  }, [metaMask, hive, connectToMetaMask, connectToHive]);
+
   return (
-    <PeerLinkContext.Provider
-      value={{ metaMask, hive, connectToMetaMask, connectToHive }}
-    >
+    <PeerLinkContext.Provider value={context}>
       {children}
     </PeerLinkContext.Provider>
   );

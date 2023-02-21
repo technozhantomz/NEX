@@ -87,8 +87,17 @@ export const utils = {
     );
 
     const length = name.length;
-
-    if (length < 3) {
+    if (!/^[~a-z]/.test(name)) {
+      return {
+        isValid: false,
+        error:
+          suffix +
+          counterpart.translate(
+            "field.errors.account_creation_errors.start_with_letter"
+          ),
+      };
+    }
+    if (length < 2) {
       return {
         isValid: false,
         error:
@@ -98,7 +107,7 @@ export const utils = {
           ),
       };
     }
-    if (length > 63) {
+    if (length > 62) {
       return {
         isValid: false,
         error:
@@ -157,7 +166,7 @@ export const utils = {
             ),
         };
       }
-      if (label.length < 3) {
+      if (label.length < 2) {
         return {
           isValid: false,
           error:

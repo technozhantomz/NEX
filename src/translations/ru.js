@@ -621,7 +621,7 @@ export const ru = {
         witness_signature: "Подпись свидетеля",
         search_transactions: "Поиск транзакций",
       },
-      transaction_detials: {
+      transaction_details: {
         transaction: "Транзакция",
         transaction_id: "Идентификатор транзакции",
         ref_block_prefix: "Префикс блока ссылки",

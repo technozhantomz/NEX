@@ -20,8 +20,8 @@ const Dashboard = (): JSX.Element => {
       <Styled.HeaderContainer>
         <Styled.HeaderContainerItem>
           <Styled.Row gutter={4}>
-            {tabs.map((tab, i) => (
-              <Styled.Col key={i} className="gutter-row" span={6}>
+            {tabs.map((tab) => (
+              <Styled.Col key={tab} className="gutter-row" span={6}>
                 <Styled.Buttons
                   className={activeTab === tab ? "active" : ""}
                   onClick={() => changeTab(tab)}

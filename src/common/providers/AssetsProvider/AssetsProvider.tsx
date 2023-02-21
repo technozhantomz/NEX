@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -104,17 +105,22 @@ export const AssetsProvider = ({ children }: Props): JSX.Element => {
     };
   }, [getSidechainAssets, setLoadingSidechainAssets, _setSidechainAssets]);
 
+  const context = useMemo(() => {
+    return {
+      defaultAsset,
+      sidechainAssets,
+      loadingSidechainAssets,
+      loadingDefaultAsset,
+    };
+  }, [
+    defaultAsset,
+    sidechainAssets,
+    loadingSidechainAssets,
+    loadingDefaultAsset,
+  ]);
+
   return (
-    <AssetsContext.Provider
-      value={{
-        defaultAsset,
-        sidechainAssets,
-        loadingSidechainAssets,
-        loadingDefaultAsset,
-      }}
-    >
-      {children}
-    </AssetsContext.Provider>
+    <AssetsContext.Provider value={context}>{children}</AssetsContext.Provider>
   );
 };
 
