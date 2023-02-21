@@ -693,6 +693,8 @@ export const ru = {
       select_asset: "Выберите актив",
       select_blockchain: "Выберите блокчейн",
       available_to_send: "Доступно для отправки:",
+      withdraw_alert:
+        "Если вы выберете блокчейн, отличный от Peerplays, вы будете выводить свои средства в целевую сеть.",
     },
     market: {
       heading: "Рынок",

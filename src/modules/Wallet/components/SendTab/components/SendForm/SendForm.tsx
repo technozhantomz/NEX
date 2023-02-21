@@ -263,20 +263,33 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             />
           </Form.Item>
         </div>
-        <p>{counterpart.translate(`field.comments.public_memo`)}</p>
-        <Styled.MemoWrapper>
-          <Styled.MemoFormItem
-            name="memo"
-            validateFirst={true}
-            validateTrigger="onChange"
-          >
-            <Styled.Memo
-              placeholder={counterpart.translate(`field.placeholder.memo`)}
-              maxLength={256}
-              disabled={selectedBlockchain !== defaultNetwork}
-            />
-          </Styled.MemoFormItem>
-        </Styled.MemoWrapper>
+        {selectedBlockchain === undefined ||
+        selectedBlockchain === defaultNetwork ? (
+          <>
+            <p>{counterpart.translate(`field.comments.public_memo`)}</p>
+            <Styled.MemoWrapper>
+              <Styled.MemoFormItem
+                name="memo"
+                validateFirst={true}
+                validateTrigger="onChange"
+              >
+                <Styled.Memo
+                  placeholder={counterpart.translate(`field.placeholder.memo`)}
+                  maxLength={256}
+                  disabled={selectedBlockchain !== defaultNetwork}
+                />
+              </Styled.MemoFormItem>
+            </Styled.MemoWrapper>
+          </>
+        ) : (
+          <Styled.WithdrawAlertWrapper>
+            <Styled.AlertIcon />
+            <Styled.AlertText>
+              {counterpart.translate("pages.wallet.withdraw_alert")}
+            </Styled.AlertText>
+          </Styled.WithdrawAlertWrapper>
+        )}
+
         {transactionDetails}
         <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">

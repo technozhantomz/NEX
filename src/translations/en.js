@@ -693,6 +693,8 @@ export const en = {
       select_asset: "Select an asset",
       select_blockchain: "Select a blockchain",
       available_to_send: "Available to send:",
+      withdraw_alert:
+        "If you select a blockchain other than Peerplays, you will be withdrawing your funds to the targeted network.",
     },
     market: {
       heading: "Market",
