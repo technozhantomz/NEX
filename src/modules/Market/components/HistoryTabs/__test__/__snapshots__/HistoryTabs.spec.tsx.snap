@@ -3,7 +3,7 @@
 exports[`HistoryTabs component should render tabs with translated labels and HistoryTable 1`] = `
 <DocumentFragment>
   <div
-    class="ant-tabs ant-tabs-top ant-tabs-centered Tabs-sc-694db91e-0 sc-bcXHqe CYjqP cLewbG"
+    class="ant-tabs ant-tabs-top ant-tabs-centered Tabs-sc-694db91e-0 sc-bcXHqe CYjqP djyrMg"
   >
     <div
       class="ant-tabs-nav"
@@ -102,7 +102,7 @@ exports[`HistoryTabs component should render tabs with translated labels and His
           tabindex="0"
         >
           <div
-            class="sc-gswNZR fEWeSN"
+            class="sc-gswNZR kjbwPJ"
           >
             <div>
               HistoryTable

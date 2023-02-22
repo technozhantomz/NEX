@@ -83,8 +83,8 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   }, []);
 
   const groupAsksByThreshold = useCallback(
-    (asks: MarketOrder[], selectedPair: MarketPair, threshold: number) => {
-      const filteredAsks = cloneDeep(asks).filter(
+    (rawAsks: MarketOrder[], selectedPair: MarketPair, threshold: number) => {
+      const filteredAsks = cloneDeep(rawAsks).filter(
         (ask) => Number(ask.price) >= threshold
       );
       const groupedAsks: (MarketOrder & { maxPrice: string })[] = [];
@@ -126,8 +126,8 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   );
 
   const groupBidsByThreshold = useCallback(
-    (bids: MarketOrder[], selectedPair: MarketPair, threshold: number) => {
-      const filteredBids = cloneDeep(bids).filter(
+    (rawBids: MarketOrder[], selectedPair: MarketPair, threshold: number) => {
+      const filteredBids = cloneDeep(rawBids).filter(
         (bid) => Number(bid.price) >= threshold
       );
       const groupedBids: (MarketOrder & { minPrice: string })[] = [];
@@ -291,11 +291,10 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   );
 
   const specifyAsksTableRowClassName = useCallback(
-    (record: any) => {
-      const item = record as MarketOrder;
+    (record: MarketOrder) => {
       const orderDepthRatio =
         Math.ceil(
-          (Number(item.quote) /
+          (Number(record.quote) /
             (max(asksRows.map((row) => Number(row.quote))) ?? 0)) *
             10
         ) * 10;
@@ -306,11 +305,10 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   );
 
   const specifyBidsTableRowClassName = useCallback(
-    (record: any) => {
-      const item = record as MarketOrder;
+    (record: MarketOrder) => {
       const orderDepthRatio =
         Math.ceil(
-          (Number(item.quote) /
+          (Number(record.quote) /
             (max(bidsRows.map((row) => Number(row.quote))) ?? 0)) *
             10
         ) * 10;

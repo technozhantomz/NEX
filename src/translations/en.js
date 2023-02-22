@@ -620,7 +620,7 @@ export const en = {
         witness_signature: "Witness Signature",
         search_transactions: "Search Transactions",
       },
-      transaction_detials: {
+      transaction_details: {
         transaction: "Transaction",
         transaction_id: "Transaction ID",
         ref_block_prefix: "Ref block prefix",
@@ -693,6 +693,8 @@ export const en = {
       select_asset: "Select an asset",
       select_blockchain: "Select a blockchain",
       available_to_send: "Available to send:",
+      withdraw_alert:
+        "If you select a blockchain other than Peerplays, you will be withdrawing your funds to the targeted network.",
     },
     market: {
       heading: "Market",
@@ -1116,10 +1118,6 @@ export const en = {
       same_account: "Same as your account",
       no_account: "Account not found",
       added_account: "Account is already added",
-      premium_username:
-        "This is a premium name which is not supported by this faucet.",
-      username_limits:
-        "Username should start with lowercase letter and should not contain capital letter or special characters or only digits",
       user_not_found: "User not found",
       password_incorrect: "Password incorrect",
       username_required: "Username is required",
@@ -1182,6 +1180,27 @@ export const en = {
       post_only_limit_order: "Unable to create post only limit order",
       missing_custom_expiration_time:
         "Please select the custom expiration time or change the time policy of the order",
+      premium_username:
+        "This is a premium name which is not supported by this faucet. A Cheap name includes digits or doesn't include vowels",
+      account_creation_errors: {
+        account_should: "Account name should ",
+        be_longer: "be longer.",
+        be_shorter: "be shorter.",
+        account_segment_should:
+          "Each account segment (separated by `.`) should ",
+        start_with_letter: "start with a lowercase letter.",
+        have_letters_digits_dashes: "have only letters, digits, or dashes.",
+        have_one_dash_in_row: "have only one dash in a row.",
+        end_letter_digit: "end with a letter or digit.",
+      },
+      hive_account_errors: {
+        account_should: "Hive account should ",
+        be_longer: "be longer.",
+        start_with_letter: "start with a lowercase letter.",
+        have_letters_digits_dashes: "have only letters, digits, or dashes.",
+        end_letter_digit: "end with a letter or digit.",
+        have_one_dash_in_row: "have only one dash in a row.",
+      },
     },
     success: {
       successfully_transferred:

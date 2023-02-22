@@ -38,7 +38,7 @@ export function usePowerDownForm({
   const [newBalance, setNewBalance] = useState<string>("0");
   const [newAvailableBalance, setNewAvailableBalance] = useState<string>("0");
 
-  const { transactionMessageState, transactionMessageDispatch } =
+  const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
   const [powerDownForm] = Form.useForm<PowerDownForm>();
   const withdrawAmount: string =
@@ -55,12 +55,12 @@ export function usePowerDownForm({
 
   const handleWithdraw = useCallback(
     async (signerKey: SignerKey) => {
-      transactionMessageDispatch({
+      dispatchTransactionMessage({
         type: TransactionMessageActionType.CLEAR,
       });
       const values = powerDownForm.getFieldsValue();
       try {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADING,
         });
         const vestingBalances: VestingBalance[] = await dbApi(
@@ -82,7 +82,7 @@ export function usePowerDownForm({
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await calculateGposBalances();
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_SUCCESS,
             message: counterpart.translate(
               `field.success.successfully_withdrawn`,
@@ -93,14 +93,14 @@ export function usePowerDownForm({
             ),
           });
         } else {
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(`field.errors.transaction_unable`),
           });
         }
       } catch (e) {
         console.log(e);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
@@ -108,7 +108,7 @@ export function usePowerDownForm({
     },
     [
       powerDownForm,
-      transactionMessageDispatch,
+      dispatchTransactionMessage,
       dbApi,
       id,
       gposBalances,
@@ -258,7 +258,7 @@ export function usePowerDownForm({
     formValidation,
     adjustWithdraw,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     handleWithdraw,
     feeAmount,
     withdrawAmount,

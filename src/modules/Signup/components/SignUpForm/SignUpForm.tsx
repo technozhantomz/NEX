@@ -78,7 +78,7 @@ export const SignUpForm: React.FC = () => {
         name="passwordCheck"
         rules={formValidation.passwordCheck}
         validateFirst={true}
-        validateTrigger="onChange"
+        validateTrigger="onBlur"
       >
         <Input.Password
           autoComplete="off"

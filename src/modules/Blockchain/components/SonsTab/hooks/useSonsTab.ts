@@ -33,75 +33,65 @@ export function useSonsTab(): UseSonsTabResult {
 
   const getSonsData = useCallback(async () => {
     if (defaultAsset) {
-      try {
-        const [chain, blockData] = await Promise.all([
-          getChain(),
-          getBlockData(),
-        ]);
-        if (chain && blockData) {
-          const { sons, sonsIds } = await getSons();
-          const budgetAmount = setPrecision(
-            false,
-            blockData.son_budget,
-            defaultAsset.precision
-          );
-          const now = new Date().getTime();
-          const nextVoteTime = new Date(
-            blockData.next_maintenance_time
-          ).getTime();
-          const nextVoteDistance = now - nextVoteTime;
-          if (sons && sons.length > 0) {
-            sons.sort((a, b) => b.total_votes - a.total_votes);
-            const sonsRows: SonsTableRow[] = [];
-            let index = 0;
-            const sonsVotesAsset = sons.map((son) => {
-              return formKnownAssetBalanceById(defaultAsset, son.total_votes);
-            });
+      const [chain, blockData] = await Promise.all([
+        getChain(),
+        getBlockData(),
+      ]);
+      if (chain && blockData) {
+        const { sons, sonsIds } = await getSons();
+        const budgetAmount = setPrecision(
+          false,
+          blockData.son_budget,
+          defaultAsset.precision
+        );
+        const now = new Date().getTime();
+        const nextVoteTime = new Date(
+          blockData.next_maintenance_time
+        ).getTime();
+        const nextVoteDistance = now - nextVoteTime;
+        sons.sort((a, b) => b.total_votes - a.total_votes);
+        const sonsRows: SonsTableRow[] = [];
+        let index = 0;
+        const sonsVotesAsset = sons.map((son) => {
+          return formKnownAssetBalanceById(defaultAsset, son.total_votes);
+        });
 
-            for (const son of sons) {
-              sonsRows.push({
-                key: index,
-                rank: index + 1,
-                name: sonsIds.filter((sonId) => sonId[1] === son.id)[0][0],
-                active: son.status === "active" ? true : false,
-                url: son.url,
-                totalVotes: `${sonsVotesAsset[index]?.amount} ${sonsVotesAsset[index]?.symbol}`,
-              } as SonsTableRow);
-              index = index + 1;
-            }
-
-            const activeSones = sonsRows.filter((son) => son.active === true);
-            return {
-              sonsRows,
-              activeSons: activeSones.length,
-              budget: budgetAmount,
-              nextVote: formLocalDate(blockData.next_maintenance_time, [
-                "month",
-                "date",
-                "time",
-              ]),
-              sonsStats: {
-                active: updateArrayWithLimit(
-                  sonsStats.active,
-                  activeSones.length,
-                  99
-                ),
-                budget: updateArrayWithLimit(
-                  sonsStats.budget,
-                  budgetAmount,
-                  99
-                ),
-                nextVote: updateArrayWithLimit(
-                  sonsStats.nextVote,
-                  nextVoteDistance,
-                  99
-                ),
-              },
-            };
-          }
+        for (const son of sons) {
+          sonsRows.push({
+            key: index,
+            rank: index + 1,
+            name: sonsIds.filter((sonId) => sonId[1] === son.id)[0][0],
+            active: son.status === "active" ? true : false,
+            url: son.url,
+            totalVotes: `${sonsVotesAsset[index]?.amount} ${sonsVotesAsset[index]?.symbol}`,
+          } as SonsTableRow);
+          index = index + 1;
         }
-      } catch (e) {
-        console.log(e);
+
+        const activeSones = sonsRows.filter((son) => son.active === true);
+        return {
+          sonsRows,
+          activeSons: activeSones.length,
+          budget: budgetAmount,
+          nextVote: formLocalDate(blockData.next_maintenance_time, [
+            "month",
+            "date",
+            "time",
+          ]),
+          sonsStats: {
+            active: updateArrayWithLimit(
+              sonsStats.active,
+              activeSones.length,
+              99
+            ),
+            budget: updateArrayWithLimit(sonsStats.budget, budgetAmount, 99),
+            nextVote: updateArrayWithLimit(
+              sonsStats.nextVote,
+              nextVoteDistance,
+              99
+            ),
+          },
+        };
       }
     }
   }, [

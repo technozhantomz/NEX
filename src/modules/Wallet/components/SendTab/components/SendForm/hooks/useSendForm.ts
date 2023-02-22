@@ -45,7 +45,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
   const { calculateTransferFee } = useFees();
   const { buildTransferTransaction } = useTransferTransactionBuilder();
   const { buildTrx, getTrxFee } = useTransactionBuilder();
-  const { transactionMessageState, transactionMessageDispatch } =
+  const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
 
   const [selectedBlockchain, setSelectedBlockchain] = useState<string>();
@@ -61,7 +61,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
   const userAsset = useMemo(() => {
     return assets.find((asset) => asset.symbol === assetSymbol);
   }, [assetSymbol, assets, assets.length]);
-  const selectedAssetPrecission = useMemo(() => {
+  const selectedAssetPrecision = useMemo(() => {
     return userAsset ? userAsset.precision : 5;
   }, [userAsset]);
 
@@ -184,14 +184,14 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
 
   const handleAmountChange = useCallback(
     (amount: string) => {
-      let modifiedAmount = limitByPrecision(amount, selectedAssetPrecission);
+      let modifiedAmount = limitByPrecision(amount, selectedAssetPrecision);
       sendForm.setFieldsValue({
         amount: modifiedAmount,
       });
       modifiedAmount = modifiedAmount ? modifiedAmount : "0";
       setAmount(modifiedAmount);
     },
-    [limitByPrecision, selectedAssetPrecission, sendForm, setAmount]
+    [limitByPrecision, selectedAssetPrecision, sendForm, setAmount]
   );
   const handleToChange = useCallback(
     async (to: string) => {
@@ -245,7 +245,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
 
   const send = useCallback(
     async (signerKey: SignerKey) => {
-      transactionMessageDispatch({
+      dispatchTransactionMessage({
         type: TransactionMessageActionType.CLEAR,
       });
       const values = sendForm.getFieldsValue();
@@ -262,14 +262,14 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
       }
       let trxResult;
       try {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADING,
         });
         const trx = await buildSendFormTransaction(_to, _memo);
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
@@ -279,7 +279,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
           sendForm.resetFields();
         };
         formAccountBalancesByName(localStorageAccount);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_SUCCESS,
           message: counterpart.translate(
             `field.success.successfully_transferred`,
@@ -291,14 +291,14 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
           ),
         });
       } else {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
       }
     },
     [
-      transactionMessageDispatch,
+      dispatchTransactionMessage,
       sendForm,
       buildSendFormTransaction,
       buildTrx,
@@ -311,7 +311,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     ]
   );
 
-  /*********  Validation Funcations ***************/
+  /*********  Validation Functions ***************/
   const validateChainAndAssetSelection = () => {
     if (!prevAssetSymbol) {
       return counterpart.translate(`field.errors.first_select_asset`);
@@ -426,11 +426,9 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
       : undefined;
   };
   const validateToInHive = (value: string) => {
-    const isValid = utils.validateGrapheneAccountName(value);
+    const { isValid, error } = utils.validateHiveAccount(value);
     if (!isValid) {
-      return counterpart.translate(
-        `field.errors.invalid_withdraw_hive_address`
-      );
+      return error as string;
     }
 
     return undefined;
@@ -466,7 +464,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     }
   };
 
-  const formValdation = {
+  const formValidation = {
     asset: [
       {
         required: true,
@@ -538,15 +536,15 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     handleValuesChange,
     onBlockchainChange,
     selectedBlockchain,
-    formValdation,
+    formValidation,
     feeAmount,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     send,
     amount,
     localStorageAccount,
     toAccount: sendForm.getFieldsValue().to,
-    selectedAssetPrecission,
+    selectedAssetPrecision,
     btcTransferFee,
     afterTransactionModalClose: afterTransactionModalClose.current,
   };

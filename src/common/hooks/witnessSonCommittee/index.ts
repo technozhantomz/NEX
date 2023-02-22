@@ -1,1 +1,1 @@
-export * from "./useMemebers";
+export * from "./useMembers";

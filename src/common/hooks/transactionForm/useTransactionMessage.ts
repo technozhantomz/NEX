@@ -65,12 +65,12 @@ const initialState: TransactionMessageState = {
 };
 
 export function useTransactionMessage(): UseTransactionMessageResult {
-  const [transactionMessageState, transactionMessageDispatch] = useReducer(
+  const [transactionMessageState, dispatchTransactionMessage] = useReducer(
     transactionMessageReducer,
     initialState
   );
   return {
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
   };
 }

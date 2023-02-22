@@ -31,7 +31,7 @@ import {
 
 export function useSwap(): UseSwapResult {
   const { exchanges, updateSwapPair } = useUpdateExchanges();
-  const { transactionMessageState, transactionMessageDispatch } =
+  const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
   const { localStorageAccount, assets, id } = useUserContext();
   const [selectedAssetsSymbols, setSelectedAssetsSymbols] =
@@ -171,7 +171,6 @@ export function useSwap(): UseSwapResult {
       defaultAsset,
     ]
   );
-  //TODO: needs separation of concerns
   const calculateNonBasePairPriceForSellAmount = useCallback(
     (
       sellAmount: number,
@@ -237,7 +236,6 @@ export function useSwap(): UseSwapResult {
     ]
   );
 
-  //TODO: needs separation of concern
   const calculateNonBasePairPriceForBuyAmount = useCallback(
     (
       buyAmount: number,
@@ -517,7 +515,7 @@ export function useSwap(): UseSwapResult {
   ]);
 
   const handleValuesChange = useCallback(
-    async (changedValues: any) => {
+    async (changedValues: { sellAmount?: string; buyAmount?: string }) => {
       if (sellAsset && buyAsset) {
         setLoadingSwapData(true);
 
@@ -776,7 +774,7 @@ export function useSwap(): UseSwapResult {
 
       let trxResult;
       try {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADING,
         });
         trxResult = await buildTrx([trx], [signerKey]);
@@ -784,7 +782,7 @@ export function useSwap(): UseSwapResult {
         console.log(e);
         swapForm.resetFields();
         setCalculatedPrice(0);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
@@ -793,7 +791,7 @@ export function useSwap(): UseSwapResult {
         formAccountBalancesByName(localStorageAccount);
         swapForm.resetFields();
         setCalculatedPrice(0);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_SUCCESS,
           message: counterpart.translate(
             `field.success.swap_order_successfully`,
@@ -808,7 +806,7 @@ export function useSwap(): UseSwapResult {
       } else {
         swapForm.resetFields();
         setCalculatedPrice(0);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
@@ -825,7 +823,7 @@ export function useSwap(): UseSwapResult {
       formAccountBalancesByName,
       localStorageAccount,
       selectedAssetsSymbols,
-      transactionMessageDispatch,
+      dispatchTransactionMessage,
     ]
   );
 
@@ -867,7 +865,7 @@ export function useSwap(): UseSwapResult {
 
       let swapTrxResult;
       try {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADING,
         });
         swapTrxResult = await buildTrx(
@@ -878,7 +876,7 @@ export function useSwap(): UseSwapResult {
           formAccountBalancesByName(localStorageAccount);
           swapForm.resetFields();
           setCalculatedPrice(0);
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_SUCCESS,
             message: counterpart.translate(
               `field.success.swap_order_successfully`,
@@ -893,7 +891,7 @@ export function useSwap(): UseSwapResult {
         } else {
           swapForm.resetFields();
           setCalculatedPrice(0);
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(`field.errors.transaction_unable`),
           });
@@ -902,7 +900,7 @@ export function useSwap(): UseSwapResult {
         console.log(e);
         swapForm.resetFields();
         setCalculatedPrice(0);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
@@ -921,7 +919,7 @@ export function useSwap(): UseSwapResult {
       swapForm,
       setCalculatedPrice,
       selectedAssetsSymbols,
-      transactionMessageDispatch,
+      dispatchTransactionMessage,
     ]
   );
 
@@ -1235,7 +1233,7 @@ export function useSwap(): UseSwapResult {
   return {
     swapForm,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     selectedAssetsSymbols,
     allAssets,
     handleSellAssetChange,

@@ -14,7 +14,7 @@ import { utils } from "../../../api/utils";
 import { Form, Input } from "../../../ui/src";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
-import { useAsset, useHandleTransactionForm } from "../../hooks";
+import { useAsset, useTransactionForm } from "../../hooks";
 import { useAssetsContext, useUserContext } from "../../providers";
 import { Asset, SidechainAccount } from "../../types";
 
@@ -36,7 +36,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     selectedAsset,
     handleAssetChange,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     handleWithdraw,
     amount,
     userBalance,
@@ -52,13 +52,12 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleWithdraw,
-    transactionMessageDispatch,
+  } = useTransactionForm({
+    executeTransaction: handleWithdraw,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
 
@@ -284,7 +283,6 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
         <Styled.WithdrawForm
           form={withdrawForm}
           name="withdrawForm"
-          onFinish={showPasswordModal}
           onValuesChange={handleValuesChange}
           size="large"
           validateTrigger={["onChange", "onSubmit"]}

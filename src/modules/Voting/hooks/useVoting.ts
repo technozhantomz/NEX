@@ -46,36 +46,27 @@ export function useVoting(): UseVotingResult {
 
   const getProxyAccount = useCallback(
     async (proxyId: string) => {
-      try {
-        const proxy = await getFullAccount(proxyId, false);
-        return proxy;
-      } catch (e) {
-        console.log(e);
-      }
+      const proxy = await getFullAccount(proxyId, false);
+      return proxy;
     },
     [getFullAccount]
   );
 
   const getAllMembers = useCallback(async () => {
-    try {
-      setLoadingMembers(true);
-      let allMembers: Vote[] = [];
-      let allMembersIds: [string, string][] = [];
-      const [
-        { committees, committeesIds },
-        { sons, sonsIds },
-        { witnesses, witnessesIds },
-      ] = await Promise.all([getCommittees(), getSons(), getWitnesses()]);
-      allMembers = [...committees, ...sons, ...witnesses];
-      allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
+    setLoadingMembers(true);
+    let allMembers: Vote[] = [];
+    let allMembersIds: [string, string][] = [];
+    const [
+      { committees, committeesIds },
+      { sons, sonsIds },
+      { witnesses, witnessesIds },
+    ] = await Promise.all([getCommittees(), getSons(), getWitnesses()]);
+    allMembers = [...committees, ...sons, ...witnesses];
+    allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
 
-      setAllMembers(allMembers);
-      setAllMembersIds(allMembersIds);
-      setLoadingMembers(false);
-    } catch (e) {
-      console.log(e);
-      setLoadingMembers(false);
-    }
+    setAllMembers(allMembers);
+    setAllMembersIds(allMembersIds);
+    setLoadingMembers(false);
   }, [
     setLoadingMembers,
     getCommittees,
@@ -86,33 +77,27 @@ export function useVoting(): UseVotingResult {
   ]);
 
   const getUserVotes = useCallback(async () => {
-    try {
-      setLoadingUserVotes(true);
-      const fullAccount = await getFullAccount(localStorageAccount, false);
-      if (fullAccount !== undefined) {
-        const proxyId = fullAccount.account.options.voting_account;
-        const [proxy, gposInfo] = await Promise.all([
-          getProxyAccount(proxyId),
-          getGposInfo(fullAccount.account.id),
-        ]);
+    setLoadingUserVotes(true);
+    const fullAccount = await getFullAccount(localStorageAccount, false);
+    if (fullAccount !== undefined) {
+      const proxyId = fullAccount.account.options.voting_account;
+      const [proxy, gposInfo] = await Promise.all([
+        getProxyAccount(proxyId),
+        getGposInfo(fullAccount.account.id),
+      ]);
 
-        const votesIds = fullAccount.votes.map((vote) => vote.vote_id);
-        if (gposInfo) {
-          setGposInfo(gposInfo);
-        }
-        setProxy({
-          name: proxyId !== DEFAULT_PROXY_ID ? proxy?.account.name : "",
-          id: proxyId,
-        } as Proxy);
-        setServerApprovedVotesIds(votesIds);
-        setFullAccount(fullAccount);
+      const votesIds = fullAccount.votes.map((vote) => vote.vote_id);
+      if (gposInfo) {
+        setGposInfo(gposInfo);
       }
-
-      setLoadingUserVotes(false);
-    } catch (e) {
-      console.log(e);
-      setLoadingUserVotes(false);
+      setProxy({
+        name: proxyId !== DEFAULT_PROXY_ID ? proxy?.account.name : "",
+        id: proxyId,
+      } as Proxy);
+      setServerApprovedVotesIds(votesIds);
+      setFullAccount(fullAccount);
     }
+    setLoadingUserVotes(false);
   }, [
     setLoadingUserVotes,
     getFullAccount,

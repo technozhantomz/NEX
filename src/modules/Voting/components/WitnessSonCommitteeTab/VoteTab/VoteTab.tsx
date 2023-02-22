@@ -44,7 +44,7 @@ export const VoteTab = ({
     addVote,
     removeVote,
     handleVoting,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     transactionMessageState,
     updateAccountFee,
     afterSuccessTransactionModalClose,
@@ -68,7 +68,7 @@ export const VoteTab = ({
       resetChanges={resetChanges}
       name={name}
       handleVoting={handleVoting}
-      transactionMessageDispatch={transactionMessageDispatch}
+      dispatchTransactionMessage={dispatchTransactionMessage}
       transactionMessageState={transactionMessageState}
       updateAccountFee={updateAccountFee}
       proxy={proxy}
@@ -85,7 +85,7 @@ export const VoteTab = ({
         resetChanges={resetChanges}
         name={name}
         handleVoting={handleVoting}
-        transactionMessageDispatch={transactionMessageDispatch}
+        dispatchTransactionMessage={dispatchTransactionMessage}
         transactionMessageState={transactionMessageState}
         updateAccountFee={updateAccountFee}
         proxy={proxy}

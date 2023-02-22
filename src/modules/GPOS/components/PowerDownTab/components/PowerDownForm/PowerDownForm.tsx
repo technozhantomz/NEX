@@ -6,7 +6,7 @@ import {
   PasswordModal,
   TransactionModal,
 } from "../../../../../../common/components";
-import { useHandleTransactionForm } from "../../../../../../common/hooks";
+import { useTransactionForm } from "../../../../../../common/hooks";
 import {
   useUserContext,
   useViewportContext,
@@ -35,7 +35,7 @@ export const PowerDownForm = ({
     formValidation,
     adjustWithdraw,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     handleWithdraw,
     feeAmount,
     newAvailableBalance,
@@ -50,12 +50,11 @@ export const PowerDownForm = ({
     isPasswordModalVisible,
     isTransactionModalVisible,
     hideTransactionModal,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleWithdraw,
-    transactionMessageDispatch,
+  } = useTransactionForm({
+    executeTransaction: handleWithdraw,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
   const { sm } = useViewportContext();
@@ -74,7 +73,6 @@ export const PowerDownForm = ({
           form={powerDownForm}
           layout="vertical"
           name="powerDownForm"
-          onFinish={showPasswordModal}
           size="large"
           initialValues={{
             openingBalance: "",
