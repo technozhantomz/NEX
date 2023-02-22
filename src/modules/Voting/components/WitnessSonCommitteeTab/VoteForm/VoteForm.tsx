@@ -9,7 +9,7 @@ import {
 import {
   TransactionMessageAction,
   TransactionMessageState,
-  useHandleTransactionForm,
+  useTransactionForm,
 } from "../../../../../common/hooks";
 import { Proxy, SignerKey } from "../../../../../common/types";
 import { Tooltip } from "../../../../../ui/src";
@@ -23,7 +23,7 @@ type Props = {
   isVotesChanged: boolean;
   resetChanges: () => void;
   handleVoting: (signerKey: SignerKey) => Promise<void>;
-  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
+  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
   transactionMessageState: TransactionMessageState;
   name: string;
   updateAccountFee?: number;
@@ -39,7 +39,7 @@ export const VoteForm = ({
   isVotesChanged,
   resetChanges,
   handleVoting,
-  transactionMessageDispatch,
+  dispatchTransactionMessage,
   transactionMessageState,
   name,
   updateAccountFee,
@@ -57,13 +57,12 @@ export const VoteForm = ({
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleVoting,
-    transactionMessageDispatch,
+  } = useTransactionForm({
+    executeTransaction: handleVoting,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
 
@@ -101,11 +100,7 @@ export const VoteForm = ({
   return (
     <Styled.VoteFormWrapper>
       <Styled.VoteForm.Provider onFormFinish={handleFormFinish}>
-        <Styled.VoteForm
-          form={voteForm}
-          name="voteForm"
-          onFinish={showPasswordModal}
-        >
+        <Styled.VoteForm form={voteForm} name="voteForm">
           <Styled.ActionsContainer>
             {proxy.id !== DEFAULT_PROXY_ID ? (
               <Tooltip

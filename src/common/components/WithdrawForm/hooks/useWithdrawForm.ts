@@ -51,7 +51,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     buildDeletingBitcoinSidechainTransaction,
   } = useSidechainTransactionBuilder();
   const [withdrawForm] = Form.useForm<WithdrawForm>();
-  const { transactionMessageState, transactionMessageDispatch } =
+  const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
 
   const [withdrawFee, setWithdrawFee] = useState<number>(0);
@@ -78,7 +78,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     }
   }, [selectedAsset, sidechainAssets]);
 
-  const handleValuesChange = (changedValues: any) => {
+  const handleValuesChange = (changedValues: { amount?: string }) => {
     if (changedValues.amount) {
       const selectedSidechainAsset = sidechainAssets.find(
         (asset) => asset?.symbol === selectedAsset
@@ -170,10 +170,10 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   }, [buildWithdrawFormTransaction, getTrxFee, setWithdrawFee]);
 
   const handleWithdraw = async (signerKey: SignerKey) => {
-    transactionMessageDispatch({
+    dispatchTransactionMessage({
       type: TransactionMessageActionType.CLEAR,
     });
-    transactionMessageDispatch({
+    dispatchTransactionMessage({
       type: TransactionMessageActionType.LOADING,
     });
     const values = withdrawForm.getFieldsValue();
@@ -207,7 +207,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
           [signerKey]
         );
         if (!updateSidechainsTrxResult) {
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(`field.errors.transaction_unable`),
           });
@@ -216,7 +216,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         await getSidechainAccounts(id);
       } catch (e) {
         console.log(e);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
@@ -228,13 +228,13 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       const trx = await buildWithdrawFormTransaction();
       const trxResult = await buildTrx([trx], [signerKey]);
       if (!trxResult) {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
       } else {
         formAccountBalancesByName(localStorageAccount);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_SUCCESS,
           message: counterpart.translate(
             `field.success.successfully_withdrawn`,
@@ -250,7 +250,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       }
     } catch (e) {
       console.log(e);
-      transactionMessageDispatch({
+      dispatchTransactionMessage({
         type: TransactionMessageActionType.LOADED_ERROR,
         message: counterpart.translate(`field.errors.transaction_unable`),
       });
@@ -393,12 +393,9 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         return Promise.resolve();
       }
     } else {
-      if (!utils.validateGrapheneAccountName(value)) {
-        return Promise.reject(
-          new Error(
-            counterpart.translate(`field.errors.invalid_withdraw_hive_address`)
-          )
-        );
+      const { isValid, error } = utils.validateHiveAccount(value);
+      if (!isValid) {
+        return Promise.reject(new Error(error));
       }
       await setWithdrawFeeWithMemo();
       return Promise.resolve();
@@ -485,7 +482,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     selectedAsset,
     handleAssetChange,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     handleWithdraw,
     amount,
     userBalance,

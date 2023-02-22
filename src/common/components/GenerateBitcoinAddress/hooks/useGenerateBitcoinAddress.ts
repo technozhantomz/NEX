@@ -22,7 +22,7 @@ const NETWORK = testnetCheck ? bitcoin.networks.regtest : undefined;
 export function useGenerateBitcoinAddress(
   getSidechainAccounts: (accountId: string) => Promise<void>
 ): UseGenerateBitcoinAddressResult {
-  const { transactionMessageState, transactionMessageDispatch } =
+  const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
   const { buildTrx } = useTransactionBuilder();
   const { id } = useUserContext();
@@ -32,9 +32,9 @@ export function useGenerateBitcoinAddress(
   const { bitcoinSidechainAccounts, setBitcoinSidechainAccounts } =
     useUserContext();
 
-  const toHex = useCallback((buffer: any) => {
+  const toHex = useCallback((buffer: Buffer) => {
     return Array.from(buffer)
-      .map((byte: any) => byte.toString(16).padStart(2, "0"))
+      .map((byte) => byte.toString(16).padStart(2, "0"))
       .join("");
   }, []);
 
@@ -47,17 +47,17 @@ export function useGenerateBitcoinAddress(
     });
     return {
       address: address.address as string,
-      pubKey: toHex(address.pubkey),
+      pubKey: toHex(address.pubkey as Buffer),
       privateKey: keyPair.toWIF(),
     };
   };
 
   const generateBitcoinAddresses = useCallback(
     async (signerKey: SignerKey) => {
-      transactionMessageDispatch({
+      dispatchTransactionMessage({
         type: TransactionMessageActionType.CLEAR,
       });
-      transactionMessageDispatch({
+      dispatchTransactionMessage({
         type: TransactionMessageActionType.LOADING,
       });
 
@@ -65,7 +65,7 @@ export function useGenerateBitcoinAddress(
         const sonNetworkStatus = await getSonNetworkStatus();
 
         if (!sonNetworkStatus.isSonNetworkOk) {
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(
               `field.errors.sons_not_available_try_again`
@@ -75,7 +75,7 @@ export function useGenerateBitcoinAddress(
         }
       } catch (e) {
         console.log(e);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(
             `field.errors.sons_not_available_try_again`
@@ -102,7 +102,7 @@ export function useGenerateBitcoinAddress(
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (error) {
         console.log(error);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
@@ -111,14 +111,14 @@ export function useGenerateBitcoinAddress(
         setTimeout(async () => {
           await getSidechainAccounts(id);
         }, 3000);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_SUCCESS,
           message: counterpart.translate(
             `field.success.successfully_generate_btc_addresses`
           ),
         });
       } else {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
@@ -129,7 +129,7 @@ export function useGenerateBitcoinAddress(
       buildTrx,
       getSidechainAccounts,
       setBitcoinSidechainAccounts,
-      transactionMessageDispatch,
+      dispatchTransactionMessage,
       id,
       getSonNetworkStatus,
     ]
@@ -139,7 +139,7 @@ export function useGenerateBitcoinAddress(
     bitcoinSidechainAccounts,
     setBitcoinSidechainAccounts,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     generateBitcoinAddresses,
   };
 }

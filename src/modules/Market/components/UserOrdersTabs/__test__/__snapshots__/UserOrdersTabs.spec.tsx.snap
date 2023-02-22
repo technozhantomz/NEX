@@ -3,7 +3,7 @@
 exports[`UsersOrdersTabs component should render tabs with translated labels and UserOrdersTable 1`] = `
 <DocumentFragment>
   <div
-    class="ant-tabs ant-tabs-top ant-tabs-centered Tabs-sc-694db91e-0 sc-bcXHqe CYjqP bumAKK"
+    class="ant-tabs ant-tabs-top ant-tabs-centered Tabs-sc-694db91e-0 sc-bcXHqe CYjqP eyzkhJ"
   >
     <div
       class="ant-tabs-nav"

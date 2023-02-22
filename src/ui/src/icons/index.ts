@@ -3,6 +3,7 @@ export { default as Blockchain } from "./BlockchainIcon";
 export { default as Contacts } from "./ContactsIcon";
 export { default as Dashboard } from "./DashboardIcon";
 export { default as Logo } from "./LogoIcon";
+export { default as LogoColored } from "./LogoIconColored";
 export { default as Market } from "./MarketIcon";
 export { default as Vote } from "./VoteIcon";
 export { default as Key } from "./KeyIcon";

@@ -2,7 +2,6 @@ import { Account, FullAccount, KeyType, WhaleVaultPubKeys } from "../../types";
 
 export type UseAccountResult = {
   formAccountByName: (name: string, subscription: boolean) => Promise<void>;
-  loading: boolean;
   formAccountBalancesByName: (name: string) => Promise<void>;
   getFullAccount: (
     name: string,

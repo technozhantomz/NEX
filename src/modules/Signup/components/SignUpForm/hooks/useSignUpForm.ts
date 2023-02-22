@@ -103,15 +103,10 @@ export function useSignUpForm(): UseSignUpFormResult {
         new Error(counterpart.translate(`field.errors.username_taken`))
       );
     }
-    if (!utils.validateGrapheneAccountName(value)) {
-      return Promise.reject(
-        new Error(counterpart.translate(`field.errors.username_invalid`))
-      );
-    }
+    const { isValid, error } = utils.validatePeerplaysAccountName(value);
 
-    const defaultErrors = ChainValidation.is_account_name_error(value);
-    if (defaultErrors) {
-      return Promise.reject(new Error(`${defaultErrors}`));
+    if (!isValid) {
+      return Promise.reject(new Error(error));
     }
     if (!ChainValidation.is_cheap_name(value)) {
       return Promise.reject(
@@ -143,10 +138,6 @@ export function useSignUpForm(): UseSignUpFormResult {
       {
         required: true,
         message: counterpart.translate(`field.errors.username_required`),
-      },
-      {
-        pattern: new RegExp(/^([a-z])[a-z0-9]*$/),
-        message: counterpart.translate(`field.errors.username_limits`),
       },
       { validator: validateUsername },
     ],

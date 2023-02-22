@@ -8,7 +8,7 @@ import {
   TransactionModal,
   UserLinkExtractor,
 } from "../../../../common/components";
-import { useHandleTransactionForm } from "../../../../common/hooks";
+import { useTransactionForm } from "../../../../common/hooks";
 import { InfoCircleOutlined } from "../../../../ui/src";
 
 import * as Styled from "./MembershipTab.styled";
@@ -17,7 +17,7 @@ import { useMembershipTab } from "./hooks";
 export const MembershipTab = (): JSX.Element => {
   const {
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     membershipForm,
     name,
     feesCashback,
@@ -44,24 +44,19 @@ export const MembershipTab = (): JSX.Element => {
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleMembershipUpgrade,
-    transactionMessageDispatch,
+  } = useTransactionForm({
+    executeTransaction: handleMembershipUpgrade,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
 
   return (
     <Styled.MembershipCard>
       <Styled.MembershipForm.Provider onFormFinish={handleFormFinish}>
-        <Styled.MembershipForm
-          form={membershipForm}
-          name="membershipForm"
-          onFinish={showPasswordModal}
-        >
+        <Styled.MembershipForm form={membershipForm} name="membershipForm">
           <Styled.InfoContainer>
             <>
               {!isLifetimeMember ? (

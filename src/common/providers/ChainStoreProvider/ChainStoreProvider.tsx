@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -114,7 +115,7 @@ export const ChainStoreProvider = ({
     setListeners();
     const syncCheckInterval = setInterval(getSyncStatus, 5000);
     return () => {
-      clearInterval(syncCheckInterval as NodeJS.Timer);
+      clearInterval(syncCheckInterval);
     };
   }, [setListeners]);
 
@@ -129,15 +130,17 @@ export const ChainStoreProvider = ({
     };
   }, [apiInstance]);
 
+  const context = useMemo(() => {
+    return {
+      synced,
+      getBlockTimeDelta,
+      rpcConnectionStatus,
+      OUT_OF_SYNC_LIMIT,
+    };
+  }, [synced, getBlockTimeDelta, rpcConnectionStatus, OUT_OF_SYNC_LIMIT]);
+
   return (
-    <ChainStoreContext.Provider
-      value={{
-        synced,
-        getBlockTimeDelta,
-        rpcConnectionStatus,
-        OUT_OF_SYNC_LIMIT,
-      }}
-    >
+    <ChainStoreContext.Provider value={context}>
       {syncFail ? (
         <div
           style={{

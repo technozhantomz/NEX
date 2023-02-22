@@ -54,7 +54,7 @@ export const TransactionDetails = ({
               <Styled.BlockNumber>
                 <span>
                   {counterpart.translate(
-                    `pages.blocks.transaction_detials.transaction`
+                    `pages.blocks.transaction_details.transaction`
                   )}{" "}
                   {transaction} of {blockTransactions.length}
                 </span>
@@ -95,7 +95,7 @@ export const TransactionDetails = ({
         {/* <Styled.BlockInfo>
           <Styled.BlockInfoTitle>
             {counterpart.translate(
-              `pages.blocks.transaction_detials.transaction_id`
+              `pages.blocks.transaction_details.transaction_id`
             )}
           </Styled.BlockInfoTitle>
           <p>{transactionDetails.id}</p>
@@ -104,7 +104,7 @@ export const TransactionDetails = ({
           <Styled.BlockInfo>
             <Styled.BlockInfoTitle>
               {counterpart.translate(
-                `pages.blocks.transaction_detials.ref_block_prefix`
+                `pages.blocks.transaction_details.ref_block_prefix`
               )}
             </Styled.BlockInfoTitle>
             <p>{transactionDetails.refBlockPrefix}</p>
@@ -112,7 +112,7 @@ export const TransactionDetails = ({
           <Styled.BlockInfo>
             <Styled.BlockInfoTitle>
               {counterpart.translate(
-                `pages.blocks.transaction_detials.ref_block_num`
+                `pages.blocks.transaction_details.ref_block_num`
               )}
             </Styled.BlockInfoTitle>
             <p>{transactionDetails.refBlockNum}</p>
@@ -131,7 +131,7 @@ export const TransactionDetails = ({
         <Styled.BlockInfo>
           <Styled.BlockInfoTitle>
             {counterpart.translate(
-              `pages.blocks.transaction_detials.signatures`
+              `pages.blocks.transaction_details.signatures`
             )}
           </Styled.BlockInfoTitle>
           <ol>

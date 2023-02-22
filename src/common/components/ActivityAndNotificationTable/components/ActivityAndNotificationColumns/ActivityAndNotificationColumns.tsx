@@ -12,7 +12,7 @@ export type ActivityAndNotificationType = {
   key: string;
   render:
     | ((value: string) => JSX.Element)
-    | ((status: boolean, record: any) => JSX.Element)
+    | ((status: boolean, record: ActivityRow) => JSX.Element)
     | undefined;
   filters:
     | {
@@ -58,7 +58,7 @@ export const ActivityAndNotificationColumns = (
         ),
         undefined,
         undefined,
-        (status: boolean, record: any): JSX.Element => {
+        (status: boolean, record: ActivityRow): JSX.Element => {
           function handleClick() {
             markTheNotificationAsReadOrUnread(record.id, !status);
           }
