@@ -1,5 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../../../../../common/hooks";
 import { Asset, SignerKey } from "../../../../../../../common/types";
 import {
   BaseOptionType,
@@ -22,22 +26,19 @@ export type UseSendFormResult = {
   assetBlockchains: string[];
   sendForm: FormInstance<SendForm>;
   selectedAssetSymbol: string | undefined;
-  selectedAsset: Asset | undefined;
-  handleValuesChange: (changedValues: any) => void;
+  userAsset: Asset | undefined;
+  handleValuesChange: (changedValues: any) => Promise<void>;
   onBlockchainChange: (value: unknown) => void;
   selectedBlockchain: string | undefined;
-  formValdation: FormValidation;
+  formValidation: FormValidation;
   feeAmount: number;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  transactionErrorMessage: string;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  transactionSuccessMessage: string;
-  loadingTransaction: boolean;
+  transactionMessageState: TransactionMessageState;
+  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
   send: (signerKey: SignerKey) => Promise<void>;
   amount: string;
   localStorageAccount: string;
   toAccount: string;
-  selectedAssetPrecission: number;
+  selectedAssetPrecision: number;
   btcTransferFee: number;
   afterTransactionModalClose?: () => void;
 };
@@ -53,6 +54,5 @@ export type FormValidation = {
   asset: Rule[];
   to: Rule[];
   amount: Rule[];
-  memo: Rule[];
   blockchain: Rule[];
 };

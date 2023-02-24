@@ -1,3 +1,4 @@
+import { ChainTypes } from "peerplaysjs-lib";
 import { useCallback, useEffect, useState } from "react";
 
 import { useAsset } from "../../../../../../../common/hooks";
@@ -14,13 +15,16 @@ export function useOperationsTable(
   const [loading, setLoading] = useState(true);
   const [searchDataSource, setSearchDataSource] = useState<OperationRow[]>([]);
   const [operationsRows, setOperationsRows] = useState<OperationRow[]>([]);
-  const [showDetials, setShowDetials] = useState<boolean>(false);
+  const [showDetails, setShowDetails] = useState<boolean>(false);
   const { getAssetById } = useAsset();
 
   const formOperationRows = useCallback(async () => {
     setLoading(true);
     try {
       if (transaction) {
+        const operationType = Object.keys(ChainTypes.operations).find(
+          (key) => ChainTypes.operations[key] === transaction.operations[0][0]
+        );
         const operations: OperationRow[] = await Promise.all(
           transaction.operations.map(
             async (operation: unknown[], index: number) => {
@@ -34,7 +38,8 @@ export function useOperationsTable(
                 key: index + 1,
                 number: index + 1,
                 id: operation[0] as number,
-                type: operationDetails.ts as string,
+                type: operationType,
+                time: operationDetails.ts as string,
                 fees: fees,
                 details: JSON.stringify(operation),
                 results: operationResults.toString() as string,
@@ -59,8 +64,8 @@ export function useOperationsTable(
   ]);
 
   const toggleDetails = useCallback(() => {
-    setShowDetials(showDetials ? false : true);
-  }, [showDetials, setLoading]);
+    setShowDetails(showDetails ? false : true);
+  }, [showDetails, setShowDetails]);
 
   useEffect(() => {
     formOperationRows();
@@ -68,7 +73,7 @@ export function useOperationsTable(
 
   return {
     loading,
-    showDetials,
+    showDetails,
     searchDataSource,
     operationsRows,
     setSearchDataSource,

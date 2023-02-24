@@ -5,7 +5,7 @@ import { Form } from "../../../../ui/src";
 import { OrdersTable } from "../OrdersTable";
 
 import * as Styled from "./OrdersTab.styled";
-import { useOpenOrdersTab } from "./hooks";
+import { useOrdersTab } from "./hooks";
 
 export const OrdersTab = (): JSX.Element => {
   const {
@@ -14,9 +14,7 @@ export const OrdersTab = (): JSX.Element => {
     openOrdersTableRows,
     ordersHistoriesTableRows,
     ordersHistoriesColumns,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
     selectedOrderId,
     isPasswordModalVisible,
     isTransactionModalVisible,
@@ -24,9 +22,9 @@ export const OrdersTab = (): JSX.Element => {
     handleFormFinish,
     hideTransactionModal,
     localStorageAccount,
-    cancelOrderfeeAmount,
+    cancelOrderFeeAmount,
     onCancelClick,
-  } = useOpenOrdersTab();
+  } = useOrdersTab();
 
   return (
     <Styled.OrdersTabWrapper>
@@ -42,11 +40,9 @@ export const OrdersTab = (): JSX.Element => {
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={localStorageAccount}
-          fee={cancelOrderfeeAmount}
+          fee={cancelOrderFeeAmount}
           orderId={selectedOrderId}
           transactionType="limit_order_cancel"
         />

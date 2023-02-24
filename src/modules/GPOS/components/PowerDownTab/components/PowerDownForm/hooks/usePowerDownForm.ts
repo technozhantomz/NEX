@@ -2,11 +2,13 @@ import counterpart from "counterpart";
 import { useCallback, useEffect, useState } from "react";
 
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useFees,
   useGPOSTransactionBuilder,
   useTransactionBuilder,
+  useTransactionMessage,
 } from "../../../../../../../common/hooks";
 import {
   useAssetsContext,
@@ -32,15 +34,12 @@ export function usePowerDownForm({
   //loading,
   calculateGposBalances,
 }: UsePowerDownFormArgs): UsePowerDownFormResult {
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const [feeAmount, setFeeAmount] = useState<number>(0);
   const [newBalance, setNewBalance] = useState<string>("0");
   const [newAvailableBalance, setNewAvailableBalance] = useState<string>("0");
 
+  const { transactionMessageState, dispatchTransactionMessage } =
+    useTransactionMessage();
   const [powerDownForm] = Form.useForm<PowerDownForm>();
   const withdrawAmount: string =
     Form.useWatch("withdrawAmount", powerDownForm) || "0";
@@ -56,10 +55,14 @@ export function usePowerDownForm({
 
   const handleWithdraw = useCallback(
     async (signerKey: SignerKey) => {
-      setTransactionErrorMessage("");
+      dispatchTransactionMessage({
+        type: TransactionMessageActionType.CLEAR,
+      });
       const values = powerDownForm.getFieldsValue();
       try {
-        setLoadingTransaction(true);
+        dispatchTransactionMessage({
+          type: TransactionMessageActionType.LOADING,
+        });
         const vestingBalances: VestingBalance[] = await dbApi(
           "get_vesting_balances",
           [id]
@@ -69,7 +72,7 @@ export function usePowerDownForm({
         );
 
         const trx = buildVestingWithdrawTransaction(
-          gposBalances?.asset as Asset,
+          defaultAsset as Asset,
           values.withdrawAmount,
           gposVestingBalances,
           id
@@ -79,40 +82,40 @@ export function usePowerDownForm({
         if (trxResult) {
           formAccountBalancesByName(localStorageAccount);
           await calculateGposBalances();
-          setTransactionErrorMessage("");
-          setTransactionSuccessMessage(
-            counterpart.translate(`field.success.successfully_withdrawn`, {
-              withdrawAmount: values.withdrawAmount,
-              symbol: gposBalances?.asset.symbol,
-            })
-          );
-          setLoadingTransaction(false);
+          dispatchTransactionMessage({
+            type: TransactionMessageActionType.LOADED_SUCCESS,
+            message: counterpart.translate(
+              `field.success.successfully_withdrawn`,
+              {
+                withdrawAmount: values.withdrawAmount,
+                symbol: gposBalances?.symbol,
+              }
+            ),
+          });
         } else {
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.unable_transaction`)
-          );
-          setLoadingTransaction(false);
+          dispatchTransactionMessage({
+            type: TransactionMessageActionType.LOADED_ERROR,
+            message: counterpart.translate(`field.errors.transaction_unable`),
+          });
         }
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.unable_transaction`)
-        );
-        setLoadingTransaction(false);
+        dispatchTransactionMessage({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       }
     },
     [
       powerDownForm,
-      setLoadingTransaction,
+      dispatchTransactionMessage,
       dbApi,
       id,
       gposBalances,
-      setTransactionErrorMessage,
       buildVestingWithdrawTransaction,
       buildTrx,
       formAccountBalancesByName,
       calculateGposBalances,
-      setTransactionSuccessMessage,
     ]
   );
 
@@ -141,7 +144,7 @@ export function usePowerDownForm({
 
   const validateWithdrawAmount = async (_: unknown, value: string) => {
     const accountAsset = assets.find(
-      (asset) => asset.symbol === gposBalances?.asset.symbol
+      (asset) => asset.symbol === gposBalances?.symbol
     );
     if (Number(value) <= 0) {
       return Promise.reject(
@@ -175,17 +178,16 @@ export function usePowerDownForm({
       if (!sm) {
         powerDownForm.setFieldsValue({
           openingBalance:
-            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
+            gposBalances.openingBalance + " " + gposBalances.symbol,
           availableBalance:
-            gposBalances.availableBalance + " " + gposBalances.asset.symbol,
-          newBalance:
-            gposBalances.openingBalance + " " + gposBalances.asset.symbol,
+            gposBalances.availableBalance + " " + gposBalances.symbol,
+          newBalance: gposBalances.openingBalance + " " + gposBalances.symbol,
         });
       } else {
         powerDownForm.setFieldsValue({
-          openingBalance: gposBalances.asset.symbol,
-          availableBalance: gposBalances.asset.symbol,
-          newBalance: gposBalances.asset.symbol,
+          openingBalance: gposBalances.symbol,
+          availableBalance: gposBalances.symbol,
+          newBalance: gposBalances.symbol,
         });
       }
     }
@@ -221,14 +223,13 @@ export function usePowerDownForm({
         setNewAvailableBalance(newAvailableBalance);
         if (!sm) {
           powerDownForm.setFieldsValue({
-            availableBalance:
-              newAvailableBalance + " " + gposBalances.asset.symbol,
-            newBalance: newBalance + " " + gposBalances.asset.symbol,
+            availableBalance: newAvailableBalance + " " + gposBalances.symbol,
+            newBalance: newBalance + " " + gposBalances.symbol,
           });
         } else {
           powerDownForm.setFieldsValue({
-            availableBalance: gposBalances.asset.symbol,
-            newBalance: gposBalances.asset.symbol,
+            availableBalance: gposBalances.symbol,
+            newBalance: gposBalances.symbol,
           });
         }
       }
@@ -256,11 +257,8 @@ export function usePowerDownForm({
     powerDownForm,
     formValidation,
     adjustWithdraw,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    dispatchTransactionMessage,
     handleWithdraw,
     feeAmount,
     withdrawAmount,

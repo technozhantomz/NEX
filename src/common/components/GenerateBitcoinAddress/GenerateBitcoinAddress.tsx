@@ -4,7 +4,7 @@ import React from "react";
 import { PasswordModal, TransactionModal } from "..";
 import { BITCOIN_NETWORK } from "../../../api/params";
 import { Form } from "../../../ui/src";
-import { useHandleTransactionForm } from "../../hooks";
+import { useTransactionForm } from "../../hooks";
 import { useUserContext } from "../../providers";
 
 import * as Styled from "./GenerateBitcoinAddress.styled";
@@ -21,36 +21,27 @@ export const GenerateBitcoinAddress = ({
 }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const {
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
-    transactionErrorMessage,
-    transactionSuccessMessage,
+    transactionMessageState,
+    dispatchTransactionMessage,
     generateBitcoinAddresses,
   } = useGenerateBitcoinAddress(getSidechainAccounts);
 
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: generateBitcoinAddresses,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+  } = useTransactionForm({
+    executeTransaction: generateBitcoinAddresses,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
 
   return (
     <>
       <Form.Provider onFormFinish={handleFormFinish}>
-        <Styled.DepositForm
-          name="generateAddressForm"
-          onFinish={showPasswordModal}
-          className={className}
-        >
+        <Styled.DepositForm name="generateAddressForm" className={className}>
           <Styled.FormItem>
             <Styled.Button type="primary" htmlType="submit">
               {counterpart.translate(`buttons.generate_bitcoin_address`)}
@@ -66,9 +57,7 @@ export const GenerateBitcoinAddress = ({
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={localStorageAccount}
           fee={0}
           sidechain={BITCOIN_NETWORK}

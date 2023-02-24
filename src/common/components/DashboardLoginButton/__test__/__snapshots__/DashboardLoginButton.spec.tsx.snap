@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard login button Deposit tab renders correctly for not logged in user dashboard deposit tab(BTC) 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-jWgTtR kuIzMZ"
+  >
+    <button
+      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-ed3eeb43-0 sc-eDZJfc dPgDWt fwQlA"
+      type="button"
+    >
+      <span>
+        Log in & Generate Bitcoin Addresses
+      </span>
+    </button>
+    <p
+      class="sc-bcXHqe cKWvWQ sc-fmZqYP cYvPcd"
+    >
+      <span>
+        Don't have a Peerplays account? 
+      </span>
+      <a
+        href="/signup"
+      >
+        Create account
+      </a>
+    </p>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Dashboard login button Deposit tab renders correctly for not logged in user dashboard deposit tab(HIVE) 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-jWgTtR kuIzMZ"
+  >
+    <button
+      class="ant-btn ant-btn-primary Button-sc-d40bd577-0 CardForm__CardFormButton-sc-ed3eeb43-0 sc-eDZJfc dPgDWt fwQlA"
+      type="button"
+    >
+      <span>
+        Log in & Deposit HIVE
+      </span>
+    </button>
+    <p
+      class="sc-bcXHqe cKWvWQ sc-fmZqYP cYvPcd"
+    >
+      <span>
+        Don't have a Peerplays account? 
+      </span>
+      <a
+        href="/signup"
+      >
+        Create account
+      </a>
+    </p>
+  </div>
+</DocumentFragment>
+`;

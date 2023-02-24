@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 export type UseBlockchainTabResult = {
   loading: boolean;
   blockColumns: BlockColumnType[];
-  blockchainTableRows: DataTableRow[];
+  blockchainTableRows?: DataTableRow[];
   blockchainStats: BlockchainStats;
   currentBlock: number;
   lastIrreversibleBlock: string;

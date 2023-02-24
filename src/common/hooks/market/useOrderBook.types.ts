@@ -1,10 +1,7 @@
-import { Asset, BookedOrder } from "../../types";
+import { BookedOrder, MarketPair } from "../../types";
 
 export type UseOrderBookResult = {
-  getOrderBook: (
-    base: Asset,
-    quote: Asset
-  ) => Promise<{
+  getOrderBook: (selectedPair: MarketPair) => Promise<{
     asks: BookedOrder[];
     bids: BookedOrder[];
   }>;

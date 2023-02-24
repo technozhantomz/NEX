@@ -13,6 +13,7 @@ export { Tag } from "./Tag";
 export { TableSearch } from "./TableSearch";
 export { ListItem } from "./ListItem";
 export { Tabs } from "./Tabs";
+export { PageTabs } from "./PageTabs";
 export { Input } from "./Input";
 export { Form } from "./Form";
 export { PrintTable } from "./PrintTable";
@@ -35,6 +36,10 @@ export {
   Switch,
   List,
   Carousel,
+  Slider,
+  Collapse,
+  DatePicker,
+  Drawer,
 } from "antd";
 
 export {
@@ -66,6 +71,7 @@ export {
   LikeOutlined,
   LikeFilled,
   DislikeOutlined,
+  WalletOutlined,
 } from "@ant-design/icons";
 
 export { Col } from "./Col";

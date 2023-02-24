@@ -24,9 +24,5 @@ export const GeneratedBitcoinAddress = styled(Input)`
   }
   .ant-input.ant-input-disabled.ant-input-sm {
     color: ${colors.textColor};
-    font-size: 12px;
-    ${breakpoint.sm} {
-      font-size: 14px;
-    }
   }
 `;

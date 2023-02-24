@@ -40,6 +40,7 @@ export const KeyManagementTab = (): JSX.Element => {
             placeholder={counterpart.translate(
               `field.placeholder.master_password`
             )}
+            autoComplete="new-password"
           />
         </Styled.PasswordFormItem>
 

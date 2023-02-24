@@ -26,10 +26,11 @@ export const en = {
         "Once you've synchronized your clock, please refresh this page",
     },
     connection_error: {
-      title: "Application initialization issues",
+      title: "Connection Error",
       first_description:
-        "Coming soon: Node manual selection and Adding a personal node",
-      second_description: "Please check your connection and refresh the page",
+        "Peerplays DEX can't find a running node to connect to the blockchain.",
+      second_description:
+        "Please check your node connection and refresh the page.",
     },
   },
   transaction: {
@@ -126,7 +127,7 @@ export const en = {
       asset_issue: {
         title: "Issue asset",
         description:
-          "%(issuer)s, issued %(assetAmount)s %(symbol)s to, %(receiver)s",
+          "%(issuer)s, issued %(assetAmount)s %(symbol)s to , %(receiver)s",
       },
       asset_publish_feed: {
         title: "Publish feed",
@@ -619,7 +620,7 @@ export const en = {
         witness_signature: "Witness Signature",
         search_transactions: "Search Transactions",
       },
-      transaction_detials: {
+      transaction_details: {
         transaction: "Transaction",
         transaction_id: "Transaction ID",
         ref_block_prefix: "Ref block prefix",
@@ -692,6 +693,8 @@ export const en = {
       select_asset: "Select an asset",
       select_blockchain: "Select a blockchain",
       available_to_send: "Available to send:",
+      withdraw_alert:
+        "If you select a blockchain other than Peerplays, you will be withdrawing your funds to the targeted network.",
     },
     market: {
       heading: "Market",
@@ -703,6 +706,48 @@ export const en = {
       my_order_history: "My Order History",
       buy: "BUY",
       sell: "SELL",
+      orders: "Orders",
+      market_depth: "Market depth",
+      all_pairs: "All pairs",
+      all_statuses: "All statuses",
+      completed: "Completed",
+      partial: "Partial",
+      open: "Open",
+      tabs: {
+        history: {
+          all: "Trade history",
+          user: "My history",
+        },
+        controls: {
+          order_form: "Order form",
+          limit: "Limit",
+          market: "Market",
+          advanced: "Advanced",
+          time_policy: "Time in force policy",
+          time_policy_description:
+            "This option sets the rules for how long your order will exist on the order book or how it must execute",
+          good_til_canceled: "Good till canceled (default)",
+          good_til_time: "Good till time",
+          fill_or_kill: "Fill or kill",
+          maker_or_cancel: "Maker or cancel",
+          immediate_or_cancel: "Immediate or cancel",
+          execution: "Execution",
+          execution_description:
+            "The Post Only option will ensure that your order will not immediately execute against an existing order. Your whole order will be posted to the order book. The Allow Taker option means that all or some of your order can immediately execute against an existing order",
+          post_only: "Post only",
+          allow_taker: "Allow taker",
+          market_fee_description:
+            "The owner of %(asset)s charges a market fee of %(percent)s%% for buy orders. This fee will be subtracted from the amount you receive when your order fills, it is not paid when placing an order.",
+        },
+      },
+      twenty_four_hour_high: "24h High",
+      twenty_four_hour_low: "24h Low",
+      twenty_four_hour_volume: "24h Volume",
+      twenty_four_hour_change: "24h Change",
+      twenty_four_hour_lowest_ask: "24h Lowest ask",
+      twenty_four_hour_highest_bid: "24h Highest bid",
+      ask: "Ask",
+      bid: "Bid",
     },
     settings: {
       heading: "Settings",
@@ -876,10 +921,12 @@ export const en = {
       activities: "Activities",
       notifications: "Notifications",
       activity: {
+        heading: "Activities",
         my_activity: "My Activity",
         search_activities: "Search Activities",
       },
       orders_tab: {
+        heading: "Orders",
         buy: "Buy",
         sell: "Sell",
         partial: "Partial",
@@ -890,6 +937,7 @@ export const en = {
         search_activities: "Search activities",
       },
       notification: {
+        heading: "Notifications",
         my_notification: "My notifications",
         search_notifications: "Search notifications",
         read: "Read",
@@ -1023,6 +1071,7 @@ export const en = {
       approved: "Approved",
       removed: "Removed",
       my_activity: "My activity",
+      available: "Available",
     },
     comments: {
       deposit_hbd:
@@ -1069,10 +1118,6 @@ export const en = {
       same_account: "Same as your account",
       no_account: "Account not found",
       added_account: "Account is already added",
-      premium_username:
-        "This is a premium name which is not supported by this faucet.",
-      username_limits:
-        "Username should start with lowercase letter and should not contain capital letter or special characters or only digits",
       user_not_found: "User not found",
       password_incorrect: "Password incorrect",
       username_required: "Username is required",
@@ -1132,6 +1177,30 @@ export const en = {
       whalevault_not_installed:
         "WhaleVault is not installed. Please install WhaleVault extension and reload the app",
       wrong_whalevault_keys: "Added keys to WhaleVault are not correct",
+      post_only_limit_order: "Unable to create post only limit order",
+      missing_custom_expiration_time:
+        "Please select the custom expiration time or change the time policy of the order",
+      premium_username:
+        "This is a premium name which is not supported by this faucet. A Cheap name includes digits or doesn't include vowels",
+      account_creation_errors: {
+        account_should: "Account name should ",
+        be_longer: "be longer.",
+        be_shorter: "be shorter.",
+        account_segment_should:
+          "Each account segment (separated by `.`) should ",
+        start_with_letter: "start with a lowercase letter.",
+        have_letters_digits_dashes: "have only letters, digits, or dashes.",
+        have_one_dash_in_row: "have only one dash in a row.",
+        end_letter_digit: "end with a letter or digit.",
+      },
+      hive_account_errors: {
+        account_should: "Hive account should ",
+        be_longer: "be longer.",
+        start_with_letter: "start with a lowercase letter.",
+        have_letters_digits_dashes: "have only letters, digits, or dashes.",
+        end_letter_digit: "end with a letter or digit.",
+        have_one_dash_in_row: "have only one dash in a row.",
+      },
     },
     success: {
       successfully_transferred:
@@ -1223,7 +1292,7 @@ export const en = {
     status_actions: "Status/Actions",
   },
   tableFilters: {
-    avtive: "Avtive",
+    active: "Active",
     inactive: "Inactive",
     approved: "Approved",
     not_approved: "Not Approved",

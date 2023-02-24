@@ -6,10 +6,7 @@ export type IUsePasswordForm = {
   formValidation: FormValidation;
   useWhaleVault: boolean;
   onChangeUseWhaleVault: (e: CheckboxChangeEvent) => void;
-  useResetFormOnCloseModal: (
-    form: FormInstance<PasswordForm>,
-    visible: boolean
-  ) => void;
+  resetForm: () => void;
 };
 
 export type PasswordForm = {

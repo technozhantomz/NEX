@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserLinkExtractor component UserLinkExtractor component in settings page - membership tab renders membership info correctly with correct link 1`] = `
+<DocumentFragment>
+  <span>
+    Fees paid by 
+  </span>
+  <a
+    href="/user/test-account1"
+  >
+    test-account1
+  </a>
+  <span>
+     are divided among the network
+  </span>
+  <span>
+     referrers
+  </span>
+  <span>
+     and registrars once every maintenance interval 3600 seconds). The next maintenance time is Dec 12 2022 18:30:00
+  </span>
+</DocumentFragment>
+`;
+
+exports[`UserLinkExtractor component UserLinkExtractor component in wallet page - Receive tab renders receive instruction correctly with correct link 1`] = `
+<DocumentFragment>
+  <span>
+    To receive TEST send funds to 
+  </span>
+  <a
+    href="/user/test-account1"
+  >
+    test-account1
+  </a>
+  <span>
+     on the Peerplays blockchain
+  </span>
+</DocumentFragment>
+`;

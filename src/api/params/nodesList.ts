@@ -2,7 +2,7 @@ import counterpart from "counterpart";
 
 import { Node } from "../../common/types";
 
-import { testnetCheck } from "./networkparams";
+import { testnetCheck } from "./networkParams";
 
 export const nodeRegions = [
   // region of the node follows roughly https://en.wikipedia.org/wiki/Subregion#/media/File:United_Nations_geographical_subregions.png
@@ -33,13 +33,13 @@ export const nodeRegions = [
 
 // node location could be the city name
 
-const testnetNodes: Node[] = [
+export const testnetNodes: Node[] = [
   {
     url: "wss://fake.automatic-selection.com",
     location: counterpart.translate("settings.api_closest"),
   },
   {
-    url: "wss://mint.peerplays.download/api",
+    url: "wss://devnet.peerplays.download/api",
     location: "",
     region: "Northern America",
     country: "Canada",
@@ -50,7 +50,7 @@ const testnetNodes: Node[] = [
   },
 ];
 
-const prodNodes: Node[] = [
+export const prodNodes: Node[] = [
   {
     url: "wss://fake.automatic-selection.com",
     location: counterpart.translate("settings.api_closest"),

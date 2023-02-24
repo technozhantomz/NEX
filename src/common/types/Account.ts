@@ -89,7 +89,7 @@ export type SignupForm = {
   saved: boolean;
 };
 
-export type SidechainAcccount = {
+export type SidechainAccount = {
   deposit_address: string;
   deposit_address_data: string;
   deposit_public_key: string;

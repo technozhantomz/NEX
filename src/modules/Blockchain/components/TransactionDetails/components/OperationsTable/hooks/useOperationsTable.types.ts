@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export type UseOperationsTableResult = {
   loading: boolean;
-  showDetials: boolean;
+  showDetails: boolean;
   searchDataSource: OperationRow[];
   operationsRows: OperationRow[];
   setSearchDataSource: Dispatch<SetStateAction<OperationRow[]>>;
@@ -13,7 +13,8 @@ export type OperationRow = {
   key: number;
   number: number;
   id: number;
-  type: string;
+  type?: string;
+  time: string;
   fees: string;
   details: string;
   results: string;

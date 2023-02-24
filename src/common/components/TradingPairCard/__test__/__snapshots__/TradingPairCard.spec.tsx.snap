@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TradingPairCard should renders the TradingPairCard component correctly 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="sc-bcXHqe OTLsA trading-card"
+    >
+      <div
+        class="sc-gswNZR jGxrCZ"
+      >
+        <p
+          class="sc-dkrFOg hjyPTZ"
+        >
+          TEST/BTC
+        </p>
+      </div>
+      <p
+        class="sc-eDvSVe iBBoZQ"
+      >
+        10,000
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;

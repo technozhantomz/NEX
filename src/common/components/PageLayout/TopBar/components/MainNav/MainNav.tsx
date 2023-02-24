@@ -18,8 +18,8 @@ import {
   Vote,
 } from "../../../../../../ui/src/icons";
 import {
+  useAppSettingsContext,
   useMenuContext,
-  useSettingsContext,
   useUserContext,
   useViewportContext,
 } from "../../../../../providers";
@@ -30,7 +30,7 @@ import { useAdvancedMode } from "./hooks";
 export const MainNav = (): JSX.Element => {
   const { advancedMode, handleAdvancedModeChange } = useAdvancedMode();
   const { localStorageAccount } = useUserContext();
-  const { exchanges } = useSettingsContext();
+  const { exchanges } = useAppSettingsContext();
   const { sm } = useViewportContext();
   const { openMenu } = useMenuContext();
   return (
@@ -165,7 +165,7 @@ export const MainNav = (): JSX.Element => {
         {!localStorageAccount ? (
           ""
         ) : (
-          <li className={"logout"}>
+          <li>
             <MenuItem
               href="/logout"
               icon={<PoweroffOutlined className={"menu-icon"} />}

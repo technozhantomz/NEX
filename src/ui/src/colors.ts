@@ -16,4 +16,8 @@ export const colors = {
   missedColor: `#D01721`,
   inactiveColor: `#f0f0f0`,
   lightText: `#B9B9B9`,
+  marketBuy: `#18A370`,
+  marketSell: `#E2444D`,
+  PeerPlaysBlue: `#0147BD`,
+  PeerPlaysOrange: `#FB7A14`,
 };

@@ -4,6 +4,7 @@ import {
   Avatar,
   Badge,
   BellOutlined,
+  LogoColored,
   MenuOutlined,
   MoreOutlined,
   UserOutlined,
@@ -12,9 +13,9 @@ import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.s
 import MetaMaskIcon from "../../../../../../ui/src/icons/Cryptocurrencies/MetaMaskIcon.svg";
 import {
   useMenuContext,
+  useNotificationsContext,
   usePeerLinkContext,
   useUserContext,
-  useUserSettingsContext,
   useViewportContext,
 } from "../../../../../providers";
 import { MainNav } from "../MainNav";
@@ -35,18 +36,32 @@ export const MainNavBar = (): JSX.Element => {
     profileMenuOpen,
     mainMenuOpen,
   } = useMenuContext();
-  const { hasUnreadMessages } = useUserSettingsContext();
+  const { hasUnreadMessages } = useNotificationsContext();
 
   const CloseButton = (
     <>
       {sm ? (
-        <Styled.CloseButton
-          type="text"
-          className="close"
-          onClick={closeAllMenus}
-        >
-          X
-        </Styled.CloseButton>
+        <Styled.LogoCloseContainer>
+          <Styled.LogoContainer>
+            <Styled.LogoLink href={"/"}>
+              <LogoColored className={"logo"} />
+              <h1 className="peer">
+                PEER
+                <span className="plays">PLAYS</span>
+              </h1>
+            </Styled.LogoLink>
+          </Styled.LogoContainer>
+          <Styled.CloseButton
+            type="text"
+            className="close"
+            onClick={(e) => {
+              e.stopPropagation();
+              closeAllMenus();
+            }}
+          >
+            X
+          </Styled.CloseButton>
+        </Styled.LogoCloseContainer>
       ) : (
         ""
       )}

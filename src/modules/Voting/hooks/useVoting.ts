@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { DEFAULT_PROXY_ID } from "../../../api/params";
-import { useAccount, useAsset, useMembers } from "../../../common/hooks";
 import {
-  usePeerplaysApiContext,
-  useUserContext,
-} from "../../../common/providers";
+  GPOSInfo,
+  useAccount,
+  useGpos,
+  useMembers,
+} from "../../../common/hooks";
+import { useUserContext } from "../../../common/providers";
 import { FullAccount, Proxy, Vote } from "../../../common/types";
-import { GposInfo } from "../types";
 
 import { UseVotingResult } from "./useVoting.types";
 
@@ -20,72 +21,52 @@ export function useVoting(): UseVotingResult {
   const [allMembers, setAllMembers] = useState<Vote[]>([]);
   const [allMembersIds, setAllMembersIds] = useState<[string, string][]>([]);
   const [loadingMembers, setLoadingMembers] = useState<boolean>(true);
-  const [totalGpos, setTotalGpos] = useState<number>(0);
+  const [gposInfo, setGposInfo] = useState<GPOSInfo>({
+    gposBalance: 0,
+    performance: "",
+    qualifiedReward: 0,
+    rakeReward: 0,
+    availableBalance: 0,
+    symbol: "",
+  });
   const [proxy, setProxy] = useState<Proxy>({
     name: "",
     id: DEFAULT_PROXY_ID,
   });
 
-  const { localStorageAccount, id } = useUserContext();
+  const { localStorageAccount } = useUserContext();
   const { getFullAccount } = useAccount();
   const { getCommittees, getSons, getWitnesses } = useMembers();
-  const { dbApi } = usePeerplaysApiContext();
-  const { getAssetById, setPrecision } = useAsset();
+  const { getGposInfo } = useGpos();
+
+  const [voteTabLoaded, setVoteTabLoaded] = useState<boolean>(false);
+  if (!voteTabLoaded && !loadingUserVotes && !loadingMembers) {
+    setVoteTabLoaded(true);
+  }
 
   const getProxyAccount = useCallback(
     async (proxyId: string) => {
-      const proxy = (await getFullAccount(proxyId, false)) as FullAccount;
-
-      setProxy({
-        name: proxyId !== DEFAULT_PROXY_ID ? proxy.account.name : "",
-        id: proxyId,
-      } as Proxy);
+      const proxy = await getFullAccount(proxyId, false);
+      return proxy;
     },
-    [getFullAccount, setProxy]
+    [getFullAccount]
   );
 
-  const getUserTotalGpos = useCallback(async () => {
-    if (id) {
-      try {
-        const gposInfo: GposInfo = await dbApi("get_gpos_info", [id]);
-        if (gposInfo !== undefined) {
-          const asset = await getAssetById(gposInfo.award.asset_id);
-          if (asset !== undefined) {
-            setTotalGpos(
-              setPrecision(
-                true,
-                gposInfo.account_vested_balance,
-                asset.precision
-              )
-            );
-          }
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  }, [dbApi, id, getAssetById, setTotalGpos, setPrecision]);
-
   const getAllMembers = useCallback(async () => {
-    try {
-      setLoadingMembers(true);
-      let allMembers: Vote[] = [];
-      let allMembersIds: [string, string][] = [];
-      const [
-        { committees, committeesIds },
-        { sons, sonsIds },
-        { witnesses, witnessesIds },
-      ] = await Promise.all([getCommittees(), getSons(), getWitnesses()]);
-      allMembers = [...committees, ...sons, ...witnesses];
-      allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
+    setLoadingMembers(true);
+    let allMembers: Vote[] = [];
+    let allMembersIds: [string, string][] = [];
+    const [
+      { committees, committeesIds },
+      { sons, sonsIds },
+      { witnesses, witnessesIds },
+    ] = await Promise.all([getCommittees(), getSons(), getWitnesses()]);
+    allMembers = [...committees, ...sons, ...witnesses];
+    allMembersIds = [...committeesIds, ...sonsIds, ...witnessesIds];
 
-      setAllMembers(allMembers);
-      setAllMembersIds(allMembersIds);
-      setLoadingMembers(false);
-    } catch (e) {
-      console.log(e);
-      setLoadingMembers(false);
-    }
+    setAllMembers(allMembers);
+    setAllMembersIds(allMembersIds);
+    setLoadingMembers(false);
   }, [
     setLoadingMembers,
     getCommittees,
@@ -96,26 +77,38 @@ export function useVoting(): UseVotingResult {
   ]);
 
   const getUserVotes = useCallback(async () => {
-    try {
-      setLoadingUserVotes(true);
-      const fullAccount = await getFullAccount(localStorageAccount, false);
-      if (fullAccount !== undefined) {
-        await getProxyAccount(fullAccount.account.options.voting_account);
-        const votesIds = fullAccount.votes.map((vote) => vote.vote_id);
-        setServerApprovedVotesIds(votesIds);
-        setFullAccount(fullAccount);
-      }
+    setLoadingUserVotes(true);
+    const fullAccount = await getFullAccount(localStorageAccount, false);
+    if (fullAccount !== undefined) {
+      const proxyId = fullAccount.account.options.voting_account;
+      const [proxy, gposInfo] = await Promise.all([
+        getProxyAccount(proxyId),
+        getGposInfo(fullAccount.account.id),
+      ]);
 
-      setLoadingUserVotes(false);
-    } catch (e) {
-      console.log(e);
-      setLoadingUserVotes(false);
+      const votesIds = fullAccount.votes.map((vote) => vote.vote_id);
+      if (gposInfo) {
+        setGposInfo(gposInfo);
+      }
+      setProxy({
+        name: proxyId !== DEFAULT_PROXY_ID ? proxy?.account.name : "",
+        id: proxyId,
+      } as Proxy);
+      setServerApprovedVotesIds(votesIds);
+      setFullAccount(fullAccount);
     }
+    setLoadingUserVotes(false);
   }, [
     setLoadingUserVotes,
+    getFullAccount,
     localStorageAccount,
-    setFullAccount,
+    getProxyAccount,
+    getGposInfo,
+    setGposInfo,
+    setProxy,
+    DEFAULT_PROXY_ID,
     setServerApprovedVotesIds,
+    setFullAccount,
   ]);
 
   useEffect(() => {
@@ -126,19 +119,16 @@ export function useVoting(): UseVotingResult {
     getUserVotes();
   }, [getUserVotes]);
 
-  useEffect(() => {
-    getUserTotalGpos();
-  }, [getUserTotalGpos]);
-
   return {
     loadingUserVotes,
     serverApprovedVotesIds,
     allMembers,
     fullAccount,
     allMembersIds,
-    totalGpos,
+    gposInfo,
     proxy,
     getUserVotes,
     loadingMembers,
+    voteTabLoaded,
   };
 }

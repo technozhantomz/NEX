@@ -44,11 +44,8 @@ export const VoteTab = ({
     addVote,
     removeVote,
     handleVoting,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    dispatchTransactionMessage,
+    transactionMessageState,
     updateAccountFee,
     afterSuccessTransactionModalClose,
   } = useVoteTab({
@@ -71,11 +68,8 @@ export const VoteTab = ({
       resetChanges={resetChanges}
       name={name}
       handleVoting={handleVoting}
-      loadingTransaction={loadingTransaction}
-      setTransactionErrorMessage={setTransactionErrorMessage}
-      setTransactionSuccessMessage={setTransactionSuccessMessage}
-      transactionErrorMessage={transactionErrorMessage}
-      transactionSuccessMessage={transactionSuccessMessage}
+      dispatchTransactionMessage={dispatchTransactionMessage}
+      transactionMessageState={transactionMessageState}
       updateAccountFee={updateAccountFee}
       proxy={proxy}
       localApprovedVotesIds={localApprovedVotesIds}
@@ -91,11 +85,8 @@ export const VoteTab = ({
         resetChanges={resetChanges}
         name={name}
         handleVoting={handleVoting}
-        loadingTransaction={loadingTransaction}
-        setTransactionErrorMessage={setTransactionErrorMessage}
-        setTransactionSuccessMessage={setTransactionSuccessMessage}
-        transactionErrorMessage={transactionErrorMessage}
-        transactionSuccessMessage={transactionSuccessMessage}
+        dispatchTransactionMessage={dispatchTransactionMessage}
+        transactionMessageState={transactionMessageState}
         updateAccountFee={updateAccountFee}
         proxy={proxy}
         localApprovedVotesIds={localApprovedVotesIds}
@@ -111,9 +102,7 @@ export const VoteTab = ({
           tab: capitalize(counterpart.translate(`pages.voting.${tab}.heading`)),
         })}
         <InfoCircleOutlined />
-        <Link href={""}>
-          <a>{counterpart.translate(`links.learn_more`)}</a>
-        </Link>
+        <Link href={""}>{counterpart.translate(`links.learn_more`)}</Link>
       </Styled.Title>
       <Styled.VoteTabCard>
         <VoteTable

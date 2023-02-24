@@ -1,12 +1,13 @@
 import counterpart from "counterpart";
 import Link from "next/link";
+import { useCallback } from "react";
 
 import { renderPaginationItem, UserLinkExtractor } from "../../../..";
 import { Checkbox, List, Switch, Tooltip } from "../../../../../../ui/src";
 import { useFormDate } from "../../../../../hooks";
 import {
+  useNotificationsContext,
   useUserContext,
-  useUserSettingsContext,
 } from "../../../../../providers";
 import { Notification } from "../../../../../types";
 
@@ -20,7 +21,7 @@ export const NotificationMenu = (): JSX.Element => {
     hasUnreadMessages,
     loadingNotifications,
     markTheNotificationAsReadOrUnread,
-  } = useUserSettingsContext();
+  } = useNotificationsContext();
   const { showUnreadOnly, setShowUnreadOnly, groupedNotificationsByDate } =
     useNotificationMenu({
       notifications,
@@ -63,6 +64,39 @@ export const NotificationMenu = (): JSX.Element => {
       <Styled.TimeSpecification>{renderTodayOrOlder}</Styled.TimeSpecification>
     );
   };
+
+  const renderListItem = useCallback(
+    (item: Notification) => (
+      <Styled.ActivityListItem key={item.activity.key}>
+        <Styled.ActivitysItemContent>
+          <div className="activity-info">
+            <Tooltip
+              placement="top"
+              title={`${
+                item.unread
+                  ? counterpart.translate(`tooltips.mark_read`)
+                  : counterpart.translate(`tooltips.mark_unread`)
+              }`}
+            >
+              <Checkbox
+                checked={!item.unread}
+                onChange={(e) => {
+                  markTheNotificationAsReadOrUnread(
+                    item.activity.id,
+                    !e.target.checked
+                  );
+                }}
+              ></Checkbox>
+              <span className="activity-info-value">
+                <UserLinkExtractor infoString={item.activity.info} />
+              </span>
+            </Tooltip>
+          </div>
+        </Styled.ActivitysItemContent>
+      </Styled.ActivityListItem>
+    ),
+    [markTheNotificationAsReadOrUnread]
+  );
 
   return (
     <Styled.NotificationMenuCard
@@ -113,39 +147,7 @@ export const NotificationMenu = (): JSX.Element => {
                     }
                     itemLayout="vertical"
                     dataSource={dataSource}
-                    renderItem={(item: Notification) => (
-                      <Styled.ActivityListItem key={item.activity.key}>
-                        <Styled.ActivitysItemContent>
-                          <div className="activity-info">
-                            <Tooltip
-                              placement="top"
-                              title={`${
-                                item.unread
-                                  ? counterpart.translate(`tooltips.mark_read`)
-                                  : counterpart.translate(
-                                      `tooltips.mark_unread`
-                                    )
-                              }`}
-                            >
-                              <Checkbox
-                                checked={!item.unread}
-                                onChange={(e) => {
-                                  markTheNotificationAsReadOrUnread(
-                                    item.activity.id,
-                                    !e.target.checked
-                                  );
-                                }}
-                              ></Checkbox>
-                              <span className="activity-info-value">
-                                <UserLinkExtractor
-                                  infoString={item.activity.info}
-                                />
-                              </span>
-                            </Tooltip>
-                          </div>
-                        </Styled.ActivitysItemContent>
-                      </Styled.ActivityListItem>
-                    )}
+                    renderItem={renderListItem}
                   />
                 </div>
               );
@@ -162,7 +164,7 @@ export const NotificationMenu = (): JSX.Element => {
 
       <Styled.AllActivityContainer>
         <Link href={`/user/${localStorageAccount}`}>
-          <a>{counterpart.translate(`links.see_all_account_activity`)}</a>
+          {counterpart.translate(`links.see_all_account_activity`)}
         </Link>
       </Styled.AllActivityContainer>
     </Styled.NotificationMenuCard>

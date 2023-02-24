@@ -1,29 +1,29 @@
 import { Dispatch, SetStateAction } from "react";
 
 import { FormInstance, Rule } from "../../../../ui/src";
-import { SidechainAcccount, SignerKey } from "../../../types";
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../hooks";
+import { SidechainAccount, SignerKey } from "../../../types";
 
 export type UseWithdrawFormResult = {
-  formValdation: FormValidation;
+  formValidation: FormValidation;
   withdrawForm: FormInstance<WithdrawForm>;
-  handleValuesChange: (changedValues: any) => void;
+  handleValuesChange: (changedValues: { amount?: string }) => void;
   handleAssetChange: (value: unknown) => void;
   selectedAsset: string;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  transactionErrorMessage: string;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  transactionSuccessMessage: string;
+  transactionMessageState: TransactionMessageState;
+  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
   handleWithdraw: (signerKey: SignerKey) => Promise<void>;
-  loadingTransaction: boolean;
   amount: string;
-  withdrawAddress: string;
   userBalance: number;
   withdrawFee: number;
   btcTransferFee: number;
   setBtcTransferFee: Dispatch<SetStateAction<number>>;
-  selectedAssetPrecission: number;
+  selectedAssetPrecision: number;
   hasBTCDepositAddress: boolean;
-  bitcoinSidechainAccount: SidechainAcccount | undefined;
+  bitcoinSidechainAccount: SidechainAccount | undefined;
   getSidechainAccounts: (accountId: string) => Promise<void>;
   loadingSidechainAccounts: boolean;
 };

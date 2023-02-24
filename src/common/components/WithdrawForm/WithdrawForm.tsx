@@ -14,43 +14,35 @@ import { utils } from "../../../api/utils";
 import { Form, Input } from "../../../ui/src";
 import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
-import { useAsset, useHandleTransactionForm } from "../../hooks";
+import { useAsset, useTransactionForm } from "../../hooks";
 import { useAssetsContext, useUserContext } from "../../providers";
-import { Asset, SidechainAcccount } from "../../types";
+import { Asset, SidechainAccount } from "../../types";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
 
 type Props = {
   asset: string;
-  withAssetSelector?: boolean;
 };
 
-export const WithdrawForm = ({
-  asset,
-  withAssetSelector,
-}: Props): JSX.Element => {
+export const WithdrawForm = ({ asset }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { sidechainAssets } = useAssetsContext();
   const { limitByPrecision } = useAsset();
   const {
     withdrawForm,
-    formValdation,
+    formValidation,
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
-    transactionErrorMessage,
-    setTransactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionSuccessMessage,
+    transactionMessageState,
+    dispatchTransactionMessage,
     handleWithdraw,
-    loadingTransaction,
     amount,
-    withdrawAddress,
     userBalance,
     withdrawFee,
     btcTransferFee,
-    selectedAssetPrecission,
+    selectedAssetPrecision,
     hasBTCDepositAddress,
     bitcoinSidechainAccount,
     getSidechainAccounts,
@@ -60,20 +52,25 @@ export const WithdrawForm = ({
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleWithdraw,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+  } = useTransactionForm({
+    executeTransaction: handleWithdraw,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
 
+  let withdrawAddress = "";
+  if ((withdrawForm as any).__INTERNAL__.name) {
+    // do form logic here
+    const values = withdrawForm.getFieldsValue();
+    withdrawAddress = values.withdrawAddress;
+  }
+
   const precisedAmount = limitByPrecision(
     String(amount),
-    selectedAssetPrecission
+    selectedAssetPrecision
   );
 
   const isLoggedIn = localStorageAccount && localStorageAccount !== "";
@@ -137,6 +134,7 @@ export const WithdrawForm = ({
       <>{feeSummary(true)}</>
     </>
   );
+
   const confirmationTime =
     selectedAsset === BITCOIN_ASSET_SYMBOL
       ? counterpart.translate(`field.labels.btc_withdrawal_confirmation_time`)
@@ -167,25 +165,21 @@ export const WithdrawForm = ({
     <>
       <Form.Item
         name="from"
-        rules={formValdation.from}
+        rules={formValidation.from}
         validateFirst={true}
         initialValue={localStorageAccount}
-        hidden={withAssetSelector ? true : false}
+        hidden={true}
       >
         <Input disabled={true} placeholder="From" />
       </Form.Item>
-      {/* fieldLabel */}
-      {withAssetSelector ? (
-        <p className="label">
-          {counterpart.translate(`field.labels.withdraw_public_key_address`)}
-        </p>
-      ) : (
-        ""
-      )}
+      <p className="label">
+        {counterpart.translate(`field.labels.withdraw_public_key_address`)}
+      </p>
+
       <Form.Item
         name="withdrawPublicKey"
         validateFirst={true}
-        rules={formValdation.withdrawPublicKey}
+        rules={formValidation.withdrawPublicKey}
       >
         <Input
           placeholder={counterpart.translate(
@@ -199,7 +193,7 @@ export const WithdrawForm = ({
       <Form.Item
         name="withdrawAddress"
         validateFirst={true}
-        rules={formValdation.withdrawAddress}
+        rules={formValidation.withdrawAddress}
       >
         <Input
           placeholder={counterpart.translate(
@@ -210,26 +204,6 @@ export const WithdrawForm = ({
           autoComplete="off"
         />
       </Form.Item>
-      {!withAssetSelector ? (
-        <Form.Item
-          name="amount"
-          validateFirst={true}
-          rules={formValdation.amount}
-        >
-          <Input
-            placeholder={counterpart.translate(`field.placeholder.amount`)}
-            type="number"
-            step="any"
-            min={0}
-            onKeyPress={utils.ensureInputNumberValidity}
-            onPaste={utils.numberedInputsPasteHandler}
-            disabled={localStorageAccount ? false : true}
-            autoComplete="off"
-          />
-        </Form.Item>
-      ) : (
-        ""
-      )}
       <Styled.WithdrawalInstruction>
         <Styled.IconWrapper>
           <BitcoinIcon height="30" width="30" />
@@ -239,7 +213,7 @@ export const WithdrawForm = ({
         </span>
       </Styled.WithdrawalInstruction>
       <DownloadBitcoinKeys
-        bitcoinSidechainAccount={bitcoinSidechainAccount as SidechainAcccount}
+        bitcoinSidechainAccount={bitcoinSidechainAccount as SidechainAccount}
         getSidechainAccounts={getSidechainAccounts}
       />
       {transactionDetails}
@@ -253,24 +227,21 @@ export const WithdrawForm = ({
     <>
       <Form.Item
         name="from"
-        rules={formValdation.from}
+        rules={formValidation.from}
         validateFirst={true}
         initialValue={localStorageAccount}
-        hidden={withAssetSelector ? true : false}
+        hidden={true}
       >
         <Input disabled={true} placeholder="From" />
       </Form.Item>
-      {withAssetSelector ? (
-        <p className="label">
-          {counterpart.translate(`field.labels.hive_blockchain_account`)}
-        </p>
-      ) : (
-        ""
-      )}
+      <p className="label">
+        {counterpart.translate(`field.labels.hive_blockchain_account`)}
+      </p>
+
       <Form.Item
         name="withdrawAddress"
         validateFirst={true}
-        rules={formValdation.withdrawAddress}
+        rules={formValidation.withdrawAddress}
       >
         <Input
           placeholder={counterpart.translate(
@@ -280,25 +251,6 @@ export const WithdrawForm = ({
           disabled={localStorageAccount ? false : true}
         />
       </Form.Item>
-      {!withAssetSelector ? (
-        <Form.Item
-          name="amount"
-          validateFirst={true}
-          rules={formValdation.amount}
-        >
-          <Input
-            placeholder={counterpart.translate(`field.placeholder.amount`)}
-            type="number"
-            step="any"
-            min={0}
-            onKeyPress={utils.ensureInputNumberValidity}
-            onPaste={utils.numberedInputsPasteHandler}
-            disabled={localStorageAccount ? false : true}
-          />
-        </Form.Item>
-      ) : (
-        ""
-      )}
       <Styled.WithdrawalInstruction>
         <Styled.IconWrapper>
           <HIVEIcon width="30" height="30" />
@@ -331,46 +283,38 @@ export const WithdrawForm = ({
         <Styled.WithdrawForm
           form={withdrawForm}
           name="withdrawForm"
-          onFinish={showPasswordModal}
           onValuesChange={handleValuesChange}
           size="large"
           validateTrigger={["onChange", "onSubmit"]}
         >
-          {withAssetSelector ? (
-            <>
-              <Form.Item>
-                <Input.Group compact>
-                  <Styled.WithdrawFormAsset>
-                    <LogoSelectOption
-                      assets={sidechainAssets as Asset[]}
-                      value={selectedAsset}
-                      onChange={handleAssetChange}
-                    />
-                    {renderUserBalance}
-                  </Styled.WithdrawFormAsset>
-                  <Styled.WithdrawFormAssetAmount
-                    name="amount"
-                    validateFirst={true}
-                    rules={formValdation.amount}
-                    noStyle
-                  >
-                    <Input
-                      placeholder="0.0"
-                      type="number"
-                      step="any"
-                      min={0}
-                      onKeyPress={utils.ensureInputNumberValidity}
-                      onPaste={utils.numberedInputsPasteHandler}
-                      disabled={!isLoggedIn}
-                      autoComplete="off"
-                    />
-                  </Styled.WithdrawFormAssetAmount>
-                </Input.Group>
-              </Form.Item>
-            </>
-          ) : (
-            ""
-          )}
+          <Form.Item>
+            <Input.Group compact>
+              <Styled.WithdrawFormAsset>
+                <LogoSelectOption
+                  assets={sidechainAssets as Asset[]}
+                  value={selectedAsset}
+                  onChange={handleAssetChange}
+                />
+                {renderUserBalance}
+              </Styled.WithdrawFormAsset>
+              <Styled.WithdrawFormAssetAmount
+                name="amount"
+                validateFirst={true}
+                rules={formValidation.amount}
+                noStyle
+              >
+                <Input
+                  placeholder="0.0"
+                  type="number"
+                  step="any"
+                  min={0}
+                  onKeyPress={utils.ensureInputNumberValidity}
+                  disabled={!isLoggedIn}
+                  autoComplete="off"
+                />
+              </Styled.WithdrawFormAssetAmount>
+            </Input.Group>
+          </Form.Item>
 
           {isLoggedIn ? (
             <>{formBodyWithLoading}</>
@@ -391,9 +335,7 @@ export const WithdrawForm = ({
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={localStorageAccount}
           fee={transactionModalFee}
           asset={selectedAsset}

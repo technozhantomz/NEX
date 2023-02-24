@@ -1,53 +1,33 @@
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
 
 import { Layout } from "../../../../common/components";
 import { DepositTab, MarketTab, SwapTab, WithdrawTab } from "../../components";
 
 import * as Styled from "./Dashboard.styled";
 
-const Dashboard: React.FC = () => {
+const Dashboard = (): JSX.Element => {
   const router = useRouter();
   const { tab } = router.query;
-  const [activeTab, setActiveTab] = useState<string>(
-    tab ? (tab as string) : "Deposit"
-  );
-
   const changeTab = (tab: string) => {
-    setActiveTab(tab);
-    router.push(`/?tab=${tab.toLowerCase()}`);
+    router.push(`/?tab=${tab}`);
   };
+  const activeTab = tab ? (tab as string).toLowerCase() : "deposit";
+  const tabs = ["deposit", "withdraw", "swap", "market"];
 
-  useEffect(() => {
-    setActiveTab(tab ? (tab as string) : "Deposit");
-  }, [tab, setActiveTab]);
-
-  const Tabs = [
-    { tabName: "Deposit" },
-    { tabName: "Withdraw" },
-    { tabName: "Swap" },
-    { tabName: "Market" },
-  ];
   return (
     <Layout title="Dashboard">
       <Styled.HeaderContainer>
         <Styled.HeaderContainerItem>
           <Styled.Row gutter={4}>
-            {Tabs.map((e, i) => (
-              <Styled.Col key={i} className="gutter-row" span={6}>
+            {tabs.map((tab) => (
+              <Styled.Col key={tab} className="gutter-row" span={6}>
                 <Styled.Buttons
-                  className={
-                    activeTab.toLowerCase() === e.tabName.toLowerCase()
-                      ? "active"
-                      : ""
-                  }
-                  onClick={() => changeTab(e.tabName)}
+                  className={activeTab === tab ? "active" : ""}
+                  onClick={() => changeTab(tab)}
                 >
                   <Styled.ButtonNames>
-                    {counterpart.translate(
-                      `buttons.${e.tabName.toLowerCase()}`
-                    )}
+                    {counterpart.translate(`buttons.${tab}`)}
                   </Styled.ButtonNames>
                 </Styled.Buttons>
               </Styled.Col>
@@ -56,14 +36,10 @@ const Dashboard: React.FC = () => {
         </Styled.HeaderContainerItem>
       </Styled.HeaderContainer>
       <Styled.BodyContainer>
-        {!activeTab ||
-          ((activeTab.toLowerCase() === "Deposit".toLowerCase() ||
-            activeTab.toLowerCase() === "") && <DepositTab />)}
-        {activeTab.toLowerCase() === "Withdraw".toLowerCase() && (
-          <WithdrawTab />
-        )}
-        {activeTab.toLowerCase() === "Swap".toLowerCase() && <SwapTab />}
-        {activeTab.toLowerCase() === "Market".toLowerCase() && <MarketTab />}
+        {activeTab === "deposit" && <DepositTab />}
+        {activeTab === "withdraw" && <WithdrawTab />}
+        {activeTab === "swap" && <SwapTab />}
+        {activeTab === "market" && <MarketTab />}
       </Styled.BodyContainer>
     </Layout>
   );

@@ -22,9 +22,10 @@ export const SwapContainer = styled.div`
 export const SwapForm = styled(swapForm)`
   .ant-input-group.ant-input-group-compact {
     display: flex;
-    padding: 4px 11px;
   }
-  .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
+  .ant-select-status-error.ant-select:not(.ant-select-disabled):not(
+      .ant-select-customize-input
+    )
     .ant-select-selector {
     border-color: transparent !important;
   }
@@ -45,10 +46,18 @@ export const SwapForm = styled(swapForm)`
     ${breakpoint.sm} {
       height: 85px;
     }
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:focus,
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input-focused,
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
-    .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input:focus,
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input-focused,
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input,
+    .ant-input-status-error:not(.ant-input-disabled):not(
+        .ant-input-borderless
+      ).ant-input:hover {
       border: none !important;
       box-shadow: none !important;
     }
@@ -58,10 +67,6 @@ export const SwapForm = styled(swapForm)`
       text-align: right;
       direction: ltr;
       padding-right: 30px;
-      font-size: 16px;
-      ${breakpoint.sm} {
-        font-size: 20px;
-      }
     }
     .ant-input[disabled] {
       background-color: unset;
@@ -89,9 +94,6 @@ export const SwapSellItem = styled(SwapItem)`
 
 export const AssetSelectContainer = styled.div`
   margin-bottom: 0;
-  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-    padding: 0;
-  }
   min-width: 200px;
   ${breakpoint.sm} {
     min-width: 240px;
@@ -104,8 +106,8 @@ export const AssetSelectContainer = styled.div`
 
 export const Balance = styled.div`
   text-align: left;
-  padding-left: 40px;
   font-size: 14px;
+  padding-left: 15px;
 `;
 
 export const SwapButtonFormItem = styled(swapForm.Item)`

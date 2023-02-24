@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { useState } from "react";
+import { FocusEvent, useCallback, useState } from "react";
 
 import { defaultToken } from "../../../../api/params";
 import { utils } from "../../../../api/utils";
@@ -9,7 +9,7 @@ import {
   PasswordModal,
   TransactionModal,
 } from "../../../../common/components";
-import { useHandleTransactionForm } from "../../../../common/hooks";
+import { useTransactionForm } from "../../../../common/hooks";
 import {
   CardFormButton,
   Form,
@@ -24,20 +24,16 @@ import { useSwap } from "./hooks";
 export const SwapTab = (): JSX.Element => {
   const {
     swapForm,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    dispatchTransactionMessage,
     selectedAssetsSymbols,
     allAssets,
     handleSellAssetChange,
     handleBuyAssetChange,
     localStorageAccount,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
     swapOrderFee,
     price,
     loadingSwapData,
-    //loadingAssets,
     handleValuesChange,
     handleSwapAssets,
     buyAssetBalance,
@@ -53,17 +49,21 @@ export const SwapTab = (): JSX.Element => {
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleSwapSubmit,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+  } = useTransactionForm({
+    executeTransaction: handleSwapSubmit,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
 
+  const selectOnFocus = useCallback(
+    (e: FocusEvent<HTMLInputElement, Element>) => {
+      e.target.select();
+    },
+    []
+  );
   const [transactionModalSellAmount, setTransactionModalSellAmount] =
     useState<string>("");
   const [transactionModalBuyAmount, setTransactionModalBuyAmount] =
@@ -193,7 +193,6 @@ export const SwapTab = (): JSX.Element => {
             const values = swapForm.getFieldsValue();
             setTransactionModalSellAmount(values.sellAmount);
             setTransactionModalBuyAmount(values.buyAmount);
-            showPasswordModal();
           }}
           validateTrigger={["onChange", "onSubmit", "onBlur"]}
         >
@@ -226,9 +225,7 @@ export const SwapTab = (): JSX.Element => {
               >
                 <Input
                   placeholder="0.0"
-                  onFocus={(e) => {
-                    e.target.select();
-                  }}
+                  onFocus={selectOnFocus}
                   autoComplete="off"
                   onKeyPress={utils.ensureInputNumberValidity}
                   onPaste={utils.numberedInputsPasteHandler}
@@ -261,9 +258,7 @@ export const SwapTab = (): JSX.Element => {
               >
                 <Input
                   placeholder="0.0"
-                  onFocus={(e) => {
-                    e.target.select();
-                  }}
+                  onFocus={selectOnFocus}
                   onKeyPress={utils.ensureInputNumberValidity}
                   onPaste={utils.numberedInputsPasteHandler}
                   autoComplete="off"
@@ -285,9 +280,7 @@ export const SwapTab = (): JSX.Element => {
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={localStorageAccount}
           fee={transactionModalFee}
           transactionType="swap_order_create"

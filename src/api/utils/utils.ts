@@ -1,3 +1,4 @@
+import counterpart from "counterpart";
 import { ClipboardEvent, KeyboardEvent } from "react";
 
 import { BITCOIN_NETWORK, defaultNetwork, HIVE_NETWORK } from "../params";
@@ -12,7 +13,7 @@ export const utils = {
 
     return inverse ? intB - intA : intA - intB;
   },
-  is_object_id: (obj_id: string): boolean => {
+  isObjectId: (obj_id: string): boolean => {
     if ("string" != typeof obj_id) return false;
     const match = id_regex.exec(obj_id);
     return match !== null && obj_id.split(".").length === 3;
@@ -74,12 +75,177 @@ export const utils = {
       TEST: "PeerPlays",
       PPY: "PeerPlays",
     };
-    return blockchains[symbol] || symbol;
+    return blockchains[symbol.toUpperCase()] || symbol;
   },
-  validateGrapheneAccountName: (name: string): boolean => {
-    return /^[a-z](?!.*([-.])\\1)((?=.*(-))|(?=.*(\d)))[a-z0-9-.]{2,62}(?![-.])$/.test(
-      name
+  validatePeerplaysAccountName: (
+    name: string
+  ): { isValid: boolean; error?: string } => {
+    let suffix = "";
+
+    suffix = counterpart.translate(
+      "field.errors.account_creation_errors.account_should"
     );
+
+    const length = name.length;
+    if (!/^[~a-z]/.test(name)) {
+      return {
+        isValid: false,
+        error:
+          suffix +
+          counterpart.translate(
+            "field.errors.account_creation_errors.start_with_letter"
+          ),
+      };
+    }
+    if (length < 2) {
+      return {
+        isValid: false,
+        error:
+          suffix +
+          counterpart.translate(
+            "field.errors.account_creation_errors.be_longer"
+          ),
+      };
+    }
+    if (length > 62) {
+      return {
+        isValid: false,
+        error:
+          suffix +
+          counterpart.translate(
+            "field.errors.account_creation_errors.be_shorter"
+          ),
+      };
+    }
+    if (/\./.test(name)) {
+      suffix = counterpart.translate(
+        "field.errors.account_creation_errors.account_segment_should"
+      );
+    }
+    const ref = name.split(".");
+
+    for (let i = 0, len = ref.length; i < len; i++) {
+      const label = ref[i];
+      if (!/^[~a-z]/.test(label)) {
+        return {
+          isValid: false,
+          error:
+            suffix +
+            counterpart.translate(
+              "field.errors.account_creation_errors.start_with_letter"
+            ),
+        };
+      }
+      if (!/^[~a-z0-9-]*$/.test(label)) {
+        return {
+          isValid: false,
+          error:
+            suffix +
+            counterpart.translate(
+              "field.errors.account_creation_errors.have_letters_digits_dashes"
+            ),
+        };
+      }
+      if (/--/.test(label)) {
+        return {
+          isValid: false,
+          error:
+            suffix +
+            counterpart.translate(
+              "field.errors.account_creation_errors.have_one_dash_in_row"
+            ),
+        };
+      }
+      if (!/[a-z0-9]$/.test(label)) {
+        return {
+          isValid: false,
+          error:
+            suffix +
+            counterpart.translate(
+              "field.errors.account_creation_errors.end_letter_digit"
+            ),
+        };
+      }
+      if (label.length < 2) {
+        return {
+          isValid: false,
+          error:
+            suffix +
+            counterpart.translate(
+              "field.errors.account_creation_errors.be_longer"
+            ),
+        };
+      }
+    }
+
+    return { isValid: true };
+  },
+  validateHiveAccount: (name: string): { isValid: boolean; error?: string } => {
+    let suffix = "";
+
+    suffix = counterpart.translate(
+      "field.errors.hive_account_errors.account_should"
+    );
+
+    const length = name.length;
+
+    if (length < 3) {
+      return {
+        isValid: false,
+        error:
+          suffix +
+          counterpart.translate("field.errors.hive_account_errors.be_longer"),
+      };
+    }
+    if (length > 16) {
+      return {
+        isValid: false,
+        error:
+          suffix +
+          counterpart.translate("field.errors.hive_account_errors.be_shorter"),
+      };
+    }
+    if (!/^[~a-z]/.test(name)) {
+      return {
+        isValid: false,
+        error:
+          suffix +
+          counterpart.translate(
+            "field.errors.hive_account_errors.start_with_letter"
+          ),
+      };
+    }
+    if (!/^[~a-z0-9-]*$/.test(name)) {
+      return {
+        isValid: false,
+        error:
+          suffix +
+          counterpart.translate(
+            "field.errors.hive_account_errors.have_letters_digits_dashes"
+          ),
+      };
+    }
+    if (!/[a-z0-9]$/.test(name)) {
+      return {
+        isValid: false,
+        error:
+          suffix +
+          counterpart.translate(
+            "field.errors.hive_account_errors.end_letter_digit"
+          ),
+      };
+    }
+    if (/--/.test(name)) {
+      return {
+        isValid: false,
+        error:
+          suffix +
+          counterpart.translate(
+            "field.errors.hive_account_errors.have_one_dash_in_row"
+          ),
+      };
+    }
+    return { isValid: true };
   },
   isUrlsEqual: (url1: string, url2: string): boolean => {
     let trimedUrl1 =

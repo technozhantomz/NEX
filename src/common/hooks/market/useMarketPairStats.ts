@@ -1,27 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useAsset } from "..";
+import { useAsset, useMarketHistory } from "..";
 import {
   BITCOIN_ASSET_SYMBOL,
   defaultToken,
   HBD_ASSET_SYMBOL,
   HIVE_ASSET_SYMBOL,
 } from "../../../api/params";
-import { usePeerplaysApiContext } from "../../providers";
-import {
-  Asset,
-  MarketPairStats,
-  PairNameAndMarketStats,
-  Ticker,
-} from "../../types";
+import { Asset, MarketPairStats, PairNameAndMarketStats } from "../../types";
 
 import { UseMarketPairStatsResult } from "./useMarketPairStats.types";
 
 export function useMarketPairStats(): UseMarketPairStatsResult {
-  const { dbApi } = usePeerplaysApiContext();
-  const { getAllAssets, getAssetsBySymbols, limitByPrecision, ceilPrecision } =
-    useAsset();
-
+  const { getAllAssets, limitByPrecision, ceilPrecision } = useAsset();
+  const { getTicker } = useMarketHistory();
   const [allAssets, _setAllAssets] = useState<Asset[] | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -31,10 +23,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         percentChange = "0",
         volume = "0";
       try {
-        const ticker: Ticker = await dbApi("get_ticker", [
-          base.symbol,
-          quote.symbol,
-        ]);
+        const ticker = await getTicker(base, quote);
         if (ticker) {
           latest = ceilPrecision(ticker.latest, base.precision);
           percentChange = limitByPrecision(ticker.percent_change, 1) || "0";
@@ -49,7 +38,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         volume,
       } as MarketPairStats;
     },
-    [dbApi]
+    [getTicker]
   );
 
   const getDefaultPairs = useCallback(() => {
@@ -94,7 +83,13 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
       console.log(e);
       return pairs;
     }
-  }, [defaultToken, allAssets]);
+  }, [
+    defaultToken,
+    BITCOIN_ASSET_SYMBOL,
+    HBD_ASSET_SYMBOL,
+    HIVE_ASSET_SYMBOL,
+    allAssets,
+  ]);
 
   const formPairStats = useCallback(
     async (pair: string): Promise<PairNameAndMarketStats> => {
@@ -119,24 +114,24 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
         } as PairNameAndMarketStats;
       }
     },
-    [getAssetsBySymbols, allAssets]
+    [getMarketPairStats, allAssets]
   );
 
-  const setAllAssets = useCallback(async () => {
-    try {
-      setLoading(true);
-      const allAssets = await getAllAssets();
-      _setAllAssets(allAssets);
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
-    }
-  }, [getAllAssets, _setAllAssets, setLoading]);
-
   useEffect(() => {
+    let ignore = false;
+    async function setAllAssets() {
+      setLoading(true);
+      const allAssets = await getAllAssets(true);
+      if (!ignore) {
+        _setAllAssets(allAssets);
+        setLoading(false);
+      }
+    }
     setAllAssets();
-  }, [setAllAssets]);
+    return () => {
+      ignore = true;
+    };
+  }, [getAllAssets, _setAllAssets, setLoading]);
 
   return {
     getMarketPairStats,

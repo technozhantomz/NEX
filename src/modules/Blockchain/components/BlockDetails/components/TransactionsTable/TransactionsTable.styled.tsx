@@ -37,7 +37,7 @@ export const TimeStamp = styled.p`
 `;
 
 export const TableWrapper = styled.div`
-  margin: 0 51px 0 35px;
+  margin: 0 15px;
 `;
 
 export const TransactionHeaderBar = styled(DataTableHeaderBar)``;

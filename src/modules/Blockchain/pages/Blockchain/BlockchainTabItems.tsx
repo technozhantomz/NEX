@@ -1,6 +1,5 @@
 import counterpart from "counterpart";
-import router from "next/router";
-import { ReactNode } from "react";
+import { ReactNode, useCallback } from "react";
 
 import {
   AssetsTab,
@@ -18,7 +17,7 @@ export const BlockchainTabItems = (
   blockNum: number | undefined,
   transactionId: string | undefined
 ): { key: string; label: ReactNode; children: ReactNode }[] => {
-  const BlockTab = (): JSX.Element => {
+  const BlockTab = useCallback((): JSX.Element => {
     return (
       <>
         {block ? (
@@ -33,11 +32,11 @@ export const BlockchainTabItems = (
             )}
           </>
         ) : (
-          <BlockchainTab routerQuery={router.query} />
+          <BlockchainTab />
         )}
       </>
     );
-  };
+  }, [block, transactionId, blockNum]);
 
   const label = [
     "blockchain",
@@ -56,12 +55,12 @@ export const BlockchainTabItems = (
     "fees",
   ];
   const children = [
-    <BlockTab />,
-    <AssetsTab />,
-    <WitnessesTab />,
-    <CommitteeTab />,
-    <SonsTab />,
-    <FeesTab />,
+    <BlockTab key="blockchain" />,
+    <AssetsTab key="assets" />,
+    <WitnessesTab key="witnesses" />,
+    <CommitteeTab key="committees" />,
+    <SonsTab key="sons" />,
+    <FeesTab key="fees" />,
   ];
 
   return label.map((item, index) => {

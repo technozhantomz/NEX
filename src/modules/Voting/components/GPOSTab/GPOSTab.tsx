@@ -2,15 +2,22 @@ import counterpart from "counterpart";
 import { useRouter } from "next/router";
 
 import { defaultToken } from "../../../../api/params";
+import { LoadingIndicator } from "../../../../common/components";
+import { GPOSInfo } from "../../../../common/hooks";
 import { useViewportContext } from "../../../../common/providers";
 
 import * as Styled from "./GPOSTab.styled";
 import { useGPOSTab } from "./hooks";
 
-export const GPOSTab = (): JSX.Element => {
+type Props = {
+  gposInfo: GPOSInfo;
+  loading: boolean;
+};
+
+export const GPOSTab = ({ gposInfo, loading }: Props): JSX.Element => {
   const router = useRouter();
 
-  const { GPOSInfo, readMore, setReadMore } = useGPOSTab();
+  const { readMore, setReadMore } = useGPOSTab();
   const { sm } = useViewportContext();
   const ReadMoreBlock = (
     <>
@@ -69,7 +76,7 @@ export const GPOSTab = (): JSX.Element => {
                   {counterpart.translate(`pages.voting.gpos.gpos_balance`)}
                 </Styled.GPOSDetailsTitle>
                 <Styled.GPOSDetailsValue>
-                  {GPOSInfo.gposBalance} {GPOSInfo.symbol}
+                  {gposInfo.gposBalance} {gposInfo.symbol}
                 </Styled.GPOSDetailsValue>
               </li>
               <li>
@@ -79,15 +86,19 @@ export const GPOSTab = (): JSX.Element => {
                   )}
                 </Styled.GPOSDetailsTitle>
                 <Styled.GPOSDetailsValue
-                  className={GPOSInfo.performance
+                  className={gposInfo.performance
                     .replace(" ", "-")
                     .toLowerCase()}
                 >
-                  {`${counterpart.translate(
-                    `pages.voting.gpos.performance_string.${GPOSInfo.performance
-                      .replace(" ", "_")
-                      .toLowerCase()}`
-                  )}`}
+                  {!loading ? (
+                    `${counterpart.translate(
+                      `pages.voting.gpos.performance_string.${gposInfo.performance
+                        .replace(" ", "_")
+                        .toLowerCase()}`
+                    )}`
+                  ) : (
+                    <LoadingIndicator type="circle-small" />
+                  )}
                 </Styled.GPOSDetailsValue>
               </li>
               <li>
@@ -95,7 +106,7 @@ export const GPOSTab = (): JSX.Element => {
                   {counterpart.translate(`pages.voting.gpos.qualified_reward`)}
                 </Styled.GPOSDetailsTitle>
                 <Styled.GPOSDetailsValue>
-                  {GPOSInfo.qualifiedReward} %
+                  {gposInfo.qualifiedReward} %
                 </Styled.GPOSDetailsValue>
               </li>
               <li>
@@ -105,7 +116,7 @@ export const GPOSTab = (): JSX.Element => {
                   )}
                 </Styled.GPOSDetailsTitle>
                 <Styled.GPOSDetailsValue>
-                  {GPOSInfo.rakeReward} %
+                  {gposInfo.rakeReward} %
                 </Styled.GPOSDetailsValue>
               </li>
             </ul>
@@ -115,8 +126,8 @@ export const GPOSTab = (): JSX.Element => {
               {counterpart.translate(`pages.voting.gpos.available_balance`)}
             </Styled.GPOSTotalTitle>
             <Styled.GPOSTotalValue>
-              <span>{GPOSInfo.availableBalance}</span>
-              <span>{GPOSInfo.symbol}</span>
+              <span>{gposInfo.availableBalance}</span>
+              <span>{gposInfo.symbol}</span>
             </Styled.GPOSTotalValue>
           </Styled.GPOSTotal>
         </Styled.GPOSContent>

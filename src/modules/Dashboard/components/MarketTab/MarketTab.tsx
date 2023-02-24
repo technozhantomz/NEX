@@ -22,8 +22,8 @@ export const MarketTab = (): JSX.Element => {
       ) : (
         <Styled.Div>
           <Styled.Row gutter={[16, 16]}>
-            {pairs.map((pair, index) => (
-              <Styled.Col span={12} key={index}>
+            {pairs.map((pair) => (
+              <Styled.Col span={12} key={pair.tradingPair}>
                 <TradingPairCard
                   tradingPair={pair.tradingPair}
                   price={`${pair.marketPairStats.latest}`}

@@ -1,8 +1,10 @@
+//done
 import React, {
   createContext,
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -31,32 +33,45 @@ export const FeesProvider = ({ children }: Props): JSX.Element => {
 
   const getFeesFromGlobal = useCallback(async () => {
     try {
-      setLoadingFeeParameters(true);
       const globalProperties: GlobalProperties = await dbApi(
         "get_global_properties"
       );
       const feeParameters = globalProperties.parameters.current_fees.parameters;
-      setFeeParameters(feeParameters);
-      setLoadingFeeParameters(false);
+      return feeParameters;
     } catch (e) {
       console.log(e);
-      setLoadingFeeParameters(false);
     }
-  }, [dbApi, setFeeParameters, setLoadingFeeParameters]);
+  }, [dbApi]);
 
   useEffect(() => {
-    getFeesFromGlobal();
-  }, [getFeesFromGlobal]);
+    let ignore = false;
 
+    async function setFees() {
+      setLoadingFeeParameters(true);
+      const feeParameters = await getFeesFromGlobal();
+      if (!ignore) {
+        if (feeParameters) {
+          setFeeParameters(feeParameters);
+        }
+        setLoadingFeeParameters(false);
+      }
+    }
+
+    setFees();
+
+    return () => {
+      ignore = true;
+    };
+  }, [getFeesFromGlobal, setLoadingFeeParameters, setFeeParameters]);
+
+  const context = useMemo(() => {
+    return {
+      feeParameters,
+      loadingFeeParameters,
+    };
+  }, [feeParameters, loadingFeeParameters]);
   return (
-    <FeesContext.Provider
-      value={{
-        feeParameters,
-        loadingFeeParameters,
-      }}
-    >
-      {children}
-    </FeesContext.Provider>
+    <FeesContext.Provider value={context}>{children}</FeesContext.Provider>
   );
 };
 

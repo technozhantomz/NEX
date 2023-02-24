@@ -3,11 +3,12 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 
-import { usePeerplaysApiContext, useSettingsContext } from "..";
+import { useAppSettingsContext, usePeerplaysApiContext } from "..";
 import { useAsset, useLocalStorage, useSessionStorage } from "../../hooks";
 import {
   Account,
@@ -15,7 +16,7 @@ import {
   BitcoinSidechainAccounts,
   FullAccount,
   KeyType,
-  SidechainAcccount,
+  SidechainAccount,
 } from "../../types";
 
 import { UserContextType } from "./UserProvider.types";
@@ -69,7 +70,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   ) as [string, (value: string) => void];
   const { formAssetBalanceById } = useAsset();
   const { dbApi } = usePeerplaysApiContext();
-  const { settings } = useSettingsContext();
+  const { settings } = useAppSettingsContext();
 
   const [id, setId] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -79,10 +80,10 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const passwordTimeout = useRef<NodeJS.Timeout>();
   const [account, setAccount] = useState<Account | undefined>();
   const [sidechainAccounts, setSidechainAccounts] = useState<
-    SidechainAcccount[]
+    SidechainAccount[]
   >([]);
   const [bitcoinSidechainAccount, setBitcoinSidechainAccount] =
-    useState<SidechainAcccount>();
+    useState<SidechainAccount>();
   const [loadingSidechainAccounts, setLoadingSidechainAccounts] =
     useState<boolean>(true);
   const [hasBTCDepositAddress, setHasBTCDepositAddress] =
@@ -101,7 +102,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         setLoadingSidechainAccounts(true);
         const accounts = (await dbApi("get_sidechain_addresses_by_account", [
           accountId,
-        ])) as SidechainAcccount[];
+        ])) as SidechainAccount[];
         setSidechainAccounts(accounts);
         if (accounts && accounts.length) {
           const bitcoinSidechain = accounts.find(
@@ -141,8 +142,8 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
 
   const updateSidechainAccounts = useCallback(
     (
-      sidechainAccounts: SidechainAcccount[],
-      bitcoinSidechainAccount: SidechainAcccount | undefined,
+      sidechainAccounts: SidechainAccount[],
+      bitcoinSidechainAccount: SidechainAccount | undefined,
       hasBTCDepositAddress: boolean,
       hasBTCWithdrawPublicKey: boolean
     ) => {
@@ -270,33 +271,54 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     }
   }, [id, getSidechainAccounts]);
 
+  const context = useMemo(() => {
+    return {
+      id,
+      name,
+      assets,
+      account,
+      localStorageAccount,
+      setLocalStorageAccount,
+      password,
+      keyType,
+      updateAccount,
+      setAssets,
+      savePassword,
+      removePassword,
+      hasBTCDepositAddress,
+      hasBTCWithdrawPublicKey,
+      getSidechainAccounts,
+      loadingSidechainAccounts,
+      sidechainAccounts,
+      bitcoinSidechainAccount,
+      bitcoinSidechainAccounts,
+      setBitcoinSidechainAccounts,
+    };
+  }, [
+    id,
+    name,
+    assets,
+    account,
+    localStorageAccount,
+    setLocalStorageAccount,
+    password,
+    keyType,
+    updateAccount,
+    setAssets,
+    savePassword,
+    removePassword,
+    hasBTCDepositAddress,
+    hasBTCWithdrawPublicKey,
+    getSidechainAccounts,
+    loadingSidechainAccounts,
+    sidechainAccounts,
+    bitcoinSidechainAccount,
+    bitcoinSidechainAccounts,
+    setBitcoinSidechainAccounts,
+  ]);
+
   return (
-    <UserContext.Provider
-      value={{
-        id,
-        name,
-        assets,
-        account,
-        localStorageAccount,
-        setLocalStorageAccount,
-        password,
-        keyType,
-        updateAccount,
-        setAssets,
-        savePassword,
-        removePassword,
-        hasBTCDepositAddress,
-        hasBTCWithdrawPublicKey,
-        getSidechainAccounts,
-        loadingSidechainAccounts,
-        sidechainAccounts,
-        bitcoinSidechainAccount,
-        bitcoinSidechainAccounts,
-        setBitcoinSidechainAccounts,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={context}>{children}</UserContext.Provider>
   );
 };
 

@@ -1,14 +1,17 @@
 import { useCallback, useMemo } from "react";
 
-import { symbolsToBeExcepted } from "../../../api/params";
-import { usePeerplaysApiContext, useSettingsContext } from "../../providers";
+import {
+  excludedAssetsSymbols,
+  tradeableAssetsSymbols,
+} from "../../../api/params";
+import { useAppSettingsContext, usePeerplaysApiContext } from "../../providers";
 import { Asset, Cache } from "../../types";
 
 import { UseAssetResult } from "./useAsset.types";
 
 export function useAsset(): UseAssetResult {
   const { dbApi } = usePeerplaysApiContext();
-  const { cache, setCache: _setCache } = useSettingsContext();
+  const { cache, setCache: _setCache } = useAppSettingsContext();
 
   const assetsCacheExists = useMemo(() => {
     return Object.keys(cache).length > 0 && cache.assets.length > 0;
@@ -85,16 +88,27 @@ export function useAsset(): UseAssetResult {
     [dbApi, cache, setAssetsCache, assetsCacheExists]
   );
 
-  const getAllAssets = useCallback(async () => {
-    try {
-      const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-      return allAssets.filter(
-        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  }, [dbApi, symbolsToBeExcepted]);
+  const getAllAssets = useCallback(
+    async (tradeableAssetsOnly = false) => {
+      try {
+        const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
+        if (tradeableAssetsOnly) {
+          return allAssets.filter(
+            (asset) =>
+              !excludedAssetsSymbols.includes(asset.symbol) &&
+              tradeableAssetsSymbols.includes(asset.symbol)
+          );
+        } else {
+          return allAssets.filter(
+            (asset) => !excludedAssetsSymbols.includes(asset.symbol)
+          );
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi, excludedAssetsSymbols]
+  );
 
   const getAssetsBySymbols = useCallback(
     async (symbols: string[]) => {
@@ -112,7 +126,7 @@ export function useAsset(): UseAssetResult {
   );
 
   /**
-   * private method, used only inside limitByPrecision function
+   * private method, used only inside useAsset functions
    */
   const removeUnnecessaryZerosInDecimalPart = useCallback(
     (integerPart: string, decimalPart: string) => {
@@ -167,7 +181,7 @@ export function useAsset(): UseAssetResult {
   };
 
   /**
-   * This is used for integer amounts comes from the chain (like fee amounts)
+   * This is used for integer amounts comes from the chain (like user balance)
    *
    * @param roundTo whether round the result or not
    * @param amount integer amount value
@@ -217,7 +231,7 @@ export function useAsset(): UseAssetResult {
       const numbered = Number(num);
       const precised = Number(numbered.toFixed(precision));
       return precised >= numbered
-        ? String(precised)
+        ? precised.toFixed(precision)
         : (precised + 1 / 10 ** precision).toFixed(precision);
     }, []);
 

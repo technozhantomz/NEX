@@ -1,6 +1,7 @@
+//done
 import * as bitcoin from "bitcoinjs-lib";
 import counterpart from "counterpart";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   BITCOIN_ASSET_SYMBOL,
@@ -11,12 +12,14 @@ import {
 import { utils } from "../../../../api/utils";
 import { Form } from "../../../../ui/src";
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
   useFees,
   useSidechainTransactionBuilder,
   useSonNetwork,
   useTransactionBuilder,
+  useTransactionMessage,
   useTransferTransactionBuilder,
 } from "../../../hooks";
 import { useAssetsContext, useUserContext } from "../../../providers";
@@ -28,22 +31,6 @@ const NETWORK = testnetCheck ? bitcoin.networks.regtest : undefined;
 const BITCOIN_MIN_WITHDRAWAL = 0.001;
 
 export function useWithdrawForm(asset: string): UseWithdrawFormResult {
-  const [withdrawFee, setWithdrawFee] = useState<number>(0);
-  const [selectedAsset, setSelectedAsset] = useState<string>(asset);
-  const [selectedAssetPrecission, _setSelectedAssetPrecission] =
-    useState<number>(8);
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
-  const [amount, setAmount] = useState<string>("0");
-  const [withdrawAddress, setWithdrawAddress] = useState<string>("");
-  const [withdrawPublicKey, setWithdrawPublicKey] = useState<string>("");
-  const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
-  const [userBalance, _setUserBalance] = useState<number>(0);
-  const [btcTransferFee, setBtcTransferFee] = useState<number>(0.0003);
-
   const { limitByPrecision } = useAsset();
   const { sidechainAssets } = useAssetsContext();
   const { getSonNetworkStatus, sonAccount } = useSonNetwork();
@@ -64,8 +51,34 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     buildDeletingBitcoinSidechainTransaction,
   } = useSidechainTransactionBuilder();
   const [withdrawForm] = Form.useForm<WithdrawForm>();
+  const { transactionMessageState, dispatchTransactionMessage } =
+    useTransactionMessage();
 
-  const handleValuesChange = (changedValues: any) => {
+  const [withdrawFee, setWithdrawFee] = useState<number>(0);
+  const [selectedAsset, setSelectedAsset] = useState<string>(asset);
+  const [amount, setAmount] = useState<string>("0");
+  const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
+  const [btcTransferFee, setBtcTransferFee] = useState<number>(0.0003);
+  const userBalance = useMemo(() => {
+    if (assets && assets.length > 0) {
+      const userAsset = assets.find((asset) => asset.symbol === selectedAsset);
+      return userAsset ? (userAsset.amount as number) : 0;
+    } else {
+      return 0;
+    }
+  }, [assets, selectedAsset]);
+  const selectedAssetPrecision = useMemo(() => {
+    if (sidechainAssets && sidechainAssets.length > 0) {
+      const selectedsidechainAsset = sidechainAssets.find(
+        (asset) => asset?.symbol === selectedAsset
+      );
+      return selectedsidechainAsset ? selectedsidechainAsset.precision : 8;
+    } else {
+      return 8;
+    }
+  }, [selectedAsset, sidechainAssets]);
+
+  const handleValuesChange = (changedValues: { amount?: string }) => {
     if (changedValues.amount) {
       const selectedSidechainAsset = sidechainAssets.find(
         (asset) => asset?.symbol === selectedAsset
@@ -83,12 +96,26 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
 
   const handleAssetChange = useCallback(
     (value: unknown) => {
-      setSelectedAsset(String(value));
-      withdrawForm.setFieldsValue({
+      const withdrawFormValues: { [segment: string]: string | undefined } = {
         amount: "0",
-      });
+      };
+      if (String(value) === BITCOIN_ASSET_SYMBOL) {
+        withdrawFormValues["withdrawAddress"] =
+          bitcoinSidechainAccount?.withdraw_address;
+        withdrawFormValues["withdrawPublicKey"] =
+          bitcoinSidechainAccount?.withdraw_public_key;
+      } else {
+        withdrawFormValues["withdrawAddress"] = "";
+      }
+      setSelectedAsset(String(value));
+      withdrawForm.setFieldsValue(withdrawFormValues);
     },
-    [setSelectedAsset]
+    [
+      setSelectedAsset,
+      BITCOIN_ASSET_SYMBOL,
+      bitcoinSidechainAccount,
+      withdrawForm,
+    ]
   );
 
   const buildWithdrawFormTransaction = useCallback(async () => {
@@ -143,8 +170,12 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   }, [buildWithdrawFormTransaction, getTrxFee, setWithdrawFee]);
 
   const handleWithdraw = async (signerKey: SignerKey) => {
-    setTransactionErrorMessage("");
-    setLoadingTransaction(true);
+    dispatchTransactionMessage({
+      type: TransactionMessageActionType.CLEAR,
+    });
+    dispatchTransactionMessage({
+      type: TransactionMessageActionType.LOADING,
+    });
     const values = withdrawForm.getFieldsValue();
     const btcSidechainAddressesChanged =
       values.withdrawAddress !== bitcoinSidechainAccount?.withdraw_address ||
@@ -176,19 +207,19 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
           [signerKey]
         );
         if (!updateSidechainsTrxResult) {
-          setTransactionErrorMessage(
-            counterpart.translate(`field.errors.transaction_unable`)
-          );
-          setLoadingTransaction(false);
+          dispatchTransactionMessage({
+            type: TransactionMessageActionType.LOADED_ERROR,
+            message: counterpart.translate(`field.errors.transaction_unable`),
+          });
           return;
         }
         await getSidechainAccounts(id);
       } catch (e) {
         console.log(e);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        dispatchTransactionMessage({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
         return;
       }
     }
@@ -197,56 +228,34 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       const trx = await buildWithdrawFormTransaction();
       const trxResult = await buildTrx([trx], [signerKey]);
       if (!trxResult) {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.transaction_unable`)
-        );
-        setLoadingTransaction(false);
+        dispatchTransactionMessage({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.transaction_unable`),
+        });
       } else {
         formAccountBalancesByName(localStorageAccount);
-        setTransactionErrorMessage("");
-        setTransactionSuccessMessage(
-          counterpart.translate(`field.success.successfully_withdrawn`, {
-            symbol: selectedAsset,
-            withdrawAmount: amount,
-          })
-        );
+        dispatchTransactionMessage({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(
+            `field.success.successfully_withdrawn`,
+            {
+              symbol: selectedAsset,
+              withdrawAmount: amount,
+            }
+          ),
+        });
         withdrawForm.setFieldsValue({
           amount: "0",
         });
-        setLoadingTransaction(false);
       }
     } catch (e) {
       console.log(e);
-      setTransactionErrorMessage(
-        counterpart.translate(`field.errors.transaction_unable`)
-      );
-      setLoadingTransaction(false);
+      dispatchTransactionMessage({
+        type: TransactionMessageActionType.LOADED_ERROR,
+        message: counterpart.translate(`field.errors.transaction_unable`),
+      });
     }
   };
-
-  const setUserBalance = useCallback(() => {
-    if (assets && assets.length > 0) {
-      const userAsset = assets.find((asset) => asset.symbol === selectedAsset);
-
-      if (userAsset) {
-        _setUserBalance(userAsset.amount as number);
-      } else {
-        _setUserBalance(0);
-      }
-    }
-  }, [assets, selectedAsset, _setUserBalance]);
-
-  const setSelectedAssetPrecission = useCallback(() => {
-    if (sidechainAssets && sidechainAssets.length > 0) {
-      const selectedsidechainAsset = sidechainAssets.find(
-        (asset) => asset?.symbol === selectedAsset
-      );
-
-      if (selectedsidechainAsset) {
-        _setSelectedAssetPrecission(selectedsidechainAsset.precision);
-      }
-    }
-  }, [selectedAsset, sidechainAssets, _setSelectedAssetPrecission]);
 
   const validateAmount = async (_: unknown, value: string) => {
     const accountAsset = assets.find((asset) => asset.symbol === selectedAsset);
@@ -304,8 +313,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     return Promise.resolve();
   };
 
-  // we need bitcoin pub key validation
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const validateWithdrawPublicKey = async (_: unknown, value: string) => {
     if (isSonNetworkOk === undefined) {
       return Promise.reject(
@@ -323,7 +330,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         value.length !== 66 ||
         (value.slice(0, 2) !== "03" && value.slice(0, 2) !== "02")
       ) {
-        setWithdrawPublicKey("");
         return Promise.reject(
           new Error(
             counterpart.translate(`field.errors.invalid_bitcoin_public_key`, {
@@ -332,7 +338,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
           )
         );
       }
-      setWithdrawPublicKey(value);
       return Promise.resolve();
     }
     return Promise.reject(new Error(""));
@@ -340,6 +345,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
 
   const validateBtcWithdrawAddress = (value: string) => {
     let error = "";
+    const { withdrawPublicKey } = withdrawForm.getFieldsValue();
     if (!loadingSidechainAccounts) {
       if (withdrawPublicKey === "") {
         error = counterpart.translate(`field.errors.first_valid_public_key`);
@@ -379,7 +385,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         );
       }
     }
-    setWithdrawAddress(value);
     if (selectedAsset === BITCOIN_ASSET_SYMBOL) {
       const error = validateBtcWithdrawAddress(value);
       if (error !== "") {
@@ -388,19 +393,16 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         return Promise.resolve();
       }
     } else {
-      if (!utils.validateGrapheneAccountName(value)) {
-        return Promise.reject(
-          new Error(
-            counterpart.translate(`field.errors.invalid_withdraw_hive_address`)
-          )
-        );
+      const { isValid, error } = utils.validateHiveAccount(value);
+      if (!isValid) {
+        return Promise.reject(new Error(error));
       }
       await setWithdrawFeeWithMemo();
       return Promise.resolve();
     }
   };
 
-  const formValdation = {
+  const formValidation = {
     from: [
       {
         required: true,
@@ -433,26 +435,26 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     ],
   };
 
-  const checkSonNetwork = useCallback(async () => {
-    try {
-      const sonNetworkStatus = await getSonNetworkStatus();
-      setIsSonNetworkOk(sonNetworkStatus.isSonNetworkOk);
-    } catch (e) {
-      console.log(e);
-      setIsSonNetworkOk(false);
-    }
-  }, [getSonNetworkStatus, setIsSonNetworkOk]);
-
   useEffect(() => {
+    let ignore = false;
+    async function checkSonNetwork() {
+      const sonNetworkStatus = await getSonNetworkStatus();
+      if (!ignore) {
+        setIsSonNetworkOk(sonNetworkStatus.isSonNetworkOk);
+      }
+    }
     checkSonNetwork();
-  }, [checkSonNetwork]);
+    return () => {
+      ignore = true;
+    };
+  }, [getSonNetworkStatus]);
 
   useEffect(() => {
     const withdrawFee = calculateTransferFee("");
     if (withdrawFee) {
       setWithdrawFee(withdrawFee);
     }
-  }, [assets, calculateTransferFee]);
+  }, [calculateTransferFee]);
 
   useEffect(() => {
     if (
@@ -465,47 +467,29 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
         withdrawAddress: bitcoinSidechainAccount?.withdraw_address,
         withdrawPublicKey: bitcoinSidechainAccount?.withdraw_public_key,
       });
-      setWithdrawPublicKey(bitcoinSidechainAccount?.withdraw_public_key);
-      setWithdrawAddress(bitcoinSidechainAccount?.withdraw_address);
-    } else {
-      withdrawForm.setFieldsValue({
-        withdrawAddress: "",
-      });
     }
   }, [
     loadingSidechainAccounts,
     sidechainAccounts,
     bitcoinSidechainAccount,
-    selectedAsset,
+    hasBTCDepositAddress,
   ]);
-
-  useEffect(() => {
-    setUserBalance();
-  }, [setUserBalance]);
-
-  useEffect(() => {
-    setSelectedAssetPrecission();
-  }, [setSelectedAssetPrecission]);
 
   return {
     withdrawForm,
-    formValdation,
+    formValidation,
     handleValuesChange,
     selectedAsset,
     handleAssetChange,
-    transactionErrorMessage,
-    setTransactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionSuccessMessage,
+    transactionMessageState,
+    dispatchTransactionMessage,
     handleWithdraw,
-    loadingTransaction,
     amount,
-    withdrawAddress,
     userBalance,
     withdrawFee,
     btcTransferFee,
     setBtcTransferFee,
-    selectedAssetPrecission,
+    selectedAssetPrecision,
     hasBTCDepositAddress,
     bitcoinSidechainAccount,
     getSidechainAccounts,

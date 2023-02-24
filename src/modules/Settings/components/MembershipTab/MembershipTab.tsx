@@ -8,7 +8,7 @@ import {
   TransactionModal,
   UserLinkExtractor,
 } from "../../../../common/components";
-import { useHandleTransactionForm } from "../../../../common/hooks";
+import { useTransactionForm } from "../../../../common/hooks";
 import { InfoCircleOutlined } from "../../../../ui/src";
 
 import * as Styled from "./MembershipTab.styled";
@@ -16,9 +16,8 @@ import { useMembershipTab } from "./hooks";
 
 export const MembershipTab = (): JSX.Element => {
   const {
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    dispatchTransactionMessage,
     membershipForm,
     name,
     feesCashback,
@@ -40,32 +39,24 @@ export const MembershipTab = (): JSX.Element => {
     expirationDate,
     loadingAccountMembership,
     handleMembershipUpgrade,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
   } = useMembershipTab();
 
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleMembershipUpgrade,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+  } = useTransactionForm({
+    executeTransaction: handleMembershipUpgrade,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
 
   return (
     <Styled.MembershipCard>
       <Styled.MembershipForm.Provider onFormFinish={handleFormFinish}>
-        <Styled.MembershipForm
-          form={membershipForm}
-          name="membershipForm"
-          onFinish={showPasswordModal}
-        >
+        <Styled.MembershipForm form={membershipForm} name="membershipForm">
           <Styled.InfoContainer>
             <>
               {!isLifetimeMember ? (
@@ -156,7 +147,7 @@ export const MembershipTab = (): JSX.Element => {
                   )}
                 </Styled.Label>
                 <Link href={`/user/${lifetimeReferrerName}`}>
-                  <a>{lifetimeReferrerName}</a>
+                  {lifetimeReferrerName}
                 </Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
@@ -168,9 +159,7 @@ export const MembershipTab = (): JSX.Element => {
                 <Styled.Label>
                   {counterpart.translate(`pages.settings.membership.registrar`)}
                 </Styled.Label>
-                <Link href={`/user/${registrarName}`}>
-                  <a>{registrarName}</a>
-                </Link>
+                <Link href={`/user/${registrarName}`}>{registrarName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{registrarFee}%</Styled.PercentageText>
@@ -183,9 +172,7 @@ export const MembershipTab = (): JSX.Element => {
                     `pages.settings.membership.affiliate_referrer`
                   )}
                 </Styled.Label>
-                <Link href={`/user/${referrerName}`}>
-                  <a>{referrerName}</a>
-                </Link>
+                <Link href={`/user/${referrerName}`}>{referrerName}</Link>
               </Styled.LabelContainer>
               <Styled.PercentageContainer>
                 <Styled.PercentageText>{referrerFee}%</Styled.PercentageText>
@@ -255,9 +242,7 @@ export const MembershipTab = (): JSX.Element => {
           <TransactionModal
             visible={isTransactionModalVisible}
             onCancel={hideTransactionModal}
-            transactionErrorMessage={transactionErrorMessage}
-            transactionSuccessMessage={transactionSuccessMessage}
-            loadingTransaction={loadingTransaction}
+            transactionMessageState={transactionMessageState}
             account={name}
             fee={membershipPrice}
             transactionType="account_upgrade"

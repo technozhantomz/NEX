@@ -4,14 +4,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { defaultToken } from "../../../../../../api/params";
 import { isArrayEqual } from "../../../../../../api/utils";
 import {
+  TransactionMessageActionType,
   useAccount,
   useAsset,
+  useBlockchain,
   useTransactionBuilder,
+  useTransactionMessage,
   useUpdateAccountTransactionBuilder,
 } from "../../../../../../common/hooks";
 import {
   useAssetsContext,
-  usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../../common/providers";
 import {
@@ -55,14 +57,10 @@ export function useVoteTab({
     GlobalProperties | undefined
   >();
   const [updateAccountFee, setUpdateAccountFee] = useState<number>();
-  //
-  const [transactionErrorMessage, setTransactionErrorMessage] =
-    useState<string>("");
-  const [transactionSuccessMessage, setTransactionSuccessMessage] =
-    useState<string>("");
-  const [loadingTransaction, setLoadingTransaction] = useState<boolean>(false);
   const afterCloseTransactionModal = useRef<() => void>();
 
+  const { transactionMessageState, dispatchTransactionMessage } =
+    useTransactionMessage();
   const { formKnownAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { formAccountBalancesByName } = useAccount();
@@ -70,12 +68,13 @@ export function useVoteTab({
   const { buildUpdateAccountTransaction } =
     useUpdateAccountTransactionBuilder();
   const { getTrxFee, buildTrx } = useTransactionBuilder();
-  const { dbApi } = usePeerplaysApiContext();
+  const { getGlobalProperties } = useBlockchain();
 
   const sortVotesRows = useCallback((votes: VoteRow[]) => {
     const sorter = (a: VoteRow, b: VoteRow) =>
       Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0]);
-    return votes.sort(sorter).map((vote, index) => {
+    votes.sort(sorter);
+    return votes.map((vote, index) => {
       return { ...vote, rank: index + 1 };
     }) as VoteRow[];
   }, []);
@@ -373,29 +372,37 @@ export function useVoteTab({
     async (signerKey: SignerKey) => {
       const votingErrorMessage = validateVoting(updateAccountFee as number);
       if (votingErrorMessage) {
-        setTransactionErrorMessage(votingErrorMessage);
+        dispatchTransactionMessage({
+          type: TransactionMessageActionType.ERROR,
+          message: votingErrorMessage,
+        });
         return;
       }
+      dispatchTransactionMessage({
+        type: TransactionMessageActionType.CLEAR,
+        message: votingErrorMessage,
+      });
 
-      setTransactionErrorMessage("");
       let trxResult;
       try {
-        setLoadingTransaction(true);
+        dispatchTransactionMessage({
+          type: TransactionMessageActionType.LOADING,
+        });
         const trx = await createUpdateAccountTrx(localApprovedVotesIds);
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (error) {
         console.log(error);
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.unable_transaction`)
-        );
-        setLoadingTransaction(false);
+        dispatchTransactionMessage({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.unable_transaction`),
+        });
       }
       if (trxResult) {
-        setTransactionErrorMessage("");
-        setTransactionSuccessMessage(
-          counterpart.translate(`field.success.published_votes`)
-        );
-        setLoadingTransaction(false);
+        dispatchTransactionMessage({
+          type: TransactionMessageActionType.LOADED_SUCCESS,
+          message: counterpart.translate(`field.success.published_votes`),
+        });
+
         afterCloseTransactionModal.current = () => {
           formAccountBalancesByName(localStorageAccount);
           getUserVotes();
@@ -403,17 +410,16 @@ export function useVoteTab({
           setConfirmed(true);
         };
       } else {
-        setTransactionErrorMessage(
-          counterpart.translate(`field.errors.unable_transaction`)
-        );
-        setLoadingTransaction(false);
+        dispatchTransactionMessage({
+          type: TransactionMessageActionType.LOADED_ERROR,
+          message: counterpart.translate(`field.errors.unable_transaction`),
+        });
       }
     },
     [
       validateVoting,
       updateAccountFee,
-      setTransactionErrorMessage,
-      setLoadingTransaction,
+      dispatchTransactionMessage,
       createUpdateAccountTrx,
       localApprovedVotesIds,
       buildTrx,
@@ -425,15 +431,6 @@ export function useVoteTab({
       afterCloseTransactionModal.current,
     ]
   );
-
-  const getGlobalProperties = useCallback(async () => {
-    try {
-      const gpo: GlobalProperties = await dbApi("get_global_properties");
-      return gpo;
-    } catch (e) {
-      console.log(e);
-    }
-  }, [dbApi]);
 
   useEffect(() => {
     let ignore = false;
@@ -478,11 +475,8 @@ export function useVoteTab({
     addVote,
     removeVote,
     handleVoting,
-    transactionErrorMessage,
-    transactionSuccessMessage,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
-    loadingTransaction,
+    transactionMessageState,
+    dispatchTransactionMessage,
     updateAccountFee,
     localApprovedVotesIds,
     afterSuccessTransactionModalClose: afterCloseTransactionModal.current,

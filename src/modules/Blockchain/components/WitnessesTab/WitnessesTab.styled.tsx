@@ -14,6 +14,7 @@ import {
   PrintTable as UiPrintTable,
   StatsCardsDeck as UIStatsCardsDeck,
 } from "../../../../ui/src";
+import { colors } from "../../../../ui/src/colors";
 
 export const WitnessesTabWrapper = styled(DataTabWrapper)``;
 
@@ -27,7 +28,11 @@ export const DownloadLinks = styled(DataTableDownloadLinks)``;
 
 export const WitnessesTable = styled(DataTable)``;
 
-export const WitnessListItem = styled(UiListItem)``;
+export const WitnessListItem = styled(UiListItem)`
+  :not(:last-child) {
+    border-bottom: 0.25px solid ${colors.borderColorBase} !important;
+  }
+`;
 
 export const WitnessesItemContent = styled(DataItemContent)``;
 

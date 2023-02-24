@@ -98,17 +98,13 @@ export function useActivityAndNotificationTable({
       );
       const uniqTypes = uniq(allTypes);
       const updatedColumns = columns.map((column) => {
-        switch (true) {
-          case column.key === "type":
-            column.filters = uniqTypes.map((type) => {
-              return {
-                text: counterpart.translate(
-                  `transaction.trxTypes.${type}.title`
-                ),
-                value: type,
-              };
-            });
-            break;
+        if (column.key === "type") {
+          column.filters = uniqTypes.map((type) => {
+            return {
+              text: counterpart.translate(`transaction.trxTypes.${type}.title`),
+              value: type,
+            };
+          });
         }
         return { ...column };
       });

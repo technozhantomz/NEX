@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 export type UseAssetsTabResult = {
   loading: boolean;
   assetsColumns: AssetColumnType[];
-  assetTableRows: AssetTableRow[];
+  assetTableRows: AssetTableRow[] | undefined;
   assetsStats: number[];
   searchDataSource: AssetTableRow[];
   setSearchDataSource: Dispatch<SetStateAction<AssetTableRow[]>>;

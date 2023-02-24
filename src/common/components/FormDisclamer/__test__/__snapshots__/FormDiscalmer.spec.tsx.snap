@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormDisclamer component renders FormDiscalmet correctly in login page 1`] = `
+<DocumentFragment>
+  <p
+    class="sc-bcXHqe cKWvWQ"
+  >
+    <span>
+      Don’t have an account? 
+    </span>
+    <a
+      href="/signup"
+    >
+      Create account
+    </a>
+  </p>
+</DocumentFragment>
+`;
+
+exports[`FormDisclamer component renders FormDiscalmet correctly in sign up page 1`] = `
+<DocumentFragment>
+  <p
+    class="sc-bcXHqe cKWvWQ"
+  >
+    <span>
+      Already have a Peerplays account? 
+    </span>
+    <a
+      href="/login"
+    >
+      Log in
+    </a>
+  </p>
+</DocumentFragment>
+`;

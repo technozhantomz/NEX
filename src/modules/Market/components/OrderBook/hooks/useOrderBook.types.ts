@@ -1,28 +1,40 @@
-import { Dispatch, SetStateAction } from "react";
+import {
+  MarketOrder,
+  MarketPair,
+  TradeHistoryRow,
+} from "../../../../../common/types";
 
-import { SignerKey } from "../../../../../common/types";
-import { OrderColumn, OrderType } from "../../../types";
-
-export type { OrderType } from "../../../types";
+export type OrderColumn = {
+  title: string;
+  dataIndex: string;
+  key: string;
+  render?: (_value: string, record: unknown) => string;
+  fixed?: boolean | string;
+};
 
 export type UseOrderBookResult = {
-  orderType: OrderType;
   threshold: number;
-  handleThresholdChange: (menuInfo: any) => void;
-  handleFilterChange: (type: OrderType) => void;
+  loading: boolean;
   orderColumns: OrderColumn[];
-  cancelOrderfeeAmount: number;
-  transactionErrorMessage: string;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  transactionSuccessMessage: string;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  loadingTransaction: boolean;
-  setSelectedOrderId: Dispatch<SetStateAction<string>>;
-  selectedOrderId: string;
-  handleCancelLimitOrder: (signerKey: SignerKey) => Promise<void>;
+  asksRows: MarketOrder[];
+  bidsRows: MarketOrder[];
+  filter: FilterType;
+  thresholdValues: string[];
+  lastTrade?: TradeHistoryRow;
+  handleFilterChange: (type: FilterType) => void;
+  handleThresholdChange: (menuInfo: { key: string }) => void;
+  specifyTableHeight: () => string;
+  specifyTableScroll: (orders: MarketOrder[]) =>
+    | {
+        y: number;
+        x: undefined;
+        scrollToFirstRowOnChange: boolean;
+      }
+    | undefined;
+  specifyLastTradeClassName: (tradeHistory?: TradeHistoryRow) => string;
+  specifyAsksTableRowClassName: (record: any) => string;
+  specifyBidsTableRowClassName: (record: any) => string;
+  selectedPair: MarketPair | undefined;
 };
 
-export type TableScroll = {
-  scrollToFirstRowOnChange: boolean;
-  y: string | number;
-};
+export type FilterType = "buy" | "sell" | "total";

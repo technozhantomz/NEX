@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import Link from "next/link";
 
 import { TableHeading } from "../../../../../common/components";
 import * as Styled from "../SonsTab.styled";
@@ -9,9 +10,9 @@ const keys = ["rank", "name", "active", "url", "totalVotes"];
 const renders = [
   undefined,
   (name: string): JSX.Element => (
-    <a href={`/user/${name}`} target="_blank">
+    <Link href={`/user/${name}`} target="_blank">
       {name}
-    </a>
+    </Link>
   ),
   (active: boolean): JSX.Element => (
     <span>{active === true ? <Styled.ActiveIcon /> : ``}</span>
@@ -34,11 +35,11 @@ const filters = [
   undefined,
   [
     {
-      text: "Avtive",
+      text: counterpart.translate(`tableFilters.active`),
       value: true,
     },
     {
-      text: "Inactive",
+      text: counterpart.translate(`tableFilters.inactive`),
       value: false,
     },
   ],

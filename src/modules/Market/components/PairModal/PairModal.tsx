@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 
-import { Exchanges } from "../../../../common/types";
+import { useUpdateExchanges } from "../../../../common/hooks";
 import { Form, Select } from "../../../../ui/src";
 
 import * as Styled from "./PairModal.styled";
@@ -11,7 +11,6 @@ type Props = {
   isVisible: boolean;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
   currentPair: string;
-  exchanges: Exchanges;
 };
 
 const { Option } = Select;
@@ -20,26 +19,26 @@ export const PairModal = ({
   isVisible,
   setIsVisible,
   currentPair,
-  exchanges,
 }: Props): JSX.Element => {
+  const { exchanges } = useUpdateExchanges();
   const {
     pairModalForm,
     formValidation,
     allAssetsSymbols,
-    useResetFormOnOpenModal,
     handleCancel,
     handleSelectPair,
     handleSelectRecent,
     handleValuesChange,
   } = usePairModal({ setIsVisible, currentPair });
+  const handleSubmit = useCallback(() => {
+    pairModalForm.submit();
+  }, [pairModalForm]);
 
   const footerButtons = [
     <Styled.PairModalFormButton
       key="submit"
       type="primary"
-      onClick={() => {
-        pairModalForm.submit();
-      }}
+      onClick={handleSubmit}
     >
       {counterpart.translate(`buttons.confirm`)}
     </Styled.PairModalFormButton>,
@@ -52,7 +51,6 @@ export const PairModal = ({
     </Styled.PairModalFormButton>,
   ];
 
-  useResetFormOnOpenModal(pairModalForm, isVisible);
   return (
     <Styled.PairModal
       title={counterpart.translate(`pages.market.select_pair`)}

@@ -1,14 +1,15 @@
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
-import { ReactInstance, ReactNode, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { ReactNode, useCallback, useRef } from "react";
 
 import { AssetsPrintTable } from "..";
-import { renderPaginationItem } from "../../../../common/components";
+import {
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
-import { DownloadOutlined, List, SearchOutlined } from "../../../../ui/src";
+import { List, SearchOutlined } from "../../../../ui/src";
 import { AssetTitle } from "../AssetTitle";
 
 import * as Styled from "./AssetsTable.styled";
@@ -34,8 +35,44 @@ export const AssetsTable = ({
     searchDataSource,
     setSearchDataSource,
   } = useAssetsTable({ filterAsset, actionType });
-  const { sm } = useViewportContext();
+  const { md } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
+  const renderListItem = useCallback(
+    (item: AssetTableRow) => {
+      return (
+        <Styled.AssetListItem
+          key={item.key}
+          actions={
+            [
+              (
+                assetsColumns[4].render as (
+                  _text: string,
+                  record: AssetTableRow
+                ) => JSX.Element
+              )("", item),
+            ] as ReactNode[]
+          }
+        >
+          <AssetTitle symbol={item.symbol} />
+          <Styled.AssetsItemContent>
+            <div className="asset-info">
+              <span className="asset-info-title">
+                {assetsColumns[2].title()}
+              </span>
+              <span className="asset-info-value">{item.available}</span>
+            </div>
+            <div className="asset-info">
+              <span className="asset-info-title">
+                {assetsColumns[3].title()}
+              </span>
+              <span className="asset-info-value">{item.inOrders}</span>
+            </div>
+          </Styled.AssetsItemContent>
+        </Styled.AssetListItem>
+      );
+    },
+    [assetsColumns]
+  );
 
   return (
     <Styled.AssetsWrapper className={className}>
@@ -52,24 +89,12 @@ export const AssetsTable = ({
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"AssetsTable.csv"}
-            data={assetsTableRows}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={assetsTableRows}
+        ></TableDownloader>
       </Styled.AssetHeaderBar>
-      {sm ? (
+      {md ? (
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
@@ -83,37 +108,7 @@ export const AssetsTable = ({
             size: "small",
             itemRender: renderPaginationItem(),
           }}
-          renderItem={(item) => (
-            <Styled.AssetListItem
-              key={item.key}
-              actions={
-                [
-                  (
-                    assetsColumns[4].render as (
-                      _text: string,
-                      record: AssetTableRow
-                    ) => JSX.Element
-                  )("", item),
-                ] as ReactNode[]
-              }
-            >
-              <AssetTitle symbol={item.symbol} />
-              <Styled.AssetsItemContent>
-                <div className="asset-info">
-                  <span className="asset-info-title">
-                    {assetsColumns[2].title()}
-                  </span>
-                  <span className="asset-info-value">{item.available}</span>
-                </div>
-                <div className="asset-info">
-                  <span className="asset-info-title">
-                    {assetsColumns[3].title()}
-                  </span>
-                  <span className="asset-info-value">{item.inOrders}</span>
-                </div>
-              </Styled.AssetsItemContent>
-            </Styled.AssetListItem>
-          )}
+          renderItem={renderListItem}
         />
       ) : (
         <Styled.AssetsTable

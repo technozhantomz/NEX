@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { useAsset } from "../../../common/hooks";
-import {
-  usePeerplaysApiContext,
-  useUserContext,
-} from "../../../common/providers";
-import { GPOSInfoType } from "../../../common/types";
+import { useAsset, useGpos } from "../../../common/hooks";
+import { useUserContext } from "../../../common/providers";
 import { GPOSBalances } from "../types";
 
 import { UseGposPageResult } from "./useGposPage.types";
@@ -13,58 +9,38 @@ import { UseGposPageResult } from "./useGposPage.types";
 export function useGposPage(): UseGposPageResult {
   const [gposBalances, setGposBalances] = useState<GPOSBalances>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [isMobileDropdownvisible, _setIsMobileDropdownvisible] =
+  const [isMobileDropdownVisible, setIsMobileDropdownVisible] =
     useState<boolean>(false);
 
+  const { getGposInfo } = useGpos();
   const { getAssetById } = useAsset();
-  const { dbApi } = usePeerplaysApiContext();
   const { id } = useUserContext();
 
-  const setIsMobileDropdownvisible = useCallback(
-    (isMobileDropdownvisible: boolean) => {
-      _setIsMobileDropdownvisible(isMobileDropdownvisible);
-    },
-    [_setIsMobileDropdownvisible]
-  );
-
-  const getGposInfo = useCallback(async () => {
-    try {
-      if (id) {
-        const gposInfo: GPOSInfoType = await dbApi("get_gpos_info", [id]);
-        return gposInfo;
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }, [dbApi, id]);
-
   const calculateGposBalances = useCallback(async () => {
-    try {
-      setLoading(true);
-      const gposInfo = await getGposInfo();
-      if (gposInfo) {
-        const asset = await getAssetById(gposInfo.award.asset_id);
-        if (asset) {
-          const openingBalance =
-            gposInfo.account_vested_balance / 10 ** asset.precision;
-          const availableBalance =
-            gposInfo.allowed_withdraw_amount / 10 ** asset.precision;
+    if (id) {
+      try {
+        setLoading(true);
+        const gposInfo = await getGposInfo(id);
+        if (gposInfo) {
+          const openingBalance = gposInfo.gposBalance;
+          const availableBalance = gposInfo.availableBalance;
           setGposBalances({
             openingBalance: openingBalance,
             availableBalance: availableBalance,
             newBalance: openingBalance,
-            asset: asset,
+            symbol: gposInfo.symbol,
           });
+
+          setLoading(false);
+        } else {
+          setLoading(false);
         }
-        setLoading(false);
-      } else {
+      } catch (e) {
+        console.log(e);
         setLoading(false);
       }
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
     }
-  }, [getGposInfo, setLoading, getAssetById, setGposBalances]);
+  }, [getGposInfo, setLoading, getAssetById, setGposBalances, id]);
 
   useEffect(() => {
     calculateGposBalances();
@@ -74,7 +50,7 @@ export function useGposPage(): UseGposPageResult {
     gposBalances,
     loading,
     calculateGposBalances,
-    isMobileDropdownvisible,
-    setIsMobileDropdownvisible,
+    isMobileDropdownVisible,
+    setIsMobileDropdownVisible,
   };
 }

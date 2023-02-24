@@ -1,32 +1,23 @@
-import { ParsedUrlQuery } from "querystring";
-
 import { SearchTableInput } from "ant-table-extensions";
 import { ColumnsType } from "antd/lib/table";
 import counterpart from "counterpart";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ReactInstance, useRef } from "react";
-import { CSVLink } from "react-csv";
-import ReactToPrint from "react-to-print";
+import { useCallback, useRef } from "react";
 
-import { renderPaginationItem } from "../../../../common/components";
-import { useViewportContext } from "../../../../common/providers";
 import {
-  DownloadOutlined,
-  InfoCircleOutlined,
-  List,
-  SearchOutlined,
-} from "../../../../ui/src";
+  renderPaginationItem,
+  TableDownloader,
+} from "../../../../common/components";
+import { useViewportContext } from "../../../../common/providers";
+import { InfoCircleOutlined, List, SearchOutlined } from "../../../../ui/src";
 import { StatsCard } from "../../common";
 
 import * as Styled from "./BlockchainTab.styled";
 import { BlockPrintTable } from "./components";
 import { DataTableRow, useBlockchainTab } from "./hooks";
 
-type Props = {
-  routerQuery: ParsedUrlQuery;
-};
-export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
+export const BlockchainTab = (): JSX.Element => {
   const {
     loading,
     blockColumns,
@@ -38,10 +29,64 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
     supply,
     searchDataSource,
     setSearchDataSource,
-  } = useBlockchainTab(routerQuery);
+  } = useBlockchainTab();
   const router = useRouter();
   const { sm } = useViewportContext();
   const componentRef = useRef<HTMLDivElement>(null);
+  const renderListItem = useCallback(
+    (item: DataTableRow, _index: number) => {
+      function onClick() {
+        router.push(`/blockchain/${item.blockID}`);
+      }
+      return (
+        <div onClick={onClick}>
+          <Styled.BlockListItem key={item.key}>
+            <Styled.BlockItemContent>
+              <div className="item-info">
+                <span className="item-info-title">
+                  {blockColumns[0].title()}
+                </span>
+                <span className="item-info-value">{item.blockID}</span>
+              </div>
+              <div className="item-info">
+                <span className="item-info-title">
+                  {blockColumns[1].title()}
+                </span>
+                <span className="item-info-value">{item.time}</span>
+              </div>
+              <div className="item-info">
+                <span className="item-info-title">
+                  {blockColumns[2].title()}
+                </span>
+                <span className="item-info-value">
+                  {" "}
+                  <Link href={`/user/${item.witness}`} target="_blank">
+                    {item.witness}
+                  </Link>
+                </span>
+              </div>
+              <div className="item-info">
+                <span className="item-info-title">
+                  {blockColumns[3].title()}
+                </span>
+                <span className="item-info-value">
+                  {item.transaction ? item.transaction : 0}
+                </span>
+              </div>
+            </Styled.BlockItemContent>
+          </Styled.BlockListItem>
+        </div>
+      );
+    },
+    [blockColumns]
+  );
+  const onRow = useCallback((record: DataTableRow) => {
+    return {
+      onClick: () => {
+        router.push(`/blockchain/${record.blockID}`);
+      },
+    };
+  }, []);
 
   return (
     <Styled.BlockTabWrapper>
@@ -86,7 +131,7 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
         </Styled.BlockHeader>
         <SearchTableInput
           columns={blockColumns as ColumnsType<DataTableRow>}
-          dataSource={blockchainTableRows}
+          dataSource={blockchainTableRows ?? []}
           setDataSource={setSearchDataSource}
           inputProps={{
             placeholder: counterpart.translate(
@@ -95,28 +140,16 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
             suffix: <SearchOutlined />,
           }}
         />
-        <Styled.DownloadLinks>
-          <DownloadOutlined />
-          <ReactToPrint
-            trigger={() => <a href="#">{counterpart.translate(`links.pdf`)}</a>}
-            content={() => componentRef.current as unknown as ReactInstance}
-          />
-
-          {` / `}
-          <CSVLink
-            filename={"BlocksTable.csv"}
-            data={blockchainTableRows}
-            className="btn btn-primary"
-          >
-            {counterpart.translate(`links.csv`)}
-          </CSVLink>
-        </Styled.DownloadLinks>
+        <TableDownloader
+          componentRef={componentRef}
+          data={blockchainTableRows}
+        ></TableDownloader>
       </Styled.BlockHeaderBar>
       {sm ? (
         <List
           itemLayout="vertical"
           dataSource={searchDataSource}
-          loading={loading}
+          loading={loading && !blockchainTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 5,
@@ -126,54 +159,14 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
             size: "small",
             itemRender: renderPaginationItem(),
           }}
-          renderItem={(item) => (
-            <Link href={`/blockchain/${item.blockID}`}>
-              <a>
-                <Styled.BlockListItem key={item.key}>
-                  <Styled.BlockItemContent>
-                    <div className="item-info">
-                      <span className="item-info-title">
-                        {blockColumns[0].title()}
-                      </span>
-                      <span className="item-info-value">{item.blockID}</span>
-                    </div>
-                    <div className="item-info">
-                      <span className="item-info-title">
-                        {blockColumns[1].title()}
-                      </span>
-                      <span className="item-info-value">{item.time}</span>
-                    </div>
-                    <div className="item-info">
-                      <span className="item-info-title">
-                        {blockColumns[2].title()}
-                      </span>
-                      <span className="item-info-value">
-                        {" "}
-                        <a href={`/user/${item.witness}`} target="_blank">
-                          {item.witness}
-                        </a>
-                      </span>
-                    </div>
-                    <div className="item-info">
-                      <span className="item-info-title">
-                        {blockColumns[3].title()}
-                      </span>
-                      <span className="item-info-value">
-                        {item.transaction ? item.transaction : 0}
-                      </span>
-                    </div>
-                  </Styled.BlockItemContent>
-                </Styled.BlockListItem>
-              </a>
-            </Link>
-          )}
+          renderItem={renderListItem}
         />
       ) : (
         <Styled.BlockTable
           dataSource={searchDataSource}
           columns={blockColumns as ColumnsType<DataTableRow>}
           rowKey={(record) => record.blockID}
-          loading={loading}
+          loading={loading && !blockchainTableRows}
           pagination={{
             hideOnSinglePage: true,
             defaultPageSize: 15,
@@ -183,21 +176,15 @@ export const BlockchainTab = ({ routerQuery }: Props): JSX.Element => {
             size: "small",
             itemRender: renderPaginationItem(),
           }}
-          onRow={(record, _rowIndex) => {
-            return {
-              onClick: (_event) => {
-                router.push(`/blockchain/${record.blockID}`);
-              },
-            };
-          }}
+          onRow={onRow}
         />
       )}
       <Styled.PrintTable>
         <BlockPrintTable
           ref={componentRef}
           blockColumns={blockColumns}
-          blockchainTableRows={blockchainTableRows}
-          loading={loading}
+          blockchainTableRows={blockchainTableRows ?? []}
+          loading={loading && !blockchainTableRows}
         />
       </Styled.PrintTable>
     </Styled.BlockTabWrapper>

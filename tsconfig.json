@@ -13,8 +13,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "react": [ "./node_modules/@types/react" ]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/api/utils/storage/clearAllStorage.ts", "src/api/utils/storage/getStorage.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/api/utils/storage/clearAllStorage.ts", "src/api/utils/storage/getStorage.ts", "jest.config.js",  "./jest-setup.ts"],
   "exclude": ["node_modules"]
 }

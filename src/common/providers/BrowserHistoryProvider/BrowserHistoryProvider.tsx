@@ -3,12 +3,12 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
-  useState,
+  useMemo,
+  useRef,
 } from "react";
 
 import { useUserContext } from "..";
-import { useArrayLimiter, useSessionStorage } from "../../hooks";
+import { useArrayLimiter } from "../../hooks";
 
 import { BrowserHistoryContextType } from "./BrowserHistoryProvider.types";
 
@@ -30,7 +30,6 @@ const DefaultBrowserHistoryState: BrowserHistoryContextType = {
     "/gpos",
     "/profile",
   ],
-  pageLoading: true,
   handleLoginRedirect: function (): void {
     throw new Error(`Function not implemented.`);
   },
@@ -45,62 +44,61 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { updateArrayWithLimit } = useArrayLimiter();
   const privatePaths = DefaultBrowserHistoryState.privatePaths;
-  const [pageLoading, setPageLoading] = useState<boolean>(
-    DefaultBrowserHistoryState.pageLoading
-  );
-  const [browserHistory, setBrowserHistory] = useSessionStorage("history") as [
-    string[],
-    (value: string[]) => void
-  ];
+
+  const browserHistory = useRef<string[]>([]);
 
   const handleLoginRedirect = useCallback(() => {
     if (
       !browserHistory ||
-      browserHistory.length < 2 ||
-      browserHistory[browserHistory.length - 2] === "/logout" ||
-      browserHistory[browserHistory.length - 2] === "/signup" ||
-      browserHistory[browserHistory.length - 2] === "/login"
+      browserHistory.current.length < 2 ||
+      browserHistory.current[browserHistory.current.length - 2] === "/logout" ||
+      browserHistory.current[browserHistory.current.length - 2] === "/signup" ||
+      browserHistory.current[browserHistory.current.length - 2] === "/login"
     ) {
       router.push("/");
     } else {
-      router.push(browserHistory[browserHistory.length - 2]);
+      router.push(browserHistory.current[browserHistory.current.length - 2]);
     }
-  }, [browserHistory, router]);
+  }, [browserHistory, browserHistory.current, router]);
 
   const updateBrowserHistory = useCallback(() => {
-    if (!browserHistory) {
-      setBrowserHistory([asPath]);
+    if (!browserHistory.current.length) {
+      browserHistory.current = [asPath];
     } else {
-      if (browserHistory[browserHistory.length - 1] !== asPath) {
+      if (
+        browserHistory.current[browserHistory.current.length - 1] !== asPath
+      ) {
         const newHistory = updateArrayWithLimit(
-          browserHistory,
+          browserHistory.current,
           asPath,
           BROWSER_HISTORY_LENGTH
         );
-        setBrowserHistory([...newHistory]);
+        browserHistory.current = [...newHistory];
       }
     }
-  }, [browserHistory, setBrowserHistory, asPath, updateArrayWithLimit]);
+  }, [browserHistory, browserHistory.current, asPath, updateArrayWithLimit]);
 
-  useEffect(() => {
-    if (!localStorageAccount && privatePaths.includes(pathname)) {
-      router.replace("/login");
-    } else {
-      setPageLoading(false);
-    }
-    updateBrowserHistory();
-  }, [asPath, localStorageAccount]);
+  if (!localStorageAccount && privatePaths.includes(pathname)) {
+    router.replace("/login");
+  }
+  updateBrowserHistory();
 
+  const context = useMemo(() => {
+    return {
+      browserHistory: browserHistory.current,
+      pathname,
+      privatePaths,
+      handleLoginRedirect,
+    };
+  }, [
+    browserHistory,
+    browserHistory.current,
+    pathname,
+    privatePaths,
+    handleLoginRedirect,
+  ]);
   return (
-    <BrowserHistoryContext.Provider
-      value={{
-        browserHistory,
-        pathname,
-        privatePaths,
-        pageLoading,
-        handleLoginRedirect,
-      }}
-    >
+    <BrowserHistoryContext.Provider value={context}>
       {children}
     </BrowserHistoryContext.Provider>
   );

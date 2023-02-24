@@ -1,11 +1,15 @@
 import counterpart from "counterpart";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch } from "react";
 
 import {
   PasswordModal,
   TransactionModal,
 } from "../../../../../../common/components";
-import { useHandleTransactionForm } from "../../../../../../common/hooks";
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+  useTransactionForm,
+} from "../../../../../../common/hooks";
 import { useViewportContext } from "../../../../../../common/providers";
 import { Account, Proxy, SignerKey } from "../../../../../../common/types";
 import { Form, RedoOutlined } from "../../../../../../ui/src";
@@ -19,20 +23,17 @@ type Props = {
   searchError: boolean;
   searchedAccount: Account | undefined;
   updateAccountFee: number;
-  loadingTransaction: boolean;
-  transactionErrorMessage: string;
-  transactionSuccessMessage: string;
   addProxy: (account: Account) => void;
   removeProxy: () => void;
   searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => Promise<void>;
   handlePublishChanges: (signerKey: SignerKey) => Promise<void>;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
   isPublishable: boolean;
   resetChanges: () => void;
   searchValue: string;
   isSameAccount: boolean;
   accountAlreadyAdded: boolean;
+  transactionMessageState: TransactionMessageState;
+  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
 };
 
 export const ProxyForm = ({
@@ -42,32 +43,27 @@ export const ProxyForm = ({
   searchError,
   searchedAccount,
   updateAccountFee,
-  loadingTransaction,
-  transactionErrorMessage,
-  transactionSuccessMessage,
   addProxy,
   searchValue,
   searchChange,
   handlePublishChanges,
-  setTransactionErrorMessage,
-  setTransactionSuccessMessage,
   isPublishable,
   resetChanges,
   isSameAccount,
   accountAlreadyAdded,
+  transactionMessageState,
+  dispatchTransactionMessage,
 }: Props): JSX.Element => {
   const [proxyForm] = Form.useForm();
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handlePublishChanges,
-    setTransactionErrorMessage,
-    setTransactionSuccessMessage,
+  } = useTransactionForm({
+    executeTransaction: handlePublishChanges,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
   const { sm } = useViewportContext();
@@ -117,7 +113,6 @@ export const ProxyForm = ({
         <Styled.ProxyForm
           form={proxyForm}
           name="proxyForm"
-          onFinish={showPasswordModal}
           size="large"
           layout={sm ? "horizontal" : "inline"}
         >
@@ -149,9 +144,7 @@ export const ProxyForm = ({
         <TransactionModal
           visible={isTransactionModalVisible}
           onCancel={hideTransactionModal}
-          transactionErrorMessage={transactionErrorMessage}
-          transactionSuccessMessage={transactionSuccessMessage}
-          loadingTransaction={loadingTransaction}
+          transactionMessageState={transactionMessageState}
           account={name}
           fee={updateAccountFee}
           transactionType="account_update"

@@ -1,7 +1,7 @@
 import counterpart from "counterpart";
 import React from "react";
 
-import { useSettingsContext } from "../../../../common/providers";
+import { useAppSettingsContext } from "../../../../common/providers";
 import { Checkbox, Form, Input, Option, Select } from "../../../../ui/src";
 
 import * as Styled from "./LoginForm.styled";
@@ -11,13 +11,13 @@ export const LoginForm: React.FC = () => {
   const {
     loginForm,
     handleLogin,
-    formValdation,
+    formValidation,
     onChangeUseWhaleVault,
     onChangeWalletLock,
     submitting,
     useWhaleVault,
   } = useLoginForm();
-  const { settings } = useSettingsContext();
+  const { settings } = useAppSettingsContext();
   const walletLockInMinutes = ["0", "30", "60", "90", "180", "210"];
 
   return (
@@ -35,7 +35,7 @@ export const LoginForm: React.FC = () => {
     >
       <Form.Item
         name="username"
-        rules={formValdation.username}
+        rules={formValidation.username}
         validateFirst={true}
         validateTrigger={["onChange", "onSubmit"]}
       >
@@ -48,7 +48,7 @@ export const LoginForm: React.FC = () => {
         <>
           <Form.Item
             name="password"
-            rules={formValdation.password}
+            rules={formValidation.password}
             validateFirst={true}
             validateTrigger="onSubmit"
           >
@@ -76,7 +76,7 @@ export const LoginForm: React.FC = () => {
         ""
       )}
       <Form.Item
-        rules={formValdation.useWhaleVault}
+        rules={formValidation.useWhaleVault}
         validateFirst={true}
         validateTrigger={["onChange", "onSubmit"]}
         name="useWhaleVault"

@@ -12,7 +12,7 @@ export type ActivityAndNotificationType = {
   key: string;
   render:
     | ((value: string) => JSX.Element)
-    | ((status: boolean, record: any) => JSX.Element)
+    | ((status: boolean, record: ActivityRow) => JSX.Element)
     | undefined;
   filters:
     | {
@@ -58,21 +58,22 @@ export const ActivityAndNotificationColumns = (
         ),
         undefined,
         undefined,
-        (status: boolean, record: any): JSX.Element => (
-          <>
-            {status ? (
-              <Styled.NotificationTableStatusButton
-                onClick={() =>
-                  markTheNotificationAsReadOrUnread(record.id, !status)
-                }
-              >
-                {counterpart.translate(`pages.profile.notification.unread`)}
-              </Styled.NotificationTableStatusButton>
-            ) : (
-              counterpart.translate(`pages.profile.notification.read`)
-            )}
-          </>
-        ),
+        (status: boolean, record: ActivityRow): JSX.Element => {
+          function handleClick() {
+            markTheNotificationAsReadOrUnread(record.id, !status);
+          }
+          return (
+            <>
+              {status ? (
+                <Styled.NotificationTableStatusButton onClick={handleClick}>
+                  {counterpart.translate(`pages.profile.notification.unread`)}
+                </Styled.NotificationTableStatusButton>
+              ) : (
+                counterpart.translate(`pages.profile.notification.read`)
+              )}
+            </>
+          );
+        },
       ]
     : [
         undefined,

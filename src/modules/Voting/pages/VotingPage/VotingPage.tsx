@@ -4,23 +4,15 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-import { Layout } from "../../../../common/components";
+import { Layout, MobileTabBar } from "../../../../common/components";
 import { useViewportContext } from "../../../../common/providers";
 import { VoteType } from "../../../../common/types";
-import {
-  Button,
-  DownOutlined,
-  Menu,
-  Tabs,
-  UpOutlined,
-} from "../../../../ui/src";
+import { PageTabs } from "../../../../ui/src";
 import { GPOSTab, ProxyTab, VoteTab } from "../../components";
 import { useVoting } from "../../hooks";
 
 import * as Styled from "./VotingPage.styled";
 import { useVotingPageMeta } from "./hooks";
-
-const { TabPane } = Tabs;
 
 const VotingPage: NextPage = () => {
   const router = useRouter();
@@ -29,65 +21,77 @@ const VotingPage: NextPage = () => {
   const voteIdentifiers = [1, 3, 0];
   const { tab } = router.query;
   const { pageMeta } = useVotingPageMeta(tab as string);
-  const { sm } = useViewportContext();
+  const { md } = useViewportContext();
   const {
-    loadingMembers,
-    loadingUserVotes,
     allMembers,
     allMembersIds,
     fullAccount,
     proxy,
-    totalGpos,
+    gposInfo,
     getUserVotes,
     serverApprovedVotesIds,
+    voteTabLoaded,
+    loadingUserVotes,
   } = useVoting();
-  const dropdowItems = [
-    { label: counterpart.translate(`pages.voting.gpos.tab`), key: "gpos" },
+
+  const renderTabBar = MobileTabBar({
+    showMobileMenu: md,
+    visible,
+    tab,
+    setVisible,
+    defaultKey: "gpos",
+    defaultTab: counterpart.translate(`pages.voting.gpos.tab`),
+    selectedTab: counterpart.translate(`pages.voting.${tab}.tab`),
+  });
+
+  const tabItems = [
     {
-      label: counterpart.translate(`pages.voting.witnesses.tab`),
-      key: "witnesses",
+      label: counterpart.translate(`pages.voting.gpos.tab`),
+      key: "gpos",
+      children: <GPOSTab loading={loadingUserVotes} gposInfo={gposInfo} />,
     },
-    { label: counterpart.translate(`pages.voting.sons.tab`), key: "sons" },
-    {
-      label: counterpart.translate(`pages.voting.committees.tab`),
-      key: "committees",
-    },
+    ...voteTabs.map((voteTab, index) => {
+      return {
+        label: capitalize(
+          counterpart.translate(`pages.voting.lower_case_${voteTab}`)
+        ),
+        key: voteTab,
+        children: (
+          <VoteTab
+            tab={voteTab}
+            votesLoading={!voteTabLoaded}
+            fullAccount={fullAccount}
+            tabAllMembers={allMembers.filter(
+              (member) =>
+                parseInt(member.vote_id.split(":")[0]) ===
+                voteIdentifiers[index]
+            )}
+            tabServerApprovedVotesIds={serverApprovedVotesIds.filter(
+              (voteId) =>
+                parseInt(voteId.split(":")[0]) === voteIdentifiers[index]
+            )}
+            allMembersIds={allMembersIds}
+            getUserVotes={getUserVotes}
+            totalGpos={gposInfo.gposBalance}
+            proxy={proxy}
+            key={voteTab}
+          />
+        ),
+      };
+    }),
     {
       label: counterpart.translate(`pages.voting.proxy.tab`),
       key: "proxy",
+      children: (
+        <ProxyTab
+          serverProxy={proxy}
+          totalGpos={gposInfo.gposBalance}
+          getUserVotes={getUserVotes}
+          loading={!voteTabLoaded}
+        />
+      ),
     },
   ];
-  const renderTabBar = (props: any, DefaultTabBar: any) => (
-    <>
-      {sm ? (
-        <Styled.MobileDropdownWrapper>
-          <Styled.MobileDropdown
-            visible={visible}
-            overlay={
-              <Styled.MobileTabsWrapper>
-                <Menu
-                  onClick={(item: any) => {
-                    props.onTabClick(item.key);
-                  }}
-                  items={dropdowItems}
-                  selectedKeys={tab ? [tab as string] : ["gpos"]}
-                />
-              </Styled.MobileTabsWrapper>
-            }
-          >
-            <Button type="text" onClick={() => setVisible(!visible)}>
-              {tab
-                ? counterpart.translate(`pages.voting.${tab}.tab`)
-                : counterpart.translate(`pages.voting.gpos.tab`)}{" "}
-              {!visible ? <DownOutlined /> : <UpOutlined />}
-            </Button>
-          </Styled.MobileDropdown>
-        </Styled.MobileDropdownWrapper>
-      ) : (
-        <DefaultTabBar {...props}>{(node: any) => <>{node}</>}</DefaultTabBar>
-      )}
-    </>
-  );
 
   return (
     <Layout
@@ -97,68 +101,21 @@ const VotingPage: NextPage = () => {
       description={`${pageMeta.description}`}
       layout="dex"
       onClick={() => {
-        if (sm) {
+        if (md) {
           visible && setVisible(false);
         }
       }}
     >
       <Styled.VotingPageCard>
-        <Tabs
+        <PageTabs
           renderTabBar={renderTabBar}
           activeKey={`${tab ? tab : "gpos"}`}
           onTabClick={(key) => {
             router.push(`/voting?tab=${key}`);
-            if (sm) setVisible(false);
+            if (md) setVisible(false);
           }}
-        >
-          <TabPane
-            tab={counterpart.translate(`pages.voting.gpos.tab`)}
-            key="gpos"
-          >
-            <GPOSTab />
-          </TabPane>
-          {voteTabs.map((voteTab, index) => {
-            return (
-              <TabPane
-                tab={capitalize(
-                  counterpart.translate(`pages.voting.lower_case_${voteTab}`)
-                )}
-                key={voteTab}
-              >
-                <VoteTab
-                  tab={voteTab}
-                  votesLoading={loadingMembers || loadingUserVotes}
-                  fullAccount={fullAccount}
-                  tabAllMembers={allMembers.filter(
-                    (member) =>
-                      parseInt(member.vote_id.split(":")[0]) ===
-                      voteIdentifiers[index]
-                  )}
-                  tabServerApprovedVotesIds={serverApprovedVotesIds.filter(
-                    (voteId) =>
-                      parseInt(voteId.split(":")[0]) === voteIdentifiers[index]
-                  )}
-                  allMembersIds={allMembersIds}
-                  getUserVotes={getUserVotes}
-                  totalGpos={totalGpos}
-                  proxy={proxy}
-                  key={voteTab}
-                />
-              </TabPane>
-            );
-          })}
-          <TabPane
-            tab={counterpart.translate(`pages.voting.proxy.tab`)}
-            key="proxy"
-          >
-            <ProxyTab
-              serverProxy={proxy}
-              totalGpos={totalGpos}
-              getUserVotes={getUserVotes}
-              loading={loadingMembers || loadingUserVotes}
-            />
-          </TabPane>
-        </Tabs>
+          items={tabItems}
+        />
       </Styled.VotingPageCard>
     </Layout>
   );

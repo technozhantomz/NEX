@@ -1,14 +1,15 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 
+import {
+  TransactionMessageAction,
+  TransactionMessageState,
+} from "../../../hooks";
 import { BitcoinSidechainAccounts, SignerKey } from "../../../types";
 
 export type UseGenerateBitcoinAddressResult = {
   bitcoinSidechainAccounts: BitcoinSidechainAccounts | undefined;
   setBitcoinSidechainAccounts: (value: BitcoinSidechainAccounts) => void;
-  transactionErrorMessage: string;
-  setTransactionErrorMessage: Dispatch<SetStateAction<string>>;
-  transactionSuccessMessage: string;
-  setTransactionSuccessMessage: Dispatch<SetStateAction<string>>;
-  loadingTransaction: boolean;
+  transactionMessageState: TransactionMessageState;
+  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
   generateBitcoinAddresses: (signerKey: SignerKey) => Promise<void>;
 };

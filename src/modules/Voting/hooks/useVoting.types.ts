@@ -1,3 +1,4 @@
+import { GPOSInfo } from "../../../common/hooks";
 import { FullAccount, Proxy, Vote } from "../../../common/types";
 
 export type UseVotingResult = {
@@ -6,8 +7,9 @@ export type UseVotingResult = {
   allMembers: Vote[];
   fullAccount: FullAccount | undefined;
   allMembersIds: [string, string][];
-  totalGpos: number;
+  gposInfo: GPOSInfo;
   proxy: Proxy;
   getUserVotes: () => Promise<void>;
   loadingMembers: boolean;
+  voteTabLoaded: boolean;
 };
