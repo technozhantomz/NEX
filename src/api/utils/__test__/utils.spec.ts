@@ -271,4 +271,133 @@ describe("Testing utils functions ", () => {
       expect(utils.getBlockchainFromSymbol("btc")).toBe("Bitcoin");
     });
   });
+
+  describe("validatePeerplaysAccountName", () => {
+    it("should return false if name is shorter than 2 characters", () => {
+      const result = utils.validatePeerplaysAccountName("a");
+      expect(result.isValid).toBe(false);
+    });
+
+    it("should return false if name is longer than 62 characters", () => {
+      const result = utils.validatePeerplaysAccountName(
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      );
+      expect(result.isValid).toBe(true);
+    });
+
+    it("should return false if name does not start with a letter or tilde", () => {
+      const result = utils.validatePeerplaysAccountName("1test");
+      expect(result.isValid).toBe(false);
+    });
+
+    it("should return false if any segment of the name does not start with a letter or tilde", () => {
+      const result = utils.validatePeerplaysAccountName("test.1test");
+      expect(result.isValid).toBe(false);
+    });
+
+    it("should return false if any segment of the name contains invalid characters", () => {
+      const result = utils.validatePeerplaysAccountName("test.t$st");
+      expect(result.isValid).toBe(false);
+    });
+
+    it("should return false if any segment of the name contains two dashes in a row", () => {
+      const result = utils.validatePeerplaysAccountName("test.--st");
+      expect(result.isValid).toBe(false);
+    });
+
+    it("should return false if any segment of the name does not end with a letter or digit", () => {
+      const result = utils.validatePeerplaysAccountName("test.-st");
+      expect(result.isValid).toBe(false);
+    });
+
+    it("should return true for valid account names", () => {
+      const result = utils.validatePeerplaysAccountName("test-name123");
+      expect(result.isValid).toBeTruthy();
+    });
+  });
+
+  describe("validateHiveAccount", () => {
+    it("should return isValid: false and error message when name length is less than 3", () => {
+      const result = utils.validateHiveAccount("ab");
+      expect(result).toEqual({
+        isValid: false,
+        error: "Hive account should be longer.",
+      });
+    });
+
+    it("should return isValid: false and error message when name length is more than 16", () => {
+      const result = utils.validateHiveAccount("abcdefghijklmnopq");
+      expect(result).toEqual({
+        isValid: false,
+        error: "Hive account should be shorter.",
+      });
+    });
+
+    it("should return isValid: false and error message when name does not start with letter or ~", () => {
+      const result = utils.validateHiveAccount("1abc");
+      expect(result).toEqual({
+        isValid: false,
+        error: "Hive account should start with a lowercase letter.",
+      });
+    });
+
+    it("should return isValid: false and error message when name does not contain letters, digits or dashes", () => {
+      const result = utils.validateHiveAccount("~a@b");
+      expect(result).toEqual({
+        isValid: false,
+        error: "Hive account should have only letters, digits, or dashes.",
+      });
+    });
+
+    it("should return isValid: false and error message when name does not end with letter or digit", () => {
+      const result = utils.validateHiveAccount("~abc-");
+      expect(result).toEqual({
+        isValid: false,
+        error: "Hive account should end with a letter or digit.",
+      });
+    });
+
+    it("should return isValid: false and error message when name contains two dashes in a row", () => {
+      const result = utils.validateHiveAccount("~ab--c");
+      expect(result).toEqual({
+        isValid: false,
+        error: "Hive account should have only one dash in a row.",
+      });
+    });
+
+    it("should return isValid true when valid hive account name provided", () => {
+      const result = utils.validateHiveAccount("~abc123-d");
+      expect(result).toEqual({ isValid: true });
+    });
+  });
+
+  describe("isUrlsEqual", () => {
+    it("should return true when comparing two equal URLs", () => {
+      const url1 = "https://www.example.com/";
+      const url2 = "https://www.example.com";
+
+      expect(utils.isUrlsEqual(url1, url2)).toBe(true);
+    });
+
+    it("should return false when comparing two different URLs", () => {
+      const url1 = "https://www.example.com/";
+      const url2 = "https://www.example2.com";
+
+      expect(utils.isUrlsEqual(url1, url2)).toBe(false);
+    });
+
+    it("should return true when comparing two equal URLs with trailing slash", () => {
+      const url1 = "https://www.example.com/";
+      const url2 = "https://www.example.com/path/";
+
+      expect(utils.isUrlsEqual(url1, url2)).toBe(false);
+    });
+
+    it("should return false when comparing two different URLs with trailing slash", () => {
+      const url1 = "https://www.example.com/";
+      const url2 = "https://www.example2.com/path/";
+
+      expect(utils.isUrlsEqual(url1, url2)).toBe(false);
+    });
+  });
 });

@@ -11,6 +11,7 @@ import {
   HIVE_NETWORK,
   Sidechains,
   SON_ACCOUNT_NAME,
+  tradeableAssetsSymbols,
 } from "..";
 import { en } from "../../../translations/en";
 import { ru } from "../../../translations/ru";
@@ -99,6 +100,24 @@ describe("symbols To Be Excepted", () => {
       "WTFUN",
       "KOEBUNCPN",
       "NATHANBUNCPNN",
+    ]);
+  });
+});
+
+describe("tradeableAssetsSymbols", () => {
+  it("should be an array", () => {
+    expect(tradeableAssetsSymbols).toBeInstanceOf(Array);
+  });
+
+  it("should contain the correct symbols", () => {
+    expect(tradeableAssetsSymbols).toEqual([
+      "BTC",
+      "HBD",
+      "HIVE",
+      defaultToken,
+      "PBTC",
+      "PEOS",
+      "PETH",
     ]);
   });
 });

@@ -1195,6 +1195,7 @@ export const en = {
       },
       hive_account_errors: {
         account_should: "Hive account should ",
+        be_shorter: "be shorter.",
         be_longer: "be longer.",
         start_with_letter: "start with a lowercase letter.",
         have_letters_digits_dashes: "have only letters, digits, or dashes.",
