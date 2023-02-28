@@ -4,8 +4,11 @@ import { useCallback, useEffect, useState } from "react";
 import { usePeerplaysApiContext } from "../../providers";
 import {
   Account,
+  ActiveSons,
   GlobalProperties,
   SonAccount,
+  SonData,
+  SonNetwork,
   SonStatistics,
 } from "../../types";
 
@@ -37,7 +40,7 @@ export function useSonNetwork(): UseSonNetworkResult {
         if (!gpo.active_sons || gpo.active_sons.length === 0) {
           return { sons: [], sonIds: [] };
         }
-        const sonIds = gpo.active_sons.map((active_son) => active_son.son_id);
+        const sonIds = getSonIds(gpo.active_sons);
         const sons: SonAccount[] = await dbApi("get_sons", [sonIds]);
         return { sons, sonIds };
       } catch (e) {
@@ -47,6 +50,18 @@ export function useSonNetwork(): UseSonNetworkResult {
     },
     [dbApi]
   );
+
+  const getSonIds = useCallback((activeSons: ActiveSons): string[] => {
+    const sonIds: string[] = [];
+    activeSons.forEach((sonNetwork: SonNetwork) => {
+      sonNetwork.sons.forEach((sonAccount: SonData) => {
+        if (!sonIds.includes(sonAccount.son_id)) {
+          sonIds.push(sonAccount.son_id);
+        }
+      });
+    });
+    return sonIds;
+  }, []);
 
   const getSonsStatistics = useCallback(
     async (sons: SonAccount[]): Promise<SonStatistics[]> => {

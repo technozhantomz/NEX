@@ -1,18 +1,25 @@
 export type GlobalProperties = {
   active_committee_members: string[];
-  active_sons: ActiveSon[];
+  active_sons: ActiveSons;
   active_witnesses: string[];
   id: string;
   parameters: GlobalPropertiesParameters;
   next_available_vote_id: number;
 };
 
-export type ActiveSon = {
-  sidechain_public_keys: [string, string][];
-  signing_key: string;
+export type SonData = {
   son_id: string;
   weight: number;
+  signing_key: string;
+  public_key: string;
 };
+
+export type SonNetwork = {
+  network: string;
+  sons: SonData[];
+};
+
+export type ActiveSons = SonNetwork[];
 
 export type GlobalPropertiesParameters = {
   account_fee_scale_bitshifts: number;

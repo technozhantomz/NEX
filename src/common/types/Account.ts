@@ -13,6 +13,10 @@ export type FullAccount = {
 
 export type Account = {
   active: Permissions;
+  active_special_authority: any[];
+  blacklisted_accounts: string[];
+  blacklisting_accounts: string[];
+  cashback_vb: string;
   id: string;
   lifetime_referrer: string;
   lifetime_referrer_fee_percentage: number;
@@ -26,6 +30,8 @@ export type Account = {
   registrar: string;
   statistics: string;
   top_n_control_flags: number;
+  whitelisted_accounts: string[];
+  whitelisting_accounts: string[];
 };
 
 export type Balance = {

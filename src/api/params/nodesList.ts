@@ -39,7 +39,7 @@ export const testnetNodes: Node[] = [
     location: counterpart.translate("settings.api_closest"),
   },
   {
-    url: "wss://devnet.peerplays.download/api",
+    url: "wss://alphanet.peerplays.download/api",
     location: "",
     region: "Northern America",
     country: "Canada",
@@ -48,6 +48,16 @@ export const testnetNodes: Node[] = [
       status: "Witness",
     },
   },
+  // {
+  //   url: "wss://devnet.peerplays.download/api",
+  //   location: "",
+  //   region: "Northern America",
+  //   country: "Canada",
+  //   user: {
+  //     name: "Peerplays Witnesses",
+  //     status: "Witness",
+  //   },
+  // },
 ];
 
 export const prodNodes: Node[] = [
