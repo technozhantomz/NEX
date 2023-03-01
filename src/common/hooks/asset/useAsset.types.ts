@@ -17,11 +17,14 @@ export type UseAssetResult = {
     precision?: number | undefined
   ) => number;
   getAllAssets: (tradeableAssetsOnly?: boolean) => Promise<Asset[] | undefined>;
-  limitByPrecision: (value: string, precision?: number) => string;
+  limitByPrecision: (value: string | number, precision?: number) => string;
   ceilPrecision: (
     num: string | number,
     precision?: number | undefined
   ) => string;
   getAssetsBySymbols: (symbols: string[]) => Promise<Asset[]>;
-  roundNum: (num: string | number, roundTo?: number) => string;
+  removeUnnecessaryZerosInDecimalPart: (
+    integerPart: string,
+    decimalPart: string
+  ) => string;
 };

@@ -653,7 +653,11 @@ export const ru = {
       },
       sons: {
         heading: "Пирплейс Сыновья",
-        active_sons: "Активные сыновья",
+        active_sons: {
+          bitcoin_active_sons: "Bitcoin active sons",
+          hive_active_sons: "Hive active sons",
+          ethereum_active_sons: "Ethereum active sons",
+        },
         search_sons: "Поиск сыновей",
         sons: "сыновья",
       },

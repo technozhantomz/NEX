@@ -68,10 +68,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     withdrawAddress = values.withdrawAddress;
   }
 
-  const precisedAmount = limitByPrecision(
-    String(amount),
-    selectedAssetPrecision
-  );
+  const precisedAmount = limitByPrecision(amount, selectedAssetPrecision);
 
   const isLoggedIn = localStorageAccount && localStorageAccount !== "";
 

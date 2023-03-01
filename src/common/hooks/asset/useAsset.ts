@@ -125,9 +125,6 @@ export function useAsset(): UseAssetResult {
     [getAllAssets]
   );
 
-  /**
-   * private method, used only inside useAsset functions
-   */
   const removeUnnecessaryZerosInDecimalPart = useCallback(
     (integerPart: string, decimalPart: string) => {
       let decimalPartWithoutEndZeros = decimalPart;
@@ -156,7 +153,8 @@ export function useAsset(): UseAssetResult {
    * @returns limited by precision amount
    *
    */
-  const limitByPrecision = (value: string, precision = 5) => {
+  const limitByPrecision = (value: string | number, precision = 5) => {
+    value = String(value);
     value = !value.includes("e") ? value : Number(value).toFixed(20);
     const splitString = value.split(".");
     if (
@@ -165,19 +163,11 @@ export function useAsset(): UseAssetResult {
     ) {
       return value;
     } else {
-      const limitedValue = removeUnnecessaryZerosInDecimalPart(
-        splitString[0],
-        splitString[1].slice(0, precision)
-      );
+      const limitedValue =
+        splitString[0] + "." + splitString[1].slice(0, precision);
+
       return limitedValue;
     }
-  };
-
-  const roundNum = (num: string | number, roundTo = 5): string => {
-    const numbered = Number(num);
-    const precised = numbered.toFixed(roundTo);
-    const splitString = precised.split(".");
-    return removeUnnecessaryZerosInDecimalPart(splitString[0], splitString[1]);
   };
 
   /**
@@ -197,7 +187,9 @@ export function useAsset(): UseAssetResult {
   ) => number = useCallback(
     (roundTo: boolean, amount: number, precision = 5) => {
       const precisioned = amount / 10 ** precision;
-      return roundTo ? Number(roundNum(precisioned, precision)) : precisioned;
+      return roundTo
+        ? Number(limitByPrecision(precisioned, precision))
+        : precisioned;
     },
     []
   );
@@ -244,7 +236,7 @@ export function useAsset(): UseAssetResult {
     limitByPrecision,
     ceilPrecision,
     getAssetsBySymbols,
-    roundNum,
     formKnownAssetBalanceById,
+    removeUnnecessaryZerosInDecimalPart,
   };
 }

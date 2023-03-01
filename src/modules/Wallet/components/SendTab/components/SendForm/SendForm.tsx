@@ -70,10 +70,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     neededKeyType: "active",
   });
 
-  const precisedAmount = limitByPrecision(
-    String(amount),
-    selectedAssetPrecision
-  );
+  const precisedAmount = limitByPrecision(amount, selectedAssetPrecision);
 
   const feeLabel =
     selectedBlockchain === BITCOIN_NETWORK

@@ -2,14 +2,14 @@ export type SonAccount = {
   deposit: string;
   id: string;
   pay_vb: string;
-  sidechain_public_keys: [string, string];
+  sidechain_public_keys: [string, string][];
+  sidechain_vote_ids: [string, string][];
   signing_key: string;
   son_account: string;
   statistics: string;
-  status: string;
-  total_votes: number;
+  statuses: [string, string][];
+  total_votes: [string, number][];
   url: string;
-  vote_id: string;
 };
 
 export type SonStatistics = {
@@ -26,3 +26,9 @@ export type SonStatistics = {
   total_voted_time: number;
   txs_signed: string[];
 };
+
+export enum Sidechain {
+  BITCOIN = "bitcoin",
+  ETHEREUM = "ethereum",
+  HIVE = "hive",
+}
