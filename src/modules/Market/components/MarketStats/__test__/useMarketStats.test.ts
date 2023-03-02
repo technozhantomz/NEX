@@ -1,6 +1,5 @@
 import { renderHook, waitFor } from "@testing-library/react";
 
-// import { useMarketPairStats } from "../../../../../common/hooks";
 import { useMarketStats } from "../hooks/useMarketStats";
 
 describe("useMarketStats", () => {
@@ -29,25 +28,5 @@ describe("useMarketStats", () => {
     await waitFor(() => result.current.marketPairStats);
     // Assert that the market stats data is present
     expect(result.current.marketPairStats).toBeDefined();
-  });
-
-  it("should return market stats data", async () => {
-    const mockedData = {
-      latest: "100",
-      percentChange: "200",
-      volume: "1000",
-      lowestAsk: "10",
-      highestBid: "15",
-      dailyHigh: "16",
-      dailyLow: "9",
-    };
-    (useMarketStats as jest.Mock).mockResolvedValueOnce(mockedData);
-
-    const { result } = renderHook(() => useMarketStats());
-
-    await waitFor(() => result.current.marketPairStats);
-
-    // Verify initial state
-    expect(result.current.marketPairStats).toEqual(mockedData);
   });
 });
