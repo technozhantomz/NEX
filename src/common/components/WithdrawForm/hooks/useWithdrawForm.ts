@@ -438,7 +438,11 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   useEffect(() => {
     let ignore = false;
     async function checkSonNetwork() {
-      const sonNetworkStatus = await getSonNetworkStatus();
+      setIsSonNetworkOk(undefined);
+      const sidechain = utils.getSidechainFromAssetSymbol(
+        selectedAsset.toUpperCase()
+      );
+      const sonNetworkStatus = await getSonNetworkStatus(sidechain);
       if (!ignore) {
         setIsSonNetworkOk(sonNetworkStatus.isSonNetworkOk);
       }
@@ -447,7 +451,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     return () => {
       ignore = true;
     };
-  }, [getSonNetworkStatus]);
+  }, [getSonNetworkStatus, selectedAsset]);
 
   useEffect(() => {
     const withdrawFee = calculateTransferFee("");

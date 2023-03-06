@@ -1,8 +1,8 @@
-import { Account } from "../../types";
+import { Account, Sidechain } from "../../types";
 
 export type UseSonNetworkResult = {
   sonAccount: Account | undefined;
-  getSonNetworkStatus: () => Promise<SonNetworkStatus>;
+  getSonNetworkStatus: (chain: Sidechain) => Promise<SonNetworkStatus>;
 };
 
 export type SonNetworkStatus = {

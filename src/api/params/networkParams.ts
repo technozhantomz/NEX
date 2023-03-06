@@ -26,3 +26,19 @@ export const HIVE_NETWORK = "Hive";
 export const HIVE_ASSET_SYMBOL = "HIVE";
 export const HBD_ASSET_SYMBOL = "HBD";
 export const SON_ACCOUNT_NAME = "son-account";
+
+export const assetsBlockchains: {
+  [assetSymbol: string]: string[];
+} = {
+  BTC: [defaultNetwork, BITCOIN_NETWORK],
+  HIVE: [defaultNetwork, HIVE_NETWORK],
+  HBD: [defaultNetwork, HIVE_NETWORK],
+  // this should change
+  ETH: [defaultNetwork],
+};
+
+export const WITNESS_VOTE_IDENTIFIER = 1;
+export const COMMITTEE_VOTE_IDENTIFIER = 0;
+export const BITCOIN_SON_VOTE_IDENTIFIER = 3;
+export const HIVE_SON_VOTE_IDENTIFIER = 4;
+export const ETHEREUM_SON_VOTE_IDENTIFIER = 5;

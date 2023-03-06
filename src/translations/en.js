@@ -1234,6 +1234,10 @@ export const en = {
       "Unable to connect to API node %(url)s, falling back to known working nodes. Error was: %(error)s",
   },
   tableHead: {
+    active_all_chains: "Active",
+    votes_all_chains: "Votes",
+    status_all_chains: "Status",
+    action_all_chains: "Action",
     active_chains: "Active chains",
     account_id: "Account ID",
     block_id: "Block ID",
@@ -1299,6 +1303,7 @@ export const en = {
     sidechain: "Sidechain",
     active_on: "Active on",
     total_votes_on: "Total votes on",
+    status_on: "Status on",
   },
   tableFilters: {
     active: "Active",

@@ -50,10 +50,8 @@ export function useMembers(): UseMembersResult {
       let sonsIds: [string, string][] = [];
       let sons: SonAccount[] = [];
       sonsIds = await dbApi("lookup_son_accounts", ["", 100]);
-      console.log("sonsIds", sonsIds);
       if (sonsIds !== undefined && sonsIds.length > 0) {
         sons = await dbApi("get_sons", [sonsIds.map((sonIds) => sonIds[1])]);
-        console.log("sons", sons);
       }
       return { sons, sonsIds };
     } catch (e) {

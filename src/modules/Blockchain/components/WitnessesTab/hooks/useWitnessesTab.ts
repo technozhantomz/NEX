@@ -40,7 +40,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const { getUserNameById } = useAccount();
   const { getWitnesses } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
-  const { formKnownAssetBalanceById, setPrecision } = useAsset();
+  const { formAssetBalance, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
   const { getChain, getAvgBlockTime, getBlockData, getGlobalProperties } =
     useBlockchain();
@@ -88,7 +88,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
             const witnessesRows: WitnessTableRow[] = [];
             let index = 0;
             for (const witness of witnesses) {
-              const votesAsset = formKnownAssetBalanceById(
+              const votesAsset = formAssetBalance(
                 defaultAsset,
                 Number(witness.total_votes)
               );
@@ -175,7 +175,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
     setPrecision,
     getWitnesses,
     getUserNameById,
-    formKnownAssetBalanceById,
+    formAssetBalance,
     getAvgBlockTime,
     getDaysInThisMonth,
   ]);

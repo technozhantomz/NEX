@@ -44,7 +44,7 @@ export function useAssetsTable({
       return {
         key: asset.id,
         symbol: asset.symbol,
-        name: utils.getBlockchainFromSymbol(asset.symbol),
+        name: utils.getNativeBlockchainFromAssetSymbol(asset.symbol),
         available: available,
         inOrders: limitByPrecision(inOrders, asset.precision),
       };

@@ -2,18 +2,15 @@ import { sum } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
 import {
-  BITCOIN_NETWORK,
-  ETHEREUM_NETWORK,
-  HIVE_NETWORK,
-} from "../../../../../api/params";
-import {
   useArrayLimiter,
   useAsset,
   useBlockchain,
   useFormDate,
   useMembers,
+  useSons,
 } from "../../../../../common/hooks";
 import { useAssetsContext } from "../../../../../common/providers";
+import { Sidechain } from "../../../../../common/types";
 
 import { SonsStats, SonsTableRow, UseSonsTabResult } from "./useSonsTab.types";
 
@@ -36,7 +33,8 @@ export function useSonsTab(): UseSonsTabResult {
 
   const { getSons } = useMembers();
   const { updateArrayWithLimit } = useArrayLimiter();
-  const { formKnownAssetBalanceById, setPrecision } = useAsset();
+  const { setPrecision } = useAsset();
+  const { getSonAccountVotes } = useSons();
   const { defaultAsset } = useAssetsContext();
   const { getChain, getBlockData } = useBlockchain();
   const { formLocalDate } = useFormDate();
@@ -67,25 +65,12 @@ export function useSonsTab(): UseSonsTabResult {
         const sonsRows: SonsTableRow[] = [];
         let index = 0;
         const sonsVotesAsset = sons.map((son) => {
-          const bitcoinTotalVotes = son.total_votes.find(
-            (total_vote) => total_vote[0] === BITCOIN_NETWORK.toLowerCase()
-          );
-          const hiveTotalVotes = son.total_votes.find(
-            (total_vote) => total_vote[0] === HIVE_NETWORK.toLowerCase()
-          );
-          const ethereumTotalVotes = son.total_votes.find(
-            (total_vote) => total_vote[0] === ETHEREUM_NETWORK.toLowerCase()
-          );
+          const { bitcoinVoteAsset, hiveVoteAsset, ethereumVoteAsset } =
+            getSonAccountVotes(son, defaultAsset);
           return {
-            bitcoinVoteAsset: bitcoinTotalVotes
-              ? formKnownAssetBalanceById(defaultAsset, bitcoinTotalVotes[1])
-              : undefined,
-            hiveVoteAsset: hiveTotalVotes
-              ? formKnownAssetBalanceById(defaultAsset, hiveTotalVotes[1])
-              : undefined,
-            ethereumVoteAsset: ethereumTotalVotes
-              ? formKnownAssetBalanceById(defaultAsset, ethereumTotalVotes[1])
-              : undefined,
+            bitcoinVoteAsset: bitcoinVoteAsset,
+            hiveVoteAsset: hiveVoteAsset,
+            ethereumVoteAsset: ethereumVoteAsset,
           };
         });
 
@@ -101,11 +86,9 @@ export function useSonsTab(): UseSonsTabResult {
             accountId: son.son_account,
             url: son.url,
             activeChains: activeChains,
-            bitcoinActive: activeChains.includes(BITCOIN_NETWORK.toLowerCase()),
-            ethereumActive: activeChains.includes(
-              ETHEREUM_NETWORK.toLowerCase()
-            ),
-            hiveActive: activeChains.includes(HIVE_NETWORK.toLowerCase()),
+            bitcoinActive: activeChains.includes(Sidechain.BITCOIN),
+            ethereumActive: activeChains.includes(Sidechain.ETHEREUM),
+            hiveActive: activeChains.includes(Sidechain.HIVE),
             bitcoinTotalVotes: sonsVotesAsset[index].bitcoinVoteAsset
               ? `${sonsVotesAsset[index].bitcoinVoteAsset?.amount} ${sonsVotesAsset[index].bitcoinVoteAsset?.symbol}`
               : undefined,
@@ -171,7 +154,7 @@ export function useSonsTab(): UseSonsTabResult {
     getBlockData,
     getSons,
     setPrecision,
-    formKnownAssetBalanceById,
+    getSonAccountVotes,
   ]);
 
   useEffect(() => {

@@ -5,10 +5,7 @@ export type UseAssetResult = {
     id: string,
     amount: number
   ) => Promise<Asset | undefined>;
-  formKnownAssetBalanceById: (
-    asset: Asset,
-    amount: number
-  ) => Asset | undefined;
+  formAssetBalance: (asset: Asset, amount: number) => Asset;
   getAssetById: (id: string) => Promise<Asset | undefined>;
   getAssetBySymbol: (symbol: string) => Promise<Asset | undefined>;
   setPrecision: (

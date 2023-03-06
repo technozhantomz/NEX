@@ -45,7 +45,9 @@ export const MissedBlocks = styled(DataTableMissedBlocks)``;
 export const urlIcon = styled(DataTableUrlIcon)``;
 export const ActiveIcon = styled(DataTableActiveIcon)``;
 
-export const ExpandableContainer = styled.div``;
+export const ExpandableContainer = styled.div`
+  margin-left: 40px;
+`;
 export const SidechainRow = styled(Row)`
   margin-bottom: 8px;
 `;

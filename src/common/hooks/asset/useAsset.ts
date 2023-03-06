@@ -206,14 +206,12 @@ export function useAsset(): UseAssetResult {
     },
     [getAssetById, setPrecision]
   );
-  const formKnownAssetBalanceById = useCallback(
+  const formAssetBalance = useCallback(
     (asset: Asset, amount: number) => {
-      if (asset) {
-        return {
-          ...asset,
-          amount: setPrecision(false, amount, asset.precision),
-        } as Asset;
-      }
+      return {
+        ...asset,
+        amount: setPrecision(false, amount, asset.precision),
+      } as Asset;
     },
     [setPrecision]
   );
@@ -236,7 +234,7 @@ export function useAsset(): UseAssetResult {
     limitByPrecision,
     ceilPrecision,
     getAssetsBySymbols,
-    formKnownAssetBalanceById,
+    formAssetBalance,
     removeUnnecessaryZerosInDecimalPart,
   };
 }
