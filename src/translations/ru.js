@@ -654,9 +654,9 @@ export const ru = {
       sons: {
         heading: "Пирплейс Сыновья",
         active_sons: {
-          bitcoin_active_sons: "Bitcoin active sons",
-          hive_active_sons: "Hive active sons",
-          ethereum_active_sons: "Ethereum active sons",
+          bitcoin_active_sons: "Bitcoin активный sons",
+          hive_active_sons: "Hive активный sons",
+          ethereum_active_sons: "Ethereum активный sons",
         },
         search_sons: "Поиск сыновей",
         sons: "сыновья",
@@ -1237,6 +1237,12 @@ export const ru = {
       "Не удается подключиться к узлу API %(url)s, возвращаясь к известным рабочим узлам. Ошибка: %(error)s",
   },
   tableHead: {
+    active_all_chains: "Активный",
+    votes_all_chains: "Голоса",
+    status_all_chains: "Положение дел",
+    action_all_chains: "Действие",
+    active_chains: "Активные цепочки",
+    account_id: "Идентификатор учетной записи",
     block_id: "Идентификатор блока",
     time: "Время",
     witness: "Свидетель",
@@ -1297,6 +1303,10 @@ export const ru = {
     filled: "Заполненный",
     total: "Общий",
     status_actions: "Статус/Действия",
+    sidechain: "Боковая цепь",
+    active_on: "Активен в",
+    total_votes_on: "Всего голосов за",
+    status_on: "Статус включен",
   },
   tableFilters: {
     active: "Активный",
