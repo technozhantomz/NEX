@@ -13,6 +13,22 @@ export type Block = {
   witness_signature: string;
 };
 
+export type Block2 = {
+  id?: number;
+  extensions: any[];
+  next_secret_hash?: string;
+  previous: string;
+  previous_secret: string;
+  signing_key: string;
+  timestamp: string | Date;
+  transaction_merkle_root: string;
+  transactions: any[];
+  transaction_ids: string[];
+  witness: string;
+  witness_account_name: string;
+  witness_signature: string;
+};
+
 export type BlockData = {
   accounts_registered_this_interval: number;
   current_aslot: number;

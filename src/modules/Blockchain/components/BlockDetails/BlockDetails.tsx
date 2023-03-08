@@ -73,7 +73,7 @@ export const BlockDetails = ({ block }: Props): JSX.Element => {
             title={counterpart.translate(`pages.blocks.block_details.witness`)}
             data={
               <Link href={`/user/${blockDetails.witness}`}>
-                {blockDetails.witness}
+                {`${blockDetails.witness_account_name} (${blockDetails.witness})`}
               </Link>
             }
             statsData={[0]}
