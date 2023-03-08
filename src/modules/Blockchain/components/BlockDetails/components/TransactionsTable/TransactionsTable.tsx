@@ -49,6 +49,12 @@ export const TransactionsTable = ({
               </span>
               <span className="item-info-value">{item.rank}</span>
             </div>
+            <div className="item-info">
+              <span className="item-info-title">
+                {transactionsColumns[2].title()}
+              </span>
+              <span className="item-info-value">{item.operations.length}</span>
+            </div>
             {/* <div className="item-info">
             <span className="item-info-title">
               {transactionsColumns[1].title()}

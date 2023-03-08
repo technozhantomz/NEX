@@ -26,18 +26,19 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
   const [loadingSideBlocks, setLoadingSideBlocks] = useState<boolean>(true);
 
   const { formLocalDate } = useFormDate();
-  const { getBlock, getBlockData } = useBlockchain();
+  const { getBlock2, getBlockData } = useBlockchain();
 
   const getBlockDetails = useCallback(async () => {
     try {
-      const rawBlock = await getBlock(Number(block));
+      const rawBlock = await getBlock2(Number(block));
       if (rawBlock) {
         const transactions: TransactionRow[] = rawBlock.transactions.map(
           (transaction, index) => {
             return {
               key: index + 1,
               rank: index + 1,
-              id: index.toString(),
+              id: rawBlock.transaction_ids[index],
+              transaction_id: transaction.transaction_id,
               expiration: transaction.expiration,
               operations: transaction.operations,
               operationResults: transaction.operation_results,
@@ -60,15 +61,17 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
             "year",
             "time",
           ]),
-          witness: rawBlock.witness_account_name,
+          witness: rawBlock.witness,
+          witness_account_name: rawBlock.witness_account_name,
           witnessSignature: rawBlock.witness_signature,
           transactions: transactions,
+          transaction_ids: rawBlock.transaction_ids,
         };
       }
     } catch (e) {
       console.log(e);
     }
-  }, [block, getBlock]);
+  }, [block, getBlock2]);
 
   const checkSideBlocksExistence = useCallback(async () => {
     let hasPreviousBlock = false;

@@ -92,14 +92,14 @@ export const TransactionDetails = ({
             statsData={[transactionDetails.operations.length]}
           />
         </Styled.StatsCardsDeck>
-        {/* <Styled.BlockInfo>
+        <Styled.BlockInfo>
           <Styled.BlockInfoTitle>
             {counterpart.translate(
               `pages.blocks.transaction_details.transaction_id`
             )}
           </Styled.BlockInfoTitle>
           <p>{transactionDetails.id}</p>
-        </Styled.BlockInfo> */}
+        </Styled.BlockInfo>
         <Styled.TwoColumns>
           <Styled.BlockInfo>
             <Styled.BlockInfoTitle>
