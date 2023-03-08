@@ -618,6 +618,7 @@ export const ru = {
         merkle_root: "Корень Меркла",
         previous_secret: "Предыдущий секрет",
         next_secret: "Следующий секрет",
+        signing_key: "Ключ подписи",
         witness_signature: "Подпись свидетеля",
         search_transactions: "Поиск транзакций",
       },

@@ -28,6 +28,7 @@ export type BlockDetailsType = {
   time: string;
   witness: string;
   witness_account_name?: string;
+  signingKey?: string;
   witnessSignature?: string;
   transactions?: TransactionRow[];
 };

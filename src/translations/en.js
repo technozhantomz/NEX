@@ -617,6 +617,7 @@ export const en = {
         merkle_root: "Merkle Root",
         previous_secret: "Previous Secret",
         next_secret: "Next Secret",
+        signing_key: "Signing key",
         witness_signature: "Witness Signature",
         search_transactions: "Search Transactions",
       },

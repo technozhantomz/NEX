@@ -119,7 +119,7 @@ export function useBlockchain(): UseBlockchainResult {
   const getBlock2 = useCallback(
     async (value: number) => {
       try {
-        const block: Block2 | null = await dbApi("get_block2", [value]);
+        const block: Block2 = await dbApi("get_block2", [value]);
         if (block) {
           const witness: WitnessAccount = (
             await dbApi("get_objects", [[block.witness]])

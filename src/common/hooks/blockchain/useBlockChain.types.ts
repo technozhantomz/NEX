@@ -1,5 +1,6 @@
 import {
   Block,
+  Block2,
   BlockData,
   BlockHeader,
   Dynamic,
@@ -13,7 +14,7 @@ export type UseBlockchainResult = {
   getRecentBlocks: () => Block[];
   getAvgBlockTime: () => number;
   getBlock: (value: number) => Promise<Block | undefined>;
-  getBlock2: (value: number) => Promise<Block | undefined>;
+  getBlock2: (value: number) => Promise<Block2 | undefined>;
   getBlocks: (
     first: number,
     last: number,

@@ -19,6 +19,7 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
     blockID: block,
     time: "",
     witness: "",
+    signingKey: "",
     witnessSignature: "",
     transactions: [],
   });
@@ -39,7 +40,12 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
               rank: index + 1,
               id: rawBlock.transaction_ids[index],
               transaction_id: transaction.transaction_id,
-              expiration: transaction.expiration,
+              expiration: formLocalDate(transaction.expiration, [
+                "month",
+                "date",
+                "year",
+                "time",
+              ]),
               operations: transaction.operations,
               operationResults: transaction.operation_results,
               refBlockPrefix: transaction.ref_block_prefix,
@@ -63,10 +69,11 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
           ]),
           witness: rawBlock.witness,
           witness_account_name: rawBlock.witness_account_name,
+          signingKey: rawBlock.signing_key,
           witnessSignature: rawBlock.witness_signature,
           transactions: transactions,
           transaction_ids: rawBlock.transaction_ids,
-        };
+        } as BlockDetailsType;
       }
     } catch (e) {
       console.log(e);
