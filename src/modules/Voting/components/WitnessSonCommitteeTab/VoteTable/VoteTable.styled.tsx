@@ -36,7 +36,7 @@ export const MissedBlocks = styled(DataTableMissedBlocks)``;
 
 export const VoteTableWrapper = styled.div`
   margin: 0 25px;
-  ${breakpoint.sm} {
+  ${breakpoint.md} {
     margin: 0 35px;
   }
   .cursor-pointer {
@@ -46,6 +46,9 @@ export const VoteTableWrapper = styled.div`
 
 export const VoteTable = styled(DataTable)`
   max-width: 100%;
+  .ant-table-row {
+    height: 50px;
+  }
 `;
 
 export const VoteList = styled(UiList)`
@@ -75,7 +78,7 @@ export const VoteList = styled(UiList)`
   .ant-pagination.ant-pagination-mini .ant-pagination-options {
     margin-left: 16px;
     padding-top: 4px;
-    ${breakpoint.sm} {
+    ${breakpoint.md} {
       padding-top: 0;
     }
   }
@@ -135,16 +138,10 @@ export const RowMessage = styled(row)`
 /** ICONS */
 export const Check = styled(check)`
   color: #11b881;
-  ${breakpoint.sm} {
-    margin-left: 15px;
-  }
 `;
 
 export const Xmark = styled(xmark)`
   color: #d01721;
-  ${breakpoint.sm} {
-    margin-left: 15px;
-  }
 `;
 
 export const VoteHeaderBar = styled(DataTableHeaderBar)`
@@ -163,4 +160,28 @@ export const ApprovedStatus = styled.span`
 
 export const NotApprovedStatus = styled.span`
   color: ${colors.missedColor};
+`;
+
+export const ExpandableContainer = styled.div`
+  margin-left: 40px;
+`;
+export const SidechainRow = styled(Row)`
+  margin-bottom: 8px;
+`;
+export const SidechainCol = styled(Col)``;
+export const ExpandableHeader = styled.div`
+  font-size: 12px;
+  color: ${colors.textColorSecondary};
+`;
+
+export const ItemHeader = styled.div`
+  font-weight: 300;
+  width: 120px;
+  min-width: 120px;
+  word-break: break-word;
+  margin-right: 5px;
+  color: #6c6c6c;
+`;
+export const IndentedListItem = styled.div`
+  margin-left: 24px;
 `;

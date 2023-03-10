@@ -30,21 +30,21 @@ export function useTransactionDetails(
     extensions: [],
     signatures: [],
   });
-  const { getBlock } = useBlockchain();
+  const { getBlock2 } = useBlockchain();
 
   const getTransactionDetails = useCallback(async () => {
     try {
       setLoading(true);
       if (transactionNum !== undefined) {
         const transactionNumAsIndex = transactionNum - 1;
-        const rawBlock = await getBlock(Number(block));
+        const rawBlock = await getBlock2(Number(block));
         if (rawBlock) {
           const transactions: TransactionRow[] = rawBlock.transactions.map(
             (transaction, index) => {
               return {
                 key: index + 1,
                 rank: index + 1,
-                id: index.toString(),
+                id: rawBlock.transaction_ids[index],
                 expiration: transaction.expiration,
                 operations: transaction.operations,
                 operationResults: transaction.operation_results,
@@ -67,7 +67,7 @@ export function useTransactionDetails(
       setLoading(false);
     }
   }, [
-    getBlock,
+    getBlock2,
     block,
     transactionNum,
     setBlockTransactions,

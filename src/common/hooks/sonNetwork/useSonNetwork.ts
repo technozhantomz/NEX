@@ -4,7 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 import { usePeerplaysApiContext } from "../../providers";
 import {
   Account,
+  ActiveSon,
   GlobalProperties,
+  Sidechain,
   SonAccount,
   SonStatistics,
 } from "../../types";
@@ -28,16 +30,18 @@ export function useSonNetwork(): UseSonNetworkResult {
 
   const getSons = useCallback(
     async (
-      gpo: GlobalProperties
+      chainActiveSonsDetails: ActiveSon[]
     ): Promise<{
       sons: SonAccount[];
       sonIds: string[];
     }> => {
       try {
-        if (!gpo.active_sons || gpo.active_sons.length === 0) {
+        if (chainActiveSonsDetails.length === 0) {
           return { sons: [], sonIds: [] };
         }
-        const sonIds = gpo.active_sons.map((active_son) => active_son.son_id);
+        const sonIds = chainActiveSonsDetails.map(
+          (sonDetails) => sonDetails.son_id
+        );
         const sons: SonAccount[] = await dbApi("get_sons", [sonIds]);
         return { sons, sonIds };
       } catch (e) {
@@ -69,6 +73,7 @@ export function useSonNetwork(): UseSonNetworkResult {
 
   const getSonStatus = useCallback(
     (
+      chain: Sidechain,
       son: SonAccount,
       sonsStatistics: SonStatistics,
       gpo: GlobalProperties
@@ -83,8 +88,12 @@ export function useSonNetwork(): UseSonNetworkResult {
         now.getUTCSeconds(),
         now.getUTCMilliseconds()
       ).getTime();
+      const chainLastActiveTimeStamp =
+        sonsStatistics.last_active_timestamp.find(
+          (timestamp) => timestamp[0] === chain
+        ) as [Sidechain, string];
       if (
-        new Date(sonsStatistics.last_active_timestamp).getTime() +
+        new Date(chainLastActiveTimeStamp[1]).getTime() +
           gpo.parameters.extensions.son_heartbeat_frequency * 1000 >
         utcNowMS
       ) {
@@ -94,7 +103,7 @@ export function useSonNetwork(): UseSonNetworkResult {
         };
       } else {
         if (
-          new Date(sonsStatistics.last_active_timestamp).getTime() +
+          new Date(chainLastActiveTimeStamp[1]).getTime() +
             gpo.parameters.extensions.son_down_time * 1000 >
           utcNowMS
         ) {
@@ -119,47 +128,56 @@ export function useSonNetwork(): UseSonNetworkResult {
     []
   );
 
-  const getSonNetworkStatus = useCallback(async () => {
-    const result = { status: [], isSonNetworkOk: false } as SonNetworkStatus;
-    let activeSons = 0;
-    try {
-      const gpo: GlobalProperties = await dbApi("get_global_properties");
-      if (!gpo.active_sons || gpo.active_sons.length === 0) {
+  const getSonNetworkStatus = useCallback(
+    async (chain: Sidechain) => {
+      const result = { status: [], isSonNetworkOk: false } as SonNetworkStatus;
+      let activeSons = 0;
+      try {
+        const gpo: GlobalProperties = await dbApi("get_global_properties");
+        const chainActiveSons = gpo.active_sons.find(
+          (sons) => sons[0] === chain
+        );
+        const chainActiveSonsDetails =
+          chainActiveSons !== undefined ? chainActiveSons[1] : [];
+        if (chainActiveSonsDetails.length === 0) {
+          return result;
+        }
+        const { sons, sonIds } = await getSons(chainActiveSonsDetails);
+        const sonsStatistics = await getSonsStatistics(sons);
+
+        let i = 0;
+        for (const son of sons) {
+          if (son) {
+            const sonStatisticsObject = sonsStatistics.find(
+              (sonStatistics) => sonStatistics.owner === son.id
+            ) as SonStatistics;
+            const { status, isActive } = getSonStatus(
+              chain,
+              son,
+              sonStatisticsObject,
+              gpo
+            );
+            result.status.push(status);
+            if (isActive) {
+              activeSons = activeSons + 1;
+            }
+          } else {
+            result.status.push([sonIds[i], "NOT OK, invalid SON id"]);
+          }
+          i++;
+        }
+        result.isSonNetworkOk =
+          activeSons / gpo.parameters.extensions.maximum_son_count > 2 / 3
+            ? true
+            : false;
+        return result;
+      } catch (e) {
+        console.log(e);
         return result;
       }
-      const { sons, sonIds } = await getSons(gpo);
-      const sonsStatistics = await getSonsStatistics(sons);
-
-      let i = 0;
-      for (const son of sons) {
-        if (son) {
-          const sonStatisticsObject = sonsStatistics.find(
-            (sonStatistics) => sonStatistics.owner === son.id
-          ) as SonStatistics;
-          const { status, isActive } = getSonStatus(
-            son,
-            sonStatisticsObject,
-            gpo
-          );
-          result.status.push(status);
-          if (isActive) {
-            activeSons = activeSons + 1;
-          }
-        } else {
-          result.status.push([sonIds[i], "NOT OK, invalid SON id"]);
-        }
-        i++;
-      }
-      result.isSonNetworkOk =
-        activeSons / gpo.parameters.extensions.maximum_son_count > 2 / 3
-          ? true
-          : false;
-      return result;
-    } catch (e) {
-      console.log(e);
-      return result;
-    }
-  }, [dbApi, getSons, getSonsStatistics, getSonStatus]);
+    },
+    [dbApi, getSons, getSonsStatistics, getSonStatus]
+  );
 
   useEffect(() => {
     let ignore = false;

@@ -8,7 +8,12 @@ import {
   useMembers,
 } from "../../../common/hooks";
 import { useUserContext } from "../../../common/providers";
-import { FullAccount, Proxy, Vote } from "../../../common/types";
+import {
+  FullAccount,
+  isSonAccount,
+  Member,
+  Proxy,
+} from "../../../common/types";
 
 import { UseVotingResult } from "./useVoting.types";
 
@@ -18,7 +23,7 @@ export function useVoting(): UseVotingResult {
     string[]
   >([]);
   const [loadingUserVotes, setLoadingUserVotes] = useState<boolean>(true);
-  const [allMembers, setAllMembers] = useState<Vote[]>([]);
+  const [allMembers, setAllMembers] = useState<Member[]>([]);
   const [allMembersIds, setAllMembersIds] = useState<[string, string][]>([]);
   const [loadingMembers, setLoadingMembers] = useState<boolean>(true);
   const [gposInfo, setGposInfo] = useState<GPOSInfo>({
@@ -54,7 +59,7 @@ export function useVoting(): UseVotingResult {
 
   const getAllMembers = useCallback(async () => {
     setLoadingMembers(true);
-    let allMembers: Vote[] = [];
+    let allMembers: Member[] = [];
     let allMembersIds: [string, string][] = [];
     const [
       { committees, committeesIds },
@@ -86,7 +91,16 @@ export function useVoting(): UseVotingResult {
         getGposInfo(fullAccount.account.id),
       ]);
 
-      const votesIds = fullAccount.votes.map((vote) => vote.vote_id);
+      const votesIds: string[] = [];
+      fullAccount.votes.forEach((vote) => {
+        if (isSonAccount(vote)) {
+          vote.sidechain_vote_ids.forEach((id) => {
+            votesIds.push(id[1]);
+          });
+        } else {
+          votesIds.push(vote.vote_id);
+        }
+      });
       if (gposInfo) {
         setGposInfo(gposInfo);
       }
