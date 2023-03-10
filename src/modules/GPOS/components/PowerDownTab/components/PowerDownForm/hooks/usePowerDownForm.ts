@@ -124,7 +124,7 @@ export function usePowerDownForm({
       const minusDirection =
         Number(withdrawAmount) >= 1
           ? limitByPrecision(
-              String(Number(withdrawAmount) - 1),
+              Number(withdrawAmount) - 1,
               defaultAsset?.precision
             )
           : "0";
@@ -132,7 +132,7 @@ export function usePowerDownForm({
         withdrawAmount:
           direction === "+"
             ? limitByPrecision(
-                String(Number(withdrawAmount) + 1),
+                Number(withdrawAmount) + 1,
                 defaultAsset?.precision
               )
             : minusDirection,
@@ -209,12 +209,12 @@ export function usePowerDownForm({
         ),
       });
       const newBalance = limitByPrecision(
-        String(gposBalances.openingBalance - Number(withdrawAmount)),
+        gposBalances.openingBalance - Number(withdrawAmount),
         defaultAsset?.precision
       );
 
       const newAvailableBalance = limitByPrecision(
-        String(gposBalances.availableBalance - Number(withdrawAmount)),
+        gposBalances.availableBalance - Number(withdrawAmount),
         defaultAsset?.precision
       );
 

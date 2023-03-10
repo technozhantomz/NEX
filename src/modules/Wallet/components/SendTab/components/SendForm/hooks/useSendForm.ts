@@ -22,7 +22,10 @@ import {
   useTransactionMessage,
   useTransferTransactionBuilder,
 } from "../../../../../../../common/hooks";
-import { useUserContext } from "../../../../../../../common/providers";
+import {
+  useAssetsContext,
+  useUserContext,
+} from "../../../../../../../common/providers";
 import { Account, Asset, SignerKey } from "../../../../../../../common/types";
 import { Form } from "../../../../../../../ui/src";
 
@@ -47,6 +50,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
   const { buildTrx, getTrxFee } = useTransactionBuilder();
   const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
+  const { sidechainAssets } = useAssetsContext();
 
   const [selectedBlockchain, setSelectedBlockchain] = useState<string>();
   const [toAccount, setToAccount] = useState<Account>();
@@ -65,25 +69,13 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     return userAsset ? userAsset.precision : 5;
   }, [userAsset]);
 
-  const assetsBlockchains = useMemo<{
-    [assetSymbol: string]: string[];
-  }>(() => {
-    return {
-      BTC: [defaultNetwork, BITCOIN_NETWORK],
-      HIVE: [defaultNetwork, HIVE_NETWORK],
-      HBD: [defaultNetwork, HIVE_NETWORK],
-    };
-  }, [defaultNetwork, BITCOIN_NETWORK, HIVE_NETWORK]);
-
   const selectedAssetBlockchains = useMemo(() => {
     if (assetSymbol) {
-      return assetsBlockchains[assetSymbol]
-        ? assetsBlockchains[assetSymbol]
-        : [defaultNetwork];
+      return utils.getAssetBlockchains(assetSymbol);
     } else {
       return [];
     }
-  }, [assetSymbol, assetsBlockchains, defaultNetwork]);
+  }, [assetSymbol]);
 
   const [prevAssetSymbol, setPrevAssetSymbol] = useState<string | undefined>(
     assetSymbol
@@ -493,20 +485,31 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     ],
   };
 
-  // done
   useEffect(() => {
     let ignore = false;
     async function checkSonNetwork() {
-      const sonNetworkStatus = await getSonNetworkStatus();
-      if (!ignore) {
-        setIsSonNetworkOk(sonNetworkStatus.isSonNetworkOk);
+      const isSidechainAsset =
+        sidechainAssets.find(
+          (sidechainAsset) => sidechainAsset?.symbol === assetSymbol
+        ) !== undefined;
+      const isSidechainSelected =
+        selectedBlockchain && selectedBlockchain !== defaultNetwork;
+      if (assetSymbol && isSidechainAsset && isSidechainSelected) {
+        setIsSonNetworkOk(undefined);
+        const sidechain = utils.getSidechainFromAssetSymbol(
+          assetSymbol.toUpperCase()
+        );
+        const sonNetworkStatus = await getSonNetworkStatus(sidechain);
+        if (!ignore) {
+          setIsSonNetworkOk(sonNetworkStatus.isSonNetworkOk);
+        }
       }
     }
     checkSonNetwork();
     return () => {
       ignore = true;
     };
-  }, [getSonNetworkStatus, setIsSonNetworkOk]);
+  }, [getSonNetworkStatus, setIsSonNetworkOk, assetSymbol, selectedBlockchain]);
 
   useEffect(() => {
     const transferFee = calculateTransferFee("");

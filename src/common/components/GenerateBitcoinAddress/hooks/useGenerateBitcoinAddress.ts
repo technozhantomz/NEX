@@ -13,7 +13,7 @@ import {
   useTransactionMessage,
 } from "../../../hooks";
 import { useUserContext } from "../../../providers";
-import { BitcoinAccount, SignerKey } from "../../../types";
+import { BitcoinAccount, Sidechain, SignerKey } from "../../../types";
 
 import { UseGenerateBitcoinAddressResult } from "./useGenerateBitcoinAddress.types";
 
@@ -62,7 +62,7 @@ export function useGenerateBitcoinAddress(
       });
 
       try {
-        const sonNetworkStatus = await getSonNetworkStatus();
+        const sonNetworkStatus = await getSonNetworkStatus(Sidechain.BITCOIN);
 
         if (!sonNetworkStatus.isSonNetworkOk) {
           dispatchTransactionMessage({

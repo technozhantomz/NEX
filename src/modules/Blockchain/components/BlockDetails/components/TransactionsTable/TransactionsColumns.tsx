@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { TableHeading } from "../../../../../../common/components";
+import { TransactionRow } from "../../hooks/useBlockDetails.types";
 
 import * as Styled from "./TransactionsTable.styled";
 
@@ -11,7 +12,8 @@ export const TransactionsColumns = (
   dataIndex: string;
   key: string;
   render:
-    | ((rank: number) => JSX.Element) // | ((id: string, record: TransactionRow) => JSX.Element)
+    | ((rank: number) => JSX.Element)
+    | ((id: string, record: TransactionRow) => JSX.Element)
     | ((expiration: string) => JSX.Element)
     | ((operations: unknown[]) => JSX.Element)
     | ((extensions: unknown[]) => JSX.Element)
@@ -22,6 +24,7 @@ export const TransactionsColumns = (
   onFilter: unknown | undefined;
   sorter:
     | ((a: { rank: number }, b: { rank: number }) => number)
+    | ((a: { id: string }, b: { id: string }) => number)
     | ((a: { expiration: string }, b: { expiration: string }) => number)
     | ((a: { operations: unknown[] }, b: { operations: unknown[] }) => number)
     | ((a: { refBlockPrefix: number }, b: { refBlockPrefix: number }) => number)
@@ -31,7 +34,7 @@ export const TransactionsColumns = (
 }[] => {
   const headings = [
     "rank",
-    // "id",
+    "id",
     "expiration",
     "operations",
     "ref_block_prefix",
@@ -40,7 +43,7 @@ export const TransactionsColumns = (
   ];
   const keys = [
     "rank",
-    // "id",
+    "id",
     "expiration",
     "operations",
     "refBlockPrefix",
@@ -53,14 +56,14 @@ export const TransactionsColumns = (
         {rank}
       </Link>
     ),
-    // (id: string, record: TransactionRow): JSX.Element => (
-    //   <Link target="_blank" href={`/blockchain/${block}/${record.rank}`}>
-    //     <Styled.CenterEllipsis>
-    //       <span className="ellipsis">{id}</span>
-    //       <span className="indent">{id}</span>
-    //     </Styled.CenterEllipsis>
-    //   </Link>
-    // ),
+    (id: string, record: TransactionRow): JSX.Element => (
+      <Link target="_blank" href={`/blockchain/${block}/${record.rank}`}>
+        <Styled.CenterEllipsis>
+          <span className="ellipsis">{id}</span>
+          <span className="indent">{id}</span>
+        </Styled.CenterEllipsis>
+      </Link>
+    ),
     (expiration: string): JSX.Element => (
       <Styled.TimeStamp>{expiration}</Styled.TimeStamp>
     ),
@@ -71,7 +74,7 @@ export const TransactionsColumns = (
   ];
   const filters = [
     undefined,
-    // undefined,
+    undefined,
     undefined,
     undefined,
     undefined,
@@ -80,7 +83,7 @@ export const TransactionsColumns = (
   ];
   const filterModes = [
     undefined,
-    // undefined,
+    undefined,
     undefined,
     undefined,
     undefined,
@@ -89,7 +92,7 @@ export const TransactionsColumns = (
   ];
   const filterSearch = [
     undefined,
-    // undefined,
+    undefined,
     undefined,
     undefined,
     undefined,
@@ -98,7 +101,7 @@ export const TransactionsColumns = (
   ];
   const onFilters = [
     undefined,
-    // undefined,
+    undefined,
     undefined,
     undefined,
     undefined,
@@ -107,7 +110,7 @@ export const TransactionsColumns = (
   ];
   const sorters = [
     (a: { rank: number }, b: { rank: number }) => a.rank - b.rank,
-    // undefined,
+    (a: { id: string }, b: { id: string }) => a.id.localeCompare(b.id),
     (a: { expiration: string }, b: { expiration: string }) =>
       new Date(a.expiration).getTime() - new Date(b.expiration).getTime(),
     (a: { operations: unknown[] }, b: { operations: unknown[] }) =>

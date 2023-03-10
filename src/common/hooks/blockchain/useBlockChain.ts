@@ -5,6 +5,7 @@ import { usePeerplaysApiContext } from "../../providers";
 import {
   Account,
   Block,
+  Block2,
   BlockData,
   BlockHeader,
   Dynamic,
@@ -115,6 +116,27 @@ export function useBlockchain(): UseBlockchainResult {
     [dbApi]
   );
 
+  const getBlock2 = useCallback(
+    async (value: number) => {
+      try {
+        const block: Block2 = await dbApi("get_block2", [value]);
+        if (block) {
+          const witness: WitnessAccount = (
+            await dbApi("get_objects", [[block.witness]])
+          )[0];
+          const witnessAccount: Account = (
+            await dbApi("get_accounts", [[witness.witness_account]])
+          )[0];
+          block.witness_account_name = witnessAccount.name;
+          return block;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
+  );
+
   const getBlocks = useCallback(
     async (first: number, last: number, limit: number) => {
       try {
@@ -186,6 +208,7 @@ export function useBlockchain(): UseBlockchainResult {
     getRecentBlocks,
     getAvgBlockTime,
     getBlock,
+    getBlock2,
     getBlocks,
     getBlockHeader,
     getGlobalProperties,

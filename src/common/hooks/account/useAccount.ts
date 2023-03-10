@@ -7,9 +7,9 @@ import { usePeerplaysApiContext, useUserContext } from "../../providers";
 import {
   Account,
   Asset,
+  Authority,
   FullAccount,
   KeyType,
-  Permissions,
   WhaleVaultPubKeys,
   WitnessAccount,
 } from "../../types";
@@ -176,7 +176,7 @@ export function useAccount(): UseAccountResult {
         const pubKey = privKey.toPublicKey().toString(defaultToken);
         let userKeys: string[] = [];
         if (role !== "memo") {
-          const permission = account[role as keyof Account] as Permissions;
+          const permission = account[role as keyof Account] as Authority;
           userKeys = permission.key_auths.map((key_auth) => key_auth[0]);
         } else {
           userKeys = [account.options.memo_key];

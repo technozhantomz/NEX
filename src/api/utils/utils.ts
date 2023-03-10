@@ -1,7 +1,14 @@
 import counterpart from "counterpart";
 import { ClipboardEvent, KeyboardEvent } from "react";
 
-import { BITCOIN_NETWORK, defaultNetwork, HIVE_NETWORK } from "../params";
+import { Sidechain } from "../../common/types";
+import {
+  assetsBlockchains,
+  BITCOIN_NETWORK,
+  defaultNetwork,
+  ETHEREUM_NETWORK,
+  HIVE_NETWORK,
+} from "../params";
 
 const id_regex = /\b\d+\.\d+\.(\d+)\b/;
 
@@ -62,7 +69,7 @@ export const utils = {
       e.preventDefault();
     }
   },
-  getBlockchainFromSymbol: (symbol: string): string => {
+  getNativeBlockchainFromAssetSymbol: (symbol: string): string => {
     const blockchains: Record<string, string> = {
       BTC: BITCOIN_NETWORK,
       PBTC: defaultNetwork,
@@ -70,10 +77,10 @@ export const utils = {
       HBD: HIVE_NETWORK,
       PEOS: "EOSIO",
       EOS: "EOSIO",
-      PETH: "Ethereum",
-      ETH: "Ethereum",
-      TEST: "PeerPlays",
-      PPY: "PeerPlays",
+      PETH: ETHEREUM_NETWORK,
+      ETH: ETHEREUM_NETWORK,
+      TEST: defaultNetwork,
+      PPY: defaultNetwork,
     };
     return blockchains[symbol.toUpperCase()] || symbol;
   },
@@ -261,5 +268,19 @@ export const utils = {
       : trimedUrl2;
 
     return trimedUrl1 === trimedUrl2;
+  },
+  getSidechainFromAssetSymbol: (symbol: string): Sidechain => {
+    const blockchains: Record<string, Sidechain> = {
+      BTC: Sidechain.BITCOIN,
+      HIVE: Sidechain.HIVE,
+      HBD: Sidechain.HIVE,
+      ETH: Sidechain.ETHEREUM,
+    };
+    return blockchains[symbol.toUpperCase()];
+  },
+  getAssetBlockchains: (symbol: string): string[] => {
+    return assetsBlockchains[symbol]
+      ? assetsBlockchains[symbol]
+      : [defaultNetwork];
   },
 };

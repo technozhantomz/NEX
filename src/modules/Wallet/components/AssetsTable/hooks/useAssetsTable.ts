@@ -24,7 +24,7 @@ export function useAssetsTable({
   const [loading, setLoading] = useState<boolean>(true);
   const { assets, localStorageAccount } = useUserContext();
   const { getFullAccount } = useAccount();
-  const { setPrecision, roundNum } = useAsset();
+  const { setPrecision, limitByPrecision } = useAsset();
 
   const formAssetRow = useCallback(
     (asset: Asset): AssetTableRow => {
@@ -44,9 +44,9 @@ export function useAssetsTable({
       return {
         key: asset.id,
         symbol: asset.symbol,
-        name: utils.getBlockchainFromSymbol(asset.symbol),
+        name: utils.getNativeBlockchainFromAssetSymbol(asset.symbol),
         available: available,
-        inOrders: roundNum(inOrders, asset.precision),
+        inOrders: limitByPrecision(inOrders, asset.precision),
       };
     },
     [fullAccount, setPrecision]
