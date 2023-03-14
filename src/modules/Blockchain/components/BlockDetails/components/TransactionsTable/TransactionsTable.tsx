@@ -96,7 +96,7 @@ export const TransactionsTable = ({
     (record: TransactionRow) => {
       return {
         onClick: () => {
-          router.push(`/blockchain/${block}/${record.rank}`);
+          router.push(`/blockchain/${block}/${record.id}`);
         },
       };
     },
