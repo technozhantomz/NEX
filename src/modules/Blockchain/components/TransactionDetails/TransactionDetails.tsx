@@ -23,17 +23,20 @@ export const TransactionDetails = ({
     hasNextTransition,
     hasPreviousTransition,
     loading,
-  } = useTransactionDetails(block, parseInt(transaction));
+    transactionIndexFromBlock,
+    nextTransactionId,
+    previousTransactionId,
+  } = useTransactionDetails(block, transaction);
 
   const renderPreviousTransaction = hasPreviousTransition ? (
-    <Link href={`/blockchain/${Number(block)}/${Number(transaction) - 1}`}>
+    <Link href={`/blockchain/${Number(block)}/${previousTransactionId}`}>
       <LeftOutlined />
     </Link>
   ) : (
     ""
   );
   const renderNextTransaction = hasNextTransition ? (
-    <Link href={`/blockchain/${Number(block)}/${Number(transaction) + 1}`}>
+    <Link href={`/blockchain/${Number(block)}/${nextTransactionId}`}>
       <RightOutlined />
     </Link>
   ) : (
@@ -56,7 +59,7 @@ export const TransactionDetails = ({
                   {counterpart.translate(
                     `pages.blocks.transaction_details.transaction`
                   )}{" "}
-                  {transaction} of {blockTransactions.length}
+                  {transactionIndexFromBlock + 1} of {blockTransactions.length}
                 </span>
               </Styled.BlockNumber>
               <Styled.BlockNumber>

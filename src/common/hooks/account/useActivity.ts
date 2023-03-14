@@ -395,6 +395,11 @@ export function useActivity(): UseActivityResult {
       const blockHeader: BlockHeader = await dbApi("get_block_header", [
         activity.block_num,
       ]);
+      const rawBlock = await dbApi("get_block2", [activity.block_num]);
+      const block_num = activity.block_num;
+      const transaction_id = rawBlock
+        ? rawBlock.transaction_ids[activity.trx_in_block]
+        : 0;
       const time = blockHeader.timestamp;
       const feeAsset = await getAssetById(fee.asset_id);
       const operationsNames = Object.keys(ChainTypes.operations);
@@ -411,6 +416,8 @@ export function useActivity(): UseActivityResult {
         type: operationType,
         info: activityDescription,
         id: activity.id,
+        block_num: block_num,
+        trx_in_block: transaction_id,
         fee: `${setPrecision(false, fee.amount, feeAsset?.precision)} ${
           feeAsset?.symbol
         }`,

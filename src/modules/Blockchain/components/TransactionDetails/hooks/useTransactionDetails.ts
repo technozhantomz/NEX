@@ -1,18 +1,28 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useBlockchain } from "../../../../../common/hooks";
+import { Block2 } from "../../../../../common/types";
 import { TransactionRow } from "../../BlockDetails/hooks";
 
 import { UseTransactionDetails } from "./useTransactionDetails.types";
 
 export function useTransactionDetails(
   block: number,
-  transactionNum?: number
+  transactionId?: string
 ): UseTransactionDetails {
   const [loading, setLoading] = useState<boolean>(true);
   const [hasNextTransition, setHasNextTransition] = useState<boolean>(false);
+  const [rawBlock, setRawBlock] = useState<Block2>();
+  const [transactionIndexFromBlock, setTransactionIndexFromBlock] =
+    useState<number>(0);
   const [hasPreviousTransition, setHasPreviousTransition] =
     useState<boolean>(false);
+  const [nextTransactionId, setNextTransactionId] = useState<
+    string | undefined
+  >();
+  const [previousTransactionId, setPreviousTransactionId] = useState<
+    string | undefined
+  >();
   const [loadingSideTransactions, setLoadingSideTransactions] =
     useState<boolean>(true);
   const [blockTransactions, setBlockTransactions] = useState<TransactionRow[]>(
@@ -32,19 +42,19 @@ export function useTransactionDetails(
   });
   const { getBlock2 } = useBlockchain();
 
-  const getTransactionDetails = useCallback(async () => {
+  //in the state we need the rawblock data and the transaction index
+  const setTransactionState = useCallback(async () => {
     try {
       setLoading(true);
-      if (transactionNum !== undefined) {
-        const transactionNumAsIndex = transactionNum - 1;
-        const rawBlock = await getBlock2(Number(block));
-        if (rawBlock) {
-          const transactions: TransactionRow[] = rawBlock.transactions.map(
+      if (transactionId !== undefined) {
+        const blockData = await getBlock2(Number(block));
+        if (blockData) {
+          const transactions: TransactionRow[] = blockData.transactions.map(
             (transaction, index) => {
               return {
                 key: index + 1,
                 rank: index + 1,
-                id: rawBlock.transaction_ids[index],
+                id: blockData.transaction_ids[index],
                 expiration: transaction.expiration,
                 operations: transaction.operations,
                 operationResults: transaction.operation_results,
@@ -56,7 +66,11 @@ export function useTransactionDetails(
             }
           );
           setBlockTransactions(transactions);
-          setTransactionDetails(transactions[transactionNumAsIndex]);
+          setTransactionDetails(transactions[transactionIndexFromBlock]);
+          setRawBlock(blockData);
+          setTransactionIndexFromBlock(
+            blockData.transaction_ids.indexOf(transactionId)
+          );
         }
         setLoading(false);
       } else {
@@ -69,28 +83,40 @@ export function useTransactionDetails(
   }, [
     getBlock2,
     block,
-    transactionNum,
-    setBlockTransactions,
-    setTransactionDetails,
+    transactionId,
+    setRawBlock,
+    setTransactionIndexFromBlock,
     setLoading,
   ]);
 
-  const getSideTransactions = useCallback(async () => {
+  const buildBlockPagination = useCallback(async () => {
     try {
-      if (transactionNum !== undefined) {
+      if (
+        transactionId !== undefined &&
+        transactionIndexFromBlock !== undefined &&
+        rawBlock !== undefined
+      ) {
         setLoadingSideTransactions(true);
-        const transactionNumAsIndex = transactionNum - 1;
-        const nextTransaction = blockTransactions[transactionNumAsIndex + 1];
+        const nextTransaction =
+          blockTransactions[transactionIndexFromBlock + 1];
         if (nextTransaction) {
+          setNextTransactionId(
+            rawBlock?.transaction_ids[transactionIndexFromBlock + 1]
+          );
           setHasNextTransition(true);
         } else {
+          setNextTransactionId(undefined);
           setHasNextTransition(false);
         }
         const previousTransaction =
-          blockTransactions[transactionNumAsIndex - 1];
+          blockTransactions[transactionIndexFromBlock - 1];
         if (previousTransaction) {
+          setPreviousTransactionId(
+            rawBlock?.transaction_ids[transactionIndexFromBlock - 1]
+          );
           setHasPreviousTransition(true);
         } else {
+          setPreviousTransactionId(undefined);
           setHasPreviousTransition(false);
         }
         setLoadingSideTransactions(false);
@@ -104,22 +130,23 @@ export function useTransactionDetails(
       setLoadingSideTransactions(false);
     }
   }, [
+    rawBlock,
+    transactionIndexFromBlock,
     transactionDetails,
-    transactionNum,
+    transactionId,
     blockTransactions,
-    getTransactionDetails,
     setHasNextTransition,
     setHasPreviousTransition,
     setLoadingSideTransactions,
   ]);
 
   useEffect(() => {
-    getTransactionDetails();
-  }, [getTransactionDetails]);
+    setTransactionState();
+  }, [setTransactionState]);
 
   useEffect(() => {
-    getSideTransactions();
-  }, [getSideTransactions]);
+    buildBlockPagination();
+  }, [buildBlockPagination]);
 
   return {
     loading,
@@ -128,5 +155,8 @@ export function useTransactionDetails(
     hasNextTransition,
     hasPreviousTransition,
     loadingSideTransactions,
+    transactionIndexFromBlock,
+    nextTransactionId,
+    previousTransactionId,
   };
 }
