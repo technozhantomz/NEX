@@ -10,6 +10,7 @@ import {
   Authority,
   FullAccount,
   KeyType,
+  VestingBalance,
   WhaleVaultPubKeys,
   WitnessAccount,
 } from "../../types";
@@ -335,6 +336,21 @@ export function useAccount(): UseAccountResult {
     [whaleVaultInstance, validateWhaleVaultPubKeys]
   );
 
+  const getVestingBalances = useCallback(
+    async (accountNameOrId: string) => {
+      try {
+        const vestingBalances: VestingBalance[] = await dbApi(
+          "get_vesting_balances",
+          [accountNameOrId]
+        );
+        return vestingBalances;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
+  );
+
   return {
     formAccountByName,
     formAccountBalancesByName,
@@ -349,5 +365,6 @@ export function useAccount(): UseAccountResult {
     _validateUseWhaleVault,
     getAccounts,
     getUserNamesByIds,
+    getVestingBalances,
   };
 }

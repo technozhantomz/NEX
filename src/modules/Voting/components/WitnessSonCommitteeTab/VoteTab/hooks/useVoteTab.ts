@@ -1,5 +1,5 @@
 import counterpart from "counterpart";
-import { cloneDeep, sum } from "lodash";
+import { cloneDeep, sum, uniq } from "lodash";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
@@ -26,12 +26,10 @@ import {
   useUserContext,
 } from "../../../../../../common/providers";
 import {
-  AccountOptions,
   Asset,
   CommitteeMember,
   FullAccount,
   GlobalProperties,
-  isSonAccount,
   Member,
   MemberType,
   Sidechain,
@@ -82,12 +80,7 @@ export function useVoteTab({
     useUpdateAccountTransactionBuilder();
   const { getTrxFee, buildTrx } = useTransactionBuilder();
   const { getGlobalProperties } = useBlockchain();
-  const {
-    getActiveSons,
-    getSonAccountVotes,
-    getSonAccountsVotesIds,
-    getSonAccountVoteId,
-  } = useSons();
+  const { getActiveSons, getSonAccountVotes, getSonAccountVoteId } = useSons();
 
   const sortVotesRows = useCallback((votes: VoteRow[]) => {
     const sorter = (a: VoteRow, b: VoteRow) =>
@@ -103,8 +96,7 @@ export function useVoteTab({
       member: WitnessAccount | CommitteeMember,
       allMemberIds: [string, string][],
       defaultAsset: Asset,
-      globalProperties: GlobalProperties,
-      userVotes?: Member[]
+      globalProperties: GlobalProperties
     ): VoteRow => {
       let voteType: MemberType;
       let voteActive: boolean;
@@ -142,12 +134,12 @@ export function useVoteTab({
         missedBlocks: missedBlocks,
         possibleAction: undefined,
         active: voteActive,
-        status: userVotes?.some((vote) => vote.id === member.id)
+        status: tabServerApprovedVotesIds.some((id) => id === member.vote_id)
           ? VoteStatus.APPROVED
           : VoteStatus.UNAPPROVED,
       } as VoteRow;
     },
-    [formAssetBalance]
+    [formAssetBalance, tabServerApprovedVotesIds]
   );
 
   const formSonVoteRow = useCallback(
@@ -155,15 +147,8 @@ export function useVoteTab({
       member: SonAccount,
       allMemberIds: [string, string][],
       defaultAsset: Asset,
-      globalProperties: GlobalProperties,
-      userSonsVotes: SonAccount[]
+      globalProperties: GlobalProperties
     ): VoteRow => {
-      const {
-        bitcoinVotesIds: userBitcoinVotesIds,
-        hiveVotesIds: userHiveVotesIds,
-        ethereumVotesIds: userEthereumVotesIds,
-      } = getSonAccountsVotesIds(userSonsVotes);
-
       // Maybe some chains are missing for the member
       const { bitcoinVoteId, ethereumVoteId, hiveVoteId } =
         getSonAccountVoteId(member);
@@ -172,17 +157,19 @@ export function useVoteTab({
       const memberHasHiveChain = hiveVoteId !== undefined;
 
       // Statuses
-      const bitcoinStatus = userBitcoinVotesIds.some(
+      const bitcoinStatus = tabServerApprovedVotesIds.some(
         (id) => id === bitcoinVoteId
       )
         ? VoteStatus.APPROVED
         : VoteStatus.UNAPPROVED;
-      const ethereumStatus = userEthereumVotesIds.some(
+      const ethereumStatus = tabServerApprovedVotesIds.some(
         (id) => id === ethereumVoteId
       )
         ? VoteStatus.APPROVED
         : VoteStatus.UNAPPROVED;
-      const hiveStatus = userHiveVotesIds.some((id) => id === hiveVoteId)
+      const hiveStatus = tabServerApprovedVotesIds.some(
+        (id) => id === hiveVoteId
+      )
         ? VoteStatus.APPROVED
         : VoteStatus.UNAPPROVED;
       const statuses = {
@@ -264,11 +251,11 @@ export function useVoteTab({
       } as VoteRow;
     },
     [
-      getSonAccountsVotesIds,
       getActiveSons,
       getSonAccountVotes,
       getSonAccountVoteId,
       formAssetBalance,
+      tabServerApprovedVotesIds,
     ]
   );
 
@@ -279,27 +266,13 @@ export function useVoteTab({
       globalProperties !== undefined
     ) {
       if (tab === "sons") {
-        const _userSonsVotes = fullAccount
-          ? fullAccount.votes.map((vote) => {
-              if (isSonAccount(vote)) {
-                return vote;
-              } else {
-                return undefined;
-              }
-            })
-          : [];
-        const userSonsVotes = _userSonsVotes.filter(
-          (vote) => vote !== undefined
-        ) as SonAccount[];
-
         return sortVotesRows(
           tabAllMembers.map((member) => {
             return formSonVoteRow(
               member as SonAccount,
               allMembersIds,
               defaultAsset,
-              globalProperties,
-              userSonsVotes
+              globalProperties
             );
           })
         );
@@ -310,8 +283,7 @@ export function useVoteTab({
               member as WitnessAccount | CommitteeMember,
               allMembersIds,
               defaultAsset,
-              globalProperties,
-              fullAccount?.votes
+              globalProperties
             );
           })
         );
@@ -375,15 +347,7 @@ export function useVoteTab({
           : membersIdentifiers["witnesses"];
 
       if (fullAccount !== undefined && id) {
-        const new_options = {
-          extensions: cloneDeep(fullAccount.account.options.extensions),
-          memo_key: fullAccount.account.options.memo_key,
-          num_committee: fullAccount.account.options.num_committee,
-          num_witness: fullAccount.account.options.num_witness,
-          num_son: fullAccount.account.options.num_son,
-          votes: cloneDeep(fullAccount.account.options.votes),
-          voting_account: fullAccount.account.options.voting_account,
-        } as AccountOptions;
+        const new_options = cloneDeep(fullAccount.account.options);
 
         // Other tabs approved votes
         const allTabsServerApprovedVotesIds = fullAccount.account.options.votes;
@@ -543,10 +507,10 @@ export function useVoteTab({
         const votesIds = Object.values(sonRow.sidechainVotesIds).filter(
           (voteId) => voteId !== undefined
         );
-        const newLocalApprovedVotesIds = [
+        const newLocalApprovedVotesIds = uniq([
           ...localApprovedVotesIds,
           ...votesIds,
-        ];
+        ]);
         setLocalApprovedVotesIds(newLocalApprovedVotesIds);
         const votesChanged = checkVotesChanged(
           tabServerApprovedVotesIds,

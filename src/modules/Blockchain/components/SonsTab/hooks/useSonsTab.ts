@@ -36,26 +36,24 @@ export function useSonsTab(): UseSonsTabResult {
   const { setPrecision } = useAsset();
   const { getSonAccountVotes } = useSons();
   const { defaultAsset } = useAssetsContext();
-  const { getChain, getBlockData } = useBlockchain();
+  const { getGlobalProperties, getDynamicGlobalProperties } = useBlockchain();
   const { formLocalDate } = useFormDate();
 
   const getSonsData = useCallback(async () => {
     if (defaultAsset) {
-      const [chain, blockData] = await Promise.all([
-        getChain(),
-        getBlockData(),
+      const [gpo, dgpo] = await Promise.all([
+        getGlobalProperties(),
+        getDynamicGlobalProperties(),
       ]);
-      if (chain && blockData) {
+      if (gpo && dgpo) {
         const { sons, sonsIds } = await getSons();
         const budgetAmount = setPrecision(
           false,
-          blockData.son_budget,
+          dgpo.son_budget,
           defaultAsset.precision
         );
         const now = new Date().getTime();
-        const nextVoteTime = new Date(
-          blockData.next_maintenance_time
-        ).getTime();
+        const nextVoteTime = new Date(dgpo.next_maintenance_time).getTime();
         const nextVoteDistance = now - nextVoteTime;
         sons.sort(
           (a, b) =>
@@ -117,7 +115,7 @@ export function useSonsTab(): UseSonsTabResult {
           activeHiveSons: activeHiveSons.length,
           activeEthereumSons: activeEthereumSons.length,
           budget: budgetAmount,
-          nextVote: formLocalDate(blockData.next_maintenance_time, [
+          nextVote: formLocalDate(dgpo.next_maintenance_time, [
             "month",
             "date",
             "time",
@@ -150,8 +148,8 @@ export function useSonsTab(): UseSonsTabResult {
     }
   }, [
     defaultAsset,
-    getChain,
-    getBlockData,
+    getGlobalProperties,
+    getDynamicGlobalProperties,
     getSons,
     setPrecision,
     getSonAccountVotes,

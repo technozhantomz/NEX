@@ -1,16 +1,17 @@
 import {
+  AssetDynamicData,
   Block,
   Block2,
-  BlockData,
   BlockHeader,
-  Dynamic,
+  DynamicGlobalProperties,
   GlobalProperties,
 } from "../../types";
 
 export type UseBlockchainResult = {
-  getChain: () => Promise<GlobalProperties | undefined>;
-  getBlockData: () => Promise<BlockData | undefined>;
-  getDynamic: () => Promise<Dynamic | undefined>;
+  getDynamicGlobalProperties: () => Promise<
+    DynamicGlobalProperties | undefined
+  >;
+  getAssetDynamicData: () => Promise<AssetDynamicData | undefined>;
   getRecentBlocks: () => Block[];
   getAvgBlockTime: () => number;
   getBlock: (value: number) => Promise<Block | undefined>;

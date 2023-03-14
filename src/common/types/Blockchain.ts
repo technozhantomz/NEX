@@ -30,7 +30,7 @@ export type Block2 = {
   witness_signature: string;
 };
 
-export type BlockData = {
+export type DynamicGlobalProperties = {
   accounts_registered_this_interval: number;
   current_aslot: number;
   current_witness: string;
@@ -49,7 +49,7 @@ export type BlockData = {
   witness_budget: number;
 };
 
-export type Dynamic = {
+export type AssetDynamicData = {
   accumulated_fees: number;
   confidential_supply: number;
   current_supply: string;

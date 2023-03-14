@@ -9,7 +9,6 @@ import {
   useMembers,
 } from "../../../../../common/hooks";
 import { useAssetsContext } from "../../../../../common/providers";
-import { BlockData, GlobalProperties } from "../../../../../common/types";
 
 import {
   UseWitnessesTabResult,
@@ -42,7 +41,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const { updateArrayWithLimit } = useArrayLimiter();
   const { formAssetBalance, setPrecision } = useAsset();
   const { defaultAsset } = useAssetsContext();
-  const { getChain, getAvgBlockTime, getBlockData, getGlobalProperties } =
+  const { getAvgBlockTime, getDynamicGlobalProperties, getGlobalProperties } =
     useBlockchain();
   const { formLocalDate } = useFormDate();
 
@@ -54,35 +53,26 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   const getWitnessData = useCallback(async () => {
     if (defaultAsset) {
       try {
-        const [gpo, chain, blockData]: [
-          GlobalProperties | undefined,
-          GlobalProperties | undefined,
-          BlockData | undefined
-        ] = await Promise.all([
+        const [gpo, dgpo] = await Promise.all([
           getGlobalProperties(),
-          getChain(),
-          getBlockData(),
+          getDynamicGlobalProperties(),
         ]);
-        if (gpo && chain && blockData) {
+        if (gpo && dgpo) {
           const rewardAmount = setPrecision(
             false,
-            chain.parameters.witness_pay_per_block,
+            gpo.parameters.witness_pay_per_block,
             defaultAsset.precision
           );
           const budgetAmount = setPrecision(
             false,
-            blockData.witness_budget,
+            dgpo.witness_budget,
             defaultAsset.precision
           );
           const { witnesses, witnessesIds } = await getWitnesses();
           const now = new Date().getTime();
-          const nextVoteTime = new Date(
-            blockData.next_maintenance_time
-          ).getTime();
+          const nextVoteTime = new Date(dgpo.next_maintenance_time).getTime();
           const nextVoteDistance = now - nextVoteTime;
-          const currentWitness = await getUserNameById(
-            blockData.current_witness
-          );
+          const currentWitness = await getUserNameById(dgpo.current_witness);
           if (witnesses && witnesses.length > 0) {
             witnesses.sort((a, b) => b.total_votes - a.total_votes);
             const witnessesRows: WitnessTableRow[] = [];
@@ -127,7 +117,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
               reward: rewardAmount,
               earnings: Number(earnings),
               budget: budgetAmount,
-              nextVote: formLocalDate(blockData.next_maintenance_time, [
+              nextVote: formLocalDate(dgpo.next_maintenance_time, [
                 "month",
                 "date",
                 "time",
@@ -170,8 +160,7 @@ export function useWitnessesTab(): UseWitnessesTabResult {
   }, [
     defaultAsset,
     getGlobalProperties,
-    getChain,
-    getBlockData,
+    getDynamicGlobalProperties,
     setPrecision,
     getWitnesses,
     getUserNameById,

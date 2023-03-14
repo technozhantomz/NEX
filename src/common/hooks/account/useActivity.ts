@@ -2,21 +2,14 @@ import counterpart from "counterpart";
 import { ChainTypes } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
-import { useAccountHistory, useAsset } from "..";
+import { useAccountHistory, useAsset, useBlockchain } from "..";
 import { defaultToken } from "../../../api/params";
 import {
   useAssetsContext,
   usePeerplaysApiContext,
   useUserContext,
 } from "../../providers";
-import {
-  ActivityRow,
-  Amount,
-  Asset,
-  BlockHeader,
-  Fee,
-  History,
-} from "../../types";
+import { ActivityRow, Amount, Asset, Fee, History } from "../../types";
 
 import { useAccount } from "./useAccount";
 import { UseActivityResult } from "./useActivity.types";
@@ -28,6 +21,7 @@ export function useActivity(): UseActivityResult {
   const { dbApi } = usePeerplaysApiContext();
   const { getAccountHistoryById } = useAccountHistory();
   const { id } = useUserContext();
+  const { getBlockHeader } = useBlockchain();
 
   const formActivityDescription: {
     [activityType: string]: (operation: any, result?: any) => Promise<string>;
@@ -392,15 +386,13 @@ export function useActivity(): UseActivityResult {
   const formActivityRow = useCallback(
     async (activity: History): Promise<ActivityRow> => {
       const fee = activity.op[1].fee as Fee;
-      const blockHeader: BlockHeader = await dbApi("get_block_header", [
-        activity.block_num,
-      ]);
+      const blockHeader = await getBlockHeader(activity.block_num);
       const rawBlock = await dbApi("get_block2", [activity.block_num]);
       const block_num = activity.block_num;
       const transaction_id = rawBlock
         ? rawBlock.transaction_ids[activity.trx_in_block]
         : 0;
-      const time = blockHeader.timestamp;
+      const time = blockHeader ? blockHeader.timestamp : "";
       const feeAsset = await getAssetById(fee.asset_id);
       const operationsNames = Object.keys(ChainTypes.operations);
       const operationType = operationsNames[activity.op[0]].toLowerCase();
@@ -423,7 +415,7 @@ export function useActivity(): UseActivityResult {
         }`,
       } as ActivityRow;
     },
-    [dbApi, defaultAsset, getAssetById, formActivityDescription]
+    [getBlockHeader, defaultAsset, getAssetById, formActivityDescription]
   );
 
   const getActivitiesRows = useCallback(
