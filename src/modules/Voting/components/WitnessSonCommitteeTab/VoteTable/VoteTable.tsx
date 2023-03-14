@@ -385,7 +385,7 @@ export const VoteTable = ({
               <div className="item-info">
                 <span className="item-info-title">{ETHEREUM_NETWORK}</span>
                 <span className="item-info-value">
-                  {item.status === "approved" ? (
+                  {item.statuses?.ethereum === VoteStatus.APPROVED ? (
                     <>
                       <Styled.Check></Styled.Check>
                       <Styled.ApprovedStatus>

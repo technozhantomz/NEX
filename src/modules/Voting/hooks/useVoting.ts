@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 
 import { DEFAULT_PROXY_ID } from "../../../api/params";
@@ -8,12 +9,7 @@ import {
   useMembers,
 } from "../../../common/hooks";
 import { useUserContext } from "../../../common/providers";
-import {
-  FullAccount,
-  isSonAccount,
-  Member,
-  Proxy,
-} from "../../../common/types";
+import { FullAccount, Member, Proxy } from "../../../common/types";
 
 import { UseVotingResult } from "./useVoting.types";
 
@@ -91,16 +87,7 @@ export function useVoting(): UseVotingResult {
         getGposInfo(fullAccount.account.id),
       ]);
 
-      const votesIds: string[] = [];
-      fullAccount.votes.forEach((vote) => {
-        if (isSonAccount(vote)) {
-          vote.sidechain_vote_ids.forEach((id) => {
-            votesIds.push(id[1]);
-          });
-        } else {
-          votesIds.push(vote.vote_id);
-        }
-      });
+      const votesIds = cloneDeep(fullAccount.account.options.votes);
       if (gposInfo) {
         setGposInfo(gposInfo);
       }
