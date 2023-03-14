@@ -27,7 +27,7 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
   const [loadingSideBlocks, setLoadingSideBlocks] = useState<boolean>(true);
 
   const { formLocalDate } = useFormDate();
-  const { getBlock2, getBlockData } = useBlockchain();
+  const { getBlock2, getDynamicGlobalProperties } = useBlockchain();
 
   const getBlockDetails = useCallback(async () => {
     try {
@@ -84,11 +84,11 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
     let hasPreviousBlock = false;
     let hasNextBlock = false;
     try {
-      const blockData = await getBlockData();
+      const dgpo = await getDynamicGlobalProperties();
       if (block > 1) {
         hasPreviousBlock = true;
       }
-      if (blockData && block < blockData.head_block_number) {
+      if (dgpo && block < dgpo.head_block_number) {
         hasNextBlock = true;
       }
     } catch (e) {
@@ -98,7 +98,7 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
       hasPreviousBlock,
       hasNextBlock,
     };
-  }, [getBlockData, block]);
+  }, [getDynamicGlobalProperties, block]);
 
   useEffect(() => {
     let ignore = false;

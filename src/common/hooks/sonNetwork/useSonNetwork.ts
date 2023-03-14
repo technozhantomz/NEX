@@ -10,23 +10,26 @@ import {
   SonAccount,
   SonStatistics,
 } from "../../types";
+import { useAccount } from "../account";
+import { useBlockchain } from "../blockchain";
 
 import { SonNetworkStatus, UseSonNetworkResult } from "./useSonNetwork.types";
 
 export function useSonNetwork(): UseSonNetworkResult {
   const [sonAccount, _setSonAccount] = useState<Account>();
   const { dbApi } = usePeerplaysApiContext();
+  const { getGlobalProperties } = useBlockchain();
+  const { getAccounts } = useAccount();
 
   const getSonAccount = useCallback(async () => {
-    try {
-      const gpo: GlobalProperties = await dbApi("get_global_properties");
+    const gpo = await getGlobalProperties();
+    if (gpo) {
       const son_id = gpo.parameters.extensions.son_account;
-      const son_account: Account = (await dbApi("get_accounts", [[son_id]]))[0];
+      const accounts = await getAccounts([son_id]);
+      const son_account = accounts ? accounts[0] : undefined;
       return son_account;
-    } catch (e) {
-      console.log(e);
     }
-  }, [dbApi]);
+  }, [getGlobalProperties, getAccounts]);
 
   const getSons = useCallback(
     async (
@@ -133,7 +136,10 @@ export function useSonNetwork(): UseSonNetworkResult {
       const result = { status: [], isSonNetworkOk: false } as SonNetworkStatus;
       let activeSons = 0;
       try {
-        const gpo: GlobalProperties = await dbApi("get_global_properties");
+        const gpo = await getGlobalProperties();
+        if (!gpo) {
+          return result;
+        }
         const chainActiveSons = gpo.active_sons.find(
           (sons) => sons[0] === chain
         );
@@ -176,7 +182,7 @@ export function useSonNetwork(): UseSonNetworkResult {
         return result;
       }
     },
-    [dbApi, getSons, getSonsStatistics, getSonStatus]
+    [getGlobalProperties, getSons, getSonsStatistics, getSonStatus]
   );
 
   useEffect(() => {
