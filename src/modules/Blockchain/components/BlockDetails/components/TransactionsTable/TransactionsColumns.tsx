@@ -51,13 +51,9 @@ export const TransactionsColumns = (
     "extensions",
   ];
   const renders = [
-    (rank: number): JSX.Element => (
-      <Link target="_blank" href={`/blockchain/${block}/${rank}`}>
-        {rank}
-      </Link>
-    ),
+    (rank: number): JSX.Element => <span>{rank}</span>,
     (id: string, record: TransactionRow): JSX.Element => (
-      <Link target="_blank" href={`/blockchain/${block}/${record.rank}`}>
+      <Link href={`/blockchain/${block}/${record.id}`}>
         <Styled.CenterEllipsis>
           <span className="ellipsis">{id}</span>
           <span className="indent">{id}</span>
