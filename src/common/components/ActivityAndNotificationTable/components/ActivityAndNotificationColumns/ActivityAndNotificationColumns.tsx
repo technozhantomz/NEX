@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import Link from "next/link";
 
 import { ActivityRow } from "../../../../types";
 import { TableHeading } from "../../../TableHeading";
@@ -13,6 +14,7 @@ export type ActivityAndNotificationType = {
   render:
     | ((value: string) => JSX.Element)
     | ((status: boolean, record: ActivityRow) => JSX.Element)
+    | ((value: string, record: ActivityRow) => JSX.Element)
     | undefined;
   filters:
     | {
@@ -82,6 +84,11 @@ export const ActivityAndNotificationColumns = (
         ),
         (value: string): JSX.Element => (
           <UserLinkExtractor infoString={value} />
+        ),
+        (value: string, record: ActivityRow): JSX.Element => (
+          <Link href={`blockchain/${record.block_num}/${record.trx_in_block}`}>
+            {value}
+          </Link>
         ),
         undefined,
         undefined,

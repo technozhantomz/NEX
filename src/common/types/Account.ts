@@ -144,6 +144,8 @@ export type ActivityRow = {
   type: string;
   info: string;
   id: string;
+  block_num: number;
+  trx_in_block: number;
   fee: string;
   status: boolean;
 };
