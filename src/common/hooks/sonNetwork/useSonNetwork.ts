@@ -19,6 +19,7 @@ export function useSonNetwork(): UseSonNetworkResult {
   const [sonAccount, _setSonAccount] = useState<Account>();
   const { dbApi } = usePeerplaysApiContext();
   const { getGlobalProperties } = useBlockchain();
+  const { getChainProperties } = useBlockchain();
   const { getAccounts } = useAccount();
 
   const getSonAccount = useCallback(async () => {
@@ -137,7 +138,8 @@ export function useSonNetwork(): UseSonNetworkResult {
       let activeSons = 0;
       try {
         const gpo = await getGlobalProperties();
-        if (!gpo) {
+        const chainProperties = await getChainProperties();
+        if (!gpo || !chainProperties) {
           return result;
         }
         const chainActiveSons = gpo.active_sons.find(
@@ -172,7 +174,10 @@ export function useSonNetwork(): UseSonNetworkResult {
           }
           i++;
         }
-        result.isSonNetworkOk = activeSons >= 5 ? true : false; //minimum activeSons to process transactions is 5
+        result.isSonNetworkOk =
+          activeSons >= chainProperties.immutable_parameters.min_son_count
+            ? true
+            : false;
         return result;
       } catch (e) {
         console.log(e);
