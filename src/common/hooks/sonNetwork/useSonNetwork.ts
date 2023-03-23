@@ -172,10 +172,7 @@ export function useSonNetwork(): UseSonNetworkResult {
           }
           i++;
         }
-        result.isSonNetworkOk =
-          activeSons / gpo.parameters.extensions.maximum_son_count > 2 / 3
-            ? true
-            : false;
+        result.isSonNetworkOk = activeSons >= 5 ? true : false; //minimum activeSons to process transactions is 5
         return result;
       } catch (e) {
         console.log(e);
