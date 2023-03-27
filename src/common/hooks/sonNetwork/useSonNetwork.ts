@@ -18,8 +18,7 @@ import { SonNetworkStatus, UseSonNetworkResult } from "./useSonNetwork.types";
 export function useSonNetwork(): UseSonNetworkResult {
   const [sonAccount, _setSonAccount] = useState<Account>();
   const { dbApi } = usePeerplaysApiContext();
-  const { getGlobalProperties } = useBlockchain();
-  const { getChainProperties } = useBlockchain();
+  const { getGlobalProperties, getChainProperties } = useBlockchain();
   const { getAccounts } = useAccount();
 
   const getSonAccount = useCallback(async () => {
@@ -137,8 +136,11 @@ export function useSonNetwork(): UseSonNetworkResult {
       const result = { status: [], isSonNetworkOk: false } as SonNetworkStatus;
       let activeSons = 0;
       try {
-        const gpo = await getGlobalProperties();
-        const chainProperties = await getChainProperties();
+        const [gpo, chainProperties] = await Promise.all([
+          getGlobalProperties(),
+          getChainProperties(),
+        ]);
+
         if (!gpo || !chainProperties) {
           return result;
         }
