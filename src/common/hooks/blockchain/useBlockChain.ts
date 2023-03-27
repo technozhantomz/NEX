@@ -8,6 +8,7 @@ import {
   Block,
   Block2,
   BlockHeader,
+  ChainProperties,
   DynamicGlobalProperties,
   GlobalProperties,
   WitnessAccount,
@@ -188,6 +189,17 @@ export function useBlockchain(): UseBlockchainResult {
     }
   }, [dbApi]);
 
+  const getChainProperties = useCallback(async () => {
+    try {
+      const chainProperties: ChainProperties = await dbApi(
+        "get_chain_properties"
+      );
+      return chainProperties;
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi]);
+
   return {
     getDynamicGlobalProperties,
     getAssetDynamicData,
@@ -198,5 +210,6 @@ export function useBlockchain(): UseBlockchainResult {
     getBlocks,
     getBlockHeader,
     getGlobalProperties,
+    getChainProperties,
   };
 }
