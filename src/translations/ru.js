@@ -1238,6 +1238,7 @@ export const ru = {
       "Не удается подключиться к узлу API %(url)s, возвращаясь к известным рабочим узлам. Ошибка: %(error)s",
   },
   tableHead: {
+    transaction_hash: "Хэш транзакции",
     active_all_chains: "Активный",
     votes_all_chains: "Голоса",
     status_all_chains: "Положение дел",

@@ -34,7 +34,7 @@ export const TransactionsColumns = (
 }[] => {
   const headings = [
     "rank",
-    "id",
+    "transaction_hash",
     "expiration",
     "operations",
     "ref_block_prefix",
@@ -51,13 +51,9 @@ export const TransactionsColumns = (
     "extensions",
   ];
   const renders = [
-    (rank: number): JSX.Element => (
-      <Link target="_blank" href={`/blockchain/${block}/${rank}`}>
-        {rank}
-      </Link>
-    ),
+    (rank: number): JSX.Element => <span>{rank}</span>,
     (id: string, record: TransactionRow): JSX.Element => (
-      <Link target="_blank" href={`/blockchain/${block}/${record.rank}`}>
+      <Link href={`/blockchain/${block}/${record.id}`}>
         <Styled.CenterEllipsis>
           <span className="ellipsis">{id}</span>
           <span className="indent">{id}</span>
@@ -110,7 +106,7 @@ export const TransactionsColumns = (
   ];
   const sorters = [
     (a: { rank: number }, b: { rank: number }) => a.rank - b.rank,
-    (a: { id: string }, b: { id: string }) => a.id.localeCompare(b.id),
+    undefined,
     (a: { expiration: string }, b: { expiration: string }) =>
       new Date(a.expiration).getTime() - new Date(b.expiration).getTime(),
     (a: { operations: unknown[] }, b: { operations: unknown[] }) =>

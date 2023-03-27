@@ -40,8 +40,8 @@ export const TransactionsTable = ({
   const router = useRouter();
   const renderListItem = useCallback(
     (item: TransactionRow, _index: number) => (
-      <Link href={`/blockchain/${block}/${item.rank}`}>
-        <Styled.TransactionListItem key={item.rank}>
+      <Link href={`/blockchain/${block}/${item.id}`}>
+        <Styled.TransactionListItem key={item.id}>
           <Styled.TransactionItemContent>
             <div className="item-info">
               <span className="item-info-title">
@@ -96,7 +96,7 @@ export const TransactionsTable = ({
     (record: TransactionRow) => {
       return {
         onClick: () => {
-          router.push(`/blockchain/${block}/${record.rank}`);
+          router.push(`/blockchain/${block}/${record.id}`);
         },
       };
     },

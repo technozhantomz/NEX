@@ -16,7 +16,7 @@ export function useActivity(): UseActivityResult {
   const { defaultAsset } = useAssetsContext();
   const { getAccountHistoryById } = useAccountHistory();
   const { id } = useUserContext();
-  const { getBlockHeader } = useBlockchain();
+  const { getBlockHeader, getBlock2 } = useBlockchain();
 
   const formActivityDescription: {
     [activityType: string]: (operation: any, result?: any) => Promise<string>;
@@ -381,7 +381,13 @@ export function useActivity(): UseActivityResult {
   const formActivityRow = useCallback(
     async (activity: History): Promise<ActivityRow> => {
       const fee = activity.op[1].fee as Fee;
-      const blockHeader = await getBlockHeader(activity.block_num);
+      const block_num = activity.block_num;
+      const trx_in_block = activity.trx_in_block;
+      const blockHeader = await getBlockHeader(block_num);
+      const rawBlock = await getBlock2(block_num);
+      const transaction_id = rawBlock
+        ? rawBlock.transaction_ids[trx_in_block]
+        : "";
       const time = blockHeader ? blockHeader.timestamp : "";
       const feeAsset = await getAssetById(fee.asset_id);
       const operationsNames = Object.keys(ChainTypes.operations);
@@ -398,6 +404,9 @@ export function useActivity(): UseActivityResult {
         type: operationType,
         info: activityDescription,
         id: activity.id,
+        block_num: block_num,
+        trx_in_block: trx_in_block,
+        transaction_id: transaction_id,
         fee: `${setPrecision(false, fee.amount, feeAsset?.precision)} ${
           feeAsset?.symbol
         }`,
