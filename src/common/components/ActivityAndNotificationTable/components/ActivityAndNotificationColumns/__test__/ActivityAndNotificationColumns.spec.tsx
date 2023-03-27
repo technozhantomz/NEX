@@ -40,11 +40,11 @@ describe("ActivityAndNotificationColumns", () => {
   });
 
   it("should return the correct columns for the notification tab", () => {
-    expect(notificationColumns).toHaveLength(6);
+    expect(notificationColumns).toHaveLength(7);
   });
 
   it("should return the correct columns for the activity tab", () => {
-    expect(activityColumns).toHaveLength(5);
+    expect(activityColumns).toHaveLength(6);
   });
 
   it("should return the correct onFilter function for the type column", () => {
