@@ -18,7 +18,7 @@ import { SonNetworkStatus, UseSonNetworkResult } from "./useSonNetwork.types";
 export function useSonNetwork(): UseSonNetworkResult {
   const [sonAccount, _setSonAccount] = useState<Account>();
   const { dbApi } = usePeerplaysApiContext();
-  const { getGlobalProperties } = useBlockchain();
+  const { getGlobalProperties, getChainProperties } = useBlockchain();
   const { getAccounts } = useAccount();
 
   const getSonAccount = useCallback(async () => {
@@ -136,8 +136,12 @@ export function useSonNetwork(): UseSonNetworkResult {
       const result = { status: [], isSonNetworkOk: false } as SonNetworkStatus;
       let activeSons = 0;
       try {
-        const gpo = await getGlobalProperties();
-        if (!gpo) {
+        const [gpo, chainProperties] = await Promise.all([
+          getGlobalProperties(),
+          getChainProperties(),
+        ]);
+
+        if (!gpo || !chainProperties) {
           return result;
         }
         const chainActiveSons = gpo.active_sons.find(
@@ -173,7 +177,7 @@ export function useSonNetwork(): UseSonNetworkResult {
           i++;
         }
         result.isSonNetworkOk =
-          activeSons / gpo.parameters.extensions.maximum_son_count > 2 / 3
+          activeSons >= chainProperties.immutable_parameters.min_son_count
             ? true
             : false;
         return result;

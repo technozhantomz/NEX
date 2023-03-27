@@ -3,6 +3,7 @@ import {
   Block,
   Block2,
   BlockHeader,
+  ChainProperties,
   DynamicGlobalProperties,
   GlobalProperties,
 } from "../../types";
@@ -23,4 +24,5 @@ export type UseBlockchainResult = {
   ) => Promise<Block[] | undefined>;
   getBlockHeader: (blockNumber: number) => Promise<BlockHeader | undefined>;
   getGlobalProperties: () => Promise<GlobalProperties | undefined>;
+  getChainProperties: () => Promise<ChainProperties | undefined>;
 };

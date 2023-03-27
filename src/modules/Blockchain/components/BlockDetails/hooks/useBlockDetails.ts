@@ -39,7 +39,6 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
               key: index + 1,
               rank: index + 1,
               id: rawBlock.transaction_ids[index],
-              transaction_id: transaction.transaction_id,
               expiration: formLocalDate(transaction.expiration, [
                 "month",
                 "date",
@@ -72,7 +71,6 @@ export function useBlockDetails(block: number): UseBlockDetailsResult {
           signingKey: rawBlock.signing_key,
           witnessSignature: rawBlock.witness_signature,
           transactions: transactions,
-          transaction_ids: rawBlock.transaction_ids,
         } as BlockDetailsType;
       }
     } catch (e) {

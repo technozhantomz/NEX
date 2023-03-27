@@ -9,6 +9,19 @@ export type GlobalProperties = {
   next_available_vote_id: number;
 };
 
+export type ChainProperties = {
+  chain_id: string;
+  immutable_parameters: ImmutableParameters;
+};
+
+export type ImmutableParameters = {
+  min_committee_member_count: number;
+  min_witness_count: number;
+  min_son_count: number;
+  num_special_accounts: number;
+  num_special_assets: number;
+};
+
 export type ActiveSon = {
   sidechain_public_keys: [string, string][];
   signing_key: string;
