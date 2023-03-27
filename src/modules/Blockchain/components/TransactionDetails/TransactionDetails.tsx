@@ -11,11 +11,11 @@ import { useTransactionDetails } from "./hooks";
 
 type Props = {
   block: number;
-  transaction: string;
+  transactionId: string;
 };
 export const TransactionDetails = ({
   block,
-  transaction,
+  transactionId,
 }: Props): JSX.Element => {
   const {
     blockTransactions,
@@ -23,10 +23,10 @@ export const TransactionDetails = ({
     hasNextTransition,
     hasPreviousTransition,
     loading,
-    transactionIndexFromBlock,
+    trxInBlock,
     nextTransactionId,
     previousTransactionId,
-  } = useTransactionDetails(block, transaction);
+  } = useTransactionDetails(block, transactionId);
 
   const renderPreviousTransaction = hasPreviousTransition ? (
     <Link href={`/blockchain/${Number(block)}/${previousTransactionId}`}>
@@ -59,7 +59,7 @@ export const TransactionDetails = ({
                   {counterpart.translate(
                     `pages.blocks.transaction_details.transaction`
                   )}{" "}
-                  {transactionIndexFromBlock + 1} of {blockTransactions.length}
+                  {trxInBlock + 1} of {blockTransactions.length}
                 </span>
               </Styled.BlockNumber>
               <Styled.BlockNumber>

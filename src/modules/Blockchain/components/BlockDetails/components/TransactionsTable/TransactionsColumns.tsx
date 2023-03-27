@@ -34,7 +34,7 @@ export const TransactionsColumns = (
 }[] => {
   const headings = [
     "rank",
-    "id",
+    "transaction_hash",
     "expiration",
     "operations",
     "ref_block_prefix",
@@ -106,7 +106,7 @@ export const TransactionsColumns = (
   ];
   const sorters = [
     (a: { rank: number }, b: { rank: number }) => a.rank - b.rank,
-    (a: { id: string }, b: { id: string }) => a.id.localeCompare(b.id),
+    undefined,
     (a: { expiration: string }, b: { expiration: string }) =>
       new Date(a.expiration).getTime() - new Date(b.expiration).getTime(),
     (a: { operations: unknown[] }, b: { operations: unknown[] }) =>

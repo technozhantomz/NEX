@@ -1,6 +1,7 @@
 import counterpart from "counterpart";
 import Link from "next/link";
 
+import { Tooltip } from "../../../../../ui/src";
 import { ActivityRow } from "../../../../types";
 import { TableHeading } from "../../../TableHeading";
 import { UserLinkExtractor } from "../../../UserLinkExtractor";
@@ -42,24 +43,40 @@ export const ActivityAndNotificationColumns = (
   markTheNotificationAsReadOrUnread: (id: string, unread: boolean) => void
 ): ActivityAndNotificationType[] => {
   const headings = isNotificationTab
-    ? ["time", "type", "info", "id", "fee", "status"]
-    : ["time", "type", "info", "id", "fee"];
+    ? ["time", "type", "info", "id", "transaction_hash", "fee", "status"]
+    : ["time", "type", "info", "id", "transaction_hash", "fee"];
 
   const keys = isNotificationTab
-    ? ["time", "type", "info", "id", "fee", "status"]
-    : ["time", "type", "info", "id", "fee"];
+    ? ["time", "type", "info", "id", "transaction_id", "fee", "status"]
+    : ["time", "type", "info", "id", "transaction_id", "fee"];
 
   const renders = isNotificationTab
     ? [
+        //time
         undefined,
+        //type
         (type: string): JSX.Element => (
           <ActivityAndNotificationTag type={type} />
         ),
+        //info
         (value: string): JSX.Element => (
           <UserLinkExtractor infoString={value} />
         ),
+        //id
         undefined,
+        //transaction_id
+        (value: string, record: ActivityRow): JSX.Element => (
+          <Tooltip placement="top" title={record.transaction_id}>
+            <Link
+              href={`/blockchain/${record.block_num}/${record.transaction_id}`}
+            >
+              {value}
+            </Link>
+          </Tooltip>
+        ),
+        //fee
         undefined,
+        //status
         (status: boolean, record: ActivityRow): JSX.Element => {
           function handleClick() {
             markTheNotificationAsReadOrUnread(record.id, !status);
@@ -78,33 +95,51 @@ export const ActivityAndNotificationColumns = (
         },
       ]
     : [
+        //time
         undefined,
+        //type
         (type: string): JSX.Element => (
           <ActivityAndNotificationTag type={type} />
         ),
+        //info
         (value: string): JSX.Element => (
           <UserLinkExtractor infoString={value} />
         ),
-        (value: string, record: ActivityRow): JSX.Element => (
-          <Link href={`blockchain/${record.block_num}/${record.trx_in_block}`}>
-            {value}
-          </Link>
-        ),
+        //id
         undefined,
+        //transaction_id
+        (value: string, record: ActivityRow): JSX.Element => (
+          <Tooltip placement="top" title={record.transaction_id}>
+            <Link
+              href={`/blockchain/${record.block_num}/${record.transaction_id}`}
+            >
+              {value}
+            </Link>
+          </Tooltip>
+        ),
+        //fee
         undefined,
       ];
 
   const filters = isNotificationTab
-    ? [undefined, undefined, undefined, undefined, undefined, undefined]
-    : [undefined, undefined, undefined, undefined, undefined];
+    ? [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ]
+    : [undefined, undefined, undefined, undefined, undefined, undefined];
 
   const filterModes = isNotificationTab
-    ? [undefined, "menu", undefined, undefined, undefined, undefined]
-    : [undefined, "menu", undefined, undefined, undefined];
+    ? [undefined, "menu", undefined, undefined, undefined, undefined, undefined]
+    : [undefined, "menu", undefined, undefined, undefined, undefined];
 
   const filterSearch = isNotificationTab
-    ? [undefined, false, undefined, undefined, undefined, undefined]
-    : [undefined, false, undefined, undefined, undefined];
+    ? [undefined, false, undefined, undefined, undefined, undefined, undefined]
+    : [undefined, false, undefined, undefined, undefined, undefined];
 
   const onFilters = isNotificationTab
     ? [
@@ -115,11 +150,13 @@ export const ActivityAndNotificationColumns = (
         undefined,
         undefined,
         undefined,
+        undefined,
       ]
     : [
         undefined,
         (value: string, record: ActivityRow): boolean =>
           record.type.includes(value),
+        undefined,
         undefined,
         undefined,
         undefined,
@@ -134,10 +171,12 @@ export const ActivityAndNotificationColumns = (
         undefined,
         undefined,
         undefined,
+        undefined,
       ]
     : [
         (a: { time: string }, b: { time: string }) =>
           new Date(a.time).getTime() - new Date(b.time).getTime(),
+        undefined,
         undefined,
         undefined,
         undefined,
@@ -155,6 +194,7 @@ export const ActivityAndNotificationColumns = (
       filterSearch: filterSearch[index],
       onFilter: onFilters[index],
       sorter: sorters[index],
+      ellipsis: heading === "transaction_hash" ? true : false,
     };
   });
 };

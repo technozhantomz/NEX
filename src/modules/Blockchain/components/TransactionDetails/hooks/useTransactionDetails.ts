@@ -13,8 +13,7 @@ export function useTransactionDetails(
   const [loading, setLoading] = useState<boolean>(true);
   const [hasNextTransition, setHasNextTransition] = useState<boolean>(false);
   const [rawBlock, setRawBlock] = useState<Block2>();
-  const [transactionIndexFromBlock, setTransactionIndexFromBlock] =
-    useState<number>(0);
+  const [trxInBlock, setTrxInBlock] = useState<number>(0);
   const [hasPreviousTransition, setHasPreviousTransition] =
     useState<boolean>(false);
   const [nextTransactionId, setNextTransactionId] = useState<
@@ -42,7 +41,7 @@ export function useTransactionDetails(
   });
   const { getBlock2 } = useBlockchain();
 
-  //in the state we need the rawblock data and the transaction index
+  //in the state we need the raw block data and the transaction index
   const setTransactionState = useCallback(async () => {
     try {
       setLoading(true);
@@ -66,11 +65,9 @@ export function useTransactionDetails(
             }
           );
           setBlockTransactions(transactions);
-          setTransactionDetails(transactions[transactionIndexFromBlock]);
+          setTransactionDetails(transactions[trxInBlock]);
           setRawBlock(blockData);
-          setTransactionIndexFromBlock(
-            blockData.transaction_ids.indexOf(transactionId)
-          );
+          setTrxInBlock(blockData.transaction_ids.indexOf(transactionId));
         }
         setLoading(false);
       } else {
@@ -80,40 +77,27 @@ export function useTransactionDetails(
       console.log(e);
       setLoading(false);
     }
-  }, [
-    getBlock2,
-    block,
-    transactionId,
-    setRawBlock,
-    setTransactionIndexFromBlock,
-    setLoading,
-  ]);
+  }, [getBlock2, block, transactionId, setRawBlock, setTrxInBlock, setLoading]);
 
   const buildBlockPagination = useCallback(async () => {
     try {
       if (
         transactionId !== undefined &&
-        transactionIndexFromBlock !== undefined &&
+        trxInBlock !== undefined &&
         rawBlock !== undefined
       ) {
         setLoadingSideTransactions(true);
-        const nextTransaction =
-          blockTransactions[transactionIndexFromBlock + 1];
+        const nextTransaction = blockTransactions[trxInBlock + 1];
         if (nextTransaction) {
-          setNextTransactionId(
-            rawBlock?.transaction_ids[transactionIndexFromBlock + 1]
-          );
+          setNextTransactionId(rawBlock?.transaction_ids[trxInBlock + 1]);
           setHasNextTransition(true);
         } else {
           setNextTransactionId(undefined);
           setHasNextTransition(false);
         }
-        const previousTransaction =
-          blockTransactions[transactionIndexFromBlock - 1];
+        const previousTransaction = blockTransactions[trxInBlock - 1];
         if (previousTransaction) {
-          setPreviousTransactionId(
-            rawBlock?.transaction_ids[transactionIndexFromBlock - 1]
-          );
+          setPreviousTransactionId(rawBlock?.transaction_ids[trxInBlock - 1]);
           setHasPreviousTransition(true);
         } else {
           setPreviousTransactionId(undefined);
@@ -131,7 +115,7 @@ export function useTransactionDetails(
     }
   }, [
     rawBlock,
-    transactionIndexFromBlock,
+    trxInBlock,
     transactionDetails,
     transactionId,
     blockTransactions,
@@ -155,7 +139,7 @@ export function useTransactionDetails(
     hasNextTransition,
     hasPreviousTransition,
     loadingSideTransactions,
-    transactionIndexFromBlock,
+    trxInBlock,
     nextTransactionId,
     previousTransactionId,
   };

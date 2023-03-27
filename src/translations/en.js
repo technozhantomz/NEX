@@ -1235,6 +1235,7 @@ export const en = {
       "Unable to connect to API node %(url)s, falling back to known working nodes. Error was: %(error)s",
   },
   tableHead: {
+    transaction_hash: "Transaction Hash",
     active_all_chains: "Active",
     votes_all_chains: "Votes",
     status_all_chains: "Status",
