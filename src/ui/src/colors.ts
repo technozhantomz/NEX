@@ -9,6 +9,7 @@ export const colors = {
   headingColor: `#212121`,
   textColor: `#212121`,
   textColorSecondary: `#6C6C6C`,
+  textColorTertiary: `#B9B9B9`,
   white: `#ffffff`,
   borderColorBase: `#C1C2C4`,
   successTag: `#B8F4C9`,

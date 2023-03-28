@@ -805,6 +805,7 @@ export const en = {
       lower_case_committees: "committees",
       status: {
         approved: "Approved",
+        partially_approved: "Partially Approved",
         not_approved: "Not Approved",
         pending_add: "voting to approve",
         pending_remove: "voting to remove approval",

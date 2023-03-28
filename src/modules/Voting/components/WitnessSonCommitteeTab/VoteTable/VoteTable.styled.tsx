@@ -27,6 +27,11 @@ export const LikeFilledIcon = styled(LikeFilled)`
   color: ${colors.textColorSecondary};
 `;
 
+export const LikePartiallyFilledIcon = styled(LikeFilled)`
+  font-size: 16px;
+  color: ${colors.textColorTertiary};
+`;
+
 export const LikeOutlinedIcon = styled(LikeOutlined)`
   font-size: 16px;
   color: ${colors.textColorSecondary};

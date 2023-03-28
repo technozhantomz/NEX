@@ -222,7 +222,7 @@ const createWitnessColumns = (
 };
 
 const createSonsColumns = (
-  localApprovedVotesIds: string[],
+  // localApprovedVotesIds: string[],
   voteToAllSidechains: (sonAccountId: string) => void,
   removeAllSidechainsVotes: (sonAccountId: string) => void
 ) => {
@@ -272,12 +272,19 @@ const createSonsColumns = (
     //status
     (_value: string, _record: VoteRow): JSX.Element => (
       <>
-        {_value === "unapproved" ? (
+        {_value === VoteStatus.UNAPPROVED ? (
           <>
             <Styled.Xmark></Styled.Xmark>
             <Styled.NotApprovedStatus>
               {counterpart.translate(`pages.voting.status.not_approved`)}
             </Styled.NotApprovedStatus>
+          </>
+        ) : _value === VoteStatus.PARTIALLY_APPROVED ? (
+          <>
+            <Styled.Check></Styled.Check>
+            <Styled.ApprovedStatus>
+              {counterpart.translate(`pages.voting.status.partially_approved`)}
+            </Styled.ApprovedStatus>
           </>
         ) : (
           <>
@@ -290,13 +297,36 @@ const createSonsColumns = (
       </>
     ),
     //possibleAction
+    // (_value: string, record: VoteRow): JSX.Element => (
+    //   <>
+    //     {Object.values(
+    //       record.sidechainVotesIds as {
+    //         [sidechain: string]: string;
+    //       }
+    //     ).some((voteId) => !localApprovedVotesIds.includes(voteId)) ? (
+    //       <div
+    //         className="cursor-pointer"
+    //         onClick={() => {
+    //           voteToAllSidechains(record.id);
+    //         }}
+    //       >
+    //         <Styled.LikeOutlinedIcon />
+    //       </div>
+    //     ) : (
+    //       <div
+    //         className="cursor-pointer"
+    //         onClick={() => {
+    //           removeAllSidechainsVotes(record.id);
+    //         }}
+    //       >
+    //         <Styled.LikeFilledIcon />
+    //       </div>
+    //     )}
+    //   </>
+    // ),
     (_value: string, record: VoteRow): JSX.Element => (
       <>
-        {Object.values(
-          record.sidechainVotesIds as {
-            [sidechain: string]: string;
-          }
-        ).some((voteId) => !localApprovedVotesIds.includes(voteId)) ? (
+        {record.status === VoteStatus.UNAPPROVED ? (
           <div
             className="cursor-pointer"
             onClick={() => {
@@ -304,6 +334,15 @@ const createSonsColumns = (
             }}
           >
             <Styled.LikeOutlinedIcon />
+          </div>
+        ) : record.status === VoteStatus.PARTIALLY_APPROVED ? (
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              removeAllSidechainsVotes(record.id);
+            }}
+          >
+            <Styled.LikePartiallyFilledIcon />
           </div>
         ) : (
           <div
@@ -643,7 +682,7 @@ export const showVotesColumns = (
       onFilters,
       sorters,
     } = createSonsColumns(
-      localApprovedVotesIds,
+      // localApprovedVotesIds,
       voteToAllSidechains,
       removeAllSidechainsVotes
     );
