@@ -204,9 +204,18 @@ export function useVoteTab({
         Number(sum(member.total_votes.map((member) => member[1])))
       );
       const activeChains: string[] = [];
-      if (actives.bitcoin) activeChains.push(Sidechain.BITCOIN);
-      if (actives.ethereum) activeChains.push(Sidechain.ETHEREUM);
-      if (actives.hive) activeChains.push(Sidechain.HIVE);
+      if (actives.bitcoin)
+        activeChains.push(
+          Sidechain.BITCOIN.replace(/^\w/, (c) => c.toUpperCase())
+        );
+      if (actives.ethereum)
+        activeChains.push(
+          Sidechain.ETHEREUM.replace(/^\w/, (c) => c.toUpperCase())
+        );
+      if (actives.hive)
+        activeChains.push(
+          Sidechain.HIVE.replace(/^\w/, (c) => c.toUpperCase())
+        );
       let approvals = 0;
       //loop through statuses and count approvals
       Object.values(statuses).forEach((status) => {
@@ -227,12 +236,6 @@ export function useVoteTab({
           status = VoteStatus.APPROVED;
           break;
       }
-
-      // const status =
-      //   Object.values(statuses).entries (VoteStatus.UNAPPROVED) ||
-      //   Object.values(statuses).includes(undefined)
-      //     ? VoteStatus.UNAPPROVED
-      //     : VoteStatus.APPROVED;
 
       return {
         id: member.id,

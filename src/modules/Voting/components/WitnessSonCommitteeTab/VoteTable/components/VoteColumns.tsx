@@ -296,34 +296,6 @@ const createSonsColumns = (
         )}
       </>
     ),
-    //possibleAction
-    // (_value: string, record: VoteRow): JSX.Element => (
-    //   <>
-    //     {Object.values(
-    //       record.sidechainVotesIds as {
-    //         [sidechain: string]: string;
-    //       }
-    //     ).some((voteId) => !localApprovedVotesIds.includes(voteId)) ? (
-    //       <div
-    //         className="cursor-pointer"
-    //         onClick={() => {
-    //           voteToAllSidechains(record.id);
-    //         }}
-    //       >
-    //         <Styled.LikeOutlinedIcon />
-    //       </div>
-    //     ) : (
-    //       <div
-    //         className="cursor-pointer"
-    //         onClick={() => {
-    //           removeAllSidechainsVotes(record.id);
-    //         }}
-    //       >
-    //         <Styled.LikeFilledIcon />
-    //       </div>
-    //     )}
-    //   </>
-    // ),
     (_value: string, record: VoteRow): JSX.Element => (
       <>
         {record.status === VoteStatus.UNAPPROVED ? (
