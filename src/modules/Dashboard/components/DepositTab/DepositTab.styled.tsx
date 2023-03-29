@@ -46,7 +46,7 @@ export const AddressGeneratedContainer = styled.div``;
 
 export const HIVEDepositContainer = styled.div``;
 
-export const BTCDepositInstructionContainer = styled.div`
+export const SidechainDepositInstructionContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 25px;
@@ -56,13 +56,13 @@ export const BTCDepositInstructionContainer = styled.div`
   margin-left: 11px;
 `;
 
-export const BTCIconWrapper = styled.div`
+export const SidechainIconWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-right: 10px;
 `;
 
-export const BTCDepositInstruction = styled.div`
+export const SidechainDepositInstruction = styled.div`
   color: ${colors.textColor};
   font-size: 12px;
   ${breakpoint.sm} {
@@ -72,6 +72,6 @@ export const BTCDepositInstruction = styled.div`
 
 export const LoadingIndicatorContainer = styled.div`
   text-align: center;
-  display: "flex";
-  justifycontent: "center";
+  display: flex;
+  justify-content: center;
 `;

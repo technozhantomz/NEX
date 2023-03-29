@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { FormInstance, Rule } from "../../../../ui/src";
 import {
   TransactionMessageAction,
   TransactionMessageState,
-} from "../../../hooks";
-import { SidechainAccount, SignerKey } from "../../../types";
+} from "../../../../../../../common/hooks";
+import { SidechainAccount, SignerKey } from "../../../../../../../common/types";
+import { FormInstance, Rule } from "../../../../../../../ui/src";
 
 export type UseWithdrawFormResult = {
   formValidation: FormValidation;
@@ -22,8 +22,12 @@ export type UseWithdrawFormResult = {
   btcTransferFee: number;
   setBtcTransferFee: Dispatch<SetStateAction<number>>;
   selectedAssetPrecision: number;
-  hasBTCDepositAddress: boolean;
-  bitcoinSidechainAccount: SidechainAccount | undefined;
+  bitcoinSidechainAccount:
+    | {
+        account: SidechainAccount;
+        hasDepositAddress: boolean;
+      }
+    | undefined;
   getSidechainAccounts: (accountId: string) => Promise<void>;
   loadingSidechainAccounts: boolean;
 };

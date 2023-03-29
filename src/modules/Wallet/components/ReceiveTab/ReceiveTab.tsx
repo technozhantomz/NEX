@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import { useMemo } from "react";
 
 import { AssetsTable, AssetTitle } from "..";
 import {
@@ -26,12 +27,14 @@ type Props = {
 
 export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
   const {
-    bitcoinSidechainAccount,
-    hasBTCDepositAddress,
+    sidechainAccounts,
     loadingSidechainAccounts,
     getSidechainAccounts,
     localStorageAccount,
   } = useUserContext();
+  const bitcoinSidechainAccount = useMemo(() => {
+    return sidechainAccounts["bitcoin"];
+  }, [sidechainAccounts]);
 
   const renderBTCDepositInstruction = (instruction: string) => {
     return (
@@ -46,19 +49,24 @@ export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
     );
   };
 
-  const renderBtcDeposit = (
-    hasBTCDepositAddress: boolean,
-    bitcoinSidechainAccount: SidechainAccount
-  ) => {
-    if (hasBTCDepositAddress) {
+  const renderBtcDeposit = (bitcoinSidechainAccount?: {
+    account: SidechainAccount;
+    hasDepositAddress: boolean;
+  }) => {
+    if (bitcoinSidechainAccount && bitcoinSidechainAccount.hasDepositAddress) {
       return (
         <>
-          <AddressGenerated bitcoinSidechainAccount={bitcoinSidechainAccount} />
+          <AddressGenerated
+            label={counterpart.translate(
+              `field.labels.bitcoin_deposit_address`
+            )}
+            sidechainAccount={bitcoinSidechainAccount.account}
+          />
           {renderBTCDepositInstruction(
             counterpart.translate(`field.labels.deposit_btc`)
           )}
           <DownloadBitcoinKeys
-            bitcoinSidechainAccount={bitcoinSidechainAccount}
+            bitcoinSidechainAccount={bitcoinSidechainAccount.account}
             getSidechainAccounts={getSidechainAccounts}
           />
         </>
@@ -82,10 +90,7 @@ export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
 
   const renderDeposit = (asset: string) => {
     if (asset === BITCOIN_ASSET_SYMBOL) {
-      return renderBtcDeposit(
-        hasBTCDepositAddress,
-        bitcoinSidechainAccount as SidechainAccount
-      );
+      return renderBtcDeposit(bitcoinSidechainAccount);
     } else if (asset === HIVE_ASSET_SYMBOL || asset === HBD_ASSET_SYMBOL) {
       return <HIVEAndHBDDeposit assetSymbol={asset} />;
     } else {

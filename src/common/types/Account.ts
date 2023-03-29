@@ -180,3 +180,16 @@ export type BitcoinAccount = {
   pubKey: string;
   privateKey: string;
 };
+
+export type EthereumSidechainAccounts =
+  | {
+      deposit: EthereumAccount;
+      withdraw: EthereumAccount;
+    }
+  | undefined;
+
+export type EthereumAccount = {
+  address: string;
+  pubKey: string;
+  privateKey: string;
+};

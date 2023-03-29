@@ -38,11 +38,9 @@ const BITCOIN_MIN_WITHDRAWAL = 0.001;
 
 export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
   const router = useRouter();
-  const { assets } = useUserContext();
+  const { assets, localStorageAccount, sidechainAccounts } = useUserContext();
   const [sendForm] = Form.useForm<SendForm>();
   const { limitByPrecision } = useAsset();
-  const { localStorageAccount, bitcoinSidechainAccount, hasBTCDepositAddress } =
-    useUserContext();
   const { formAccountBalancesByName, getAccountByName } = useAccount();
   const { sonAccount, getSonNetworkStatus } = useSonNetwork();
   const { calculateTransferFee } = useFees();
@@ -86,6 +84,9 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     setAmount("0");
     setToAccount(undefined);
   }
+  const bitcoinSidechainAccount = useMemo(() => {
+    return sidechainAccounts["bitcoin"];
+  }, [sidechainAccounts]);
 
   const buildSendFormTransaction = useCallback(
     async (_to: string, _memo: string) => {
@@ -156,9 +157,13 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
           memo: undefined,
         });
       }
-      if (value === BITCOIN_NETWORK && hasBTCDepositAddress) {
+      if (
+        value === BITCOIN_NETWORK &&
+        bitcoinSidechainAccount &&
+        bitcoinSidechainAccount.hasDepositAddress
+      ) {
         sendForm.setFieldsValue({
-          to: bitcoinSidechainAccount?.withdraw_address,
+          to: bitcoinSidechainAccount.account.withdraw_address,
         });
       } else {
         sendForm.setFieldsValue({
@@ -166,12 +171,7 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
         });
       }
     },
-    [
-      setSelectedBlockchain,
-      hasBTCDepositAddress,
-      sendForm,
-      bitcoinSidechainAccount,
-    ]
+    [setSelectedBlockchain, bitcoinSidechainAccount, sendForm]
   );
 
   const handleAmountChange = useCallback(
@@ -413,7 +413,8 @@ export function useSendForm({ assetSymbol }: Args): UseSendFormResult {
     }
   };
   const validateToInBitcoin = () => {
-    return !hasBTCDepositAddress
+    return !bitcoinSidechainAccount ||
+      !bitcoinSidechainAccount.hasDepositAddress
       ? counterpart.translate(`field.errors.first_generate_deposit_addresses`)
       : undefined;
   };

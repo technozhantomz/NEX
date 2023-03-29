@@ -1,10 +1,9 @@
-import * as bitcoin from "bitcoinjs-lib";
-import counterpart from "counterpart";
-import ECPairFactory from "ecpair";
-import { useCallback } from "react";
-import * as ecc from "tiny-secp256k1";
+import * as crypto from "crypto";
 
-import { testnetCheck } from "../../../../api/params";
+import counterpart from "counterpart";
+import * as ethers from "ethers";
+import { useCallback } from "react";
+
 import {
   TransactionMessageActionType,
   useSidechainTransactionBuilder,
@@ -13,48 +12,37 @@ import {
   useTransactionMessage,
 } from "../../../hooks";
 import { useUserContext } from "../../../providers";
-import { BitcoinAccount, Sidechain, SignerKey } from "../../../types";
+import { EthereumAccount, Sidechain, SignerKey } from "../../../types";
 
-import { UseGenerateBitcoinAddressResult } from "./useGenerateBitcoinAddress.types";
+import { UseGenerateEthereumAddressResult } from "./useGenerateEthereumAddress.types";
 
-const NETWORK = testnetCheck ? bitcoin.networks.regtest : undefined;
-
-export function useGenerateBitcoinAddress(
+export function useGenerateEthereumAddress(
   getSidechainAccounts: (accountId: string) => Promise<void>
-): UseGenerateBitcoinAddressResult {
+): UseGenerateEthereumAddressResult {
   const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
   const { buildTrx } = useTransactionBuilder();
-  const {
-    id,
-    sessionBitcoinSidechainAccounts,
-    setSessionBitcoinSidechainAccounts,
-  } = useUserContext();
+  const { id } = useUserContext();
   const { getSonNetworkStatus } = useSonNetwork();
-  const { buildAddingBitcoinSidechainTransaction } =
+  const { buildAddingEthereumSidechainTransaction } =
     useSidechainTransactionBuilder();
+  const {
+    sessionEthereumSidechainAccounts,
+    setSessionEthereumSidechainAccounts,
+  } = useUserContext();
 
-  const toHex = useCallback((buffer: Buffer) => {
-    return Array.from(buffer)
-      .map((byte) => byte.toString(16).padStart(2, "0"))
-      .join("");
-  }, []);
-
-  const generateNewAddress = (): BitcoinAccount => {
-    const ECPair = ECPairFactory(ecc);
-    const keyPair = ECPair.makeRandom({ network: NETWORK });
-    const address = bitcoin.payments.p2pkh({
-      pubkey: keyPair.publicKey,
-      network: NETWORK,
-    });
+  const generateNewAddress = (): EthereumAccount => {
+    const id = crypto.randomBytes(32).toString("hex");
+    const privateKey = "0x" + id;
+    const wallet = new ethers.Wallet(privateKey);
     return {
-      address: address.address as string,
-      pubKey: toHex(address.pubkey as Buffer),
-      privateKey: keyPair.toWIF(),
+      address: wallet.address,
+      pubKey: wallet.signingKey.compressedPublicKey,
+      privateKey: wallet.privateKey,
     };
   };
 
-  const generateBitcoinAddresses = useCallback(
+  const generateEthereumAddresses = useCallback(
     async (signerKey: SignerKey) => {
       dispatchTransactionMessage({
         type: TransactionMessageActionType.CLEAR,
@@ -64,7 +52,7 @@ export function useGenerateBitcoinAddress(
       });
 
       try {
-        const sonNetworkStatus = await getSonNetworkStatus(Sidechain.BITCOIN);
+        const sonNetworkStatus = await getSonNetworkStatus(Sidechain.ETHEREUM);
 
         if (!sonNetworkStatus.isSonNetworkOk) {
           dispatchTransactionMessage({
@@ -88,9 +76,9 @@ export function useGenerateBitcoinAddress(
       const deposit = generateNewAddress();
       const withdraw = generateNewAddress();
 
-      setSessionBitcoinSidechainAccounts({ deposit, withdraw });
+      setSessionEthereumSidechainAccounts({ deposit, withdraw });
 
-      const trx = buildAddingBitcoinSidechainTransaction(
+      const trx = buildAddingEthereumSidechainTransaction(
         id,
         id,
         deposit.pubKey,
@@ -116,7 +104,7 @@ export function useGenerateBitcoinAddress(
         dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_SUCCESS,
           message: counterpart.translate(
-            `field.success.successfully_generate_btc_addresses`
+            `field.success.successfully_generate_eth_addresses`
           ),
         });
       } else {
@@ -127,10 +115,10 @@ export function useGenerateBitcoinAddress(
       }
     },
     [
-      buildAddingBitcoinSidechainTransaction,
+      buildAddingEthereumSidechainTransaction,
       buildTrx,
       getSidechainAccounts,
-      setSessionBitcoinSidechainAccounts,
+      setSessionEthereumSidechainAccounts,
       dispatchTransactionMessage,
       id,
       getSonNetworkStatus,
@@ -138,10 +126,10 @@ export function useGenerateBitcoinAddress(
   );
 
   return {
-    sessionBitcoinSidechainAccounts,
-    setSessionBitcoinSidechainAccounts,
+    sessionEthereumSidechainAccounts,
+    setSessionEthereumSidechainAccounts,
     transactionMessageState,
     dispatchTransactionMessage,
-    generateBitcoinAddresses,
+    generateEthereumAddresses,
   };
 }

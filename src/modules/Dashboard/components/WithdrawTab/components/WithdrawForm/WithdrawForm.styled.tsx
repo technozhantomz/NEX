@@ -1,6 +1,11 @@
-import { CardForm, CardFormButton, Form, styled } from "../../../ui/src";
-import { breakpoint } from "../../../ui/src/breakpoints";
-import { colors } from "../../../ui/src/colors";
+import {
+  CardForm,
+  CardFormButton,
+  Form,
+  styled,
+} from "../../../../../../ui/src";
+import { breakpoint } from "../../../../../../ui/src/breakpoints";
+import { colors } from "../../../../../../ui/src/colors";
 
 export const WithdrawForm = styled(CardForm)`
   .ant-input-group.ant-input-group-compact {

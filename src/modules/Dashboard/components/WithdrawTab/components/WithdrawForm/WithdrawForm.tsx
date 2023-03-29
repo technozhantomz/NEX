@@ -1,6 +1,11 @@
 import counterpart from "counterpart";
 
 import {
+  BITCOIN_ASSET_SYMBOL,
+  defaultToken,
+} from "../../../../../../api/params";
+import { utils } from "../../../../../../api/utils";
+import {
   DashboardLoginButton,
   DownloadBitcoinKeys,
   GenerateBitcoinAddress,
@@ -8,15 +13,16 @@ import {
   LogoSelectOption,
   PasswordModal,
   TransactionModal,
-} from "..";
-import { BITCOIN_ASSET_SYMBOL, defaultToken } from "../../../api/params";
-import { utils } from "../../../api/utils";
-import { Form, Input } from "../../../ui/src";
-import BitcoinIcon from "../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
-import HIVEIcon from "../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
-import { useAsset, useTransactionForm } from "../../hooks";
-import { useAssetsContext, useUserContext } from "../../providers";
-import { Asset, SidechainAccount } from "../../types";
+} from "../../../../../../common/components";
+import { useAsset, useTransactionForm } from "../../../../../../common/hooks";
+import {
+  useAssetsContext,
+  useUserContext,
+} from "../../../../../../common/providers";
+import { Asset } from "../../../../../../common/types";
+import { Form, Input } from "../../../../../../ui/src";
+import BitcoinIcon from "../../../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
+import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
 
 import * as Styled from "./WithdrawForm.styled";
 import { useWithdrawForm } from "./hooks";
@@ -43,7 +49,6 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     withdrawFee,
     btcTransferFee,
     selectedAssetPrecision,
-    hasBTCDepositAddress,
     bitcoinSidechainAccount,
     getSidechainAccounts,
     loadingSidechainAccounts,
@@ -158,67 +163,68 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     </Styled.TransactionDetails>
   );
 
-  const btcFormBody = hasBTCDepositAddress ? (
-    <>
-      <Form.Item
-        name="from"
-        rules={formValidation.from}
-        validateFirst={true}
-        initialValue={localStorageAccount}
-        hidden={true}
-      >
-        <Input disabled={true} placeholder="From" />
-      </Form.Item>
-      <p className="label">
-        {counterpart.translate(`field.labels.withdraw_public_key_address`)}
-      </p>
+  const btcFormBody =
+    bitcoinSidechainAccount && bitcoinSidechainAccount.hasDepositAddress ? (
+      <>
+        <Form.Item
+          name="from"
+          rules={formValidation.from}
+          validateFirst={true}
+          initialValue={localStorageAccount}
+          hidden={true}
+        >
+          <Input disabled={true} placeholder="From" />
+        </Form.Item>
+        <p className="label">
+          {counterpart.translate(`field.labels.withdraw_public_key_address`)}
+        </p>
 
-      <Form.Item
-        name="withdrawPublicKey"
-        validateFirst={true}
-        rules={formValidation.withdrawPublicKey}
-      >
-        <Input
-          placeholder={counterpart.translate(
-            `field.placeholder.withdraw_public_key`
-          )}
-          autoComplete="off"
-          className="form-input"
-          disabled={!isLoggedIn}
+        <Form.Item
+          name="withdrawPublicKey"
+          validateFirst={true}
+          rules={formValidation.withdrawPublicKey}
+        >
+          <Input
+            placeholder={counterpart.translate(
+              `field.placeholder.withdraw_public_key`
+            )}
+            autoComplete="off"
+            className="form-input"
+            disabled={!isLoggedIn}
+          />
+        </Form.Item>
+        <Form.Item
+          name="withdrawAddress"
+          validateFirst={true}
+          rules={formValidation.withdrawAddress}
+        >
+          <Input
+            placeholder={counterpart.translate(
+              `field.placeholder.withdraw_address`
+            )}
+            className="form-input"
+            disabled={localStorageAccount ? false : true}
+            autoComplete="off"
+          />
+        </Form.Item>
+        <Styled.WithdrawalInstruction>
+          <Styled.IconWrapper>
+            <BitcoinIcon height="30" width="30" />
+          </Styled.IconWrapper>
+          <span>
+            {counterpart.translate(`field.labels.btc_withdraw_instruction`)}
+          </span>
+        </Styled.WithdrawalInstruction>
+        <DownloadBitcoinKeys
+          bitcoinSidechainAccount={bitcoinSidechainAccount.account}
+          getSidechainAccounts={getSidechainAccounts}
         />
-      </Form.Item>
-      <Form.Item
-        name="withdrawAddress"
-        validateFirst={true}
-        rules={formValidation.withdrawAddress}
-      >
-        <Input
-          placeholder={counterpart.translate(
-            `field.placeholder.withdraw_address`
-          )}
-          className="form-input"
-          disabled={localStorageAccount ? false : true}
-          autoComplete="off"
-        />
-      </Form.Item>
-      <Styled.WithdrawalInstruction>
-        <Styled.IconWrapper>
-          <BitcoinIcon height="30" width="30" />
-        </Styled.IconWrapper>
-        <span>
-          {counterpart.translate(`field.labels.btc_withdraw_instruction`)}
-        </span>
-      </Styled.WithdrawalInstruction>
-      <DownloadBitcoinKeys
-        bitcoinSidechainAccount={bitcoinSidechainAccount as SidechainAccount}
-        getSidechainAccounts={getSidechainAccounts}
-      />
-      {transactionDetails}
-      {submitButton}
-    </>
-  ) : (
-    ""
-  );
+        {transactionDetails}
+        {submitButton}
+      </>
+    ) : (
+      ""
+    );
 
   const hiveFormBody = (
     <>
@@ -343,7 +349,8 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
       </Form.Provider>
       {isLoggedIn &&
         selectedAsset === BITCOIN_ASSET_SYMBOL &&
-        !hasBTCDepositAddress &&
+        (!bitcoinSidechainAccount ||
+          !bitcoinSidechainAccount.hasDepositAddress) &&
         !loadingSidechainAccounts && (
           <GenerateBitcoinAddress getSidechainAccounts={getSidechainAccounts} />
         )}

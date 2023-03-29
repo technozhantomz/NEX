@@ -1,0 +1,54 @@
+import counterpart from "counterpart";
+
+import { InfoCircleOutlined } from "../../../ui/src";
+import { SidechainAccount } from "../../types";
+
+import * as Styled from "./DownloadEthereumKeys.styled";
+import { useDownloadEthereumKeys } from "./hooks";
+
+type Props = {
+  ethereumSidechainAccount: SidechainAccount;
+  getSidechainAccounts: (accountId: string) => Promise<void>;
+};
+export const DownloadEthereumKeys = ({
+  ethereumSidechainAccount,
+  getSidechainAccounts,
+}: Props): JSX.Element => {
+  const { downloaded, downloadPrivateKeys } = useDownloadEthereumKeys({
+    getSidechainAccounts,
+  });
+
+  return (
+    <>
+      {!downloaded ? (
+        <>
+          <Styled.InfoBox>
+            <InfoCircleOutlined />
+            <Styled.DisclaimerFooter>
+              {counterpart.translate(
+                `field.labels.ethereum_associated_account`
+              )}
+            </Styled.DisclaimerFooter>
+          </Styled.InfoBox>
+          <Styled.AddressLinkContainer>
+            <Styled.AddressDownloadLink
+              onClick={() =>
+                downloadPrivateKeys(ethereumSidechainAccount.deposit_address)
+              }
+            >
+              {counterpart.translate(`field.labels.download_private_keys`)}
+            </Styled.AddressDownloadLink>
+          </Styled.AddressLinkContainer>
+          <Styled.InfoBox>
+            <InfoCircleOutlined />
+            <Styled.DisclaimerFooter>
+              {counterpart.translate(`field.labels.private_keys_warning`)}
+            </Styled.DisclaimerFooter>
+          </Styled.InfoBox>
+        </>
+      ) : (
+        ""
+      )}
+    </>
+  );
+};

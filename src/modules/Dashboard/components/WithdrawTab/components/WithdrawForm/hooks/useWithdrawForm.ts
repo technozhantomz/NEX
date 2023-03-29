@@ -8,9 +8,8 @@ import {
   defaultToken,
   SON_ACCOUNT_NAME,
   testnetCheck,
-} from "../../../../api/params";
-import { utils } from "../../../../api/utils";
-import { Form } from "../../../../ui/src";
+} from "../../../../../../../api/params";
+import { utils } from "../../../../../../../api/utils";
 import {
   TransactionMessageActionType,
   useAccount,
@@ -21,9 +20,17 @@ import {
   useTransactionBuilder,
   useTransactionMessage,
   useTransferTransactionBuilder,
-} from "../../../hooks";
-import { useAssetsContext, useUserContext } from "../../../providers";
-import { Account, SignerKey, Transaction } from "../../../types";
+} from "../../../../../../../common/hooks";
+import {
+  useAssetsContext,
+  useUserContext,
+} from "../../../../../../../common/providers";
+import {
+  Account,
+  SignerKey,
+  Transaction,
+} from "../../../../../../../common/types";
+import { Form } from "../../../../../../../ui/src";
 
 import { UseWithdrawFormResult, WithdrawForm } from "./useWithdrawForm.types";
 
@@ -34,13 +41,8 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const { limitByPrecision } = useAsset();
   const { sidechainAssets } = useAssetsContext();
   const { getSonNetworkStatus, sonAccount } = useSonNetwork();
-  const {
-    bitcoinSidechainAccount,
-    sidechainAccounts,
-    hasBTCDepositAddress,
-    loadingSidechainAccounts,
-    getSidechainAccounts,
-  } = useUserContext();
+  const { sidechainAccounts, loadingSidechainAccounts, getSidechainAccounts } =
+    useUserContext();
   const { getAccountByName, formAccountBalancesByName } = useAccount();
   const { account, localStorageAccount, assets, id } = useUserContext();
   const { buildTrx, getTrxFee } = useTransactionBuilder();
@@ -59,6 +61,7 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [amount, setAmount] = useState<string>("0");
   const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
   const [btcTransferFee, setBtcTransferFee] = useState<number>(0.0003);
+  // const [ethTransferFee, setEthtransferFee] = useState<number>(0.001);
   const userBalance = useMemo(() => {
     if (assets && assets.length > 0) {
       const userAsset = assets.find((asset) => asset.symbol === selectedAsset);
@@ -77,6 +80,12 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       return 8;
     }
   }, [selectedAsset, sidechainAssets]);
+  const bitcoinSidechainAccount = useMemo(() => {
+    return sidechainAccounts["bitcoin"];
+  }, [sidechainAccounts]);
+  // const ethereumSidechainAccount = useMemo(() => {
+  //   return sidechainAccounts["ethereum"];
+  // }, [sidechainAccounts]);
 
   const handleValuesChange = (changedValues: { amount?: string }) => {
     if (changedValues.amount) {
@@ -101,9 +110,9 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       };
       if (String(value) === BITCOIN_ASSET_SYMBOL) {
         withdrawFormValues["withdrawAddress"] =
-          bitcoinSidechainAccount?.withdraw_address;
+          bitcoinSidechainAccount?.account.withdraw_address;
         withdrawFormValues["withdrawPublicKey"] =
-          bitcoinSidechainAccount?.withdraw_public_key;
+          bitcoinSidechainAccount?.account.withdraw_public_key;
       } else {
         withdrawFormValues["withdrawAddress"] = "";
       }
@@ -178,8 +187,10 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     });
     const values = withdrawForm.getFieldsValue();
     const btcSidechainAddressesChanged =
-      values.withdrawAddress !== bitcoinSidechainAccount?.withdraw_address ||
-      values.withdrawPublicKey !== bitcoinSidechainAccount?.withdraw_public_key;
+      values.withdrawAddress !==
+        bitcoinSidechainAccount?.account.withdraw_address ||
+      values.withdrawPublicKey !==
+        bitcoinSidechainAccount?.account.withdraw_public_key;
 
     if (
       selectedAsset === BITCOIN_ASSET_SYMBOL &&
@@ -188,14 +199,14 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       const transactions: Transaction[] = [];
       const deleteTrx = buildDeletingBitcoinSidechainTransaction(
         id,
-        bitcoinSidechainAccount?.id as string,
+        bitcoinSidechainAccount?.account.id as string,
         id
       );
       transactions.push(deleteTrx);
       const addTrx = buildAddingBitcoinSidechainTransaction(
         id,
         id,
-        bitcoinSidechainAccount?.deposit_public_key as string,
+        bitcoinSidechainAccount?.account.deposit_public_key as string,
         values.withdrawPublicKey,
         values.withdrawAddress
       );
@@ -465,19 +476,14 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       selectedAsset === BITCOIN_ASSET_SYMBOL &&
       !loadingSidechainAccounts &&
       bitcoinSidechainAccount &&
-      hasBTCDepositAddress
+      bitcoinSidechainAccount.hasDepositAddress
     ) {
       withdrawForm.setFieldsValue({
-        withdrawAddress: bitcoinSidechainAccount?.withdraw_address,
-        withdrawPublicKey: bitcoinSidechainAccount?.withdraw_public_key,
+        withdrawAddress: bitcoinSidechainAccount.account.withdraw_address,
+        withdrawPublicKey: bitcoinSidechainAccount.account.withdraw_public_key,
       });
     }
-  }, [
-    loadingSidechainAccounts,
-    sidechainAccounts,
-    bitcoinSidechainAccount,
-    hasBTCDepositAddress,
-  ]);
+  }, [loadingSidechainAccounts, bitcoinSidechainAccount]);
 
   return {
     withdrawForm,
@@ -494,7 +500,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
     btcTransferFee,
     setBtcTransferFee,
     selectedAssetPrecision,
-    hasBTCDepositAddress,
     bitcoinSidechainAccount,
     getSidechainAccounts,
     loadingSidechainAccounts,

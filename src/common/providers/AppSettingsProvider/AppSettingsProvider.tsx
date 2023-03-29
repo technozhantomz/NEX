@@ -111,6 +111,7 @@ export function AppSettingsProvider({
     [_setConnectedNode]
   );
 
+  // We use versioning for backward-incompatible changes in local storage
   const setLocalForceVersion = useCallback(() => {
     if (localForceVersion !== config.forceVersion) {
       _setLocalForceVersion(config.forceVersion as string);

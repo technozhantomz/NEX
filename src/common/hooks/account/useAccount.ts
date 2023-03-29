@@ -25,7 +25,7 @@ export function useAccount(): UseAccountResult {
     savePassword,
     removePassword,
     setLocalStorageAccount,
-    setBitcoinSidechainAccounts,
+    setSessionBitcoinSidechainAccounts,
   } = useUserContext();
   const { formAssetBalanceById } = useAsset();
   const { dbApi, whaleVaultInstance } = usePeerplaysApiContext();
@@ -79,7 +79,7 @@ export function useAccount(): UseAccountResult {
     updateAccount("", "", [], undefined);
     removePassword();
     setLocalStorageAccount("");
-    setBitcoinSidechainAccounts(undefined);
+    setSessionBitcoinSidechainAccounts(undefined);
   }, [updateAccount, removePassword, setLocalStorageAccount]);
 
   const formAccountAfterConfirmation = useCallback(
