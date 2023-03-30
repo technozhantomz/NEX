@@ -24,7 +24,6 @@ import {
 } from "../../../../../../../common/hooks";
 import {
   useAssetsContext,
-  usePeerplaysApiContext,
   useUserContext,
 } from "../../../../../../../common/providers";
 import {
@@ -57,7 +56,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [withdrawForm] = Form.useForm<WithdrawForm>();
   const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
-  const { dbApi } = usePeerplaysApiContext();
 
   const [withdrawFee, setWithdrawFee] = useState<number>(0);
   const [selectedAssetSymbol, setSelectedAssetSymbol] = useState<string>(asset);
@@ -581,15 +579,6 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       withdrawForm.resetFields();
     }
   }, [loadingSidechainAccounts]);
-
-  const test = async () => {
-    const x = await dbApi("s", []);
-    console.log("This is ", x);
-  };
-
-  useEffect(() => {
-    test();
-  }, []);
 
   return {
     withdrawForm,
