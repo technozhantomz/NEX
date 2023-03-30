@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 
 import {
   TransactionMessageAction,
@@ -12,7 +12,7 @@ export type UseWithdrawFormResult = {
   withdrawForm: FormInstance<WithdrawForm>;
   handleValuesChange: (changedValues: { amount?: string }) => void;
   handleAssetChange: (value: unknown) => void;
-  selectedAsset: string;
+  selectedAssetSymbol: string;
   transactionMessageState: TransactionMessageState;
   dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
   handleWithdraw: (signerKey: SignerKey) => Promise<void>;
@@ -20,7 +20,6 @@ export type UseWithdrawFormResult = {
   userBalance: number;
   withdrawFee: number;
   btcTransferFee: number;
-  setBtcTransferFee: Dispatch<SetStateAction<number>>;
   selectedAssetPrecision: number;
   bitcoinSidechainAccount:
     | {
@@ -28,8 +27,15 @@ export type UseWithdrawFormResult = {
         hasDepositAddress: boolean;
       }
     | undefined;
+  ethereumSidechainAccount:
+    | {
+        account: SidechainAccount;
+        hasDepositAddress: boolean;
+      }
+    | undefined;
   getSidechainAccounts: (accountId: string) => Promise<void>;
   loadingSidechainAccounts: boolean;
+  ethTransferFee: number;
 };
 
 export type FormField = {

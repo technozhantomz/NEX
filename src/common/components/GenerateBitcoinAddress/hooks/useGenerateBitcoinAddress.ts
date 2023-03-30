@@ -30,7 +30,7 @@ export function useGenerateBitcoinAddress(
     sessionBitcoinSidechainAccounts,
     setSessionBitcoinSidechainAccounts,
   } = useUserContext();
-  const { getSonNetworkStatus } = useSonNetwork();
+  const { isSidechainSonNetworkOk } = useSonNetwork();
   const { buildAddingBitcoinSidechainTransaction } =
     useSidechainTransactionBuilder();
 
@@ -64,9 +64,9 @@ export function useGenerateBitcoinAddress(
       });
 
       try {
-        const sonNetworkStatus = await getSonNetworkStatus(Sidechain.BITCOIN);
+        const isSonOk = await isSidechainSonNetworkOk(Sidechain.BITCOIN);
 
-        if (!sonNetworkStatus.isSonNetworkOk) {
+        if (!isSonOk) {
           dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(
@@ -133,7 +133,7 @@ export function useGenerateBitcoinAddress(
       setSessionBitcoinSidechainAccounts,
       dispatchTransactionMessage,
       id,
-      getSonNetworkStatus,
+      isSidechainSonNetworkOk,
     ]
   );
 

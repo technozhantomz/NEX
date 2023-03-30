@@ -84,7 +84,7 @@ export type Authority = {
   weight_threshold: number;
 };
 
-export type UserPermissions = {
+export type AccountAuthorities = {
   active: Authority | string;
   memo: Authority | string;
   owner: Authority | string;
@@ -190,6 +190,5 @@ export type EthereumSidechainAccounts =
 
 export type EthereumAccount = {
   address: string;
-  pubKey: string;
   privateKey: string;
 };

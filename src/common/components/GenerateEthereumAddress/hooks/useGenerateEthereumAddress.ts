@@ -23,7 +23,7 @@ export function useGenerateEthereumAddress(
     useTransactionMessage();
   const { buildTrx } = useTransactionBuilder();
   const { id } = useUserContext();
-  const { getSonNetworkStatus } = useSonNetwork();
+  const { isSidechainSonNetworkOk } = useSonNetwork();
   const { buildAddingEthereumSidechainTransaction } =
     useSidechainTransactionBuilder();
   const {
@@ -37,7 +37,6 @@ export function useGenerateEthereumAddress(
     const wallet = new ethers.Wallet(privateKey);
     return {
       address: wallet.address,
-      pubKey: wallet.signingKey.compressedPublicKey,
       privateKey: wallet.privateKey,
     };
   };
@@ -52,9 +51,11 @@ export function useGenerateEthereumAddress(
       });
 
       try {
-        const sonNetworkStatus = await getSonNetworkStatus(Sidechain.ETHEREUM);
+        const isSonNetworkOk = await isSidechainSonNetworkOk(
+          Sidechain.ETHEREUM
+        );
 
-        if (!sonNetworkStatus.isSonNetworkOk) {
+        if (!isSonNetworkOk) {
           dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(
@@ -81,8 +82,7 @@ export function useGenerateEthereumAddress(
       const trx = buildAddingEthereumSidechainTransaction(
         id,
         id,
-        deposit.pubKey,
-        withdraw.pubKey,
+        deposit.address,
         withdraw.address
       );
 
@@ -121,7 +121,7 @@ export function useGenerateEthereumAddress(
       setSessionEthereumSidechainAccounts,
       dispatchTransactionMessage,
       id,
-      getSonNetworkStatus,
+      isSidechainSonNetworkOk,
     ]
   );
 

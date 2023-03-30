@@ -16,8 +16,7 @@ export type UseSidechainTransactionBuilderResult = {
   buildAddingEthereumSidechainTransaction: (
     payer: string,
     sidechain_address_account: string,
-    deposit_public_key: string,
-    withdraw_public_key: string,
+    deposit_address: string,
     withdraw_address: string
   ) => Transaction;
   buildDeletingEthereumSidechainTransaction: (

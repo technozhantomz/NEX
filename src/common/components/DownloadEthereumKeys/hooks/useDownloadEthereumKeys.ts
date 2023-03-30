@@ -22,28 +22,19 @@ export function useDownloadEthereumKeys({
     setDownloaded(false);
   }
 
-  const downloadPrivateKeys = (sidechainDepositAddress: string): void => {
+  const downloadPrivateKeys = (): void => {
     const element = document.createElement("a");
     const fileContents = `
-      \n##### ${counterpart.translate(
-        "file_content.peerplays_eth_deposit_address"
-      )} #####
-      \nAddress: ${sidechainDepositAddress}
-      \n
       \n###### ${counterpart.translate(
         "file_content.eth_deposit_account"
-      )} (${counterpart.translate(
-      "file_content.eth_deposit_account_description"
-    )}) ######
+      )} ######
       \nAddress: ${sessionEthereumSidechainAccounts?.deposit.address}
-      \nPublic Key: ${sessionEthereumSidechainAccounts?.deposit.pubKey}
       \nPrivate Key: ${sessionEthereumSidechainAccounts?.deposit.privateKey}
       \n
       \n###### ${counterpart.translate(
         `file_content.eth_withdraw_account`
       )} ######
       \nAddress: ${sessionEthereumSidechainAccounts?.withdraw.address}
-      \nPublic Key: ${sessionEthereumSidechainAccounts?.withdraw.pubKey}
       \nPrivate Key: ${sessionEthereumSidechainAccounts?.withdraw.privateKey}
       \n
         `;

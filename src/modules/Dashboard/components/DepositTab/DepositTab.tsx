@@ -16,7 +16,7 @@ import {
   LoadingIndicator,
 } from "../../../../common/components";
 import { useAssetsContext, useUserContext } from "../../../../common/providers";
-import { Asset } from "../../../../common/types";
+import { Asset, Sidechain } from "../../../../common/types";
 import BitcoinIcon from "../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import EthereumIcon from "../../../../ui/src/icons/Cryptocurrencies/EthereumIcon.svg";
 
@@ -33,13 +33,12 @@ export const DepositTab = (): JSX.Element => {
   const { sidechainAssets } = useAssetsContext();
   const { handleAssetChange, selectedAsset } = useDepositTab();
   const bitcoinSidechainAccount = useMemo(() => {
-    return sidechainAccounts["bitcoin"];
+    return sidechainAccounts[Sidechain.BITCOIN];
   }, [sidechainAccounts]);
   const ethereumSidechainAccount = useMemo(() => {
-    return sidechainAccounts["ethereum"];
+    return sidechainAccounts[Sidechain.ETHEREUM];
   }, [sidechainAccounts]);
 
-  console.log("sidechainAccounts", sidechainAccounts);
   const isLoggedIn = localStorageAccount && localStorageAccount !== "";
 
   const renderBTCDepositInstruction = (instruction: string) => {
@@ -100,10 +99,7 @@ export const DepositTab = (): JSX.Element => {
         {renderEthDepositInstruction(
           counterpart.translate(`field.labels.deposit_eth`)
         )}
-        <DownloadEthereumKeys
-          ethereumSidechainAccount={ethereumSidechainAccount.account}
-          getSidechainAccounts={getSidechainAccounts}
-        />
+        <DownloadEthereumKeys getSidechainAccounts={getSidechainAccounts} />
       </Styled.AddressGeneratedContainer>
     ) : (
       <>

@@ -53,7 +53,6 @@ export const SidechainDepositInstructionContainer = styled.div`
   ${breakpoint.sm} {
     margin-bottom: 35px;
   }
-  margin-left: 11px;
 `;
 
 export const SidechainIconWrapper = styled.div`

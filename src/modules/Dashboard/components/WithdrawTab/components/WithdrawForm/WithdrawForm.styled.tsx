@@ -1,9 +1,4 @@
-import {
-  CardForm,
-  CardFormButton,
-  Form,
-  styled,
-} from "../../../../../../ui/src";
+import { CardForm, Form, styled } from "../../../../../../ui/src";
 import { breakpoint } from "../../../../../../ui/src/breakpoints";
 import { colors } from "../../../../../../ui/src/colors";
 
@@ -68,13 +63,6 @@ export const WithdrawFormAssetAmount = styled(CardForm.Item)`
   }
 `;
 
-export const WithdrawFormButton = styled(CardFormButton)`
-  margin-bottom: 25px;
-  ${breakpoint.sm} {
-    margin-bottom: 35px;
-  }
-`;
-
 export const FormItem = styled(Form.Item)`
   width: 255px;
   margin-left: auto;
@@ -94,43 +82,6 @@ export const Balance = styled.div`
   text-align: left;
   padding-left: 15px;
   font-size: 14px;
-`;
-
-export const WithdrawalInstruction = styled.div`
-  display: flex;
-  margin-bottom: 24px;
-  span {
-    color: ${colors.textColorSecondary};
-    font-size: 12px;
-    ${breakpoint.sm} {
-      font-size: 14px;
-    }
-  }
-`;
-
-export const IconWrapper = styled.div`
-  margin-right: 16px;
-`;
-
-export const DetailsWrapper = styled.div`
-  display: flex;
-  font-size: 12px;
-  ${breakpoint.sm} {
-    font-size: 14px;
-  }
-`;
-
-export const DetailsLabelWrapper = styled.div`
-  min-width: 150px;
-`;
-
-export const AmountsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const TransactionDetails = styled.div`
-  margin-bottom: 24px;
 `;
 
 export const LoadingIndicatorContainer = styled.div`

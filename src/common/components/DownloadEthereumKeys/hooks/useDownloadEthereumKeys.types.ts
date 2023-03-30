@@ -1,4 +1,4 @@
 export type UseDownloadEthereumKeysResult = {
   downloaded: boolean;
-  downloadPrivateKeys: (sidechainDepositAddress: string) => void;
+  downloadPrivateKeys: () => void;
 };

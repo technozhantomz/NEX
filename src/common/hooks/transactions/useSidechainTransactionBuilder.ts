@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import { useAssetsContext } from "../../providers";
-import { Transaction } from "../../types";
+import { Sidechain, Transaction } from "../../types";
 
 import { UseSidechainTransactionBuilderResult } from "./useSidechainTransactionBuilder.types";
 
@@ -25,7 +25,7 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
           },
           payer,
           sidechain_address_account,
-          sidechain: "bitcoin",
+          sidechain: Sidechain.BITCOIN,
           deposit_public_key,
           deposit_address: "",
           deposit_address_data: "",
@@ -53,7 +53,7 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
           payer,
           sidechain_address_id,
           sidechain_address_account,
-          sidechain: "bitcoin",
+          sidechain: Sidechain.BITCOIN,
         },
       };
       return trx;
@@ -65,8 +65,7 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
     (
       payer: string,
       sidechain_address_account: string,
-      deposit_public_key: string,
-      withdraw_public_key: string,
+      deposit_address: string,
       withdraw_address: string
     ) => {
       const trx: Transaction = {
@@ -78,12 +77,12 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
           },
           payer,
           sidechain_address_account,
-          sidechain: "ethereum",
-          deposit_public_key,
-          deposit_address: "",
+          sidechain: Sidechain.ETHEREUM,
+          deposit_public_key: deposit_address,
+          deposit_address: deposit_address,
           deposit_address_data: "",
-          withdraw_public_key,
-          withdraw_address,
+          withdraw_public_key: withdraw_address,
+          withdraw_address: withdraw_address,
         },
       };
       return trx;
@@ -106,7 +105,7 @@ export function useSidechainTransactionBuilder(): UseSidechainTransactionBuilder
           payer,
           sidechain_address_id,
           sidechain_address_account,
-          sidechain: "ethereum",
+          sidechain: Sidechain.ETHEREUM,
         },
       };
       return trx;
