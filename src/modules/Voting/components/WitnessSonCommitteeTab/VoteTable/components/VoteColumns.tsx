@@ -281,10 +281,10 @@ const createSonsColumns = (
           </>
         ) : _value === VoteStatus.PARTIALLY_APPROVED ? (
           <>
-            <Styled.Check></Styled.Check>
-            <Styled.ApprovedStatus>
+            <Styled.PartialCheck></Styled.PartialCheck>
+            <Styled.PartiallyApprovedStatus>
               {counterpart.translate(`pages.voting.status.partially_approved`)}
-            </Styled.ApprovedStatus>
+            </Styled.PartiallyApprovedStatus>
           </>
         ) : (
           <>
