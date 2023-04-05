@@ -997,15 +997,15 @@ export const en = {
       generate_btc_deposit_address:
         "Generate a Bitcoin address so you can deposit BTC to your Peerplays account",
       generate_eth_deposit_address:
-        "Generate a Ethereum address so you can deposit ETH to your Peerplays account",
+        "Generate an Ethereum address so you can deposit ETH to your Peerplays account",
       deposit_btc:
         "Deposit your BTC to the Bitcoin address listed above to send it to your Peerplays account",
       deposit_eth:
         "Deposit your ETH to the Ethereum address listed above to send it to your Peerplays account",
       bitcoin_associated_account:
-        "Your new Bitcoin addresses now associated with your account",
+        "Your new Bitcoin addresses are now associated with your account",
       ethereum_associated_account:
-        "Your new Ethereum addresses now associated with your account",
+        "Your new Ethereum addresses are now associated with your account",
       download_private_keys: "Download Private Keys",
       private_keys_warning:
         "The private keys must be saved securely as it will be shown just once during the deposit address creation",
@@ -1019,7 +1019,7 @@ export const en = {
       btc_withdraw_instruction:
         "Withdraw your BTC to the Bitcoin public key and address above or update them.",
       eth_withdraw_instruction:
-        "Withdraw your ETH to the Ethereum public key and address above or update them.",
+        "Withdraw your ETH to the Ethereum address above or update it.",
       hive_blockchain_account: "Withdrawal Address (Hive account)",
       hive_withdraw_instruction:
         "Withdraw your %(asset)s to the Hive blockchain account entered above",
@@ -1247,9 +1247,9 @@ export const en = {
       canceled_limit_order:
         "You have successfully canceled #%(selectedOrderId)s order",
       successfully_generate_btc_addresses:
-        "You have successfully generated bitcoin deposit and withdrawal addresses",
+        "You have successfully generated Bitcoin deposit and withdrawal addresses",
       successfully_generate_eth_addresses:
-        "You have successfully generated ethereum deposit and withdrawal addresses",
+        "You have successfully generated Ethereum deposit and withdrawal addresses",
     },
   },
   settings: {
@@ -1359,7 +1359,6 @@ export const en = {
     peerplays_btc_deposit_address: "PeerPlays Deposit Address",
     eth_withdraw_account: "Ethereum Withdraw Account",
     eth_deposit_account: "Ethereum Deposit Account",
-    peerplays_eth_deposit_address: "PeerPlays Deposit Address",
   },
   transfer: {
     transfer: "Transfer",

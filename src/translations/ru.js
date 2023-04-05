@@ -524,6 +524,9 @@ export const ru = {
     market: "Рынок",
     generate_bitcoin_address: "Создание биткойн-адресов",
     login_and_generate_bitcoin_address: "Войдите и сгенерируйте биткойн-адреса",
+    generate_ethereum_address: "Создание адресов Ethereum",
+    login_and_generate_ethereum_address:
+      "Войдите и сгенерируйте адреса Ethereum",
     dont_have_peerplays_account: "У вас нет учетной записи Peerplays? ",
     log_in_withdraw: "Войти и вывести %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Войти и внести депозит %(assetSymbol)s",
@@ -691,6 +694,7 @@ export const ru = {
       select_this_asset: "Выберите этот объект",
       select_to_receive: "Выберите актив для получения",
       no_btc_address: "Биткойн-адрес еще не связан с вашей учетной записью",
+      no_eth_address: "Адрес Ethereum еще не связан с вашей учетной записью",
       receive_selected_asset_instruction:
         "Чтобы получить %(assetSymbol)s, отправьте средства на %(account)s в блокчейне Peerplays",
       send_assets: "Отправить активы",
@@ -993,19 +997,30 @@ export const ru = {
       swap_fee_info: "Для завершения обмена применяются следующие сборы",
       generate_btc_deposit_address:
         "Создайте биткойн-адрес, чтобы вы могли внести BTC на свою учетную запись Peerplays.",
+      generate_eth_deposit_address:
+        "Создайте адрес Ethereum, чтобы вы могли внести ETH на свою учетную запись Peerplays.",
       deposit_btc:
         "Внесите свой BTC на указанный выше биткойн-адрес, чтобы отправить его на свою учетную запись Peerplays.",
+      deposit_eth:
+        "Внесите свой ETH на адрес Ethereum, указанный выше, чтобы отправить его на свою учетную запись Peerplays.",
       bitcoin_associated_account:
         "Ваши новые биткойн-адреса теперь связаны с вашей учетной записью",
+      ethereum_associated_account:
+        "Ваши новые адреса Ethereum теперь связаны с вашей учетной записью.",
       download_private_keys: "Скачать закрытые ключи",
       private_keys_warning:
         "Закрытые ключи должны быть надежно сохранены, так как они будут показаны только один раз при создании адреса депозита.",
       bitcoin_deposit_address: "Адрес депозита (адрес BTC)",
+      ethereum_deposit_address: "Адрес депозита (адрес Ethereum)",
       sidechain: "Боковая цепь",
       fetching_price: "Получение цены",
       withdraw_public_key_address: "Сжатый открытый ключ и адрес вывода",
+      ethereum_withdrawal_address:
+        "Адрес для вывода средств (адрес учетной записи Ethereum)",
       btc_withdraw_instruction:
         "Выведите свои BTC на открытый ключ Bitcoin и адрес выше или обновите их.",
+      eth_withdraw_instruction:
+        "Выведите свой ETH на указанный выше адрес Ethereum или обновите его.",
       hive_blockchain_account: "Адрес для вывода средств (учетная запись Hive)",
       hive_withdraw_instruction:
         "Выведите свои %(asset)s на учетную запись блокчейна Hive, указанную выше.",
@@ -1013,6 +1028,7 @@ export const ru = {
       total_transaction: "Всего транзакций: ",
       withdrawal_confirmation_time: "Время подтверждения: ",
       btc_withdrawal_confirmation_time: "~10 минуты",
+      eth_withdrawal_confirmation_time: "~5 минуты",
       hive_withdrawal_confirmation_time: "~3 минуты",
       peerplays_confirmation_time: "~3 секунды",
       estimated_fees_label: "Расчетные сборы: ",
@@ -1105,8 +1121,12 @@ export const ru = {
     errors: {
       first_select_asset: "Сначала выберите объект",
       first_select_blockchain: "Сначала выберите блокчейн",
+      first_generate_deposit_addresses:
+        "Пожалуйста, сначала создайте адреса депозита и вывода средств на вкладке «Депозит» на панели инструментов.",
       first_generate_btc_deposit_addresses:
         "Сначала сгенерируйте биткойн-адреса на вкладке «Депозит» на панели управления.",
+      first_generate_eth_deposit_addresses:
+        "Пожалуйста, сначала сгенерируйте адреса Ethereum на вкладке «Депозит» на панели инструментов.",
       loading_sidechain_accounts:
         "Подождите, пока загрузятся сайдчейн-аккаунты.",
       unable_to_create_account:
@@ -1114,6 +1134,7 @@ export const ru = {
       enter_amount: "Введите сумму",
       invalid_bitcoin_public_key:
         "Открытый ключ недействителен для биткойн %(network)s",
+      invalid_ethereum_address: "Адрес недействителен.",
       insufficient_asset_balance: "Недостаточный баланс %(asset)s",
       insufficient_balance_for_fee: "Недостаточно %(coreAsset)s для комиссии",
       not_enough_liquidity: "Недостаточно ликвидности",
@@ -1230,6 +1251,8 @@ export const ru = {
       canceled_limit_order: "Вы успешно отменили заказ #%(selectedOrderId)s",
       successfully_generate_btc_addresses:
         "Вы успешно сгенерировали адреса ввода и вывода биткойнов",
+      successfully_generate_eth_addresses:
+        "Вы успешно сгенерировали адреса депозита и вывода Ethereum",
     },
   },
   settings: {
@@ -1337,6 +1360,8 @@ export const ru = {
     btc_deposit_account_description:
       "Используется для создания депозитного адреса PeerPlays с мультиподписью выше.",
     peerplays_btc_deposit_address: "Адрес депозита PeerPlays",
+    eth_withdraw_account: "Счет для вывода Эфириума",
+    eth_deposit_account: "Депозитный счет Ethereum",
   },
   transfer: {
     transfer: "Передача",
