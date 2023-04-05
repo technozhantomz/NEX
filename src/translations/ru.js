@@ -808,6 +808,7 @@ export const ru = {
       lower_case_committees: "комитеты",
       status: {
         approved: "Утверждено",
+        partially_approved: "Частично одобрено",
         not_approved: "Не одобрено",
         pending_add: "голосование за одобрение",
         pending_remove: "голосование за снятие одобрения",

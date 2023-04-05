@@ -272,12 +272,19 @@ const createSonsColumns = (
     //status
     (_value: string, _record: VoteRow): JSX.Element => (
       <>
-        {_value === "unapproved" ? (
+        {_value === VoteStatus.UNAPPROVED ? (
           <>
             <Styled.Xmark></Styled.Xmark>
             <Styled.NotApprovedStatus>
               {counterpart.translate(`pages.voting.status.not_approved`)}
             </Styled.NotApprovedStatus>
+          </>
+        ) : _value === VoteStatus.PARTIALLY_APPROVED ? (
+          <>
+            <Styled.PartialCheck></Styled.PartialCheck>
+            <Styled.PartiallyApprovedStatus>
+              {counterpart.translate(`pages.voting.status.partially_approved`)}
+            </Styled.PartiallyApprovedStatus>
           </>
         ) : (
           <>

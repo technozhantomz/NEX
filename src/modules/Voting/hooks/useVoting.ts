@@ -81,7 +81,6 @@ export function useVoting(): UseVotingResult {
     setLoadingUserVotes(true);
     const fullAccount = await getFullAccount(localStorageAccount, false);
     if (fullAccount !== undefined) {
-      console.log("fullAccount", fullAccount);
       const proxyId = fullAccount.account.options.voting_account;
       const [proxy, gposInfo] = await Promise.all([
         getProxyAccount(proxyId),
