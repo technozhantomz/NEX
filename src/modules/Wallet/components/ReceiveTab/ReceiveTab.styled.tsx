@@ -1,4 +1,7 @@
-import { GenerateBitcoinAddress as UiGenerateBitcoinAddress } from "../../../../common/components";
+import {
+  GenerateBitcoinAddress as UiGenerateBitcoinAddress,
+  GenerateEthereumAddress as UiGenerateEthereumAddress,
+} from "../../../../common/components";
 import { styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
@@ -20,8 +23,17 @@ export const GenerateBitcoinAddress = styled(UiGenerateBitcoinAddress)`
     }
   }
 `;
+export const GenerateEthereumAddress = styled(UiGenerateEthereumAddress)`
+  .ant-form-item {
+    width: 100%;
+    margin: 0 !important;
+    ${breakpoint.sm} {
+      width: 350px;
+    }
+  }
+`;
 
-export const BtcNotAssociated = styled.div`
+export const SidechainAddressNotAssociated = styled.div`
   font-size: 14px;
   color: ${colors.textColorSecondary};
   margin-bottom: 24px;
@@ -51,23 +63,22 @@ export const Header = styled.div`
   }
 `;
 
-export const BTCDepositInstructionContainer = styled.div`
+export const SidechainDepositInstructionContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 25px;
   ${breakpoint.sm} {
     margin-bottom: 35px;
   }
-  margin-left: 11px;
 `;
 
-export const BTCIconWrapper = styled.div`
+export const SidechainIconWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-right: 10px;
 `;
 
-export const BTCDepositInstruction = styled.div`
+export const SidechainDepositInstruction = styled.div`
   color: ${colors.textColor};
   font-size: 14px;
 `;

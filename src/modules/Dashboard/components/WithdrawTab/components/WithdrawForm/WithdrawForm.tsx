@@ -31,11 +31,7 @@ import {
 } from "./components";
 import { useWithdrawForm } from "./hooks";
 
-type Props = {
-  asset: string;
-};
-
-export const WithdrawForm = ({ asset }: Props): JSX.Element => {
+export const WithdrawForm = (): JSX.Element => {
   const { localStorageAccount } = useUserContext();
   const { sidechainAssets } = useAssetsContext();
   const { limitByPrecision } = useAsset();
@@ -58,7 +54,7 @@ export const WithdrawForm = ({ asset }: Props): JSX.Element => {
     getSidechainAccounts,
     loadingSidechainAccounts,
     ethTransferFee,
-  } = useWithdrawForm(asset);
+  } = useWithdrawForm();
 
   const {
     isPasswordModalVisible,

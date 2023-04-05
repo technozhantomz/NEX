@@ -4,8 +4,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   BITCOIN_ASSET_SYMBOL,
+  BTC_DEFAULT_WITHDRAWAL_FEE,
   BTC_MIN_WITHDRAWAL,
   defaultToken,
+  ETH_DEFAULT_WITHDRAWAL_FEE,
   ETH_MIN_WITHDRAWAL,
   ETHEREUM_ASSET_SYMBOL,
   SON_ACCOUNT_NAME,
@@ -16,6 +18,7 @@ import {
   useAccount,
   useAsset,
   useFees,
+  useSidechainApi,
   useSidechainTransactionBuilder,
   useSonNetwork,
   useTransactionBuilder,
@@ -36,7 +39,7 @@ import { Form } from "../../../../../../../ui/src";
 
 import { UseWithdrawFormResult, WithdrawForm } from "./useWithdrawForm.types";
 
-export function useWithdrawForm(asset: string): UseWithdrawFormResult {
+export function useWithdrawForm(): UseWithdrawFormResult {
   const { limitByPrecision } = useAsset();
   const { sidechainAssets } = useAssetsContext();
   const { isSidechainSonNetworkOk, sonAccount } = useSonNetwork();
@@ -56,13 +59,20 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
   const [withdrawForm] = Form.useForm<WithdrawForm>();
   const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
+  const { estimateWithdrawalFeeBySidechain } = useSidechainApi();
+  const { setPrecision } = useAsset();
 
   const [withdrawFee, setWithdrawFee] = useState<number>(0);
-  const [selectedAssetSymbol, setSelectedAssetSymbol] = useState<string>(asset);
+  const [selectedAssetSymbol, setSelectedAssetSymbol] =
+    useState<string>(BITCOIN_ASSET_SYMBOL);
   const [amount, setAmount] = useState<string>("0");
   const [isSonNetworkOk, setIsSonNetworkOk] = useState<boolean>();
-  const [btcTransferFee, _setBtcTransferFee] = useState<number>(0.0003);
-  const [ethTransferFee, _setEthTransferFee] = useState<number>(0.003);
+  const [btcTransferFee, setBtcTransferFee] = useState<number>(
+    BTC_DEFAULT_WITHDRAWAL_FEE
+  );
+  const [ethTransferFee, setEthTransferFee] = useState<number>(
+    ETH_DEFAULT_WITHDRAWAL_FEE
+  );
 
   const selectedAsset = useMemo(() => {
     if (sidechainAssets && sidechainAssets.length > 0) {
@@ -579,6 +589,46 @@ export function useWithdrawForm(asset: string): UseWithdrawFormResult {
       withdrawForm.resetFields();
     }
   }, [loadingSidechainAccounts]);
+
+  useEffect(() => {
+    let ignore = false;
+    async function setSidechainWithdrawalFee() {
+      const sidechain = utils.getSidechainFromAssetSymbol(
+        selectedAssetSymbol.toUpperCase()
+      );
+      const sidechainWithdrawalFee = await estimateWithdrawalFeeBySidechain(
+        sidechain
+      );
+      if (!ignore && sidechainWithdrawalFee) {
+        if (sidechain === Sidechain.ETHEREUM) {
+          setEthTransferFee(
+            setPrecision(
+              false,
+              sidechainWithdrawalFee.amount,
+              selectedAssetPrecision
+            )
+          );
+        } else if (sidechain === Sidechain.BITCOIN) {
+          setBtcTransferFee(
+            setPrecision(
+              false,
+              sidechainWithdrawalFee.amount,
+              selectedAssetPrecision
+            )
+          );
+        }
+      }
+    }
+    setSidechainWithdrawalFee();
+    const feeEstimationInterval = setInterval(
+      () => setSidechainWithdrawalFee(),
+      12000
+    );
+    return () => {
+      ignore = true;
+      clearInterval(feeEstimationInterval);
+    };
+  }, [estimateWithdrawalFeeBySidechain, selectedAssetSymbol]);
 
   return {
     withdrawForm,

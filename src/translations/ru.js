@@ -1105,7 +1105,7 @@ export const ru = {
     errors: {
       first_select_asset: "Сначала выберите объект",
       first_select_blockchain: "Сначала выберите блокчейн",
-      first_generate_deposit_addresses:
+      first_generate_btc_deposit_addresses:
         "Сначала сгенерируйте биткойн-адреса на вкладке «Депозит» на панели управления.",
       loading_sidechain_accounts:
         "Подождите, пока загрузятся сайдчейн-аккаунты.",
