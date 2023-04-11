@@ -24,12 +24,17 @@ import { mixIns } from "../../../../../ui/src/mixins";
 
 export const LikeFilledIcon = styled(LikeFilled)`
   font-size: 16px;
-  color: ${colors.textColorSecondary};
+  color: ${colors.approvedStatus};
+`;
+
+export const LikePartiallyFilledIcon = styled(LikeFilled)`
+  font-size: 16px;
+  color: ${colors.partiallyApprovedStatus};
 `;
 
 export const LikeOutlinedIcon = styled(LikeOutlined)`
   font-size: 16px;
-  color: ${colors.textColorSecondary};
+  color: ${colors.unapprovedStatus};
 `;
 
 export const MissedBlocks = styled(DataTableMissedBlocks)``;
@@ -140,6 +145,10 @@ export const Check = styled(check)`
   color: #11b881;
 `;
 
+export const PartialCheck = styled(check)`
+  color: ${colors.partiallyApprovedStatus};
+`;
+
 export const Xmark = styled(xmark)`
   color: #d01721;
 `;
@@ -155,11 +164,15 @@ export const urlIcon = styled(DataTableUrlIcon)``;
 export const ActiveIcon = styled(DataTableActiveIcon)``;
 
 export const ApprovedStatus = styled.span`
-  color: ${colors.successColor};
+  color: ${colors.approvedStatus};
+`;
+
+export const PartiallyApprovedStatus = styled.span`
+  color: ${colors.partiallyApprovedStatus};
 `;
 
 export const NotApprovedStatus = styled.span`
-  color: ${colors.missedColor};
+  color: ${colors.unapprovedStatus};
 `;
 
 export const ExpandableContainer = styled.div`

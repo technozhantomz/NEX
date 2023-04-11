@@ -2,11 +2,11 @@ import { Login, PrivateKey } from "peerplaysjs-lib";
 import { useCallback } from "react";
 
 import { defaultToken } from "../../../api/params";
-import { KeyType, UserPermissions } from "../../types";
+import { AccountAuthorities, KeyType } from "../../types";
 
 type UseFormKeysResult = {
-  formKeys: (name: string, password: string) => UserPermissions;
-  formWifKeys: (name: string, password: string) => UserPermissions;
+  formKeys: (name: string, password: string) => AccountAuthorities;
+  formWifKeys: (name: string, password: string) => AccountAuthorities;
   formWifKey: (
     username: string,
     password: string,
@@ -29,7 +29,7 @@ type UseFormKeysResult = {
 
 export function useFormKeys(): UseFormKeysResult {
   const formKeys = useCallback((name: string, password: string) => {
-    const keys: UserPermissions = {
+    const keys: AccountAuthorities = {
       active: "",
       memo: "",
       owner: "",
@@ -44,7 +44,7 @@ export function useFormKeys(): UseFormKeysResult {
     );
 
     for (const role of roles) {
-      keys[role as keyof UserPermissions] =
+      keys[role as keyof AccountAuthorities] =
         generatedKeys.pubKeys[role].toString();
     }
 
@@ -52,7 +52,7 @@ export function useFormKeys(): UseFormKeysResult {
   }, []);
 
   const formWifKeys = useCallback((name: string, password: string) => {
-    const keys: UserPermissions = {
+    const keys: AccountAuthorities = {
       active: "",
       memo: "",
       owner: "",
@@ -67,7 +67,7 @@ export function useFormKeys(): UseFormKeysResult {
     );
 
     for (const role of roles) {
-      keys[role as keyof UserPermissions] =
+      keys[role as keyof AccountAuthorities] =
         generatedKeys.privKeys[role].toWif();
     }
 

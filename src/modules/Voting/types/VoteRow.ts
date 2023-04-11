@@ -50,4 +50,5 @@ export type VoteRow = {
 export enum VoteStatus {
   APPROVED = "approved",
   UNAPPROVED = "unapproved",
+  PARTIALLY_APPROVED = "partial_approved",
 }
