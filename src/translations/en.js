@@ -523,6 +523,8 @@ export const en = {
     market: "Market",
     generate_bitcoin_address: "Generate Bitcoin addresses",
     login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Addresses",
+    generate_ethereum_address: "Generate Ethereum addresses",
+    login_and_generate_ethereum_address: "Log in & Generate Ethereum Addresses",
     dont_have_peerplays_account: "Don't have a Peerplays account? ",
     log_in_withdraw: "Log in & Withdraw %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Log in & Deposit %(assetSymbol)s",
@@ -691,6 +693,8 @@ export const en = {
       select_to_receive: "Select an asset to receive",
       no_btc_address:
         "A Bitcoin address is not yet associated with your account",
+      no_eth_address:
+        "An Ethereum address is not yet associated with your account",
       receive_selected_asset_instruction:
         "To receive %(assetSymbol)s send funds to , %(account)s, on the Peerplays blockchain",
       send_assets: "Send assets",
@@ -805,6 +809,7 @@ export const en = {
       lower_case_committees: "committees",
       status: {
         approved: "Approved",
+        partially_approved: "Partially Approved",
         not_approved: "Not Approved",
         pending_add: "voting to approve",
         pending_remove: "voting to remove approval",
@@ -967,8 +972,8 @@ export const en = {
       user_name: "Enter username",
       master_password: "Enter master password",
       master_password_private_key: "Master password or private key",
-      withdraw_public_key: "Withdraw public key",
-      withdraw_address: "Withdraw address",
+      withdraw_public_key: "Withdrawal public key",
+      withdraw_address: "Withdrawal address",
       hive_blockchain_account: "Hive account",
       enter_amount: "Enter amount to send",
       amount: "Amount",
@@ -992,19 +997,30 @@ export const en = {
         "In order to complete swap the following fees is applicable",
       generate_btc_deposit_address:
         "Generate a Bitcoin address so you can deposit BTC to your Peerplays account",
+      generate_eth_deposit_address:
+        "Generate an Ethereum address so you can deposit ETH to your Peerplays account",
       deposit_btc:
         "Deposit your BTC to the Bitcoin address listed above to send it to your Peerplays account",
+      deposit_eth:
+        "Deposit your ETH to the Ethereum address listed above to send it to your Peerplays account",
       bitcoin_associated_account:
-        "Your new Bitcoin addresses now associated with your account",
+        "Your new Bitcoin addresses are now associated with your account",
+      ethereum_associated_account:
+        "Your new Ethereum addresses are now associated with your account",
       download_private_keys: "Download Private Keys",
       private_keys_warning:
         "The private keys must be saved securely as it will be shown just once during the deposit address creation",
       bitcoin_deposit_address: "Deposit address (BTC address)",
+      ethereum_deposit_address: "Deposit address (Ethereum address)",
       sidechain: "Sidechain",
       fetching_price: "Fetching price",
       withdraw_public_key_address: "Compressed Withdraw Public key & Address",
+      ethereum_withdrawal_address:
+        "Withdrawal Address (Ethereum account address)",
       btc_withdraw_instruction:
         "Withdraw your BTC to the Bitcoin public key and address above or update them.",
+      eth_withdraw_instruction:
+        "Withdraw your ETH to the Ethereum address above or update it.",
       hive_blockchain_account: "Withdrawal Address (Hive account)",
       hive_withdraw_instruction:
         "Withdraw your %(asset)s to the Hive blockchain account entered above",
@@ -1012,6 +1028,7 @@ export const en = {
       total_transaction: "Total Transaction: ",
       withdrawal_confirmation_time: "Confirmation Time: ",
       btc_withdrawal_confirmation_time: "~10 minutes",
+      eth_withdrawal_confirmation_time: "~5 minutes",
       hive_withdrawal_confirmation_time: "~3 minutes",
       peerplays_confirmation_time: "~3 seconds",
       estimated_fees_label: "Estimated Fees:",
@@ -1104,12 +1121,17 @@ export const en = {
       first_select_asset: "Please first select an asset",
       first_select_blockchain: "Please first select a blockchain",
       first_generate_deposit_addresses:
+        "Please first generate deposit and withdrawal addresses on the Dashboard Deposit tab",
+      first_generate_btc_deposit_addresses:
         "Please first generate Bitcoin addresses on the Dashboard Deposit tab",
+      first_generate_eth_deposit_addresses:
+        "Please first generate Ethereum addresses on the Dashboard Deposit tab",
       loading_sidechain_accounts: "Please wait for sidechain accounts to load",
       unable_to_create_account:
         "Unable to create an account. Please try again later",
       invalid_bitcoin_public_key:
         "The public key is not valid for Bitcoin %(network)s",
+      invalid_ethereum_address: "The address is not valid.",
       enter_amount: "Enter amount",
       insufficient_asset_balance: "Insufficient %(asset)s balance",
       insufficient_balance_for_fee: "Insufficient %(coreAsset)s for fee",
@@ -1148,7 +1170,7 @@ export const en = {
       to_required: "To is required",
       amount_required: "Amount is required",
       withdraw_add_required: "Withdraw address is required",
-      invalid_withdraw_hive_address: "Hive withdraw address is invalid",
+      invalid_withdraw_hive_address: "Hive withdrawal address is invalid",
       withdraw_pub_key_required: "Withdraw public key is required",
       sons_not_available_try_again:
         "SONs network is not available now. Please try again later!",
@@ -1226,7 +1248,9 @@ export const en = {
       canceled_limit_order:
         "You have successfully canceled #%(selectedOrderId)s order",
       successfully_generate_btc_addresses:
-        "You have successfully generated bitcoin deposit and withdrawal addresses",
+        "You have successfully generated Bitcoin deposit and withdrawal addresses",
+      successfully_generate_eth_addresses:
+        "You have successfully generated Ethereum deposit and withdrawal addresses",
     },
   },
   settings: {
@@ -1334,6 +1358,8 @@ export const en = {
     btc_deposit_account_description:
       "Used to create the above PeerPlays multi-signature deposit address",
     peerplays_btc_deposit_address: "PeerPlays Deposit Address",
+    eth_withdraw_account: "Ethereum Withdraw Account",
+    eth_deposit_account: "Ethereum Deposit Account",
   },
   transfer: {
     transfer: "Transfer",

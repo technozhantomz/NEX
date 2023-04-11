@@ -1,16 +1,20 @@
+import * as bitcoin from "bitcoinjs-lib";
 import counterpart from "counterpart";
+import * as ethers from "ethers";
 import { ClipboardEvent, KeyboardEvent } from "react";
 
 import { Sidechain } from "../../common/types";
 import {
-  assetsBlockchains,
+  ASSETS_BLOCKCHAINS,
   BITCOIN_NETWORK,
-  defaultNetwork,
+  DEFAULT_NETWORK,
   ETHEREUM_NETWORK,
   HIVE_NETWORK,
+  testnetCheck,
 } from "../params";
 
 const id_regex = /\b\d+\.\d+\.(\d+)\b/;
+const NETWORK = testnetCheck ? bitcoin.networks.regtest : undefined;
 
 export const utils = {
   sortID(a: string, b: string, inverse = false): number {
@@ -72,15 +76,15 @@ export const utils = {
   getNativeBlockchainFromAssetSymbol: (symbol: string): string => {
     const blockchains: Record<string, string> = {
       BTC: BITCOIN_NETWORK,
-      PBTC: defaultNetwork,
+      PBTC: DEFAULT_NETWORK,
       HIVE: HIVE_NETWORK,
       HBD: HIVE_NETWORK,
       PEOS: "EOSIO",
       EOS: "EOSIO",
       PETH: ETHEREUM_NETWORK,
       ETH: ETHEREUM_NETWORK,
-      TEST: defaultNetwork,
-      PPY: defaultNetwork,
+      TEST: DEFAULT_NETWORK,
+      PPY: DEFAULT_NETWORK,
     };
     return blockchains[symbol.toUpperCase()] || symbol;
   },
@@ -279,8 +283,44 @@ export const utils = {
     return blockchains[symbol.toUpperCase()];
   },
   getAssetBlockchains: (symbol: string): string[] => {
-    return assetsBlockchains[symbol]
-      ? assetsBlockchains[symbol]
-      : [defaultNetwork];
+    return ASSETS_BLOCKCHAINS[symbol]
+      ? ASSETS_BLOCKCHAINS[symbol]
+      : [DEFAULT_NETWORK];
+  },
+  validateBitcoinCompressedPublicKey: (
+    publicKey: string
+  ): string | undefined => {
+    if (
+      publicKey.length !== 66 ||
+      (publicKey.slice(0, 2) !== "03" && publicKey.slice(0, 2) !== "02")
+    ) {
+      return counterpart.translate(`field.errors.invalid_bitcoin_public_key`, {
+        network: testnetCheck ? "regtest" : "mainnet",
+      });
+    }
+  },
+  validateBitcoinAddress: (
+    address: string,
+    publicKey: string
+  ): string | undefined => {
+    const pubkey = Buffer.from(publicKey, "hex");
+    try {
+      const { address: createdAddress } = bitcoin.payments.p2pkh({
+        pubkey,
+        network: NETWORK,
+      });
+      if (address !== createdAddress) {
+        return counterpart.translate(`field.errors.not_match_address`);
+      }
+    } catch (e) {
+      console.log(e);
+      return counterpart.translate(`field.errors.first_valid_public_key`);
+    }
+  },
+  validateEthereumAddress: (address: string): string | undefined => {
+    const isAddress = ethers.isAddress(address);
+    if (!isAddress) {
+      return counterpart.translate("field.errors.invalid_ethereum_address");
+    }
   },
 };

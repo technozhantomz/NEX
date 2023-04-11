@@ -2,18 +2,11 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { usePeerplaysApiContext } from "../../providers";
-import {
-  Account,
-  ActiveSon,
-  GlobalProperties,
-  Sidechain,
-  SonAccount,
-  SonStatistics,
-} from "../../types";
+import { Account, Sidechain } from "../../types";
 import { useAccount } from "../account";
 import { useBlockchain } from "../blockchain";
 
-import { SonNetworkStatus, UseSonNetworkResult } from "./useSonNetwork.types";
+import { UseSonNetworkResult } from "./useSonNetwork.types";
 
 export function useSonNetwork(): UseSonNetworkResult {
   const [sonAccount, _setSonAccount] = useState<Account>();
@@ -31,162 +24,45 @@ export function useSonNetwork(): UseSonNetworkResult {
     }
   }, [getGlobalProperties, getAccounts]);
 
-  const getSons = useCallback(
-    async (
-      chainActiveSonsDetails: ActiveSon[]
-    ): Promise<{
-      sons: SonAccount[];
-      sonIds: string[];
-    }> => {
-      try {
-        if (chainActiveSonsDetails.length === 0) {
-          return { sons: [], sonIds: [] };
-        }
-        const sonIds = chainActiveSonsDetails.map(
-          (sonDetails) => sonDetails.son_id
-        );
-        const sons: SonAccount[] = await dbApi("get_sons", [sonIds]);
-        return { sons, sonIds };
-      } catch (e) {
-        console.log(e);
-        return { sons: [], sonIds: [] };
-      }
-    },
-    [dbApi]
-  );
+  const getSonNetworkStatus = useCallback(async () => {
+    try {
+      const sonNetworkStatus = await dbApi("get_son_network_status", []);
+      return sonNetworkStatus as [Sidechain, [string, string][]][];
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi]);
 
-  const getSonsStatistics = useCallback(
-    async (sons: SonAccount[]): Promise<SonStatistics[]> => {
-      try {
-        const sonsStatistics: SonStatistics[] = await dbApi("get_objects", [
-          sons.map((son) => {
-            if (son) {
-              return son.statistics;
-            }
-          }),
-        ]);
-        return sonsStatistics;
-      } catch (e) {
-        console.log(e);
-        return [];
-      }
-    },
-    [dbApi]
-  );
-
-  const getSonStatus = useCallback(
-    (
-      chain: Sidechain,
-      son: SonAccount,
-      sonsStatistics: SonStatistics,
-      gpo: GlobalProperties
-    ): { status: [string, string]; isActive: boolean } => {
-      const now = new Date();
-      const utcNowMS = new Date(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        now.getUTCHours(),
-        now.getUTCMinutes(),
-        now.getUTCSeconds(),
-        now.getUTCMilliseconds()
-      ).getTime();
-      const chainLastActiveTimeStamp =
-        sonsStatistics.last_active_timestamp.find(
-          (timestamp) => timestamp[0] === chain
-        ) as [Sidechain, string];
-      if (
-        new Date(chainLastActiveTimeStamp[1]).getTime() +
-          gpo.parameters.extensions.son_heartbeat_frequency * 1000 >
-        utcNowMS
-      ) {
-        return {
-          status: [son.id, "OK, regular SON heartbeat"],
-          isActive: true,
-        };
-      } else {
-        if (
-          new Date(chainLastActiveTimeStamp[1]).getTime() +
-            gpo.parameters.extensions.son_down_time * 1000 >
-          utcNowMS
-        ) {
-          return {
-            status: [
-              son.id,
-              "OK, irregular SON heartbeat, but not triggering SON down proposal",
-            ],
-            isActive: false,
-          };
-        } else {
-          return {
-            status: [
-              son.id,
-              "NOT OK, irregular SON heartbeat, triggering SON down proposal",
-            ],
-            isActive: false,
-          };
-        }
-      }
-    },
-    []
-  );
-
-  const getSonNetworkStatus = useCallback(
+  const getSonNetworkStatusBySidechain = useCallback(
     async (chain: Sidechain) => {
-      const result = { status: [], isSonNetworkOk: false } as SonNetworkStatus;
-      let activeSons = 0;
       try {
-        const [gpo, chainProperties] = await Promise.all([
-          getGlobalProperties(),
-          getChainProperties(),
-        ]);
-
-        if (!gpo || !chainProperties) {
-          return result;
-        }
-        const chainActiveSons = gpo.active_sons.find(
-          (sons) => sons[0] === chain
+        const sonNetworkStatus = await dbApi(
+          "get_son_network_status_by_sidechain",
+          [chain]
         );
-        const chainActiveSonsDetails =
-          chainActiveSons !== undefined ? chainActiveSons[1] : [];
-        if (chainActiveSonsDetails.length === 0) {
-          return result;
-        }
-        const { sons, sonIds } = await getSons(chainActiveSonsDetails);
-        const sonsStatistics = await getSonsStatistics(sons);
-
-        let i = 0;
-        for (const son of sons) {
-          if (son) {
-            const sonStatisticsObject = sonsStatistics.find(
-              (sonStatistics) => sonStatistics.owner === son.id
-            ) as SonStatistics;
-            const { status, isActive } = getSonStatus(
-              chain,
-              son,
-              sonStatisticsObject,
-              gpo
-            );
-            result.status.push(status);
-            if (isActive) {
-              activeSons = activeSons + 1;
-            }
-          } else {
-            result.status.push([sonIds[i], "NOT OK, invalid SON id"]);
-          }
-          i++;
-        }
-        result.isSonNetworkOk =
-          activeSons >= chainProperties.immutable_parameters.min_son_count
-            ? true
-            : false;
-        return result;
+        return sonNetworkStatus as [string, string][];
       } catch (e) {
         console.log(e);
-        return result;
       }
     },
-    [getGlobalProperties, getSons, getSonsStatistics, getSonStatus]
+    [dbApi]
+  );
+
+  const isSidechainSonNetworkOk = useCallback(
+    async (chain: Sidechain) => {
+      const sonNetworkStatus = await getSonNetworkStatusBySidechain(chain);
+      if (!sonNetworkStatus || sonNetworkStatus.length === 0) {
+        return false;
+      }
+      let activeSons = 0;
+      sonNetworkStatus.forEach((status) => {
+        if (status[1] === "OK, regular SON heartbeat") activeSons++;
+      });
+      const chainProperties = await getChainProperties();
+      if (!chainProperties) return false;
+      return activeSons >= chainProperties.immutable_parameters.min_son_count;
+    },
+    [getSonNetworkStatusBySidechain, getChainProperties]
   );
 
   useEffect(() => {
@@ -209,5 +85,7 @@ export function useSonNetwork(): UseSonNetworkResult {
   return {
     sonAccount,
     getSonNetworkStatus,
+    getSonNetworkStatusBySidechain,
+    isSidechainSonNetworkOk,
   };
 }
