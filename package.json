@@ -12,6 +12,7 @@
     "format": "next lint",
     "test": "jest --watch -u",
     "test:ci": "jest --ci -u --testResultsProcessor=jest-sonar-reporter",
+    "test:ci:junit": "jest --ci -u --reporters=default --reporters=jest-junit",
     "test:coverage": "jest --coverage -u --testResultsProcessor=jest-sonar-reporter"
   },
   "dependencies": {
