@@ -1,6 +1,6 @@
 import {
+  AddOrUpdateEthereumDepositAddress as UiAddOrUpdateEthereumDepositAddress,
   GenerateBitcoinAddress as UiGenerateBitcoinAddress,
-  GenerateEthereumAddress as UiGenerateEthereumAddress,
 } from "../../../../common/components";
 import { styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
@@ -22,11 +22,24 @@ export const GenerateBitcoinAddress = styled(UiGenerateBitcoinAddress)`
       width: 350px;
     }
   }
+  .ant-btn {
+    height: 50px;
+  }
 `;
-export const GenerateEthereumAddress = styled(UiGenerateEthereumAddress)`
+export const AddOrUpdateEthereumDepositAddress = styled(
+  UiAddOrUpdateEthereumDepositAddress
+)`
+  .ant-input {
+    height: 50px;
+  }
+
+  .ant-btn {
+    height: 50px;
+  }
+
   .ant-form-item {
     width: 100%;
-    margin: 0 !important;
+    margin: 0 0 24px 0 !important;
     ${breakpoint.sm} {
       width: 350px;
     }

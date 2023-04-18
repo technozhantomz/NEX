@@ -1,5 +1,10 @@
 import { FormDisclamer as UiFormDisclamer } from "..";
-import { CardFormButton, Form, styled } from "../../../ui/src";
+import {
+  CardFormButton,
+  Form,
+  styled,
+  Input as UiInput,
+} from "../../../ui/src";
 import { breakpoint } from "../../../ui/src/breakpoints";
 import { colors } from "../../../ui/src/colors";
 
@@ -14,7 +19,13 @@ export const SonError = styled.span`
   color: ${colors.errorColor};
 `;
 
-export const FormItem = styled(Form.Item)`
+export const Input = styled(UiInput)`
+  border-radius: 4px;
+`;
+
+export const FormItem = styled(Form.Item)``;
+
+export const ButtonFormItem = styled(Form.Item)`
   width: 255px;
   margin-left: auto;
   margin-right: auto;

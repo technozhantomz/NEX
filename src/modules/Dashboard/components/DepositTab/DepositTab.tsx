@@ -3,15 +3,15 @@ import React, { useMemo } from "react";
 
 import {
   BITCOIN_ASSET_SYMBOL,
+  config,
   ETHEREUM_ASSET_SYMBOL,
 } from "../../../../api/params";
 import {
+  AddOrUpdateEthereumDepositAddress,
   AddressGenerated,
   DashboardLoginButton,
   DownloadBitcoinKeys,
-  DownloadEthereumKeys,
   GenerateBitcoinAddress,
-  GenerateEthereumAddress,
   HIVEAndHBDDeposit,
   LoadingIndicator,
 } from "../../../../common/components";
@@ -89,27 +89,19 @@ export const DepositTab = (): JSX.Element => {
       </Styled.SidechainDepositInstructionContainer>
     );
   };
-  const ethDeposit =
-    ethereumSidechainAccount && ethereumSidechainAccount.hasDepositAddress ? (
-      <Styled.AddressGeneratedContainer>
-        <AddressGenerated
-          label={counterpart.translate(`field.labels.ethereum_deposit_address`)}
-          sidechainAccount={ethereumSidechainAccount.account}
-        />
-        {renderEthDepositInstruction(
-          counterpart.translate(`field.labels.deposit_eth`)
-        )}
-        <DownloadEthereumKeys getSidechainAccounts={getSidechainAccounts} />
-      </Styled.AddressGeneratedContainer>
-    ) : (
-      <>
-        <GenerateEthereumAddress getSidechainAccounts={getSidechainAccounts} />
-        {renderEthDepositInstruction(
-          counterpart.translate(`field.labels.generate_eth_deposit_address`)
-        )}
-      </>
-    );
-
+  const ethDeposit = (
+    <>
+      <AddOrUpdateEthereumDepositAddress
+        ethereumSidechainAccount={ethereumSidechainAccount}
+        getSidechainAccounts={getSidechainAccounts}
+      />
+      {renderEthDepositInstruction(
+        counterpart.translate(`field.labels.add_eth_deposit_address`, {
+          primaryWallet: config.EthereumPrimaryWallet,
+        })
+      )}
+    </>
+  );
   const HIVEDeposit = (
     <Styled.HIVEDepositContainer>
       <HIVEAndHBDDeposit assetSymbol={selectedAsset} />
@@ -122,9 +114,7 @@ export const DepositTab = (): JSX.Element => {
         `buttons.login_and_generate_bitcoin_address`
       );
     } else if (selectedAsset === ETHEREUM_ASSET_SYMBOL) {
-      return counterpart.translate(
-        `buttons.login_and_generate_ethereum_address`
-      );
+      return counterpart.translate(`buttons.login_and_deposit_ethereum`);
     } else {
       return counterpart.translate(`buttons.log_in_deposit_hbd_hive`, {
         assetSymbol: selectedAsset,

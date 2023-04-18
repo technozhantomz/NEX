@@ -26,7 +26,7 @@ import * as Styled from "./WithdrawForm.styled";
 import {
   BtcFormBody,
   EthFormBody,
-  GenerateAddress,
+  GenerateBitcoinAddresses,
   HiveFormBody,
 } from "./components";
 import { useWithdrawForm } from "./hooks";
@@ -122,7 +122,6 @@ export const WithdrawForm = (): JSX.Element => {
           ethTransferFee={ethTransferFee}
           ethereumSidechainAccount={ethereumSidechainAccount}
           formValidation={formValidation}
-          getSidechainAccounts={getSidechainAccounts}
           localStorageAccount={localStorageAccount}
           precisedAmount={precisedAmount}
           withdrawFee={withdrawFee}
@@ -234,13 +233,12 @@ export const WithdrawForm = (): JSX.Element => {
           transactionType="withdraw"
         />
       </Form.Provider>
-      <GenerateAddress
+      <GenerateBitcoinAddresses
         bitcoinSidechainAccount={bitcoinSidechainAccount}
         getSidechainAccounts={getSidechainAccounts}
         loadingSidechainAccounts={loadingSidechainAccounts}
         isLoggedIn={isLoggedIn}
         selectedAssetSymbol={selectedAssetSymbol}
-        ethereumSidechainAccount={ethereumSidechainAccount}
       />
     </>
   );

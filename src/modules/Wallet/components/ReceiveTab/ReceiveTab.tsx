@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { AssetsTable, AssetTitle } from "..";
 import {
   BITCOIN_ASSET_SYMBOL,
+  config,
   ETHEREUM_ASSET_SYMBOL,
   HBD_ASSET_SYMBOL,
   HIVE_ASSET_SYMBOL,
@@ -11,7 +12,6 @@ import {
 import {
   AddressGenerated,
   DownloadBitcoinKeys,
-  DownloadEthereumKeys,
   HIVEAndHBDDeposit,
   LoadingIndicator,
   UserLinkExtractor,
@@ -109,39 +109,28 @@ export const ReceiveTab = ({ assetSymbol }: Props): JSX.Element => {
     account: SidechainAccount;
     hasDepositAddress: boolean;
   }) => {
-    if (
-      ethereumSidechainAccount &&
-      ethereumSidechainAccount.hasDepositAddress
-    ) {
-      return (
-        <>
-          <AddressGenerated
-            label={counterpart.translate(
-              `field.labels.ethereum_deposit_address`
-            )}
-            sidechainAccount={ethereumSidechainAccount.account}
-          />
-          {renderEthDepositInstruction(
-            counterpart.translate(`field.labels.deposit_eth`)
-          )}
-          <DownloadEthereumKeys getSidechainAccounts={getSidechainAccounts} />
-        </>
-      );
-    } else {
-      return (
-        <>
+    return (
+      <>
+        {ethereumSidechainAccount &&
+        ethereumSidechainAccount.hasDepositAddress ? (
+          <></>
+        ) : (
           <Styled.SidechainAddressNotAssociated>
             {counterpart.translate(`pages.wallet.no_eth_address`)}
           </Styled.SidechainAddressNotAssociated>
-          <Styled.GenerateEthereumAddress
-            getSidechainAccounts={getSidechainAccounts}
-          />
-          {renderEthDepositInstruction(
-            counterpart.translate(`field.labels.generate_eth_deposit_address`)
-          )}
-        </>
-      );
-    }
+        )}
+
+        <Styled.AddOrUpdateEthereumDepositAddress
+          getSidechainAccounts={getSidechainAccounts}
+          ethereumSidechainAccount={ethereumSidechainAccount}
+        />
+        {renderEthDepositInstruction(
+          counterpart.translate(`field.labels.add_eth_deposit_address`, {
+            primaryWallet: config.EthereumPrimaryWallet,
+          })
+        )}
+      </>
+    );
   };
 
   const renderDeposit = (asset: string) => {

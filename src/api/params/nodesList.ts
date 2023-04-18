@@ -39,7 +39,7 @@ export const testnetNodes: Node[] = [
     location: counterpart.translate("settings.api_closest"),
   },
   {
-    url: "wss://alphanet.peerplays.download/api",
+    url: "ws://213.183.48.120:8090",
     location: "",
     region: "Northern America",
     country: "Canada",

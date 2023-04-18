@@ -218,19 +218,32 @@ export function useWithdrawForm(): UseWithdrawFormResult {
   const handleUpdateEthereumAddresses = useCallback(
     async (signerKey: SignerKey, withdrawAddress: string) => {
       const transactions: Transaction[] = [];
-      const deleteTrx = buildDeletingEthereumSidechainTransaction(
-        id,
-        ethereumSidechainAccount?.account.id as string,
-        id
-      );
-      transactions.push(deleteTrx);
-      const addTrx = buildAddingEthereumSidechainTransaction(
-        id,
-        id,
-        ethereumSidechainAccount?.account.deposit_address as string,
-        withdrawAddress
-      );
-      transactions.push(addTrx);
+      if (
+        ethereumSidechainAccount &&
+        ethereumSidechainAccount.hasDepositAddress
+      ) {
+        const deleteTrx = buildDeletingEthereumSidechainTransaction(
+          id,
+          ethereumSidechainAccount.account.id,
+          id
+        );
+        transactions.push(deleteTrx);
+        const addTrx = buildAddingEthereumSidechainTransaction(
+          id,
+          id,
+          ethereumSidechainAccount.account.deposit_address,
+          withdrawAddress
+        );
+        transactions.push(addTrx);
+      } else {
+        const addTrx = buildAddingEthereumSidechainTransaction(
+          id,
+          id,
+          withdrawAddress,
+          withdrawAddress
+        );
+        transactions.push(addTrx);
+      }
 
       try {
         const updateSidechainsTrxResult = await buildTrx(

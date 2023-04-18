@@ -17,7 +17,6 @@ export const DepositFormContainer = styled.div`
     min-height: 215px;
   }
   .ant-form {
-    width: 90%;
     margin: 0 auto;
     .ant-input {
       height: 50px;

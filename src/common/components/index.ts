@@ -19,5 +19,4 @@ export * from "./UserLinkExtractor";
 export * from "./TableDownloader";
 export * from "./MobileTabBar";
 export * from "./UserOrderColumns";
-export * from "./GenerateEthereumAddress";
-export * from "./DownloadEthereumKeys";
+export * from "./AddOrUpdateEthereumDepositAddress";

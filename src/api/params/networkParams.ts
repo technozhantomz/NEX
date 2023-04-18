@@ -7,14 +7,9 @@ export const testnetCheck = MAIN_NET_CHAIN_ID !== Config.defaultChainID;
 
 export const defaultToken = Config.defaultToken;
 export const defaultQuote = Config.defaultQuote;
-export const faucetUrl = Config.faucetUrl;
-export const defaultChainId = Config.defaultChainID;
+export const FAUCET_URL = Config.faucetUrl;
+export const DEFAULT_CHAIN_ID = Config.defaultChainID;
 export const DEFAULT_PROXY_ID = "1.2.5";
-export const defaultChainParams = {
-  core_asset: defaultToken,
-  chain_id: defaultChainId,
-  address_prefix: defaultToken,
-};
 
 export const DEFAULT_NETWORK = "Peerplays";
 export const BITCOIN_NETWORK = "Bitcoin";

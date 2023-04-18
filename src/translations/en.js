@@ -523,8 +523,9 @@ export const en = {
     market: "Market",
     generate_bitcoin_address: "Generate Bitcoin addresses",
     login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Addresses",
-    generate_ethereum_address: "Generate Ethereum addresses",
-    login_and_generate_ethereum_address: "Log in & Generate Ethereum Addresses",
+    add_ethereum_address: "Add Ethereum address",
+    update_ethereum_address: "Update Ethereum address",
+    login_and_deposit_ethereum: "Log in & Deposit Ethereum",
     dont_have_peerplays_account: "Don't have a Peerplays account? ",
     log_in_withdraw: "Log in & Withdraw %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Log in & Deposit %(assetSymbol)s",
@@ -974,6 +975,7 @@ export const en = {
       master_password_private_key: "Master password or private key",
       withdraw_public_key: "Withdrawal public key",
       withdraw_address: "Withdrawal address",
+      deposit_address: "Deposit address",
       hive_blockchain_account: "Hive account",
       enter_amount: "Enter amount to send",
       amount: "Amount",
@@ -997,12 +999,10 @@ export const en = {
         "In order to complete swap the following fees is applicable",
       generate_btc_deposit_address:
         "Generate a Bitcoin address so you can deposit BTC to your Peerplays account",
-      generate_eth_deposit_address:
-        "Generate an Ethereum address so you can deposit ETH to your Peerplays account",
+      add_eth_deposit_address:
+        "Add an Ethereum address to your Peerplays account and then send ETH from the added address to the `%(primaryWallet)s` address to deposit ETH to your Peerplays account",
       deposit_btc:
         "Deposit your BTC to the Bitcoin address listed above to send it to your Peerplays account",
-      deposit_eth:
-        "Deposit your ETH to the Ethereum address listed above to send it to your Peerplays account",
       bitcoin_associated_account:
         "Your new Bitcoin addresses are now associated with your account",
       ethereum_associated_account:

@@ -524,9 +524,9 @@ export const ru = {
     market: "Рынок",
     generate_bitcoin_address: "Создание биткойн-адресов",
     login_and_generate_bitcoin_address: "Войдите и сгенерируйте биткойн-адреса",
-    generate_ethereum_address: "Создание адресов Ethereum",
-    login_and_generate_ethereum_address:
-      "Войдите и сгенерируйте адреса Ethereum",
+    add_ethereum_address: "Добавить адрес Ethereum",
+    update_ethereum_address: "Обновлять адрес Ethereum",
+    login_and_deposit_ethereum: "Войти и внести депозит Ethereum",
     dont_have_peerplays_account: "У вас нет учетной записи Peerplays? ",
     log_in_withdraw: "Войти и вывести %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Войти и внести депозит %(assetSymbol)s",
@@ -975,6 +975,7 @@ export const ru = {
       master_password_private_key: "Мастер-пароль или закрытый ключ",
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
+      deposit_address: "Адрес депозита",
       hive_blockchain_account: "учетная запись Hive",
       enter_amount: "Введите сумму для отправки",
       amount: "количество",
@@ -998,12 +999,10 @@ export const ru = {
       swap_fee_info: "Для завершения обмена применяются следующие сборы",
       generate_btc_deposit_address:
         "Создайте биткойн-адрес, чтобы вы могли внести BTC на свою учетную запись Peerplays.",
-      generate_eth_deposit_address:
-        "Создайте адрес Ethereum, чтобы вы могли внести ETH на свою учетную запись Peerplays.",
+      add_eth_deposit_address:
+        "Add an Ethereum address to your Peerplays account and then send ETH from the added address to the `%(primaryWallet)s` address to deposit ETH to your Peerplays account.",
       deposit_btc:
         "Внесите свой BTC на указанный выше биткойн-адрес, чтобы отправить его на свою учетную запись Peerplays.",
-      deposit_eth:
-        "Внесите свой ETH на адрес Ethereum, указанный выше, чтобы отправить его на свою учетную запись Peerplays.",
       bitcoin_associated_account:
         "Ваши новые биткойн-адреса теперь связаны с вашей учетной записью",
       ethereum_associated_account:

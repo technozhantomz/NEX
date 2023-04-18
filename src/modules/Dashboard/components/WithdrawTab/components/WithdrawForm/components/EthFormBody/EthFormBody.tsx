@@ -1,7 +1,6 @@
 import counterpart from "counterpart";
 
 import { ETHEREUM_ASSET_SYMBOL } from "../../../../../../../../api/params";
-import { DownloadEthereumKeys } from "../../../../../../../../common/components";
 import { SidechainAccount } from "../../../../../../../../common/types";
 import { Form, Input, Rule } from "../../../../../../../../ui/src";
 import EthereumIcon from "../../../../../../../../ui/src/icons/Cryptocurrencies/EthereumIcon.svg";
@@ -25,7 +24,6 @@ type Props = {
     | undefined;
   localStorageAccount: string;
   formValidation: FormValidation;
-  getSidechainAccounts: (accountId: string) => Promise<void>;
   withdrawFee: number;
   ethTransferFee: number;
   precisedAmount: string;
@@ -34,13 +32,11 @@ export const EthFormBody = ({
   ethereumSidechainAccount,
   localStorageAccount,
   formValidation,
-  getSidechainAccounts,
   withdrawFee,
   ethTransferFee,
   precisedAmount,
 }: Props): JSX.Element => {
-  return ethereumSidechainAccount &&
-    ethereumSidechainAccount.hasDepositAddress ? (
+  return (
     <>
       <Form.Item
         name="from"
@@ -58,6 +54,7 @@ export const EthFormBody = ({
       <Form.Item
         name="withdrawAddress"
         validateFirst={true}
+        initialValue={ethereumSidechainAccount?.account.withdraw_address}
         rules={formValidation.withdrawAddress}
       >
         <Input
@@ -77,7 +74,6 @@ export const EthFormBody = ({
           {counterpart.translate(`field.labels.eth_withdraw_instruction`)}
         </span>
       </Styled.WithdrawalInstruction>
-      <DownloadEthereumKeys getSidechainAccounts={getSidechainAccounts} />
       <TransactionDetails
         selectedAssetSymbol={ETHEREUM_ASSET_SYMBOL}
         withdrawFee={withdrawFee}
@@ -86,7 +82,5 @@ export const EthFormBody = ({
       />
       <SubmitButton />
     </>
-  ) : (
-    <></>
   );
 };
