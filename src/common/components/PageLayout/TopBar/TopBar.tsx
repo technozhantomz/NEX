@@ -36,7 +36,17 @@ export const TopBar = ({ layout }: Props): JSX.Element => {
               ) : null}
             </Styled.HeaderWrapper>
           </Link>
-          {layout === "dex" ? <p className="dex-logo">DEX</p> : ""}
+          {layout === "dex" ? (
+            <p
+              className={"dex-logo".concat(
+                networkChain === "mainnet" ? " main" : " test"
+              )}
+            >
+              DEX
+            </p>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className={"topbar-right"}>
