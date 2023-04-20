@@ -3,6 +3,16 @@ import { config as Config } from "./config";
 const MAIN_NET_CHAIN_ID =
   "6b6b5f0ce7a36d323768e534f3edb41c6d6332a541a95725b98e28d140850134";
 
+const TESTNET_CHAIN_ID =
+  "195d4e865e3a27d2b204de759341e4738f778dd5c4e21860c7e8bf1bd9c79203";
+
+export const networkChain =
+  MAIN_NET_CHAIN_ID === Config.defaultChainID
+    ? "mainnet"
+    : TESTNET_CHAIN_ID === Config.defaultChainID
+    ? "testnet"
+    : "devnet";
+
 export const testnetCheck = MAIN_NET_CHAIN_ID !== Config.defaultChainID;
 
 export const defaultToken = Config.defaultToken;
