@@ -1,5 +1,6 @@
-export const colors = {
-  primaryColor: `#0148BE`,
+import { networkChain } from "../../api/params";
+
+const commonColors = {
   errorColor: `#ff4d4f`,
   warningColor: `#f2c222`,
   infoColor: `#1890ff`,
@@ -24,4 +25,30 @@ export const colors = {
   marketSell: `#E2444D`,
   PeerPlaysBlue: `#0147BD`,
   PeerPlaysOrange: `#FB7A14`,
+};
+
+const chainColors = {
+  mainnet: {
+    primaryColor: `#0148BE`,
+    primaryGradiantColor: `#01245f`,
+    buttonColor: `#0148BE`,
+    buttonHover: `#2369cc`,
+  },
+  testnet: {
+    primaryColor: `#FB7A14`,
+    primaryGradiantColor: `#C45A0A`,
+    buttonColor: `#FB7A14`,
+    buttonHover: `#CC6C23`,
+  },
+  devnet: {
+    primaryColor: `#6402BF`,
+    primaryGradiantColor: `#2c005e`,
+    buttonColor: `#6402BF`,
+    buttonHover: `#6423CC`,
+  },
+};
+
+export const colors = {
+  ...commonColors,
+  ...chainColors[networkChain],
 };
