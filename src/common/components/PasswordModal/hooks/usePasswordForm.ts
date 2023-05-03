@@ -33,8 +33,8 @@ export function usePasswordForm({ neededKeyType }: Props): IUsePasswordForm {
       if (
         !checkPassword ||
         (inputedKeyType !== "password" &&
-          inputedKeyType !== neededKeyType &&
-          inputedKeyType !== "owner")
+          inputedKeyType !== "owner" &&
+          inputedKeyType !== neededKeyType)
       ) {
         return Promise.reject(
           new Error(counterpart.translate(`field.errors.password_incorrect`))

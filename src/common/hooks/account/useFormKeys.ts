@@ -16,7 +16,7 @@ type UseFormKeysResult = {
     username: string,
     password: string,
     passwordType: KeyType,
-    neededKey: KeyType
+    neededKeyType: KeyType
   ) =>
     | string
     | {
@@ -98,16 +98,19 @@ export function useFormKeys(): UseFormKeysResult {
       username: string,
       password: string,
       inputedKeyType: KeyType,
-      neededKey: KeyType
+      neededKeyType: KeyType
     ) => {
       let signerKey;
       if (inputedKeyType === "password") {
-        signerKey = formWifKey(username, password, neededKey);
-      } else if (inputedKeyType === neededKey) {
+        signerKey = formWifKey(username, password, neededKeyType);
+      } else if (
+        inputedKeyType === neededKeyType ||
+        inputedKeyType === "owner"
+      ) {
         signerKey = formWifKey(username, password);
       } else {
         signerKey = {
-          whaleVaultInfo: { keyType: neededKey, account: username },
+          whaleVaultInfo: { keyType: neededKeyType, account: username },
         };
       }
       return signerKey;
