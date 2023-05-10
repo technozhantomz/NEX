@@ -1,3 +1,5 @@
+import { Progress } from "antd";
+
 import { CardFormButton, styled } from "../../../../ui/src";
 import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
@@ -68,9 +70,23 @@ export const GPOSDetails = styled.div`
 export const GPOSDetailsTitle = styled.span`
   font-size: 12px;
 `;
+
+export const GPOSProgressBar = styled(Progress)`
+  .ant-progress-text {
+    width: 100%;
+  }
+`;
+
+export const GPOSPerformanceRewardWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+`;
+
 export const GPOSDetailsValue = styled.span`
   font-size: 12px;
   word-break: break-all;
+  margin-left: auto;
   color: ${colors.textColor};
   font-weight: normal;
   &.max-rewards,

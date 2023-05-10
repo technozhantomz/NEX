@@ -1,3 +1,4 @@
+import { green, red, yellow } from "@ant-design/colors";
 import counterpart from "counterpart";
 import { useRouter } from "next/router";
 
@@ -109,15 +110,44 @@ export const GPOSTab = ({ gposInfo, loading }: Props): JSX.Element => {
                   {gposInfo.qualifiedReward} %
                 </Styled.GPOSDetailsValue>
               </li>
-              <li>
+              <li style={{ alignItems: "baseline" }}>
                 <Styled.GPOSDetailsTitle>
                   {counterpart.translate(
                     `pages.voting.gpos.estimated_participation_reward`
                   )}
                 </Styled.GPOSDetailsTitle>
+
+                <Styled.GPOSProgressBar
+                  percent={gposInfo.rakeReward}
+                  steps={6}
+                  strokeColor={[
+                    red[5],
+                    red[5],
+                    yellow[5],
+                    yellow[5],
+                    green[5],
+                    green[6],
+                  ]}
+                />
+
+                {/* <Styled.GPOSPerformanceRewardWrapper>
                 <Styled.GPOSDetailsValue>
-                  {gposInfo.rakeReward} %
-                </Styled.GPOSDetailsValue>
+                    {gposInfo.rakeReward} %
+                  </Styled.GPOSDetailsValue>
+                <Progress
+                    // showInfo={false}
+                    percent={gposInfo.rakeReward}
+                    steps={6}
+                    strokeColor={[
+                      red[5],
+                      red[5],
+                      yellow[5],
+                      yellow[5],
+                      green[5],
+                      green[6],
+                    ]}
+                  />
+                </Styled.GPOSPerformanceRewardWrapper> */}
               </li>
             </ul>
           </Styled.GPOSDetails>
