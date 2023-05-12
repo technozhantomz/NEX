@@ -55,9 +55,12 @@ const VotingPage: NextPage = () => {
     },
     ...voteTabs.map((voteTab) => {
       return {
-        label: capitalize(
-          counterpart.translate(`pages.voting.lower_case_${voteTab.key}`)
-        ),
+        label:
+          voteTab.key === "sons"
+            ? "SONs"
+            : capitalize(
+                counterpart.translate(`pages.voting.lower_case_${voteTab.key}`)
+              ),
         key: voteTab.key,
         children: (
           <VoteTab
