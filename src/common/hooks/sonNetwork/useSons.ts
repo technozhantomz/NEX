@@ -10,6 +10,21 @@ export function useSons(): UseSonsResult {
 
   const getSonAccountVotes = useCallback(
     (son: SonAccount, voteAsset: Asset) => {
+      //validate SonAccount
+      if (
+        !son.total_votes ||
+        !Array.isArray(son.total_votes) ||
+        son.total_votes.length === 0
+      ) {
+        return {
+          bitcoinTotalVotes: undefined,
+          bitcoinVoteAsset: undefined,
+          hiveTotalVotes: undefined,
+          hiveVoteAsset: undefined,
+          ethereumTotalVotes: undefined,
+          ethereumVoteAsset: undefined,
+        };
+      }
       const bitcoinTotalVotes = son.total_votes.find(
         (total_vote) => total_vote[0] === Sidechain.BITCOIN
       );
@@ -40,6 +55,14 @@ export function useSons(): UseSonsResult {
   );
 
   const getSonAccountVoteId = useCallback((son: SonAccount) => {
+    //validate SonAccount
+    if (!son.sidechain_vote_ids || son.sidechain_vote_ids.length === 0) {
+      return {
+        bitcoinVoteId: undefined,
+        ethereumVoteId: undefined,
+        hiveVoteId: undefined,
+      };
+    }
     const bitcoinVoteId = son.sidechain_vote_ids.find(
       (vote_id) => vote_id[0] === Sidechain.BITCOIN
     );

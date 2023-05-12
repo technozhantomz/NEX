@@ -201,7 +201,9 @@ export function useVoteTab({
       )[0][0];
       const votesAsset = formAssetBalance(
         defaultAsset,
-        Number(sum(member.total_votes.map((member) => member[1])))
+        Array.isArray(member.total_votes)
+          ? Number(sum(member.total_votes.map((member) => member[1])))
+          : 0
       );
       const activeChains: string[] = [];
       if (actives.bitcoin) activeChains.push(Sidechain.BITCOIN);

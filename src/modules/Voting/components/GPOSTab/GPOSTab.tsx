@@ -129,25 +129,6 @@ export const GPOSTab = ({ gposInfo, loading }: Props): JSX.Element => {
                     green[6],
                   ]}
                 />
-
-                {/* <Styled.GPOSPerformanceRewardWrapper>
-                <Styled.GPOSDetailsValue>
-                    {gposInfo.rakeReward} %
-                  </Styled.GPOSDetailsValue>
-                <Progress
-                    // showInfo={false}
-                    percent={gposInfo.rakeReward}
-                    steps={6}
-                    strokeColor={[
-                      red[5],
-                      red[5],
-                      yellow[5],
-                      yellow[5],
-                      green[5],
-                      green[6],
-                    ]}
-                  />
-                </Styled.GPOSPerformanceRewardWrapper> */}
               </li>
             </ul>
           </Styled.GPOSDetails>
