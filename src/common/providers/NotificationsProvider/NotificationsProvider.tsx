@@ -255,7 +255,7 @@ export function NotificationsProvider({
     if (localStorageAccount && localStorageAccount !== "") {
       updateNotifications();
     } else {
-      setNotifications(null);
+      setNotifications([]);
     }
   }, [
     localStorageAccount,
