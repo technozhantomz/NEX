@@ -11,10 +11,7 @@ import {
 } from "chart.js";
 import { MetaMaskProvider } from "metamask-react";
 import type { AppProps } from "next/app";
-import { useEffect } from "react";
-import TagManager from "react-gtm-module";
 
-import { config } from "../api/params";
 import {
   AppSettingsProvider,
   AssetsProvider,
@@ -42,20 +39,6 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
     Filler,
     Legend
   );
-
-  let didTagManagerInit = false;
-  useEffect(() => {
-    if (!didTagManagerInit) {
-      didTagManagerInit = true;
-      if (config.googleTagManagerId && config.googleTagManagerId !== "") {
-        didTagManagerInit = true;
-        const tagManagerArgs = {
-          gtmId: config.googleTagManagerId,
-        };
-        TagManager.initialize(tagManagerArgs);
-      }
-    }
-  }, []);
 
   return (
     <ViewportProvider>

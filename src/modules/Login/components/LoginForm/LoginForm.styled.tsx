@@ -53,6 +53,10 @@ export const WalletLockLabel = styled.p`
 export const LoginButton = styled(CardFormButton)`
   height: 100%;
   width: 100%;
+  font-size: 12px;
+  ${breakpoint.sm} {
+    font-size: 16px;
+  }
 `;
 
 export const LoginButtonContainer = styled.div`

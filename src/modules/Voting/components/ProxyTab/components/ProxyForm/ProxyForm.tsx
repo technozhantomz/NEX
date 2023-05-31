@@ -8,7 +8,7 @@ import {
 import {
   TransactionMessageAction,
   TransactionMessageState,
-  useTransactionForm,
+  useHandleTransactionForm,
 } from "../../../../../../common/hooks";
 import { useViewportContext } from "../../../../../../common/providers";
 import { Account, Proxy, SignerKey } from "../../../../../../common/types";
@@ -33,7 +33,7 @@ type Props = {
   isSameAccount: boolean;
   accountAlreadyAdded: boolean;
   transactionMessageState: TransactionMessageState;
-  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
 };
 
 export const ProxyForm = ({
@@ -52,18 +52,19 @@ export const ProxyForm = ({
   isSameAccount,
   accountAlreadyAdded,
   transactionMessageState,
-  dispatchTransactionMessage,
+  transactionMessageDispatch,
 }: Props): JSX.Element => {
   const [proxyForm] = Form.useForm();
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
+    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useTransactionForm({
-    executeTransaction: handlePublishChanges,
-    dispatchTransactionMessage,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handlePublishChanges,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
   const { sm } = useViewportContext();
@@ -113,6 +114,7 @@ export const ProxyForm = ({
         <Styled.ProxyForm
           form={proxyForm}
           name="proxyForm"
+          onFinish={showPasswordModal}
           size="large"
           layout={sm ? "horizontal" : "inline"}
         >

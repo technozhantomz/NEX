@@ -1,4 +1,3 @@
-import { OrderTableRow } from "../../../types";
 import { TableHeading } from "../../TableHeading";
 import {
   createUserOrderColumns,
@@ -8,8 +7,8 @@ import {
 describe("OrdersColumns", () => {
   let ordersColumns: UserOrderColumnType[];
   let historyColumns: UserOrderColumnType[];
-  let orders: OrderTableRow[];
-  let histories: OrderTableRow[];
+  let orders: any[];
+  let histories: any[];
   const handleClick = jest.fn();
 
   beforeEach(() => {
@@ -27,10 +26,6 @@ describe("OrdersColumns", () => {
         side: "Buy",
         total: "5 TEST",
         type: "Limit",
-        numberedAmount: 1,
-        numberedPrice: 8,
-        numberedTotal: 5,
-        isOpenOrderRow: true,
       },
       {
         amount: "1 PBTC",
@@ -42,10 +37,6 @@ describe("OrdersColumns", () => {
         side: "Sell",
         total: "8 TEST",
         type: "Market",
-        numberedAmount: 1,
-        numberedPrice: 5,
-        numberedTotal: 8,
-        isOpenOrderRow: true,
       },
     ];
 
@@ -61,10 +52,6 @@ describe("OrdersColumns", () => {
         statusActions: "Complete",
         total: "86 TEST",
         type: "Limit",
-        numberedAmount: 1,
-        numberedPrice: 86,
-        numberedTotal: 86,
-        isOpenOrderRow: false,
       },
       {
         amount: "2 HIVE",
@@ -77,10 +64,6 @@ describe("OrdersColumns", () => {
         statusActions: "Partial",
         total: "82 TEST",
         type: "Market",
-        numberedAmount: 2,
-        numberedPrice: 80,
-        numberedTotal: 82,
-        isOpenOrderRow: false,
       },
     ];
   });
@@ -192,10 +175,6 @@ describe("OrdersColumns", () => {
             side: "Buy",
             total: "5 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 8,
-            numberedTotal: 5,
-            isOpenOrderRow: true,
           },
         ]);
       });
@@ -214,10 +193,6 @@ describe("OrdersColumns", () => {
             side: "Buy",
             total: "5 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 8,
-            numberedTotal: 5,
-            isOpenOrderRow: true,
           },
         ]);
       });
@@ -236,10 +211,6 @@ describe("OrdersColumns", () => {
             side: "Buy",
             total: "5 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 8,
-            numberedTotal: 5,
-            isOpenOrderRow: true,
           },
         ]);
       });
@@ -259,10 +230,6 @@ describe("OrdersColumns", () => {
             side: "Sell",
             total: "8 TEST",
             type: "Market",
-            numberedAmount: 1,
-            numberedPrice: 5,
-            numberedTotal: 8,
-            isOpenOrderRow: true,
           },
           {
             amount: "1 HIVE",
@@ -274,10 +241,6 @@ describe("OrdersColumns", () => {
             side: "Buy",
             total: "5 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 8,
-            numberedTotal: 5,
-            isOpenOrderRow: true,
           },
         ]);
       });
@@ -294,10 +257,6 @@ describe("OrdersColumns", () => {
             side: "Buy",
             total: "5 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 8,
-            numberedTotal: 5,
-            isOpenOrderRow: true,
           },
           {
             amount: "1 PBTC",
@@ -309,10 +268,6 @@ describe("OrdersColumns", () => {
             side: "Sell",
             total: "8 TEST",
             type: "Market",
-            numberedAmount: 1,
-            numberedPrice: 5,
-            numberedTotal: 8,
-            isOpenOrderRow: true,
           },
         ]);
       });
@@ -329,10 +284,6 @@ describe("OrdersColumns", () => {
             side: "Buy",
             total: "5 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 8,
-            numberedTotal: 5,
-            isOpenOrderRow: true,
           },
           {
             amount: "1 PBTC",
@@ -344,10 +295,6 @@ describe("OrdersColumns", () => {
             side: "Sell",
             total: "8 TEST",
             type: "Market",
-            numberedAmount: 1,
-            numberedPrice: 5,
-            numberedTotal: 8,
-            isOpenOrderRow: true,
           },
         ]);
       });
@@ -364,10 +311,6 @@ describe("OrdersColumns", () => {
             side: "Buy",
             total: "5 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 8,
-            numberedTotal: 5,
-            isOpenOrderRow: true,
           },
           {
             amount: "1 PBTC",
@@ -379,10 +322,6 @@ describe("OrdersColumns", () => {
             side: "Sell",
             total: "8 TEST",
             type: "Market",
-            numberedAmount: 1,
-            numberedPrice: 5,
-            numberedTotal: 8,
-            isOpenOrderRow: true,
           },
         ]);
       });
@@ -467,10 +406,6 @@ describe("OrdersColumns", () => {
             statusActions: "Complete",
             total: "86 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 86,
-            numberedTotal: 86,
-            isOpenOrderRow: false,
           },
         ]);
       });
@@ -490,10 +425,6 @@ describe("OrdersColumns", () => {
             statusActions: "Complete",
             total: "86 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 86,
-            numberedTotal: 86,
-            isOpenOrderRow: false,
           },
         ]);
       });
@@ -513,10 +444,6 @@ describe("OrdersColumns", () => {
             statusActions: "Partial",
             total: "82 TEST",
             type: "Market",
-            numberedAmount: 2,
-            numberedPrice: 80,
-            numberedTotal: 82,
-            isOpenOrderRow: false,
           },
         ]);
       });
@@ -536,10 +463,6 @@ describe("OrdersColumns", () => {
             statusActions: "Partial",
             total: "82 TEST",
             type: "Market",
-            numberedAmount: 2,
-            numberedPrice: 80,
-            numberedTotal: 82,
-            isOpenOrderRow: false,
           },
         ]);
       });
@@ -560,10 +483,6 @@ describe("OrdersColumns", () => {
             statusActions: "Partial",
             total: "82 TEST",
             type: "Market",
-            numberedAmount: 2,
-            numberedPrice: 80,
-            numberedTotal: 82,
-            isOpenOrderRow: false,
           },
           {
             amount: "1 BTC",
@@ -576,10 +495,6 @@ describe("OrdersColumns", () => {
             statusActions: "Complete",
             total: "86 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 86,
-            numberedTotal: 86,
-            isOpenOrderRow: false,
           },
         ]);
       });
@@ -597,10 +512,6 @@ describe("OrdersColumns", () => {
             statusActions: "Complete",
             total: "86 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 86,
-            numberedTotal: 86,
-            isOpenOrderRow: false,
           },
           {
             amount: "2 HIVE",
@@ -613,10 +524,6 @@ describe("OrdersColumns", () => {
             statusActions: "Partial",
             total: "82 TEST",
             type: "Market",
-            numberedAmount: 2,
-            numberedPrice: 80,
-            numberedTotal: 82,
-            isOpenOrderRow: false,
           },
         ]);
       });
@@ -634,10 +541,6 @@ describe("OrdersColumns", () => {
             statusActions: "Partial",
             total: "82 TEST",
             type: "Market",
-            numberedAmount: 2,
-            numberedPrice: 80,
-            numberedTotal: 82,
-            isOpenOrderRow: false,
           },
           {
             amount: "1 BTC",
@@ -650,10 +553,6 @@ describe("OrdersColumns", () => {
             statusActions: "Complete",
             total: "86 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 86,
-            numberedTotal: 86,
-            isOpenOrderRow: false,
           },
         ]);
       });
@@ -671,10 +570,6 @@ describe("OrdersColumns", () => {
             statusActions: "Partial",
             total: "82 TEST",
             type: "Market",
-            numberedAmount: 2,
-            numberedPrice: 80,
-            numberedTotal: 82,
-            isOpenOrderRow: false,
           },
           {
             amount: "1 BTC",
@@ -687,10 +582,6 @@ describe("OrdersColumns", () => {
             statusActions: "Complete",
             total: "86 TEST",
             type: "Limit",
-            numberedAmount: 1,
-            numberedPrice: 86,
-            numberedTotal: 86,
-            isOpenOrderRow: false,
           },
         ]);
       });

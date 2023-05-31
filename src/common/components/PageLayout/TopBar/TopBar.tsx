@@ -20,15 +20,15 @@ export const TopBar = ({ layout }: Props): JSX.Element => {
           >
             <Logo className={"logo"} />
             <h1 className="peer">
-              PEER
+              HOME
               {layout === "peerlink" ? (
                 <span className="link">LINK</span>
               ) : (
-                <span className="plays">PLAYS</span>
+                <span className="plays">PESA</span>
               )}
             </h1>
           </Link>
-          {layout === "dex" ? <p className="dex-logo">DEX</p> : ""}
+          {layout === "dex" ? <p className="dex-logo">WALLET</p> : ""}
         </div>
       </div>
       <div className={"topbar-right"}>

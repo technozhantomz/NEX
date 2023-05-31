@@ -4,7 +4,6 @@ import { colors } from "../../../../ui/src/colors";
 
 export const PairSelectContainer = styled.div`
   margin: 0;
-  width: 100%;
 `;
 
 export const PairButtonRow = styled(Row)`
@@ -12,10 +11,7 @@ export const PairButtonRow = styled(Row)`
 `;
 
 export const PairButton = styled(Button)`
-  font-size: 16px;
-  ${breakpoint.lg} {
-    font-size: 20px;
-  }
+  font-size: 20px;
   font-weight: 500;
   border: none;
   box-shadow: none;

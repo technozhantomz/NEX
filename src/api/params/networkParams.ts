@@ -1,7 +1,7 @@
 import { config as Config } from "./config";
 
 const MAIN_NET_CHAIN_ID =
-  "6b6b5f0ce7a36d323768e534f3edb41c6d6332a541a95725b98e28d140850134";
+  "9dd7d963d226b6991b0001688df0716f1c25a9f2ea39d6d71b82d97212c6ab8f";
 
 export const testnetCheck = MAIN_NET_CHAIN_ID !== Config.defaultChainID;
 
@@ -19,10 +19,10 @@ export const defaultChainParams = {
 };
 
 export const BITCOIN_NETWORK = "Bitcoin";
-export const BITCOIN_ASSET_SYMBOL = "BTC";
+export const BITCOIN_ASSET_SYMBOL = "USD";
 export const ETHEREUM_NETWORK = "Ethereum";
 export const ETHEREUM_ASSET_SYMBOL = "ETH";
 export const HIVE_NETWORK = "Hive";
-export const HIVE_ASSET_SYMBOL = "HIVE";
-export const HBD_ASSET_SYMBOL = "HBD";
+export const HIVE_ASSET_SYMBOL = "CNY";
+export const HBD_ASSET_SYMBOL = "GOLD";
 export const SON_ACCOUNT_NAME = "son-account";

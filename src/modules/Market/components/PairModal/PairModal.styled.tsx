@@ -78,11 +78,5 @@ export const PairModalForm = styled(UIForm)`
       align-items: center;
     }
   }
-  .ant-form-item {
-    margin-bottom: 16px;
-  }
-  .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    border-radius: 4px;
-  }
 `;
 export const PairModalFormButton = styled(UIButton)``;

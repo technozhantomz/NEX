@@ -15,7 +15,7 @@ export function useOperationsTable(
   const [loading, setLoading] = useState(true);
   const [searchDataSource, setSearchDataSource] = useState<OperationRow[]>([]);
   const [operationsRows, setOperationsRows] = useState<OperationRow[]>([]);
-  const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [showDetials, setShowDetials] = useState<boolean>(false);
   const { getAssetById } = useAsset();
 
   const formOperationRows = useCallback(async () => {
@@ -64,8 +64,8 @@ export function useOperationsTable(
   ]);
 
   const toggleDetails = useCallback(() => {
-    setShowDetails(showDetails ? false : true);
-  }, [showDetails, setShowDetails]);
+    setShowDetials(showDetials ? false : true);
+  }, [showDetials, setLoading]);
 
   useEffect(() => {
     formOperationRows();
@@ -73,7 +73,7 @@ export function useOperationsTable(
 
   return {
     loading,
-    showDetails,
+    showDetials,
     searchDataSource,
     operationsRows,
     setSearchDataSource,

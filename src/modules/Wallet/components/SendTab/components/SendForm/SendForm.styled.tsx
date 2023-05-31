@@ -2,7 +2,6 @@ import {
   CardForm,
   CardFormButton,
   Form,
-  InfoCircleOutlined,
   Input,
   Option,
   Select,
@@ -100,26 +99,6 @@ export const IconWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-right: 20px;
-`;
-
-export const WithdrawAlertWrapper = styled.div`
-  margin-bottom: 24px;
-  display: flex;
-  align-items: flex-start;
-`;
-export const AlertIcon = styled(InfoCircleOutlined)`
-  margin-top: 3px;
-  margin-right: 8px;
-  &.anticon-info-circle {
-    color: ${colors.warningColor};
-    font-size: 18px;
-  }
-`;
-export const AlertText = styled.div`
-  font-size: 12px;
-  ${breakpoint.sm} {
-    font-size: 14px;
-  }
 `;
 
 export const MemoWrapper = styled.div`

@@ -32,7 +32,7 @@ export const AccountUpdate = ({
       </Styled.DetailContainer>
       {generatedKeys
         ? generatedKeys.map((key) => (
-            <Styled.DetailContainer key={key.key}>
+            <Styled.DetailContainer>
               <p>{key.label}</p>
               <p>{counterpart.translate(`field.labels.true`)}</p>
             </Styled.DetailContainer>

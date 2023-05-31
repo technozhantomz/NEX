@@ -5,12 +5,12 @@ import {
   defaultNetwork,
   defaultQuote,
   defaultToken,
-  excludedAssetsSymbols,
   HBD_ASSET_SYMBOL,
   HIVE_ASSET_SYMBOL,
   HIVE_NETWORK,
   Sidechains,
   SON_ACCOUNT_NAME,
+  symbolsToBeExcepted,
 } from "..";
 import { en } from "../../../translations/en";
 import { ru } from "../../../translations/ru";
@@ -75,7 +75,7 @@ describe("Testing network parameters", () => {
 
 describe("symbols To Be Excepted", () => {
   it("should have the correct default values", () => {
-    expect(excludedAssetsSymbols).toEqual([
+    expect(symbolsToBeExcepted).toEqual([
       "AQSQFHZAJVZDTVAC",
       "AXFMUJYATHGJSOIV",
       "BSEBEIBGLWDPKMDB",
@@ -97,8 +97,6 @@ describe("symbols To Be Excepted", () => {
       "WGKGQTICUIYEYTWV",
       "WNIPJIXZAFZGHGIC",
       "WTFUN",
-      "KOEBUNCPN",
-      "NATHANBUNCPNN",
     ]);
   });
 });

@@ -4,19 +4,19 @@ import { useFormKeys } from "..";
 import { useUserContext } from "../../providers";
 import { KeyType, SignerKey } from "../../types";
 
-import { UseHandleTransactionFormResult } from "./useTransactionForm.types";
+import { UseHandleTransactionFormResult } from "./useHandleTransactionForm.types";
 
 import { TransactionMessageAction, TransactionMessageActionType } from ".";
 
 type Args = {
-  executeTransaction: (password: SignerKey) => Promise<void>;
-  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
+  handleTransactionConfirmation: (password: SignerKey) => Promise<void>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   neededKeyType: KeyType;
 };
 
-export function useTransactionForm({
-  executeTransaction,
-  dispatchTransactionMessage,
+export function useHandleTransactionForm({
+  handleTransactionConfirmation,
+  transactionMessageDispatch,
   neededKeyType,
 }: Args): UseHandleTransactionFormResult {
   const [isPasswordModalVisible, setIsPasswordModalVisible] =
@@ -27,7 +27,7 @@ export function useTransactionForm({
   const [inputedKeyType, setInputedKeyType] = useState<KeyType>("");
 
   const {
-    password: savedPassword,
+    password,
     keyType: savedKeyType,
     savePassword,
     localStorageAccount,
@@ -39,19 +39,19 @@ export function useTransactionForm({
   }, [setIsTransactionModalVisible]);
 
   const hideTransactionModal = useCallback(() => {
-    dispatchTransactionMessage({ type: TransactionMessageActionType.CLEAR });
+    transactionMessageDispatch({ type: TransactionMessageActionType.CLEAR });
     setIsTransactionModalVisible(false);
-  }, [setIsTransactionModalVisible, dispatchTransactionMessage]);
+  }, [setIsTransactionModalVisible, transactionMessageDispatch]);
 
   const hidePasswordModal = useCallback(() => {
     setIsPasswordModalVisible(false);
   }, [setIsPasswordModalVisible]);
 
-  const showPasswordModalIfNeeded = useCallback(() => {
+  const showPasswordModal = useCallback(() => {
     // There is no saved password or needed key
     if (
-      !savedPassword ||
-      savedPassword === "" ||
+      !password ||
+      password === "" ||
       (savedKeyType !== "password" && savedKeyType !== neededKeyType)
     ) {
       setIsPasswordModalVisible(true);
@@ -62,7 +62,7 @@ export function useTransactionForm({
     }
   }, [
     setIsPasswordModalVisible,
-    savedPassword,
+    password,
     savedKeyType,
     neededKeyType,
     setIsTransactionModalVisible,
@@ -70,8 +70,8 @@ export function useTransactionForm({
 
   const handleFormFinish = (name: string, info: any) => {
     const { values, forms } = info;
-    const { passwordModal, transactionModal } = forms;
 
+    const { passwordModal, transactionModal } = forms;
     if (name === "passwordModal") {
       passwordModal.validateFields().then(() => {
         savePassword(values.password, values.keyType);
@@ -80,17 +80,18 @@ export function useTransactionForm({
         setIsPasswordModalVisible(false);
         setIsTransactionModalVisible(true);
       });
-    } else if (name === "transactionModal") {
+    }
+    if (name === "transactionModal") {
       transactionModal.validateFields().then(() => {
         let key = "";
         let keyType: KeyType = "";
-        const passwordModalShown = inputedPassword !== "";
+        const passwordModalShown = inputedKeyType !== "";
 
         if (passwordModalShown) {
           key = inputedPassword;
           keyType = inputedKeyType;
         } else {
-          key = savedPassword;
+          key = password;
           keyType = savedKeyType;
         }
         const signerKey = formSignerKey(
@@ -99,10 +100,8 @@ export function useTransactionForm({
           keyType,
           neededKeyType
         );
-        executeTransaction(signerKey);
+        handleTransactionConfirmation(signerKey);
       });
-    } else {
-      showPasswordModalIfNeeded();
     }
   };
 
@@ -110,9 +109,9 @@ export function useTransactionForm({
     isPasswordModalVisible,
     isTransactionModalVisible,
     hidePasswordModal,
+    showPasswordModal,
     showTransactionModal,
     hideTransactionModal,
     handleFormFinish,
-    showPasswordModalIfNeeded,
   };
 }

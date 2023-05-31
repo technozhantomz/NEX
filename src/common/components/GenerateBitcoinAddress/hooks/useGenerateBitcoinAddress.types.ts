@@ -10,6 +10,6 @@ export type UseGenerateBitcoinAddressResult = {
   bitcoinSidechainAccounts: BitcoinSidechainAccounts | undefined;
   setBitcoinSidechainAccounts: (value: BitcoinSidechainAccounts) => void;
   transactionMessageState: TransactionMessageState;
-  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   generateBitcoinAddresses: (signerKey: SignerKey) => Promise<void>;
 };

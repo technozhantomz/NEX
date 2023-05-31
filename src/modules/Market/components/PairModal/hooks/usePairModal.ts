@@ -110,7 +110,7 @@ export function usePairModal({
   useEffect(() => {
     let ignore = false;
     async function setAllAssetsSymbols() {
-      const allAssets = await getAllAssets(true);
+      const allAssets = await getAllAssets();
       if (!ignore && allAssets && allAssets.length > 0) {
         const allAssetsSymbols = allAssets.map((asset) => asset.symbol);
         _setAllAssetsSymbols(allAssetsSymbols);

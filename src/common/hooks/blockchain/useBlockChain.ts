@@ -51,21 +51,11 @@ export function useBlockchain(): UseBlockchainResult {
   }, [dbApi]);
 
   const getRecentBlocks = useCallback(() => {
-    const rawRecentBlocks = ChainStore.getRecentBlocks();
-    if (rawRecentBlocks) {
-      try {
-        let recentBlocks: Block[] = ChainStore.getRecentBlocks().toJS();
-        recentBlocks = recentBlocks.sort(
-          (a, b) => (b.id as number) - (a.id as number)
-        );
-        return recentBlocks;
-      } catch (e) {
-        console.log(e);
-        return [];
-      }
-    } else {
-      return [];
-    }
+    let recentBlocks: Block[] = ChainStore.getRecentBlocks().toJS();
+    recentBlocks = recentBlocks.sort(
+      (a, b) => (b.id as number) - (a.id as number)
+    );
+    return recentBlocks;
   }, [ChainStore, dbApi]);
 
   const getAvgBlockTime = useCallback(() => {

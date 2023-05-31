@@ -18,7 +18,7 @@ export type UseVoteTabResult = {
   removeVote: (voteId: string) => void;
   handleVoting: (signerKey: SignerKey) => Promise<void>;
   transactionMessageState: TransactionMessageState;
-  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   updateAccountFee: number | undefined;
   afterSuccessTransactionModalClose: (() => void) | undefined;
 };

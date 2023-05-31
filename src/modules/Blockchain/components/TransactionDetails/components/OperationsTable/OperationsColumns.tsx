@@ -14,7 +14,7 @@ const renders = [
   undefined,
   (_details: unknown): JSX.Element => (
     <a>
-      {counterpart.translate(`pages.blocks.transaction_details.see_details`)}
+      {counterpart.translate(`pages.blocks.transaction_detials.see_details`)}
     </a>
   ),
 ];

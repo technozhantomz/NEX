@@ -1,9 +1,6 @@
 import { useCallback, useMemo } from "react";
 
-import {
-  excludedAssetsSymbols,
-  tradeableAssetsSymbols,
-} from "../../../api/params";
+import { symbolsToBeExcepted } from "../../../api/params";
 import { useAppSettingsContext, usePeerplaysApiContext } from "../../providers";
 import { Asset, Cache } from "../../types";
 
@@ -88,27 +85,16 @@ export function useAsset(): UseAssetResult {
     [dbApi, cache, setAssetsCache, assetsCacheExists]
   );
 
-  const getAllAssets = useCallback(
-    async (tradeableAssetsOnly = false) => {
-      try {
-        const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
-        if (tradeableAssetsOnly) {
-          return allAssets.filter(
-            (asset) =>
-              !excludedAssetsSymbols.includes(asset.symbol) &&
-              tradeableAssetsSymbols.includes(asset.symbol)
-          );
-        } else {
-          return allAssets.filter(
-            (asset) => !excludedAssetsSymbols.includes(asset.symbol)
-          );
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    [dbApi, excludedAssetsSymbols]
-  );
+  const getAllAssets = useCallback(async () => {
+    try {
+      const allAssets: Asset[] = await dbApi("list_assets", ["", 99]);
+      return allAssets.filter(
+        (asset) => !symbolsToBeExcepted.includes(asset.symbol)
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dbApi, symbolsToBeExcepted]);
 
   const getAssetsBySymbols = useCallback(
     async (symbols: string[]) => {

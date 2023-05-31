@@ -18,6 +18,4 @@ export const colors = {
   lightText: `#B9B9B9`,
   marketBuy: `#18A370`,
   marketSell: `#E2444D`,
-  PeerPlaysBlue: `#0147BD`,
-  PeerPlaysOrange: `#FB7A14`,
 };

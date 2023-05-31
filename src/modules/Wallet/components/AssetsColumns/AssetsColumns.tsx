@@ -64,8 +64,7 @@ const sorters = [
   undefined,
   (a: { available: number }, b: { available: number }) =>
     a.available - b.available,
-  (a: { inOrders: string }, b: { inOrders: string }) =>
-    Number(a.inOrders) - Number(b.inOrders),
+  (a: { inOrders: number }, b: { inOrders: number }) => a.inOrders - b.inOrders,
   undefined,
 ];
 
@@ -94,10 +93,10 @@ export type AssetColumnType = {
       ) => number)
     | ((
         a: {
-          inOrders: string;
+          inOrders: number;
         },
         b: {
-          inOrders: string;
+          inOrders: number;
         }
       ) => number)
     | undefined;

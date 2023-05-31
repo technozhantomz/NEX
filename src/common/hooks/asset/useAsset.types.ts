@@ -16,7 +16,7 @@ export type UseAssetResult = {
     amount: number,
     precision?: number | undefined
   ) => number;
-  getAllAssets: (tradeableAssetsOnly?: boolean) => Promise<Asset[] | undefined>;
+  getAllAssets: () => Promise<Asset[] | undefined>;
   limitByPrecision: (value: string, precision?: number) => string;
   ceilPrecision: (
     num: string | number,

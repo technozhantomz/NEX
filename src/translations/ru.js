@@ -128,7 +128,7 @@ export const ru = {
       asset_issue: {
         title: "Выпустить актив",
         description:
-          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к , %(receiver)s",
+          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к, %(receiver)s",
       },
       asset_publish_feed: {
         title: "Опубликовать фид",
@@ -621,7 +621,7 @@ export const ru = {
         witness_signature: "Подпись свидетеля",
         search_transactions: "Поиск транзакций",
       },
-      transaction_details: {
+      transaction_detials: {
         transaction: "Транзакция",
         transaction_id: "Идентификатор транзакции",
         ref_block_prefix: "Префикс блока ссылки",
@@ -693,8 +693,6 @@ export const ru = {
       select_asset: "Выберите актив",
       select_blockchain: "Выберите блокчейн",
       available_to_send: "Доступно для отправки:",
-      withdraw_alert:
-        "Если вы выберете блокчейн, отличный от Peerplays, вы будете выводить свои средства в целевую сеть.",
     },
     market: {
       heading: "Рынок",
@@ -706,20 +704,12 @@ export const ru = {
       my_order_history: "Моя история заказов",
       buy: "КУПИТЬ",
       sell: "ПРОДАВАТЬ",
-      orders: "Заказы",
-      market_depth: "Глубина рынка",
-      all_pairs: "Все пары",
-      all_statuses: "Все статусы",
-      completed: "Завершенный",
-      partial: "Частичный",
-      open: "Открыть",
       tabs: {
         history: {
           all: "Торговая история",
           user: "Моя история",
         },
         controls: {
-          order_form: "Форма заказа",
           limit: "Ограничение",
           market: "Рынок",
           advanced: "Передовой",
@@ -740,12 +730,6 @@ export const ru = {
             "Владелец %(asset)s взимает рыночную комиссию в размере %(percent)s%% за ордера на покупку. Эта комиссия будет вычтена из суммы, которую вы получите, когда ваш заказ будет выполнен, она не оплачивается при размещении заказа.",
         },
       },
-      twenty_four_hour_high: "24h Высокий",
-      twenty_four_hour_low: "24h Низкий",
-      twenty_four_hour_volume: "24h Объем",
-      twenty_four_hour_change: "24h Изменять",
-      twenty_four_hour_lowest_ask: "24h Самая низкая цена",
-      twenty_four_hour_highest_bid: "24h Самая высокая ставка",
     },
     settings: {
       heading: "Настройки",
@@ -1121,6 +1105,10 @@ export const ru = {
       same_account: "Так же, как ваш аккаунт",
       no_account: "аккаунт не найден",
       added_account: "Аккаунт уже добавлен",
+      premium_username:
+        "Это премиальное имя, которое не поддерживается этим сборщиком..",
+      username_limits:
+        "Имя пользователя должно начинаться со строчной буквы и не должно содержать заглавных букв, специальных символов или только цифр.",
       user_not_found: "Пользователь не найден",
       password_incorrect: "Неверный пароль",
       username_required: "Имя пользователя требуется",
@@ -1185,27 +1173,6 @@ export const ru = {
         "Невозможно создать лимитный ордер только для публикации",
       missing_custom_expiration_time:
         "Выберите пользовательское время истечения срока действия или измените временную политику заказа.",
-      premium_username:
-        "Это премиальное имя, которое не поддерживается этим сборщиком. Недорогое имя включает цифры или не включает гласные.",
-      account_creation_errors: {
-        account_should: "Имя учетной записи должно ",
-        be_longer: "быть длиннее.",
-        be_shorter: "быть короче.",
-        account_segment_should:
-          "Каждый сегмент учетной записи (разделенный `.`) должен ",
-        start_with_letter: "начинаться с маленькой буквы.",
-        have_letters_digits_dashes: "содержать только буквы, цифры или тире.",
-        have_one_dash_in_row: "иметь только одну черточку подряд.",
-        end_letter_digit: "заканчиваться буквой или цифрой.",
-      },
-      hive_account_errors: {
-        account_should: "Hive счет должен ",
-        be_longer: "быть длиннее.",
-        start_with_letter: "начинаться с маленькой буквы.",
-        have_letters_digits_dashes: "содержать только буквы, цифры или тире.",
-        end_letter_digit: "заканчиваться буквой или цифрой.",
-        have_one_dash_in_row: "иметь только одну черточку подряд.",
-      },
     },
     success: {
       successfully_transferred:

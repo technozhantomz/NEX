@@ -15,29 +15,7 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
   const { selectedPair, setMarketPair } = useMarketContext();
   const [loadingSelectedPair, setLoadingSelectedPair] = useState<boolean>(true);
   const [isPairModalVisible, setIsPairModalVisible] = useState<boolean>(false);
-  const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
-  const [controlsTabsClassName, setControlsTabsClassName] =
-    useState<string>("buy");
-  const onChangeControlsTab = useCallback(
-    (activeKey: string) => {
-      setControlsTabsClassName(activeKey);
-    },
-    [setControlsTabsClassName]
-  );
-
-  const showBuyOrderDrawer = useCallback(() => {
-    setControlsTabsClassName("buy");
-    setIsOrderDrawerOpen(true);
-  }, [setIsOrderDrawerOpen, setControlsTabsClassName]);
-  const showSellOrderDrawer = useCallback(() => {
-    setControlsTabsClassName("sell");
-    setIsOrderDrawerOpen(true);
-  }, [setControlsTabsClassName, setIsOrderDrawerOpen]);
-
-  const hideOrderDrawer = useCallback(() => {
-    setIsOrderDrawerOpen(false);
-    setControlsTabsClassName("buy");
-  }, [setIsOrderDrawerOpen, setControlsTabsClassName]);
+  //   const [pageLoaded, setPageLoaded] = useState<boolean>(false);
 
   const getPairAssets = useCallback(async () => {
     const assetsSymbols = currentPair.split("_");
@@ -83,11 +61,6 @@ export function useMarketPage({ currentPair }: Props): UseMarketPageResult {
     isPairModalVisible,
     handleClickOnPair,
     setIsPairModalVisible,
-    isOrderDrawerOpen,
-    showBuyOrderDrawer,
-    showSellOrderDrawer,
-    hideOrderDrawer,
-    controlsTabsClassName,
-    onChangeControlsTab,
+    // pageLoaded,
   };
 }

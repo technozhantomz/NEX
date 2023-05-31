@@ -4,7 +4,7 @@ export type UseHistoryTableResult = {
   tradeHistoryRows: TradeHistoryRow[];
   tradeHistoryColumns: TradeHistoryColumn[];
   loadingTradeHistory: boolean;
-  defineTableRowClassName: (record: TradeHistoryRow) => "buy" | "sell";
+  defineTableRowClassName: (record: any) => "buy" | "sell";
 };
 
 export type TradeHistoryColumn = {

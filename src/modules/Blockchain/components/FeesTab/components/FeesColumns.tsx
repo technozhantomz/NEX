@@ -24,8 +24,8 @@ const renders = [
   ),
   (types: string[], record: FeesTableRow): JSX.Element => (
     <>
-      {types.map((type) => (
-        <div key={`${record.key}-${type}`}>{type}</div>
+      {types.map((type, index) => (
+        <div key={`${record.key}-${index}`}>{type}</div>
       ))}
     </>
   ),

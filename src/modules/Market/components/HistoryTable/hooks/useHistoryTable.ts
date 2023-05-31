@@ -156,8 +156,9 @@ export function useHistoryTable({
     ]
   );
 
-  const defineTableRowClassName = useCallback((record: TradeHistoryRow) => {
-    return record.isBuyOrder ? "buy" : "sell";
+  const defineTableRowClassName = useCallback((record: any) => {
+    const item = record as TradeHistoryRow;
+    return item.isBuyOrder ? "buy" : "sell";
   }, []);
 
   useEffect(() => {

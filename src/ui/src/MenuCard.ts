@@ -23,7 +23,6 @@ export const MenuCard = styled(AntdCard)`
   }
   .menu-item {
     display: flex;
-    font-weight: 500;
     justify-content: space-between;
     color: ${colors.textColor};
     &.active {
@@ -82,9 +81,6 @@ export const MenuCard = styled(AntdCard)`
         border-bottom: none !important;
         padding: 0 0 10px 0;
       }
-    }
-    .menu-item {
-      font-weight: 300;
     }
     .menu-item-arrow {
       display: none;

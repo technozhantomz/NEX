@@ -7,7 +7,6 @@ import {
   BlockHeader,
   History,
   LimitOrder,
-  MarketHistory,
   MarketPair,
   OrderHistory,
   Ticker,
@@ -24,18 +23,6 @@ export function useMarketHistory(): UseMarketHistoryResult {
   const { getBlockHeader } = useBlockchain();
   const { setPrecision, ceilPrecision } = useAsset();
   const { formLocalDate } = useFormDate();
-
-  const getMarketHistoryBuckets = useCallback(async () => {
-    try {
-      const buckets: number[] = await historyApi(
-        "get_market_history_buckets",
-        []
-      );
-      return buckets;
-    } catch (e) {
-      console.log(e);
-    }
-  }, [historyApi]);
 
   const getFillOrderHistory = useCallback(
     async (selectedPair: MarketPair, limit = 100) => {
@@ -85,7 +72,7 @@ export function useMarketHistory(): UseMarketHistoryResult {
         ? (history as History).op[1]
         : (history as OrderHistory).op;
       const key = history.id;
-      let numberedFilled = 100;
+      let numberdFilled = 100;
       let filled = "";
       let baseAmount = 0,
         quoteAmount = 0,
@@ -103,9 +90,9 @@ export function useMarketHistory(): UseMarketHistoryResult {
 
       if (forUser) {
         if (openOrder) {
-          numberedFilled =
+          numberdFilled =
             (pays.amount / openOrder.sell_price.base.amount) * 100;
-          filled = `${numberedFilled.toFixed(1)}%`;
+          filled = `${numberdFilled.toFixed(1)}%`;
         } else {
           filled = "100%";
         }
@@ -166,49 +153,10 @@ export function useMarketHistory(): UseMarketHistoryResult {
     [formTradeHistoryRow, defineHistoryPriceMovement]
   );
 
-  /**
-   * Get OHLCV data of a trading pair in a time range.
-   *
-   * @param firstAssetSymbolOrId Asset symbol or ID in a trading pair
-   * @param secondAssetSymbolOrId The other asset symbol or ID in the trading pair
-   * @param bucketSize Length of each time bucket in seconds.
-   * Note: it need to be within result of get_market_history_buckets() API, otherwise no data will be returne
-   * @param start The start of a time range, E.G. “2018-01-01T00:00:00”
-   * @param end The end of the time range
-   *
-   * @returns A list of OHLCV data, in “least recent first” order. If there are more than 200 records in the specified time
-   *  range, the first 200 records will be returned.
-   */
-  const getMarketHistory = useCallback(
-    async (
-      firstAssetSymbolOrId: string,
-      secondAssetSymbolOrId: string,
-      bucketSize: number,
-      start: string,
-      end: string
-    ) => {
-      try {
-        const OHLCVs: MarketHistory[] = await historyApi("get_market_history", [
-          firstAssetSymbolOrId,
-          secondAssetSymbolOrId,
-          bucketSize,
-          start,
-          end,
-        ]);
-        return OHLCVs;
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    [historyApi]
-  );
-
   return {
     getFillOrderHistory,
     getTicker,
     formTradeHistoryTableRows,
     formTradeHistoryRow,
-    getMarketHistoryBuckets,
-    getMarketHistory,
   };
 }

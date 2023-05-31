@@ -14,29 +14,29 @@ export const SocialBar = (): JSX.Element => {
     <Styled.SocialBarWrapper>
       <Styled.SocialLinks>
         <Styled.SocialLink
-          href="https://www.youtube.com/c/PeerplaysBlockchain"
+          href="https://www.youtube.com/c/homepesa"
           target="_blank"
         >
           <YoutubeFilled />
           <span className="link-text">Youtube</span>
         </Styled.SocialLink>
-        <Styled.SocialLink href="https://twitter.com/Peerplays" target="_blank">
+        <Styled.SocialLink href="https://twitter.com/homepesa" target="_blank">
           <TwitterOutlined />
           <span className="link-text">Twitter</span>
         </Styled.SocialLink>
-        <Styled.SocialLink href="https://t.me/Peerplays" target="_blank">
+        <Styled.SocialLink href="https://t.me/homepesa" target="_blank">
           <TelegramIcon />
           <span className="link-text">Telegram</span>
         </Styled.SocialLink>
         <Styled.SocialLink
-          href="https://www.reddit.com/r/Peerplays/"
+          href="https://www.reddit.com/r/homepesa/"
           target="_blank"
         >
           <RedditFilledIcon />
           <span className="link-text">Reddit</span>
         </Styled.SocialLink>
         <Styled.SocialLink
-          href="https://www.tiktok.com/@peerplays"
+          href="https://www.tiktok.com/@homepesa"
           target="_blank"
         >
           <TiktokFilledIcon />

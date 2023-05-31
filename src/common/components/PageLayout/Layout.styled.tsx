@@ -57,15 +57,11 @@ export const Layout = styled.main`
     }
     ${breakpoint.sm} {
       &.card-layout,
-      &.card-layout__lrg {
+      &.card-layout__lrg,
+      &.card-layout__xlrg {
         margin: 0 auto;
         padding-left: 24px;
         padding-right: 24px;
-      }
-      &.card-layout__xlrg {
-        margin: 0 auto;
-        padding-left: 16px;
-        padding-right: 16px;
       }
       &.card-layout {
         max-width: 600px;
@@ -74,14 +70,14 @@ export const Layout = styled.main`
         max-width: 1070px;
       }
       &.card-layout__xlrg {
-        max-width: 1912px;
+        max-width: 1800px;
       }
       &.card-layout__lrg > .ant-card {
         min-height: 856px;
       }
       &.card-layout__xlrg > .ant-card {
-        min-height: 1280px;
-        height: 1280px;
+        min-height: 1242px;
+        height: 1242px;
       }
     }
   }
@@ -91,7 +87,7 @@ export const PageHeading = styled.h1`
   color: ${colors.white};
   font-size: 20px;
   font-weight: 500;
-  margin: 20px 0 20px;
+  margin: 40px 0 20px;
 
   ${breakpoint.sm} {
     font-size: 24px;

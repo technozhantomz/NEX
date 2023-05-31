@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -16,7 +15,7 @@ import {
   BitcoinSidechainAccounts,
   FullAccount,
   KeyType,
-  SidechainAccount,
+  SidechainAcccount,
 } from "../../types";
 
 import { UserContextType } from "./UserProvider.types";
@@ -80,10 +79,10 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
   const passwordTimeout = useRef<NodeJS.Timeout>();
   const [account, setAccount] = useState<Account | undefined>();
   const [sidechainAccounts, setSidechainAccounts] = useState<
-    SidechainAccount[]
+    SidechainAcccount[]
   >([]);
   const [bitcoinSidechainAccount, setBitcoinSidechainAccount] =
-    useState<SidechainAccount>();
+    useState<SidechainAcccount>();
   const [loadingSidechainAccounts, setLoadingSidechainAccounts] =
     useState<boolean>(true);
   const [hasBTCDepositAddress, setHasBTCDepositAddress] =
@@ -102,7 +101,7 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
         setLoadingSidechainAccounts(true);
         const accounts = (await dbApi("get_sidechain_addresses_by_account", [
           accountId,
-        ])) as SidechainAccount[];
+        ])) as SidechainAcccount[];
         setSidechainAccounts(accounts);
         if (accounts && accounts.length) {
           const bitcoinSidechain = accounts.find(
@@ -142,8 +141,8 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
 
   const updateSidechainAccounts = useCallback(
     (
-      sidechainAccounts: SidechainAccount[],
-      bitcoinSidechainAccount: SidechainAccount | undefined,
+      sidechainAccounts: SidechainAcccount[],
+      bitcoinSidechainAccount: SidechainAcccount | undefined,
       hasBTCDepositAddress: boolean,
       hasBTCWithdrawPublicKey: boolean
     ) => {
@@ -271,54 +270,33 @@ export const UserProvider = ({ children }: Props): JSX.Element => {
     }
   }, [id, getSidechainAccounts]);
 
-  const context = useMemo(() => {
-    return {
-      id,
-      name,
-      assets,
-      account,
-      localStorageAccount,
-      setLocalStorageAccount,
-      password,
-      keyType,
-      updateAccount,
-      setAssets,
-      savePassword,
-      removePassword,
-      hasBTCDepositAddress,
-      hasBTCWithdrawPublicKey,
-      getSidechainAccounts,
-      loadingSidechainAccounts,
-      sidechainAccounts,
-      bitcoinSidechainAccount,
-      bitcoinSidechainAccounts,
-      setBitcoinSidechainAccounts,
-    };
-  }, [
-    id,
-    name,
-    assets,
-    account,
-    localStorageAccount,
-    setLocalStorageAccount,
-    password,
-    keyType,
-    updateAccount,
-    setAssets,
-    savePassword,
-    removePassword,
-    hasBTCDepositAddress,
-    hasBTCWithdrawPublicKey,
-    getSidechainAccounts,
-    loadingSidechainAccounts,
-    sidechainAccounts,
-    bitcoinSidechainAccount,
-    bitcoinSidechainAccounts,
-    setBitcoinSidechainAccounts,
-  ]);
-
   return (
-    <UserContext.Provider value={context}>{children}</UserContext.Provider>
+    <UserContext.Provider
+      value={{
+        id,
+        name,
+        assets,
+        account,
+        localStorageAccount,
+        setLocalStorageAccount,
+        password,
+        keyType,
+        updateAccount,
+        setAssets,
+        savePassword,
+        removePassword,
+        hasBTCDepositAddress,
+        hasBTCWithdrawPublicKey,
+        getSidechainAccounts,
+        loadingSidechainAccounts,
+        sidechainAccounts,
+        bitcoinSidechainAccount,
+        bitcoinSidechainAccounts,
+        setBitcoinSidechainAccounts,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
   );
 };
 

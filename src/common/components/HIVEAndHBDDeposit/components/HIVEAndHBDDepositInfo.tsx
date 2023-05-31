@@ -16,7 +16,7 @@ export const HIVEAndHBDDepositInfo = ({ infoString }: Props): JSX.Element => {
       trimedUserLink.lastIndexOf("]")
     );
     return (
-      <i key={`user-${key}`}>
+      <i key={key}>
         <Link href={`/user/${userName}`}>{userName}</Link>
       </i>
     );
@@ -42,7 +42,7 @@ export const HIVEAndHBDDepositInfo = ({ infoString }: Props): JSX.Element => {
         } else if (stringPart.includes(SON_ACCOUNT_NAME)) {
           return getSonAccountLink(index);
         } else {
-          return <span key={`${stringPart}-${index}`}>{stringPart}</span>;
+          return <span key={index}>{stringPart}</span>;
         }
       })}
     </>

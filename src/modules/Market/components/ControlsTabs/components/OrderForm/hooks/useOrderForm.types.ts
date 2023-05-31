@@ -31,7 +31,7 @@ export type UseOrderFormResult = {
   sliderValue: number;
   timePolicy: TimePolicy;
   handleTimePolicyChange: (value: any) => void;
-  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   transactionMessageState: TransactionMessageState;
   handleCreateLimitOrder: (signerKey: SignerKey) => Promise<void>;
   executionValue: ExecutionType;

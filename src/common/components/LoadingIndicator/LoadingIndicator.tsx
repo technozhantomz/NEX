@@ -17,11 +17,11 @@ export const LoadingIndicator = ({
   switch (type) {
     case "three-bounce":
       return (
-        <Styled.ThreeBounceWrapper>
+        <Styled.ThreeBounceWrpper>
           <div className="bounce1" />
           <div className="bounce2" />
           <div className="bounce3" />
-        </Styled.ThreeBounceWrapper>
+        </Styled.ThreeBounceWrpper>
       );
     case "circle":
       return (

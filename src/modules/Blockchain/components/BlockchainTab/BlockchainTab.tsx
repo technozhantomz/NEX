@@ -80,7 +80,7 @@ export const BlockchainTab = (): JSX.Element => {
     },
     [blockColumns]
   );
-  const onRow = useCallback((record: DataTableRow) => {
+  const onRow = useCallback((record: any) => {
     return {
       onClick: () => {
         router.push(`/blockchain/${record.blockID}`);

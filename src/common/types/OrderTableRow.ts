@@ -12,5 +12,4 @@ export type OrderTableRow = {
   total: string;
   numberedTotal: number;
   statusActions?: string;
-  isOpenOrderRow: boolean;
 };

@@ -1,62 +1,86 @@
-import { useMemo } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { useAsset } from "../../../../../common/hooks";
+import { useAsset, useMarketHistory } from "../../../../../common/hooks";
 import { useMarketContext } from "../../../../../common/providers";
 import { MarketPairStats } from "../../../../../common/types";
 
 import { UseMarketStatsResult } from "./useMarketStats.types";
 
 export function useMarketStats(): UseMarketStatsResult {
-  const { lastTradeHistory, selectedPair, ticker, dayOHLCVs } =
+  const { asks, bids, marketHistory, lastTradeHistory, selectedPair } =
     useMarketContext();
+  const [marketPairStats, _setMarketPairStats] = useState<MarketPairStats>({
+    latest: "0",
+    percentChange: "0",
+    volume: "0",
+    askPrice: "0",
+    bidPrice: "0",
+    dailyHigh: "0",
+    dailyLow: "0",
+  });
+  const { getTicker } = useMarketHistory();
+  const { limitByPrecision } = useAsset();
 
-  const { limitByPrecision, setPrecision } = useAsset();
-
-  const marketPairStats = useMemo(() => {
-    if (selectedPair && ticker) {
+  const getMarketPairStats = useCallback(async () => {
+    let latest = "0",
+      percentChange = "0",
+      volume = "0",
+      askPrice = "0",
+      bidPrice = "0",
+      dailyHigh = "0",
+      dailyLow = "0";
+    if (selectedPair && asks && bids && marketHistory) {
       const base = selectedPair.base;
       const quote = selectedPair.quote;
-      let stats = {} as MarketPairStats;
-      const tickerDate = {
-        latest: Number(ticker.latest).toFixed(base.precision),
-        percentChange: limitByPrecision(ticker.percent_change, 1) || "0",
-        volume: limitByPrecision(ticker.quote_volume, quote.precision),
-        highestBid: Number(ticker.highest_bid).toFixed(base.precision),
-        lowestAsk: Number(ticker.lowest_ask).toFixed(base.precision),
-      };
-      if (dayOHLCVs) {
-        stats = {
-          ...tickerDate,
-          dailyHigh: (
-            setPrecision(false, dayOHLCVs.high_base, base.precision) /
-            setPrecision(false, dayOHLCVs.high_quote, quote.precision)
-          ).toFixed(base.precision),
-          dailyLow: (
-            setPrecision(false, dayOHLCVs.low_base, base.precision) /
-            setPrecision(false, dayOHLCVs.low_quote, quote.precision)
-          ).toFixed(base.precision),
-        };
-      } else {
-        stats = {
-          ...tickerDate,
-          dailyHigh: "0",
-          dailyLow: "0",
-        };
+      try {
+        const ticker = await getTicker(selectedPair.base, selectedPair.quote);
+        // console.log("ticker", ticker);
+        askPrice = Number(asks[0].price).toFixed(base.precision);
+        bidPrice = Number(bids[0].price).toFixed(base.precision);
+        if (ticker) {
+          latest = Number(ticker.latest).toFixed(base.precision);
+          percentChange = limitByPrecision(ticker.percent_change, 1) || "0";
+          volume = limitByPrecision(ticker.quote_volume, quote.precision);
+          dailyHigh = limitByPrecision(ticker.highest_bid, base.precision);
+          dailyLow = limitByPrecision(ticker.lowest_ask, base.precision);
+        }
+      } catch (e) {
+        console.log(e);
       }
-      return stats;
-    } else {
-      const defaultPairStats: MarketPairStats = {
-        latest: "0",
-        percentChange: "0",
-        volume: "0",
-        highestBid: "0",
-        lowestAsk: "0",
-        dailyHigh: "0",
-        dailyLow: "0",
-      };
-      return defaultPairStats;
     }
-  }, [selectedPair, ticker]);
+    // console.log("ticker final", {
+    //   latest,
+    //   percentChange,
+    //   volume,
+    //   askPrice,
+    //   bidPrice,
+    //   dailyHigh,
+    //   dailyLow,
+    // });
+    return {
+      latest,
+      percentChange,
+      volume,
+      askPrice,
+      bidPrice,
+      dailyHigh,
+      dailyLow,
+    } as MarketPairStats;
+  }, [selectedPair, asks, bids, marketHistory, getTicker]);
+
+  useEffect(() => {
+    let ignore = false;
+    async function setMarketPairStats() {
+      const marketPairStats = await getMarketPairStats();
+      if (!ignore) {
+        _setMarketPairStats(marketPairStats);
+      }
+    }
+    setMarketPairStats();
+    return () => {
+      ignore = true;
+    };
+  }, [getMarketPairStats, _setMarketPairStats]);
 
   return {
     marketPairStats,

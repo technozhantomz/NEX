@@ -39,7 +39,7 @@ export function useMembershipTab(): UseMembershipTabResult {
   const { calculateAccountUpgradeFee } = useFees();
   const { maintenanceInterval, nextMaintenanceTime } = useMaintenance();
   const { getGlobalProperties } = useBlockchain();
-  const { transactionMessageState, dispatchTransactionMessage } =
+  const { transactionMessageState, transactionMessageDispatch } =
     useTransactionMessage();
 
   const [membershipForm] = Form.useForm();
@@ -183,12 +183,12 @@ export function useMembershipTab(): UseMembershipTabResult {
         (assets.filter((asset) => asset.id === defaultAsset.id)[0]
           .amount as number) < membershipPrice
       ) {
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.ERROR,
           message: counterpart.translate(`field.errors.balance_not_enough`),
         });
       } else {
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.CLEAR,
         });
         const fee = { amount: 0, asset_id: defaultAsset?.id };
@@ -203,13 +203,13 @@ export function useMembershipTab(): UseMembershipTabResult {
         let trxResult;
 
         try {
-          dispatchTransactionMessage({
+          transactionMessageDispatch({
             type: TransactionMessageActionType.LOADING,
           });
           trxResult = await buildTrx([trx], [signerKey]);
         } catch (error) {
           console.log(error);
-          dispatchTransactionMessage({
+          transactionMessageDispatch({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(`field.errors.transaction_unable`),
           });
@@ -221,14 +221,14 @@ export function useMembershipTab(): UseMembershipTabResult {
 
           _setMembershipStatus(membershipStatus);
 
-          dispatchTransactionMessage({
+          transactionMessageDispatch({
             type: TransactionMessageActionType.LOADED_SUCCESS,
             message: counterpart.translate(
               `field.success.account_upgraded_successfully`
             ),
           });
         } else {
-          dispatchTransactionMessage({
+          transactionMessageDispatch({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(`field.errors.transaction_unable`),
           });
@@ -240,7 +240,7 @@ export function useMembershipTab(): UseMembershipTabResult {
       defaultAsset,
       membershipPrice,
       id,
-      dispatchTransactionMessage,
+      transactionMessageDispatch,
       buildTrx,
       setIsLifetimeMember,
       formAccountBalancesByName,
@@ -275,7 +275,7 @@ export function useMembershipTab(): UseMembershipTabResult {
     handleMembershipUpgrade,
     membershipForm,
     transactionMessageState,
-    dispatchTransactionMessage,
+    transactionMessageDispatch,
     name,
     feesCashback,
     membershipPrice,

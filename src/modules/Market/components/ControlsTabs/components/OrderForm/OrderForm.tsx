@@ -9,7 +9,7 @@ import {
   PasswordModal,
   TransactionModal,
 } from "../../../../../../common/components";
-import { useTransactionForm } from "../../../../../../common/hooks";
+import { useHandleTransactionForm } from "../../../../../../common/hooks";
 import { useUserContext } from "../../../../../../common/providers";
 import {
   DownOutlined,
@@ -23,17 +23,8 @@ import { TimePolicy, useOrderForm } from "./hooks";
 type Props = {
   isBuyForm: boolean;
   formType: "limit" | "market";
-  precisions: {
-    price: number;
-    amount: number;
-    total: number;
-  };
 };
-export function OrderForm({
-  isBuyForm,
-  formType,
-  precisions,
-}: Props): JSX.Element {
+export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
   const { pair } = router.query;
@@ -52,7 +43,7 @@ export function OrderForm({
     sliderValue,
     timePolicy,
     handleTimePolicyChange,
-    dispatchTransactionMessage,
+    transactionMessageDispatch,
     transactionMessageState,
     handleCreateLimitOrder,
     handleExecutionChange,
@@ -63,17 +54,18 @@ export function OrderForm({
     transactionModalTotal,
   } = useOrderForm({
     isBuyForm,
-    precisions,
+    formType,
   });
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
+    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useTransactionForm({
-    executeTransaction: handleCreateLimitOrder,
-    dispatchTransactionMessage,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleCreateLimitOrder,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
   const sliderMarks: SliderMarks = {
@@ -103,6 +95,7 @@ export function OrderForm({
           name="orderForm"
           form={orderForm}
           onValuesChange={handleValuesChange}
+          onFinish={showPasswordModal}
         >
           {formType === "limit" && (
             <Styled.FormItem

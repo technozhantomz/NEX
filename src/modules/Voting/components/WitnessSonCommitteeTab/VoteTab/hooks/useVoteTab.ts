@@ -59,7 +59,7 @@ export function useVoteTab({
   const [updateAccountFee, setUpdateAccountFee] = useState<number>();
   const afterCloseTransactionModal = useRef<() => void>();
 
-  const { transactionMessageState, dispatchTransactionMessage } =
+  const { transactionMessageState, transactionMessageDispatch } =
     useTransactionMessage();
   const { formKnownAssetBalanceById } = useAsset();
   const { defaultAsset } = useAssetsContext();
@@ -73,8 +73,7 @@ export function useVoteTab({
   const sortVotesRows = useCallback((votes: VoteRow[]) => {
     const sorter = (a: VoteRow, b: VoteRow) =>
       Number(b.votes.split(" ")[0]) - Number(a.votes.split(" ")[0]);
-    votes.sort(sorter);
-    return votes.map((vote, index) => {
+    return votes.sort(sorter).map((vote, index) => {
       return { ...vote, rank: index + 1 };
     }) as VoteRow[];
   }, []);
@@ -372,33 +371,33 @@ export function useVoteTab({
     async (signerKey: SignerKey) => {
       const votingErrorMessage = validateVoting(updateAccountFee as number);
       if (votingErrorMessage) {
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.ERROR,
           message: votingErrorMessage,
         });
         return;
       }
-      dispatchTransactionMessage({
+      transactionMessageDispatch({
         type: TransactionMessageActionType.CLEAR,
         message: votingErrorMessage,
       });
 
       let trxResult;
       try {
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.LOADING,
         });
         const trx = await createUpdateAccountTrx(localApprovedVotesIds);
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (error) {
         console.log(error);
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.unable_transaction`),
         });
       }
       if (trxResult) {
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.LOADED_SUCCESS,
           message: counterpart.translate(`field.success.published_votes`),
         });
@@ -410,7 +409,7 @@ export function useVoteTab({
           setConfirmed(true);
         };
       } else {
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.unable_transaction`),
         });
@@ -419,7 +418,7 @@ export function useVoteTab({
     [
       validateVoting,
       updateAccountFee,
-      dispatchTransactionMessage,
+      transactionMessageDispatch,
       createUpdateAccountTrx,
       localApprovedVotesIds,
       buildTrx,
@@ -476,7 +475,7 @@ export function useVoteTab({
     removeVote,
     handleVoting,
     transactionMessageState,
-    dispatchTransactionMessage,
+    transactionMessageDispatch,
     updateAccountFee,
     localApprovedVotesIds,
     afterSuccessTransactionModalClose: afterCloseTransactionModal.current,

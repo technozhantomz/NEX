@@ -12,7 +12,7 @@ export type UseProxyTab = {
   searchedAccount: Account | undefined;
   updateAccountFee: number;
   transactionMessageState: TransactionMessageState;
-  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   addProxy: (account: Account) => void;
   removeProxy: () => void;
   searchChange: (inputEvent: ChangeEvent<HTMLInputElement>) => Promise<void>;

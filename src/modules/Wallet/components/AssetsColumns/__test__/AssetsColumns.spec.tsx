@@ -9,7 +9,7 @@ describe("AssetsColumns", () => {
   beforeEach(() => {
     assetOne = {
       available: 0,
-      inOrders: "62",
+      inOrders: 62,
       key: "1.3.0",
       name: "PeerPlays",
       symbol: "TEST",
@@ -17,7 +17,7 @@ describe("AssetsColumns", () => {
 
     assetTwo = {
       available: 0,
-      inOrders: "0",
+      inOrders: 0,
       key: "1.3.1",
       name: "Bitcoin",
       symbol: "BTC",
@@ -67,8 +67,8 @@ describe("AssetsColumns", () => {
     expect(inOrdersColumn).toHaveProperty("sorter", expect.any(Function));
 
     const sorterFn = inOrdersColumn.sorter as (
-      a: { inOrders: string },
-      b: { inOrders: string }
+      a: { inOrders: number },
+      b: { inOrders: number }
     ) => number;
     expect(sorterFn(assetOne, assetTwo)).toBe(62);
   });

@@ -27,7 +27,7 @@ type Props = {
 export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
   const {
     loading,
-    showDetails,
+    showDetials,
     searchDataSource,
     operationsRows,
     setSearchDataSource,
@@ -75,21 +75,21 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
               <span className="item-info-value">
                 <a onClick={toggleDetails}>
                   {counterpart.translate(
-                    `pages.blocks.transaction_details.see_details`
+                    `pages.blocks.transaction_detials.see_details`
                   )}
                 </a>
               </span>
             </div>
-            <Styled.OperationDetails className={showDetails ? "open" : ""}>
+            <Styled.OperationDetails className={showDetials ? "open" : ""}>
               <p>
                 {counterpart.translate(
-                  `pages.blocks.transaction_details.details`
+                  `pages.blocks.transaction_detials.details`
                 )}
                 : {item.details}
               </p>
               <p>
                 {counterpart.translate(
-                  `pages.blocks.transaction_details.results`
+                  `pages.blocks.transaction_detials.results`
                 )}
                 : {item.results}
               </p>
@@ -98,23 +98,8 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
         </Styled.OperationsListItem>
       );
     },
-    [OperationsColumns, toggleDetails, showDetails]
+    [OperationsColumns, toggleDetails, showDetials]
   );
-
-  const expandedRowRender = useCallback((record: OperationRow) => {
-    return (
-      <>
-        <p>
-          {counterpart.translate(`pages.blocks.transaction_details.details`)}:{" "}
-          {record.details}
-        </p>
-        <p>
-          {counterpart.translate(`pages.blocks.transaction_details.results`)}:{" "}
-          {record.results}
-        </p>
-      </>
-    );
-  }, []);
 
   return (
     <Styled.TableWrapper>
@@ -151,7 +136,22 @@ export const OperationsTable = ({ transactionRow }: Props): JSX.Element => {
           dataSource={searchDataSource}
           columns={OperationsColumns as ColumnsType<OperationRow>}
           expandable={{
-            expandedRowRender: expandedRowRender,
+            expandedRowRender: (record) => (
+              <>
+                <p>
+                  {counterpart.translate(
+                    `pages.blocks.transaction_detials.details`
+                  )}
+                  : {record.details}
+                </p>
+                <p>
+                  {counterpart.translate(
+                    `pages.blocks.transaction_detials.results`
+                  )}
+                  : {record.results}
+                </p>
+              </>
+            ),
             rowExpandable: (record) => record.details !== undefined,
             expandRowByClick: true,
             showExpandColumn: false,

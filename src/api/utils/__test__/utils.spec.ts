@@ -191,26 +191,22 @@ describe("Testing utils functions ", () => {
     });
   });
 
-  describe("validatePeerplaysAccountName function", () => {
+  describe("validateGrapheneAccountName function", () => {
     it("should return true for valid Graphene account names", () => {
-      expect(utils.validatePeerplaysAccountName("abc").isValid).toBe(true);
-      expect(utils.validatePeerplaysAccountName("abcd1234").isValid).toBe(true);
-      expect(utils.validatePeerplaysAccountName("ab-cd-12-34").isValid).toBe(
-        true
-      );
+      expect(utils.validateGrapheneAccountName("abcd1234")).toBe(true);
+      expect(utils.validateGrapheneAccountName("ab-cd-12-34")).toBe(true);
       expect(
-        utils.validatePeerplaysAccountName(
+        utils.validateGrapheneAccountName(
           "abcdefghijklmnopqrstuvwxyz1234567890"
-        ).isValid
+        )
       ).toBe(true);
     });
 
     it("Should return false for invalid Graphene account names", () => {
-      expect(utils.validatePeerplaysAccountName("abc--").isValid).toBe(false);
-      expect(utils.validatePeerplaysAccountName("abc--").isValid).toBe(false);
-      expect(utils.validatePeerplaysAccountName("ab.cd.12.34").isValid).toBe(
-        false
-      );
+      expect(utils.validateGrapheneAccountName("abc")).toBe(false);
+      expect(utils.validateGrapheneAccountName("abc--")).toBe(false);
+      expect(utils.validateGrapheneAccountName("abc--")).toBe(false);
+      expect(utils.validateGrapheneAccountName("ab.cd.12.34")).toBe(false);
     });
   });
 

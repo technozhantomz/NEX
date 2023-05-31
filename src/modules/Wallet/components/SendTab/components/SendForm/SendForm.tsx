@@ -11,7 +11,10 @@ import {
   PasswordModal,
   TransactionModal,
 } from "../../../../../../common/components";
-import { useAsset, useTransactionForm } from "../../../../../../common/hooks";
+import {
+  useAsset,
+  useHandleTransactionForm,
+} from "../../../../../../common/hooks";
 import { Form, Input, Progress } from "../../../../../../ui/src";
 import BitcoinIcon from "../../../../../../ui/src/icons/Cryptocurrencies/BitcoinIcon.svg";
 import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
@@ -35,15 +38,15 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
     handleValuesChange,
     onBlockchainChange,
     selectedBlockchain,
-    formValidation,
+    formValdation,
     feeAmount,
     send,
-    dispatchTransactionMessage,
+    transactionMessageDispatch,
     transactionMessageState,
     localStorageAccount,
     amount,
     toAccount,
-    selectedAssetPrecision,
+    selectedAssetPrecission,
     btcTransferFee,
     afterTransactionModalClose,
   } = useSendForm({
@@ -53,7 +56,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
   const icons: {
     [blockchain: string]: JSX.Element;
   } = {
-    Peerplays: <PPYIcon height="20" width="20" />,
+    Homepesa: <PPYIcon height="20" width="20" />,
     Hive: <HIVEIcon height="20" width="20" />,
     Bitcoin: <BitcoinIcon height="20" width="20" />,
   };
@@ -61,18 +64,19 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
+    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useTransactionForm({
-    executeTransaction: send,
-    dispatchTransactionMessage,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: send,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
 
   const precisedAmount = limitByPrecision(
     String(amount),
-    selectedAssetPrecision
+    selectedAssetPrecission
   );
 
   const feeLabel =
@@ -114,9 +118,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
 
   const totalTransaction = (
     <>
-      <div>{`${precisedAmount} ${
-        selectedAssetSymbol !== undefined ? selectedAssetSymbol : ""
-      }`}</div>
+      <div>{`${precisedAmount} ${selectedAssetSymbol}`}</div>
       <>{feeSummary(true)}</>
     </>
   );
@@ -155,9 +157,9 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
   return (
     <Form.Provider onFormFinish={handleFormFinish}>
       <Styled.SendForm
-        name="sendForm"
         size="large"
         form={sendForm}
+        onFinish={showPasswordModal}
         onValuesChange={handleValuesChange}
         validateTrigger={["onChange", "onBlur", "onSubmit"]}
         initialValues={{
@@ -167,7 +169,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
         <div className="two-input-row">
           <Form.Item
             name="asset"
-            rules={formValidation.asset}
+            rules={formValdation.asset}
             validateFirst={true}
           >
             <Styled.AssetSelector
@@ -189,7 +191,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
 
           <Form.Item
             name="blockchain"
-            rules={formValidation.blockchain}
+            rules={formValdation.blockchain}
             validateFirst={true}
           >
             <Styled.BlockchainSelector
@@ -238,7 +240,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
           <Form.Item
             name="amount"
             validateFirst={true}
-            rules={formValidation.amount}
+            rules={formValdation.amount}
           >
             <Input
               placeholder={counterpart.translate(
@@ -253,7 +255,7 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             />
           </Form.Item>
 
-          <Form.Item name="to" validateFirst={true} rules={formValidation.to}>
+          <Form.Item name="to" validateFirst={true} rules={formValdation.to}>
             <Input
               placeholder={counterpart.translate(
                 `field.placeholder.enter_recipient`
@@ -263,33 +265,20 @@ export const SendForm = ({ assetSymbol }: Props): JSX.Element => {
             />
           </Form.Item>
         </div>
-        {selectedBlockchain === undefined ||
-        selectedBlockchain === defaultNetwork ? (
-          <>
-            <p>{counterpart.translate(`field.comments.public_memo`)}</p>
-            <Styled.MemoWrapper>
-              <Styled.MemoFormItem
-                name="memo"
-                validateFirst={true}
-                validateTrigger="onChange"
-              >
-                <Styled.Memo
-                  placeholder={counterpart.translate(`field.placeholder.memo`)}
-                  maxLength={256}
-                  disabled={selectedBlockchain !== defaultNetwork}
-                />
-              </Styled.MemoFormItem>
-            </Styled.MemoWrapper>
-          </>
-        ) : (
-          <Styled.WithdrawAlertWrapper>
-            <Styled.AlertIcon />
-            <Styled.AlertText>
-              {counterpart.translate("pages.wallet.withdraw_alert")}
-            </Styled.AlertText>
-          </Styled.WithdrawAlertWrapper>
-        )}
-
+        <p>{counterpart.translate(`field.comments.public_memo`)}</p>
+        <Styled.MemoWrapper>
+          <Styled.MemoFormItem
+            name="memo"
+            validateFirst={true}
+            validateTrigger="onChange"
+          >
+            <Styled.Memo
+              placeholder={counterpart.translate(`field.placeholder.memo`)}
+              maxLength={256}
+              disabled={selectedBlockchain !== defaultNetwork}
+            />
+          </Styled.MemoFormItem>
+        </Styled.MemoWrapper>
         {transactionDetails}
         <Styled.FormItem>
           <Styled.TransferFormButton type="primary" htmlType="submit">

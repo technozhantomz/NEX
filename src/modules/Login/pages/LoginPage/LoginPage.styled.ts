@@ -4,6 +4,7 @@ import { breakpoint } from "../../../../ui/src/breakpoints";
 import { mixIns } from "../../../../ui/src/mixins";
 
 export const LoginFormCard = styled(Card)`
+  max-width: 335px;
   min-height: 245px;
   padding-top: 10px;
   ${mixIns.borderRadius}

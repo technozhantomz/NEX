@@ -12,5 +12,4 @@ export const Input = styled(AntdInput)`
   input[type="number"] {
     -moz-appearance: textfield;
   }
-  font-size: 14px;
 `;

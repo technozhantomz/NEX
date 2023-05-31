@@ -4,7 +4,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 
@@ -64,14 +63,15 @@ export const FeesProvider = ({ children }: Props): JSX.Element => {
     };
   }, [getFeesFromGlobal, setLoadingFeeParameters, setFeeParameters]);
 
-  const context = useMemo(() => {
-    return {
-      feeParameters,
-      loadingFeeParameters,
-    };
-  }, [feeParameters, loadingFeeParameters]);
   return (
-    <FeesContext.Provider value={context}>{children}</FeesContext.Provider>
+    <FeesContext.Provider
+      value={{
+        feeParameters,
+        loadingFeeParameters,
+      }}
+    >
+      {children}
+    </FeesContext.Provider>
   );
 };
 

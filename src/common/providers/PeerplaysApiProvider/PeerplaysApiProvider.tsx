@@ -13,7 +13,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -1141,6 +1140,13 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
         error: err,
       })
     );
+    //TODO: Add notif error
+    // Notification.error({
+    //   message: counterpart.translate("settings.connection_error", {
+    //     url: failingNodeUrl || "",
+    //     error: err,
+    //   }),
+    // });
     const _apiLatencies = apiLatencies;
     delete _apiLatencies[failingNodeUrl];
     setApiLatencies(apiLatencies);
@@ -1341,35 +1347,21 @@ export const PeerplaysApiProvider = ({ children }: Props): JSX.Element => {
     }
   }, []);
 
-  const context = useMemo(() => {
-    return {
-      apiInstance: apiInstance.current,
-      getNodes,
-      willTransitionTo,
-      dbApi,
-      historyApi,
-      isTransitionInProgress,
-      getTransitionTarget,
-      isAutoSelection,
-      isBackgroundPingingInProgress,
-      whaleVaultInstance,
-    };
-  }, [
-    apiInstance,
-    apiInstance.current,
-    getNodes,
-    willTransitionTo,
-    dbApi,
-    historyApi,
-    isTransitionInProgress,
-    getTransitionTarget,
-    isAutoSelection,
-    isBackgroundPingingInProgress,
-    whaleVaultInstance,
-  ]);
-
   return (
-    <PeerPlaysApiContext.Provider value={context}>
+    <PeerPlaysApiContext.Provider
+      value={{
+        apiInstance: apiInstance.current,
+        getNodes,
+        willTransitionTo,
+        dbApi,
+        historyApi,
+        isTransitionInProgress,
+        getTransitionTarget,
+        isAutoSelection,
+        isBackgroundPingingInProgress,
+        whaleVaultInstance,
+      }}
+    >
       {children}
     </PeerPlaysApiContext.Provider>
   );

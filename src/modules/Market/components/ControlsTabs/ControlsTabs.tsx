@@ -1,17 +1,10 @@
 import counterpart from "counterpart";
+import { useCallback, useState } from "react";
 
 import * as Styled from "./ControlsTabs.styled";
 import { FormTabs } from "./components";
 
-type Props = {
-  controlsTabsClassName: string;
-  onChangeControlsTab: (activeKey: string) => void;
-};
-
-export function ControlsTabs({
-  controlsTabsClassName,
-  onChangeControlsTab,
-}: Props): JSX.Element {
+export function ControlsTabs(): JSX.Element {
   const tabItems = [
     {
       label: counterpart.translate(`buttons.buy`),
@@ -32,14 +25,21 @@ export function ControlsTabs({
       ),
     },
   ];
+  const [className, setClassName] = useState<string>("buy");
+  const onChange = useCallback(
+    (activeKey: string) => {
+      setClassName(activeKey);
+    },
+    [setClassName]
+  );
   return (
     <Styled.TabsContainer>
       <Styled.Tabs
-        activeKey={controlsTabsClassName}
+        defaultActiveKey="buy"
         centered={true}
         items={tabItems}
-        className={controlsTabsClassName}
-        onChange={onChangeControlsTab}
+        className={className}
+        onChange={onChange}
       />
     </Styled.TabsContainer>
   );

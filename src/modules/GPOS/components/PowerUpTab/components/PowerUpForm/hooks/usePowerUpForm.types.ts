@@ -13,7 +13,7 @@ export type UsePowerUpFormResult = {
   powerUpForm: FormInstance<PowerUpForm>;
   adjustDeposit: (direction: string) => void;
   transactionMessageState: TransactionMessageState;
-  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   handleVesting: (signerKey: SignerKey) => Promise<void>;
   feeAmount: number;
   depositAmount: string;

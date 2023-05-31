@@ -21,7 +21,6 @@ const customJestConfig = {
     "**/*.ts",
     "!<rootDir>/node_modules/",
     "!**/index.ts",
-    "!**/*.types.ts",
     "!**/*.styled.tsx",
     "!<rootDir>/src/pages/**/**.tsx",
     "!<rootDir>/src/api/params/nodesList.ts",

@@ -1,4 +1,4 @@
-export const excludedAssetsSymbols = [
+export const symbolsToBeExcepted = [
   "AQSQFHZAJVZDTVAC",
   "AXFMUJYATHGJSOIV",
   "BSEBEIBGLWDPKMDB",
@@ -20,6 +20,4 @@ export const excludedAssetsSymbols = [
   "WGKGQTICUIYEYTWV",
   "WNIPJIXZAFZGHGIC",
   "WTFUN",
-  "KOEBUNCPN",
-  "NATHANBUNCPNN",
 ];

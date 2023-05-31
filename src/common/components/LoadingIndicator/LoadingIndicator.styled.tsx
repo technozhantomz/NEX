@@ -17,7 +17,7 @@ const bouncedelay = keyframes`
 }
  `;
 
-export const ThreeBounceWrapper = styled.div`
+export const ThreeBounceWrpper = styled.div`
   & > div {
     width: 18px;
     height: 18px;

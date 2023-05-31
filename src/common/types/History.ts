@@ -43,23 +43,3 @@ export type TradeHistoryRow = {
   isPriceUp?: boolean;
   filled?: string;
 };
-
-export type MarketHistory = {
-  base_volume: number;
-  close_base: number;
-  close_quote: number;
-  high_base: number;
-  high_quote: number;
-  id: string;
-  key: {
-    base: string;
-    open: string;
-    quote: string;
-    seconds: number;
-  };
-  low_base: number;
-  low_quote: number;
-  open_base: number;
-  open_quote: number;
-  quote_volume: number;
-};

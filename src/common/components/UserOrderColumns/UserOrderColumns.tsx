@@ -11,7 +11,7 @@ export type UserOrderColumnType = {
   title: () => JSX.Element;
   dataIndex: string;
   key: string;
-  render: ((_value: string, _record: OrderTableRow) => JSX.Element) | undefined;
+  render: ((_value: string, _record: any) => JSX.Element) | undefined;
   filters:
     | {
         text: string;
@@ -103,7 +103,7 @@ export const createUserOrderColumns = (
     //total
     undefined,
     //status
-    (_value: string, _record: OrderTableRow): JSX.Element => {
+    (_value: string, _record: any): JSX.Element => {
       function handleClick(
         // eslint-disable-next-line no-undef
         e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>

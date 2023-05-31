@@ -6,7 +6,7 @@ import {
   PasswordModal,
   TransactionModal,
 } from "../../../../../../common/components";
-import { useTransactionForm } from "../../../../../../common/hooks";
+import { useHandleTransactionForm } from "../../../../../../common/hooks";
 import {
   useUserContext,
   useViewportContext,
@@ -35,7 +35,7 @@ export const PowerUpForm = ({
     formValidation,
     adjustDeposit,
     transactionMessageState,
-    dispatchTransactionMessage,
+    transactionMessageDispatch,
     handleVesting,
     feeAmount,
     depositAmount,
@@ -50,11 +50,12 @@ export const PowerUpForm = ({
     isPasswordModalVisible,
     isTransactionModalVisible,
     hideTransactionModal,
+    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
-  } = useTransactionForm({
-    executeTransaction: handleVesting,
-    dispatchTransactionMessage,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleVesting,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
   const { sm } = useViewportContext();
@@ -74,6 +75,7 @@ export const PowerUpForm = ({
           form={powerUpForm}
           layout="vertical"
           name="powerUpForm"
+          onFinish={showPasswordModal}
           size="large"
           initialValues={{
             openingBalance: "",

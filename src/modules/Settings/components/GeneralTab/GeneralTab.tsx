@@ -85,8 +85,8 @@ export const GeneralTab = (): JSX.Element => {
             </Styled.LabelText>
             <Styled.GeneralSettingFormItem name="selectedLanguage">
               <Styled.Select>
-                {defaultLocales.map((e) => (
-                  <Styled.Option key={e.type} value={e.type}>
+                {defaultLocales.map((e, id) => (
+                  <Styled.Option key={id} value={e.type}>
                     {e.title}
                   </Styled.Option>
                 ))}
@@ -122,8 +122,8 @@ export const GeneralTab = (): JSX.Element => {
             </Styled.LabelText>
             <Styled.GeneralSettingFormItem name="walletLockInMinutes">
               <Styled.Select>
-                {walletLockInMinutes.map((e) => (
-                  <Styled.Option value={e} key={e}>
+                {walletLockInMinutes.map((e, i) => (
+                  <Styled.Option value={e} key={i}>
                     {e} {counterpart.translate(`field.options.lock_wallet`)}
                   </Styled.Option>
                 ))}

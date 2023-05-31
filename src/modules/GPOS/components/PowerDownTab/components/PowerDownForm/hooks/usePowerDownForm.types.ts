@@ -13,7 +13,7 @@ export type UsePowerDownFormResult = {
   formValidation: FormValidation;
   adjustWithdraw: (direction: string) => void;
   transactionMessageState: TransactionMessageState;
-  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   handleWithdraw: (signerKey: SignerKey) => Promise<void>;
   feeAmount: number;
   withdrawAmount: string;

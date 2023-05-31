@@ -9,8 +9,8 @@ export type MarketPairStats = {
   latest: string;
   percentChange: string;
   volume: string;
-  lowestAsk?: string;
-  highestBid?: string;
+  askPrice?: string;
+  bidPrice?: string;
   dailyHigh?: string;
   dailyLow?: string;
 };

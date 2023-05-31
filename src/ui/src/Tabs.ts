@@ -21,8 +21,4 @@ export const Tabs = styled(AntdTabs)`
   .ant-tabs-tab.ant-tabs-tab-active {
     border-bottom: 2pt solid #0a48be;
   }
-  .ant-tabs-tab.ant-tabs-tab-disabled {
-    color: rgba(0, 0, 0, 0.25);
-    cursor: not-allowed;
-  }
 `;

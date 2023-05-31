@@ -8,6 +8,7 @@ const CreatePriceChart = (): JSX.Element => {
 
   return (
     <>
+      {/* <div ref={lightweightContainerRef} /> */}
       <Styled.PriceChartWrapper ref={chartContainerRef} />
     </>
   );

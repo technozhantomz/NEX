@@ -31,7 +31,6 @@ const VotingPage: NextPage = () => {
     getUserVotes,
     serverApprovedVotesIds,
     voteTabLoaded,
-    loadingUserVotes,
   } = useVoting();
 
   const renderTabBar = MobileTabBar({
@@ -48,7 +47,7 @@ const VotingPage: NextPage = () => {
     {
       label: counterpart.translate(`pages.voting.gpos.tab`),
       key: "gpos",
-      children: <GPOSTab loading={loadingUserVotes} gposInfo={gposInfo} />,
+      children: <GPOSTab gposInfo={gposInfo} />,
     },
     ...voteTabs.map((voteTab, index) => {
       return {

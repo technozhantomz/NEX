@@ -113,10 +113,8 @@ export function useWitnessesTab(): UseWitnessesTabResult {
             const activeWitnesses = witnessesRows.filter(
               (witness) => witness.active === true
             );
-            const avgTime = getAvgBlockTime();
-            const blocksPerMonth = avgTime
-              ? (60 / avgTime) * 60 * 24 * getDaysInThisMonth()
-              : 0;
+            const blocksPerMonth =
+              (60 / getAvgBlockTime()) * 60 * 24 * getDaysInThisMonth();
             const earnings = (
               (blocksPerMonth / witnessesRows.length) *
               rewardAmount

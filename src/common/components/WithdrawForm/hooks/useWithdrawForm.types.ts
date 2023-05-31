@@ -5,25 +5,26 @@ import {
   TransactionMessageAction,
   TransactionMessageState,
 } from "../../../hooks";
-import { SidechainAccount, SignerKey } from "../../../types";
+import { SidechainAcccount, SignerKey } from "../../../types";
 
 export type UseWithdrawFormResult = {
-  formValidation: FormValidation;
+  formValdation: FormValidation;
   withdrawForm: FormInstance<WithdrawForm>;
-  handleValuesChange: (changedValues: { amount?: string }) => void;
+  handleValuesChange: (changedValues: any) => void;
   handleAssetChange: (value: unknown) => void;
   selectedAsset: string;
   transactionMessageState: TransactionMessageState;
-  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   handleWithdraw: (signerKey: SignerKey) => Promise<void>;
   amount: string;
+  withdrawAddress: string;
   userBalance: number;
   withdrawFee: number;
   btcTransferFee: number;
   setBtcTransferFee: Dispatch<SetStateAction<number>>;
-  selectedAssetPrecision: number;
+  selectedAssetPrecission: number;
   hasBTCDepositAddress: boolean;
-  bitcoinSidechainAccount: SidechainAccount | undefined;
+  bitcoinSidechainAccount: SidechainAcccount | undefined;
   getSidechainAccounts: (accountId: string) => Promise<void>;
   loadingSidechainAccounts: boolean;
 };

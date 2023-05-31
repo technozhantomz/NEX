@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 
@@ -89,24 +88,18 @@ export const MenuProvider = ({ children }: Props): JSX.Element => {
     closeAllMenus();
   }, [browserHistory]);
 
-  const context = useMemo(() => {
-    return {
-      notificationMenuOpen,
-      profileMenuOpen,
-      mainMenuOpen,
-      openMenu,
-      closeAllMenus,
-    };
-  }, [
-    notificationMenuOpen,
-    profileMenuOpen,
-    mainMenuOpen,
-    openMenu,
-    closeAllMenus,
-  ]);
-
   return (
-    <MenuContext.Provider value={context}>{children}</MenuContext.Provider>
+    <MenuContext.Provider
+      value={{
+        notificationMenuOpen,
+        profileMenuOpen,
+        mainMenuOpen,
+        openMenu,
+        closeAllMenus,
+      }}
+    >
+      {children}
+    </MenuContext.Provider>
   );
 };
 

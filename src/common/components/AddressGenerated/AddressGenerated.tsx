@@ -1,12 +1,12 @@
 import counterpart from "counterpart";
 
 import { CopyButton } from "..";
-import { SidechainAccount } from "../../types";
+import { SidechainAcccount } from "../../types";
 
 import * as Styled from "./AddressGenerated.styled";
 
 type Props = {
-  bitcoinSidechainAccount?: SidechainAccount;
+  bitcoinSidechainAccount?: SidechainAcccount;
 };
 export const AddressGenerated = ({
   bitcoinSidechainAccount,

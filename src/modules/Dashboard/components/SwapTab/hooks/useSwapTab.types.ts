@@ -15,16 +15,13 @@ export type UseSwapResult = {
   selectedAssetsSymbols: SwapAssetPair;
   localStorageAccount: string;
   transactionMessageState: TransactionMessageState;
-  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
+  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
   allAssets: Asset[];
   swapOrderFee: number;
   price: number;
   loadingSwapData: boolean;
   loadingAssets: boolean;
-  handleValuesChange: (changedValues: {
-    sellAmount?: string;
-    buyAmount?: string;
-  }) => Promise<void>;
+  handleValuesChange: (changedValues: any) => Promise<void>;
   handleSwapAssets: () => void;
   buyAssetBalance: number;
   sellAssetBalance: number;

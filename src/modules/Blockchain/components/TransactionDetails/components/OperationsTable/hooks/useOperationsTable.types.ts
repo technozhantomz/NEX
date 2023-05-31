@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export type UseOperationsTableResult = {
   loading: boolean;
-  showDetails: boolean;
+  showDetials: boolean;
   searchDataSource: OperationRow[];
   operationsRows: OperationRow[];
   setSearchDataSource: Dispatch<SetStateAction<OperationRow[]>>;

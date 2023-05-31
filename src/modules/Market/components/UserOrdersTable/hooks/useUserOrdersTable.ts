@@ -8,9 +8,9 @@ import {
   useAccount,
   useAccountOrders,
   useFees,
+  useHandleTransactionForm,
   useOrderTransactionBuilder,
   useTransactionBuilder,
-  useTransactionForm,
   useTransactionMessage,
 } from "../../../../../common/hooks";
 import {
@@ -32,13 +32,12 @@ type UseUserOrdersTableResult = {
   handleCancelLimitOrderFinish: (name: string, info: any) => void;
   hideTransactionModal: () => void;
   defineTableRowClassName: (record: any) => "buy" | "sell";
-  onCancelClick: (orderId: string) => void;
 };
 
 export function useUserOrdersTable(isOpen: boolean): UseUserOrdersTableResult {
   const { id, localStorageAccount } = useUserContext();
   const { selectedPair, marketHistory } = useMarketContext();
-  const { transactionMessageState, dispatchTransactionMessage } =
+  const { transactionMessageState, transactionMessageDispatch } =
     useTransactionMessage();
   const { formAccountBalancesByName } = useAccount();
   const { buildCancelLimitOrderTransaction } = useOrderTransactionBuilder();
@@ -80,20 +79,20 @@ export function useUserOrdersTable(isOpen: boolean): UseUserOrdersTableResult {
 
   const handleCancelLimitOrder = useCallback(
     async (signerKey: SignerKey) => {
-      dispatchTransactionMessage({
+      transactionMessageDispatch({
         type: TransactionMessageActionType.CLEAR,
       });
 
       const trx = buildCancelLimitOrderTransaction(selectedOrderId, id);
       let trxResult;
       try {
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.LOADING,
         });
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
@@ -101,21 +100,21 @@ export function useUserOrdersTable(isOpen: boolean): UseUserOrdersTableResult {
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
         formUserOrders();
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.LOADED_SUCCESS,
           message: counterpart.translate(`field.success.canceled_limit_order`, {
             selectedOrderId,
           }),
         });
       } else {
-        dispatchTransactionMessage({
+        transactionMessageDispatch({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
       }
     },
     [
-      dispatchTransactionMessage,
+      transactionMessageDispatch,
       buildCancelLimitOrderTransaction,
       selectedOrderId,
       id,
@@ -130,22 +129,22 @@ export function useUserOrdersTable(isOpen: boolean): UseUserOrdersTableResult {
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
+    showPasswordModal,
     hidePasswordModal,
     handleFormFinish: handleCancelLimitOrderFinish,
     hideTransactionModal,
-    showPasswordModalIfNeeded,
-  } = useTransactionForm({
-    executeTransaction: handleCancelLimitOrder,
-    dispatchTransactionMessage,
+  } = useHandleTransactionForm({
+    handleTransactionConfirmation: handleCancelLimitOrder,
+    transactionMessageDispatch,
     neededKeyType: "active",
   });
 
   const onCancelClick = useCallback(
     (orderId: string) => {
       setSelectedOrderId(orderId.split(".")[2]);
-      showPasswordModalIfNeeded();
+      showPasswordModal();
     },
-    [setSelectedOrderId, showPasswordModalIfNeeded]
+    [setSelectedOrderId, showPasswordModal]
   );
 
   const cancelOrderFeeAmount = useMemo(() => {
@@ -182,6 +181,5 @@ export function useUserOrdersTable(isOpen: boolean): UseUserOrdersTableResult {
     handleCancelLimitOrderFinish,
     hideTransactionModal,
     defineTableRowClassName,
-    onCancelClick,
   };
 }
