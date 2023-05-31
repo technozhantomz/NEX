@@ -2,7 +2,7 @@ import counterpart from "counterpart";
 
 import { Node } from "../../common/types";
 
-import { testnetCheck } from "./networkparams";
+import { testnetCheck } from "./networkParams";
 
 export const nodeRegions = [
   // region of the node follows roughly https://en.wikipedia.org/wiki/Subregion#/media/File:United_Nations_geographical_subregions.png
@@ -39,13 +39,13 @@ export const testnetNodes: Node[] = [
     location: counterpart.translate("settings.api_closest"),
   },
   {
-    url: "wss://wss.homepesa.org/api",
+    url: "wss://alphanet.peerplays.download/api",
     location: "",
-    region: "Locally hosted",
-    country: "min-y-machine",
+    region: "Northern America",
+    country: "Canada",
     user: {
-      name: "AcoudBank",
-      status: "min-y-machine",
+      name: "Peerplays Witnesses",
+      status: "Witness",
     },
   },
 ];
@@ -56,13 +56,33 @@ export const prodNodes: Node[] = [
     location: counterpart.translate("settings.api_closest"),
   },
   {
-    url: "wss://wss.homepesa.org/api",
+    url: "wss://ca.peerplays.info",
     location: "",
-    region: "AcoudBank",
-    country: "min-y-machine",
+    region: "Northern America",
+    country: "Canada",
     user: {
-      name: "AcoudBank",
-      status: "min-y-machine",
+      name: "Peerplays Witnesses",
+      status: "Witness",
+    },
+  },
+  {
+    url: "wss://de.peerplays.xyz",
+    location: "",
+    region: "Western Europe",
+    country: "Germany",
+    user: {
+      name: "Peerplays Witnesses",
+      status: "Witness",
+    },
+  },
+  {
+    url: "wss://pl.peerplays.org",
+    location: "",
+    region: "Eastern Europe",
+    country: "Poland",
+    user: {
+      name: "Peerplays Witnesses",
+      status: "Witness",
     },
   },
 ];

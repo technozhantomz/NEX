@@ -72,21 +72,21 @@ export const FaucetURLWrapper = styled.div`
 `;
 
 export const FaucetURL = styled.div`
-  text-align: left;
-  font: normal normal normal 14px/17px Inter;
-  letter-spacing: 0px;
   color: ${colors.textColor};
-  opacity: 1;
   margin-bottom: 20px;
+  word-break: break-word;
   ${breakpoint.sm} {
     margin-bottom: 0;
   }
 `;
 
 export const FaucetSpace = styled.div`
-  margin-top: 96px;
+  margin-top: 48px;
   .ant-row {
     align-items: center;
+  }
+  ${breakpoint.sm} {
+    margin-top: 96px;
   }
 `;
 
@@ -126,12 +126,9 @@ export const CheckBoxGroup = styled(UiForm.Item)`
     margin-top: 8px;
   }
   .ant-checkbox + span {
-    font-size: 12px;
+    font-size: 14px;
   }
   ${breakpoint.sm} {
-    .ant-checkbox + span {
-      font-size: 14px;
-    }
     .ant-form-item-control-input-content {
       min-width: 120%;
     }
@@ -140,13 +137,12 @@ export const CheckBoxGroup = styled(UiForm.Item)`
 
 export const TextContainer = styled.div`
   min-height: 22px;
-  font-size: 12px;
+  font-size: 14px;
   .anticon-info-circle {
     margin: 0 15px 0 0;
     color: ${colors.warningColor};
   }
   ${breakpoint.sm} {
-    font-size: 14px;
     .anticon-info-circle {
       margin: 0 15px;
       color: ${colors.warningColor};

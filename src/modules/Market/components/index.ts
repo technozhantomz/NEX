@@ -1,3 +1,4 @@
+export * from "./DepthChart";
 export * from "./UserOrdersTabs";
 export * from "./UserOrdersTable";
 export * from "./HistoryTabs";
@@ -9,3 +10,4 @@ export * from "./PriceChart";
 export * from "./Wallet";
 export * from "./OrderBook";
 export * from "./ControlsTabs";
+export * from "./SmallScreenTabs";

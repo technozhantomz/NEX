@@ -3,7 +3,10 @@ import { cloneDeep, max } from "lodash";
 import { useCallback, useMemo, useState } from "react";
 
 import { useAsset } from "../../../../../common/hooks";
-import { useMarketContext } from "../../../../../common/providers";
+import {
+  useMarketContext,
+  useViewportContext,
+} from "../../../../../common/providers";
 import {
   MarketOrder,
   MarketPair,
@@ -21,11 +24,15 @@ type Args = {
 };
 
 export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
-  const { roundNum } = useAsset();
+  const { limitByPrecision } = useAsset();
   const { selectedPair, asks, bids, loadingAsksBids, lastTradeHistory } =
     useMarketContext();
+  const { lg, xxl } = useViewportContext();
+
   const [threshold, setThreshold] = useState<number>(0.001);
-  const [filter, setFilter] = useState<FilterType>("total");
+  const [filter, setFilter] = useState<FilterType>(() =>
+    lg ? "sell" : "total"
+  );
   const [prevPair, setPrevPair] = useState<string>(currentPair);
 
   if (prevPair !== currentPair) {
@@ -47,9 +54,37 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
     [setFilter]
   );
 
+  const reduceOrdersByPrice = useCallback((orders: MarketOrder[]) => {
+    const reducedOrders = orders.reduce((previousOrders, currentOrder) => {
+      const repeatedPriceIndex = previousOrders.findIndex(
+        (previousOrder) => previousOrder.price === currentOrder.price
+      );
+      if (repeatedPriceIndex === -1) {
+        previousOrders.push(currentOrder);
+      } else {
+        const orderWithRepeatedPrice = previousOrders[repeatedPriceIndex];
+        previousOrders[repeatedPriceIndex] = {
+          ...orderWithRepeatedPrice,
+          quote: String(
+            Number(orderWithRepeatedPrice.quote) + Number(currentOrder.quote)
+          ),
+          base: String(
+            Number(orderWithRepeatedPrice.base) + Number(currentOrder.base)
+          ),
+        };
+      }
+      return previousOrders;
+    }, [] as MarketOrder[]);
+    return reducedOrders.sort((a, b) =>
+      !a.isBuyOrder
+        ? Number(a.price) - Number(b.price)
+        : Number(b.price) - Number(a.price)
+    );
+  }, []);
+
   const groupAsksByThreshold = useCallback(
-    (asks: MarketOrder[], selectedPair: MarketPair, threshold: number) => {
-      const filteredAsks = cloneDeep(asks).filter(
+    (rawAsks: MarketOrder[], selectedPair: MarketPair, threshold: number) => {
+      const filteredAsks = cloneDeep(rawAsks).filter(
         (ask) => Number(ask.price) >= threshold
       );
       const groupedAsks: (MarketOrder & { maxPrice: string })[] = [];
@@ -70,12 +105,11 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
           groupedAsks.push({ ...ask, maxPrice: unchangedPrice });
         }
       });
-
-      return groupedAsks.map((asks, index) => {
+      const updatedAsks = groupedAsks.map((asks, index) => {
         return {
           key: `${threshold}-ask-${index}`,
-          quote: roundNum(asks.quote, selectedPair.quote.precision),
-          base: roundNum(asks.base, selectedPair.base.precision),
+          quote: limitByPrecision(asks.quote, selectedPair.quote.precision),
+          base: limitByPrecision(asks.base, selectedPair.base.precision),
           isBuyOrder: false,
           price:
             Number(asks.price) >= Number(asks.maxPrice)
@@ -85,13 +119,15 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
                 ),
         } as MarketOrder;
       });
+      const reducedAsks = reduceOrdersByPrice(updatedAsks);
+      return reducedAsks;
     },
-    [roundNum]
+    [limitByPrecision, reduceOrdersByPrice]
   );
 
   const groupBidsByThreshold = useCallback(
-    (bids: MarketOrder[], selectedPair: MarketPair, threshold: number) => {
-      const filteredBids = cloneDeep(bids).filter(
+    (rawBids: MarketOrder[], selectedPair: MarketPair, threshold: number) => {
+      const filteredBids = cloneDeep(rawBids).filter(
         (bid) => Number(bid.price) >= threshold
       );
       const groupedBids: (MarketOrder & { minPrice: string })[] = [];
@@ -115,12 +151,11 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
           groupedBids.push({ ...bid, minPrice: unchangedPrice });
         }
       });
-
-      return groupedBids.map((bids, index) => {
+      const updatedBids = groupedBids.map((bids, index) => {
         return {
           key: `${threshold}-bid-${index}`,
-          quote: roundNum(bids.quote, selectedPair.quote.precision),
-          base: roundNum(bids.base, selectedPair.base.precision),
+          quote: limitByPrecision(bids.quote, selectedPair.quote.precision),
+          base: limitByPrecision(bids.base, selectedPair.base.precision),
           isBuyOrder: true,
           price:
             Number(bids.price) <= Number(bids.minPrice)
@@ -130,8 +165,11 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
                 ),
         } as MarketOrder;
       });
+      const reducedBids = reduceOrdersByPrice(updatedBids);
+
+      return reducedBids;
     },
-    [roundNum]
+    [limitByPrecision, reduceOrdersByPrice]
   );
 
   const asksRows: MarketOrder[] = useMemo(() => {
@@ -192,30 +230,54 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
 
   const specifyTableScroll = useCallback(
     (orders: MarketOrder[]) => {
-      if (filter === "total") {
-        return orders.length > 12
+      if (lg) {
+        return orders.length > 7
           ? {
-              y: 246,
+              y: 130,
+              x: undefined,
+              scrollToFirstRowOnChange: false,
+            }
+          : undefined;
+      } else if (xxl) {
+        return orders.length > 25
+          ? {
+              y: 500,
               x: undefined,
               scrollToFirstRowOnChange: false,
             }
           : undefined;
       } else {
-        return orders.length > 30
-          ? {
-              y: 580,
-              x: undefined,
-              scrollToFirstRowOnChange: false,
-            }
-          : undefined;
+        if (filter === "total") {
+          return orders.length > 15
+            ? {
+                y: 300,
+                x: undefined,
+                scrollToFirstRowOnChange: false,
+              }
+            : undefined;
+        } else {
+          return orders.length > 34
+            ? {
+                y: 680,
+                x: undefined,
+                scrollToFirstRowOnChange: false,
+              }
+            : undefined;
+        }
       }
     },
-    [filter]
+    [filter, xxl, lg]
   );
 
   const specifyTableHeight = useCallback((): string => {
-    return filter === "total" ? "282px" : "610px";
-  }, [filter]);
+    if (lg) {
+      return "186px";
+    } else if (xxl) {
+      return "564px";
+    } else {
+      return filter === "total" ? "340px" : "724px";
+    }
+  }, [filter, xxl, lg]);
 
   const specifyLastTradeClassName = useCallback(
     (lastTrade?: TradeHistoryRow) => {
@@ -229,11 +291,10 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   );
 
   const specifyAsksTableRowClassName = useCallback(
-    (record: any) => {
-      const item = record as MarketOrder;
+    (record: MarketOrder) => {
       const orderDepthRatio =
         Math.ceil(
-          (Number(item.quote) /
+          (Number(record.quote) /
             (max(asksRows.map((row) => Number(row.quote))) ?? 0)) *
             10
         ) * 10;
@@ -244,11 +305,10 @@ export function useOrderBook({ currentPair }: Args): UseOrderBookResult {
   );
 
   const specifyBidsTableRowClassName = useCallback(
-    (record: any) => {
-      const item = record as MarketOrder;
+    (record: MarketOrder) => {
       const orderDepthRatio =
         Math.ceil(
-          (Number(item.quote) /
+          (Number(record.quote) /
             (max(bidsRows.map((row) => Number(row.quote))) ?? 0)) *
             10
         ) * 10;

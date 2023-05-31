@@ -1,19 +1,15 @@
-import { useRouter } from "next/router";
-
 import {
   Avatar,
   Badge,
   BellOutlined,
+  LogoColored,
   MenuOutlined,
   MoreOutlined,
   UserOutlined,
 } from "../../../../../../ui/src";
-import HIVEIcon from "../../../../../../ui/src/icons/Cryptocurrencies/HIVEIcon.svg";
-import MetaMaskIcon from "../../../../../../ui/src/icons/Cryptocurrencies/MetaMaskIcon.svg";
 import {
   useMenuContext,
   useNotificationsContext,
-  usePeerLinkContext,
   useUserContext,
   useViewportContext,
 } from "../../../../../providers";
@@ -24,9 +20,7 @@ import { ProfileMenu } from "../ProfileMenu";
 import * as Styled from "./MainNavBar.styled";
 
 export const MainNavBar = (): JSX.Element => {
-  const router = useRouter();
   const { localStorageAccount } = useUserContext();
-  const { metaMask, hive } = usePeerLinkContext();
   const { sm } = useViewportContext();
   const {
     openMenu,
@@ -40,13 +34,27 @@ export const MainNavBar = (): JSX.Element => {
   const CloseButton = (
     <>
       {sm ? (
-        <Styled.CloseButton
-          type="text"
-          className="close"
-          onClick={closeAllMenus}
-        >
-          X
-        </Styled.CloseButton>
+        <Styled.LogoCloseContainer>
+          <Styled.LogoContainer>
+            <Styled.LogoLink href={"/"}>
+              <LogoColored className={"logo"} />
+              <h1 className="peer">
+                PEER
+                <span className="plays">PLAYS</span>
+              </h1>
+            </Styled.LogoLink>
+          </Styled.LogoContainer>
+          <Styled.CloseButton
+            type="text"
+            className="close"
+            onClick={(e) => {
+              e.stopPropagation();
+              closeAllMenus();
+            }}
+          >
+            X
+          </Styled.CloseButton>
+        </Styled.LogoCloseContainer>
       ) : (
         ""
       )}
@@ -103,39 +111,6 @@ export const MainNavBar = (): JSX.Element => {
     </div>
   );
 
-  const metaMaskBadge = sm ? (
-    <Styled.PeerLinkWalletBadge>
-      <MetaMaskIcon width="25" height="25" />
-    </Styled.PeerLinkWalletBadge>
-  ) : (
-    <Styled.PeerLinkWalletBadge>
-      <MetaMaskIcon width="30" height="30" />
-      <Styled.PeerLinkWalletAccount>
-        {metaMask.selectedAddress}
-      </Styled.PeerLinkWalletAccount>
-    </Styled.PeerLinkWalletBadge>
-  );
-
-  const hiveBadge = sm ? (
-    <Styled.PeerLinkWalletBadge>
-      <HIVEIcon width="25" height="25" />
-    </Styled.PeerLinkWalletBadge>
-  ) : (
-    <Styled.PeerLinkWalletBadge>
-      <HIVEIcon width="30" height="30" />
-      <Styled.PeerLinkWalletAccount>
-        {hive.userName}
-      </Styled.PeerLinkWalletAccount>
-    </Styled.PeerLinkWalletBadge>
-  );
-
-  const peerLinkBadge = (
-    <Styled.PeerLinkBadgeWrapper>
-      {hive.isConnected ? hiveBadge : ""}
-      {metaMask.isConnected ? metaMaskBadge : ""}
-    </Styled.PeerLinkBadgeWrapper>
-  );
-
   const userItems = (
     <>
       {notificationItem}
@@ -166,7 +141,6 @@ export const MainNavBar = (): JSX.Element => {
   return (
     <>
       <Styled.MainNavBar>
-        {router.pathname.includes("peerlink") ? peerLinkBadge : ""}
         {localStorageAccount ? userItems : ""}
         {mainMenuItem}
       </Styled.MainNavBar>

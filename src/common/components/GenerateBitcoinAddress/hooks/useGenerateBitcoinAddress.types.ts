@@ -7,9 +7,9 @@ import {
 import { BitcoinSidechainAccounts, SignerKey } from "../../../types";
 
 export type UseGenerateBitcoinAddressResult = {
-  bitcoinSidechainAccounts: BitcoinSidechainAccounts | undefined;
-  setBitcoinSidechainAccounts: (value: BitcoinSidechainAccounts) => void;
+  sessionBitcoinSidechainAccounts: BitcoinSidechainAccounts | undefined;
+  setSessionBitcoinSidechainAccounts: (value: BitcoinSidechainAccounts) => void;
   transactionMessageState: TransactionMessageState;
-  transactionMessageDispatch: Dispatch<TransactionMessageAction>;
+  dispatchTransactionMessage: Dispatch<TransactionMessageAction>;
   generateBitcoinAddresses: (signerKey: SignerKey) => Promise<void>;
 };

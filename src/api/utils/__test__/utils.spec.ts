@@ -191,22 +191,26 @@ describe("Testing utils functions ", () => {
     });
   });
 
-  describe("validateGrapheneAccountName function", () => {
+  describe("validatePeerplaysAccountName function", () => {
     it("should return true for valid Graphene account names", () => {
-      expect(utils.validateGrapheneAccountName("abcd1234")).toBe(true);
-      expect(utils.validateGrapheneAccountName("ab-cd-12-34")).toBe(true);
+      expect(utils.validatePeerplaysAccountName("abc").isValid).toBe(true);
+      expect(utils.validatePeerplaysAccountName("abcd1234").isValid).toBe(true);
+      expect(utils.validatePeerplaysAccountName("ab-cd-12-34").isValid).toBe(
+        true
+      );
       expect(
-        utils.validateGrapheneAccountName(
+        utils.validatePeerplaysAccountName(
           "abcdefghijklmnopqrstuvwxyz1234567890"
-        )
+        ).isValid
       ).toBe(true);
     });
 
     it("Should return false for invalid Graphene account names", () => {
-      expect(utils.validateGrapheneAccountName("abc")).toBe(false);
-      expect(utils.validateGrapheneAccountName("abc--")).toBe(false);
-      expect(utils.validateGrapheneAccountName("abc--")).toBe(false);
-      expect(utils.validateGrapheneAccountName("ab.cd.12.34")).toBe(false);
+      expect(utils.validatePeerplaysAccountName("abc--").isValid).toBe(false);
+      expect(utils.validatePeerplaysAccountName("abc--").isValid).toBe(false);
+      expect(utils.validatePeerplaysAccountName("ab.cd.12.34").isValid).toBe(
+        false
+      );
     });
   });
 
@@ -249,22 +253,22 @@ describe("Testing utils functions ", () => {
 
   describe("getBlockchainFromSymbol function", () => {
     it('the blockchain for "HIVE" is Hive', () => {
-      expect(utils.getBlockchainFromSymbol("HIVE")).toBe("Hive");
+      expect(utils.getNativeBlockchainFromAssetSymbol("HIVE")).toBe("Hive");
     });
     it('the blockchain for "Hive" is Hive', () => {
-      expect(utils.getBlockchainFromSymbol("Hive")).toBe("Hive");
+      expect(utils.getNativeBlockchainFromAssetSymbol("Hive")).toBe("Hive");
     });
     it('the blockchain for the symbol "ETH" is Ethereum', () => {
-      expect(utils.getBlockchainFromSymbol("ETH")).toBe("Ethereum");
+      expect(utils.getNativeBlockchainFromAssetSymbol("ETH")).toBe("Ethereum");
     });
     it('the blockchain for the symbol "eth" is Ethereum', () => {
-      expect(utils.getBlockchainFromSymbol("eth")).toBe("Ethereum");
+      expect(utils.getNativeBlockchainFromAssetSymbol("eth")).toBe("Ethereum");
     });
     it('the blockchain for the symbol "BTC" is Bitcoin', () => {
-      expect(utils.getBlockchainFromSymbol("BTC")).toBe("Bitcoin");
+      expect(utils.getNativeBlockchainFromAssetSymbol("BTC")).toBe("Bitcoin");
     });
     it('the blockchain for the symbol "btc" is Bitcoin', () => {
-      expect(utils.getBlockchainFromSymbol("btc")).toBe("Bitcoin");
+      expect(utils.getNativeBlockchainFromAssetSymbol("btc")).toBe("Bitcoin");
     });
   });
 });

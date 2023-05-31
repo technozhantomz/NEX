@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -10,10 +11,12 @@ import { Form, FormInstance } from "../../../ui/src";
 import { useMarketHistory, useOrderBook } from "../../hooks";
 import {
   Asset,
+  MarketHistory,
   MarketOrder,
   MarketPair,
   OrderForm,
   OrderHistory,
+  Ticker,
   TradeHistoryRow,
 } from "../../types";
 import { useChainStoreContext } from "../ChainStoreProvider";
@@ -40,15 +43,25 @@ const defaultMarketState: MarketContextType = {
   },
   buyOrderForm: {} as FormInstance<OrderForm>,
   sellOrderForm: {} as FormInstance<OrderForm>,
+  buckets: [15, 60, 300, 3600, 86400],
+  OHLCVs: undefined,
+  dayOHLCVs: undefined,
+  ticker: undefined,
 };
 
 const MarketContext = createContext<MarketContextType>(defaultMarketState);
 
 export const MarketProvider = ({ children }: Props): JSX.Element => {
   const { dbApi } = usePeerplaysApiContext();
-  const { getFillOrderHistory } = useMarketHistory();
+  const {
+    getFillOrderHistory,
+    getMarketHistoryBuckets,
+    getMarketHistory,
+    getTicker,
+  } = useMarketHistory();
   const { getOrderBook } = useOrderBook();
   const { synced } = useChainStoreContext();
+
   const [selectedPair, setSelectedPair] = useState<MarketPair>();
   const [marketHistory, setMarketHistory] = useState<OrderHistory[]>();
   const [asks, setAsks] = useState<MarketOrder[]>();
@@ -57,34 +70,45 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
   const [lastTradeHistory, setLastTradeHistory] = useState<TradeHistoryRow>();
   const [buyOrderForm] = Form.useForm<OrderForm>();
   const [sellOrderForm] = Form.useForm<OrderForm>();
+  // in seconds
+  const [buckets, _setBuckets] = useState<number[]>([15, 60, 300, 3600, 86400]);
+  const [OHLCVs, _setOHLCVs] = useState<MarketHistory[]>();
+  const [dayOHLCVs, _setDayOHLCVs] = useState<MarketHistory>();
+  const [ticker, _setTicker] = useState<Ticker>();
+  // in seconds
+  const [bucketSize, setBucketSize] = useState<number>(3600);
+  const bucketCount = 200;
 
-  const getHistory = useCallback(async () => {
+  const changeBucketSize = useCallback(
+    (bucketSize: number) => {
+      setBucketSize(bucketSize);
+    },
+    [setBucketSize]
+  );
+
+  const setHistory = useCallback(async () => {
     if (selectedPair) {
-      try {
-        const histories = await getFillOrderHistory(selectedPair);
-        if (histories) {
-          const marketTakersHistories = histories.reduce(
-            (previousHistory, currentHistory, i, { [i - 1]: next }) => {
-              if (i % 2) {
-                previousHistory.push(
-                  currentHistory.op.order_id > next.op.order_id
-                    ? currentHistory
-                    : next
-                );
-              }
-              return previousHistory;
-            },
-            [] as OrderHistory[]
-          );
-          setMarketHistory(marketTakersHistories);
-        }
-      } catch (e) {
-        console.log(e);
+      const histories = await getFillOrderHistory(selectedPair);
+      if (histories) {
+        const marketTakersHistories = histories.reduce(
+          (previousHistory, currentHistory, i, { [i - 1]: next }) => {
+            if (i % 2) {
+              previousHistory.push(
+                currentHistory.op.order_id > next.op.order_id
+                  ? currentHistory
+                  : next
+              );
+            }
+            return previousHistory;
+          },
+          [] as OrderHistory[]
+        );
+        setMarketHistory(marketTakersHistories);
       }
     }
   }, [selectedPair, getFillOrderHistory, setMarketHistory]);
 
-  const getAsksBids = useCallback(async () => {
+  const setAsksBids = useCallback(async () => {
     if (selectedPair) {
       setLoadingAsksBids(true);
       const { asks, bids } = await getOrderBook(selectedPair);
@@ -107,15 +131,142 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
     }
   }, [selectedPair, getOrderBook, setAsks, setBids]);
 
+  const setBuckets = useCallback(async () => {
+    if (selectedPair) {
+      const buckets = await getMarketHistoryBuckets();
+      if (buckets) {
+        _setBuckets(buckets);
+        if (buckets.indexOf(bucketSize) === -1) {
+          changeBucketSize(buckets[buckets.length - 1]);
+        }
+      }
+    }
+  }, [
+    selectedPair,
+    getMarketHistoryBuckets,
+    _setBuckets,
+    bucketSize,
+    changeBucketSize,
+  ]);
+
+  const setDayOHLCVs = useCallback(async () => {
+    const lastDay = new Date();
+    lastDay.setDate(lastDay.getDate() - 1);
+    const today = new Date();
+    const bucketSize = 86400;
+    if (selectedPair) {
+      const dayOHLCVs = await getMarketHistory(
+        selectedPair.base.symbol,
+        selectedPair.quote.symbol,
+        bucketSize,
+        lastDay.toISOString().slice(0, -5),
+        today.toISOString().slice(0, -5)
+      );
+      if (dayOHLCVs && dayOHLCVs.length) {
+        _setDayOHLCVs(dayOHLCVs[0]);
+      }
+    }
+  }, [selectedPair, getMarketHistory, _setDayOHLCVs]);
+
+  const setOHLCVs = useCallback(
+    async (bucketSize: number) => {
+      if (selectedPair) {
+        let startDate = new Date();
+        let startDate2 = new Date();
+        let startDate3 = new Date();
+        const endDate = new Date();
+        startDate = new Date(
+          startDate.getTime() - bucketSize * bucketCount * 1000
+        );
+        startDate2 = new Date(
+          startDate2.getTime() - bucketSize * bucketCount * 2000
+        );
+        startDate3 = new Date(
+          startDate3.getTime() - bucketSize * bucketCount * 3000
+        );
+        endDate.setDate(endDate.getDate() + 1);
+        const [result1, result2, result3] = await Promise.all([
+          getMarketHistory(
+            selectedPair.base.symbol,
+            selectedPair.quote.symbol,
+            bucketSize,
+            startDate.toISOString().slice(0, -5),
+            endDate.toISOString().slice(0, -5)
+          ),
+          getMarketHistory(
+            selectedPair.base.symbol,
+            selectedPair.quote.symbol,
+            bucketSize,
+            startDate2.toISOString().slice(0, -5),
+            startDate.toISOString().slice(0, -5)
+          ),
+          getMarketHistory(
+            selectedPair.base.symbol,
+            selectedPair.quote.symbol,
+            bucketSize,
+            startDate3.toISOString().slice(0, -5),
+            startDate2.toISOString().slice(0, -5)
+          ),
+        ]);
+        const data1 = result2 || [];
+        const data2 = result3 || [];
+        if (result1) {
+          _setOHLCVs(data1.concat(data2.concat(result1)));
+        }
+      }
+    },
+    [selectedPair, bucketCount, getMarketHistory, _setOHLCVs]
+  );
+
+  const setTicker = useCallback(async () => {
+    if (selectedPair) {
+      const ticker = await getTicker(selectedPair.base, selectedPair.quote);
+      if (ticker) {
+        _setTicker(ticker);
+      }
+    }
+  }, [selectedPair, getTicker, _setTicker]);
+
+  const subscription = useCallback(
+    (notification: any) => {
+      let hasFill = false;
+      if (
+        notification &&
+        notification.length &&
+        typeof notification[0] !== "string" &&
+        notification[0].length === 2 &&
+        notification[0][0] &&
+        notification[0][0][0].length === 2 &&
+        notification[0][0][0][0] === 4
+      ) {
+        hasFill = true;
+      }
+      Promise.all([
+        !hasFill ? null : setHistory(),
+        setAsksBids(),
+        !hasFill ? null : setOHLCVs(bucketSize),
+        !hasFill ? null : setDayOHLCVs(),
+        setTicker(),
+      ]);
+    },
+    [setHistory, setAsksBids, setOHLCVs, bucketSize, setDayOHLCVs, setTicker]
+  );
+
   const subscribeToMarket = useCallback(async () => {
-    if (selectedPair && synced) {
+    if (selectedPair && synced && bucketSize) {
       try {
-        await Promise.all([getHistory(), getAsksBids()]);
+        buyOrderForm.resetFields();
+        sellOrderForm.resetFields();
+        await Promise.all([
+          setHistory(),
+          setAsksBids(),
+          setBuckets(),
+          setOHLCVs(bucketSize),
+          setDayOHLCVs(),
+          setTicker(),
+        ]);
         await dbApi("subscribe_to_market", [
-          () => {
-            getHistory();
-            getAsksBids();
-          },
+          subscription,
           selectedPair.base.symbol,
           selectedPair.quote.symbol,
         ]);
@@ -123,7 +274,21 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
         console.log(e);
       }
     }
-  }, [selectedPair, synced, dbApi, getHistory, getAsksBids]);
+  }, [
+    selectedPair,
+    synced,
+    bucketSize,
+    buyOrderForm,
+    sellOrderForm,
+    setHistory,
+    setAsksBids,
+    setBuckets,
+    setOHLCVs,
+    setDayOHLCVs,
+    setTicker,
+    dbApi,
+    subscription,
+  ]);
 
   const unsubscribeFromMarket = useCallback(async () => {
     if (selectedPair) {
@@ -160,25 +325,44 @@ export const MarketProvider = ({ children }: Props): JSX.Element => {
     return () => {
       unsubscribeFromMarket();
     };
-  }, [selectedPair, synced]);
+  }, [selectedPair, bucketSize]);
+
+  const context = useMemo(() => {
+    return {
+      selectedPair,
+      marketHistory,
+      asks,
+      bids,
+      setMarketPair,
+      loadingAsksBids,
+      lastTradeHistory,
+      fillLastTradeHistory,
+      buyOrderForm,
+      sellOrderForm,
+      buckets,
+      OHLCVs,
+      dayOHLCVs,
+      ticker,
+    };
+  }, [
+    selectedPair,
+    marketHistory,
+    asks,
+    bids,
+    setMarketPair,
+    loadingAsksBids,
+    lastTradeHistory,
+    fillLastTradeHistory,
+    buyOrderForm,
+    sellOrderForm,
+    buckets,
+    OHLCVs,
+    dayOHLCVs,
+    ticker,
+  ]);
 
   return (
-    <MarketContext.Provider
-      value={{
-        selectedPair,
-        marketHistory,
-        asks,
-        bids,
-        setMarketPair,
-        loadingAsksBids,
-        lastTradeHistory,
-        fillLastTradeHistory,
-        buyOrderForm,
-        sellOrderForm,
-      }}
-    >
-      {children}
-    </MarketContext.Provider>
+    <MarketContext.Provider value={context}>{children}</MarketContext.Provider>
   );
 };
 export const useMarketContext = (): MarketContextType => {

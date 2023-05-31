@@ -1,4 +1,5 @@
 import counterpart from "counterpart";
+import { cloneDeep } from "lodash";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import { DEFAULT_PROXY_ID, defaultToken } from "../../../../../api/params";
@@ -41,7 +42,7 @@ export function useProxyTab({
   const [accountAlreadyAdded, setAccountAlreadyAdded] =
     useState<boolean>(false);
 
-  const { transactionMessageState, transactionMessageDispatch } =
+  const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
   const { id, assets, name, localStorageAccount } = useUserContext();
   const { getAccountByName, getFullAccount, formAccountBalancesByName } =
@@ -88,7 +89,7 @@ export function useProxyTab({
   const getUpdateAccountTrx = useCallback(async () => {
     const fullAccount = await getFullAccount(localStorageAccount, false);
     if (fullAccount !== undefined && id) {
-      const new_options = fullAccount.account.options;
+      const new_options = cloneDeep(fullAccount.account.options);
       new_options.voting_account =
         localProxy && localProxy.id ? localProxy.id : DEFAULT_PROXY_ID;
       const trx = buildUpdateAccountTransaction(
@@ -142,7 +143,7 @@ export function useProxyTab({
         userDefaultAsset === undefined ||
         (userDefaultAsset.amount as number) < updateAccountFee
       ) {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.ERROR,
           message: counterpart.translate(
             `field.errors.balance_not_enough_to_pay`
@@ -151,23 +152,23 @@ export function useProxyTab({
         return;
       }
       if (totalGpos <= 0) {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.ERROR,
           message: counterpart.translate(`field.errors.need_to_vest_gpos`),
         });
       } else {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.CLEAR,
         });
         let trxResult;
         try {
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADING,
           });
           trxResult = await buildTrx([pendingTransaction], [signerKey]);
         } catch (error) {
           console.log(error);
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(`field.errors.transaction_unable`),
           });
@@ -176,12 +177,12 @@ export function useProxyTab({
           formAccountBalancesByName(localStorageAccount);
           getUserVotes();
           setIsPublishable(false);
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_SUCCESS,
             message: counterpart.translate(`field.success.published_proxy`),
           });
         } else {
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.LOADED_ERROR,
             message: counterpart.translate(`field.errors.transaction_unable`),
           });
@@ -192,7 +193,7 @@ export function useProxyTab({
       assets,
       defaultToken,
       updateAccountFee,
-      transactionMessageDispatch,
+      dispatchTransactionMessage,
       totalGpos,
       buildTrx,
       pendingTransaction,
@@ -248,7 +249,7 @@ export function useProxyTab({
     searchedAccount,
     updateAccountFee,
     transactionMessageState,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     addProxy,
     removeProxy,
     searchChange,

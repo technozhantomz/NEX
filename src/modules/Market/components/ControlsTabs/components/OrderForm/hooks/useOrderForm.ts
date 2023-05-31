@@ -29,16 +29,23 @@ import {
 
 type Args = {
   isBuyForm: boolean;
-  formType: "limit" | "market";
+  precisions: {
+    price: number;
+    amount: number;
+    total: number;
+  };
 };
-export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
-  const { transactionMessageState, transactionMessageDispatch } =
+export function useOrderForm({
+  isBuyForm,
+  precisions,
+}: Args): UseOrderFormResult {
+  const { transactionMessageState, dispatchTransactionMessage } =
     useTransactionMessage();
   const { buildCreateLimitOrderTransaction } = useOrderTransactionBuilder();
   const { buildTrx } = useTransactionBuilder();
   const { assets, id, localStorageAccount } = useUserContext();
   const { formAccountBalancesByName } = useAccount();
-  const { limitByPrecision, roundNum } = useAsset();
+  const { limitByPrecision } = useAsset();
   const router = useRouter();
   const { pair } = router.query;
   const {
@@ -108,65 +115,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     }
   }, [selectedPair, calculateCreateLimitOrderFee, isBuyForm]);
 
-  const precisions = useMemo(() => {
-    if (selectedPair) {
-      const leastPrecision = 1;
-      let firstPrecision = 5;
-      let secondPrecision = 5;
-      const isSamePrecisions =
-        selectedPair.base.precision === selectedPair.quote.precision;
-      if (isSamePrecisions) {
-        firstPrecision = Math.floor(selectedPair.base.precision / 2);
-        secondPrecision = Math.floor(selectedPair.base.precision / 2) + 1;
-      } else {
-        const smallToBigRatio =
-          selectedPair.base.precision > selectedPair.quote.precision
-            ? {
-                ratio:
-                  selectedPair.quote.precision / selectedPair.base.precision,
-                isBaseBigger: true,
-              }
-            : {
-                ratio:
-                  selectedPair.base.precision / selectedPair.quote.precision,
-                isBaseBigger: false,
-              };
-        firstPrecision = smallToBigRatio.isBaseBigger
-          ? Math.round(selectedPair.quote.precision * smallToBigRatio.ratio)
-          : Math.round(selectedPair.base.precision * smallToBigRatio.ratio);
-        secondPrecision = selectedPair.base.precision - firstPrecision;
-        if (firstPrecision === 0) {
-          firstPrecision = leastPrecision;
-          secondPrecision = secondPrecision - leastPrecision;
-        } else if (secondPrecision === 0) {
-          secondPrecision = leastPrecision;
-          firstPrecision = firstPrecision - leastPrecision;
-        }
-      }
-      const bigPrecision =
-        firstPrecision >= secondPrecision ? firstPrecision : secondPrecision;
-      const smallPrecision =
-        firstPrecision >= secondPrecision ? secondPrecision : firstPrecision;
-      return {
-        price:
-          selectedPair.base.precision >= selectedPair.quote.precision
-            ? bigPrecision
-            : smallPrecision,
-        amount:
-          selectedPair.quote.precision >= selectedPair.base.precision
-            ? bigPrecision
-            : smallPrecision,
-        total: selectedPair.base.precision,
-      };
-    } else {
-      return {
-        price: 5,
-        amount: 5,
-        total: 5,
-      };
-    }
-  }, [selectedPair]);
-
   const handleFieldPrecision = useCallback(
     (fieldValue: string, fieldName: string, precision: number) => {
       const precisedValue = limitByPrecision(fieldValue, precision);
@@ -181,7 +129,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     [orderForm, limitByPrecision]
   );
   const handleFormPrecision = useCallback(
-    (changedValues: any) => {
+    (changedValues: { price?: string; amount?: string; total?: string }) => {
       if (changedValues.price) {
         handleFieldPrecision(changedValues.price, "price", precisions.price);
       }
@@ -195,7 +143,10 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     [handleFieldPrecision, precisions]
   );
   const handleRelationsBetweenInputs = useCallback(
-    (changedValues: any, allValues: any) => {
+    (
+      changedValues: { price?: string; amount?: string },
+      allValues: { price?: string; amount?: string }
+    ) => {
       let baseRoundTo = 5;
       if (selectedPair) {
         baseRoundTo = selectedPair.base.precision;
@@ -206,12 +157,15 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       ) {
         if (
           allValues.price &&
-          allValues.price > 0 &&
+          Number(allValues.price) > 0 &&
           allValues.amount &&
-          allValues.amount > 0
+          Number(allValues.amount) > 0
         ) {
           orderForm.setFieldsValue({
-            total: roundNum(allValues.price * allValues.amount, baseRoundTo),
+            total: limitByPrecision(
+              Number(allValues.price) * Number(allValues.amount),
+              baseRoundTo
+            ),
           });
         } else {
           orderForm.setFieldsValue({
@@ -223,7 +177,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     [orderForm, selectedPair]
   );
   const specifySliderValue = useCallback(() => {
-    const allValues = orderForm.getFieldsValue() as any;
+    const allValues = orderForm.getFieldsValue();
     if (isBuyForm) {
       const userBaseBalance =
         assets && assets.length
@@ -232,7 +186,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
           : 0;
       if (allValues.total) {
         const sliderValue = userBaseBalance
-          ? Math.floor((allValues.total / userBaseBalance) * 100)
+          ? Math.floor((Number(allValues.total) / userBaseBalance) * 100)
           : 0;
         setSliderValue(sliderValue);
       } else {
@@ -246,7 +200,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
           : 0;
       if (allValues.amount) {
         const sliderValue = userQuoteBalance
-          ? Math.floor((allValues.amount / userQuoteBalance) * 100)
+          ? Math.floor((Number(allValues.amount) / userQuoteBalance) * 100)
           : 0;
         setSliderValue(sliderValue);
       } else {
@@ -256,7 +210,10 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
   }, [orderForm, isBuyForm, assets, selectedPair, setSliderValue]);
 
   const handleValuesChange = useCallback(
-    (changedValues: any, allValues: any) => {
+    (
+      changedValues: { price?: string; amount?: string },
+      allValues: { price?: string; amount?: string }
+    ) => {
       handleFormPrecision(changedValues);
       handleRelationsBetweenInputs(changedValues, allValues);
       specifySliderValue();
@@ -338,7 +295,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
           {
             amount: amount,
             price: price,
-            total: total,
           },
           allValues
         );
@@ -573,12 +529,12 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
   );
   const handleCreateLimitOrder = useCallback(
     async (signerKey: SignerKey) => {
-      transactionMessageDispatch({
+      dispatchTransactionMessage({
         type: TransactionMessageActionType.CLEAR,
       });
       const values = orderForm.getFieldsValue();
       if (timePolicy === TimePolicy.Good_Til_Time && !expirationCustomTime) {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.ERROR,
           message: counterpart.translate(
             "field.errors.missing_custom_expiration_time"
@@ -593,7 +549,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       if (executionValue === "post-only") {
         const isPossible = checkPostOnlyPossibility(values);
         if (!isPossible) {
-          transactionMessageDispatch({
+          dispatchTransactionMessage({
             type: TransactionMessageActionType.ERROR,
             message: counterpart.translate(
               "field.errors.post_only_limit_order"
@@ -602,13 +558,19 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
           return;
         }
       }
+      const amounts = {
+        quantity: values.amount,
+        total: values.total,
+      };
+      const assetPairs = {
+        base: selectedPair?.base as Asset,
+        quote: selectedPair?.quote as Asset,
+      };
 
       const trx = buildCreateLimitOrderTransaction(
         id,
-        values.amount,
-        values.total,
-        selectedPair?.base as Asset,
-        selectedPair?.quote as Asset,
+        amounts,
+        assetPairs,
         expiration,
         fillOrKill,
         [],
@@ -616,34 +578,34 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       );
       let trxResult;
       try {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADING,
         });
         trxResult = await buildTrx([trx], [signerKey]);
       } catch (e) {
         console.log(e);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
       }
       if (trxResult) {
         formAccountBalancesByName(localStorageAccount);
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_SUCCESS,
           message: counterpart.translate(
             `field.success.limit_order_successfully`
           ),
         });
       } else {
-        transactionMessageDispatch({
+        dispatchTransactionMessage({
           type: TransactionMessageActionType.LOADED_ERROR,
           message: counterpart.translate(`field.errors.transaction_unable`),
         });
       }
     },
     [
-      transactionMessageDispatch,
+      dispatchTransactionMessage,
       orderForm,
       buildCreateLimitOrderTransaction,
       id,
@@ -659,12 +621,6 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
       expirationCustomTime,
     ]
   );
-
-  // useEffect(() => {
-  //   if (formType === "market") {
-
-  //   }
-  // }, [formType]);
 
   return {
     balance,
@@ -682,7 +638,7 @@ export function useOrderForm({ isBuyForm }: Args): UseOrderFormResult {
     handleTimePolicyChange,
     transactionMessageState,
     handleCreateLimitOrder,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     executionValue,
     handleExecutionChange,
     expirationCustomTime,

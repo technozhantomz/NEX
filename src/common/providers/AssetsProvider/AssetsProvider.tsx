@@ -4,12 +4,13 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
 import { defaultToken } from "../../../api/params";
-import { useAsset, useBlockchain } from "../../hooks";
-import { Asset } from "../../types";
+import { Asset, GlobalProperties } from "../../types";
+import { usePeerplaysApiContext } from "../PeerplaysApiProvider";
 
 import { AssetsContextType } from "./AssetsProvider.types";
 
@@ -34,38 +35,63 @@ export const AssetsProvider = ({ children }: Props): JSX.Element => {
   const [sidechainAssets, _setSidechainAssets] = useState<
     (Asset | undefined)[]
   >([]);
-
-  const { getGlobalProperties } = useBlockchain();
-  const { getAssetById, getAssetBySymbol } = useAsset();
+  const { dbApi } = usePeerplaysApiContext();
 
   const getDefaultAsset = useCallback(async () => {
     try {
-      const defaultAsset = await getAssetBySymbol(defaultToken as string);
-      return defaultAsset;
+      const assets = await dbApi("lookup_asset_symbols", [[defaultToken]]);
+      if (assets && assets.length) {
+        const defaultAsset: Asset = assets[0];
+        return defaultAsset;
+      } else {
+        return undefined;
+      }
     } catch (e) {
       console.log(e);
     }
-  }, [getAssetBySymbol]);
+  }, [dbApi, defaultToken]);
+
+  const getAssetsByIds = useCallback(
+    async (ids: string[]) => {
+      try {
+        const assets = await dbApi("get_assets", [ids]);
+        if (assets && assets.length) {
+          return assets as (Asset | undefined)[];
+        } else {
+          return undefined;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dbApi]
+  );
 
   const getSidechainAssets = useCallback(async () => {
     try {
-      const globalProperties = await getGlobalProperties();
-      if (globalProperties) {
-        const btcAssetId = globalProperties.parameters.extensions.btc_asset;
-        const hbdAssetId = globalProperties.parameters.extensions.hbd_asset;
-        const hiveAssetId = globalProperties.parameters.extensions.hive_asset;
+      const gpo: GlobalProperties | undefined = await dbApi(
+        "get_global_properties"
+      );
+      if (gpo) {
+        const btcAssetId = gpo.parameters.extensions.btc_asset;
+        const hbdAssetId = gpo.parameters.extensions.hbd_asset;
+        const hiveAssetId = gpo.parameters.extensions.hive_asset;
+        const ethAssetId = gpo.parameters.extensions.eth_asset;
 
-        const sidechainAssetsIds = [btcAssetId, hbdAssetId, hiveAssetId];
+        const sidechainAssetsIds = [
+          btcAssetId,
+          hbdAssetId,
+          hiveAssetId,
+          ethAssetId,
+        ];
 
-        const sidechainAssets = await Promise.all(
-          sidechainAssetsIds.map(getAssetById)
-        );
+        const sidechainAssets = await getAssetsByIds(sidechainAssetsIds);
         return sidechainAssets;
       }
     } catch (e) {
       console.log(e);
     }
-  }, [getGlobalProperties, getAssetById]);
+  }, [dbApi, getAssetsByIds]);
 
   useEffect(() => {
     let ignore = false;
@@ -104,17 +130,22 @@ export const AssetsProvider = ({ children }: Props): JSX.Element => {
     };
   }, [getSidechainAssets, setLoadingSidechainAssets, _setSidechainAssets]);
 
+  const context = useMemo(() => {
+    return {
+      defaultAsset,
+      sidechainAssets,
+      loadingSidechainAssets,
+      loadingDefaultAsset,
+    };
+  }, [
+    defaultAsset,
+    sidechainAssets,
+    loadingSidechainAssets,
+    loadingDefaultAsset,
+  ]);
+
   return (
-    <AssetsContext.Provider
-      value={{
-        defaultAsset,
-        sidechainAssets,
-        loadingSidechainAssets,
-        loadingDefaultAsset,
-      }}
-    >
-      {children}
-    </AssetsContext.Provider>
+    <AssetsContext.Provider value={context}>{children}</AssetsContext.Provider>
   );
 };
 

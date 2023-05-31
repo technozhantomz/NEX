@@ -28,7 +28,7 @@ export const en = {
     connection_error: {
       title: "Connection Error",
       first_description:
-        " Homepesa wallet can't find a running node to connect to the blockchain.",
+        "Peerplays DEX can't find a running node to connect to the blockchain.",
       second_description:
         "Please check your node connection and refresh the page.",
     },
@@ -127,7 +127,7 @@ export const en = {
       asset_issue: {
         title: "Issue asset",
         description:
-          "%(issuer)s, issued %(assetAmount)s %(symbol)s to, %(receiver)s",
+          "%(issuer)s, issued %(assetAmount)s %(symbol)s to , %(receiver)s",
       },
       asset_publish_feed: {
         title: "Publish feed",
@@ -523,7 +523,10 @@ export const en = {
     market: "Market",
     generate_bitcoin_address: "Generate Bitcoin addresses",
     login_and_generate_bitcoin_address: "Log in & Generate Bitcoin Addresses",
-    dont_have_peerplays_account: "Don't have  Homepesa account? ",
+    add_ethereum_address: "Add Ethereum address",
+    update_ethereum_address: "Update Ethereum address",
+    login_and_deposit_ethereum: "Log in & Deposit Ethereum",
+    dont_have_peerplays_account: "Don't have a Peerplays account? ",
     log_in_withdraw: "Log in & Withdraw %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Log in & Deposit %(assetSymbol)s",
     send: "Send",
@@ -577,7 +580,7 @@ export const en = {
     },
     signUp: {
       heading: "Create your account",
-      already_have_account: "Already have  Homepesa account? ",
+      already_have_account: "Already have a Peerplays account? ",
     },
     dashboard: {
       heading: "Dashboard",
@@ -594,7 +597,7 @@ export const en = {
       },
       blockchain: {
         blockchain: "Blockchain",
-        heading: " Homepesa Blockchain",
+        heading: "PeerPlays Blockchain",
         current_block: "Current Block",
         last_irreversible_block: "Last irreversible block",
         supply: "Supply (%(symbol)s)",
@@ -617,10 +620,11 @@ export const en = {
         merkle_root: "Merkle Root",
         previous_secret: "Previous Secret",
         next_secret: "Next Secret",
+        signing_key: "Signing key",
         witness_signature: "Witness Signature",
         search_transactions: "Search Transactions",
       },
-      transaction_detials: {
+      transaction_details: {
         transaction: "Transaction",
         transaction_id: "Transaction ID",
         ref_block_prefix: "Ref block prefix",
@@ -631,18 +635,18 @@ export const en = {
         results: "Results",
       },
       assets: {
-        heading: " Homepesa Assets",
+        heading: "PeerPlays Assets",
         assets: "Assets",
         search_assets: "Search Assets",
       },
       committees: {
-        heading: " Homepesa Committees",
+        heading: "PeerPlays Committees",
         active_committees: "Active Committees",
         search_committees: "Search Committees",
         committees: "Committees",
       },
       witnesses: {
-        heading: " Homepesa Witnesses",
+        heading: "PeerPlays Witnesses",
         active_witnesses: "Active Witnesses",
         block_reward: "Block Reward",
         monthly_earnings: "Monthly Earnings",
@@ -651,13 +655,17 @@ export const en = {
         current_witness: "Current Witness",
       },
       sons: {
-        heading: " Homepesa Sons",
-        active_sons: "Active Sons",
+        heading: "PeerPlays Sons",
+        active_sons: {
+          bitcoin_active_sons: "Bitcoin active sons",
+          hive_active_sons: "Hive active sons",
+          ethereum_active_sons: "Ethereum active sons",
+        },
         search_sons: "Search Sons",
-        sons: "Sidechains",
+        sons: "Sons",
       },
       fees: {
-        heading: " Homepesa Fees",
+        heading: "PeerPlays Fees",
         fees: "Fees",
         search_fees: "Search Fees",
         general: "General",
@@ -686,13 +694,17 @@ export const en = {
       select_to_receive: "Select an asset to receive",
       no_btc_address:
         "A Bitcoin address is not yet associated with your account",
+      no_eth_address:
+        "An Ethereum address is not yet associated with your account",
       receive_selected_asset_instruction:
-        "To receive %(assetSymbol)s send funds to , %(account)s, on th Homepesa blockchain",
+        "To receive %(assetSymbol)s send funds to , %(account)s, on the Peerplays blockchain",
       send_assets: "Send assets",
       clear_form: "Clear form",
       select_asset: "Select an asset",
       select_blockchain: "Select a blockchain",
       available_to_send: "Available to send:",
+      withdraw_alert:
+        "If you select a blockchain other than Peerplays, you will be withdrawing your funds to the targeted network.",
     },
     market: {
       heading: "Market",
@@ -704,12 +716,20 @@ export const en = {
       my_order_history: "My Order History",
       buy: "BUY",
       sell: "SELL",
+      orders: "Orders",
+      market_depth: "Market depth",
+      all_pairs: "All pairs",
+      all_statuses: "All statuses",
+      completed: "Completed",
+      partial: "Partial",
+      open: "Open",
       tabs: {
         history: {
           all: "Trade history",
           user: "My history",
         },
         controls: {
+          order_form: "Order form",
           limit: "Limit",
           market: "Market",
           advanced: "Advanced",
@@ -734,6 +754,8 @@ export const en = {
       twenty_four_hour_low: "24h Low",
       twenty_four_hour_volume: "24h Volume",
       twenty_four_hour_change: "24h Change",
+      twenty_four_hour_lowest_ask: "24h Lowest ask",
+      twenty_four_hour_highest_bid: "24h Highest bid",
       ask: "Ask",
       bid: "Bid",
     },
@@ -781,13 +803,14 @@ export const en = {
     },
     voting: {
       heading: "Voting",
-      peerplays_gpos: " Homepesa (GPOS)",
-      peerplays_voting: " Homepesa Voting",
+      peerplays_gpos: "PeerPlays (GPOS)",
+      peerplays_voting: "PeerPlays Voting",
       lower_case_witnesses: "witnesses",
-      lower_case_sons: "Sidechains",
+      lower_case_sons: "sons",
       lower_case_committees: "committees",
       status: {
         approved: "Approved",
+        partially_approved: "Partially Approved",
         not_approved: "Not Approved",
         pending_add: "voting to approve",
         pending_remove: "voting to remove approval",
@@ -805,16 +828,16 @@ export const en = {
         join_gpos:
           "Join GPOS by transferring your %(defaultToken)s to your GPOS balance.",
         consistently_participate:
-          "Consistently participate in voting for the best Witnesses, Advisors, Proposals, and SONs. Share the exciting news and DApps available o Homepesa with others.",
+          "Consistently participate in voting for the best Witnesses, Advisors, Proposals, and SONs. Share the exciting news and DApps available on Peerplays with others.",
         gpos_description:
-          "The more value that comes int Homepesa blockchain through its operations, the more those that participate to help make it secure will earn!",
+          "The more value that comes into Peerplays blockchain through its operations, the more those that participate to help make it secure will earn!",
         rewards_label:
           "If you want to increase your participation rewards you can do it two ways:",
         rewards_way_first:
           "1. Transfer more %(defaultToken)s into your GPOS balance",
-        rewards_way_second: "2. Shar Homepesa with others",
+        rewards_way_second: "2. Share Peerplays with others",
         decentralized_autonomous_cooperative:
-          "Together as a Decentralized Autonomous Cooperative (DAC), we can ensur Homepesa remains the most secure provably fair blockchain globally.",
+          "Together as a Decentralized Autonomous Cooperative (DAC), we can ensure Peerplays remains the most secure provably fair blockchain globally.",
         gpos_balance: "GPOS Balance",
         voting_performance: "Voting Performance",
         qualified_reward: "Qualified Reward",
@@ -835,14 +858,14 @@ export const en = {
         powerUp: {
           heading: "GPOS - Power up",
           power_up_description:
-            "When you Power Up your %(defaultToken)s on th Homepesa blockchain you are taking your first steps into participating in the Decentralized Autonomous Cooperative (DAC) that is the magic in blockchain tech. This means you will:",
+            "When you Power Up your %(defaultToken)s on the Peerplays blockchain you are taking your first steps into participating in the Decentralized Autonomous Cooperative (DAC) that is the magic in blockchain tech. This means you will:",
           power_up_description_heading: "Notice",
           power_up_lists: {
             first: "Become a big part of something special on a global scale",
             second: "Earn participation rewards for your efforts",
             third: "Bragging rights to family and friends",
             fourth: "Stake your %(defaultToken)s while you participate",
-            fifth: "Help secure th Homepesa blockchain",
+            fifth: "Help secure the Peerplays blockchain",
           },
         },
         powerDown: {
@@ -852,7 +875,7 @@ export const en = {
           power_down_description_heading: "Notice",
           power_down_lists: {
             first: "Still be a part of something special, just not as much",
-            second: "No longer helping secure th Homepesa blockchain",
+            second: "No longer helping secure the Peerplays blockchain",
             third: "No longer earn participation rewards",
             fourth: "Lose bragging rights",
             fifth: "Stop staking your %(defaultToken)s",
@@ -860,15 +883,15 @@ export const en = {
         },
       },
       sons: {
-        heading: "Sidechains",
-        tab: "Sidechains",
+        heading: "SONs",
+        tab: "Sons",
       },
       witnesses: {
         heading: "Witnesses",
         tab: "Witnesses",
       },
       proxy: {
-        heading: " Homepesa Proxy Voting",
+        heading: "PeerPlays Proxy Voting",
         tab: "Proxy",
       },
       committees: {
@@ -950,8 +973,9 @@ export const en = {
       user_name: "Enter username",
       master_password: "Enter master password",
       master_password_private_key: "Master password or private key",
-      withdraw_public_key: "Withdraw public key",
-      withdraw_address: "Withdraw address",
+      withdraw_public_key: "Withdrawal public key",
+      withdraw_address: "Withdrawal address",
+      deposit_address: "Deposit address",
       hive_blockchain_account: "Hive account",
       enter_amount: "Enter amount to send",
       amount: "Amount",
@@ -974,20 +998,29 @@ export const en = {
       swap_fee_info:
         "In order to complete swap the following fees is applicable",
       generate_btc_deposit_address:
-        "Generate a Bitcoin address so you can deposit BTC to you Homepesa account",
+        "Generate a Bitcoin address so you can deposit BTC to your Peerplays account",
+      add_eth_deposit_address:
+        "Add an Ethereum address to your Peerplays account and then send ETH from the added address to the `%(primaryWallet)s` address to deposit ETH to your Peerplays account",
       deposit_btc:
-        "Deposit your BTC to the Bitcoin address listed above to send it to you Homepesa account",
+        "Deposit your BTC to the Bitcoin address listed above to send it to your Peerplays account",
       bitcoin_associated_account:
-        "Your new Bitcoin addresses now associated with your account",
+        "Your new Bitcoin addresses are now associated with your account",
+      ethereum_associated_account:
+        "Your new Ethereum addresses are now associated with your account",
       download_private_keys: "Download Private Keys",
       private_keys_warning:
         "The private keys must be saved securely as it will be shown just once during the deposit address creation",
       bitcoin_deposit_address: "Deposit address (BTC address)",
+      ethereum_deposit_address: "Deposit address (Ethereum address)",
       sidechain: "Sidechain",
       fetching_price: "Fetching price",
       withdraw_public_key_address: "Compressed Withdraw Public key & Address",
+      ethereum_withdrawal_address:
+        "Withdrawal Address (Ethereum account address)",
       btc_withdraw_instruction:
         "Withdraw your BTC to the Bitcoin public key and address above or update them.",
+      eth_withdraw_instruction:
+        "Withdraw your ETH to the Ethereum address above or update it.",
       hive_blockchain_account: "Withdrawal Address (Hive account)",
       hive_withdraw_instruction:
         "Withdraw your %(asset)s to the Hive blockchain account entered above",
@@ -995,6 +1028,7 @@ export const en = {
       total_transaction: "Total Transaction: ",
       withdrawal_confirmation_time: "Confirmation Time: ",
       btc_withdrawal_confirmation_time: "~10 minutes",
+      eth_withdrawal_confirmation_time: "~5 minutes",
       hive_withdrawal_confirmation_time: "~3 minutes",
       peerplays_confirmation_time: "~3 seconds",
       estimated_fees_label: "Estimated Fees:",
@@ -1068,7 +1102,7 @@ export const en = {
     },
     checkBoxes: {
       cannot_recover_my_lost_password:
-        "I understan Homepesa cannot recover my lost password",
+        "I understand Peerplays cannot recover my lost password",
       securely_saved_my_password: "I have securely saved my password",
       enable_notifications: "Enable Notifications",
       key_management_group: ["Owner", "Active", "Memo"],
@@ -1087,12 +1121,17 @@ export const en = {
       first_select_asset: "Please first select an asset",
       first_select_blockchain: "Please first select a blockchain",
       first_generate_deposit_addresses:
+        "Please first generate deposit and withdrawal addresses on the Dashboard Deposit tab",
+      first_generate_btc_deposit_addresses:
         "Please first generate Bitcoin addresses on the Dashboard Deposit tab",
+      first_generate_eth_deposit_addresses:
+        "Please first generate Ethereum addresses on the Dashboard Deposit tab",
       loading_sidechain_accounts: "Please wait for sidechain accounts to load",
       unable_to_create_account:
         "Unable to create an account. Please try again later",
       invalid_bitcoin_public_key:
         "The public key is not valid for Bitcoin %(network)s",
+      invalid_ethereum_address: "The address is not valid.",
       enter_amount: "Enter amount",
       insufficient_asset_balance: "Insufficient %(asset)s balance",
       insufficient_balance_for_fee: "Insufficient %(coreAsset)s for fee",
@@ -1106,10 +1145,6 @@ export const en = {
       same_account: "Same as your account",
       no_account: "Account not found",
       added_account: "Account is already added",
-      premium_username:
-        "This is a premium name which is not supported by this faucet.",
-      username_limits:
-        "Username should start with lowercase letter and should not contain capital letter or special characters or only digits",
       user_not_found: "User not found",
       password_incorrect: "Password incorrect",
       username_required: "Username is required",
@@ -1135,7 +1170,7 @@ export const en = {
       to_required: "To is required",
       amount_required: "Amount is required",
       withdraw_add_required: "Withdraw address is required",
-      invalid_withdraw_hive_address: "Hive withdraw address is invalid",
+      invalid_withdraw_hive_address: "Hive withdrawal address is invalid",
       withdraw_pub_key_required: "Withdraw public key is required",
       sons_not_available_try_again:
         "SONs network is not available now. Please try again later!",
@@ -1172,6 +1207,27 @@ export const en = {
       post_only_limit_order: "Unable to create post only limit order",
       missing_custom_expiration_time:
         "Please select the custom expiration time or change the time policy of the order",
+      premium_username:
+        "This is a premium name which is not supported by this faucet. A Cheap name includes digits or doesn't include vowels",
+      account_creation_errors: {
+        account_should: "Account name should ",
+        be_longer: "be longer.",
+        be_shorter: "be shorter.",
+        account_segment_should:
+          "Each account segment (separated by `.`) should ",
+        start_with_letter: "start with a lowercase letter.",
+        have_letters_digits_dashes: "have only letters, digits, or dashes.",
+        have_one_dash_in_row: "have only one dash in a row.",
+        end_letter_digit: "end with a letter or digit.",
+      },
+      hive_account_errors: {
+        account_should: "Hive account should ",
+        be_longer: "be longer.",
+        start_with_letter: "start with a lowercase letter.",
+        have_letters_digits_dashes: "have only letters, digits, or dashes.",
+        end_letter_digit: "end with a letter or digit.",
+        have_one_dash_in_row: "have only one dash in a row.",
+      },
     },
     success: {
       successfully_transferred:
@@ -1192,7 +1248,9 @@ export const en = {
       canceled_limit_order:
         "You have successfully canceled #%(selectedOrderId)s order",
       successfully_generate_btc_addresses:
-        "You have successfully generated bitcoin deposit and withdrawal addresses",
+        "You have successfully generated Bitcoin deposit and withdrawal addresses",
+      successfully_generate_eth_addresses:
+        "You have successfully generated Ethereum deposit and withdrawal addresses",
     },
   },
   settings: {
@@ -1201,6 +1259,13 @@ export const en = {
       "Unable to connect to API node %(url)s, falling back to known working nodes. Error was: %(error)s",
   },
   tableHead: {
+    transaction_hash: "Transaction Hash",
+    active_all_chains: "Active",
+    votes_all_chains: "Votes",
+    status_all_chains: "Status",
+    action_all_chains: "Action",
+    active_chains: "Active chains",
+    account_id: "Account ID",
     block_id: "Block ID",
     time: "Time",
     witness: "Witness",
@@ -1261,6 +1326,10 @@ export const en = {
     filled: "Filled",
     total: "Total",
     status_actions: "Status/Actions",
+    sidechain: "Sidechain",
+    active_on: "Active on",
+    total_votes_on: "Total votes on",
+    status_on: "Status on",
   },
   tableFilters: {
     active: "Active",
@@ -1287,8 +1356,10 @@ export const en = {
     btc_withdraw_account: "Bitcoin Withdraw Account",
     btc_deposit_account: "Bitcoin Deposit Account",
     btc_deposit_account_description:
-      "Used to create the abov Homepesa multi-signature deposit address",
-    peerplays_btc_deposit_address: " Homepesa Deposit Address",
+      "Used to create the above PeerPlays multi-signature deposit address",
+    peerplays_btc_deposit_address: "PeerPlays Deposit Address",
+    eth_withdraw_account: "Ethereum Withdraw Account",
+    eth_deposit_account: "Ethereum Deposit Account",
   },
   transfer: {
     transfer: "Transfer",

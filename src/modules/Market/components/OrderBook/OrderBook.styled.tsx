@@ -1,4 +1,5 @@
 import { Dropdown, Menu, styled, Table as UiTable } from "../../../../ui/src";
+import { breakpoint } from "../../../../ui/src/breakpoints";
 import { colors } from "../../../../ui/src/colors";
 
 export const OrderBookContainer = styled.div`
@@ -22,7 +23,10 @@ export const FilterContainer = styled.div`
   justify-content: space-between;
   display: flex;
   flex-wrap: wrap;
-  margin: 16px;
+  margin: 8px;
+  ${breakpoint.lg} {
+    margin: 16px;
+  }
 `;
 
 export const Flex = styled.div`
@@ -31,13 +35,13 @@ export const Flex = styled.div`
 
 export const OrdersFilter = styled.button`
   display: flex;
-  width: 100%;
-  height: 25px;
-  margin-bottom: 10px;
+  width: 30px;
+  height: 30px;
+  padding: 2px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
+  border-radius: 15px;
   border: none;
   background: none;
   cursor: pointer;
@@ -46,8 +50,8 @@ export const OrdersFilter = styled.button`
   }
   & span {
     background-color: #e2444d;
-    height: 2px;
-    width: 14px;
+    height: 3px;
+    width: 15px;
   }
   &.order-filters__type--total span:nth-child(3),
   &.order-filters__type--total span:nth-child(4) {
@@ -84,8 +88,8 @@ export const LastTradeContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: 2px;
+  padding-right: 2px;
   height: 25px;
   margin-bottom: 10px;
   margin-top: 10px;
@@ -93,9 +97,7 @@ export const LastTradeContainer = styled.div`
   font-size: 12px;
 `;
 
-export const LastTradeValue = styled.div`
-  flex-basis: 33%;
-`;
+export const LastTradeValue = styled.div``;
 
 export const LastTradePriceValue = styled(LastTradeValue)`
   .buy {
@@ -109,6 +111,7 @@ export const LastTradePriceValue = styled(LastTradeValue)`
 export const Table = styled(UiTable)`
   max-height: inherit;
   padding: 6px;
+
   .ant-table-tbody > tr > td {
     border-bottom: none;
     font-size: 0.7em;
@@ -327,5 +330,25 @@ export const Table = styled(UiTable)`
       transparent 100%,
       transparent 100%
     );
+  }
+`;
+
+export const TableContainer = styled.div`
+  ${breakpoint.lg} {
+    display: flex;
+    justify-content: space-between;
+    flex: 1 1 48%;
+    padding-left: 16px;
+    padding-right: 16px;
+    .ant-table-wrapper:first-child {
+      border-right: 1px solid ${colors.borderColorBase};
+    }
+  }
+  ${breakpoint.xxl} {
+    display: block;
+    padding: 0;
+    .ant-table-wrapper:first-child {
+      border-right: none;
+    }
   }
 `;

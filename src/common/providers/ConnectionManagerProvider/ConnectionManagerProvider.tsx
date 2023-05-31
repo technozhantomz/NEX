@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -151,14 +152,20 @@ export const ConnectionManagerProvider = ({ children }: Props): JSX.Element => {
     </div>
   );
 
+  const context = useMemo(() => {
+    return {
+      willTransitionTo,
+      setFailureConnectionStates,
+      setSuccessConnectionStates,
+    };
+  }, [
+    willTransitionTo,
+    setFailureConnectionStates,
+    setSuccessConnectionStates,
+  ]);
+
   return (
-    <ConnectionManagerContext.Provider
-      value={{
-        willTransitionTo,
-        setFailureConnectionStates,
-        setSuccessConnectionStates,
-      }}
-    >
+    <ConnectionManagerContext.Provider value={context}>
       {!apiConnected ? (
         renderNotConnectedScreen
       ) : (

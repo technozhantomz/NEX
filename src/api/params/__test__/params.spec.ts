@@ -1,16 +1,15 @@
 import {
   BITCOIN_ASSET_SYMBOL,
   BITCOIN_NETWORK,
+  DEFAULT_NETWORK,
   DEFAULT_PROXY_ID,
-  defaultNetwork,
   defaultQuote,
   defaultToken,
+  excludedAssetsSymbols,
   HBD_ASSET_SYMBOL,
   HIVE_ASSET_SYMBOL,
   HIVE_NETWORK,
-  Sidechains,
   SON_ACCOUNT_NAME,
-  symbolsToBeExcepted,
 } from "..";
 import { en } from "../../../translations/en";
 import { ru } from "../../../translations/ru";
@@ -60,9 +59,8 @@ describe("Default settings values", () => {
 describe("Testing network parameters", () => {
   it("should have the correct default values", () => {
     expect(defaultToken).toMatch(/(TEST|PPY)/);
-    expect(defaultNetwork).toEqual("Peerplays");
+    expect(DEFAULT_NETWORK).toEqual("Peerplays");
     expect(defaultQuote).toEqual("BTC");
-    expect(Sidechains).toEqual(["Bitcoin"]);
     expect(DEFAULT_PROXY_ID).toEqual("1.2.5");
     expect(BITCOIN_NETWORK).toEqual("Bitcoin");
     expect(BITCOIN_ASSET_SYMBOL).toEqual("BTC");
@@ -75,7 +73,7 @@ describe("Testing network parameters", () => {
 
 describe("symbols To Be Excepted", () => {
   it("should have the correct default values", () => {
-    expect(symbolsToBeExcepted).toEqual([
+    expect(excludedAssetsSymbols).toEqual([
       "AQSQFHZAJVZDTVAC",
       "AXFMUJYATHGJSOIV",
       "BSEBEIBGLWDPKMDB",
@@ -97,6 +95,8 @@ describe("symbols To Be Excepted", () => {
       "WGKGQTICUIYEYTWV",
       "WNIPJIXZAFZGHGIC",
       "WTFUN",
+      "KOEBUNCPN",
+      "NATHANBUNCPNN",
     ]);
   });
 });

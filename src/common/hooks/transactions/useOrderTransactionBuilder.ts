@@ -11,10 +11,11 @@ export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
   const buildCreateLimitOrderTransaction = useCallback(
     (
       sellerId: string,
-      quantity: string,
-      total: string,
-      currentBase: Asset,
-      currentQuote: Asset,
+      amounts: {
+        quantity: string;
+        total: string;
+      },
+      assetPairs: { base: Asset; quote: Asset },
       expiration: string,
       fill_or_kill: boolean,
       extensions: any[],
@@ -22,27 +23,31 @@ export function useOrderTransactionBuilder(): UseOrderTransactionBuilderResult {
     ): Transaction => {
       let amount_to_sell, min_to_receive: Amount;
       if (isBuyOrder) {
-        const sellAsset = currentBase;
-        const buyAsset = currentQuote;
+        const sellAsset = assetPairs.base;
+        const buyAsset = assetPairs.quote;
         amount_to_sell = {
-          amount: Math.round(Number(total) * 10 ** sellAsset.precision),
+          amount: Math.round(Number(amounts.total) * 10 ** sellAsset.precision),
           asset_id: sellAsset.id,
         };
 
         min_to_receive = {
-          amount: Math.round(Number(quantity) * 10 ** buyAsset.precision),
+          amount: Math.round(
+            Number(amounts.quantity) * 10 ** buyAsset.precision
+          ),
           asset_id: buyAsset.id,
         };
       } else {
-        const sellAsset = currentQuote;
-        const buyAsset = currentBase;
+        const sellAsset = assetPairs.quote;
+        const buyAsset = assetPairs.base;
         amount_to_sell = {
-          amount: Math.round(Number(quantity) * 10 ** sellAsset.precision),
+          amount: Math.round(
+            Number(amounts.quantity) * 10 ** sellAsset.precision
+          ),
           asset_id: sellAsset.id,
         };
 
         min_to_receive = {
-          amount: Math.round(Number(total) * 10 ** buyAsset.precision),
+          amount: Math.round(Number(amounts.total) * 10 ** buyAsset.precision),
           asset_id: buyAsset.id,
         };
       }

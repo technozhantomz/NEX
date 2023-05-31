@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { VoteForm, VoteTable } from "..";
 import { useViewportContext } from "../../../../../common/providers";
-import { FullAccount, Proxy, Vote } from "../../../../../common/types";
+import { FullAccount, Member, Proxy } from "../../../../../common/types";
 import { InfoCircleOutlined } from "../../../../../ui/src";
 
 import * as Styled from "./VoteTab.styled";
@@ -14,7 +14,7 @@ import { useVoteTab } from "./hooks";
 type Props = {
   tab: string;
   votesLoading: boolean;
-  tabAllMembers: Vote[];
+  tabAllMembers: Member[];
   fullAccount: FullAccount | undefined;
   getUserVotes: () => Promise<void>;
   allMembersIds: [string, string][];
@@ -44,10 +44,12 @@ export const VoteTab = ({
     addVote,
     removeVote,
     handleVoting,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     transactionMessageState,
     updateAccountFee,
     afterSuccessTransactionModalClose,
+    voteToAllSidechains,
+    removeAllSidechainsVotes,
   } = useVoteTab({
     tab,
     votesLoading,
@@ -58,9 +60,9 @@ export const VoteTab = ({
     totalGpos,
     tabServerApprovedVotesIds,
   });
-  const { sm } = useViewportContext();
+  const { md } = useViewportContext();
 
-  const renderVotesForm = !sm ? (
+  const renderVotesForm = !md ? (
     <VoteForm
       confirmed={confirmed}
       tab={tab}
@@ -68,7 +70,7 @@ export const VoteTab = ({
       resetChanges={resetChanges}
       name={name}
       handleVoting={handleVoting}
-      transactionMessageDispatch={transactionMessageDispatch}
+      dispatchTransactionMessage={dispatchTransactionMessage}
       transactionMessageState={transactionMessageState}
       updateAccountFee={updateAccountFee}
       proxy={proxy}
@@ -85,7 +87,7 @@ export const VoteTab = ({
         resetChanges={resetChanges}
         name={name}
         handleVoting={handleVoting}
-        transactionMessageDispatch={transactionMessageDispatch}
+        dispatchTransactionMessage={dispatchTransactionMessage}
         transactionMessageState={transactionMessageState}
         updateAccountFee={updateAccountFee}
         proxy={proxy}
@@ -112,6 +114,8 @@ export const VoteTab = ({
           addVote={addVote}
           removeVote={removeVote}
           localApprovedVotesIds={localApprovedVotesIds}
+          voteToAllSidechains={voteToAllSidechains}
+          removeAllSidechainsVotes={removeAllSidechainsVotes}
         />
         {!(votesLoading || tableRows.length === 0) ? renderVotesForm : ""}
       </Styled.VoteTabCard>

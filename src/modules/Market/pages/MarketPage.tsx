@@ -7,12 +7,14 @@ import { useViewportContext } from "../../../common/providers";
 import { Col } from "../../../ui/src";
 import {
   ControlsTabs,
+  DepthChart,
   HistoryTabs,
   MarketStats,
   OrderBook,
   PairModal,
   PairSelect,
   PriceChart,
+  SmallScreenTabs,
   UsersOrdersTabs,
   Wallet,
 } from "../components";
@@ -23,14 +25,24 @@ import { useMarketPage } from "./hooks";
 const MarketPage: NextPage = () => {
   const router = useRouter();
   const { pair } = router.query;
+
   const { lg, xxl } = useViewportContext();
-  const { isPairModalVisible, handleClickOnPair, setIsPairModalVisible } =
-    useMarketPage({
-      currentPair: pair as string,
-    });
+  const {
+    isPairModalVisible,
+    handleClickOnPair,
+    setIsPairModalVisible,
+    isOrderDrawerOpen,
+    showBuyOrderDrawer,
+    showSellOrderDrawer,
+    hideOrderDrawer,
+    controlsTabsClassName,
+    onChangeControlsTab,
+  } = useMarketPage({
+    currentPair: pair as string,
+  });
 
   const renderHistoryTabs = !xxl ? (
-    <Styled.RightBorderedVerticalFlexedCol xxl={{ span: 5 }}>
+    <Styled.RightBorderedVerticalFlexedCol xxl={{ span: 4 }}>
       {/* Trade History Title */}
       <Styled.HistoryBox>
         <Styled.TradeHistoryContainer>
@@ -47,16 +59,16 @@ const MarketPage: NextPage = () => {
       {/* Charts Section */}
       {!xxl ? (
         <>
-          <Styled.RightBorderedVerticalFlexedCol lg={24} xxl={16}>
+          <Styled.RightBorderedVerticalFlexedCol lg={24} xxl={17}>
             <Styled.PriceChartContainer>
               <PriceChart />
             </Styled.PriceChartContainer>
             <Styled.MarketDepthContainer>
-              Market Depth Chart Section
+              <DepthChart />
             </Styled.MarketDepthContainer>
           </Styled.RightBorderedVerticalFlexedCol>
           {/* Order Book section */}
-          <Col xxl={8}>
+          <Col xxl={7}>
             <OrderBook currentPair={pair as string} />
           </Col>
         </>
@@ -76,7 +88,7 @@ const MarketPage: NextPage = () => {
     </Styled.UserOrdersContainer>
   ) : (
     <Styled.TabletTabsContainer>
-      <UsersOrdersTabs />
+      <SmallScreenTabs />
     </Styled.TabletTabsContainer>
   );
 
@@ -86,10 +98,11 @@ const MarketPage: NextPage = () => {
       type="card-xlrg"
       heading={counterpart.translate(`pages.market.heading`)}
       description={`Market Page | ${pair}`}
+      layout="dex"
     >
       {/* Mobile view */}
       {lg ? (
-        <>
+        <Styled.MobilePageWrapper>
           <Styled.MobileAssetSelectorContainer>
             <PairSelect
               handleClickOnPair={handleClickOnPair}
@@ -103,9 +116,32 @@ const MarketPage: NextPage = () => {
             <PriceChart />
           </Styled.MobileChartContainer>
           <Styled.MobileTabsContainer>
-            <UsersOrdersTabs />
+            <SmallScreenTabs />
           </Styled.MobileTabsContainer>
-        </>
+          <Styled.Affix offsetBottom={0}>
+            <Styled.BuySellWrapper>
+              <Styled.BuyButton onClick={showBuyOrderDrawer}>
+                {counterpart.translate("pages.market.buy")}
+              </Styled.BuyButton>
+              <Styled.SellButton onClick={showSellOrderDrawer}>
+                {counterpart.translate("pages.market.sell")}
+              </Styled.SellButton>
+            </Styled.BuySellWrapper>
+          </Styled.Affix>
+          <Styled.OrderDrawer
+            title={counterpart.translate(
+              "pages.market.tabs.controls.order_form"
+            )}
+            onClose={hideOrderDrawer}
+            open={isOrderDrawerOpen}
+            autoFocus={false}
+          >
+            <ControlsTabs
+              controlsTabsClassName={controlsTabsClassName}
+              onChangeControlsTab={onChangeControlsTab}
+            />
+          </Styled.OrderDrawer>
+        </Styled.MobilePageWrapper>
       ) : (
         <Styled.Container>
           <Styled.FullHeightRow>
@@ -115,7 +151,7 @@ const MarketPage: NextPage = () => {
             {/* Middle Section */}
             <Styled.RightBorderedVerticalFlexedCol
               lg={{ span: 16 }}
-              xxl={{ span: 14 }}
+              xxl={{ span: 15 }}
             >
               {/* Stats Section */}
               <Styled.StatsBox>
@@ -141,7 +177,10 @@ const MarketPage: NextPage = () => {
 
               {/* Limit Order forms */}
               <Styled.LimitOrderFormContainer>
-                <ControlsTabs />
+                <ControlsTabs
+                  controlsTabsClassName={controlsTabsClassName}
+                  onChangeControlsTab={onChangeControlsTab}
+                />
               </Styled.LimitOrderFormContainer>
 
               {/* Wallet Sections */}
@@ -150,13 +189,13 @@ const MarketPage: NextPage = () => {
               </Styled.WalletContainer>
             </Styled.VerticalFlexedCol>
           </Styled.FullHeightRow>
-          <PairModal
-            isVisible={isPairModalVisible}
-            setIsVisible={setIsPairModalVisible}
-            currentPair={pair as string}
-          />
         </Styled.Container>
       )}
+      <PairModal
+        isVisible={isPairModalVisible}
+        setIsVisible={setIsPairModalVisible}
+        currentPair={pair as string}
+      />
     </Layout>
   );
 };

@@ -1,4 +1,5 @@
 import { styled, Tabs as UiTabs } from "../../../../../../ui/src";
+import { breakpoint } from "../../../../../../ui/src/breakpoints";
 
 export const Tabs = styled(UiTabs)`
   width: 100%;
@@ -13,6 +14,10 @@ export const Tabs = styled(UiTabs)`
   .ant-tabs-tab + .ant-tabs-tab {
     margin: 0;
   }
+  &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations-hidden,
+  &.ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations {
+    display: none !important;
+  }
   .ant-tabs-tab {
     flex: 1 1 50%;
     justify-content: center;
@@ -20,7 +25,10 @@ export const Tabs = styled(UiTabs)`
   }
   .ant-tabs-tab-btn,
   .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-    font-size: 16px;
+    font-size: 14px;
+    ${breakpoint.lg} {
+      font-size: 16px;
+    }
   }
   .ant-tabs-tab.ant-tabs-tab-active {
     border-bottom: unset;

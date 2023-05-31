@@ -16,7 +16,7 @@ export function useDataFeed(): UseDataFeedResult {
   const lastBarsCache = new Map();
 
   const configurationData = {
-    supported_resolutions: ["D", "2D", "3D", "W", "3W", "M", "6M"],
+    supported_resolutions: ["D", "2D", "3D", "W", "2W", "3W", "M", "6M", "Y"],
     supports_search: false,
     supports_group_request: false,
     supports_marks: true,
@@ -24,14 +24,14 @@ export function useDataFeed(): UseDataFeedResult {
     supports_time: true,
     exchanges: [
       {
-        value: "homepesa",
-        name: "homepesa",
-        desc: "homepesa",
+        value: "PeerplaysDex",
+        name: "PeerplaysDex",
+        desc: "PeerplaysDex",
       },
       {
-        value: "homepesa",
-        name: "homepesa",
-        desc: "homepesa wallet",
+        value: "PeerplaysDex",
+        name: "PeerplaysDex",
+        desc: "PeerPlays Decentralized Exchange",
       },
     ],
     symbols_types: [
@@ -43,6 +43,7 @@ export function useDataFeed(): UseDataFeedResult {
   };
 
   const dataFeed: IBasicDataFeed = {
+    // This is chart --data-- configuration
     onReady: (callback) => {
       // console.log("[onReady]: Method call");
       setTimeout(() =>
@@ -66,6 +67,7 @@ export function useDataFeed(): UseDataFeedResult {
       });
       onResultReadyCallback(newSymbols as SearchSymbolResultItem[]);
     },
+    // This is chart --data-- configuration based on the pair (you can override onReady config)
     resolveSymbol: async (
       symbolName,
       onSymbolResolvedCallback,

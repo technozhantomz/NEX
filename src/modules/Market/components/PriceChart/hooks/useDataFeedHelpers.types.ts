@@ -1,5 +1,3 @@
-// import { OrderHistory } from "../../../../../common/types";
-
 export type ExchangeSymbol = {
   short: string;
   full: string;
@@ -12,10 +10,6 @@ export type ExchangeSymbols = {
   exchange: string;
   type: string;
 };
-
-// export type GroupedOrderHistory = {
-//   [date: string]: OrderHistory[];
-// };
 
 export type ChartFeed = {
   time: number;

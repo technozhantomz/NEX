@@ -128,7 +128,7 @@ export const ru = {
       asset_issue: {
         title: "Выпустить актив",
         description:
-          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к, %(receiver)s",
+          "%(issuer)s, изданный %(assetAmount)s %(symbol)s к , %(receiver)s",
       },
       asset_publish_feed: {
         title: "Опубликовать фид",
@@ -524,6 +524,9 @@ export const ru = {
     market: "Рынок",
     generate_bitcoin_address: "Создание биткойн-адресов",
     login_and_generate_bitcoin_address: "Войдите и сгенерируйте биткойн-адреса",
+    add_ethereum_address: "Добавить адрес Ethereum",
+    update_ethereum_address: "Обновлять адрес Ethereum",
+    login_and_deposit_ethereum: "Войти и внести депозит Ethereum",
     dont_have_peerplays_account: "У вас нет учетной записи Peerplays? ",
     log_in_withdraw: "Войти и вывести %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Войти и внести депозит %(assetSymbol)s",
@@ -618,10 +621,11 @@ export const ru = {
         merkle_root: "Корень Меркла",
         previous_secret: "Предыдущий секрет",
         next_secret: "Следующий секрет",
+        signing_key: "Ключ подписи",
         witness_signature: "Подпись свидетеля",
         search_transactions: "Поиск транзакций",
       },
-      transaction_detials: {
+      transaction_details: {
         transaction: "Транзакция",
         transaction_id: "Идентификатор транзакции",
         ref_block_prefix: "Префикс блока ссылки",
@@ -653,7 +657,11 @@ export const ru = {
       },
       sons: {
         heading: "Пирплейс Сыновья",
-        active_sons: "Активные сыновья",
+        active_sons: {
+          bitcoin_active_sons: "Bitcoin активный sons",
+          hive_active_sons: "Hive активный sons",
+          ethereum_active_sons: "Ethereum активный sons",
+        },
         search_sons: "Поиск сыновей",
         sons: "сыновья",
       },
@@ -686,6 +694,7 @@ export const ru = {
       select_this_asset: "Выберите этот объект",
       select_to_receive: "Выберите актив для получения",
       no_btc_address: "Биткойн-адрес еще не связан с вашей учетной записью",
+      no_eth_address: "Адрес Ethereum еще не связан с вашей учетной записью",
       receive_selected_asset_instruction:
         "Чтобы получить %(assetSymbol)s, отправьте средства на %(account)s в блокчейне Peerplays",
       send_assets: "Отправить активы",
@@ -693,6 +702,8 @@ export const ru = {
       select_asset: "Выберите актив",
       select_blockchain: "Выберите блокчейн",
       available_to_send: "Доступно для отправки:",
+      withdraw_alert:
+        "Если вы выберете блокчейн, отличный от Peerplays, вы будете выводить свои средства в целевую сеть.",
     },
     market: {
       heading: "Рынок",
@@ -704,12 +715,20 @@ export const ru = {
       my_order_history: "Моя история заказов",
       buy: "КУПИТЬ",
       sell: "ПРОДАВАТЬ",
+      orders: "Заказы",
+      market_depth: "Глубина рынка",
+      all_pairs: "Все пары",
+      all_statuses: "Все статусы",
+      completed: "Завершенный",
+      partial: "Частичный",
+      open: "Открыть",
       tabs: {
         history: {
           all: "Торговая история",
           user: "Моя история",
         },
         controls: {
+          order_form: "Форма заказа",
           limit: "Ограничение",
           market: "Рынок",
           advanced: "Передовой",
@@ -730,6 +749,12 @@ export const ru = {
             "Владелец %(asset)s взимает рыночную комиссию в размере %(percent)s%% за ордера на покупку. Эта комиссия будет вычтена из суммы, которую вы получите, когда ваш заказ будет выполнен, она не оплачивается при размещении заказа.",
         },
       },
+      twenty_four_hour_high: "24h Высокий",
+      twenty_four_hour_low: "24h Низкий",
+      twenty_four_hour_volume: "24h Объем",
+      twenty_four_hour_change: "24h Изменять",
+      twenty_four_hour_lowest_ask: "24h Самая низкая цена",
+      twenty_four_hour_highest_bid: "24h Самая высокая ставка",
     },
     settings: {
       heading: "Настройки",
@@ -783,6 +808,7 @@ export const ru = {
       lower_case_committees: "комитеты",
       status: {
         approved: "Утверждено",
+        partially_approved: "Частично одобрено",
         not_approved: "Не одобрено",
         pending_add: "голосование за одобрение",
         pending_remove: "голосование за снятие одобрения",
@@ -949,6 +975,7 @@ export const ru = {
       master_password_private_key: "Мастер-пароль или закрытый ключ",
       withdraw_public_key: "Отозвать открытый ключ",
       withdraw_address: "Адрес вывода",
+      deposit_address: "Адрес депозита",
       hive_blockchain_account: "учетная запись Hive",
       enter_amount: "Введите сумму для отправки",
       amount: "количество",
@@ -972,19 +999,28 @@ export const ru = {
       swap_fee_info: "Для завершения обмена применяются следующие сборы",
       generate_btc_deposit_address:
         "Создайте биткойн-адрес, чтобы вы могли внести BTC на свою учетную запись Peerplays.",
+      add_eth_deposit_address:
+        "Add an Ethereum address to your Peerplays account and then send ETH from the added address to the `%(primaryWallet)s` address to deposit ETH to your Peerplays account.",
       deposit_btc:
         "Внесите свой BTC на указанный выше биткойн-адрес, чтобы отправить его на свою учетную запись Peerplays.",
       bitcoin_associated_account:
         "Ваши новые биткойн-адреса теперь связаны с вашей учетной записью",
+      ethereum_associated_account:
+        "Ваши новые адреса Ethereum теперь связаны с вашей учетной записью.",
       download_private_keys: "Скачать закрытые ключи",
       private_keys_warning:
         "Закрытые ключи должны быть надежно сохранены, так как они будут показаны только один раз при создании адреса депозита.",
       bitcoin_deposit_address: "Адрес депозита (адрес BTC)",
+      ethereum_deposit_address: "Адрес депозита (адрес Ethereum)",
       sidechain: "Боковая цепь",
       fetching_price: "Получение цены",
       withdraw_public_key_address: "Сжатый открытый ключ и адрес вывода",
+      ethereum_withdrawal_address:
+        "Адрес для вывода средств (адрес учетной записи Ethereum)",
       btc_withdraw_instruction:
         "Выведите свои BTC на открытый ключ Bitcoin и адрес выше или обновите их.",
+      eth_withdraw_instruction:
+        "Выведите свой ETH на указанный выше адрес Ethereum или обновите его.",
       hive_blockchain_account: "Адрес для вывода средств (учетная запись Hive)",
       hive_withdraw_instruction:
         "Выведите свои %(asset)s на учетную запись блокчейна Hive, указанную выше.",
@@ -992,6 +1028,7 @@ export const ru = {
       total_transaction: "Всего транзакций: ",
       withdrawal_confirmation_time: "Время подтверждения: ",
       btc_withdrawal_confirmation_time: "~10 минуты",
+      eth_withdrawal_confirmation_time: "~5 минуты",
       hive_withdrawal_confirmation_time: "~3 минуты",
       peerplays_confirmation_time: "~3 секунды",
       estimated_fees_label: "Расчетные сборы: ",
@@ -1085,7 +1122,11 @@ export const ru = {
       first_select_asset: "Сначала выберите объект",
       first_select_blockchain: "Сначала выберите блокчейн",
       first_generate_deposit_addresses:
+        "Пожалуйста, сначала создайте адреса депозита и вывода средств на вкладке «Депозит» на панели инструментов.",
+      first_generate_btc_deposit_addresses:
         "Сначала сгенерируйте биткойн-адреса на вкладке «Депозит» на панели управления.",
+      first_generate_eth_deposit_addresses:
+        "Пожалуйста, сначала сгенерируйте адреса Ethereum на вкладке «Депозит» на панели инструментов.",
       loading_sidechain_accounts:
         "Подождите, пока загрузятся сайдчейн-аккаунты.",
       unable_to_create_account:
@@ -1093,6 +1134,7 @@ export const ru = {
       enter_amount: "Введите сумму",
       invalid_bitcoin_public_key:
         "Открытый ключ недействителен для биткойн %(network)s",
+      invalid_ethereum_address: "Адрес недействителен.",
       insufficient_asset_balance: "Недостаточный баланс %(asset)s",
       insufficient_balance_for_fee: "Недостаточно %(coreAsset)s для комиссии",
       not_enough_liquidity: "Недостаточно ликвидности",
@@ -1105,10 +1147,6 @@ export const ru = {
       same_account: "Так же, как ваш аккаунт",
       no_account: "аккаунт не найден",
       added_account: "Аккаунт уже добавлен",
-      premium_username:
-        "Это премиальное имя, которое не поддерживается этим сборщиком..",
-      username_limits:
-        "Имя пользователя должно начинаться со строчной буквы и не должно содержать заглавных букв, специальных символов или только цифр.",
       user_not_found: "Пользователь не найден",
       password_incorrect: "Неверный пароль",
       username_required: "Имя пользователя требуется",
@@ -1173,6 +1211,27 @@ export const ru = {
         "Невозможно создать лимитный ордер только для публикации",
       missing_custom_expiration_time:
         "Выберите пользовательское время истечения срока действия или измените временную политику заказа.",
+      premium_username:
+        "Это премиальное имя, которое не поддерживается этим сборщиком. Недорогое имя включает цифры или не включает гласные.",
+      account_creation_errors: {
+        account_should: "Имя учетной записи должно ",
+        be_longer: "быть длиннее.",
+        be_shorter: "быть короче.",
+        account_segment_should:
+          "Каждый сегмент учетной записи (разделенный `.`) должен ",
+        start_with_letter: "начинаться с маленькой буквы.",
+        have_letters_digits_dashes: "содержать только буквы, цифры или тире.",
+        have_one_dash_in_row: "иметь только одну черточку подряд.",
+        end_letter_digit: "заканчиваться буквой или цифрой.",
+      },
+      hive_account_errors: {
+        account_should: "Hive счет должен ",
+        be_longer: "быть длиннее.",
+        start_with_letter: "начинаться с маленькой буквы.",
+        have_letters_digits_dashes: "содержать только буквы, цифры или тире.",
+        end_letter_digit: "заканчиваться буквой или цифрой.",
+        have_one_dash_in_row: "иметь только одну черточку подряд.",
+      },
     },
     success: {
       successfully_transferred:
@@ -1192,6 +1251,8 @@ export const ru = {
       canceled_limit_order: "Вы успешно отменили заказ #%(selectedOrderId)s",
       successfully_generate_btc_addresses:
         "Вы успешно сгенерировали адреса ввода и вывода биткойнов",
+      successfully_generate_eth_addresses:
+        "Вы успешно сгенерировали адреса депозита и вывода Ethereum",
     },
   },
   settings: {
@@ -1200,6 +1261,13 @@ export const ru = {
       "Не удается подключиться к узлу API %(url)s, возвращаясь к известным рабочим узлам. Ошибка: %(error)s",
   },
   tableHead: {
+    transaction_hash: "Хэш транзакции",
+    active_all_chains: "Активный",
+    votes_all_chains: "Голоса",
+    status_all_chains: "Положение дел",
+    action_all_chains: "Действие",
+    active_chains: "Активные цепочки",
+    account_id: "Идентификатор учетной записи",
     block_id: "Идентификатор блока",
     time: "Время",
     witness: "Свидетель",
@@ -1260,6 +1328,10 @@ export const ru = {
     filled: "Заполненный",
     total: "Общий",
     status_actions: "Статус/Действия",
+    sidechain: "Боковая цепь",
+    active_on: "Активен в",
+    total_votes_on: "Всего голосов за",
+    status_on: "Статус включен",
   },
   tableFilters: {
     active: "Активный",
@@ -1288,6 +1360,8 @@ export const ru = {
     btc_deposit_account_description:
       "Используется для создания депозитного адреса PeerPlays с мультиподписью выше.",
     peerplays_btc_deposit_address: "Адрес депозита PeerPlays",
+    eth_withdraw_account: "Счет для вывода Эфириума",
+    eth_deposit_account: "Депозитный счет Ethereum",
   },
   transfer: {
     transfer: "Передача",

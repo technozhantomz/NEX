@@ -2,6 +2,7 @@ import {
   CardForm,
   CardFormButton,
   Form,
+  InfoCircleOutlined,
   Input,
   Option,
   Select,
@@ -101,6 +102,26 @@ export const IconWrapper = styled.div`
   margin-right: 20px;
 `;
 
+export const AlertWrapper = styled.div`
+  margin-bottom: 24px;
+  display: flex;
+  align-items: flex-start;
+`;
+export const AlertIcon = styled(InfoCircleOutlined)`
+  margin-top: 3px;
+  margin-right: 8px;
+  &.anticon-info-circle {
+    color: ${colors.warningColor};
+    font-size: 18px;
+  }
+`;
+export const AlertText = styled.div`
+  font-size: 12px;
+  ${breakpoint.sm} {
+    font-size: 14px;
+  }
+`;
+
 export const MemoWrapper = styled.div`
   margin-bottom: 15px;
 `;
@@ -137,25 +158,4 @@ export const FormItem = styled(CardForm.Item)`
       height: 45px;
     }
   }
-`;
-
-export const TransactionDetails = styled.div`
-  margin-bottom: 24px;
-`;
-
-export const DetailsWrapper = styled.div`
-  display: flex;
-  font-size: 12px;
-  ${breakpoint.sm} {
-    font-size: 14px;
-  }
-`;
-
-export const DetailsLabelWrapper = styled.div`
-  min-width: 150px;
-`;
-
-export const AmountsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
 `;

@@ -57,11 +57,11 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
 
   const getAllSymbols = async () => {
     let allSymbols = [];
-    const allAssets = await getAllAssets();
+    const allAssets = await getAllAssets(true);
     const symbols = allAssets?.map((asset) => {
       if (asset.symbol !== defaultToken) {
         const symbol = generateSymbol(
-          "Homepesa-wallet",
+          "PeerplaysDex",
           defaultToken as string,
           asset.symbol
         );
@@ -69,7 +69,7 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
           symbol: symbol.short,
           full_name: symbol.full,
           description: symbol.short,
-          exchange: "Homepesa-wallet",
+          exchange: "PeerplaysDex",
           type: "crypto",
         };
       }
@@ -85,8 +85,11 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
         10000
       )) as OrderHistory[];
       if (histories) {
+        const sortedHistoriesByDate = histories.sort((a, b) => {
+          return new Date(a.time).getTime() - new Date(b.time).getTime();
+        });
         const groupedHistories = new Map<number, OrderHistory[]>();
-        histories.forEach((order) => {
+        sortedHistoriesByDate.forEach((order) => {
           const time = new Date(order.time).getTime();
           let group = groupedHistories.get(time);
           if (!group) {
@@ -95,7 +98,6 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
           }
           group.push(order);
         });
-        console.log(groupedHistories);
         const processedOrders = Array.from(groupedHistories.entries()).map(
           ([time, group]) => {
             const open = getOrderAmmount(group[0]);
@@ -119,7 +121,6 @@ export function useDataFeedHelpers(): UseDataFeedHelpersResult {
             });
           }
         );
-        console.log(processedOrders);
         return processedOrders;
       }
     }

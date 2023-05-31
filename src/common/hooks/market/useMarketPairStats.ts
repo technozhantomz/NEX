@@ -43,9 +43,9 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
 
   const getDefaultPairs = useCallback(() => {
     const pairs: string[] = [
-      `USD/${defaultToken}`,
-      `CNY/${defaultToken}`,
-      `GOLD/${defaultToken}`,
+      `BTC/${defaultToken}`,
+      `HIVE/${defaultToken}`,
+      `HBD/${defaultToken}`,
     ];
     try {
       if (allAssets && allAssets.length > 0) {
@@ -121,7 +121,7 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
     let ignore = false;
     async function setAllAssets() {
       setLoading(true);
-      const allAssets = await getAllAssets();
+      const allAssets = await getAllAssets(true);
       if (!ignore) {
         _setAllAssets(allAssets);
         setLoading(false);

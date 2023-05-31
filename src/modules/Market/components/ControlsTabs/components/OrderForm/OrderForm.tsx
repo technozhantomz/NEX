@@ -9,7 +9,7 @@ import {
   PasswordModal,
   TransactionModal,
 } from "../../../../../../common/components";
-import { useHandleTransactionForm } from "../../../../../../common/hooks";
+import { useTransactionForm } from "../../../../../../common/hooks";
 import { useUserContext } from "../../../../../../common/providers";
 import {
   DownOutlined,
@@ -23,8 +23,17 @@ import { TimePolicy, useOrderForm } from "./hooks";
 type Props = {
   isBuyForm: boolean;
   formType: "limit" | "market";
+  precisions: {
+    price: number;
+    amount: number;
+    total: number;
+  };
 };
-export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
+export function OrderForm({
+  isBuyForm,
+  formType,
+  precisions,
+}: Props): JSX.Element {
   const router = useRouter();
   const { localStorageAccount } = useUserContext();
   const { pair } = router.query;
@@ -43,7 +52,7 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
     sliderValue,
     timePolicy,
     handleTimePolicyChange,
-    transactionMessageDispatch,
+    dispatchTransactionMessage,
     transactionMessageState,
     handleCreateLimitOrder,
     handleExecutionChange,
@@ -54,18 +63,17 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
     transactionModalTotal,
   } = useOrderForm({
     isBuyForm,
-    formType,
+    precisions,
   });
   const {
     isPasswordModalVisible,
     isTransactionModalVisible,
-    showPasswordModal,
     hidePasswordModal,
     handleFormFinish,
     hideTransactionModal,
-  } = useHandleTransactionForm({
-    handleTransactionConfirmation: handleCreateLimitOrder,
-    transactionMessageDispatch,
+  } = useTransactionForm({
+    executeTransaction: handleCreateLimitOrder,
+    dispatchTransactionMessage,
     neededKeyType: "active",
   });
   const sliderMarks: SliderMarks = {
@@ -95,7 +103,6 @@ export function OrderForm({ isBuyForm, formType }: Props): JSX.Element {
           name="orderForm"
           form={orderForm}
           onValuesChange={handleValuesChange}
-          onFinish={showPasswordModal}
         >
           {formType === "limit" && (
             <Styled.FormItem

@@ -22,7 +22,7 @@ type Props = {
 
 export const Layout: FunctionComponent<Props> = ({
   children,
-  title = "HomePesa",
+  title = "PeerPlays",
   description,
   type,
   heading,
@@ -45,7 +45,7 @@ export const Layout: FunctionComponent<Props> = ({
   return (
     <>
       <Head>
-        <title>{title} | HomePesa</title>
+        <title>{title} | PeerPlays</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="description" content={description} />

@@ -69,7 +69,7 @@ export function useLoginForm(): UseLoginFormResult {
       });
   };
 
-  const onChangeWalletLock = (value: any) => {
+  const onChangeWalletLock = (value: string) => {
     setSettings({ ...settings, walletLock: Number(value) });
   };
 
@@ -109,7 +109,7 @@ export function useLoginForm(): UseLoginFormResult {
     }
   };
 
-  const validateUseWhalevault = async () => {
+  const validateUseWhaleVault = async () => {
     if (temporaryFullAccount) {
       const account = temporaryFullAccount.account;
       if (useWhaleVault) {
@@ -128,7 +128,7 @@ export function useLoginForm(): UseLoginFormResult {
     }
   };
 
-  const formValdation = {
+  const formValidation = {
     username: [
       {
         required: true,
@@ -147,14 +147,14 @@ export function useLoginForm(): UseLoginFormResult {
       },
       { validator: validatePassword },
     ],
-    useWhaleVault: [{ validator: validateUseWhalevault }],
+    useWhaleVault: [{ validator: validateUseWhaleVault }],
   };
 
   return {
     validUser,
     loginForm,
     handleLogin,
-    formValdation,
+    formValidation,
     submitting,
     useWhaleVault,
     onChangeUseWhaleVault,

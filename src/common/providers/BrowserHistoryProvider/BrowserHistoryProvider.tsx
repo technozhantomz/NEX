@@ -1,5 +1,11 @@
 import router, { useRouter } from "next/router";
-import React, { createContext, useCallback, useContext, useRef } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+} from "react";
 
 import { useUserContext } from "..";
 import { useArrayLimiter } from "../../hooks";
@@ -77,15 +83,22 @@ export const BrowserHistoryProvider = ({ children }: Props): JSX.Element => {
   }
   updateBrowserHistory();
 
+  const context = useMemo(() => {
+    return {
+      browserHistory: browserHistory.current,
+      pathname,
+      privatePaths,
+      handleLoginRedirect,
+    };
+  }, [
+    browserHistory,
+    browserHistory.current,
+    pathname,
+    privatePaths,
+    handleLoginRedirect,
+  ]);
   return (
-    <BrowserHistoryContext.Provider
-      value={{
-        browserHistory: browserHistory.current,
-        pathname,
-        privatePaths,
-        handleLoginRedirect,
-      }}
-    >
+    <BrowserHistoryContext.Provider value={context}>
       {children}
     </BrowserHistoryContext.Provider>
   );
