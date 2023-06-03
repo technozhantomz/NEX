@@ -39,7 +39,7 @@ export const testnetNodes: Node[] = [
     location: counterpart.translate("settings.api_closest"),
   },
   {
-    url: "wss://alphanet.peerplays.download/api",
+    url: "wss://wss.homepesa.org/ws",
     location: "",
     region: "Northern America",
     country: "Canada",
@@ -56,7 +56,7 @@ export const prodNodes: Node[] = [
     location: counterpart.translate("settings.api_closest"),
   },
   {
-    url: "wss://ca.peerplays.info",
+    url: "wss://wss.homepesa.org/ws",
     location: "",
     region: "Northern America",
     country: "Canada",
@@ -66,7 +66,7 @@ export const prodNodes: Node[] = [
     },
   },
   {
-    url: "wss://de.peerplays.xyz",
+    url: "wss://wss.homepesa.org/ws",
     location: "",
     region: "Western Europe",
     country: "Germany",
@@ -76,7 +76,7 @@ export const prodNodes: Node[] = [
     },
   },
   {
-    url: "wss://pl.peerplays.org",
+    url: "wss://wss.homepesa.org/ws",
     location: "",
     region: "Eastern Europe",
     country: "Poland",

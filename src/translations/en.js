@@ -28,7 +28,7 @@ export const en = {
     connection_error: {
       title: "Connection Error",
       first_description:
-        "Peerplays DEX can't find a running node to connect to the blockchain.",
+        "Acloudbank DEX can't find a running node to connect to the blockchain.",
       second_description:
         "Please check your node connection and refresh the page.",
     },
@@ -597,7 +597,7 @@ export const en = {
       },
       blockchain: {
         blockchain: "Blockchain",
-        heading: "PeerPlays Blockchain",
+        heading: "Acloudbank Blockchain",
         current_block: "Current Block",
         last_irreversible_block: "Last irreversible block",
         supply: "Supply (%(symbol)s)",
@@ -635,18 +635,18 @@ export const en = {
         results: "Results",
       },
       assets: {
-        heading: "PeerPlays Assets",
+        heading: "Acloudbank Assets",
         assets: "Assets",
         search_assets: "Search Assets",
       },
       committees: {
-        heading: "PeerPlays Committees",
+        heading: "Acloudbank Committees",
         active_committees: "Active Committees",
         search_committees: "Search Committees",
         committees: "Committees",
       },
       witnesses: {
-        heading: "PeerPlays Witnesses",
+        heading: "Acloudbank Witnesses",
         active_witnesses: "Active Witnesses",
         block_reward: "Block Reward",
         monthly_earnings: "Monthly Earnings",
@@ -655,7 +655,7 @@ export const en = {
         current_witness: "Current Witness",
       },
       sons: {
-        heading: "PeerPlays Sons",
+        heading: "Acloudbank Sons",
         active_sons: {
           bitcoin_active_sons: "Bitcoin active sons",
           hive_active_sons: "Hive active sons",
@@ -665,7 +665,7 @@ export const en = {
         sons: "Sons",
       },
       fees: {
-        heading: "PeerPlays Fees",
+        heading: "Acloudbank Fees",
         fees: "Fees",
         search_fees: "Search Fees",
         general: "General",
@@ -697,7 +697,7 @@ export const en = {
       no_eth_address:
         "An Ethereum address is not yet associated with your account",
       receive_selected_asset_instruction:
-        "To receive %(assetSymbol)s send funds to , %(account)s, on the Peerplays blockchain",
+        "To receive %(assetSymbol)s send funds to , %(account)s, on the Acloudbank Blockchain",
       send_assets: "Send assets",
       clear_form: "Clear form",
       select_asset: "Select an asset",
@@ -803,8 +803,8 @@ export const en = {
     },
     voting: {
       heading: "Voting",
-      peerplays_gpos: "PeerPlays (GPOS)",
-      peerplays_voting: "PeerPlays Voting",
+      peerplays_gpos: "Acloudbank (GPOS)",
+      peerplays_voting: "Acloudbank Voting",
       lower_case_witnesses: "witnesses",
       lower_case_sons: "sons",
       lower_case_committees: "committees",
@@ -830,7 +830,7 @@ export const en = {
         consistently_participate:
           "Consistently participate in voting for the best Witnesses, Advisors, Proposals, and SONs. Share the exciting news and DApps available on Peerplays with others.",
         gpos_description:
-          "The more value that comes into Peerplays blockchain through its operations, the more those that participate to help make it secure will earn!",
+          "The more value that comes into Acloudbank Blockchain through its operations, the more those that participate to help make it secure will earn!",
         rewards_label:
           "If you want to increase your participation rewards you can do it two ways:",
         rewards_way_first:
@@ -858,14 +858,14 @@ export const en = {
         powerUp: {
           heading: "GPOS - Power up",
           power_up_description:
-            "When you Power Up your %(defaultToken)s on the Peerplays blockchain you are taking your first steps into participating in the Decentralized Autonomous Cooperative (DAC) that is the magic in blockchain tech. This means you will:",
+            "When you Power Up your %(defaultToken)s on the Acloudbank Blockchain you are taking your first steps into participating in the Decentralized Autonomous Cooperative (DAC) that is the magic in blockchain tech. This means you will:",
           power_up_description_heading: "Notice",
           power_up_lists: {
             first: "Become a big part of something special on a global scale",
             second: "Earn participation rewards for your efforts",
             third: "Bragging rights to family and friends",
             fourth: "Stake your %(defaultToken)s while you participate",
-            fifth: "Help secure the Peerplays blockchain",
+            fifth: "Help secure the Acloudbank Blockchain",
           },
         },
         powerDown: {
@@ -875,7 +875,7 @@ export const en = {
           power_down_description_heading: "Notice",
           power_down_lists: {
             first: "Still be a part of something special, just not as much",
-            second: "No longer helping secure the Peerplays blockchain",
+            second: "No longer helping secure the Acloudbank Blockchain",
             third: "No longer earn participation rewards",
             fourth: "Lose bragging rights",
             fifth: "Stop staking your %(defaultToken)s",
@@ -891,7 +891,7 @@ export const en = {
         tab: "Witnesses",
       },
       proxy: {
-        heading: "PeerPlays Proxy Voting",
+        heading: "Acloudbank Proxy Voting",
         tab: "Proxy",
       },
       committees: {
@@ -1357,7 +1357,7 @@ export const en = {
     btc_deposit_account: "Bitcoin Deposit Account",
     btc_deposit_account_description:
       "Used to create the above PeerPlays multi-signature deposit address",
-    peerplays_btc_deposit_address: "PeerPlays Deposit Address",
+    peerplays_btc_deposit_address: "Acloudbank Deposit Address",
     eth_withdraw_account: "Ethereum Withdraw Account",
     eth_deposit_account: "Ethereum Deposit Account",
   },

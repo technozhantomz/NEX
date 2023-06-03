@@ -18,13 +18,13 @@ describe("Wallet component", () => {
   afterEach(cleanup);
 
   it("renders component correctly with props", () => {
-    const { asFragment } = render(<Wallet currentPair="BTC_PPY" />);
+    const { asFragment } = render(<Wallet currentPair="BTC_KSH" />);
 
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders component with correct balance values", () => {
-    const { getByText } = render(<Wallet currentPair="BTC_PPY" />);
+    const { getByText } = render(<Wallet currentPair="BTC_KSH" />);
 
     expect(getByText("10.00")).toBeDefined();
     expect(getByText("20.00")).toBeDefined();

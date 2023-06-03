@@ -261,7 +261,7 @@ export function useAccount(): UseAccountResult {
     (pubKey: string) => {
       return pubKey.slice(0, 4).includes(defaultToken as string)
         ? pubKey
-        : pubKey.replace("PPY", defaultToken as string);
+        : pubKey.replace("KSH", defaultToken as string);
     },
     [defaultToken]
   );
@@ -302,7 +302,7 @@ export function useAccount(): UseAccountResult {
       if (whaleVaultInstance) {
         try {
           const res = await whaleVaultInstance.promiseRequestPubKeys(
-            "peerplays-dex",
+            "Acloudbank",
             `ppy:${account.name}`
           );
           if (res.success) {

@@ -84,7 +84,7 @@ export const utils = {
       PETH: ETHEREUM_NETWORK,
       ETH: ETHEREUM_NETWORK,
       TEST: DEFAULT_NETWORK,
-      PPY: DEFAULT_NETWORK,
+      KSH: DEFAULT_NETWORK,
     };
     return blockchains[symbol.toUpperCase()] || symbol;
   },

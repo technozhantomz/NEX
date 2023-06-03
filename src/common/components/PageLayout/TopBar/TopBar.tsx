@@ -22,11 +22,11 @@ export const TopBar = ({ layout }: Props): JSX.Element => {
             <Logo className={"logo"} />
             <Styled.HeaderWrapper>
               <h1 className="peer">
-                PEER
+                ACLOUD
                 {layout === "peerlink" ? (
                   <span className="link">LINK</span>
                 ) : (
-                  <span className="plays">PLAYS</span>
+                  <span className="plays">BANK</span>
                 )}
               </h1>
               {networkChain === "testnet" ? (

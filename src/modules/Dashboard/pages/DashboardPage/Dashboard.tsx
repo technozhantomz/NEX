@@ -12,8 +12,8 @@ const Dashboard = (): JSX.Element => {
   const changeTab = (tab: string) => {
     router.push(`/?tab=${tab}`);
   };
-  const activeTab = tab ? (tab as string).toLowerCase() : "deposit";
-  const tabs = ["deposit", "withdraw", "swap", "market"];
+  const activeTab = tab ? (tab as string).toLowerCase() : "market";
+  const tabs = ["market", "withdraw", "swap", "withdraw"];
 
   return (
     <Layout title="Dashboard">
@@ -36,10 +36,10 @@ const Dashboard = (): JSX.Element => {
         </Styled.HeaderContainerItem>
       </Styled.HeaderContainer>
       <Styled.BodyContainer>
-        {activeTab === "deposit" && <DepositTab />}
+        {activeTab === "market" && <DepositTab />}
         {activeTab === "withdraw" && <WithdrawTab />}
         {activeTab === "swap" && <SwapTab />}
-        {activeTab === "market" && <MarketTab />}
+        {activeTab === "deposit" && <MarketTab />}
       </Styled.BodyContainer>
     </Layout>
   );

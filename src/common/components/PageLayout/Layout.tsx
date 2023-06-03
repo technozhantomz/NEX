@@ -22,7 +22,7 @@ type Props = {
 
 export const Layout: FunctionComponent<Props> = ({
   children,
-  title = "PeerPlays",
+  title = "Acloudbank",
   description,
   type,
   heading,
