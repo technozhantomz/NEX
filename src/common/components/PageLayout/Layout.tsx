@@ -45,7 +45,7 @@ export const Layout: FunctionComponent<Props> = ({
   return (
     <>
       <Head>
-        <title>{title} | PeerPlays</title>
+        <title>{title} | AcloudBank</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="description" content={description} />
