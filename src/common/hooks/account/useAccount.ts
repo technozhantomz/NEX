@@ -261,7 +261,7 @@ export function useAccount(): UseAccountResult {
     (pubKey: string) => {
       return pubKey.slice(0, 4).includes(defaultToken as string)
         ? pubKey
-        : pubKey.replace("KSH", defaultToken as string);
+        : pubKey.replace("ACB", defaultToken as string);
     },
     [defaultToken]
   );
