@@ -77,8 +77,8 @@ export const utils = {
     const blockchains: Record<string, string> = {
       BTC: BITCOIN_NETWORK,
       PBTC: DEFAULT_NETWORK,
-      HIVE: HIVE_NETWORK,
-      HBD: HIVE_NETWORK,
+      ACNY: HIVE_NETWORK,
+      AUSD: HIVE_NETWORK,
       PEOS: "EOSIO",
       EOS: "EOSIO",
       PETH: ETHEREUM_NETWORK,
@@ -276,8 +276,8 @@ export const utils = {
   getSidechainFromAssetSymbol: (symbol: string): Sidechain => {
     const blockchains: Record<string, Sidechain> = {
       BTC: Sidechain.BITCOIN,
-      HIVE: Sidechain.HIVE,
-      HBD: Sidechain.HIVE,
+      ACNY: Sidechain.HIVE,
+      AUSD: Sidechain.HIVE,
       ETH: Sidechain.ETHEREUM,
     };
     return blockchains[symbol.toUpperCase()];
