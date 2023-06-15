@@ -526,7 +526,7 @@ export const en = {
     add_ethereum_address: "Add Ethereum address",
     update_ethereum_address: "Update Ethereum address",
     login_and_deposit_ethereum: "Log in & Deposit Ethereum",
-    dont_have_peerplays_account: "Don't have a AcloudBank account? ",
+    dont_have_peerplays_account: "Don't have a Acloudbank account? ",
     log_in_withdraw: "Log in & Withdraw %(selectedAsset)s",
     log_in_deposit_hbd_hive: "Log in & Deposit %(assetSymbol)s",
     send: "Send",
@@ -580,7 +580,7 @@ export const en = {
     },
     signUp: {
       heading: "Create your account",
-      already_have_account: "Already have a AcloudBank account? ",
+      already_have_account: "Already have a Acloudbank account? ",
     },
     dashboard: {
       heading: "Dashboard",
@@ -704,7 +704,7 @@ export const en = {
       select_blockchain: "Select a blockchain",
       available_to_send: "Available to send:",
       withdraw_alert:
-        "If you select a blockchain other thaa AcloudBank, you will be withdrawing your funds to the targeted network.",
+        "If you select a blockchain other than Peerplays, you will be withdrawing your funds to the targeted network.",
     },
     market: {
       heading: "Market",
@@ -803,8 +803,8 @@ export const en = {
     },
     voting: {
       heading: "Voting",
-    a AcloudBank_gpos: "Acloudbank (GPOS)",
-    a AcloudBank_voting: "Acloudbank Voting",
+      peerplays_gpos: "Acloudbank (GPOS)",
+      peerplays_voting: "Acloudbank Voting",
       lower_case_witnesses: "witnesses",
       lower_case_sons: "sons",
       lower_case_committees: "committees",
@@ -828,16 +828,16 @@ export const en = {
         join_gpos:
           "Join GPOS by transferring your %(defaultToken)s to your GPOS balance.",
         consistently_participate:
-          "Consistently participate in voting for the best Witnesses, Advisors, Proposals, and SONs. Share the exciting news and DApps available oa AcloudBank with others.",
+          "Consistently participate in voting for the best Witnesses, Advisors, Proposals, and SONs. Share the exciting news and DApps available on Acloudbank with others.",
         gpos_description:
           "The more value that comes into Acloudbank Blockchain through its operations, the more those that participate to help make it secure will earn!",
         rewards_label:
           "If you want to increase your participation rewards you can do it two ways:",
         rewards_way_first:
           "1. Transfer more %(defaultToken)s into your GPOS balance",
-        rewards_way_second: "2. Shara AcloudBank with others",
+        rewards_way_second: "2. Share Acloudbank with others",
         decentralized_autonomous_cooperative:
-          "Together as a Decentralized Autonomous Cooperative (DAC), we can ensura AcloudBank remains the most secure provably fair blockchain globally.",
+          "Together as a Decentralized Autonomous Cooperative (DAC), we can ensure Acloudbank remains the most secure provably fair blockchain globally.",
         gpos_balance: "GPOS Balance",
         voting_performance: "Voting Performance",
         qualified_reward: "Qualified Reward",
@@ -998,11 +998,11 @@ export const en = {
       swap_fee_info:
         "In order to complete swap the following fees is applicable",
       generate_btc_deposit_address:
-        "Generate a Bitcoin address so you can deposit BTC to youa AcloudBank account",
+        "Generate a Bitcoin address so you can deposit BTC to your Acloudbank account",
       add_eth_deposit_address:
-        "Add an Ethereum address to youa AcloudBank account and then send ETH from the added address to the `%(primaryWallet)s` address to deposit ETH to youa AcloudBank account",
+        "Add an Ethereum address to your Acloudbank account and then send ETH from the added address to the `%(primaryWallet)s` address to deposit ETH to your Acloudbank account",
       deposit_btc:
-        "Deposit your BTC to the Bitcoin address listed above to send it to youa AcloudBank account",
+        "Deposit your BTC to the Bitcoin address listed above to send it to your Acloudbank account",
       bitcoin_associated_account:
         "Your new Bitcoin addresses are now associated with your account",
       ethereum_associated_account:
@@ -1030,7 +1030,7 @@ export const en = {
       btc_withdrawal_confirmation_time: "~10 minutes",
       eth_withdrawal_confirmation_time: "~5 minutes",
       hive_withdrawal_confirmation_time: "~3 minutes",
-    a AcloudBank_confirmation_time: "~3 seconds",
+      peerplays_confirmation_time: "~3 seconds",
       estimated_fees_label: "Estimated Fees:",
       fees: "Fees: %(feeAmount)s %(defaultAsset)s",
       market_fee: "Market Fee",
@@ -1102,7 +1102,7 @@ export const en = {
     },
     checkBoxes: {
       cannot_recover_my_lost_password:
-        "I understana AcloudBank cannot recover my lost password",
+        "I understand Acloudbank cannot recover my lost password",
       securely_saved_my_password: "I have securely saved my password",
       enable_notifications: "Enable Notifications",
       key_management_group: ["Owner", "Active", "Memo"],
@@ -1356,8 +1356,8 @@ export const en = {
     btc_withdraw_account: "Bitcoin Withdraw Account",
     btc_deposit_account: "Bitcoin Deposit Account",
     btc_deposit_account_description:
-      "Used to create the abova AcloudBank multi-signature deposit address",
-  a AcloudBank_btc_deposit_address: "Acloudbank Deposit Address",
+      "Used to create the above Acloudbank multi-signature deposit address",
+    peerplays_btc_deposit_address: "Acloudbank Deposit Address",
     eth_withdraw_account: "Ethereum Withdraw Account",
     eth_deposit_account: "Ethereum Deposit Account",
   },

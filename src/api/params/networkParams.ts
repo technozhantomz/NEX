@@ -1,7 +1,7 @@
 import { config as Config } from "./config";
 
 const MAIN_NET_CHAIN_ID =
-  "33af3de75f94d4e576b7b7fbfd372923e399d0aebe9a0253d23b62525a7988f8";
+  "8fb55401e08e766166d56c182c2bb40d8cfbf980c77d8cacda0770be2ded85fb";
 
 const TESTNET_CHAIN_ID =
   "195d4e865e3a27d2b204de759341e4738f778dd5c4e21860c7e8bf1bd9c79203";
@@ -27,16 +27,16 @@ export const BITCOIN_ASSET_SYMBOL = "BTC";
 export const ETHEREUM_NETWORK = "Ethereum";
 export const ETHEREUM_ASSET_SYMBOL = "ETH";
 export const HIVE_NETWORK = "Hive";
-export const HIVE_ASSET_SYMBOL = "HIVE";
-export const HBD_ASSET_SYMBOL = "HBD";
+export const HIVE_ASSET_SYMBOL = "ACNY";
+export const HBD_ASSET_SYMBOL = "AUSD";
 export const SON_ACCOUNT_NAME = "son-account";
 
 export const ASSETS_BLOCKCHAINS: {
   [assetSymbol: string]: string[];
 } = {
   BTC: [DEFAULT_NETWORK, BITCOIN_NETWORK],
-  HIVE: [DEFAULT_NETWORK, HIVE_NETWORK],
-  HBD: [DEFAULT_NETWORK, HIVE_NETWORK],
+  ACNY: [DEFAULT_NETWORK, HIVE_NETWORK],
+  AUSD: [DEFAULT_NETWORK, HIVE_NETWORK],
   ETH: [DEFAULT_NETWORK, ETHEREUM_NETWORK],
 };
 

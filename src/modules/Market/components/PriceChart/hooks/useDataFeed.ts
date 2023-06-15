@@ -24,14 +24,14 @@ export function useDataFeed(): UseDataFeedResult {
     supports_time: true,
     exchanges: [
       {
-        value: "PeerplaysDex",
-        name: "PeerplaysDex",
-        desc: "PeerplaysDex",
+        value: "AcloudBank",
+        name: "AcloudBank",
+        desc: "AcloudBank",
       },
       {
-        value: "PeerplaysDex",
-        name: "PeerplaysDex",
-        desc: "PeerPlays Decentralized Exchange",
+        value: "AcloudBank",
+        name: "AcloudBank",
+        desc: "AcloudBank DEX",
       },
     ],
     symbols_types: [

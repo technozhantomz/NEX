@@ -34,7 +34,7 @@ export const AssetTitle = ({
     PBTC: <BitcoinIcon height="30" width="30" />,
     BTC: <BitcoinIcon height="30" width="30" />,
     TEST: <PPYIcon height="30" width="30" />,
-    ACB: <PPYIcon height="30" width="30" />,
+    KSH: <PPYIcon height="30" width="30" />,
     ACNY: <HIVEIcon height="30" width="30" />,
     AUSD: <HIVEIcon height="30" width="30" />,
     PETH: <EthereumIcon height="30" width="30" />,
@@ -50,7 +50,7 @@ export const AssetTitle = ({
   } = {
     BTC: BITCOIN_NETWORK,
     TEST: DEFAULT_NETWORK,
-    ACB: DEFAULT_NETWORK,
+    KSH: DEFAULT_NETWORK,
     ACNY: HIVE_ASSET_SYMBOL,
     AUSD: HBD_ASSET_SYMBOL,
   };

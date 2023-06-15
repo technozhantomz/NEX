@@ -44,8 +44,9 @@ export function useMarketPairStats(): UseMarketPairStatsResult {
   const getDefaultPairs = useCallback(() => {
     const pairs: string[] = [
       `BTC/${defaultToken}`,
-      `HIVE/${defaultToken}`,
-      `HBD/${defaultToken}`,
+      `ACNY/${defaultToken}`,
+      `AUSD/${defaultToken}`,
+      `GOLD/${defaultToken}`,
     ];
     try {
       if (allAssets && allAssets.length > 0) {

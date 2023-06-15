@@ -42,7 +42,7 @@ export const LogoSelectOption = (props: LogoSelectionProps): JSX.Element => {
     PBTC: <BitcoinIcon height="30" width="30" />,
     BTC: <BitcoinIcon height="30" width="30" />,
     TEST: <PPYIcon height="30" width="30" />,
-    ACB: <PPYIcon height="30" width="30" />,
+    KSH: <PPYIcon height="30" width="30" />,
     ACNY: <HIVEIcon height="30" width="30" />,
     AUSD: <HIVEIcon height="30" width="30" />,
     PETH: <EthereumIcon height="30" width="30" />,

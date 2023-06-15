@@ -37,7 +37,7 @@ export function useCreatePriceChart(): UseCreatePriceChartResult {
 
   useEffect(() => {
     if (selectedPair) {
-      const symbol = `PeerplaysDex:${selectedPair.base.symbol}/${selectedPair.quote.symbol}`;
+      const symbol = `AcloudBank:${selectedPair.base.symbol}/${selectedPair.quote.symbol}`;
       if (chartContainerRef.current) {
         const widgetOptions: ChartingLibraryWidgetOptions = {
           symbol: symbol,

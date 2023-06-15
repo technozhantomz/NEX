@@ -12,7 +12,7 @@ export function useBlockchainPage(
 ): BlockchainPage {
   const pageMeta: PageMeta = useMemo(() => {
     tab = tab ? (tab as string).toLowerCase() : "blockchain";
-    const title = "Peerplays " + capitalize(tab);
+    const title = "AcloudBANK " + capitalize(tab);
     return {
       title: title,
       heading: counterpart.translate("pages.blocks" + "." + tab + ".heading"),
