@@ -29,8 +29,8 @@ const commonColors = {
 
 const chainColors = {
   mainnet: {
-    primaryColor: `#6402BF`,
-    primaryGradiantColor: `#2c005e`,
+    primaryColor: `#05325a`,
+    primaryGradiantColor: `#73b0e7`,
     buttonColor: `#6402BF`,
     buttonHover: `#6423CC`,
   },
